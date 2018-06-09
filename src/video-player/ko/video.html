@@ -1,0 +1,10 @@
+<div class="video-player">
+    <!-- ko if: sourceUrl -->
+    <video data-bind="attr: { controls: controls, autoplay: autoplay }">
+        <source data-bind="attr: { src: sourceUrl }" />
+    </video>
+    <!-- /ko -->
+    <!-- ko ifnot: sourceUrl -->
+    <div class="empty-item" placeholder="No video selected"></div>
+    <!-- /ko -->
+</div>
