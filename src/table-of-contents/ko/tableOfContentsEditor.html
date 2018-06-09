@@ -1,0 +1,18 @@
+<div class="editor resizable-content flex-container flex-container-column">
+    <h1>
+        Table of contents
+        <a href="#" class="btn pull-right" data-bind="click: closeEditor">✖</a>
+    </h1>
+    <hr />
+    <fieldset class="form" data-bind="scrollable: {}">
+        <div class="form-group">
+            <div class="form-group">
+                <label class="form-label">Root navigation item</label>
+                <a href="#" class="form-control" data-bind="balloon: { component: { name: 'navigation-item-selector', params: { onSelect: $component.onNavigationItemChange } } }">
+                    <i class="paperbits-icon paperbits-menu-34 pull-right"></i>
+                    <span data-bind="text: navigationItemTitle"></span>
+                </a>
+            </div>
+        </div>
+    </fieldset>
+</div>

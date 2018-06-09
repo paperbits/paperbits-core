@@ -4,6 +4,7 @@ import { VideoPlayerEditorModule } from "./video-player/ko/videoPlayerEditor.mod
 import { PictureEditorModule } from "./picture/ko/pictureEditor.module";
 import { YoutubePlayerEditorModule } from "./youtube-player/ko/youtubePlayerEditor.module";
 import { NavbarEditorModule } from "./navbar/ko/navbarEditor.module";
+import { TableOfContentsEditorModule } from "./table-of-contents/ko/tableOfContentsEditor.module";
 
 export class CoreEditModule implements IInjectorModule {
     constructor(
@@ -13,6 +14,7 @@ export class CoreEditModule implements IInjectorModule {
 
     register(injector: IInjector): void {
         injector.bindModule(new NavbarEditorModule(this.modelBinders, this.viewModelBinders));
+        injector.bindModule(new TableOfContentsEditorModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new PictureEditorModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new VideoPlayerEditorModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new YoutubePlayerEditorModule(this.modelBinders, this.viewModelBinders));

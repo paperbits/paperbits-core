@@ -4,6 +4,7 @@ import { PictureModule } from "./picture/ko/picture.module";
 import { VideoPlayerModule } from "./video-player/ko/videoPlayer.module";
 import { YoutubePlayerModule } from "./youtube-player/ko/youtubePlayer.module";
 import { NavbarModule } from "./navbar/ko/navbar.module";
+import { TableOfContentsModule } from "./table-of-contents/ko/tableOfContents.module";
 
 export class CoreModule implements IInjectorModule {
     constructor(
@@ -13,6 +14,7 @@ export class CoreModule implements IInjectorModule {
 
     register(injector: IInjector): void {
         injector.bindModule(new NavbarModule(this.modelBinders, this.viewModelBinders));
+        injector.bindModule(new TableOfContentsModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new PictureModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new VideoPlayerModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new YoutubePlayerModule(this.modelBinders, this.viewModelBinders));
