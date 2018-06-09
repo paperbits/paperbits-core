@@ -1,0 +1,61 @@
+<nav class="navbar navbar-expand-lg navbar-light w-100">
+    <a class="navbar-brand" href="/" data-bind="if: $component.pictureSourceUrl">
+        <img data-bind="attr: { src: $component.pictureSourceUrl }" />
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapse" aria-controls="collaps" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div id="collapse" class="collapse navbar-collapse" data-bind="with: navigationRoot()">
+        <ul class="nav navbar-nav ml-auto" data-bind="foreach: nodes()">
+            <!--ko if: nodes().length > 0 -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" data-bind="attr: { href: url }">
+                    <span data-bind="text: label"></span>
+                    <span class="caret"></span>
+                </a>
+                <!--ko template: { name: 'navigationItemTemplate', data: $data }-->
+                <!--/ko-->
+            </li>
+            <!--/ko-->
+            <!--ko ifnot: nodes().length > 0 -->
+            <li class="nav-item" data-bind="css: { active: isActive() }">
+                <a class="nav-link" data-bind="text: label, attr: { href: url }"></a>
+            </li>
+            <!--/ko-->
+        </ul>
+    </div>
+</nav>
+
+
+<script id="navigationItemTemplate" type="text/html">
+    <ul class="dropdown-menu" data-bind="foreach: nodes()">
+        <!--ko if: nodes().length > 0 -->
+        <li class="dropdown dropdown-submenu">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" data-bind="attr: { href: url }">
+                <span data-bind="text: label"></span>
+                <!--<span class="caret"></span>-->
+            </a>
+            <!--ko template: { name: 'navigationItemTemplate', data: $data }-->
+            <!--/ko-->
+        </li>
+        <!--/ko-->
+        <!--ko ifnot: nodes().length > 0 -->
+        <li>
+            <a class="nav-link" data-bind="text: label, attr: { href: url }"></a>
+        </li>
+        <!--/ko-->
+    </ul>
+</script>
+
+<script id="tableOfContentsItemTemplate" type="text/html">
+    <ul class="nav" data-bind="foreach: { data: $data.nodes, as: 'item' }">
+        <li class="nav-item" data-bind="css: { active: item.isActive }">
+            <i class="paperbits-icon paperbits-anchor"></i>
+            <a class="nav-link" data-bind="text: item.label, attr: { href: item.url }"></a>
+
+            <!--ko template: { name: 'tableOfContentsItemTemplate', data: item }-->
+            <!--/ko-->
+        </li>
+    </ul>
+</script>

@@ -1,0 +1,22 @@
+<div class="editor resizable-content flex-container flex-container-column">
+    <h1>
+        Navigation bar
+        <a href="#" class="btn pull-right" data-bind="click: closeEditor">✖</a>
+    </h1>
+    <hr />
+    <fieldset class="form" data-bind="scrollable: {}">
+        <div class="form-group form-group-collapsible">
+            <label class="form-label">
+                <a href="#" class="form-group-toggle" data-bind="collapse: '#sourceCollapse'"></a>
+                <b>Logo</b>
+            </label>
+            <div id="sourceCollapse" class="collapse form-group-collapse">
+                <div class="dropzone">
+                    <a href="#" class="dropzone-showbox" data-bind="balloon: { component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected } } }">
+                        <div class="fit" data-bind="background: background"></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
