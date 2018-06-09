@@ -1,0 +1,16 @@
+<div class="picture" data-bind="css: css">
+    <!-- ko if: layout() === "polaroid" -->
+    <img class="content" data-bind="background: background, attr: { alt: caption }" />
+    <!-- ko if: caption() -->
+    <label class="picture-caption" data-bind="text: caption"></label>
+    <!-- /ko -->
+    <!-- /ko -->
+
+    <!-- ko if: layout() === "circle" -->
+    <div class="content" data-bind="background: background, attr: { alt: caption }" ></div>
+    <!-- /ko -->
+
+    <!-- ko if: layout() === "noframe" -->
+    <img class="content" data-bind="background: background, attr: { alt: caption }" />
+    <!-- /ko -->
+</div>

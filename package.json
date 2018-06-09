@@ -1,0 +1,42 @@
+{
+    "name": "@paperbits/core",
+    "version": "0.0.1",
+    "description": "Paperbits core components.",
+    "author": "Vienna LLC",
+    "license": "Commercial",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/paperbits/paperbits-core.git" 
+    },
+    "keywords": [
+        "paperbits",
+        "form builder"
+    ],
+    "bugs": {
+        "url": "https://github.com/paperbits/paperbits-core/issues"
+    },
+    "browserslist": [
+        "defaults",
+        "not ie < 11"
+    ],
+    "devDependencies": {
+        "@types/es6-shim": "^0.31.36",
+        "@types/knockout": "^3.4.53",
+        "@types/knockout.mapping": "^2.0.33",
+        "@types/knockout.validation": "0.0.36",
+        "@types/node": "8.5.5",
+        "del": "^3.0.0",
+        "fs": "0.0.1-security",
+        "gulp-typescript": "^4.0.2",
+        "link-package": "^0.1.0",
+        "merge2": "^1.2.2",
+        "typescript": "2.8.3"
+    },
+    "dependencies": {
+        "@paperbits/common": "0.0.91",
+        "@paperbits/knockout": "0.0.91",
+        "es6-shim": "^0.35.3",
+        "knockout": "^3.5.0-beta",
+        "knockout.validation": "^2.0.3"
+    }
+}
