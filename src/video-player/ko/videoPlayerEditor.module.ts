@@ -3,7 +3,7 @@ import { IWidgetHandler, IContentDropHandler } from "@paperbits/common/editing";
 import { IViewModelBinder } from "@paperbits/common/widgets";
 import { VideoEditor } from "./videoEditor";
 import { VideoHandlers } from "./videoHandlers";
-import { VideoPlayerModule } from "./video-player.module";
+import { VideoPlayerModule } from "./videoPlayer.module";
 
 export class VideoPlayerEditorModule implements IInjectorModule {
     constructor(

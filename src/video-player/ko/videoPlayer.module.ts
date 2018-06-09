@@ -1,10 +1,7 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { IWidgetHandler, IContentDropHandler } from "@paperbits/common/editing";
 import { IViewModelBinder } from "@paperbits/common/widgets";
 import { VideoPlayerViewModel } from "./videoPlayerViewModel";
 import { VideoPlayerModelBinder } from "../videoPlayerModelBinder";
-import { VideoEditor } from "./videoEditor";
-import { VideoHandlers } from "./videoHandlers";
 import { VideoPlayerViewModelBinder } from "./videoPlayerViewModelBinder";
 
 export class VideoPlayerModule implements IInjectorModule {
