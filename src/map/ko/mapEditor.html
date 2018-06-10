@@ -1,0 +1,17 @@
+﻿<div class="editor">
+    <h1>
+        Map
+        <a href="#" class="btn pull-right" data-bind="click: closeEditor">✖</a>
+    </h1>
+    <hr />
+    <fieldset class="form">
+        <label class="form-label">Location</label>
+        <input type="text" class="form-control" placeholder="e.g. 400 Broad St, Seattle, WA 98109" data-bind="textInput: location" />
+
+        <label class="form-label">Pin caption</label>
+        <input type="text" class="form-control" placeholder="e.g. Space Needle" data-bind="textInput: caption" maxlength="256"/>
+
+        <label class="form-label">Enable zoom control</label>
+        <input type="checkbox" data-bind="checked: zoomControl" />
+    </fieldset>
+</div>

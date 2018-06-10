@@ -1,0 +1,10 @@
+<div class="paperbits-googlemaps">
+    <!-- ko if: googleMapsLoaded -->
+    <div data-bind="googlemap: { location: location, caption: caption, zoomControl: zoomControl }"> </div>
+    <!-- /ko -->
+    <!-- ko ifnot: googleMapsLoaded -->
+    <p class="not-configured">Google Maps API key not found. To receive the key please refer to
+        <a href="https://developers.google.com/maps/documentation/javascript/get-api-key">Google Maps documentation</a>,
+        the you can provide it in Site settings.</p>
+    <!-- /ko -->
+</div>
