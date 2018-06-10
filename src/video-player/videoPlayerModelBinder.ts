@@ -1,6 +1,6 @@
 import { VideoPlayerModel } from "./videoPlayerModel";
 import { VideoPlayerContract } from "./VideoPlayerContract";
-import { IModelBinder } from "@paperbits/common/editing/IModelBinder";
+import { IModelBinder } from "@paperbits/common/editing";
 import { IPermalinkService } from "@paperbits/common/permalinks";
 import { IMediaService } from "@paperbits/common/media";
 

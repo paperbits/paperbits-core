@@ -1,6 +1,6 @@
 ﻿import { IWidgetOrder } from '@paperbits/common/editing';
 import { IWidgetHandler } from '@paperbits/common/editing';
-import { IViewManager } from "@paperbits/common/ui/IViewManager";
+import { IViewManager } from "@paperbits/common/ui";
 import { TableOfContentsModelBinder } from './tableOfContentsModelBinder';
 
 export class TableOfContentsHandlers implements IWidgetHandler {

@@ -4,7 +4,7 @@ import { IModelBinder } from "@paperbits/common/editing";
 import { INavigationService, NavigationItemContract } from "@paperbits/common/navigation";
 import { IPermalinkService, IPermalinkResolver } from "@paperbits/common/permalinks";
 import { IRouteHandler } from "@paperbits/common/routing";
-import { NavigationItemModel } from "@paperbits/common/navigation/navigationItemModel";
+import { NavigationItemModel } from "@paperbits/common/navigation";
 import { Contract } from "@paperbits/common/contract";
 
 export class NavbarModelBinder implements IModelBinder {

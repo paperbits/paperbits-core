@@ -1,8 +1,8 @@
 import { PictureModel } from "./pictureModel";
 import { PictureContract } from "./pictureContract";
 import { IModelBinder } from "@paperbits/common/editing";
-import { IPermalinkResolver } from "@paperbits/common/permalinks/IPermalinkResolver";
-import { BackgroundModel } from "@paperbits/common/widgets/background/backgroundModel";
+import { IPermalinkResolver } from "@paperbits/common/permalinks";
+import { BackgroundModel } from "@paperbits/common/widgets/background";
 
 export class PictureModelBinder implements IModelBinder {
     constructor(private readonly permalinkResolver: IPermalinkResolver) { }

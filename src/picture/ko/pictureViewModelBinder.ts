@@ -1,5 +1,5 @@
 import { PictureViewModel } from "./pictureViewModel";
-import { IViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
+import { IViewModelBinder } from "@paperbits/common/widgets";
 import { PictureModel } from "../pictureModel";
 
 export class PictureViewModelBinder implements IViewModelBinder<PictureModel, PictureViewModel> {

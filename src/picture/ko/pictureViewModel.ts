@@ -1,8 +1,8 @@
 ﻿import * as ko from "knockout";
 import template from "./picture.html";
-import { ILightbox } from "@paperbits/common/ui/ILightbox"; // TODO: Can be plugged in as binding
+import { ILightbox } from "@paperbits/common/ui"; // TODO: Can be plugged in as binding
 import { Component } from "@paperbits/knockout/decorators/component";
-import { BackgroundModel } from "@paperbits/common/widgets/background/backgroundModel";
+import { BackgroundModel } from "@paperbits/common/widgets/background";
 
 
 @Component({

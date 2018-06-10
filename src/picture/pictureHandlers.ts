@@ -1,14 +1,14 @@
 ﻿import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
-import { ICreatedMedia } from "@paperbits/common/media/ICreatedMedia";
+import { ICreatedMedia } from "@paperbits/common/media";
 import { IWidgetFactoryResult } from "@paperbits/common/editing";
-import { MediaContract } from "@paperbits/common/media/mediaContract";
+import { MediaContract } from "@paperbits/common/media";
 import { IWidgetOrder } from "@paperbits/common/editing";
 import { IContentDropHandler } from "@paperbits/common/editing";
 import { IWidgetHandler } from "@paperbits/common/editing";
 import { IDataTransfer } from "@paperbits/common/editing";
 import { IContentDescriptor } from "@paperbits/common/editing";
-import { BackgroundModel } from "@paperbits/common/widgets/background/backgroundModel";
+import { BackgroundModel } from "@paperbits/common/widgets/background";
 import { PictureModelBinder } from "./pictureModelBinder";
 import { PictureViewModelBinder } from "./ko/pictureViewModelBinder";
 import { PictureContract } from "./pictureContract";

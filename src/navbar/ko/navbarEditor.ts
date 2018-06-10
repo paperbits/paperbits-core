@@ -1,10 +1,10 @@
 import * as ko from "knockout";
 import template from "./navbarEditor.html";
-import { IWidgetEditor } from "@paperbits/common/widgets/IWidgetEditor";
-import { IViewManager } from "@paperbits/common/ui/IViewManager";
-import { MediaContract } from "@paperbits/common/media/mediaContract";
-import { BackgroundModel } from "@paperbits/common/widgets/background/backgroundModel";
-import { Component } from "@paperbits/knockout/decorators/component";
+import { IWidgetEditor } from "@paperbits/common/widgets";
+import { IViewManager } from "@paperbits/common/ui";
+import { MediaContract } from "@paperbits/common/media";
+import { BackgroundModel } from "@paperbits/common/widgets/background";
+import { Component } from "@paperbits/knockout/decorators";
 import { NavbarModel } from "../navbarModel";
 
 @Component({

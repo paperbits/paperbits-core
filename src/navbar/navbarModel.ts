@@ -1,5 +1,4 @@
-import { NavigationItemModel } from "@paperbits/common/navigation/navigationItemModel";
-
+import { NavigationItemModel } from "@paperbits/common/navigation";
 
 export class NavbarModel {
     public rootKey: string; // Should it move to NavbarItemModel?

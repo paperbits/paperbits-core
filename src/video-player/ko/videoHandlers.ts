@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import * as MediaUtils from "@paperbits/common/media/mediaUtils";
-import { ICreatedMedia } from "@paperbits/common/media/ICreatedMedia";
+import { ICreatedMedia } from "@paperbits/common/media";
 import { IWidgetFactoryResult } from "@paperbits/common/editing";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { IWidgetOrder } from "@paperbits/common/editing";

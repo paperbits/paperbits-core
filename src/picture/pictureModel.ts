@@ -1,4 +1,4 @@
-import { BackgroundModel } from "@paperbits/common/widgets/background/backgroundModel";
+import { BackgroundModel } from "@paperbits/common/widgets/background";
 
 export class PictureModel {
     public background: BackgroundModel;

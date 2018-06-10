@@ -2,7 +2,7 @@ import { TableOfContentsModel } from "./tableOfContentsModel";
 import { INavigationService, NavigationItemContract, NavigationItemModel } from "@paperbits/common/navigation";
 import { IPermalink, IPermalinkService } from "@paperbits/common/permalinks";
 import { IModelBinder } from "@paperbits/common/editing";
-import { IRouteHandler } from "@paperbits/common/routing/IRouteHandler";
+import { IRouteHandler } from "@paperbits/common/routing";
 import { TableOfContentsContract } from "./tableOfContentsContract";
 import { Contract } from "@paperbits/common";
 import { IPageService } from "@paperbits/common/pages";

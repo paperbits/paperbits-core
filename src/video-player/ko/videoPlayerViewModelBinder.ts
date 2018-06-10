@@ -1,5 +1,5 @@
 import { VideoPlayerViewModel } from "./videoPlayerViewModel";
-import { IViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
+import { IViewModelBinder } from "@paperbits/common/widgets";
 import { VideoPlayerModel } from "../videoPlayerModel";
 
 export class VideoPlayerViewModelBinder implements IViewModelBinder<VideoPlayerModel, VideoPlayerViewModel> {
