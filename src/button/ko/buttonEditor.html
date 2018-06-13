@@ -1,0 +1,48 @@
+<div class="editor">
+    <h1>
+        Button
+        <a href="#" class="btn pull-right" data-bind="click: closeEditor">✖</a>
+    </h1>
+    <hr />
+    <fieldset class="form" data-bind="scrollable: {}">
+        <label class="form-label">Label</label>
+        <div class="form-group">
+            <input type="text" class="form-control" data-bind="textInput: label" maxlength="256" />
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Link to</label>
+            <a href="#" class="form-control" data-bind="balloon: { component: { name: 'hyperlink-selector', params: { hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange } } }">
+                <i class="paperbits-icon paperbits-link-69-2 pull-right"></i>
+                <span data-bind="text: hyperlinkTitle"></span>
+            </a>
+        </div>
+
+        <label class="form-label">Style</label>
+        <div class="form-group">
+            <label class="form-label">
+                <input name="style" type="radio" value="default" data-bind="checked: style" />Default
+            </label>
+            <label class="form-label">
+                <input name="style" type="radio" value="primary" data-bind="checked: style" />Primary
+            </label>
+            <label class="form-label">
+                <input name="style" type="radio" value="inverted" data-bind="checked: style" />Inverted
+            </label>
+        </div>
+
+        <label class="form-label">Size</label>
+        <div class="form-group">
+            <label class="form-label">
+                <input name="buttonSize" type="radio" value="small" data-bind="checked: size" />Small
+            </label>
+            <label class="form-label">
+                <input name="buttonSize" type="radio" value="regular" data-bind="checked: size" />Regular
+            </label>
+            <label class="form-label">
+                <input name="buttonSize" type="radio" value="large" data-bind="checked: size" />Large
+            </label>
+        </div>
+    </fieldset>
+</div>
+
