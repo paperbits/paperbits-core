@@ -1,0 +1,34 @@
+<fieldset class="form">
+    <label class="form-label">
+        Title
+    </label>
+
+    <div class="input-group">
+        <input type="text" class="form-control" data-bind="textInput: layoutItem.title, validationElement: layoutItem.title" placeholder="i.e. Orders"
+            maxlength="256" />
+        <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: layoutItem.title" type="button">!</button>
+    </div>
+
+    <label class="form-label">
+        URL template
+    </label>
+    <div class="input-group">
+        <input type="text" class="form-control" data-bind="textInput: layoutItem.uriTemplate, validationElement: layoutItem.uriTemplate"
+            placeholder="/" maxlength="2000" />
+        <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: layoutItem.uriTemplate" type="button">!</button>
+    </div>
+
+    <label class="form-label">
+        Description
+    </label>
+    <textarea class="form-control" data-bind="textInput: layoutItem.description"></textarea>
+</fieldset>
+
+<div class="btn-group">
+    <!--ko if: isNotDefault-->
+    <button class="btn" data-bind="click: deleteLayout">
+        <i class="paperbits-icon paperbits-simple-remove"></i>
+        Delete layout
+    </button>
+    <!--/ko-->
+</div>

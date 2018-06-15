@@ -8,6 +8,8 @@ import { TableOfContentsEditorModule } from "./table-of-contents/ko/tableOfConte
 import { MapEditorModule } from "./map/ko/mapEditor.module";
 import { ButtonEditorModule } from "./button/ko/buttonEditor.module";
 import { TestimonialsEditorModule } from "./testimonials/ko/testimonialsEditor.module";
+import { KoModule } from "./ko/ko.module";
+import { LayoutEditorModule } from "./layout/ko/layoutEditor.module";
 
 export class CoreEditModule implements IInjectorModule {
     constructor(
@@ -16,6 +18,8 @@ export class CoreEditModule implements IInjectorModule {
     ) { }
 
     register(injector: IInjector): void {
+        injector.bindModule(new KoModule(this.modelBinders, this.viewModelBinders));
+        injector.bindModule(new LayoutEditorModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new NavbarEditorModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new ButtonEditorModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new MapEditorModule(this.modelBinders, this.viewModelBinders));

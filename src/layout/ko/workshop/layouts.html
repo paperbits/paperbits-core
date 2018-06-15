@@ -1,0 +1,26 @@
+<!--ko if: working()-->
+<spinner></spinner>
+<!--/ko-->
+
+<div class="flex-container flex-container-column fit">
+    <fieldset class="flex-item form">
+        <input class="form-control" type="search" data-bind="textInput: searchPattern, valueUpdate: 'keyup'" placeholder="Search layouts..."
+        />
+    </fieldset>
+
+    <ul class="flex-item flex-item-grow list" data-bind="foreach: layouts, scrollable: {}">
+        <li class="list-item" data-bind="css: { selected: hasFocus }">
+            <a href="#" data-bind="click: $parent.selectLayout, hasFocus: hasFocus, event: { keydown: $component.onKeyDown }">
+                <i class="paperbits-icon paperbits-layout-11"></i>
+                <span data-bind="text: title"></span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="flex-item btn-group">
+        <button class="btn" data-bind="click: addLayout">
+            <i class="paperbits-icon paperbits-simple-add"></i>
+            Add layout
+        </button>
+    </div>
+</div>
