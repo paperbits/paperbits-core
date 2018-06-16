@@ -1,10 +1,10 @@
 import * as ko from "knockout";
 import { IViewManager, ViewManagerMode } from "@paperbits/common/ui/IViewManager";
-import { PageModelBinder } from "@paperbits/common/widgets/page/pageModelBinder";
 import { LayoutModelBinder } from "../../layout/layoutModelBinder";
 import { GridEditor } from "@paperbits/knockout/editors/grid/gridEditor";
 import { GridHelper } from "@paperbits/common/editing";
 import { IEventManager } from "@paperbits/common/events";
+import { PageModelBinder } from "../../page/pageModelBinder";
 
 export class GridBindingHandler {
     constructor(viewManager: IViewManager, eventManager: IEventManager, pageModelBinder: PageModelBinder, layoutModelBinder: LayoutModelBinder) {

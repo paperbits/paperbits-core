@@ -1,0 +1,9 @@
+<main class="flex-fill" data-bind="content-grid: {}">
+    <!-- ko foreach: { data: sections, as: 'section' } -->
+    <!-- ko widget: section -->
+    <!-- /ko -->
+    <!-- /ko -->
+    <!-- ko if: sections().length === 0 -->
+    <div class="empty-item" placeholder="Page"></div>
+    <!-- /ko -->
+</main>

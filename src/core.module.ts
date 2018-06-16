@@ -10,6 +10,8 @@ import { ButtonModule } from "./button/ko/button.module";
 import { TestimonialsModule } from "./testimonials/ko/testimonials.module";
 import { KoModule } from "./ko/ko.module";
 import { LayoutModule } from "./layout/ko/layout.module";
+import { PageModule } from "./page/ko/page.module";
+import { BlogModule } from "./blog/ko/blog.module";
 
 export class CoreModule implements IInjectorModule {
     constructor(
@@ -20,6 +22,8 @@ export class CoreModule implements IInjectorModule {
     register(injector: IInjector): void {
         injector.bindModule(new KoModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new LayoutModule(this.modelBinders, this.viewModelBinders));
+        injector.bindModule(new PageModule(this.modelBinders, this.viewModelBinders));
+        injector.bindModule(new BlogModule(this.modelBinders));
         injector.bindModule(new NavbarModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new ButtonModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new MapModule(this.modelBinders, this.viewModelBinders));

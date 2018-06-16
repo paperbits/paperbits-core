@@ -1,0 +1,40 @@
+<div class="flex-container flex-container-column fit">
+    <fieldset class="flex-item form">
+        <input class="form-control" type="search" data-bind="textInput: searchPattern, valueUpdate: 'keyup'" placeholder="Search pages..."
+        />
+    </fieldset>
+
+    <!-- ko if: !working() && pages().length === 0 -->
+
+    <!-- ko if: searchPattern() === "" -->
+    <p class="flex-item flex-item-grow text-center">It seems that you don't have pages yet. Would you like to
+        <a href="#" class="btn-link" data-bind="click: addPage">create one</a>?
+    </p>
+    <!-- /ko -->
+
+    <!-- ko if: searchPattern() !== ""  -->
+    <p class="flex-item flex-item-grow text-center">Could not find anything. Try to change search criteria.</p>
+    <!-- /ko -->
+
+    <!-- /ko -->
+
+    <!--ko if: $component.working()-->
+    <spinner></spinner>
+    <!--/ko-->
+
+    <div class="flex-item flex-item-grow list" data-bind="foreach: pages, scrollable: {}">
+        <li class="list-item" data-bind="css: { selected: hasFocus }">
+            <a href="#" data-bind="click: $component.selectPage, hasFocus: hasFocus, event: { keydown: $component.onKeyDown }">
+                <i class="paperbits-icon paperbits-single-content-03"></i>
+                <span data-bind="text: title"></span>
+            </a>
+        </li>
+    </div>
+
+    <div class="flex-item btn-group">
+        <button class="btn" data-bind="click: addPage">
+            <i class="paperbits-icon paperbits-simple-add"></i>
+            Add page
+        </button>
+    </div>
+</div>
