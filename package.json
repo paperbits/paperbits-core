@@ -1,6 +1,6 @@
 {
     "name": "@paperbits/core",
-    "version": "0.1.9",
+    "version": "0.1.10",
     "description": "Paperbits core components.",
     "author": "Vienna LLC",
     "license": "Commercial",
@@ -20,8 +20,8 @@
         "not ie < 11"
     ],
     "dependencies": {
-        "@paperbits/common": "0.1.9",
-        "@paperbits/knockout": "0.1.9",
+        "@paperbits/common": "0.1.10",
+        "@paperbits/knockout": "0.1.10",
         "es6-shim": "^0.35.3",
         "knockout": "^3.5.0-beta",
         "knockout.validation": "^2.0.3"
