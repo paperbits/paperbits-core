@@ -19,6 +19,7 @@ import { LayoutWorkshopModule } from "./workshops/layout/ko/layout.module";
 import { PageWorkshopModule } from "./workshops/page/ko/page.module";
 import { SettingsWorkshop } from "./workshops/settings/ko/settings";
 import { MediaWorkshopModule } from "./workshops/media/ko/media.module";
+import { NavigationWorkshopModule } from "./workshops/navigation/ko/navigation.module";
 import { Workshops } from "./workshops/ko/workshops";
 
 export class CoreEditModule implements IInjectorModule {
@@ -36,6 +37,7 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindModule(new BlogWorkshopModule(this.modelBinders));
         injector.bindModule(new BlockWorkshopModule());
         injector.bindModule(new MediaWorkshopModule());
+        injector.bindModule(new NavigationWorkshopModule());
         injector.bindModule(new ColumnEditorModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new RowEditorModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new SectionEditorModule(this.modelBinders, this.viewModelBinders));

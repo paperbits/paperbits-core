@@ -6,7 +6,7 @@ import { INavigationService } from "@paperbits/common/navigation";
 import { NavigationDetailsWorkshop } from "./navigationDetails";
 import { NavigationItemSelector } from "./navigationItemSelector";
 
-export class MediaWorkshopModule implements IInjectorModule {
+export class NavigationWorkshopModule implements IInjectorModule {
     register(injector: IInjector): void {
         injector.bind("navigationWorkshop", NavigationWorkshop);
 
