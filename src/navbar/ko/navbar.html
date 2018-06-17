@@ -48,13 +48,14 @@
     </ul>
 </script>
 
-<script id="tableOfContentsItemTemplate" type="text/html">
+<script id="tableOfContentsItem" type="text/html">
     <ul class="nav" data-bind="foreach: { data: $data.nodes, as: 'item' }">
         <li class="nav-item" data-bind="css: { active: item.isActive }">
             <i class="paperbits-icon paperbits-anchor"></i>
             <a class="nav-link" data-bind="text: item.label, attr: { href: item.url }"></a>
 
-            <!--ko template: { name: 'tableOfContentsItemTemplate', data: item }-->
+            <!--ko if: item.nodes.length > 0 -->
+            <!--ko template: { name: 'tableOfContentsItem', data: item }--><!--/ko-->
             <!--/ko-->
         </li>
     </ul>
