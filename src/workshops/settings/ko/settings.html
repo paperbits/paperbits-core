@@ -1,0 +1,40 @@
+<!--ko if: working()-->
+<spinner></spinner>
+<!--/ko-->
+
+<div class="flex-container flex-container-column fit">
+    <fieldset class="flex-item flex-item-grow form" data-bind="scrollable: {}">
+        <div class="form-group">
+            <label class="form-label">Favicon</label>
+            <div class="flex-container">
+                <div class="flex-item dropzone-showbox dropzone-square" data-bind="background: favicon, balloon: { component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected, mediaFilter: $component.mediaFilter } }, position: 'top' }"></div>
+
+                <button class="flex-item flex-item-grow btn" data-bind="balloon: { component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected, mediaFilter: $component.mediaFilter } }, position: 'top' }">
+                    <i class="paperbits-icon paperbits-square-upload"></i>
+                    Setup favicon
+                </button>
+            </div>
+        </div>
+
+        <label class="form-label">Title</label>
+        <input type="text" class="form-control" data-bind="textInput: title" maxlength="500" />
+
+        <label class="form-label">Description</label>
+        <textarea class="form-control" data-bind="textInput: description" maxlength="500"></textarea>
+
+        <label class="form-label">Keywords</label>
+        <input type="text" class="form-control" data-bind="textInput: keywords" maxlength="500" />
+        
+        <label class="form-label">Author</label>
+        <input type="text" class="form-control" data-bind="textInput: author" maxlength="500" />
+
+        <label class="form-label">Google Maps API Key</label>
+        <input type="text" class="form-control" data-bind="textInput: gmapsApiKey" maxlength="500" spellcheck="false" />
+
+        <label class="form-label">Google Tag Manager Container ID</label>
+        <input type="text" class="form-control" data-bind="textInput: gtmContainerId" maxlength="500" spellcheck="false" />
+
+        <label class="form-label">Intercom App ID</label>
+        <input type="text" class="form-control" data-bind="textInput: intercomAppId" maxlength="500" spellcheck="false" />
+    </fieldset>
+</div>

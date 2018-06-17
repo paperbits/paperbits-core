@@ -17,6 +17,9 @@ import { BlogWorkshopModule } from "./workshops/blog/ko/blog.module";
 import { SliderEditorModule } from "./slider/ko/sliderEditor.module";
 import { LayoutWorkshopModule } from "./workshops/layout/ko/layout.module";
 import { PageWorkshopModule } from "./workshops/page/ko/page.module";
+import { SettingsWorkshop } from "./workshops/settings/ko/settings";
+import { MediaWorkshopModule } from "./workshops/media/ko/media.module";
+import { Workshops } from "./workshops/ko/workshops";
 
 export class CoreEditModule implements IInjectorModule {
     constructor(
@@ -25,11 +28,14 @@ export class CoreEditModule implements IInjectorModule {
     ) { }
 
     register(injector: IInjector): void {
+        injector.bind("workshops", Workshops);
+        injector.bind("settingsWorkshop", SettingsWorkshop);
         injector.bindModule(new KoModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new LayoutWorkshopModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new PageWorkshopModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new BlogWorkshopModule(this.modelBinders));
         injector.bindModule(new BlockWorkshopModule());
+        injector.bindModule(new MediaWorkshopModule());
         injector.bindModule(new ColumnEditorModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new RowEditorModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new SectionEditorModule(this.modelBinders, this.viewModelBinders));

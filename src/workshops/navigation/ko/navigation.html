@@ -1,0 +1,52 @@
+<div class="flex-container flex-container-column fit">
+    <div class="flex-item flex-item-grow list" data-bind="with: navigationItemsTree(), scrollable: {}">
+        <div class="list-item-children" data-bind="foreach: nodes">
+            <div class="list-item" data-bind="css: { selected: hasFocus }, dragtarget: { accept: canAccept, ondropbefore: insertBefore, ondropafter: insertAfter, flow: 'vertical', onacceptbefore: $component.navigationItemsTree().onAcceptNodeBefore, onacceptafter: $component.navigationItemsTree().onAcceptNodeAfter }">
+                <!-- ko if: nodes().length > 0 -->
+                <a href="#" class="list-item-collapse" data-bind="click: toggleCollapsed">
+                    <i class="paperbits-icon paperbits-circle-delete" data-bind="css: { 'paperbits-circle-add': collapsed() }"></i>
+                </a>
+                <!-- /ko -->
+
+                <a href="#" data-bind="text: label, hasFocus: hasFocus, click: function(){ $data.hasFocus(true); $component.selectNavigationItem($data); }">-</a>
+
+                <!-- ko if: nodes().length > 0 && !collapsed() -->
+                <div class="list-item-children" data-bind="foreach: nodes">
+                    <!--ko template: { name: 'node', data: $data }-->
+                    <!--/ko-->
+                </div>
+                <!-- /ko -->
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-item btn-group">
+        <button class="btn" data-bind="click: addNavigationItem">
+            <i class="paperbits-icon paperbits-simple-add"></i>
+            Add navigation item
+        </button>
+    </div>
+</div>
+
+
+<script id="node" type="text/html">
+    <div class="list-item" data-bind="css: { selected: hasFocus }, dragsource: { payload: $data, sticky: true, ondragstart: $component.navigationItemsTree().onNodeDragStart, ondragend: $component.navigationItemsTree().onNodeDragEnd }, dragtarget: { accept: canAccept, ondropbefore: insertBefore, ondropafter: insertAfter, flow: 'vertical', onacceptbefore: $component.navigationItemsTree().onAcceptNodeBefore, onacceptafter: $component.navigationItemsTree().onAcceptNodeAfter }">
+        <!--ko if: nodes().length > 0-->
+        <a href="#" class="list-item-collapse" data-bind="click: toggleCollapsed">
+            <i class="paperbits-icon paperbits-circle-delete" data-bind="css: { 'paperbits-circle-add': collapsed() }"></i>
+        </a>
+        <!--/ko-->
+
+        <a href="#" data-bind="hasFocus: hasFocus, click: function(){ $data.hasFocus(true); $component.selectNavigationItem($data); }">
+            <!-- <i class="list-item-handle paperbits-icon paperbits-menu-34"></i> -->
+            <span data-bind="text: label"></span>
+        </a>
+
+        <!--ko if: nodes().length > 0 && !collapsed()-->
+        <div class="list-item-children" data-bind="foreach: nodes">
+            <!--ko template: { name: 'node', data: $data }-->
+            <!--/ko-->
+        </div>
+        <!--/ko-->
+    </div>
+</script>

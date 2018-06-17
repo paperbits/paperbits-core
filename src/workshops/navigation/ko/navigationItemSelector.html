@@ -1,0 +1,42 @@
+<div class="flex-container flex-container-column">
+    <div class="flex-item flex-item-grow list" data-bind="with: navigationItemsTree(), scrollable: {}">
+        <div class="list-item-children" data-bind="foreach: nodes">
+            <div class="list-item" data-bind="css: { selected: hasFocus }">
+                <!--ko if: nodes().length > 0-->
+                <a href="#" class="list-item-collapse" data-bind="click: toggleCollapsed">
+                    <i class="paperbits-icon paperbits-circle-delete" data-bind="css: { 'paperbits-circle-add': collapsed() }"></i>
+                </a>
+                <!--/ko-->
+
+                <a href="#" data-bind="text: label, hasFocus: hasFocus, click: function(){ $data.hasFocus(true); $component.selectNavigationItem($data); }">-</a>
+
+                <!--ko if: nodes().length > 0 && !collapsed()-->
+                <div class="list-item-children" data-bind="foreach: nodes">
+                    <!--ko template: { name: 'node', data: $data }-->
+                    <!--/ko-->
+                </div>
+                <!--/ko-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script id="node" type="text/html">
+    <div class="list-item" data-bind="css: { selected: hasFocus }">
+        <!--ko if: nodes().length > 0-->
+        <a href="#" class="list-item-collapse" data-bind="click: toggleCollapsed">
+            <i class="paperbits-icon paperbits-circle-delete" data-bind="css: { 'paperbits-circle-add': collapsed() }"></i>
+        </a>
+        <!--/ko-->
+
+        <a href="#" data-bind="text: label, hasFocus: hasFocus, click: function(){ $data.hasFocus(true); $component.selectNavigationItem($data); }">-</a>
+
+        <!--ko if: nodes().length > 0 && !collapsed()-->
+        <div class="list-item-children" data-bind="foreach: nodes">
+            <!--ko template: { name: 'node', data: $data }-->
+            <!--/ko-->
+        </div>
+        <!--/ko-->
+    </div>
+</script>

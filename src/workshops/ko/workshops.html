@@ -1,0 +1,53 @@
+<div class="toolbox toolbox-position-left workshops-container flex-container flex-container-row" data-bind="visible: viewManager.primaryToolboxVisible, resizable: resizing">
+    <ul class="flex-item toolbox-btn-group toolbox-btn-group-vertical">
+        <li class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': viewManager.journeyName() == 'Pages' }">
+            <a href="#" title="Pages" role="button" data-bind="click: openPages">
+                <i class="paperbits-icon paperbits-menu-left"></i>
+            </a>
+        </li>
+        <li class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': viewManager.journeyName() == 'Media' }">
+            <a href="#" title="Media" role="button" data-bind="click: openMedia">
+                <i class="paperbits-icon paperbits-image-2"></i>
+            </a>
+        </li>
+        <li class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': viewManager.journeyName() == 'Blog' }">
+            <a href="#" title="Blog" role="button" data-bind="click: openBlogs">
+                <i class="paperbits-icon paperbits-chat-45-2"></i>
+            </a>
+        </li>
+        <li class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': viewManager.journeyName() == 'Layouts' }">
+            <a title="Layouts" href="#" role="button" data-bind="click: openLayouts">
+                <i class="paperbits-icon paperbits-layout-11"></i>
+            </a>
+        </li>
+        <li class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': viewManager.journeyName() == 'Navigation' }">
+            <a href="#" title="Navigation" role="button" data-bind="click: openNavigation">
+                <i class="paperbits-icon paperbits-menu-34"></i>
+            </a>
+        </li>
+        <li class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': viewManager.journeyName() == 'Site settings' }">
+            <a href="#" title="Settings" role="button" data-bind="click: openSettings">
+                <i class="paperbits-icon paperbits-preferences-circle"></i>
+            </a>
+        </li>
+        <li class="toolbox-btn pull-down">
+            <a href="#" title="Account" role="button" data-bind="click: openProfile">
+                <div class="photo" data-bind="style: { 'background-image': 'url('+userPhotoUrl()+')' }">
+                </div>
+            </a>
+        </li>
+    </ul>
+
+    <!-- ko if: viewManager.journey().length > 0 -->
+    <div class="flex-container flex-item flex-item-grow workshop" data-bind="foreach: viewManager.journey()">
+        <div class="flex-item flex-container flex-container-column workshop-journey-step">
+            <h1>
+                <span data-bind="text: heading"></span>
+                <a href="#" class="btn pull-right" data-bind="click: $component.closeWorkshop">✖</a>
+            </h1>
+            <hr />
+            <div class="flex-item flex-item-grow" data-bind="component: { name: component.name, params: component.params }"></div>
+        </div>
+    </div>
+    <!-- /ko -->
+</div>

@@ -1,0 +1,37 @@
+<div class="flex-container flex-container-column fit">
+    <fieldset class="flex-item form">
+        <input class="form-control" type="search" data-bind="textInput: searchPattern, valueUpdate: 'keyup'" placeholder="Search media..."
+        />
+    </fieldset>
+
+    <!-- ko if: !working() && mediaItems().length === 0 -->
+
+    <!-- ko if: searchPattern() === "" -->
+    <p class="flex-item flex-item-grow text-center">It seems that you don't have media yet. Would you like to
+        <a href="#" class="btn-link" data-bind="click: uploadMedia">upload one</a>?
+    </p>
+    <!-- /ko -->
+
+    <!-- ko if: searchPattern() !== ""  -->
+    <p class="flex-item flex-item-grow text-center">Could not find anything. Try to change search criteria.</p>
+    <!-- /ko -->
+
+    <!-- /ko -->
+
+    <!-- ko if: $component.working() -->
+    <spinner></spinner>
+    <!-- /ko -->
+
+    <ul class="flex-item flex-item-grow list" data-bind="foreach: { data: mediaItems, as: 'media' }, scrollable: {}">
+        <li class="list-item list-item-float" data-bind="css: { selected: media.hasFocus }, dragsource: { sticky: true, payload: $data, ondragstart: $parent.onDragStart, ondragend: $parent.onDragEnd }">
+            <a class="thumbnail" href="#" data-bind="click: $component.selectMedia, hasFocus: media.hasFocus, style: { 'background-image': 'url('+media.thumbnailUrl()+')' }, attr: { title: media.fileName() }, event: { keydown: $component.onKeyDown }"></a>
+        </li>
+    </ul>
+
+    <div class="flex-item btn-group">
+        <button class="btn" data-bind="click: uploadMedia">
+            <i class="paperbits-icon paperbits-square-upload"></i>
+            Upload file
+        </button>
+    </div>
+</div>

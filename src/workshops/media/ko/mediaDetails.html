@@ -1,0 +1,39 @@
+<div class="flex-container flex-container-column fit">
+    <fieldset class="flex-item flex-item-grow form" data-bind="scrollable: {}">
+        <label class="form-label">
+            Name
+        </label>
+        <div class="input-group">
+            <input type="text" class="form-control" data-bind="textInput: mediaItem.fileName, validationElement: mediaItem.fileName"
+                placeholder="i.e. Orders" maxlength="256" />
+            <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: mediaItem.fileName"
+                type="button">!</button>
+        </div>
+
+        <label class="form-label">
+            Permalink
+        </label>
+        <div class="input-group">
+            <input type="text" class="form-control" data-bind="textInput: mediaItem.permalinkUrl, validationElement: mediaItem.permalinkUrl"
+                placeholder="http://www.site.com/" maxlength="2000" spellcheck="false" />
+            <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: mediaItem.permalinkUrl"
+                type="button">!</button>
+        </div>
+
+        <label class="form-label">
+            Description
+        </label>
+        <textarea class="form-control" data-bind="textInput: mediaItem.description" maxlength="256"></textarea>
+
+        <label class="form-label">
+            Keywords</label>
+        <input type="text" class="form-control" data-bind="textInput: mediaItem.keywords" maxlength="256" />
+    </fieldset>
+
+    <div class="flex-item btn-group">
+        <button class="btn" data-bind="click: deleteMedia">
+            <i class="paperbits-icon paperbits-simple-remove"></i>
+            Delete file
+        </button>
+    </div>
+</div>

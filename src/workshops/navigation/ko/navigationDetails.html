@@ -1,0 +1,23 @@
+<div class="flex-container flex-container-column fit">
+    <fieldset class="flex-item flex-item-grow form" data-bind="scrollable: {}">
+        <label class="form-label">
+            Label</label>
+        <input class="form-control" type="text" autofocus data-bind="textInput: navigationItem.label" placeholder="i.e. Orders" maxlength="256"
+        />
+
+        <div class="form-group">
+            <label class="form-label">Link to</label>
+            <a href="#" class="form-control" data-bind="balloon: { component: { name: 'hyperlink-selector', params: { hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange } } }">
+                <i class="paperbits-icon paperbits-link-69-2 pull-right"></i>
+                <span data-bind="text: hyperlinkTitle"></span>
+            </a>
+        </div>
+    </fieldset>
+
+    <div class="flex-item btn-group">
+        <button class="btn" data-bind="click: deleteNavigationItem">
+            <i class="paperbits-icon paperbits-simple-remove"></i>
+            Delete navigation item
+        </button>
+    </div>
+</div>
