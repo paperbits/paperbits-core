@@ -33,7 +33,10 @@ export class TableOfContentsModelBinder implements IModelBinder {
 
             const anchorNavbarItem = new NavigationItemModel();
             anchorNavbarItem.label = anchors[anchorKey]; //`${page.title} > ${page.anchors[anchorKey]}`;
-            anchorNavbarItem.url = `${permalink.uri}#${anchorPermalink.uri}`;
+
+            // Bootstrap ScrollSpy works only with hash URLs
+            // anchorNavbarItem.url = `${permalink.uri}#${anchorPermalink.uri}`;
+            anchorNavbarItem.url = `#${anchorPermalink.uri}`;
 
             return anchorNavbarItem;
         });
