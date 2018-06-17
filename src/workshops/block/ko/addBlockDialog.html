@@ -1,0 +1,25 @@
+<div class="editor resizable-content flex-container flex-container-column">
+    <h1>
+        Design blocks
+        <a href="#" class="btn pull-right" data-bind="click: closeEditor">✖</a>
+    </h1>
+    <hr />
+
+    <fieldset class="flex-item flex-item-grow form" data-bind="scrollable: {}">
+        <label class="form-label">
+            Name for new design block
+        </label>
+        <div class="input-group">
+            <input type="text" class="form-control" data-bind="textInput: name, validationElement: name" placeholder="e.g. Features section"
+                maxlength="2000" />
+            <button class="btn btn-danger input-group-btn" type="button" data-bind="validationMessageToggle: name">!</button>
+        </div>
+    </fieldset>
+
+    <div class="flex-item btn-group">
+        <button class="btn" data-bind="click: addBlock">
+            <i class="paperbits-icon paperbits-simple-add"></i>
+            Add to library
+        </button>
+    </div>
+</div>

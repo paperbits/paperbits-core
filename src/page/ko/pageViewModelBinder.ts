@@ -1,9 +1,9 @@
 import { PageViewModel } from "./pageViewModel";
 import { IViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
-import { SectionModel } from "@paperbits/common/widgets/section/sectionModel";
 import { DragSession } from "@paperbits/common/ui/draggables/dragSession";
 import { PageModel } from "../pageModel";
 import { ViewModelBinderSelector } from "@paperbits/knockout/widgets/viewModelBinderSelector";
+import { SectionModel } from "../../section/sectionModel";
 
 export class PageViewModelBinder implements IViewModelBinder<PageModel, PageViewModel> {
     private readonly viewModelBinderSelector: ViewModelBinderSelector;

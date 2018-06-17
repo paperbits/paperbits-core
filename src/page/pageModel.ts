@@ -1,4 +1,4 @@
-import { SectionModel } from "@paperbits/common/widgets/section/sectionModel";
+import { SectionModel } from "../section/sectionModel";
 
 export class PageModel {
     public title: string;

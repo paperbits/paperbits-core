@@ -1,0 +1,41 @@
+<section class="carousel" data-ride="carousel" data-bind="css: css, attr: { id: $component.id }">
+    <!-- ko if: style() == "style1" -->
+    <ol class="carousel-indicators carousel-indicators-thumbnails">
+        <!-- ko foreach: { data: slides, as: 'slide'  } -->
+        <li data-bind="attr: { 'data-slide-to': $index(), 'data-target': '#' + $component.id }, css: { 'active': $index() == $component.activeSlideNumber() }, background: thumbnail"></li>
+        <!-- /ko -->
+    </ol>
+    <!-- /ko -->
+
+    <!-- ko if: style() == "style2" -->
+    <ol class="carousel-indicators">
+        <!-- ko foreach: { data: slides, as: 'slide'  } -->
+        <li data-bind="attr: { 'data-slide-to': $index(), 'data-target': '#' + $component.id }, css: { 'active': $index() == $component.activeSlideNumber() }">
+        <!-- /ko -->
+    </ol>
+    <!-- /ko -->
+
+    <div class="carousel-inner">
+        <!-- ko foreach: { data: slides, as: 'slide'  } -->
+        <div class="carousel-item" data-bind="css: { 'active': $index() == $component.activeSlideNumber() }">
+            <div data-bind="background: slide.background, css: slide.css">
+                <div data-bind="css: { container: slide.layout() == 'container' }">
+                    <!-- ko foreach: { data: slide.rows, as: 'row'  } -->
+                    <!-- ko widget: row -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </div>
+            </div>
+        </div>
+        <!-- /ko -->
+    </div>
+
+    <a class="carousel-control-prev" data-bind="attr: { 'href': '#' + $component.id }" data-slide="prev" role="button">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+    <a class="carousel-control-next" data-bind="attr: { 'href': '#' + $component.id }" data-slide="next" role="button">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+</section>

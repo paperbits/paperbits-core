@@ -3,23 +3,23 @@ import { IBlogService } from "@paperbits/common/blogs/IBlogService";
 import { IPermalinkService } from "@paperbits/common/permalinks";
 import { IFileService } from "@paperbits/common/files/IFileService";
 import { IRouteHandler } from "@paperbits/common/routing";
-import { SectionModelBinder, SectionModel } from "@paperbits/common/widgets/section";
 import { BlogPostModel } from "./blogPostModel";
 import { BlogPostContract } from "@paperbits/common/blogs/BlogPostContract";
 import { Contract } from "@paperbits/common";
+import { ModelBinderSelector } from "@paperbits/common/widgets";
 
 export class BlogModelBinder implements IModelBinder {
     private readonly blogService: IBlogService;
     private readonly permalinkService: IPermalinkService;
     private readonly fileService: IFileService;
-    private readonly sectionModelBinder: SectionModelBinder;
+    private readonly modelBinderSelector: ModelBinderSelector;
     private readonly routeHandler: IRouteHandler;
 
-    constructor(blogService: IBlogService, permalinkService: IPermalinkService, fileService: IFileService, sectionModelBinder: SectionModelBinder, routeHandler: IRouteHandler) {
+    constructor(blogService: IBlogService, permalinkService: IPermalinkService, fileService: IFileService, modelBinderSelector: ModelBinderSelector, routeHandler: IRouteHandler) {
         this.blogService = blogService;
         this.permalinkService = permalinkService;
         this.fileService = fileService;
-        this.sectionModelBinder = sectionModelBinder;
+        this.modelBinderSelector = modelBinderSelector;
         this.routeHandler = routeHandler;
 
         // rebinding...
@@ -49,9 +49,12 @@ export class BlogModelBinder implements IModelBinder {
         blogModel.keywords = blogPostContract.keywords;
 
         let blogContentNode = await this.fileService.getFileByKey(blogPostContract.contentKey);
-        let sectionModelPromises = blogContentNode.nodes.map(this.sectionModelBinder.nodeToModel);
-        let sections = await Promise.all<SectionModel>(sectionModelPromises);
-        blogModel.sections = sections;
+        const modelPromises = blogContentNode.nodes.map(async (config) => {
+            let modelBinder = this.modelBinderSelector.getModelBinderByNodeType(config.type);
+            return await modelBinder.nodeToModel(config);
+        });
+        const models = await Promise.all<any>(modelPromises);
+        blogModel.sections = models;
 
         return blogModel;
     }
@@ -63,7 +66,8 @@ export class BlogModelBinder implements IModelBinder {
             nodes: []
         };
         blogModel.sections.forEach(section => {
-            blogConfig.nodes.push(this.sectionModelBinder.getConfig(section));
+            const modelBinder = this.modelBinderSelector.getModelBinderByModel(section);
+            blogConfig.nodes.push(modelBinder.getConfig(section));
         });
 
         return blogConfig;

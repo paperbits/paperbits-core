@@ -1,5 +1,5 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { BlogModelBinder } from "../blogModelBinder";
+import { BlogModelBinder } from "./blogModelBinder";
 
 export class BlogModule implements IInjectorModule {
     constructor(

@@ -1,15 +1,15 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { IViewModelBinder } from "@paperbits/common/widgets";
-import { LayoutModule } from "./layout.module";
-import { LayoutsWorkshop } from "./workshop/layouts";
 import { ILayoutService } from "@paperbits/common/layouts/ILayoutService";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
-import { LayoutDetails } from "./workshop/layoutDetails";
 import { IPermalinkService } from "@paperbits/common/permalinks";
-import { LayoutSelector } from "./workshop/layoutSelector";
+import { LayoutModule } from "../../../layout/ko/layout.module";
+import { LayoutsWorkshop } from "./layouts";
+import { LayoutDetails } from "./layoutDetails";
+import { LayoutSelector } from "./layoutSelector";
 
-export class LayoutEditorModule implements IInjectorModule {
+export class LayoutWorkshopModule implements IInjectorModule {
     constructor(
         private modelBinders:any,
         private viewModelBinders:Array<IViewModelBinder<any, any>>,

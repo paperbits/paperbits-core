@@ -3,13 +3,13 @@ import { IViewModelBinder } from "@paperbits/common/widgets";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
 import { IPermalinkService } from "@paperbits/common/permalinks";
-import { PageModule } from "./page.module";
-import { PagesWorkshop } from "./workshop/pages";
 import { IPageService } from "@paperbits/common/pages";
-import { PageDetailsWorkshop } from "./workshop/pageDetails";
-import { PageSelector } from "./workshop/pageSelector";
+import { PagesWorkshop } from "./pages";
+import { PageDetailsWorkshop } from "./pageDetails";
+import { PageSelector } from "./pageSelector";
+import { PageModule } from "../../../page/ko/page.module";
 
-export class PageEditorModule implements IInjectorModule {
+export class PageWorkshopModule implements IInjectorModule {
     constructor(
         private modelBinders:any,
         private viewModelBinders:Array<IViewModelBinder<any, any>>,

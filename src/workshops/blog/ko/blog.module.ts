@@ -2,13 +2,13 @@ import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
 import { IPermalinkService } from "@paperbits/common/permalinks";
-import { BlogModule } from "./blog.module";
-import { BlogWorkshop } from "./workshop/blogs";
+import { BlogWorkshop } from "./blogs";
 import { IBlogService } from "@paperbits/common/blogs/IBlogService";
-import { BlogPostDetailsWorkshop } from "./workshop/blogPostDetails";
-import { BlogSelector } from "./workshop/blogSelector";
+import { BlogPostDetailsWorkshop } from "./blogPostDetails";
+import { BlogSelector } from "./blogSelector";
+import { BlogModule } from "../../../blog/blog.module";
 
-export class BlogEditorModule implements IInjectorModule {
+export class BlogWorkshopModule implements IInjectorModule {
     constructor(
         private modelBinders:any
     ) { }

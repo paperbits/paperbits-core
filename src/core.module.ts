@@ -11,7 +11,11 @@ import { TestimonialsModule } from "./testimonials/ko/testimonials.module";
 import { KoModule } from "./ko/ko.module";
 import { LayoutModule } from "./layout/ko/layout.module";
 import { PageModule } from "./page/ko/page.module";
-import { BlogModule } from "./blog/ko/blog.module";
+import { BlogModule } from "./blog/blog.module";
+import { ColumnModule } from "./column/ko/column.module";
+import { SectionModule } from "./section/ko/section.module";
+import { RowModule } from "./row/ko/row.module";
+import { SliderModule } from "./slider/ko/slider.module";
 
 export class CoreModule implements IInjectorModule {
     constructor(
@@ -24,6 +28,9 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new LayoutModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new PageModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new BlogModule(this.modelBinders));
+        injector.bindModule(new ColumnModule(this.modelBinders, this.viewModelBinders));
+        injector.bindModule(new RowModule(this.modelBinders, this.viewModelBinders));
+        injector.bindModule(new SectionModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new NavbarModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new ButtonModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new MapModule(this.modelBinders, this.viewModelBinders));
@@ -32,5 +39,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new VideoPlayerModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new YoutubePlayerModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new TestimonialsModule(this.modelBinders, this.viewModelBinders));
+        injector.bindModule(new SliderModule(this.modelBinders, this.viewModelBinders));
     }
 }

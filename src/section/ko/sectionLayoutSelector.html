@@ -1,0 +1,16 @@
+<div class="editor">
+    <h1>Add section</h1>
+    <hr/>
+
+    <h2>Blank</h2>
+    <a href="#" class="section-cfg" data-bind="click: $component.selectSectionLayout.bind($data, 'container')">
+        <span class="section-container-cfg"></span>
+    </a>
+
+    <a href="#" class="section-cfg" data-bind="click: $component.selectSectionLayout.bind($data, 'fluid')">
+        <span class="section-fluid-cfg"></span>
+    </a>
+
+    <h2>Blocks</h2>
+    <block-selector params="onSelect: $component.onBlockSelected"></block-selector>
+</div>

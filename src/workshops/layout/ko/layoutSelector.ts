@@ -4,7 +4,6 @@ import { LayoutContract } from "@paperbits/common/layouts/layoutContract";
 import { ILayoutService } from "@paperbits/common/layouts/ILayoutService";
 import { LayoutItem } from "./layoutItem";
 
-
 export class LayoutSelector implements IResourceSelector<LayoutContract> {
     private readonly layoutService: ILayoutService;
 

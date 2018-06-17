@@ -9,9 +9,14 @@ import { MapEditorModule } from "./map/ko/mapEditor.module";
 import { ButtonEditorModule } from "./button/ko/buttonEditor.module";
 import { TestimonialsEditorModule } from "./testimonials/ko/testimonialsEditor.module";
 import { KoModule } from "./ko/ko.module";
-import { LayoutEditorModule } from "./layout/ko/layoutEditor.module";
-import { PageEditorModule } from "./page/ko/pageEditor.module";
-import { BlogEditorModule } from "./blog/ko/blogEditor.module";
+import { ColumnEditorModule } from "./column/ko/columnEditor.module";
+import { SectionEditorModule } from "./section/ko/sectionEditor.module";
+import { RowEditorModule } from "./row/ko/rowEditor.module";
+import { BlockWorkshopModule } from "./workshops/block/ko/block.module";
+import { BlogWorkshopModule } from "./workshops/blog/ko/blog.module";
+import { SliderEditorModule } from "./slider/ko/sliderEditor.module";
+import { LayoutWorkshopModule } from "./workshops/layout/ko/layout.module";
+import { PageWorkshopModule } from "./workshops/page/ko/page.module";
 
 export class CoreEditModule implements IInjectorModule {
     constructor(
@@ -21,9 +26,13 @@ export class CoreEditModule implements IInjectorModule {
 
     register(injector: IInjector): void {
         injector.bindModule(new KoModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new LayoutEditorModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new PageEditorModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new BlogEditorModule(this.modelBinders));
+        injector.bindModule(new LayoutWorkshopModule(this.modelBinders, this.viewModelBinders));
+        injector.bindModule(new PageWorkshopModule(this.modelBinders, this.viewModelBinders));
+        injector.bindModule(new BlogWorkshopModule(this.modelBinders));
+        injector.bindModule(new BlockWorkshopModule());
+        injector.bindModule(new ColumnEditorModule(this.modelBinders, this.viewModelBinders));
+        injector.bindModule(new RowEditorModule(this.modelBinders, this.viewModelBinders));
+        injector.bindModule(new SectionEditorModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new NavbarEditorModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new ButtonEditorModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new MapEditorModule(this.modelBinders, this.viewModelBinders));
@@ -32,5 +41,6 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindModule(new VideoPlayerEditorModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new YoutubePlayerEditorModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new TestimonialsEditorModule(this.modelBinders, this.viewModelBinders));
+        injector.bindModule(new SliderEditorModule(this.modelBinders, this.viewModelBinders));
     }
 }

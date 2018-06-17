@@ -1,0 +1,56 @@
+<div class="editor resizable-content flex-container flex-container-column">
+    <h1>
+        Column
+        <a href="#" class="btn pull-right" data-bind="click: closeEditor">✖</a>
+    </h1>
+    <hr />
+    <fieldset class="form flex-item flex-item-grow" data-bind="scrollable: {}">
+        <div class="form-group form-group-collapsible">
+            <label class="form-label">
+                <a href="#" class="form-group-toggle" data-bind="collapse: '#alignmentCollapse'"></a>
+                <b>Content alignment</b>
+            </label>
+
+            <div id="alignmentCollapse" class="collapse form-group-collapse">
+                <div class="form-group">
+                    <label>Horizontal</label>
+                    <a href="#" class="toolbox-btn" data-bind="click: alignLeft, css: { 'toolbox-btn-is-active': horizontalAlignment() === 'start' }">
+                        <i class="paperbits-icon paperbits-align-left"></i>
+                    </a>
+                    <a href="#" class="toolbox-btn" data-bind="click: alignCenter, css: { 'toolbox-btn-is-active': horizontalAlignment() === 'center' || horizontalAlignment() === 'around' || horizontalAlignment() === 'between' }">
+                        <i class="paperbits-icon paperbits-align-center-horizontal"></i>
+                    </a>
+                    <a href="#" class="toolbox-btn" data-bind="click: alignRight, css: { 'toolbox-btn-is-active': horizontalAlignment() === 'end' }">
+                        <i class="paperbits-icon paperbits-align-right"></i>
+                    </a>
+                </div>
+
+                <div class="form-group">
+                    <label>Vertical</label>
+                    <a href="#" class="toolbox-btn" data-bind="click: alignTop, css: { 'toolbox-btn-is-active': verticalAlignment() === 'start' }">
+                        <i class="paperbits-icon paperbits-align-top"></i>
+                    </a>
+                    <a href="#" class="toolbox-btn toolbox-btn-is-active" data-bind="click: alignMiddle, css: { 'toolbox-btn-is-active': verticalAlignment() === 'center' || verticalAlignment() === 'around' || verticalAlignment() === 'between' }">
+                        <i class="paperbits-icon paperbits-align-center-vertical"></i>
+                    </a>
+                    <a href="#" class="toolbox-btn" data-bind="click: alignBottom, css: { 'toolbox-btn-is-active': verticalAlignment() === 'end' }">
+                        <i class="paperbits-icon paperbits-align-bottom"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group form-group-collapsible">
+            <label class="form-label">
+                <a href="#" class="form-group-toggle" data-bind="collapse: '#miscellaneousCollapse'"></a>
+                <b>Miscellaneous</b>
+            </label>
+            <div id="miscellaneousCollapse" class="collapse form-group-collapse">
+                <label>Order in row</label>
+                <div class="form-group">
+                    <input type="number" class="form-control" max="12" min="1" data-bind="textInput: order">
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
