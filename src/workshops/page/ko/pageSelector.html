@@ -6,11 +6,13 @@
     <ul class="flex-item flex-item-grow list" data-bind="foreach: pages, scrollable: {}">
         <li class="list-item" data-bind="css: { selected: hasFocus }">
             <i class="paperbits-icon paperbits-single-content-03"></i>
-            <a href="#" data-bind="click: $component.selectPage, text: title, hasFocus: hasFocus, event: { keydown: $component.keydown }"></a>
+            <a href="#" class="list-item-label" data-bind="click: $component.selectPage, text: title, hasFocus: hasFocus, event: { keydown: $component.keydown }"></a>
             <ul class="list-item-children" data-bind="foreach: anchors">
                 <li class="list-item" data-bind="css: { selected: hasFocus }">
-                    <i class="paperbits-icon paperbits-anchor"></i>
-                    <a href="#" data-bind="click: $component.selectAnchor, text: shortTitle, hasFocus: hasFocus, event: { keydown: $component.keydown }"></a>
+                    <a href="#" class="list-item-label" data-bind="click: $component.selectAnchor, hasFocus: hasFocus, event: { keydown: $component.keydown }">
+                        <i class="paperbits-icon paperbits-anchor"></i>
+                        <span data-bind="text: shortTitle"></span>
+                    </a>
                 </li>
             </ul>
         </li>
