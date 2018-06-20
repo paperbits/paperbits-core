@@ -1,0 +1,79 @@
+<div title="Ordered list" class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': ol() }">
+    <a href="#" data-bind="click: toggleOrderedList">
+        <i class="paperbits-icon paperbits-list-numbers"></i>
+    </a>
+</div>
+
+<div title="Unordered list" class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': ul() }">
+    <a href="#" data-bind="click: toggleUnorderedList">
+        <i class="paperbits-icon paperbits-list-bullet"></i>
+    </a>
+</div>
+
+<!-- <div class="toolbox-btn" title="Decrease Indentation">
+    <a href="#" data-bind="click: decIndent">
+        <i class="paperbits-icon paperbits-margin-right"></i>
+    </a>
+</div>
+<div class="toolbox-btn" title="Increase Indentation">
+    <a href="#" data-bind="click: incIndent">
+        <i class="paperbits-icon paperbits-margin-left"></i>
+    </a>
+</div> -->
+
+<div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': bold() }" title="Bold">
+    <a href="#" data-bind="click: toggleBold">
+        <i class="paperbits-icon paperbits-bold"></i>
+    </a>
+</div>
+<div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': italic() }" title="Italic">
+    <a href="#" data-bind="click: toggleItalic">
+        <i class="paperbits-icon paperbits-italic"></i>
+    </a>
+</div>
+<div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': underlined() }" title="Underlined">
+    <a href="#" data-bind="click: toggleUnderlined">
+        <i class="paperbits-icon paperbits-underline"></i>
+    </a>
+</div>
+<div title="Style" class="toolbox-btn toolbox-dropdown">
+    <a href="#" data-bind="text: style, balloon: { component: { name: 'block-style-selector' } }"></a>
+</div>
+<div title="Font" class="toolbox-btn toolbox-dropdown">
+    <a href="#" data-bind="text: font, balloon: { component: { name: 'font-selector' } }"></a>
+</div>
+<div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active':  alignment() == 'left' }" title="Align left">
+    <a href="#" data-bind="click: toggleAlignLeft">
+        <i class="paperbits-icon paperbits-align-left-2"></i>
+    </a>
+</div>
+<div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': alignment() == 'center' }" title="Align center">
+    <a href="#" data-bind="click: toggleAlignCenter">
+        <i class="paperbits-icon paperbits-align-center"></i>
+    </a>
+</div>
+<div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active':  alignment() == 'right' }" title="Align right">
+    <a href="#" data-bind="click: toggleAlignRight">
+        <i class="paperbits-icon paperbits-align-right-2"></i>
+    </a>
+</div>
+<div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active':  alignment() == 'justified' }" title="Justify">
+    <a href="#" data-bind="click: toggleJustify">
+        <i class="paperbits-icon paperbits-align-justify"></i>
+    </a>
+</div>
+<!-- <div title="Text style" class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': styled() }">
+    <a href="#" data-bind="balloon: { component: { name: 'intention-selector', params: { title: 'Text style', intentions: styleIntentions, selectedIntention: styleIntention, setIntentionSelectorCallback: setStyle } } }">
+        <i class="paperbits-icon paperbits-color"></i>
+    </a>
+</div> -->
+<div class="toolbox-btn" title="Text size" data-bind="css: { 'toolbox-btn-is-active': sized() }">
+    <a href="#" data-bind="click: toggleSize">
+        <i class="paperbits-icon paperbits-size"></i>
+    </a>
+</div>
+<div title="Anchor" class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': anchored() }">
+    <a href="#" data-bind="click: toggleAnchor">
+        <i class="paperbits-icon paperbits-anchor"></i>
+    </a>
+</div>

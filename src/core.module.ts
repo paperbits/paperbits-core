@@ -16,20 +16,26 @@ import { ColumnModule } from "./column/ko/column.module";
 import { SectionModule } from "./section/ko/section.module";
 import { RowModule } from "./row/ko/row.module";
 import { SliderModule } from "./slider/ko/slider.module";
+import { GoogleTagManager } from "./gtm/ko/gtm";
+import { IntercomViewModel } from "./intercom/ko/intercomViewModel";
+import { TextblockModule } from "./textblock/ko/textblock.module";
 
 export class CoreModule implements IInjectorModule {
     constructor(
         private modelBinders:any,
-        private viewModelBinders:Array<IViewModelBinder<any, any>>,
+        private viewModelBinders:Array<IViewModelBinder<any, any>>
     ) { }
 
-    register(injector: IInjector): void {
+    register(injector: IInjector): void {        
+        injector.bind("gtm", GoogleTagManager);
+        injector.bind("intercom", IntercomViewModel);
         injector.bindModule(new KoModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new LayoutModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new PageModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new BlogModule(this.modelBinders));
         injector.bindModule(new ColumnModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new RowModule(this.modelBinders, this.viewModelBinders));
+        injector.bindModule(new TextblockModule(this.viewModelBinders));
         injector.bindModule(new SectionModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new NavbarModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new ButtonModule(this.modelBinders, this.viewModelBinders));
