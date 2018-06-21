@@ -8,7 +8,7 @@
                 </a>
                 <!-- /ko -->
 
-                <a href="#" data-bind="text: label, hasFocus: hasFocus, click: function(){ $data.hasFocus(true); $component.selectNavigationItem($data); }">-</a>
+                <a href="#" class="list-item-label" data-bind="text: label, hasFocus: hasFocus, click: function(){ $data.hasFocus(true); $component.selectNavigationItem($data); }">-</a>
 
                 <!-- ko if: nodes().length > 0 && !collapsed() -->
                 <div class="list-item-children" data-bind="foreach: nodes">
@@ -37,7 +37,7 @@
         </a>
         <!--/ko-->
 
-        <a href="#" data-bind="hasFocus: hasFocus, click: function(){ $data.hasFocus(true); $component.selectNavigationItem($data); }">
+        <a href="#" class="list-item-label" data-bind="hasFocus: hasFocus, click: function(){ $data.hasFocus(true); $component.selectNavigationItem($data); }">
             <!-- <i class="list-item-handle paperbits-icon paperbits-menu-34"></i> -->
             <span data-bind="text: label"></span>
         </a>

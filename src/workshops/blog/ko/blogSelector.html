@@ -6,7 +6,7 @@
     <ul class="flex-item flex-item-grow list" data-bind="foreach: posts, scrollable: {}">
         <li class="list-item" data-bind="css: { selected: hasFocus }">
             <i class="paperbits-icon paperbits-chat-45-2"></i>
-            <a href="#" data-bind="click: $component.selectPost, text: title, hasFocus: hasFocus, event: { keydown: $component.keydown }"></a>
+            <a href="#" class="list-item-label" data-bind="click: $component.selectPost, text: title, hasFocus: hasFocus, event: { keydown: $component.keydown }"></a>
         </li>
     </ul>
 </div>
