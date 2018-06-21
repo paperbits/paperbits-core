@@ -8,7 +8,6 @@ import { TableOfContentsEditorModule } from "./table-of-contents/ko/tableOfConte
 import { MapEditorModule } from "./map/ko/mapEditor.module";
 import { ButtonEditorModule } from "./button/ko/buttonEditor.module";
 import { TestimonialsEditorModule } from "./testimonials/ko/testimonialsEditor.module";
-import { KoModule } from "./ko/ko.module";
 import { ColumnEditorModule } from "./column/ko/columnEditor.module";
 import { SectionEditorModule } from "./section/ko/sectionEditor.module";
 import { RowEditorModule } from "./row/ko/rowEditor.module";
@@ -22,6 +21,10 @@ import { MediaWorkshopModule } from "./workshops/media/ko/media.module";
 import { NavigationWorkshopModule } from "./workshops/navigation/ko/navigation.module";
 import { Workshops } from "./workshops/ko/workshops";
 import { TextblockEditorModule } from "./textblock/ko/textblockEditor.module";
+import { DropbucketModule } from "./workshops/dropbucket/ko/dropbucket.module";
+import { ViewportSelector } from "./workshops/viewports/ko/viewport-selector";
+import { HostBindingHandler } from "./ko/bindingHandlers";
+import { CoreModule } from "./core.module";
 
 export class CoreEditModule implements IInjectorModule {
     constructor(
@@ -30,27 +33,32 @@ export class CoreEditModule implements IInjectorModule {
     ) { }
 
     register(injector: IInjector): void {
+        injector.bindModule(new CoreModule(this.modelBinders, this.viewModelBinders)); 
+
         injector.bind("workshops", Workshops);
+        injector.bind("viewportSelector", ViewportSelector);
+        injector.bindSingleton("hostBindingHandler", HostBindingHandler);
         injector.bind("settingsWorkshop", SettingsWorkshop);
-        injector.bindModule(new KoModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new LayoutWorkshopModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new PageWorkshopModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new BlogWorkshopModule(this.modelBinders));
+        injector.bindModule(new DropbucketModule());
+        injector.bindModule(new LayoutWorkshopModule());
+        injector.bindModule(new PageWorkshopModule());
+        injector.bindModule(new BlogWorkshopModule());
         injector.bindModule(new BlockWorkshopModule());
         injector.bindModule(new MediaWorkshopModule());
         injector.bindModule(new NavigationWorkshopModule());
-        injector.bindModule(new ColumnEditorModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new RowEditorModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new TextblockEditorModule(this.viewModelBinders));
-        injector.bindModule(new SectionEditorModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new NavbarEditorModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new ButtonEditorModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new MapEditorModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new TableOfContentsEditorModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new PictureEditorModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new VideoPlayerEditorModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new YoutubePlayerEditorModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new TestimonialsEditorModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new SliderEditorModule(this.modelBinders, this.viewModelBinders));
+        injector.bindModule(new ColumnEditorModule());
+        injector.bindModule(new RowEditorModule());
+        injector.bindModule(new TextblockEditorModule());
+        injector.bindModule(new SectionEditorModule());
+        injector.bindModule(new NavbarEditorModule());
+        injector.bindModule(new ButtonEditorModule());
+        injector.bindModule(new MapEditorModule());
+        injector.bindModule(new TableOfContentsEditorModule());
+        injector.bindModule(new PictureEditorModule());
+        injector.bindModule(new VideoPlayerEditorModule());
+        injector.bindModule(new YoutubePlayerEditorModule());
+        injector.bindModule(new TestimonialsEditorModule());
+        injector.bindModule(new SliderEditorModule());
+ 
     }
 }

@@ -1,19 +1,10 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { IWidgetHandler, IContentDropHandler } from "@paperbits/common/editing";
-import { IViewModelBinder } from "@paperbits/common/widgets";
-import { MapModule } from "./map.module";
 import { MapEditor } from "./mapEditor";
 import { MapHandlers } from "../mapHandlers";
 
 export class MapEditorModule implements IInjectorModule {
-    constructor(
-        private modelBinders:any,
-        private viewModelBinders:Array<IViewModelBinder<any, any>>,
-    ) { }
-
-    register(injector: IInjector): void {        
-        injector.bindModule(new MapModule(this.modelBinders, this.viewModelBinders));
-
+    register(injector: IInjector): void {
         injector.bind("mapEditor", MapEditor);        
         injector.bindSingleton("mapDropHandler", MapHandlers);
 

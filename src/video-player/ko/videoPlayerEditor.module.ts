@@ -1,19 +1,10 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { IWidgetHandler, IContentDropHandler } from "@paperbits/common/editing";
-import { IViewModelBinder } from "@paperbits/common/widgets";
 import { VideoEditor } from "./videoEditor";
 import { VideoHandlers } from "./videoHandlers";
-import { VideoPlayerModule } from "./videoPlayer.module";
 
 export class VideoPlayerEditorModule implements IInjectorModule {
-    constructor(
-        private modelBinders:any,
-        private viewModelBinders:Array<IViewModelBinder<any, any>>,
-    ) { }
-
-    register(injector: IInjector): void {        
-        injector.bindModule(new VideoPlayerModule(this.modelBinders, this.viewModelBinders));
-    
+    register(injector: IInjector): void {
         injector.bind("videoPlayerEditor", VideoEditor);
         injector.bindSingleton("videoDropHandler", VideoHandlers);
 

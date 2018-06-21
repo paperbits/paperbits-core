@@ -6,16 +6,9 @@ import { BlogWorkshop } from "./blogs";
 import { IBlogService } from "@paperbits/common/blogs/IBlogService";
 import { BlogPostDetailsWorkshop } from "./blogPostDetails";
 import { BlogSelector } from "./blogSelector";
-import { BlogModule } from "../../../blog/blog.module";
 
 export class BlogWorkshopModule implements IInjectorModule {
-    constructor(
-        private modelBinders:any
-    ) { }
-
     register(injector: IInjector): void {        
-        injector.bindModule(new BlogModule(this.modelBinders));
-        
         injector.bind("blogWorkshop", BlogWorkshop);
 
         injector.bindComponent("blogPostDetailsWorkshop", (ctx: IInjector, params) => {

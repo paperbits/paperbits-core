@@ -19,6 +19,8 @@ import { SliderModule } from "./slider/ko/slider.module";
 import { GoogleTagManager } from "./gtm/ko/gtm";
 import { IntercomViewModel } from "./intercom/ko/intercomViewModel";
 import { TextblockModule } from "./textblock/ko/textblock.module";
+import { TextblockModelBinder } from "@paperbits/common/widgets/textblock";
+import { BackgroundModelBinder } from "@paperbits/common/widgets/background";
 
 export class CoreModule implements IInjectorModule {
     constructor(
@@ -29,7 +31,13 @@ export class CoreModule implements IInjectorModule {
     register(injector: IInjector): void {        
         injector.bind("gtm", GoogleTagManager);
         injector.bind("intercom", IntercomViewModel);
-        injector.bindModule(new KoModule(this.modelBinders, this.viewModelBinders));
+
+        injector.bind("textModelBinder", TextblockModelBinder);
+        this.modelBinders.push(injector.resolve("textModelBinder"));
+        
+        injector.bind("backgroundModelBinder", BackgroundModelBinder);
+
+        injector.bindModule(new KoModule());
         injector.bindModule(new LayoutModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new PageModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new BlogModule(this.modelBinders));
