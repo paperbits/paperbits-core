@@ -54,7 +54,7 @@ export class BlogModelBinder implements IModelBinder {
             return await modelBinder.nodeToModel(config);
         });
         const models = await Promise.all<any>(modelPromises);
-        blogModel.sections = models;
+        blogModel.widgets = models;
 
         return blogModel;
     }
@@ -65,7 +65,7 @@ export class BlogModelBinder implements IModelBinder {
             type: "blog",
             nodes: []
         };
-        blogModel.sections.forEach(section => {
+        blogModel.widgets.forEach(section => {
             const modelBinder = this.modelBinderSelector.getModelBinderByModel(section);
             blogConfig.nodes.push(modelBinder.getConfig(section));
         });

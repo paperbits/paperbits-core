@@ -4,17 +4,21 @@ import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { IModelBinder } from "@paperbits/common/editing/IModelBinder";
 import { Contract } from "@paperbits/common";
 
-export class ColumnModelBinder {
-    private readonly modelBinderSelector: ModelBinderSelector;
-
-    constructor(modelBinderSelector: ModelBinderSelector) {
-        this.modelBinderSelector = modelBinderSelector;
-
+export class ColumnModelBinder implements IModelBinder {
+    constructor(private readonly modelBinderSelector: ModelBinderSelector) {
         this.nodeToModel = this.nodeToModel.bind(this);
     }
 
+    public canHandleWidgetType(widgetType: string): boolean {
+        return widgetType === "layout-column";
+    }
+
+    public canHandleModel(model: Object): boolean {
+        return model instanceof ColumnModel;
+    }
+
     public async nodeToModel(contract: ColumnContract): Promise<ColumnModel> {
-        let columnModel = new ColumnModel();
+        const columnModel = new ColumnModel();
 
         if (contract.size) {
             columnModel.sizeXs = Number.parseInt(contract.size.xs);
@@ -44,8 +48,8 @@ export class ColumnModelBinder {
             contract.nodes = [];
         }
 
-        let modelPromises = contract.nodes.map(async (node) => {
-            let modelBinder: IModelBinder = this.modelBinderSelector.getModelBinderByNodeType(node.type);
+        const modelPromises = contract.nodes.map(async (node) => {
+            const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(node.type);
             return await modelBinder.nodeToModel(node);
         });
 
@@ -54,7 +58,7 @@ export class ColumnModelBinder {
         return columnModel;
     }
 
-    public getColumnConfig(columnModel: ColumnModel): Contract {
+    public getConfig(columnModel: ColumnModel): Contract {
         let columnConfig: ColumnContract = {
             type: "layout-column",
             object: "block",
@@ -122,9 +126,8 @@ export class ColumnModelBinder {
         }
 
         columnModel.widgets.forEach(widgetModel => {
-            let modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
+            const modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
             columnConfig.nodes.push(modelBinder.getConfig(widgetModel));
-
         });
 
         return columnConfig;

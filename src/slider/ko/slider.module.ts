@@ -10,9 +10,9 @@ export class SliderModule implements IInjectorModule {
     ) { }
 
     register(injector: IInjector): void {
-        injector.bind("sliderModelBinder", SliderModelBinder);
-        this.modelBinders.push(injector.resolve("sliderModelBinder"));
-        injector.bind("sliderViewModelBinder", SliderViewModelBinder);
-        this.viewModelBinders.push(injector.resolve("sliderViewModelBinder"));
+        // injector.bind("sliderModelBinder", SliderModelBinder);
+        // this.modelBinders.push(injector.resolve("sliderModelBinder"));
+        // injector.bind("sliderViewModelBinder", SliderViewModelBinder);
+        // this.viewModelBinders.push(injector.resolve("sliderViewModelBinder"));
     }
 }

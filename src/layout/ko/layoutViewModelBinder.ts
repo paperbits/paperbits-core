@@ -14,7 +14,7 @@ export class LayoutViewModelBinder {
             viewModel = new LayoutViewModel();
         }
 
-        let sectionViewModels = model.sections
+        const sectionViewModels = model.widgets
             .map(widgetModel => {
                 let widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
 

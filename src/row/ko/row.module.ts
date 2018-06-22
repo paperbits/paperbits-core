@@ -14,7 +14,7 @@ export class RowModule implements IInjectorModule {
         injector.bind("row", RowViewModel);
 
         injector.bind("rowModelBinder", RowModelBinder);
-        //this.modelBinders.push(injector.resolve("rowModelBinder"));
+        this.modelBinders.push(injector.resolve("rowModelBinder"));
 
         injector.bind("rowViewModelBinder", RowViewModelBinder);
         this.viewModelBinders.push(injector.resolve("rowViewModelBinder"));

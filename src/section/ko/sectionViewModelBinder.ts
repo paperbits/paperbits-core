@@ -3,36 +3,39 @@ import { IViewModelBinder } from "@paperbits/common/widgets";
 import { IContextualEditor, IView, IViewManager } from "@paperbits/common/ui";
 import { GridHelper, IWidgetBinding } from "@paperbits/common/editing";
 import { SectionModel } from "../sectionModel";
-import { RowViewModelBinder } from "../../row/ko/rowViewModelBinder";
 import { PlaceholderViewModel } from "@paperbits/knockout/editors/placeholder";
 import { RowModel } from "../../row/rowModel";
+import { ViewModelBinderSelector } from "@paperbits/knockout/widgets/viewModelBinderSelector";
 
 export class SectionViewModelBinder implements IViewModelBinder<SectionModel, SectionViewModel> {
     constructor(
-        private readonly rowViewModelBinder: RowViewModelBinder,
+        private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly viewManager: IViewManager
-    ) {
-        this.rowViewModelBinder = rowViewModelBinder;
-    }
+    ) { }
 
-    public modelToViewModel(model: SectionModel, readonly: boolean, existingViewModel?: SectionViewModel): SectionViewModel {
-        if (!existingViewModel) {
-            existingViewModel = new SectionViewModel();
+    public modelToViewModel(model: SectionModel, readonly: boolean, viewModel?: SectionViewModel): SectionViewModel {
+        if (!viewModel) {
+            viewModel = new SectionViewModel();
         }
 
-        const rowViewModels = model.rows.map(rowModel => {
-            let rowViewModel = this.rowViewModelBinder.modelToViewModel(rowModel, readonly);
-            return rowViewModel;
-        })
+        const viewModels = model.widgets
+            .map(widgetModel => {
+                const viewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
+                const viewModel = viewModelBinder.modelToViewModel(widgetModel, readonly);
 
-        if (rowViewModels.length === 0) {
-            rowViewModels.push(<any>new PlaceholderViewModel("Section"));
+                return viewModel;
+            });
+
+        if (viewModels.length === 0) {
+            viewModels.push(<any>new PlaceholderViewModel("Section"));
         }
 
-        existingViewModel.rows(rowViewModels);
-        existingViewModel.container(model.container);
-        existingViewModel.background(model.background);
-        existingViewModel.snapTo(model.snap);
+        viewModel.widgets(viewModels);
+
+        viewModel.widgets(viewModels);
+        viewModel.container(model.container);
+        viewModel.background(model.background);
+        viewModel.snapTo(model.snap);
 
         // if (model.background) {
         //     let backgroundColorKey = model.background.colorKey;
@@ -62,7 +65,7 @@ export class SectionViewModelBinder implements IViewModelBinder<SectionModel, Se
             flow: "liquid",
             editor: "layout-section-editor",
             applyChanges: () => {
-                this.modelToViewModel(model, readonly, existingViewModel);
+                this.modelToViewModel(model, readonly, viewModel);
             },
 
             getContextualEditor: (element: HTMLElement, half: string, placeholderElement?: HTMLElement, placeholderHalf?: string): IContextualEditor => {
@@ -92,13 +95,13 @@ export class SectionViewModelBinder implements IViewModelBinder<SectionModel, Se
                                     let mainModel = GridHelper.getModel(mainElement);
                                     let mainWidgetModel = GridHelper.getWidgetBinding(mainElement);
                                     let sectionModel = <SectionModel>GridHelper.getModel(sectionElement);
-                                    let index = mainModel.sections.indexOf(sectionModel);
+                                    let index = mainModel.widgets.indexOf(sectionModel);
 
                                     if (sectionHalf === "bottom") {
                                         index++;
                                     }
 
-                                    mainModel.sections.splice(index, 0, newSectionModel);
+                                    mainModel.widgets.splice(index, 0, newSectionModel);
                                     mainWidgetModel.applyChanges();
 
                                     this.viewManager.clearContextualEditors();
@@ -115,7 +118,7 @@ export class SectionViewModelBinder implements IViewModelBinder<SectionModel, Se
                             const mainWidgetModel = GridHelper.getWidgetBinding(mainElement);
                             const sectionModel = GridHelper.getModel(element);
 
-                            mainModel.sections.remove(sectionModel);
+                            mainModel.widgets.remove(sectionModel);
                             mainWidgetModel.applyChanges();
 
                             this.viewManager.clearContextualEditors();
@@ -152,7 +155,7 @@ export class SectionViewModelBinder implements IViewModelBinder<SectionModel, Se
 
                 const attachedModel = <SectionModel>GridHelper.getModel(element);
 
-                if (attachedModel.rows.length === 0) {
+                if (attachedModel.widgets.length === 0) {
                     sectionContextualEditor.hoverCommand = {
                         position: "center",
                         tooltip: "Add row",
@@ -164,7 +167,7 @@ export class SectionViewModelBinder implements IViewModelBinder<SectionModel, Se
                                     let sectionModel = GridHelper.getModel(element);
                                     let sectionBinding = GridHelper.getWidgetBinding(element);
 
-                                    sectionModel.rows.push(newRowModel);
+                                    sectionModel.widgets.push(newRowModel);
                                     sectionBinding.applyChanges();
 
                                     this.viewManager.clearContextualEditors();
@@ -178,9 +181,9 @@ export class SectionViewModelBinder implements IViewModelBinder<SectionModel, Se
             }
         }
 
-        existingViewModel["widgetBinding"] = binding;
+        viewModel["widgetBinding"] = binding;
 
-        return existingViewModel;
+        return viewModel;
     }
 
     public canHandleModel(model: SectionModel): boolean {

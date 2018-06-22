@@ -1,8 +1,8 @@
-import { RowModel } from "../row/rowModel";
+import { WidgetModel } from "@paperbits/common/widgets/WidgetModel";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 
 export class SectionModel {
-    public rows: RowModel[];
+    public widgets: WidgetModel[];
     public container: string;
     public padding: string;
     public snap: string;
@@ -14,6 +14,6 @@ export class SectionModel {
         this.padding = "with-padding";
         this.snap = "none";
         this.background = new BackgroundModel();
-        this.rows = [];
+        this.widgets = [];
     }
 }

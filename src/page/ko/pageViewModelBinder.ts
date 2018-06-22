@@ -4,6 +4,7 @@ import { DragSession } from "@paperbits/common/ui/draggables/dragSession";
 import { PageModel } from "../pageModel";
 import { ViewModelBinderSelector } from "@paperbits/knockout/widgets/viewModelBinderSelector";
 import { SectionModel } from "../../section/sectionModel";
+import { PlaceholderViewModel } from "@paperbits/knockout/editors/placeholder";
 
 export class PageViewModelBinder implements IViewModelBinder<PageModel, PageViewModel> {
     private readonly viewModelBinderSelector: ViewModelBinderSelector;
@@ -17,7 +18,7 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
             pageViewModel = new PageViewModel();
         }
 
-        const widgetViewModels = model.sections
+        const widgetViewModels = model.widgets
             .map(widgetModel => {
                 const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
 
@@ -31,7 +32,11 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
             })
             .filter(x => x != null);
 
-        pageViewModel.sections(widgetViewModels);
+        if (widgetViewModels.length === 0) {
+            widgetViewModels.push(new PlaceholderViewModel("Page"));
+        }
+
+        pageViewModel.widgets(widgetViewModels);
 
         const binding = {
             readonly: readonly,
@@ -45,7 +50,7 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
             onDragDrop: (dragSession: DragSession): void => {
                 switch (dragSession.type) {
                     case "section":
-                        model.sections.splice(dragSession.insertIndex, 0, <SectionModel>dragSession.sourceModel);
+                        model.widgets.splice(dragSession.insertIndex, 0, <SectionModel>dragSession.sourceModel);
                         break;
                 }
                 binding.applyChanges();

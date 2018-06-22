@@ -1,14 +1,14 @@
 import * as ko from "knockout";
 import template from "./row.html";
 import { Component } from "@paperbits/knockout/decorators";
-import { ColumnViewModel } from "../../column/ko/columnViewModel";
+import { WidgetViewModel } from "../../ko/widgetViewModel";
 
 @Component({
     selector: "layout-row",
     template: template
 })
-export class RowViewModel {
-    public columns: KnockoutObservableArray<ColumnViewModel>;
+export class RowViewModel implements WidgetViewModel {
+    public widgets: KnockoutObservableArray<WidgetViewModel>;
     public css: KnockoutComputed<string>;
     public alignSm: KnockoutObservable<string>;
     public alignMd: KnockoutObservable<string>;
@@ -18,7 +18,7 @@ export class RowViewModel {
     public justifyLg: KnockoutObservable<string>;
 
     constructor() {
-        this.columns = ko.observableArray<ColumnViewModel>();
+        this.widgets = ko.observableArray<WidgetViewModel>();
         this.alignSm = ko.observable<string>();
         this.alignMd = ko.observable<string>();
         this.alignLg = ko.observable<string>();

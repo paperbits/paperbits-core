@@ -109,13 +109,13 @@ export class SliderViewModelBinder {
                                     let mainModel = GridHelper.getModel(mainElement);
                                     let mainWidgetModel = GridHelper.getWidgetBinding(mainElement);
                                     let sectionModel = <SectionModel>GridHelper.getModel(sectionElement);
-                                    let index = mainModel.sections.indexOf(sectionModel);
+                                    let index = mainModel.widgets.indexOf(sectionModel);
 
                                     if (sectionHalf === "bottom") {
                                         index++;
                                     }
 
-                                    mainModel.sections.splice(index, 0, newSectionModel);
+                                    mainModel.widgets.splice(index, 0, newSectionModel);
                                     mainWidgetModel.applyChanges();
 
                                     this.viewManager.clearContextualEditors();
@@ -133,7 +133,7 @@ export class SliderViewModelBinder {
                             let widgetModel = GridHelper.getModel(widgetElement);
 
                             if (sourceMainModel) {
-                                sourceMainModel.sections.remove(widgetModel);
+                                sourceMainModel.widgets.remove(widgetModel);
                                 sourceMainWidgetModel.applyChanges();
                             }
 

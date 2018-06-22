@@ -99,7 +99,7 @@ export class SliderModelBinder implements IModelBinder {
                 }
 
                 slideModel.rows.forEach(row => {
-                    slideContract.nodes.push(this.rowModelBinder.getRowConfig(row));
+                    slideContract.nodes.push(this.rowModelBinder.getConfig(row));
                 });
 
                 return slideContract;

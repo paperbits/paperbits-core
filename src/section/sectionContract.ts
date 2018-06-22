@@ -1,7 +1,7 @@
 import { Contract } from "@paperbits/common";
 import { BackgroundContract } from "@paperbits/common/ui";
 
-export interface SectionConfig extends Contract {
+export interface SectionContract extends Contract {
     background?: BackgroundContract;
 
     /**

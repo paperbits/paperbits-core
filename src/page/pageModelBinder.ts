@@ -40,8 +40,6 @@ export class PageModelBinder implements IModelBinder {
             return new PlaceholderModel(pageContract, "Page content");
         }
 
-        let type = "page";
-
         if (!pageContract.key) {
             let permalink = await this.permalinkService.getPermalinkByUrl(pageUrl);
 
@@ -50,11 +48,6 @@ export class PageModelBinder implements IModelBinder {
             }
 
             const pageKey = permalink.targetKey;
-
-            if (pageKey.startsWith("posts")) {
-                type = "post"
-            }
-
             pageContract = await this.pageService.getPageByKey(pageKey);
         }
 
@@ -70,7 +63,7 @@ export class PageModelBinder implements IModelBinder {
         });
 
         const models = await Promise.all<any>(modelPromises);
-        pageModel.sections = models;
+        pageModel.widgets = models;
 
         return pageModel;
     }
@@ -94,7 +87,7 @@ export class PageModelBinder implements IModelBinder {
             type: "page",
             nodes: []
         };
-        pageModel.sections.forEach(section => {
+        pageModel.widgets.forEach(section => {
             const modelBinder = this.modelBinderSelector.getModelBinderByModel(section);
             pageConfig.nodes.push(modelBinder.getConfig(section));
         });
