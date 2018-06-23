@@ -1,4 +1,4 @@
-import { TextblockModel } from "@paperbits/common/widgets/textblock";
+import { TextblockModel } from "./textblockModel";
 import { TextblockViewModel } from "./ko/textblockViewModel";
 import { IViewModelBinder } from "@paperbits/common/widgets";
 

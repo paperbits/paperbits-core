@@ -25,15 +25,29 @@ import { DropbucketModule } from "./workshops/dropbucket/ko/dropbucket.module";
 import { ViewportSelector } from "./workshops/viewports/ko/viewport-selector";
 import { HostBindingHandler } from "./ko/bindingHandlers";
 import { CoreModule } from "./core.module";
+import { IModelBinder } from "@paperbits/common/editing";
+import { DefaultRouteHandler } from "@paperbits/common/routing";
+import { SettingsProvider } from "@paperbits/common/configuration";
 
 export class CoreEditModule implements IInjectorModule {
-    constructor(
-        private modelBinders:any,
-        private viewModelBinders:Array<IViewModelBinder<any, any>>,
-    ) { }
+    private coreModule;
+
+    constructor() {
+        this.coreModule = new CoreModule();
+    }
+
+    public get modelBinders(): Array<IModelBinder> {
+        return this.coreModule.modelBinders;
+    }
+
+    public get viewModelBinders(): Array<IViewModelBinder<any, any>> {
+        return this.coreModule.viewModelBinders;
+    }
 
     register(injector: IInjector): void {
-        injector.bindModule(new CoreModule(this.modelBinders, this.viewModelBinders)); 
+        injector.bindSingleton("settingsProvider", SettingsProvider);
+        injector.bindSingleton("routeHandler", DefaultRouteHandler);
+        injector.bindModule(this.coreModule);
 
         injector.bind("workshops", Workshops);
         injector.bind("viewportSelector", ViewportSelector);

@@ -1,5 +1,5 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { IViewModelBinder } from "@paperbits/common/widgets";
+import { IViewModelBinder, ModelBinderSelector } from "@paperbits/common/widgets";
 import { PictureModule } from "./picture/ko/picture.module";
 import { VideoPlayerModule } from "./video-player/ko/videoPlayer.module";
 import { YoutubePlayerModule } from "./youtube-player/ko/youtubePlayer.module";
@@ -19,22 +19,40 @@ import { SliderModule } from "./slider/ko/slider.module";
 import { GoogleTagManager } from "./gtm/ko/gtm";
 import { IntercomViewModel } from "./intercom/ko/intercomViewModel";
 import { TextblockModule } from "./textblock/ko/textblock.module";
-import { TextblockModelBinder } from "@paperbits/common/widgets/textblock";
 import { BackgroundModelBinder } from "@paperbits/common/widgets/background";
+import { IntercomService } from "./intercom/intercomService";
+import { KnockoutRegistrationLoaders } from "./ko/knockout.loaders";
+import { ViewModelBinderSelector } from "@paperbits/knockout/widgets";
+import { IModelBinder } from "@paperbits/common/editing";
 
 export class CoreModule implements IInjectorModule {
-    constructor(
-        private modelBinders:any,
-        private viewModelBinders:Array<IViewModelBinder<any, any>>
-    ) { }
+    private mBinders: Array<IModelBinder>;
+    private vmBinders: Array<IViewModelBinder<any, any>>;
+
+    constructor() {
+        this.mBinders = [];
+        this.vmBinders = [];
+    }
+
+    public get modelBinders(): Array<IModelBinder> {
+        return this.mBinders;
+    }
+
+    public get viewModelBinders(): Array<IViewModelBinder<any, any>> {
+        return this.vmBinders;
+    }
 
     register(injector: IInjector): void {        
-        injector.bind("gtm", GoogleTagManager);
-        injector.bind("intercom", IntercomViewModel);
+        injector.bindModule(new KnockoutRegistrationLoaders());
 
-        injector.bind("textModelBinder", TextblockModelBinder);
-        this.modelBinders.push(injector.resolve("textModelBinder"));
+        injector.bindInstance("modelBinderSelector", new ModelBinderSelector(this.modelBinders));    
+        injector.bindInstance("viewModelBinderSelector", new ViewModelBinderSelector(this.viewModelBinders));
+
+        injector.bind("gtm", GoogleTagManager);
         
+        injector.bind("intercom", IntercomViewModel);        
+        injector.bindSingleton("intercomService", IntercomService);
+
         injector.bind("backgroundModelBinder", BackgroundModelBinder);
 
         injector.bindModule(new KoModule());
@@ -43,7 +61,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new BlogModule(this.modelBinders));
         injector.bindModule(new ColumnModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new RowModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new TextblockModule(this.viewModelBinders));
+        injector.bindModule(new TextblockModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new SectionModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new NavbarModule(this.modelBinders, this.viewModelBinders));
         injector.bindModule(new ButtonModule(this.modelBinders, this.viewModelBinders));

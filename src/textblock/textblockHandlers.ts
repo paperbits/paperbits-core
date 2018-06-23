@@ -1,4 +1,4 @@
-﻿import { TextblockModel } from "@paperbits/common/widgets/textblock/textblockModel";
+﻿import { TextblockModel } from "./textblockModel";
 import { IWidgetOrder } from "@paperbits/common/editing";
 import { IWidgetHandler } from "@paperbits/common/editing";
 

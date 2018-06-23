@@ -1,0 +1,98 @@
+<workshops></workshops>
+<dropbucket></dropbucket>
+
+<div class="viewport" data-bind="host: { viewport: viewport }"></div>
+
+<!--ko if: shutter()-->
+<div class="shutter">
+    <spinner></spinner>
+</div>
+<!--/ko-->
+
+<div class="indicators" data-bind="foreach: progressIndicators">
+    <!--ko if: complete()-->
+    <div class="indicator">
+        <div class="indicator-success">
+            <i class="paperbits-icon paperbits-check-2"></i>
+        </div>
+        <div class="indicator-content">
+            <b data-bind="text: title"> </b>
+            <p data-bind="text: content"></p>
+        </div>
+
+    </div>
+    <!--/ko-->
+    <!--ko if: !complete()-->
+    <div class="indicator">
+        <div class="indicator-progress">
+            <spinner></spinner>
+        </div>
+        <div class="indicator-content">
+            <b data-bind="text: title"></b>
+            <p data-bind="text: content"></p>
+        </div>
+    </div>
+    <!--/ko-->
+</div>
+
+<!-- ko with: widgetEditor() -->
+<div class="toolbox toolbox-position-left-offset" data-bind="resizable: resize, surface: $data">
+    <!-- ko component: { name: component.name, params: component.params, oncreate: component.oncreate } -->
+    <!--/ko -->
+</div>
+<!-- /ko -->
+
+<!-- ko foreach: { data: contextualEditors, as: 'contextualEditor' } -->
+<!-- ko if: contextualEditor.hoverCommand -->
+<button class="fixed btn-standalone" data-bind="stickTo: { target: contextualEditor.element, position: contextualEditor.hoverCommand.position }, balloon: { component: contextualEditor.hoverCommand.component, onOpen: $component.onHoverCommandActivate, onClose: $component.onHoverCommandDeactivate }, background: { color: contextualEditor.hoverCommand.color }, attr: { title: contextualEditor.hoverCommand.tooltip }">
+    <i class="paperbits-icon paperbits-simple-add"></i>
+</button>
+<!-- /ko -->
+<!-- /ko -->
+
+<!-- ko if: highlightedElement -->
+<div class="layout-editor-selection" data-bind="highlight: highlightedElement"></div>
+<!-- /ko -->
+
+<!-- ko if: splitterElement -->
+<div class="layout-editor-splitter" data-bind="splitter: splitterElement"></div>
+<!-- /ko -->
+
+<!-- ko if: selectedElement -->
+<div class="layout-editor-selection" data-bind="highlight: selectedElement"></div>
+
+<!-- ko with: selectedElementContextualEditor() -->
+<div class="fixed" data-bind="stickTo: { target: element, position: 'top right' }">
+    <!-- ko foreach: { data: selectionCommands, as: 'command' } -->
+    <button class="btn-standalone" data-bind="gridCommand: command">
+        <i class="paperbits-icon" data-bind="css: command.iconClass"></i>
+    </button>
+    <!-- ko if: command.component -->
+    <div class="balloon" data-bind="component: command.component"></div>
+    <!-- /ko -->
+
+    <!-- /ko -->
+
+    <!-- ko if: deleteCommand -->
+    <button class="btn-standalone" data-bind="click: deleteCommand.callback, background: { color: deleteCommand.color }, attr: { title: deleteCommand.tooltip }">
+        <i class="paperbits-icon paperbits-trash-simple"></i>
+    </button>
+    <!-- /ko -->
+</div>
+<!-- /ko -->
+
+<!-- /ko -->
+
+<div class="toolbox toolbox-position-left-bottom" data-bind="visible: primaryToolboxVisible">
+    <div class="toolbox-btn">
+        <a href="#" data-bind="balloon: { component: 'viewport-selector', position: 'top' }" title="Viewport selection">
+            <i class="paperbits-icon paperbits-mirror-2"></i>
+        </a>
+    </div>
+</div>
+
+<input id="uploadDialog" type="file" multiple="multiple" aria-hidden="true" class="d-none" />
+
+<!--ko foreach: { data: balloons, as: 'balloon' } -->
+<div class="balloon balloon-is-active" data-bind="component: balloon"></div>
+<!--/ko-->
