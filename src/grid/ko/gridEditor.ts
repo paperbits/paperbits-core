@@ -552,7 +552,7 @@ export class GridEditor {
     }
 
     public static attachColumnDragEvents(sourceElement: HTMLElement, viewManager: IViewManager, eventManager: IEventManager): void {
-        var onDragStart = (item): HTMLElement => {
+        const onDragStart = (item): HTMLElement => {
             const placeholderWidth = sourceElement.clientWidth - 1 + "px";;
             const placeholderHeight = sourceElement.clientHeight - 1 + "px";
 
@@ -581,7 +581,7 @@ export class GridEditor {
             return sourceElement;
         }
 
-        var onDragEnd = () => {
+        const onDragEnd = () => {
             const dragSession = viewManager.getDragSession();
             const parentBinding = dragSession.parentBinding;
             const acceptorElement = dragSession.targetElement;
@@ -591,7 +591,7 @@ export class GridEditor {
                 const parentModel = <any>dragSession.parentModel;
                 const model = <any>dragSession.sourceModel;
 
-                parentModel.columns.remove(model); // replace "columns" with "children"
+                parentModel.widgets.remove(model);
             }
 
             parentBinding.applyChanges();
@@ -603,7 +603,7 @@ export class GridEditor {
             eventManager.dispatchEvent("virtualDragEnd");
         }
 
-        var preventDragging = (): boolean => {
+        const preventDragging = (): boolean => {
             return viewManager.mode === ViewManagerMode.configure;
         }
 
@@ -613,7 +613,7 @@ export class GridEditor {
     }
 
     public static attachSectionDragEvents(sourceElement: HTMLElement, viewManager: IViewManager, eventManager: IEventManager): void {
-        var onDragStart = (item): HTMLElement => {
+        const onDragStart = (item): HTMLElement => {
             const placeholderWidth = sourceElement.clientWidth - 1 + "px";;
             const placeholderHeight = sourceElement.clientHeight - 1 + "px";
 
@@ -651,7 +651,7 @@ export class GridEditor {
             if (acceptorElement) {
                 const parentModel = <any>dragSession.parentModel;
                 const model = dragSession.sourceModel;
-                parentModel.sections.remove(model); // TODO: Replace "sections" with "children".
+                parentModel.widgets.remove(model); // TODO: Replace "sections" with "children".
             }
 
             parentBinding.applyChanges();
