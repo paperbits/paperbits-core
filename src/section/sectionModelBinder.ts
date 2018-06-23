@@ -1,15 +1,11 @@
-import { SectionConfig } from "./sectionContract";
-import { RowModel } from "../row/rowModel";
+import { SectionContract } from "./sectionContract";
 import { SectionModel } from "./sectionModel";
-import { RowModelBinder } from "../row/rowModelBinder";
 import { IModelBinder } from "@paperbits/common/editing";
 import { BackgroundModelBinder } from "@paperbits/common/widgets/background";
 import { Contract } from "@paperbits/common";
+import { ModelBinderSelector } from "@paperbits/common/widgets";
 
 export class SectionModelBinder implements IModelBinder {
-    private readonly rowModelBinder: RowModelBinder;
-    private readonly backgroundModelBinder: BackgroundModelBinder;
-
     public canHandleWidgetType(widgetType: string): boolean {
         return widgetType === "layout-section";
     }
@@ -18,14 +14,14 @@ export class SectionModelBinder implements IModelBinder {
         return model instanceof SectionModel;
     }
 
-    constructor(rowModelBinder: RowModelBinder, backgroundModelBinder: BackgroundModelBinder) {
-        this.rowModelBinder = rowModelBinder;
-        this.backgroundModelBinder = backgroundModelBinder;
+    constructor(
+        private readonly modelBinderSelector: ModelBinderSelector,
+        private readonly backgroundModelBinder: BackgroundModelBinder) {
 
         this.nodeToModel = this.nodeToModel.bind(this);
     }
 
-    public async nodeToModel(sectionContract: SectionConfig): Promise<SectionModel> {
+    public async nodeToModel(sectionContract: SectionContract): Promise<SectionModel> {
         const sectionModel = new SectionModel();
 
         if (!sectionContract.nodes) {
@@ -48,20 +44,18 @@ export class SectionModelBinder implements IModelBinder {
             sectionModel.background = await this.backgroundModelBinder.nodeToModel(sectionContract.background);
         }
 
-        const rowModelPromises = sectionContract.nodes.map(this.rowModelBinder.nodeToModel);
-        sectionModel.rows = await Promise.all<RowModel>(rowModelPromises);
+        const modelPromises = sectionContract.nodes.map(async (node) => {
+            let modelBinder: IModelBinder = this.modelBinderSelector.getModelBinderByNodeType(node.type);
+            return await modelBinder.nodeToModel(node);
+        });
+
+        sectionModel.widgets = await Promise.all<any>(modelPromises);
 
         return sectionModel;
     }
 
-    private isChildrenChanged(widgetChildren: any[], modelItems: any[]) {
-        return (widgetChildren && !modelItems) ||
-            (!widgetChildren && modelItems) ||
-            (widgetChildren && modelItems && widgetChildren.length !== modelItems.length);
-    }
-
     public getConfig(sectionModel: SectionModel): Contract {
-        const sectionConfig: SectionConfig = {
+        const sectionContract: SectionContract = {
             type: "layout-section",
             object: "block",
             nodes: [],
@@ -71,24 +65,25 @@ export class SectionModelBinder implements IModelBinder {
         };
 
         if (sectionModel.background) {
-            sectionConfig.background = {
+            sectionContract.background = {
                 color: sectionModel.background.colorKey,
                 size: sectionModel.background.size,
                 position: sectionModel.background.position
             }
 
             if (sectionModel.background.sourceType === "picture") {
-                sectionConfig.background.picture = {
+                sectionContract.background.picture = {
                     sourcePermalinkKey: sectionModel.background.sourceKey,
                     repeat: sectionModel.background.repeat
                 }
             }
         }
 
-        sectionModel.rows.forEach(row => {
-            sectionConfig.nodes.push(this.rowModelBinder.getRowConfig(row));
+        sectionModel.widgets.forEach(widgetModel => {
+            const modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
+            sectionContract.nodes.push(modelBinder.getConfig(widgetModel));
         });
 
-        return sectionConfig;
+        return sectionContract;
     }
 }

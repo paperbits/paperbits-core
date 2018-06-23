@@ -1,5 +1,7 @@
-export class ColumnModel {    
-    public widgets: any[];
+import { WidgetModel } from "@paperbits/common/widgets/WidgetModel";
+
+export class ColumnModel implements WidgetModel {    
+    public widgets: WidgetModel[];
     public sizeXs: number;
     public sizeSm: number;
     public sizeMd: number;

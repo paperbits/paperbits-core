@@ -51,7 +51,7 @@ export class RowLayoutSelector implements IResourceSelector<RowModel> {
             column.sizeMd = size.md;
             column.sizeLg = size.lg;
             column.sizeXl = size.xl;
-            rowModel.columns.push(column);
+            rowModel.widgets.push(column);
         });
 
         if (this.onResourceSelected) {

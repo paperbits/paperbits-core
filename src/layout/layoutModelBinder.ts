@@ -7,16 +7,11 @@ import { LayoutContract } from "@paperbits/common/layouts/layoutContract";
 import { Contract } from "@paperbits/common";
 
 export class LayoutModelBinder {
-    private readonly routeHandler: IRouteHandler;
-    private readonly fileService: IFileService;
-    private readonly layoutService: ILayoutService;
-    private readonly modelBinderSelector: ModelBinderSelector;
-
-    constructor(fileService: IFileService, layoutService: ILayoutService, routeHandler: IRouteHandler, modelBinderSelector: ModelBinderSelector) {
-        this.fileService = fileService;
-        this.layoutService = layoutService;
-        this.routeHandler = routeHandler;
-        this.modelBinderSelector = modelBinderSelector;
+    constructor(
+        private readonly fileService: IFileService,
+        private readonly layoutService: ILayoutService,
+        private readonly routeHandler: IRouteHandler,
+        private readonly modelBinderSelector: ModelBinderSelector) {
 
         // rebinding...
         this.nodeToModel = this.nodeToModel.bind(this);
@@ -28,22 +23,21 @@ export class LayoutModelBinder {
         return await this.nodeToModel(layoutNode, url, readonly);
     }
 
-    public async nodeToModel(layoutNode: LayoutContract, currentUrl: string, readonly?: boolean): Promise<LayoutModel> {
-        let layoutModel = new LayoutModel();
-        layoutModel.title = layoutNode.title;
-        layoutModel.description = layoutNode.description;
-        layoutModel.uriTemplate = layoutNode.uriTemplate;
+    public async nodeToModel(layoutContract: LayoutContract, currentUrl: string, readonly?: boolean): Promise<LayoutModel> {
+        const layoutModel = new LayoutModel();
+        layoutModel.title = layoutContract.title;
+        layoutModel.description = layoutContract.description;
+        layoutModel.uriTemplate = layoutContract.uriTemplate;
 
-        const layoutContentNode = await this.fileService.getFileByKey(layoutNode.contentKey);
+        const layoutContentNode = await this.fileService.getFileByKey(layoutContract.contentKey);
 
         const modelPromises = layoutContentNode.nodes.map(async (config) => {
             const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(config.type);
-
             return await modelBinder.nodeToModel(config, currentUrl, !readonly);
         });
 
-        const models = await Promise.all<any>(modelPromises);
-        layoutModel.sections = models;
+        const widgetModels = await Promise.all<any>(modelPromises);
+        layoutModel.widgets = widgetModels;
 
         return layoutModel;
     }
@@ -60,7 +54,7 @@ export class LayoutModelBinder {
             type: "layout",
             nodes: []
         };
-        layoutModel.sections.forEach(model => {
+        layoutModel.widgets.forEach(model => {
             const modelBinder = this.modelBinderSelector.getModelBinderByModel(model);
             layoutConfig.nodes.push(modelBinder.getConfig(model));
         });

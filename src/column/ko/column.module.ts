@@ -13,7 +13,7 @@ export class ColumnModule implements IInjectorModule {
     register(injector: IInjector): void {
         injector.bind("column", ColumnViewModel);
         injector.bind("columnModelBinder", ColumnModelBinder);
-        // this.modelBinders.push(injector.resolve("columnModelBinder"));
+        this.modelBinders.push(injector.resolve("columnModelBinder"));
         
         injector.bind("columnViewModelBinder", ColumnViewModelBinder);
         this.viewModelBinders.push(injector.resolve("columnViewModelBinder"));

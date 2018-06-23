@@ -1,8 +1,7 @@
-import { ColumnModel } from "../column/columnModel";
+import { WidgetModel } from "@paperbits/common/widgets/WidgetModel";
 
-export class RowModel {
-    public type: string = "row";
-    public columns: ColumnModel[];
+export class RowModel implements WidgetModel {
+    public widgets: WidgetModel[];
     public alignSm: string;
     public alignMd: string;
     public alignLg: string;
@@ -11,6 +10,6 @@ export class RowModel {
     public justifyLg: string;
 
     constructor() {
-        this.columns = [];
+        this.widgets = [];
     }
 }

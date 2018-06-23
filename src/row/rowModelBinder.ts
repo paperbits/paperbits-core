@@ -1,57 +1,64 @@
-import { RowContract } from "./rowContract";
-import { ColumnModel } from "../column/columnModel";
-import { ColumnModelBinder } from "../column/columnModelBinder";
-import { RowModel } from "./rowModel";
 import { Contract } from "@paperbits/common";
+import { RowContract } from "./rowContract";
+import { RowModel } from "./rowModel";
+import { ModelBinderSelector } from "@paperbits/common/widgets";
 
 export class RowModelBinder {
-    private readonly columnModelBinder: ColumnModelBinder;
-
-    constructor(columnModelBinder: ColumnModelBinder) {
-        this.columnModelBinder = columnModelBinder;
-
+    constructor(private readonly modelBinderSelector: ModelBinderSelector) {
         this.nodeToModel = this.nodeToModel.bind(this);
     }
 
-    public async nodeToModel(node: RowContract): Promise<RowModel> {
-        let rowModel = new RowModel();
+    public canHandleWidgetType(widgetType: string): boolean {
+        return widgetType === "layout-row";
+    }
 
-        if (node.align) {
-            if (node.align.sm) {
-                rowModel.alignSm = node.align.sm;
+    public canHandleModel(model: Object): boolean {
+        return model instanceof RowModel;
+    }
+
+    public async nodeToModel(contract: RowContract): Promise<RowModel> {
+        const rowModel = new RowModel();
+
+        if (contract.align) {
+            if (contract.align.sm) {
+                rowModel.alignSm = contract.align.sm;
             }
-            if (node.align.md) {
-                rowModel.alignMd = node.align.md;
+            if (contract.align.md) {
+                rowModel.alignMd = contract.align.md;
             }
-            if (node.align.lg) {
-                rowModel.alignLg = node.align.lg;
+            if (contract.align.lg) {
+                rowModel.alignLg = contract.align.lg;
             }
         }
 
-        if (node.justify) {
-            if (node.justify.sm) {
-                rowModel.justifySm = node.justify.sm;
+        if (contract.justify) {
+            if (contract.justify.sm) {
+                rowModel.justifySm = contract.justify.sm;
             }
-            if (node.justify.md) {
-                rowModel.justifyMd = node.justify.md;
+            if (contract.justify.md) {
+                rowModel.justifyMd = contract.justify.md;
             }
-            if (node.justify.lg) {
-                rowModel.justifyLg = node.justify.lg;
+            if (contract.justify.lg) {
+                rowModel.justifyLg = contract.justify.lg;
             }
         }
 
-        if (!node.nodes) {
-            node.nodes = [];
+        if (!contract.nodes) {
+            contract.nodes = [];
         }
 
-        let columnModelPromises = node.nodes.map(this.columnModelBinder.nodeToModel);
-        rowModel.columns = await Promise.all<ColumnModel>(columnModelPromises);
+        const modelPromises = contract.nodes.map(async (node) => {
+            const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(node.type);
+            return await modelBinder.nodeToModel(node);
+        });
+
+        rowModel.widgets = await Promise.all<any>(modelPromises);
 
         return rowModel;
     }
 
-    public getRowConfig(rowModel: RowModel): Contract {
-        let rowConfig: RowContract = {
+    public getConfig(rowModel: RowModel): Contract {
+        const rowConfig: RowContract = {
             type: "layout-row",
             object: "block",
             nodes: []
@@ -67,8 +74,9 @@ export class RowModelBinder {
         rowConfig.justify.md = rowModel.justifyMd;
         rowConfig.justify.lg = rowModel.justifyLg;
 
-        rowModel.columns.forEach(column => {
-            rowConfig.nodes.push(this.columnModelBinder.getColumnConfig(column));
+        rowModel.widgets.forEach(widgetModel => {
+            const modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
+            rowConfig.nodes.push(modelBinder.getConfig(widgetModel));
         });
 
         return rowConfig;

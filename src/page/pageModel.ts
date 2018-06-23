@@ -1,12 +1,12 @@
-import { SectionModel } from "../section/sectionModel";
+import { WidgetModel } from "@paperbits/common/widgets/WidgetModel";
 
 export class PageModel {
     public title: string;
     public description: string;
     public keywords: string;
-    public sections: SectionModel[];
+    public widgets: WidgetModel[];
 
     constructor() {
-        this.sections = [];
+        this.widgets = [];
     }
 }

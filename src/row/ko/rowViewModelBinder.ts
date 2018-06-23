@@ -4,13 +4,13 @@ import { DragSession } from "@paperbits/common/ui/draggables/dragSession";
 import { IContextualEditor, IViewManager } from "@paperbits/common/ui";
 import { GridHelper } from "@paperbits/common/editing";
 import { RowModel } from "../rowModel";
-import { ColumnViewModelBinder } from "../../column/ko/columnViewModelBinder";
 import { PlaceholderViewModel } from "@paperbits/knockout/editors/placeholder";
 import { ColumnModel } from "../../column/columnModel";
+import { ViewModelBinderSelector } from "@paperbits/knockout/widgets/viewModelBinderSelector";
 
 export class RowViewModelBinder implements IViewModelBinder<RowModel, RowViewModel> {
     constructor(
-        private readonly columnViewModelBinder: ColumnViewModelBinder,
+        private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly viewManager: IViewManager
     ) {
     }
@@ -20,15 +20,19 @@ export class RowViewModelBinder implements IViewModelBinder<RowModel, RowViewMod
             viewModel = new RowViewModel();
         }
 
-        const columnViewModels = model.columns.map(columnModel => {
-            return this.columnViewModelBinder.modelToViewModel(columnModel, readonly);
-        });
+        const viewModels = model.widgets
+            .map(widgetModel => {
+                const viewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
+                const viewModel = viewModelBinder.modelToViewModel(widgetModel, readonly);
 
-        if (columnViewModels.length === 0) {
-            columnViewModels.push(<any>new PlaceholderViewModel("Row"));
+                return viewModel;
+            });
+
+        if (viewModels.length === 0) {
+            viewModels.push(<any>new PlaceholderViewModel("Row"));
         }
 
-        viewModel.columns(columnViewModels);
+        viewModel.widgets(viewModels);
 
         viewModel.alignSm(model.alignSm);
         viewModel.alignMd(model.alignMd);
@@ -52,14 +56,14 @@ export class RowViewModelBinder implements IViewModelBinder<RowModel, RowViewMod
             onDragDrop: (dragSession: DragSession): void => {
                 switch (dragSession.type) {
                     case "column":
-                        model.columns.splice(dragSession.insertIndex, 0, <ColumnModel>dragSession.sourceModel);
+                        model.widgets.splice(dragSession.insertIndex, 0, <ColumnModel>dragSession.sourceModel);
                         break;
 
                     case "widget":
                         const columnToInsert = new ColumnModel();
                         columnToInsert.sizeMd = 3;
                         columnToInsert.widgets.push(dragSession.sourceModel);
-                        model.columns.splice(dragSession.insertIndex, 0, columnToInsert);
+                        model.widgets.splice(dragSession.insertIndex, 0, columnToInsert);
                         break;
                 }
                 binding.applyChanges();
@@ -81,13 +85,13 @@ export class RowViewModelBinder implements IViewModelBinder<RowModel, RowViewMod
                                     let parentModel = GridHelper.getModel(parentElement);
                                     let parentWidgetModel = GridHelper.getWidgetBinding(parentElement);
                                     let rowModel = GridHelper.getModel(element);
-                                    let index = parentModel.rows.indexOf(rowModel);
+                                    let index = parentModel.widgets.indexOf(rowModel);
         
                                     if (half === "bottom") {
                                         index++;
                                     }
         
-                                    parentModel.rows.splice(index, 0, newRowModel);
+                                    parentModel.widgets.splice(index, 0, newRowModel);
                                     parentWidgetModel.applyChanges();
         
                                     this.viewManager.clearContextualEditors();
@@ -105,7 +109,7 @@ export class RowViewModelBinder implements IViewModelBinder<RowModel, RowViewMod
                             let parentBinding = GridHelper.getWidgetBinding(parentElement);
                             let rowModel = GridHelper.getModel(element);
         
-                            parentModel.rows.remove(rowModel);
+                            parentModel.widgets.remove(rowModel);
                             parentBinding.applyChanges();
         
                             this.viewManager.clearContextualEditors();

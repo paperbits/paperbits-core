@@ -23,16 +23,10 @@ export class ColumnViewModelBinder implements IViewModelBinder<ColumnModel, Colu
         const widgetViewModels = model.widgets
             .map(widgetModel => {
                 const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-
-                if (!widgetViewModelBinder) {
-                    return null;
-                }
-
                 const widgetViewModel = widgetViewModelBinder.modelToViewModel(widgetModel, readonly);
 
                 return widgetViewModel;
-            })
-            .filter(x => x != null);
+            });
 
         if (widgetViewModels.length === 0) {
             widgetViewModels.push(new PlaceholderViewModel("Column"));
