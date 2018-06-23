@@ -4,9 +4,9 @@ import { DragSession } from "@paperbits/common/ui/draggables/dragSession";
 import { IContextualEditor, IViewManager } from "@paperbits/common/ui";
 import { GridHelper } from "@paperbits/common/editing";
 import { RowModel } from "../rowModel";
-import { PlaceholderViewModel } from "@paperbits/knockout/editors/placeholder";
 import { ColumnModel } from "../../column/columnModel";
-import { ViewModelBinderSelector } from "@paperbits/knockout/widgets/viewModelBinderSelector";
+import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
+import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 
 export class RowViewModelBinder implements IViewModelBinder<RowModel, RowViewModel> {
     constructor(

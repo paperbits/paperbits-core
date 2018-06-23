@@ -3,9 +3,9 @@ import { IViewModelBinder } from "@paperbits/common/widgets";
 import { IContextualEditor, IView, IViewManager } from "@paperbits/common/ui";
 import { GridHelper, IWidgetBinding } from "@paperbits/common/editing";
 import { SectionModel } from "../sectionModel";
-import { PlaceholderViewModel } from "@paperbits/knockout/editors/placeholder";
 import { RowModel } from "../../row/rowModel";
-import { ViewModelBinderSelector } from "@paperbits/knockout/widgets/viewModelBinderSelector";
+import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
+import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 
 export class SectionViewModelBinder implements IViewModelBinder<SectionModel, SectionViewModel> {
     constructor(

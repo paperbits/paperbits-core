@@ -1,0 +1,18 @@
+<div class="editor">
+    <h1>Color</h1>
+    <hr/>
+
+    <ul class="palette">
+        <li class="color-box">
+            <a href="#" title="Clear color" class="color" data-bind="click: $component.clearIntentions">
+                <i class="paperbits-icon paperbits-ban"></i>
+            </a>
+        </li>
+
+        <!-- ko foreach: { data: intentions, as: 'intention' } -->
+        <li class="color-box" data-bind="css: { selected: intention.key == $component.selectedColor() }">
+            <a href="#" class="color" data-bind="click: $component.selectIntention, attr: { title: intention.name }, css: intention.css"></a>
+        </li>
+        <!--/ko -->
+    </ul>
+</div>
