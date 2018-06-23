@@ -1,10 +1,11 @@
 import * as ko from "knockout";
 import template from "./widgetSelector.html";
 import { WidgetItem } from "./widgetItem";
-import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
-import { IWidgetService } from "@paperbits/common/widgets/IWidgetService";
+import { IResourceSelector } from "@paperbits/common/ui";
+import { IWidgetService } from "@paperbits/common/widgets";
 import { IViewManager } from "@paperbits/common/ui";
 import { Component } from "../../../ko/component";
+
 
 @Component({
     selector: "widget-selector",
@@ -20,7 +21,8 @@ export class WidgetSelector implements IResourceSelector<Object> {
     constructor(
         private readonly viewManager: IViewManager,
         private readonly widgetService: IWidgetService,
-        private readonly onSelect: (widgetModel: Object) => void
+        private readonly onSelect: (widgetModel: Object) => void,
+        private readonly onRequest: () => string[]
     ) {
         // initialization...
         this.onResourceSelected = onSelect;
@@ -38,19 +40,21 @@ export class WidgetSelector implements IResourceSelector<Object> {
     private async loadWidgetOrders(): Promise<void> {
         this.working(true);
 
-        var items = new Array<WidgetItem>();
+        const items = new Array<WidgetItem>();
+        const widgetOrders = await this.widgetService.getWidgetOrders();
+        const provided = this.onRequest();
 
-        let widgetOrders = await this.widgetService.getWidgetOrders();
+        widgetOrders
+            .filter(x => !x.requires || x.requires.every(y => provided.indexOf(y) >= 0))
+            .forEach((widgetOrder) => {
+                const widgetItem = new WidgetItem();
 
-        widgetOrders.forEach((widgetOrder) => {
-            let widgetItem = new WidgetItem();
-
-            widgetItem.css = `${widgetOrder.iconClass}`,
+                widgetItem.css = `${widgetOrder.iconClass}`;
                 widgetItem.displayName = widgetOrder.displayName;
-            widgetItem.widgetOrder = widgetOrder;
+                widgetItem.widgetOrder = widgetOrder;
 
-            items.push(widgetItem);
-        });
+                items.push(widgetItem);
+            });
 
         this.widgets(items);
         this.working(false);

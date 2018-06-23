@@ -104,7 +104,7 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindComponent("widgetSelector", (ctx: IInjector, params: {}) => {
             const viewManager = ctx.resolve<IViewManager>("viewManager");
             const widgetService = ctx.resolve<IWidgetService>("widgetService");
-            return new WidgetSelector(viewManager, widgetService, params["onSelect"]);
+            return new WidgetSelector(viewManager, widgetService, params["onSelect"], params["onRequest"]);
         });
 
         injector.bindComponent("urlSelector", (ctx: IInjector, params: {}) => {
