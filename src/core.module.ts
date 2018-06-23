@@ -22,8 +22,8 @@ import { TextblockModule } from "./textblock/ko/textblock.module";
 import { BackgroundModelBinder } from "@paperbits/common/widgets/background";
 import { IntercomService } from "./intercom/intercomService";
 import { KnockoutRegistrationLoaders } from "./ko/knockout.loaders";
-import { ViewModelBinderSelector } from "@paperbits/knockout/widgets";
 import { IModelBinder } from "@paperbits/common/editing";
+import { ViewModelBinderSelector } from "./ko/viewModelBinderSelector";
 
 export class CoreModule implements IInjectorModule {
     private mBinders: Array<IModelBinder>;

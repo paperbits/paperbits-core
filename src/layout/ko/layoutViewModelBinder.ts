@@ -1,6 +1,6 @@
 import { LayoutViewModel } from "./layoutViewModel";
 import { LayoutModel } from "../layoutModel";
-import { ViewModelBinderSelector } from "@paperbits/knockout/widgets/viewModelBinderSelector";
+import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 
 export class LayoutViewModelBinder {
     private readonly viewModelBinderSelector: ViewModelBinderSelector;

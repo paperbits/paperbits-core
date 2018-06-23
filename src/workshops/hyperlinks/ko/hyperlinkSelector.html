@@ -1,0 +1,40 @@
+<div class="editor">
+    <h1>Hyperlink</h1>
+    What do you want to link to?
+    <hr/>
+    <div class="flex-container flex-container-row">
+        <div class="flex-item">
+            <div class="form">
+                <div class="form-group">
+                    <label class="form-label">
+                        <input name="size" type="radio" data-bind="value: null, checked: $component.selectedResourcePicker" /> None
+                    </label>
+                    <!--ko foreach: { data: resourcePickers, as: 'resourcePicker' } -->
+                    <label class="form-label">
+                        <input name="resorcePicker" type="radio" data-bind="value: resourcePicker, checked: $component.selectedResourcePicker" /> <span data-bind="text: resourcePicker.name"></span>
+                    </label>
+                    <!--/ko-->
+                </div>
+            </div>
+        </div>
+        <!-- ko with: selectedResourcePicker() -->
+        <div class="flex-item">
+            <div class="flex-container flex-container-column">
+                <div class="flex-item">
+                    <!--ko with: $component.hyperlink() -->
+                    <b data-bind="text: title"></b>
+                    <!--/ko-->
+
+                    <!--ko ifnot: $component.hyperlink() -->
+                    <b>(Not selected)</b>
+                    <!--/ko-->
+
+                    <hr />
+                </div>
+                <div class="flex-item flex-item-grow" data-bind="resourcePicker: { resourcePicker: $component.selectedResourcePicker, onSelect: $component.onResourceSelected, hyperlink: $component.hyperlink }">
+                </div>
+            </div>
+        </div>
+        <!--/ko-->
+    </div>
+</div>
