@@ -41,6 +41,7 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
         const binding = {
             readonly: readonly,
             model: model,
+            provides: ["static", "scripts", "keyboard"],
             applyChanges: () => {
                 this.modelToViewModel(model, readonly, pageViewModel);
             },

@@ -366,12 +366,21 @@ export class GridEditor {
                 component: {
                     name: "widget-selector",
                     params: {
-                        onSelect: (newWidgetModel: any) => {
-                            let parentElement = GridHelper.getParentElementWithModel(activeWidgetElement);
-                            let parentModel = GridHelper.getModel(parentElement);
+                        onRequest: () => {
+                            const parentElement = GridHelper.getParentElementWithModel(activeWidgetElement);
+                            const allBindings = GridHelper.getParentWidgetBindings(parentElement);
+                            const provided = allBindings.filter(x => x.provides != null)
+                                .map(x => x.provides)
+                                .reduce((acc, val) => { return acc.concat(val) });
 
-                            let parentBinding = GridHelper.getWidgetBinding(parentElement);
-                            let activeWidgetModel = GridHelper.getModel(activeWidgetElement);
+                            return provided;
+                        },
+                        onSelect: (newWidgetModel: any) => {
+                            const parentElement = GridHelper.getParentElementWithModel(activeWidgetElement);
+                            const parentModel = GridHelper.getModel(parentElement);
+                            const parentBinding = GridHelper.getWidgetBinding(parentElement);
+                            const activeWidgetModel = GridHelper.getModel(activeWidgetElement);
+
                             let index = parentModel.widgets.indexOf(activeWidgetModel);
 
                             if (activeWidgetHalf === "bottom") {
