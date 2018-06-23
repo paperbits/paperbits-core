@@ -14,6 +14,7 @@ export class SliderHandlers implements IWidgetHandler {
         const widgetOrder: IWidgetOrder = {
             name: "slider",
             displayName: "Slider",
+            requires: ["scripts"],
             createModel: async () => {
                 return await this.sliderModelBinder.nodeToModel(config);
             }

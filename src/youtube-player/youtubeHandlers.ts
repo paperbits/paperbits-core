@@ -20,6 +20,7 @@ export class YoutubeHandlers implements IWidgetHandler, IContentDropHandler {
             name: "youtube-player",
             displayName: "Youtube player",
             iconClass: "paperbits-player-48",
+            requires: ["scripts"],
             createModel: async () => {
                 const youtubePlayerModel = new YoutubePlayerModel();
                 youtubePlayerModel.videoId = youtubeClipId;

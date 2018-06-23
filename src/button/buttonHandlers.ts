@@ -13,9 +13,9 @@ export class ButtonHandlers implements IWidgetHandler {
     }
 
     private async prepareWidgetOrder(config: Contract): Promise<IWidgetOrder> {
-        let model = await this.buttonModelBinder.nodeToModel(config);
+        const model = await this.buttonModelBinder.nodeToModel(config);
 
-        let factoryFunction: () => IWidgetFactoryResult = () => {
+        const factoryFunction: () => IWidgetFactoryResult = () => {
             throw "Not implemented.";
 
             //let widgetModel = await this.buttonModelBinder.modelToWidgetModel(model);
@@ -27,7 +27,7 @@ export class ButtonHandlers implements IWidgetHandler {
             // return { element: htmlElement };
         }
 
-        let widgetOrder: IWidgetOrder = {
+        const widgetOrder: IWidgetOrder = {
             name: "button",
             displayName: "Button",
             iconClass: "paperbits-button-2",
@@ -41,7 +41,7 @@ export class ButtonHandlers implements IWidgetHandler {
     }
 
     private async getWidgetOrderByConfig(): Promise<IWidgetOrder> {
-        let config: Contract = {
+        const config: Contract = {
             object: "block",
             type: "button",
             label: "Button",

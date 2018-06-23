@@ -14,6 +14,7 @@ export class NavbarHandlers implements IWidgetHandler {
             name: "navbar",
             displayName: "Navigation bar",
             iconClass: "paperbits-menu-34",
+            requires: ["scripts"],
             createWidget: () => {
                 throw "Not implemented.";
             },
