@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import template from "./testimonials.html";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../ko/component";
 
 @Component({
     selector: "testimonials",

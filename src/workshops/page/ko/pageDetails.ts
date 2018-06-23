@@ -5,7 +5,7 @@ import { IPermalinkService } from "@paperbits/common/permalinks";
 import { IPageService } from "@paperbits/common/pages/IPageService";
 import { IRouteHandler } from "@paperbits/common/routing/IRouteHandler";
 import { IViewManager } from "@paperbits/common/ui/IViewManager";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../../ko/component";
 import { PageItem } from "./pageItem";
 
 @Component({

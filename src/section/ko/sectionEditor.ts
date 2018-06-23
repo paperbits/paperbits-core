@@ -4,7 +4,7 @@ import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { IViewManager } from '@paperbits/common/ui/IViewManager';
 import { IWidgetEditor } from '@paperbits/common/widgets/IWidgetEditor';
 import { BackgroundModel } from "@paperbits/common/widgets/background/backgroundModel";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../ko/component";
 import { SectionModel } from "../sectionModel";
 
 @Component({

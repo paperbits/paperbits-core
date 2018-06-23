@@ -18,7 +18,7 @@ import { ISettings } from "@paperbits/common/sites";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { IWidgetEditor } from "@paperbits/common/widgets";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../ko/component";
 
 declare var uploadDialog;
 

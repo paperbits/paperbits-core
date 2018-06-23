@@ -2,7 +2,7 @@
 import template from "./mapEditor.html";
 import { IWidgetEditor } from '@paperbits/common/widgets';
 import { IViewManager } from '@paperbits/common/ui';
-import { Component } from "@paperbits/knockout/decorators/component";
+import { Component } from "../../ko/component";
 import { MapModel } from "../mapModel";
 
 @Component({

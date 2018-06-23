@@ -10,7 +10,7 @@
     },
     "keywords": [
         "paperbits",
-        "form builder"
+        "core components"
     ],
     "bugs": {
         "url": "https://github.com/paperbits/paperbits-core/issues"
@@ -23,14 +23,22 @@
         "@paperbits/common": "0.1.12",
         "@paperbits/knockout": "0.1.12",
         "es6-shim": "^0.35.3",
+        "google-maps": "^3.2.1",
         "knockout": "^3.5.0-beta",
-        "knockout.validation": "^2.0.3"
+        "knockout.validation": "^2.0.3",
+        "lity": "^2.3.0",
+        "lodash": "^4.17.4",
+        "perfect-scrollbar": "^1.2.0",
+        "xhr2": "^0.1.4"
     },
     "devDependencies": {
         "@types/es6-shim": "^0.31.36",
+        "@types/google-maps": "^3.2.0",
         "@types/knockout": "^3.4.53",
         "@types/knockout.mapping": "^2.0.33",
         "@types/knockout.validation": "0.0.36",
-        "@types/node": "8.5.5"
+        "@types/lodash": "^4.14.74",
+        "@types/node": "8.5.5",
+        "@types/signals": "1.0.1"
     }
 }

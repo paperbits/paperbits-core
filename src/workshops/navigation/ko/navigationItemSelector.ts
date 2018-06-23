@@ -4,7 +4,7 @@ import { NavigationItemViewModel } from "./navigationItemViewModel";
 import { NavigationItemContract, INavigationService } from "@paperbits/common/navigation";
 import { IResourceSelector } from "@paperbits/common/ui";
 import { NavigationTree } from "./navigationTree";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../../ko/component";
 
 @Component({
     selector: "navigation-item-selector",

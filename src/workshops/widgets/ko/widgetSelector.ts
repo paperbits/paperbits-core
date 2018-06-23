@@ -4,7 +4,7 @@ import { WidgetItem } from "./widgetItem";
 import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
 import { IWidgetService } from "@paperbits/common/widgets/IWidgetService";
 import { IViewManager } from "@paperbits/common/ui";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../../ko/component";
 
 @Component({
     selector: "widget-selector",

@@ -4,7 +4,7 @@ import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
 import { BlockItem } from "./blockItem";
 import { BlockContract } from '@paperbits/common/blocks/blockContract';
 import { IBlockService } from '@paperbits/common/blocks/IBlockService';
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../../ko/component";
 
 @Component({
     selector: "block-selector",

@@ -4,7 +4,7 @@ import { IWidgetEditor } from '@paperbits/common/widgets';
 import { MediaContract } from '@paperbits/common/media/mediaContract';
 import { IViewManager } from '@paperbits/common/ui';
 import { IMediaFilter } from "@paperbits/common/media";
-import { Component } from "@paperbits/knockout/decorators/component";
+import { Component } from "../../ko/component";
 import { VideoPlayerModel } from "../videoPlayerModel";
 
 @Component({

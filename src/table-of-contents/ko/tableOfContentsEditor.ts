@@ -3,7 +3,7 @@ import template from "./tableOfContentsEditor.html";
 import { IViewManager } from '@paperbits/common/ui';
 import { IWidgetEditor } from '@paperbits/common/widgets';
 import { NavigationItemContract } from "@paperbits/common/navigation";
-import { Component } from "@paperbits/knockout/decorators/component";
+import { Component } from "../../ko/component";
 import { TableOfContentsModel } from "../tableOfContentsModel";
 import { TableOfContentsModelBinder } from "../tableOfContentsModelBinder";
 import { TableOfContentsContract } from "../tableOfContentsContract";

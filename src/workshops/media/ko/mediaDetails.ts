@@ -5,7 +5,7 @@ import { IPermalinkService } from "@paperbits/common/permalinks";
 import { IMediaService } from "@paperbits/common/media";
 import { IViewManager } from "@paperbits/common/ui/IViewManager";
 import { MediaItem } from "./mediaItem";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../../ko/component";
 
 @Component({
     selector: "media-details-workshop",

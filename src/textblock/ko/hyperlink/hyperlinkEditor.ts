@@ -6,7 +6,7 @@ import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { IHyperlink } from "@paperbits/common/permalinks";
 import { PermalinkResolver } from "@paperbits/common/permalinks/permalinkResolver";
 import { IPermalinkService } from "@paperbits/common/permalinks";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../../ko/component";
 
 @Component({
     selector: "hyperlink-editor",

@@ -1,5 +1,5 @@
 import template from "./tooltip.html";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../ko/component";
 
 @Component({
     selector: "tooltip",

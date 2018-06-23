@@ -3,7 +3,7 @@ import template from "./document.html";
 import * as Utils from "@paperbits/common/utils";
 import { IRouteHandler } from "@paperbits/common/routing/IRouteHandler";
 import { IViewManager } from "@paperbits/common/ui/IViewManager";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../ko/component";
 import { LayoutModelBinder } from "../layout/layoutModelBinder";
 import { LayoutViewModelBinder } from "../layout/ko/layoutViewModelBinder";
 import { LayoutViewModel } from "../layout/ko/layoutViewModel";

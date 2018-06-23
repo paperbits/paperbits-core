@@ -5,7 +5,7 @@ import { PageItem, AnchorItem } from "./pageItem";
 import { PageContract } from '@paperbits/common/pages';
 import { IPermalinkService } from '@paperbits/common/permalinks';
 import { IPageService } from '@paperbits/common/pages';
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../../ko/component";
 
 @Component({
     selector: "page-selector",

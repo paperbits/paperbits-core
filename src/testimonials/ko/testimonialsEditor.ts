@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import template from "./testimonialsEditor.html";
 import { IWidgetEditor } from "@paperbits/common/widgets/IWidgetEditor";
 import { IViewManager } from "@paperbits/common/ui/IViewManager";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../ko/component";
 import { TestimonialsModel } from "../testimonialsModel";
 
 @Component({

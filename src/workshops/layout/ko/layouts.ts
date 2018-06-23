@@ -7,7 +7,7 @@ import { IFileService } from '@paperbits/common/files/IFileService';
 import { ILayoutService } from "@paperbits/common/layouts/ILayoutService";
 import { Keys } from "@paperbits/common/keyboard";
 import { LayoutItem } from "./layoutItem";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../../ko/component";
 
 @Component({
     selector: "layouts",

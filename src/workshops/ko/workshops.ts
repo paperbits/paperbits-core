@@ -3,7 +3,7 @@ import template from "./workshops.html";
 import { IViewManager } from '@paperbits/common/ui/IViewManager';
 import { IUserService } from "@paperbits/common/user/IUserService";
 import { IView } from "@paperbits/common/ui/IView";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../ko/component";
 
 @Component({
     selector: "workshops",

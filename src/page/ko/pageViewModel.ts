@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import template from "./page.html";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../ko/component";
 import { WidgetViewModel } from "../../ko/widgetViewModel";
 
 @Component({

@@ -4,7 +4,7 @@ import { IWidgetEditor } from "@paperbits/common/widgets";
 import { IViewManager } from "@paperbits/common/ui";
 import { MediaContract } from "@paperbits/common/media";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../ko/component";
 import { NavbarModel } from "../navbarModel";
 
 @Component({

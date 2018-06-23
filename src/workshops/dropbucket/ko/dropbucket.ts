@@ -7,7 +7,7 @@ import { IMediaService, ICreatedMedia  } from "@paperbits/common/media";
 import { IContentDropHandler, IContentDescriptor, IDataTransfer } from "@paperbits/common/editing";
 import { ProgressPromise } from "@paperbits/common";
 import { DropBucketItem } from "./dropbucketItem";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../../ko/component";
 
 /*
    - Drop bucket introduces a special container for dropping content,

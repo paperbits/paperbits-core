@@ -3,8 +3,8 @@ import template from "./buttonEditor.html";
 import { IWidgetEditor } from '@paperbits/common/widgets/IWidgetEditor';
 import { IViewManager } from '@paperbits/common/ui/IViewManager';
 import { HyperlinkModel } from "@paperbits/common/permalinks";
-import { Component } from "@paperbits/knockout/decorators";
 import { ButtonModel } from "../buttonModel";
+import { Component } from "../../ko/component";
 
 @Component({
     selector: "paperbits-button-editor",

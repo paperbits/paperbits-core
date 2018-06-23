@@ -9,7 +9,7 @@ import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { Keys } from "@paperbits/common/keyboard";
 import { IContentDescriptor } from "@paperbits/common/editing";
 import { IEventManager } from "@paperbits/common/events";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../../ko/component";
 
 @Component({
     selector: "media",

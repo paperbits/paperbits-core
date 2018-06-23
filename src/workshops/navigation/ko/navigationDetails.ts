@@ -4,7 +4,7 @@ import { IViewManager } from "@paperbits/common/ui/IViewManager";
 import { NavigationItemViewModel } from "./navigationItemViewModel";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { IPermalinkResolver } from "@paperbits/common/permalinks/IPermalinkResolver";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../../ko/component";
 
 @Component({
     selector: "navigation-details-workshop",

@@ -2,7 +2,7 @@ import template from "./sectionLayoutSelector.html";
 import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
 import { BlockContract } from "@paperbits/common/blocks/BlockContract";
 import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelector";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../ko/component";
 import { SectionModel } from "../sectionModel";
 import { SliderModel } from "../../slider/sliderModel";
 

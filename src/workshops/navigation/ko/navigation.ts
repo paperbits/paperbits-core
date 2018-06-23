@@ -5,7 +5,7 @@ import { IViewManager } from "@paperbits/common/ui/IViewManager";
 import { NavigationItemContract } from "@paperbits/common/navigation/navigationItemContract";
 import { NavigationTree } from "./navigationTree";
 import { NavigationItemViewModel } from "./navigationItemViewModel";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../../ko/component";
 
 @Component({
     selector: "navigation",

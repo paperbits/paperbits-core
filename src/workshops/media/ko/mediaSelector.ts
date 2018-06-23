@@ -8,7 +8,7 @@ import { IMediaService } from '@paperbits/common/media/IMediaService';
 import { IViewManager } from "@paperbits/common/ui/IViewManager";
 import { IMediaFilter } from "@paperbits/common/media";
 import { IEventManager } from "@paperbits/common/events";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../../ko/component";
 
 @Component({
     selector: "media-selector",

@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import template from "./video.html";
-import { Component } from "@paperbits/knockout/decorators/component";
+import { Component } from "../../ko/component";
 
 @Component({
     selector: "paperbits-video-player",

@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import template from "./youtubeEditor.html";
 import { IWidgetEditor } from "@paperbits/common/widgets/IWidgetEditor";
 import { IViewManager } from "@paperbits/common/ui/IViewManager";
-import { Component } from "@paperbits/knockout/decorators/component";
+import { Component } from "../../ko/component";
 import { YoutubePlayerModel } from "../youtubePlayerModel";
 
 @Component({

@@ -24,7 +24,22 @@ import { IntercomService } from "./intercom/intercomService";
 import { KnockoutRegistrationLoaders } from "./ko/knockout.loaders";
 import { IModelBinder } from "@paperbits/common/editing";
 import { ViewModelBinderSelector } from "./ko/viewModelBinderSelector";
-
+import { SavingHandler, OfflineObjectStorage, AnchorMiddleware } from "@paperbits/common/persistence";
+import { PermalinkService, IPermalinkService, IPermalinkResolver, PermalinkResolver } from "@paperbits/common/permalinks";
+import { XmlHttpRequestClient } from "@paperbits/common/http";
+import { DefaultEventManager, GlobalEventHandler } from "@paperbits/common/events";
+import { LocalCache } from "@paperbits/common/caching";
+import { WidgetService } from "@paperbits/common/widgets";
+import { LayoutService } from "@paperbits/common/layouts/layoutService";
+import { PageService, PagePermalinkResolver } from "@paperbits/common/pages";
+import { BlogService, BlogPermalinkResolver } from "@paperbits/common/blogs";
+import { FileService } from "@paperbits/common/files";
+import { MediaService, MediaPermalinkResolver } from "@paperbits/common/media";
+import { BlockService } from "@paperbits/common/blocks";
+import { NavigationService } from "@paperbits/common/navigation";
+import { SiteService } from "@paperbits/common/sites";
+import { UrlService, UrlPermalinkResolver } from "@paperbits/common/urls";
+import { UnhandledErrorHandler } from "@paperbits/common/errors";
 export class CoreModule implements IInjectorModule {
     private mBinders: Array<IModelBinder>;
     private vmBinders: Array<IViewModelBinder<any, any>>;
@@ -42,7 +57,55 @@ export class CoreModule implements IInjectorModule {
         return this.vmBinders;
     }
 
-    register(injector: IInjector): void {        
+    register(injector: IInjector): void {
+        /*** Core ***/
+        injector.bindSingleton("httpClient", XmlHttpRequestClient);
+        //injector.bindSingleton("settingsProvider", SettingsProvider);
+        injector.bindSingleton("eventManager", DefaultEventManager);
+        // injector.bindSingleton("routeHandler", DefaultRouteHandler);
+        injector.bindSingleton("globalEventHandler", GlobalEventHandler);
+        injector.bindSingleton("localCache", LocalCache);
+        injector.bindSingleton("offlineObjectStorage", OfflineObjectStorage);
+        injector.bindSingleton("anchorMiddleware", AnchorMiddleware);
+
+        /*** Services ***/
+        injector.bindSingleton("permalinkService", PermalinkService);
+        injector.bindSingleton("widgetService", WidgetService);
+        injector.bindSingleton("layoutService", LayoutService);
+        injector.bindSingleton("pageService", PageService);
+        injector.bindSingleton("blogService", BlogService);
+        injector.bindSingleton("fileService", FileService);
+        injector.bindSingleton("mediaService", MediaService);
+        injector.bindSingleton("blockService", BlockService);
+        injector.bindSingleton("navigationService", NavigationService);
+        injector.bindSingleton("siteService", SiteService);
+        injector.bindSingleton("urlService", UrlService);
+        injector.bindSingleton("savingHandler", SavingHandler);
+        injector.bindSingleton("errorHandler", UnhandledErrorHandler);
+
+        /*** Model binders ***/
+        //injector.bind("codeblockModelBinder", CodeblockModelBinder);
+
+        injector.bind("mediaPermalinkResolver", MediaPermalinkResolver);
+        injector.bind("pagePermalinkResolver", PagePermalinkResolver);
+        injector.bind("blogPermalinkResolver", BlogPermalinkResolver);
+        injector.bind("urlPermalinkResolver", UrlPermalinkResolver);
+
+        injector.bindSingletonFactory("permalinkResolver", (ctx: IInjector) => {
+            const permalinkService = ctx.resolve<IPermalinkService>("permalinkService");
+            const mediaPermalinkResolver = ctx.resolve<IPermalinkResolver>("mediaPermalinkResolver");
+            const pagePermalinkResolver = ctx.resolve<IPermalinkResolver>("pagePermalinkResolver");
+            const blogPermalinkResolver = ctx.resolve<IPermalinkResolver>("blogPermalinkResolver");
+            const urlPermalinkResolver = ctx.resolve<IPermalinkResolver>("urlPermalinkResolver");
+
+            return new PermalinkResolver(permalinkService, [
+                mediaPermalinkResolver,
+                pagePermalinkResolver,
+                blogPermalinkResolver,
+                urlPermalinkResolver
+            ]);
+        });
+
         injector.bindModule(new KnockoutRegistrationLoaders());
 
         injector.bindInstance("modelBinderSelector", new ModelBinderSelector(this.modelBinders));    

@@ -3,7 +3,7 @@ import template from "./pictureEditor.html";
 import { IViewManager } from '@paperbits/common/ui';
 import { IWidgetEditor } from '@paperbits/common/widgets';
 import { MediaContract } from "@paperbits/common/media";
-import { Component } from "@paperbits/knockout/decorators/component";
+import { Component } from "../../ko/component";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 import { PictureModel } from "../pictureModel";
 

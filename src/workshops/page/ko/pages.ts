@@ -7,7 +7,7 @@ import { IViewManager } from "@paperbits/common/ui/IViewManager";
 import { IFileService } from "@paperbits/common/files/IFileService";
 import { Keys } from "@paperbits/common/keyboard";
 import { IBlockService } from "@paperbits/common/blocks/IBlockService";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../../ko/component";
 import { PageItem } from "./pageItem";
 
 const templateBlockKey = "blocks/8730d297-af39-8166-83b6-9439addca789";

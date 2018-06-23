@@ -1,7 +1,7 @@
 import template from "./rowLayoutSelector.html";
 import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
 import { IViewManager } from "@paperbits/common/ui";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../ko/component";
 import { ColumnModel } from "../../column/columnModel";
 import { RowModel } from "../rowModel";
 

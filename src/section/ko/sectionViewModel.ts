@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import template from "./section.html";
 import { BackgroundModel } from "@paperbits/common/widgets/background/backgroundModel";
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../ko/component";
 import { RowViewModel } from "../../row/ko/rowViewModel";
 import { WidgetViewModel } from "../../ko/widgetViewModel";
 

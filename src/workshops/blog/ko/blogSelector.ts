@@ -5,7 +5,7 @@ import { BlogPostItem } from "./blogPostItem";
 import { BlogPostContract } from '@paperbits/common/blogs/BlogPostContract';
 import { IPermalinkService } from '@paperbits/common/permalinks';
 import { IBlogService } from '@paperbits/common/blogs/IBlogService';
-import { Component } from "@paperbits/knockout/decorators";
+import { Component } from "../../../ko/component";
 
 @Component({
     selector: "blog-selector",
