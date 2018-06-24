@@ -5,17 +5,13 @@ import { LayoutModelBinder } from "../layoutModelBinder";
 import { LayoutViewModelBinder } from "./layoutViewModelBinder";
 
 export class LayoutModule implements IInjectorModule {
-    constructor(
-        private modelBinders:any,
-        private viewModelBinders:Array<IViewModelBinder<any, any>>,
-    ) { }
-
     register(injector: IInjector): void {        
         injector.bind("layoutWidget", LayoutViewModel);
         injector.bind("layoutModelBinder", LayoutModelBinder);
         //this.modelBinders.push(injector.resolve("layoutModelBinder"));
 
         injector.bind("layoutViewModelBinder", LayoutViewModelBinder);
-        this.viewModelBinders.push(injector.resolve("layoutViewModelBinder"));
+        const viewModelBinders = injector.resolve<Array<IViewModelBinder<any, any>>>("viewModelBinders");
+        viewModelBinders.push(injector.resolve("layoutViewModelBinder"));
     }
 }

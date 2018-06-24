@@ -3,19 +3,17 @@ import { IViewModelBinder } from "@paperbits/common/widgets";
 import { ButtonViewModel } from "./buttonViewModel";
 import { ButtonModelBinder } from "../buttonModelBinder";
 import { ButtonViewModelBinder } from "./buttonViewModelBinder";
+import { IModelBinder } from "@paperbits/common/editing";
 
 export class ButtonModule implements IInjectorModule {
-    constructor(
-        private modelBinders:any,
-        private viewModelBinders:Array<IViewModelBinder<any, any>>,
-    ) { }
-
     register(injector: IInjector): void {        
         injector.bind("button", ButtonViewModel);
         injector.bind("buttonModelBinder", ButtonModelBinder);
-        this.modelBinders.push(injector.resolve("buttonModelBinder"));
+        const modelBinders = injector.resolve<Array<IModelBinder>>("modelBinders");
+        modelBinders.push(injector.resolve("buttonModelBinder"));
         
         injector.bind("buttonViewModelBinder", ButtonViewModelBinder);
-        this.viewModelBinders.push(injector.resolve("buttonViewModelBinder"));
+        const viewModelBinders = injector.resolve<Array<IViewModelBinder<any, any>>>("viewModelBinders");
+        viewModelBinders.push(injector.resolve("buttonViewModelBinder"));
     }
 }

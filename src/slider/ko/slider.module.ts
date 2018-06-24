@@ -2,17 +2,15 @@ import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { IViewModelBinder } from "@paperbits/common/widgets";
 import { SliderModelBinder } from "../sliderModelBinder";
 import { SliderViewModelBinder } from "./sliderViewModelBinder";
+import { IModelBinder } from "@paperbits/common/editing";
 
 export class SliderModule implements IInjectorModule {
-    constructor(
-        private modelBinders:any,
-        private viewModelBinders:Array<IViewModelBinder<any, any>>,
-    ) { }
-
     register(injector: IInjector): void {
         // injector.bind("sliderModelBinder", SliderModelBinder);
-        // this.modelBinders.push(injector.resolve("sliderModelBinder"));
+        const modelBinders = injector.resolve<Array<IModelBinder>>("modelBinders");        
+        // modelBinders.push(injector.resolve("sliderModelBinder"));
         // injector.bind("sliderViewModelBinder", SliderViewModelBinder);
-        // this.viewModelBinders.push(injector.resolve("sliderViewModelBinder"));
+        const viewModelBinders = injector.resolve<Array<IViewModelBinder<any, any>>>("viewModelBinders");
+        // viewModelBinders.push(injector.resolve("sliderViewModelBinder"));
     }
 }

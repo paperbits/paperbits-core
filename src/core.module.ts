@@ -41,22 +41,6 @@ import { SiteService } from "@paperbits/common/sites";
 import { UrlService, UrlPermalinkResolver } from "@paperbits/common/urls";
 import { UnhandledErrorHandler } from "@paperbits/common/errors";
 export class CoreModule implements IInjectorModule {
-    private mBinders: Array<IModelBinder>;
-    private vmBinders: Array<IViewModelBinder<any, any>>;
-
-    constructor() {
-        this.mBinders = [];
-        this.vmBinders = [];
-    }
-
-    public get modelBinders(): Array<IModelBinder> {
-        return this.mBinders;
-    }
-
-    public get viewModelBinders(): Array<IViewModelBinder<any, any>> {
-        return this.vmBinders;
-    }
-
     register(injector: IInjector): void {
         /*** Core ***/
         injector.bindSingleton("httpClient", XmlHttpRequestClient);
@@ -108,8 +92,15 @@ export class CoreModule implements IInjectorModule {
 
         injector.bindModule(new KnockoutRegistrationLoaders());
 
-        injector.bindInstance("modelBinderSelector", new ModelBinderSelector(this.modelBinders));    
-        injector.bindInstance("viewModelBinderSelector", new ViewModelBinderSelector(this.viewModelBinders));
+        injector.bindSingletonFactory<Array<IModelBinder>>("modelBinders", () => {
+            return new Array<IModelBinder>();
+        });
+        injector.bindSingletonFactory<Array<IViewModelBinder<any, any>>>("viewModelBinders", () => {
+            return new Array<IViewModelBinder<any, any>>();
+        });
+
+        injector.bindSingleton("modelBinderSelector", ModelBinderSelector);    
+        injector.bindSingleton("viewModelBinderSelector", ViewModelBinderSelector);
 
         injector.bind("gtm", GoogleTagManager);
         
@@ -119,21 +110,22 @@ export class CoreModule implements IInjectorModule {
         injector.bind("backgroundModelBinder", BackgroundModelBinder);
 
         injector.bindModule(new KoModule());
-        injector.bindModule(new LayoutModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new PageModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new BlogModule(this.modelBinders));
-        injector.bindModule(new ColumnModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new RowModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new TextblockModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new SectionModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new NavbarModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new ButtonModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new MapModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new TableOfContentsModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new PictureModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new VideoPlayerModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new YoutubePlayerModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new TestimonialsModule(this.modelBinders, this.viewModelBinders));
-        injector.bindModule(new SliderModule(this.modelBinders, this.viewModelBinders));
+        injector.bindModule(new LayoutModule());
+        injector.bindModule(new PageModule());
+        injector.bindModule(new BlogModule());
+        injector.bindModule(new ColumnModule());
+        injector.bindModule(new RowModule());
+        injector.bindModule(new TextblockModule());
+
+        injector.bindModule(new SectionModule());
+        injector.bindModule(new NavbarModule());
+        injector.bindModule(new ButtonModule());
+        injector.bindModule(new MapModule());
+        injector.bindModule(new TableOfContentsModule());
+        injector.bindModule(new PictureModule());
+        injector.bindModule(new VideoPlayerModule());
+        injector.bindModule(new YoutubePlayerModule());
+        injector.bindModule(new TestimonialsModule());
+        injector.bindModule(new SliderModule());
     }
 }

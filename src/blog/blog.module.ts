@@ -1,13 +1,11 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { BlogModelBinder } from "./blogModelBinder";
+import { IModelBinder } from "@paperbits/common/editing";
 
 export class BlogModule implements IInjectorModule {
-    constructor(
-        private modelBinders:any
-    ) { }
-
     register(injector: IInjector): void {
         injector.bind("blogModelBinder", BlogModelBinder);
-        this.modelBinders.push(injector.resolve("blogModelBinder"));
+        const modelBinders = injector.resolve<Array<IModelBinder>>("modelBinders");
+        modelBinders.push(injector.resolve("blogModelBinder"));
     }
 }

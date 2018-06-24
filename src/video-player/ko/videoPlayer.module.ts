@@ -3,19 +3,17 @@ import { IViewModelBinder } from "@paperbits/common/widgets";
 import { VideoPlayerViewModel } from "./videoPlayerViewModel";
 import { VideoPlayerModelBinder } from "../videoPlayerModelBinder";
 import { VideoPlayerViewModelBinder } from "./videoPlayerViewModelBinder";
+import { IModelBinder } from "@paperbits/common/editing";
 
 export class VideoPlayerModule implements IInjectorModule {
-    constructor(
-        private modelBinders:any,
-        private viewModelBinders:Array<IViewModelBinder<any, any>>,
-    ) { }
-
     register(injector: IInjector): void {        
         injector.bind("videoPlayer", VideoPlayerViewModel);
-        injector.bind("videoPlayerModelBinder", VideoPlayerModelBinder);    
-        this.modelBinders.push(injector.resolve("videoPlayerModelBinder"));
+        injector.bind("videoPlayerModelBinder", VideoPlayerModelBinder);
+        const modelBinders = injector.resolve<Array<IModelBinder>>("modelBinders");
+        modelBinders.push(injector.resolve("videoPlayerModelBinder"));
 
         injector.bind("videoPlayerViewModelBinder", VideoPlayerViewModelBinder);
-        this.viewModelBinders.push(injector.resolve("videoPlayerViewModelBinder"));
+        const viewModelBinders = injector.resolve<Array<IViewModelBinder<any, any>>>("viewModelBinders");
+        viewModelBinders.push(injector.resolve("videoPlayerViewModelBinder"));
     }
 }
