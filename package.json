@@ -21,7 +21,6 @@
     ],
     "dependencies": {
         "@paperbits/common": "0.1.12",
-        "@paperbits/knockout": "0.1.12",
         "es6-shim": "^0.35.3",
         "google-maps": "^3.2.1",
         "knockout": "^3.5.0-beta",
