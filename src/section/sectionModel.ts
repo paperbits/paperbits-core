@@ -1,4 +1,4 @@
-import { WidgetModel } from "@paperbits/common/widgets/WidgetModel";
+import { WidgetModel } from "@paperbits/common/widgets";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 
 export class SectionModel {

@@ -1,53 +1,20 @@
-﻿import { IWidgetOrder } from '@paperbits/common/editing';
-import { IWidgetHandler } from '@paperbits/common/editing';
-import { IWidgetFactoryResult } from '@paperbits/common/editing';
-import { ButtonModelBinder } from "./buttonModelBinder";
-import { Contract } from "@paperbits/common/contract";
+﻿import { IWidgetOrder } from "@paperbits/common/editing";
+import { IWidgetHandler } from "@paperbits/common/editing";
+import { ButtonModel } from "./buttonModel";
 
 
 export class ButtonHandlers implements IWidgetHandler {
-    private readonly buttonModelBinder: ButtonModelBinder;
-
-    constructor(buttonModelBinder: ButtonModelBinder) {
-        this.buttonModelBinder = buttonModelBinder;
-    }
-
-    private async prepareWidgetOrder(config: Contract): Promise<IWidgetOrder> {
-        const model = await this.buttonModelBinder.nodeToModel(config);
-
-        const factoryFunction: () => IWidgetFactoryResult = () => {
-            throw "Not implemented.";
-
-            //let widgetModel = await this.buttonModelBinder.modelToWidgetModel(model);
-            // let htmlElement = document.createElement("widget");
-            // htmlElement.style.width = "150px";
-            // htmlElement.style.height = "100px";
-            // ko.applyBindingsToNode(htmlElement, { widget: widgetModel })
-            // htmlElement["attachedModel"] = widgetModel.model;
-            // return { element: htmlElement };
-        }
-
+    private async getWidgetOrderByConfig(): Promise<IWidgetOrder> {
         const widgetOrder: IWidgetOrder = {
             name: "button",
             displayName: "Button",
             iconClass: "paperbits-button-2",
-            createWidget: factoryFunction,
             createModel: async () => {
-                return model;
+                return new ButtonModel();
             }
         }
 
         return widgetOrder;
-    }
-
-    private async getWidgetOrderByConfig(): Promise<IWidgetOrder> {
-        const config: Contract = {
-            object: "block",
-            type: "button",
-            label: "Button",
-            style: "default"
-        }
-        return await this.prepareWidgetOrder(config);
     }
 
     public getWidgetOrder(): Promise<IWidgetOrder> {

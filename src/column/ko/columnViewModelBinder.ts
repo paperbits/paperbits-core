@@ -127,6 +127,16 @@ export class ColumnViewModelBinder implements IViewModelBinder<ColumnModel, Colu
                         component: {
                             name: "widget-selector",
                             params: {
+                                onRequest: () => {
+                                    const parentElement = GridHelper.getParentElementWithModel(element);
+                                    const bindings = GridHelper.getParentWidgetBindings(parentElement);
+                                    const provided = bindings
+                                        .filter(x => x.provides != null)
+                                        .map(x => x.provides)
+                                        .reduce((acc, val) => acc.concat(val));
+        
+                                    return provided;
+                                },
                                 onSelect: (widgetModel: any) => {
                                     const columnModel = <ColumnModel>GridHelper.getModel(element);
                                     const columnWidgetBinding = GridHelper.getWidgetBinding(element);

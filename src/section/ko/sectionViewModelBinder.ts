@@ -31,8 +31,6 @@ export class SectionViewModelBinder implements IViewModelBinder<SectionModel, Se
         }
 
         viewModel.widgets(viewModels);
-
-        viewModel.widgets(viewModels);
         viewModel.container(model.container);
         viewModel.background(model.background);
         viewModel.snapTo(model.snap);
