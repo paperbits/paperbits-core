@@ -5,8 +5,7 @@ import { TableOfContentsViewModelBinder } from "./tableOfContentsViewModelBinder
 import { IModelBinder } from "@paperbits/common/editing";
 
 export class TableOfContentsModule implements IInjectorModule {
-    register(injector: IInjector): void { 
-        
+    public register(injector: IInjector): void { 
         injector.bind("tableOfContentsModelBinder", TableOfContentsModelBinder);
         const modelBinders = injector.resolve<Array<IModelBinder>>("modelBinders");
         modelBinders.push(injector.resolve("tableOfContentsModelBinder"));

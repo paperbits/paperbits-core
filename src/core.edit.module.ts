@@ -40,6 +40,7 @@ import { UrlHyperlinkProvider } from "@paperbits/common/urls/urlHyperlinkProvide
 import { MediaHyperlinkProvider } from "@paperbits/common/media";
 import { DragManager } from "@paperbits/common/ui/draggables";
 import { PlaceholderViewModel } from "./placeholder/ko/placeholderViewModel";
+import { SearchResultsEditorModule } from "./search-results/ko/searchResultsEditor.module";
 
 export class CoreEditModule implements IInjectorModule {
 
@@ -133,6 +134,6 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindModule(new YoutubePlayerEditorModule());
         injector.bindModule(new TestimonialsEditorModule());
         injector.bindModule(new SliderEditorModule());
- 
+        injector.bindModule(new SearchResultsEditorModule());
     }
 }

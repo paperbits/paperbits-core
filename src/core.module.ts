@@ -16,6 +16,7 @@ import { ColumnModule } from "./column/ko/column.module";
 import { SectionModule } from "./section/ko/section.module";
 import { RowModule } from "./row/ko/row.module";
 import { SliderModule } from "./slider/ko/slider.module";
+import { SearchResultsModule } from "./search-results/ko/searchResults.module"
 import { GoogleTagManager } from "./gtm/ko/gtm";
 import { IntercomViewModel } from "./intercom/ko/intercomViewModel";
 import { TextblockModule } from "./textblock/ko/textblock.module";
@@ -101,12 +102,9 @@ export class CoreModule implements IInjectorModule {
 
         injector.bindSingleton("modelBinderSelector", ModelBinderSelector);    
         injector.bindSingleton("viewModelBinderSelector", ViewModelBinderSelector);
-
         injector.bind("gtm", GoogleTagManager);
-        
         injector.bind("intercom", IntercomViewModel);        
         injector.bindSingleton("intercomService", IntercomService);
-
         injector.bind("backgroundModelBinder", BackgroundModelBinder);
 
         injector.bindModule(new KoModule());
@@ -116,7 +114,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new ColumnModule());
         injector.bindModule(new RowModule());
         injector.bindModule(new TextblockModule());
-
         injector.bindModule(new SectionModule());
         injector.bindModule(new NavbarModule());
         injector.bindModule(new ButtonModule());
@@ -127,5 +124,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new YoutubePlayerModule());
         injector.bindModule(new TestimonialsModule());
         injector.bindModule(new SliderModule());
+        injector.bindModule(new SearchResultsModule());
     }
 }

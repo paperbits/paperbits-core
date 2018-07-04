@@ -11,6 +11,7 @@ import { BalloonBindingHandler } from "./bindingHandlers/bindingHandlers.balloon
 import { BackgroundBindingHandler } from "./bindingHandlers/bindingHandlers.background";
 import { ResizableBindingHandler } from "./bindingHandlers/bindingHandlers.resizable";
 import { KnockoutValidation } from "./validation/validators";
+
 import "./knockout.editors";
 import "./bindingHandlers/bindingHandlers.background";
 import "./bindingHandlers/bindingHandlers.balloon";
@@ -31,6 +32,8 @@ import "./bindingHandlers/bindingHandlers.align";
 import "./bindingHandlers/bindingHandlers.validationMessageToggle";
 import "./bindingHandlers/bindingHandlers.collapse";
 import "./bindingHandlers/bindingHandlers.container";
+import "./bindingHandlers/bindingHandlers.stickTo";
+import "./bindingHandlers/bindingHandlers.scrollable";
 
 export class KoModule implements IInjectorModule {
     register(injector: IInjector): void {

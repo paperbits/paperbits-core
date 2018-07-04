@@ -1,4 +1,4 @@
-import { IViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
+import { IViewModelBinder } from "@paperbits/common/widgets";
 import { TableOfContentsViewModel } from "./tableOfContentsViewModel";
 import { TableOfContentsModel } from "../tableOfContentsModel";
 
