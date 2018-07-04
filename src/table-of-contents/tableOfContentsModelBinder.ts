@@ -29,7 +29,7 @@ export class TableOfContentsModelBinder implements IModelBinder {
     private async processAnchorItems(permalink: IPermalink, anchors): Promise<NavigationItemModel[]> {
         const anchorPromises = Object.keys(anchors).map(async anchorKey => {
             const permalinkKey = anchorKey.replaceAll("|", "/");
-            const anchorPermalink = await this.permalinkService.getPermalink(permalinkKey);
+            const anchorPermalink = await this.permalinkService.getPermalinkByKey(permalinkKey);
 
             const anchorNavbarItem = new NavigationItemModel();
             anchorNavbarItem.label = anchors[anchorKey]; //`${page.title} > ${page.anchors[anchorKey]}`;

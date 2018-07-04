@@ -1,6 +1,7 @@
 import { TextblockModel } from "./textblockModel";
 import { TextblockViewModel } from "./ko/textblockViewModel";
 import { IViewModelBinder } from "@paperbits/common/widgets";
+import { IWidgetBinding } from "@paperbits/common/editing";
 
 export class TextblockViewModelBinder implements IViewModelBinder<TextblockModel, TextblockViewModel> {
     private readonly htmlEditorFactory;
@@ -19,7 +20,7 @@ export class TextblockViewModelBinder implements IViewModelBinder<TextblockModel
         viewModel.state(model.state);
         // textblockViewModel.readonly(!!model.readonly);
 
-        viewModel["widgetBinding"] = {
+        const widgetBinding /*: IWidgetBinding */ = {
             displayName: "Text",
             readonly: readonly,
             model: model,
@@ -30,6 +31,8 @@ export class TextblockViewModelBinder implements IViewModelBinder<TextblockModel
                 this.modelToViewModel(model, readonly, viewModel);
             }
         }
+
+        viewModel["widgetBinding"] = widgetBinding;
 
         return viewModel;
     }

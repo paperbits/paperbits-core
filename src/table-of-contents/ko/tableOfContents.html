@@ -1,23 +1,24 @@
-<script id="tableOfContentsItem" type="text/html">
-    <ul class="nav" data-bind="foreach: { data: $data.nodes, as: 'item' }">
-        <li class="nav-item" data-bind="css: { active: item.isActive }">
-            <a class="nav-link" data-bind="text: item.label, attr: { href: item.url }"></a>
+<widget>
+    <div class="table-of-contents" id="table-of-content">
+        <!--ko ifnot: $data.isEmpty -->
+        <!--ko template: { name: 'tableOfContentsItem', data: $data }-->
+        <!--/ko-->
+        <!--/ko-->
 
-            <!--ko if: item.nodes.length > 0 -->
-            <!--ko template: { name: 'tableOfContentsItem', data: item }--><!--/ko-->
-            <!--/ko-->
-        </li>
-    </ul>
-</script>
+        <!--ko if: $data.isEmpty -->
+        <p class="not-configured">It seems that you don't have navigation items here.</p>
+        <!--/ko-->
+    </div>
 
-<div class="table-of-contents" id="table-of-content">
-    <!--ko ifnot: $data.isEmpty -->
-    <!--ko template: { name: 'tableOfContentsItem', data: $data }-->
-    <!--/ko-->
-    <!--/ko-->
+    <script id="tableOfContentsItem" type="text/html">
+        <ul class="nav" data-bind="foreach: { data: $data.nodes, as: 'item' }">
+            <li class="nav-item" data-bind="css: { active: item.isActive }">
+                <a class="nav-link" data-bind="text: item.label, attr: { href: item.url }"></a>
 
-    <!--ko if: $data.isEmpty -->
-    <p class="not-configured">It seems that you don't have navigation items here.</p>
-    <!--/ko-->
-</div>
-
+                <!--ko if: item.nodes.length > 0 -->
+                <!--ko template: { name: 'tableOfContentsItem', data: item }--><!--/ko-->
+                <!--/ko-->
+            </li>
+        </ul>
+    </script>
+</widget>

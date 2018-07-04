@@ -554,7 +554,7 @@ export class GridEditor {
     }
 
     public static attachColumnDragEvents(sourceElement: HTMLElement, viewManager: IViewManager, eventManager: IEventManager): void {
-        const onDragStart = (item): HTMLElement => {
+        const onDragStart = (): HTMLElement => {
             const placeholderWidth = sourceElement.clientWidth - 1 + "px";;
             const placeholderHeight = sourceElement.clientHeight - 1 + "px";
 
