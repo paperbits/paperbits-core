@@ -1,6 +1,6 @@
 {
     "name": "@paperbits/core",
-    "version": "0.1.13",
+    "version": "0.1.14",
     "description": "Paperbits core components.",
     "author": "Vienna LLC",
     "license": "Commercial",
@@ -20,7 +20,7 @@
         "not ie < 11"
     ],
     "dependencies": {
-        "@paperbits/common": "0.1.13",
+        "@paperbits/common": "0.1.14",
         "es6-shim": "^0.35.3",
         "google-maps": "^3.2.1",
         "knockout": "^3.5.0-beta",
