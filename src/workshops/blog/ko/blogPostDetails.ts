@@ -69,6 +69,8 @@ export class BlogPostDetailsWorkshop {
     private async updatePermlaink(): Promise<void> {
         this.blogPostPermalink.uri = this.blogPostItem.permalinkUrl();
         await this.permalinkService.updatePermalink(this.blogPostPermalink);
+
+        this.routeHandler.navigateTo(this.blogPostPermalink.uri, false);
     }
 
     public async deleteBlogPost(): Promise<void> {

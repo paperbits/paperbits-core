@@ -52,7 +52,7 @@ export class KnockoutValidation {
 
                 callback(!conflict);
             },
-            message: "The permalink is already in use"
+            message: "This permalink is already in use."
         }
 
         validation.rules["uniqueLayoutUri"] = {
@@ -67,7 +67,7 @@ export class KnockoutValidation {
 
                 callback(!conflict);
             },
-            message: "The uri template is already in use"
+            message: "This URI template is already in use."
         };
 
         validation.registerExtenders();
