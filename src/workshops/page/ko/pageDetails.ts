@@ -1,7 +1,6 @@
 ﻿import * as ko from "knockout";
 import template from "./pageDetails.html";
-import { IPermalink } from "@paperbits/common/permalinks";
-import { IPermalinkService } from "@paperbits/common/permalinks";
+import { IPermalink, IPermalinkService } from "@paperbits/common/permalinks";
 import { IPageService } from "@paperbits/common/pages/IPageService";
 import { IRouteHandler } from "@paperbits/common/routing/IRouteHandler";
 import { IViewManager } from "@paperbits/common/ui/IViewManager";
@@ -69,17 +68,19 @@ export class PageDetailsWorkshop {
     private async updatePermlaink(): Promise<void> {
         this.pagePermalink.uri = this.pageItem.permalinkUrl();
         await this.permalinkService.updatePermalink(this.pagePermalink);
+
+        this.routeHandler.navigateTo(this.pagePermalink.uri, false);
     }
 
     public async deletePage(): Promise<void> {
-        //TODO: Show confirmation dialog according to mockup
+        // TODO: Show confirmation dialog according to mockup
         await this.pageService.deletePage(this.pageItem.toContract());
 
         this.viewManager.notifySuccess("Pages", `Page "${this.pageItem.title()}" was deleted.`);
         this.viewManager.closeWorkshop("page-details-workshop");
 
         if (this.onDeleteCallback) {
-            this.onDeleteCallback()
+            this.onDeleteCallback();
         }
 
         this.routeHandler.navigateTo("/");
