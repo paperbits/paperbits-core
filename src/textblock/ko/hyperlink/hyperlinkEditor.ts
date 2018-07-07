@@ -3,7 +3,7 @@ import template from "./hyperlinkEditor.html";
 import { IHtmlEditorProvider } from '@paperbits/common/editing/htmlEditorProvider'
 import { IEventManager } from '@paperbits/common/events';
 import { HyperlinkModel } from "@paperbits/common/permalinks";
-import { IHyperlink } from "@paperbits/common/permalinks";
+import { HyperlinkContract } from "@paperbits/common/editing";
 import { PermalinkResolver } from "@paperbits/common/permalinks/permalinkResolver";
 import { IPermalinkService } from "@paperbits/common/permalinks";
 import { Component } from "../../../ko/component";
@@ -59,7 +59,7 @@ export class HyperlinkEditor {
 
     private async onSelectionChange(): Promise<void> {
         let htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
-        let hyperlinkConfig: IHyperlink = htmlEditor.getHyperlink();
+        let hyperlinkConfig: HyperlinkContract = htmlEditor.getHyperlink();
         let hyperlink = null;
 
         if (hyperlinkConfig) {

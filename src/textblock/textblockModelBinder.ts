@@ -1,5 +1,5 @@
-import { IModelBinder } from "@paperbits/common/editing";
-import { IPermalinkService, IHyperlink } from "@paperbits/common/permalinks";
+import { IModelBinder, HyperlinkContract } from "@paperbits/common/editing";
+import { IPermalinkService } from "@paperbits/common/permalinks";
 import { Contract } from "@paperbits/common";
 import { TextblockModel } from "./textblockModel";
 
@@ -15,7 +15,7 @@ export class TextblockModelBinder implements IModelBinder {
             const node = leaves[i];
 
             if (node && node.type == "link") {
-                const hyperlink: IHyperlink = <IHyperlink>node;
+                const hyperlink: HyperlinkContract = <HyperlinkContract>node;
 
                 if (hyperlink.permalinkKey) {
                     const permalink = await this.permalinkService.getPermalinkByKey(hyperlink.permalinkKey);
