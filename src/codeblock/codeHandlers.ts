@@ -32,7 +32,7 @@ export class CodeHandlers extends MediaHandlers implements IWidgetHandler, ICont
             }
         };
 
-        var widgetOrder: IWidgetOrder = {
+        let widgetOrder: IWidgetOrder = {
             name: "code-block",
             displayName: "Code",
 
@@ -64,7 +64,7 @@ export class CodeHandlers extends MediaHandlers implements IWidgetHandler, ICont
     }
 
     getLangByFileName(fileName: string): string {
-        var extension = fileName.split(".").pop();
+        let extension = fileName.split(".").pop();
         switch (extension) {
             case "cs":
                 return "csharp";
@@ -86,11 +86,11 @@ export class CodeHandlers extends MediaHandlers implements IWidgetHandler, ICont
 
     public getContentDescriptorFromDataTransfer(dataTransfer: IDataTransfer): IContentDescriptor {
         return null;
-        // var descriptor: IContentDescriptor = {
+        // let descriptor: IContentDescriptor = {
         //     title: "Code",
         //     description: dataTransfer.name,
         //     getWidgetOrder: () => {
-        //         var config: ICodeConfig = {
+        //         let config: ICodeConfig = {
         //             onload: this.readFileAsText(item.file),
         //             filename: item.file.name,
         //             theme: "clouds"
@@ -106,16 +106,16 @@ export class CodeHandlers extends MediaHandlers implements IWidgetHandler, ICont
 
     private readFileAsText(file: File): ProgressPromise<string> {
         return new ProgressPromise((resolve, reject, progress) => {
-            var reader = new FileReader();
+            let reader = new FileReader();
 
             reader.onload = (event: any) => {
-                var text = event.target.result;
+                let text = event.target.result;
                 resolve(text);
             };
 
             reader.onprogress = (progressEvent: ProgressEvent) => {
                 if (progressEvent.lengthComputable) {
-                    var percentLoaded = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+                    let percentLoaded = Math.round((progressEvent.loaded / progressEvent.total) * 100);
                     progress(percentLoaded);
                 }
             };

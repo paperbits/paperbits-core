@@ -62,7 +62,7 @@ export class NavigationTree {  // TODO: This should be refactored into ModelBind
 
         if (navItem.navigationItems) {
             navItem.navigationItems.forEach(child => {
-                var childNode = this.modelToViewModel(child);
+                let childNode = this.modelToViewModel(child);
                 childNode.parent = viewModel;
                 viewModel.nodes.push(childNode);
             });

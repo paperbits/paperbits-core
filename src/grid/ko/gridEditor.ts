@@ -1,5 +1,5 @@
 import * as ko from "knockout";
-import * as _ from 'lodash';
+import * as _ from "lodash";
 import * as Utils from "@paperbits/common/utils";
 import { IEventManager } from "@paperbits/common/events";
 import { IViewManager, ViewManagerMode, IHighlightConfig, IContextualEditor } from "@paperbits/common/ui";
@@ -19,7 +19,7 @@ export class GridEditor {
     private pointerX: number;
     private pointerY: number;
     private selectedContextualEditor: IContextualEditor;
-    private actives: Object;
+    private actives: object;
 
     constructor(
         private readonly viewManager: ViewManager,
@@ -86,7 +86,7 @@ export class GridEditor {
 
         const elements = this.getUnderlyingElements();
         const element = elements.find(element => {
-            return GridHelper.getWidgetBinding(element) != null;
+            return GridHelper.getWidgetBinding(element) !== null;
         });
 
         if (!element) {
@@ -192,7 +192,7 @@ export class GridEditor {
                     return null;
                 }
             })
-            .find(x => x != null);
+            .find(x => x !== null);
 
         if (acceptorElement) {
             const childNodes = Array.prototype.slice
@@ -421,13 +421,13 @@ export class GridEditor {
     }
 
     private rerenderEditors(pointerX: number, pointerY: number, elements: HTMLElement[]): void {
-        let highlightedElement: HTMLElement = null;
-        let highlightedText: string = null;
-        let tobeDeleted = Object.keys(this.actives);
+        let highlightedElement: HTMLElement;
+        let highlightedText: string;
+        const tobeDeleted = Object.keys(this.actives);
 
         for (let i = elements.length - 1; i >= 0; i--) {
-            let element = elements[i];
-            let widgetBinding = GridHelper.getWidgetBinding(element);
+            const element = elements[i];
+            const widgetBinding = GridHelper.getWidgetBinding(element);
 
             if (!widgetBinding || widgetBinding.readonly) {
                 continue;
@@ -443,7 +443,7 @@ export class GridEditor {
             const half = quadrant.vertical;
             const active = this.actives[widgetBinding.name];
 
-            if (!active || element != active.element || half != active.half) {
+            if (!active || element !== active.element || half !== active.half) {
                 let contextualEditor;
 
                 if (widgetBinding.getContextualEditor) {
@@ -458,7 +458,7 @@ export class GridEditor {
                 this.actives[widgetBinding.name] = {
                     element: element,
                     half: quadrant.vertical
-                }
+                };
             }
         }
 
@@ -467,7 +467,7 @@ export class GridEditor {
             delete this.actives[x];
         });
 
-        if (this.activeHighlightedElement != highlightedElement) {
+        if (this.activeHighlightedElement !== highlightedElement) {
             this.activeHighlightedElement = highlightedElement;
             this.viewManager.setHighlight({ element: highlightedElement, text: highlightedText });
         }
@@ -520,7 +520,7 @@ export class GridEditor {
             });
 
             return sourceElement;
-        }
+        };
 
         const onDragEnd = () => {
             const dragSession = viewManager.getDragSession();
@@ -542,11 +542,11 @@ export class GridEditor {
             }
 
             eventManager.dispatchEvent("virtualDragEnd");
-        }
+        };
 
         const preventDragging = (): boolean => {
             return viewManager.mode === ViewManagerMode.configure;
-        }
+        };
 
         ko.applyBindingsToNode(sourceElement, {
             dragsource: { sticky: true, ondragstart: onDragStart, ondragend: onDragEnd, preventDragging: preventDragging }
@@ -581,7 +581,7 @@ export class GridEditor {
             });
 
             return sourceElement;
-        }
+        };
 
         const onDragEnd = () => {
             const dragSession = viewManager.getDragSession();
@@ -603,11 +603,11 @@ export class GridEditor {
             }
 
             eventManager.dispatchEvent("virtualDragEnd");
-        }
+        };
 
         const preventDragging = (): boolean => {
             return viewManager.mode === ViewManagerMode.configure;
-        }
+        };
 
         ko.applyBindingsToNode(sourceElement, {
             dragsource: { sticky: true, ondragstart: onDragStart, ondragend: onDragEnd, preventDragging: preventDragging }
@@ -642,7 +642,7 @@ export class GridEditor {
             });
 
             return sourceElement;
-        }
+        };
 
         const onDragEnd = () => {
             const dragSession = viewManager.getDragSession();
@@ -663,11 +663,11 @@ export class GridEditor {
             }
 
             eventManager.dispatchEvent("virtualDragEnd");
-        }
+        };
 
         const preventDragging = (): boolean => {
             return viewManager.mode === ViewManagerMode.configure;
-        }
+        };
 
         ko.applyBindingsToNode(sourceElement, {
             dragsource: { sticky: true, ondragstart: onDragStart, ondragend: onDragEnd, preventDragging: preventDragging }

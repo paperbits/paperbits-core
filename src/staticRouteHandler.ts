@@ -24,14 +24,14 @@ export class StaticRouteHandler implements IRouteHandler {
     }
 
     public addRouteChangeListener(callback: () => void): void {
-        //this.callbacks.push(callback);
+        // this.callbacks.push(callback);
     }
 
     public removeRouteChangeListener(callback: () => void): void {
         // this.callbacks.spliceremove(callback);
     }
 
-    public navigateTo(hash: string, notifyListeners: boolean = true, forceNotification?: boolean): void {
+    public navigateTo(hash: string): void {
         this.currentUrl = hash;
 
         this.callbacks.forEach(callback => {

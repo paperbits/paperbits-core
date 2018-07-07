@@ -54,7 +54,7 @@ export class NavigationItemViewModel {
         }
 
         this.parent.nodes.remove(this);
-        var ownIndex = this.parent.parent.nodes.indexOf(this.parent);
+        let ownIndex = this.parent.parent.nodes.indexOf(this.parent);
         this.parent.parent.nodes.splice(ownIndex + 1, 0, this);
         this.parent = this.parent.parent;
 
@@ -62,13 +62,13 @@ export class NavigationItemViewModel {
     }
 
     private moveNodeRight(): void {
-        var index = this.parent.nodes().indexOf(this);
+        let index = this.parent.nodes().indexOf(this);
 
         if (index === 0) {
             return;
         }
 
-        var previousSibling = this.parent.nodes()[index - 1];
+        let previousSibling = this.parent.nodes()[index - 1];
         this.parent.nodes.remove(this);
         this.parent = previousSibling;
         previousSibling.nodes.push(this);

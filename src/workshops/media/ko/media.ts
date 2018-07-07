@@ -116,7 +116,7 @@ export class MediaWorkshop {
 
         const uploadPromises = [];
 
-        for (var index = 0; index < files.length; index++) {
+        for (let index = 0; index < files.length; index++) {
             const file = files[index];
             const content = await Utils.readFileAsByteArray(file);
             const uploadPromise = this.mediaService.createMedia(file.name, content, file.type);

@@ -52,7 +52,7 @@ export class NavbarModelBinder implements IModelBinder {
         navbarItem.label = navigationItemContract.label;
 
         if (navigationItemContract.navigationItems) {
-            var tasks = [];
+            let tasks = [];
 
             navigationItemContract.navigationItems.forEach(child => {
                 tasks.push(this.navigationItemToNavbarItemModel(child, currentUrl));

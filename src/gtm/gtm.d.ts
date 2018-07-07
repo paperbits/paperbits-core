@@ -1,1 +1,1 @@
-declare var dataLayer: any;
+declare let dataLayer: any;

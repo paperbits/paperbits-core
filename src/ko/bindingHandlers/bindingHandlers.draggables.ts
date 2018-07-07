@@ -8,14 +8,14 @@ export class DraggablesBindingHandler {
 
         ko.bindingHandlers["dragsource"] = {
             init(element: HTMLElement, valueAccessor: () => DragSourceConfig) {
-                var config = valueAccessor();
+                let config = valueAccessor();
                 dragManager.registerDragSource(element, config);
             }
         };
 
         ko.bindingHandlers["dragtarget"] = {
             init(element: HTMLElement, valueAccessor: () => DragTargetConfig) {
-                var config = valueAccessor();
+                let config = valueAccessor();
                 dragManager.registerDragTarget(element, config);
             }
         };

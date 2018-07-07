@@ -25,7 +25,7 @@ export class IntercomService implements IIntercomService {
             window["Intercom"]('update', intercomSettings);
         }
         else {
-            var intercomHandle = function () {
+            let intercomHandle = function () {
                 intercomHandle["c"](arguments)
             };
             intercomHandle["q"] = [];
@@ -33,11 +33,11 @@ export class IntercomService implements IIntercomService {
                 intercomHandle["q"].push(args)
             };
 
-            var scriptElement = window.document.createElement("script");
+            let scriptElement = window.document.createElement("script");
             scriptElement.type = "text/javascript";
             scriptElement.async = true;
             scriptElement.src = `https://widget.intercom.io/widget/${appId}`;
-            var x = window.document.getElementsByTagName('body')[0];
+            let x = window.document.getElementsByTagName('body')[0];
             x.appendChild(scriptElement);
 
             window["Intercom"] = intercomHandle;

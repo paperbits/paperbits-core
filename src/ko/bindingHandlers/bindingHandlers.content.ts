@@ -4,7 +4,7 @@ export class ContentBindingHandler {
     constructor() {
         ko.bindingHandlers["content"] = {
             update(element: HTMLElement, valueAccessor, allBindings, viewModel, bindingContext): void {
-                var observable = valueAccessor();
+                let observable = valueAccessor();
 
                 if (observable() === element.innerHTML)
                     return;

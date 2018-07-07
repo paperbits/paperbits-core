@@ -11,16 +11,15 @@ import { IComponent, IView, IViewManager, ViewManagerMode, IHighlightConfig, ICo
 import { ProgressIndicator } from "../ui";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { ISplitterConfig } from "../bindingHandlers/bindingHandlers.splitter";
-import { ISiteService } from "@paperbits/common/sites";
+import { ISiteService, ISettings } from "@paperbits/common/sites";
 import { IPageService, PageContract } from "@paperbits/common/pages";
 import { IPermalinkService } from "@paperbits/common/permalinks";
-import { ISettings } from "@paperbits/common/sites";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { IWidgetEditor } from "@paperbits/common/widgets";
 import { Component } from "../../ko/component";
 
-declare var uploadDialog;
+declare let uploadDialog;
 
 @Component({
     selector: "view-manager",
@@ -132,7 +131,7 @@ export class ViewManager implements IViewManager {
         let settings = await this.siteService.getSiteSettings();
 
         if (settings && settings.site.faviconPermalinkKey) {
-            let iconFile = await this.mediaService.getMediaByPermalink(settings.site.faviconPermalinkKey);
+            let iconFile = await this.mediaService.getMediaByPermalinkKey(settings.site.faviconPermalinkKey);
 
             if (iconFile && iconFile.downloadUrl) {
                 metaDataSetter.setFavIcon(iconFile.downloadUrl);
@@ -208,20 +207,20 @@ export class ViewManager implements IViewManager {
     }
 
     public addProgressIndicator(title: string, content: string): ProgressIndicator {
-        var indicator = new ProgressIndicator(title, content);
+        let indicator = new ProgressIndicator(title, content);
         this.progressIndicators.push(indicator);
 
         return indicator;
     }
 
     public notifySuccess(title: string, content: string): void {
-        var indicator = new ProgressIndicator(title, content, 100);
+        let indicator = new ProgressIndicator(title, content, 100);
         this.progressIndicators.push(indicator);
         this.scheduleIndicatorRemoval(indicator);
     }
 
     public addPromiseProgressIndicator<T>(promise: Promise<T>, title: string, content: string): void {
-        var indicator = new ProgressIndicator(title, content);
+        let indicator = new ProgressIndicator(title, content);
 
         this.progressIndicators.push(indicator);
 

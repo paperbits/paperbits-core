@@ -5,14 +5,14 @@ export class LightboxBindingHandler {
     constructor(lightbox: ILightbox) {
         ko.bindingHandlers["lightbox"] = {
             init(element, valueAccessor) {
-                var configuration = valueAccessor();
-                var lightboxContentUrl = ko.unwrap(configuration.url);
+                let configuration = valueAccessor();
+                let lightboxContentUrl = ko.unwrap(configuration.url);
 
-                var setContentUrl = (url: string) => {
+                let setContentUrl = (url: string) => {
                     lightboxContentUrl = url;
                 }
 
-                var showLightbox = () => {
+                let showLightbox = () => {
                     lightbox.show(lightboxContentUrl);
                 };
 

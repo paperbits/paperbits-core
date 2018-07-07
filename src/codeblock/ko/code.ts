@@ -13,7 +13,7 @@ export class Code {
     public isEditable: KnockoutObservable<boolean>;
 
     constructor() {
-        this.code = ko.observable<string>("var i = 0;");
+        this.code = ko.observable<string>("let i = 0;");
         this.lang = ko.observable<string>("csharp");
         this.theme = ko.observable<string>("ambient");
         this.isEditable = ko.observable<boolean>(false);

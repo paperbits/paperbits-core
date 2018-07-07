@@ -152,8 +152,8 @@ export class SettingsWorkshop {
                 this.faviconFileName(faviconPermalink.uri);
                 this.viewManager.loadFavIcon();
 
-                var faviconModel = new BackgroundModel();
-                var faviconMedia = await this.mediaService.getMediaByKey(faviconPermalink.targetKey);
+                let faviconModel = new BackgroundModel();
+                let faviconMedia = await this.mediaService.getMediaByKey(faviconPermalink.targetKey);
 
                 faviconModel.sourceUrl = faviconMedia.downloadUrl;
 

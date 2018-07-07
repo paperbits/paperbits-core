@@ -44,7 +44,7 @@ export class YoutubeHandlers implements IWidgetHandler, IContentDropHandler {
 
         let getThumbnailPromise = () => Promise.resolve(`https://img.youtube.com/vi/${videoId}/0.jpg`);
 
-        var descriptor: IContentDescriptor = {
+        let descriptor: IContentDescriptor = {
             title: "Youtube player",
             description: "",
             getWidgetOrder: (): Promise<IWidgetOrder> => this.getWidgetOrderByConfig(videoId),
@@ -62,7 +62,7 @@ export class YoutubeHandlers implements IWidgetHandler, IContentDropHandler {
             const lower = source.toLowerCase();
 
             if (lower.startsWith("https://www.youtube.com") || lower.startsWith("http://www.youtube.com")) {
-                var videoId = new RegExp("[?&](?:v=)(.*?)(?:$|&)").exec(source);
+                let videoId = new RegExp("[?&](?:v=)(.*?)(?:$|&)").exec(source);
                 return videoId ? videoId[1] : null;
             }
         }

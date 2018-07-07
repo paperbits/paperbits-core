@@ -71,8 +71,8 @@ export class MapHandlers implements IWidgetHandler, IContentDropHandler {
             const url = source.toLowerCase();
 
             if (url.startsWith("https://www.google.com/maps/") || url.startsWith("http://www.google.com/maps/")) {
-                var location: string;
-                var match = new RegExp("/place/([^/]+)").exec(url);
+                let location: string;
+                let match = new RegExp("/place/([^/]+)").exec(url);
 
                 if (match && match.length > 1) {
                     location = match[1].replaceAll("+", " ");
@@ -80,7 +80,7 @@ export class MapHandlers implements IWidgetHandler, IContentDropHandler {
                 else {
                     match = new RegExp("/@([^/]+)").exec(url);
                     if (match && match.length > 1) {
-                        var locationParts = match[1].split(",");
+                        let locationParts = match[1].split(",");
                         location = locationParts.slice(0, 2).join(",");
                     }
                 }

@@ -1,11 +1,11 @@
 import * as ko from "knockout";
 import template from "./document.html";
 import * as Utils from "@paperbits/common/utils";
-import { IRouteHandler } from "@paperbits/common/routing/IRouteHandler";
-import { IViewManager } from "@paperbits/common/ui/IViewManager";
+import { IRouteHandler } from "@paperbits/common/routing";
+import { IViewManager } from "@paperbits/common/ui";
 import { Component } from "../ko/component";
 import { LayoutModelBinder } from "../layout/layoutModelBinder";
-import { LayoutViewModelBinder } from "../layout/ko/layoutViewModelBinder";
+import { LayoutViewModelBinder } from "../layout/ko";
 import { LayoutViewModel } from "../layout/ko/layoutViewModel";
 
 @Component({
@@ -37,7 +37,6 @@ export class DocumentViewModel {
         // setting up...
         this.routeHandler.addRouteChangeListener(this.onRouteChange);
 
-        //this.layoutModel = ko.observable<IWidgetBinding>();
         this.layoutModel = ko.observable<LayoutViewModel>();
         this.disableTracking = ko.observable(false);
 
@@ -49,13 +48,13 @@ export class DocumentViewModel {
 
         this.layoutModel(null);
 
-        let layoutMode = this.viewManager.journeyName() == "Layouts";
-        let readonly = !layoutMode;
-        let layoutModel = await this.layoutModelBinder.getLayoutModel(this.routeHandler.getCurrentUrl(), readonly);
-        let layoutViewModel = this.layoutViewModelBinder.modelToViewModel(layoutModel, readonly);
+        const layoutMode = this.viewManager.journeyName() === "Layouts";
+        const readonly = !layoutMode;
+        const layoutModel = await this.layoutModelBinder.getLayoutModel(this.routeHandler.getCurrentUrl(), readonly);
+        const layoutViewModel = this.layoutViewModelBinder.modelToViewModel(layoutModel, readonly);
 
         this.layoutModel(layoutViewModel);
-        
+
         this.disableTracking(!layoutMode)
         this.viewManager.removeShutter();
     }

@@ -64,13 +64,13 @@ export class DropBucket {
     }
 
     private async handleDroppedContent(contentDescriptor: IContentDescriptor): Promise<void> {
-        var dropbucketItem = new DropBucketItem();
+        const dropbucketItem = new DropBucketItem();
 
         dropbucketItem.title = contentDescriptor.title;
         dropbucketItem.description = contentDescriptor.description;
 
         if (contentDescriptor.getWidgetOrder) {
-            let widgetOrder = await contentDescriptor.getWidgetOrder();
+            const widgetOrder = await contentDescriptor.getWidgetOrder();
             dropbucketItem.widgetOrder(widgetOrder);
         }
 
@@ -84,8 +84,8 @@ export class DropBucket {
         }
 
         if (contentDescriptor.uploadables && contentDescriptor.uploadables.length) {
-            for (var i = 0; i < contentDescriptor.uploadables.length; i++) {
-                var uploadable = contentDescriptor.uploadables[i];
+            for (let i = 0; i < contentDescriptor.uploadables.length; i++) {
+                const uploadable = contentDescriptor.uploadables[i];
                 dropbucketItem.uploadables.push(uploadable);
             }
         }
@@ -100,8 +100,8 @@ export class DropBucket {
 
         this.droppedItems.removeAll();
 
-        var dataTransfer = event.dataTransfer;
-        var items: IDataTransfer[];
+        let dataTransfer = event.dataTransfer;
+        let items: IDataTransfer[];
 
         if (dataTransfer.files.length > 0) {
             items = [];
@@ -114,8 +114,8 @@ export class DropBucket {
             }
         }
         else {
-            var urlData = dataTransfer.getData("url");
-            var parts = urlData.split("/");
+            let urlData = dataTransfer.getData("url");
+            let parts = urlData.split("/");
 
             items = [{
                 source: urlData,
@@ -123,10 +123,10 @@ export class DropBucket {
             }];
         }
 
-        for (let item of items) {
-            var handled = false;
-            var contentDescriptor: IContentDescriptor = null;
-            var j = 0;
+        for (const item of items) {
+            let handled = false;
+            let contentDescriptor: IContentDescriptor = null;
+            let j = 0;
 
             while (contentDescriptor === null && j < this.dropHandlers.length) {
                 contentDescriptor = this.dropHandlers[j].getContentDescriptorFromDataTransfer(item);
@@ -146,9 +146,9 @@ export class DropBucket {
 
     private onPaste(event: ClipboardEvent): void {
         this.droppedItems.removeAll();
-        var text = event.clipboardData.getData("text");
-        var i = 0;
-        var contentDescriptor: IContentDescriptor = null;
+        const text = event.clipboardData.getData("text");
+        let i = 0;
+        let contentDescriptor: IContentDescriptor = null;
 
         while (contentDescriptor === null && i < this.dropHandlers.length) {
             contentDescriptor = this.dropHandlers[i].getContentDescriptorFromDataTransfer({
@@ -165,8 +165,8 @@ export class DropBucket {
     }
 
     private handleUnknownContent(dataTransfer: DataTransfer): void {
-        var title: string;
-        var description: string = "";
+        let title: string;
+        let description: string = "";
 
         if (dataTransfer.files.length > 1) {
             title = `${dataTransfer.files.length} files`;
@@ -179,10 +179,10 @@ export class DropBucket {
             title = "Piece of text";
         }
 
-        var dropbucketItem = new DropBucketItem();
-        var uploadables = [];
+        const dropbucketItem = new DropBucketItem();
+        const uploadables = [];
 
-        for (var i = 0; i < dataTransfer.files.length; i++) {
+        for (let i = 0; i < dataTransfer.files.length; i++) {
             uploadables.push(dataTransfer.files[i]);
         }
 
@@ -231,7 +231,7 @@ export class DropBucket {
     }
 
     public uploadContentAsMedia(dropbucketItem: DropBucketItem): void {
-        var uploadables = dropbucketItem.uploadables();
+        let uploadables = dropbucketItem.uploadables();
 
         this.droppedItems.remove(dropbucketItem);
 
@@ -239,7 +239,7 @@ export class DropBucket {
             let uploadPromise: ProgressPromise<ICreatedMedia>;
 
             if (typeof uploadable === "string") {
-                let name = uploadable.split("/").pop().split("?")[0];
+                const name = uploadable.split("/").pop().split("?")[0];
 
                 uploadPromise = Utils
                     .downloadFile(uploadable)
@@ -249,12 +249,12 @@ export class DropBucket {
             }
             else {
                 // TODO: Restore
-                let content = await Utils.readFileAsByteArray(uploadable);
+                const content = await Utils.readFileAsByteArray(uploadable);
                 uploadPromise = this.mediaService.createMedia(uploadable.name, content, uploadable.type);
                 this.viewManager.addPromiseProgressIndicator(uploadPromise, "Media library", `Uploading ${uploadable.name}...`);
             }
 
-            let onMediaUploadedCallback = dropbucketItem.widgetFactoryResult.onMediaUploadedCallback;
+            const onMediaUploadedCallback = dropbucketItem.widgetFactoryResult.onMediaUploadedCallback;
 
             if (onMediaUploadedCallback && typeof onMediaUploadedCallback === "function") {
                 //VK: Called by KO binding, so 2nd argument may be an event

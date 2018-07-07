@@ -3,11 +3,11 @@ import { IInjector, IInjectorModule } from "@paperbits/common/injection";
 
 export class KnockoutRegistrationLoaders implements IInjectorModule {
     public register(injector: IInjector): void {
-        var injectableComponentLoader = {
+        let injectableComponentLoader = {
             loadViewModel(name, config, callback) {
                 if (config.injectable) {
-                    var viewModelConstructor = (params) => {
-                        var resolvedInjectable: any = injector.resolve(config.injectable);
+                    let viewModelConstructor = (params) => {
+                        let resolvedInjectable: any = injector.resolve(config.injectable);
 
                         if (resolvedInjectable.factory) {
                             return resolvedInjectable.factory(injector, params);
@@ -32,14 +32,14 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
             },
 
             loadComponent(componentName: string, config: any, callback: (definition: KnockoutComponentTypes.Definition) => void) {
-                var callbackWrapper: (result: KnockoutComponentTypes.Definition) => void = (resultWrapper: KnockoutComponentTypes.Definition) => {
+                let callbackWrapper: (result: KnockoutComponentTypes.Definition) => void = (resultWrapper: KnockoutComponentTypes.Definition) => {
 
-                    var createViewModelWrapper: (params: any, options: { element: Node; }) => any = (params: any, options: { element: Node; }) => {
+                    let createViewModelWrapper: (params: any, options: { element: Node; }) => any = (params: any, options: { element: Node; }) => {
                         if (config.preprocess) {
                             config.preprocess(options.element, params);
                         }
 
-                        var viewModel = resultWrapper.createViewModel(params, options);
+                        let viewModel = resultWrapper.createViewModel(params, options);
 
                         if (config.postprocess) {
                             config.postprocess(options.element, viewModel);
@@ -48,7 +48,7 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                         return viewModel;
                     }
 
-                    var definitionWrapper /*: KnockoutComponentTypes.Definition*/ = {
+                    let definitionWrapper /*: KnockoutComponentTypes.Definition*/ = {
                         template: resultWrapper.template,
                         createViewModel: createViewModelWrapper,
                         constructor: config.constructor

@@ -2,8 +2,8 @@
 
 ko.bindingHandlers["paperbits-code-editor"] = {
     init(element, valueAccessor, context) {
-        // var aceEditor = ace.edit(element);
-        // var viewModel = valueAccessor();
+        // let aceEditor = ace.edit(element);
+        // let viewModel = valueAccessor();
 
         // aceEditor.getSession().setMode("ace/mode/" + viewModel.lang());
         // aceEditor.setTheme("ace/theme/" + viewModel.theme());

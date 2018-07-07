@@ -3,7 +3,7 @@ import { BackgroundModel } from "@paperbits/common/widgets/background";
 
 ko.bindingHandlers["style"] = {
     update(element, valueAccessor) {
-        var value = ko.utils.unwrapObservable(valueAccessor() || {});
+        let value = ko.utils.unwrapObservable(valueAccessor() || {});
 
         ko.utils.objectForEach(value, function (styleName, styleValue) {
             styleValue = ko.utils.unwrapObservable(styleValue);
@@ -22,11 +22,11 @@ export class BackgroundBindingHandler {
     constructor() {
         ko.bindingHandlers["background"] = {
             init(element: HTMLElement, valueAccessor) {
-                var configuration = valueAccessor();
-                var styleObservable = ko.observable();
-                var cssObservable = ko.observable();
+                let configuration = valueAccessor();
+                let styleObservable = ko.observable();
+                let cssObservable = ko.observable();
 
-                var setBackground = (backgroundModel: BackgroundModel) => {
+                let setBackground = (backgroundModel: BackgroundModel) => {
                     if (element.nodeName === "IMG") {
                         if (backgroundModel.sourceUrl) {
                             element["src"] = backgroundModel.sourceUrl;
