@@ -34,7 +34,7 @@ export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
             displayName: widgetDisplayName,
             iconClass: "paperbits-image-2",
             createModel: async () => {
-                return await this.pictureModelBinder.nodeToModel(config);
+                return await this.pictureModelBinder.contractToModel(config);
             }
         }
 

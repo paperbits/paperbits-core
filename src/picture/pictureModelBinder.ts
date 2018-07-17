@@ -15,7 +15,7 @@ export class PictureModelBinder implements IModelBinder {
         return model instanceof PictureModel;
     }
 
-    public async nodeToModel(pictureContract: PictureContract): Promise<PictureModel> {
+    public async contractToModel(pictureContract: PictureContract): Promise<PictureModel> {
         const pictureModel = new PictureModel();
         pictureModel.caption = pictureContract.caption;
         pictureModel.layout = pictureContract.layout;
@@ -35,7 +35,7 @@ export class PictureModelBinder implements IModelBinder {
         return pictureModel;
     }
 
-    public getConfig(pictureModel: PictureModel): PictureContract {
+    public modelToContract(pictureModel: PictureModel): PictureContract {
         let pictureContract: PictureContract = {
             object: "block",
             type: "picture",

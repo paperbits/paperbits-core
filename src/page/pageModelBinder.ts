@@ -24,7 +24,7 @@ export class PageModelBinder implements IModelBinder {
         this.modelBinderSelector = modelBinderSelector;
 
         // rebinding...
-        this.nodeToModel = this.nodeToModel.bind(this);
+        this.contractToModel = this.contractToModel.bind(this);
     }
 
     public canHandleWidgetType(widgetType: string): boolean {
@@ -35,7 +35,7 @@ export class PageModelBinder implements IModelBinder {
         return model instanceof PageModel;
     }
 
-    public async nodeToModel(pageContract, pageUrl: string, readonly?: boolean): Promise<any> {
+    public async contractToModel(pageContract, pageUrl: string, readonly?: boolean): Promise<any> {
         if (readonly) {
             return new PlaceholderModel(pageContract, "Page content");
         }
@@ -59,7 +59,7 @@ export class PageModelBinder implements IModelBinder {
         const pageContentNode = await this.fileService.getFileByKey(pageContract.contentKey);
         const modelPromises = pageContentNode.nodes.map(async (config) => {
             let modelBinder = this.modelBinderSelector.getModelBinderByNodeType(config.type);
-            return await modelBinder.nodeToModel(config);
+            return await modelBinder.contractToModel(config);
         });
 
         const models = await Promise.all<any>(modelPromises);
@@ -81,7 +81,7 @@ export class PageModelBinder implements IModelBinder {
             (widgetChildren && modelItems && widgetChildren.length !== modelItems.length);
     }
 
-    public getConfig(pageModel: PageModel): Contract {
+    public modelToContract(pageModel: PageModel): Contract {
         const pageConfig: Contract = {
             object: "block",
             type: "page",
@@ -89,7 +89,7 @@ export class PageModelBinder implements IModelBinder {
         };
         pageModel.widgets.forEach(section => {
             const modelBinder = this.modelBinderSelector.getModelBinderByModel(section);
-            pageConfig.nodes.push(modelBinder.getConfig(section));
+            pageConfig.nodes.push(modelBinder.modelToContract(section));
         });
 
         return pageConfig;
@@ -105,7 +105,7 @@ export class PageModelBinder implements IModelBinder {
         let pageKey = permalink.targetKey;
         let page = await this.pageService.getPageByKey(pageKey);
         let file = await this.fileService.getFileByKey(page.contentKey);
-        let config = this.getConfig(pageModel);
+        let config = this.modelToContract(pageModel);
 
         Object.assign(file, config);
 

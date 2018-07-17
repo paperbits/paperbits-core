@@ -23,7 +23,7 @@ export class BlogModelBinder implements IModelBinder {
         this.routeHandler = routeHandler;
 
         // rebinding...
-        this.nodeToModel = this.nodeToModel.bind(this);
+        this.contractToModel = this.contractToModel.bind(this);
     }
 
     public canHandleWidgetType(widgetType: string): boolean {
@@ -34,7 +34,7 @@ export class BlogModelBinder implements IModelBinder {
         return model instanceof BlogPostModel;
     }
 
-    public async nodeToModel(blogPostContract: BlogPostContract): Promise<BlogPostModel> {
+    public async contractToModel(blogPostContract: BlogPostContract): Promise<BlogPostModel> {
         if (!blogPostContract.key) {
             let currentUrl = this.routeHandler.getCurrentUrl();
             let permalink = await this.permalinkService.getPermalinkByUrl(currentUrl);
@@ -51,7 +51,7 @@ export class BlogModelBinder implements IModelBinder {
         let blogContentNode = await this.fileService.getFileByKey(blogPostContract.contentKey);
         const modelPromises = blogContentNode.nodes.map(async (config) => {
             let modelBinder = this.modelBinderSelector.getModelBinderByNodeType(config.type);
-            return await modelBinder.nodeToModel(config);
+            return await modelBinder.contractToModel(config);
         });
         const models = await Promise.all<any>(modelPromises);
         blogModel.widgets = models;
@@ -59,7 +59,7 @@ export class BlogModelBinder implements IModelBinder {
         return blogModel;
     }
 
-    public getConfig(blogModel: BlogPostModel): Contract {
+    public modelToContract(blogModel: BlogPostModel): Contract {
         let blogConfig: Contract = {
             object: "block",
             type: "blog",
@@ -67,7 +67,7 @@ export class BlogModelBinder implements IModelBinder {
         };
         blogModel.widgets.forEach(section => {
             const modelBinder = this.modelBinderSelector.getModelBinderByModel(section);
-            blogConfig.nodes.push(modelBinder.getConfig(section));
+            blogConfig.nodes.push(modelBinder.modelToContract(section));
         });
 
         return blogConfig;
@@ -79,7 +79,7 @@ export class BlogModelBinder implements IModelBinder {
         let blogKey = permalink.targetKey;
         let blog = await this.blogService.getBlogPostByKey(blogKey);
         let file = await this.fileService.getFileByKey(blog.contentKey);
-        let config = this.getConfig(blogModel);
+        let config = this.modelToContract(blogModel);
 
         Object.assign(file, config);
 

@@ -18,7 +18,7 @@ export class ButtonModelBinder implements IModelBinder {
         return model instanceof ButtonModel;
     }
 
-    public async nodeToModel(buttonContract: Contract): Promise<ButtonModel> {
+    public async contractToModel(buttonContract: Contract): Promise<ButtonModel> {
         let model = new ButtonModel();
         model.label = buttonContract.label;
         model.style = buttonContract.style;
@@ -31,7 +31,7 @@ export class ButtonModelBinder implements IModelBinder {
         return model;
     }
 
-    public getConfig(buttonModel: ButtonModel): Contract {
+    public modelToContract(buttonModel: ButtonModel): Contract {
         let buttonConfig: Contract = {
             object: "block",
             type: "button",

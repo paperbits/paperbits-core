@@ -6,7 +6,7 @@ import { Contract } from "@paperbits/common";
 
 export class ColumnModelBinder implements IModelBinder {
     constructor(private readonly modelBinderSelector: ModelBinderSelector) {
-        this.nodeToModel = this.nodeToModel.bind(this);
+        this.contractToModel = this.contractToModel.bind(this);
     }
 
     public canHandleWidgetType(widgetType: string): boolean {
@@ -17,7 +17,7 @@ export class ColumnModelBinder implements IModelBinder {
         return model instanceof ColumnModel;
     }
 
-    public async nodeToModel(contract: ColumnContract): Promise<ColumnModel> {
+    public async contractToModel(contract: ColumnContract): Promise<ColumnModel> {
         const columnModel = new ColumnModel();
 
         if (contract.size) {
@@ -50,7 +50,7 @@ export class ColumnModelBinder implements IModelBinder {
 
         const modelPromises = contract.nodes.map(async (node) => {
             const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(node.type);
-            return await modelBinder.nodeToModel(node);
+            return await modelBinder.contractToModel(node);
         });
 
         columnModel.widgets = await Promise.all<any>(modelPromises);
@@ -58,7 +58,7 @@ export class ColumnModelBinder implements IModelBinder {
         return columnModel;
     }
 
-    public getConfig(columnModel: ColumnModel): Contract {
+    public modelToContract(columnModel: ColumnModel): Contract {
         let columnConfig: ColumnContract = {
             type: "layout-column",
             object: "block",
@@ -127,7 +127,7 @@ export class ColumnModelBinder implements IModelBinder {
 
         columnModel.widgets.forEach(widgetModel => {
             const modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
-            columnConfig.nodes.push(modelBinder.getConfig(widgetModel));
+            columnConfig.nodes.push(modelBinder.modelToContract(widgetModel));
         });
 
         return columnConfig;

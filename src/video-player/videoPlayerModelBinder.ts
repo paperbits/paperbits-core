@@ -23,7 +23,7 @@ export class VideoPlayerModelBinder implements IModelBinder {
         return model instanceof VideoPlayerModel;
     }
 
-    public async nodeToModel(videoPlayerNode: VideoPlayerContract): Promise<VideoPlayerModel> {
+    public async contractToModel(videoPlayerNode: VideoPlayerContract): Promise<VideoPlayerModel> {
         let videoPlayerModel = new VideoPlayerModel();
         videoPlayerModel.controls = videoPlayerNode.controls;
         videoPlayerModel.autoplay = videoPlayerNode.autoplay;
@@ -58,7 +58,7 @@ export class VideoPlayerModelBinder implements IModelBinder {
         return videoPlayerModel;
     }
 
-    public getConfig(videoPlayerModel: VideoPlayerModel): VideoPlayerContract {
+    public modelToContract(videoPlayerModel: VideoPlayerModel): VideoPlayerContract {
         let videoConfig: VideoPlayerContract = {
             object: "block",
             type: "video-player",

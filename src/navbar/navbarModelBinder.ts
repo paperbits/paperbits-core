@@ -15,7 +15,7 @@ export class NavbarModelBinder implements IModelBinder {
         private readonly permalinkResolver: IPermalinkResolver) {
     }
 
-    public async nodeToModel(navbarContract: NavbarContract): Promise<NavbarModel> {
+    public async contractToModel(navbarContract: NavbarContract): Promise<NavbarModel> {
         const navbarModel = new NavbarModel();
         const navigationItemContract = await this.navigationService.getNavigationItem(navbarContract.rootKey);
         const currentUrl = this.routeHandler.getCurrentUrl();
@@ -77,7 +77,7 @@ export class NavbarModelBinder implements IModelBinder {
         return navbarItem;
     }
 
-    public getConfig(navbarModel: NavbarModel): Contract {
+    public modelToContract(navbarModel: NavbarModel): Contract {
         const navbarContract: NavbarContract = {
             object: "block",
             type: "navbar",

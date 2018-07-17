@@ -12,11 +12,11 @@ export class TestimonialsModelBinder implements IModelBinder {
         return model instanceof TestimonialsModel;
     }
 
-    public async nodeToModel(sliderContract: Contract): Promise<TestimonialsModel> {
+    public async contractToModel(sliderContract: Contract): Promise<TestimonialsModel> {
         return new TestimonialsModel();
     }
 
-    public getConfig(model: any): Contract {
+    public modelToContract(model: any): Contract {
         let sliderContract: Contract = {
             type: "testimonials",
             object: "block",

@@ -11,7 +11,7 @@ export class MapModelBinder implements IModelBinder {
         return model instanceof MapModel;
     }
 
-    public async nodeToModel(mapNode: MapContract): Promise<MapModel> {
+    public async contractToModel(mapNode: MapContract): Promise<MapModel> {
         let model = new MapModel();
         model.caption = mapNode.caption;
         model.layout = mapNode.layout;
@@ -21,7 +21,7 @@ export class MapModelBinder implements IModelBinder {
         return model;
     }
 
-    public getConfig(mapModel: MapModel): MapContract {
+    public modelToContract(mapModel: MapModel): MapContract {
         let mapConfig: MapContract = {
             object: "block",
             type: "map",

@@ -17,7 +17,7 @@ export class TestimonialsHandlers implements IWidgetHandler {
             displayName: "Testimonials",
             iconClass: "paperbits-favourite-31",
             createModel: async () => {
-                return await this.testimonialsModelBinder.nodeToModel(config);
+                return await this.testimonialsModelBinder.contractToModel(config);
             }
         }
 

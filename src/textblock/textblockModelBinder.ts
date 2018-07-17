@@ -76,7 +76,7 @@ export class TextblockModelBinder implements IModelBinder {
         }
     }
 
-    public async nodeToModel(node: Contract): Promise<TextblockModel> {
+    public async contractToModel(node: Contract): Promise<TextblockModel> {
         // TODO: Scan for unresolved hyperlink permalinks (this is compensation of Slate not being able to do async work)
 
         if (node.nodes) {
@@ -102,7 +102,7 @@ export class TextblockModelBinder implements IModelBinder {
         return model instanceof TextblockModel;
     }
 
-    public getConfig(model: TextblockModel): Contract {
+    public modelToContract(model: TextblockModel): Contract {
         let state;
 
         if (model.htmlEditor) {

@@ -24,7 +24,7 @@ export class MapHandlers implements IWidgetHandler, IContentDropHandler {
             iconClass: "paperbits-m-location",
             requires: ["scripts"],
             createModel: async () => {
-                return await this.mapModelBinder.nodeToModel(config);
+                return await this.mapModelBinder.contractToModel(config);
             }
         }
 

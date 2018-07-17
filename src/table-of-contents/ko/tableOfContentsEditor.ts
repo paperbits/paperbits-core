@@ -40,7 +40,7 @@ export class TableOfContentsEditor implements IWidgetEditor {
             navigationItemKey: navigationItem.key
         }
 
-        const model = await this.tableOfContentsModelBinder.nodeToModel(contract);
+        const model = await this.tableOfContentsModelBinder.contractToModel(contract);
 
         this.navigationItemTitle(navigationItem.label);
 

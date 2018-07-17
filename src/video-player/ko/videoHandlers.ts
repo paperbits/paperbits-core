@@ -59,7 +59,7 @@ export class VideoHandlers implements IWidgetHandler, IContentDropHandler {
                     autoplay: false
                 }
 
-                return await this.videoPlayerModelBinder.nodeToModel(config);
+                return await this.videoPlayerModelBinder.contractToModel(config);
             },
             createWidget: (): IWidgetFactoryResult => {
                 // We create HTML element here just for dragging animation

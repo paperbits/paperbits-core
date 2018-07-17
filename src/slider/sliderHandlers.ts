@@ -16,7 +16,7 @@ export class SliderHandlers implements IWidgetHandler {
             displayName: "Slider",
             requires: ["scripts"],
             createModel: async () => {
-                return await this.sliderModelBinder.nodeToModel(config);
+                return await this.sliderModelBinder.contractToModel(config);
             }
         }
 

@@ -25,7 +25,7 @@ export class NavbarHandlers implements IWidgetHandler {
                     rootKey: "main" // TODO: This is temporary, until multiple menus support is implemented.
                 };
 
-                return await this.navbarModelBinder.nodeToModel(node);
+                return await this.navbarModelBinder.contractToModel(node);
             }
         }
 

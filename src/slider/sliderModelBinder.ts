@@ -25,7 +25,7 @@ export class SliderModelBinder implements IModelBinder {
         return model instanceof SliderModel;
     }
 
-    public async nodeToModel(sliderContract: Contract): Promise<SliderModel> {
+    public async contractToModel(sliderContract: Contract): Promise<SliderModel> {
         let sliderModel = new SliderModel();
 
         if (sliderContract.nodes) {
@@ -33,12 +33,12 @@ export class SliderModelBinder implements IModelBinder {
                 let slideModel = new SlideModel();
 
                 if (slideContract.nodes) {
-                    let rowModelPromises = slideContract.nodes.map(this.rowModelBinder.nodeToModel);
+                    let rowModelPromises = slideContract.nodes.map(this.rowModelBinder.contractToModel);
                     slideModel.rows = await Promise.all<RowModel>(rowModelPromises);
                 }
 
                 if (slideContract.background) {
-                    slideModel.background = await this.backgroundModelBinder.nodeToModel(slideContract.background);
+                    slideModel.background = await this.backgroundModelBinder.contractToModel(slideContract.background);
                 }
 
                 slideModel.layout = slideContract.layout || "container";
@@ -62,7 +62,7 @@ export class SliderModelBinder implements IModelBinder {
         return sliderModel;
     }
 
-    public getConfig(sliderModel: SliderModel): Contract {
+    public modelToContract(sliderModel: SliderModel): Contract {
         let sliderContract: Contract = {
             type: "slider",
             object: "block",
@@ -99,7 +99,7 @@ export class SliderModelBinder implements IModelBinder {
                 }
 
                 slideModel.rows.forEach(row => {
-                    slideContract.nodes.push(this.rowModelBinder.getConfig(row));
+                    slideContract.nodes.push(this.rowModelBinder.modelToContract(row));
                 });
 
                 return slideContract;

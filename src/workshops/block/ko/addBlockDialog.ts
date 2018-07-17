@@ -29,7 +29,7 @@ export class AddBlockDialog {
     }
 
     public async addBlock(): Promise<void> {
-        const content = this.sectionModelBinder.getConfig(this.sectionModel);
+        const content = this.sectionModelBinder.modelToContract(this.sectionModel);
 
         await this.blockService.createBlock(this.name(), "", content);
 

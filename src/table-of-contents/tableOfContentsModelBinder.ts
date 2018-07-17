@@ -15,7 +15,7 @@ export class TableOfContentsModelBinder implements IModelBinder {
         private readonly navigationService: INavigationService,
         private readonly routeHandler: IRouteHandler
     ) {
-        this.nodeToModel = this.nodeToModel.bind(this);
+        this.contractToModel = this.contractToModel.bind(this);
     }
 
     public canHandleWidgetType(widgetType: string): boolean {
@@ -66,7 +66,7 @@ export class TableOfContentsModelBinder implements IModelBinder {
         return navbarItemModel;
     }
 
-    public async nodeToModel(tableOfContentsContract: TableOfContentsContract): Promise<TableOfContentsModel> {
+    public async contractToModel(tableOfContentsContract: TableOfContentsContract): Promise<TableOfContentsModel> {
         const type = "table-of-contents";
 
         const tableOfContentsModel = new TableOfContentsModel();
@@ -111,7 +111,7 @@ export class TableOfContentsModelBinder implements IModelBinder {
         return tableOfContentsModel;
     }
 
-    public getConfig(tableOfContentsModel: TableOfContentsModel): Contract {
+    public modelToContract(tableOfContentsModel: TableOfContentsModel): Contract {
         const tableOfContentsConfig: TableOfContentsContract = {
             object: "block",
             type: "table-of-contents",

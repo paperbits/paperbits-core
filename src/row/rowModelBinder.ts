@@ -5,7 +5,7 @@ import { ModelBinderSelector } from "@paperbits/common/widgets";
 
 export class RowModelBinder {
     constructor(private readonly modelBinderSelector: ModelBinderSelector) {
-        this.nodeToModel = this.nodeToModel.bind(this);
+        this.contractToModel = this.contractToModel.bind(this);
     }
 
     public canHandleWidgetType(widgetType: string): boolean {
@@ -16,7 +16,7 @@ export class RowModelBinder {
         return model instanceof RowModel;
     }
 
-    public async nodeToModel(contract: RowContract): Promise<RowModel> {
+    public async contractToModel(contract: RowContract): Promise<RowModel> {
         const rowModel = new RowModel();
 
         if (contract.align) {
@@ -49,7 +49,7 @@ export class RowModelBinder {
 
         const modelPromises = contract.nodes.map(async (node) => {
             const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(node.type);
-            return await modelBinder.nodeToModel(node);
+            return await modelBinder.contractToModel(node);
         });
 
         rowModel.widgets = await Promise.all<any>(modelPromises);
@@ -57,7 +57,7 @@ export class RowModelBinder {
         return rowModel;
     }
 
-    public getConfig(rowModel: RowModel): Contract {
+    public modelToContract(rowModel: RowModel): Contract {
         const rowConfig: RowContract = {
             type: "layout-row",
             object: "block",
@@ -76,7 +76,7 @@ export class RowModelBinder {
 
         rowModel.widgets.forEach(widgetModel => {
             const modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
-            rowConfig.nodes.push(modelBinder.getConfig(widgetModel));
+            rowConfig.nodes.push(modelBinder.modelToContract(widgetModel));
         });
 
         return rowConfig;

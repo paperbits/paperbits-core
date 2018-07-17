@@ -4,7 +4,7 @@ import { IModelBinder } from "@paperbits/common/editing";
 
 export class YoutubeModelBinder implements IModelBinder {
     constructor() {
-        this.nodeToModel = this.nodeToModel.bind(this);
+        this.contractToModel = this.contractToModel.bind(this);
     }
 
     public canHandleWidgetType(widgetType: string): boolean {
@@ -15,7 +15,7 @@ export class YoutubeModelBinder implements IModelBinder {
         return model instanceof YoutubePlayerModel;
     }
 
-    public async nodeToModel(youtubeNode: YoutubePlayerContract): Promise<YoutubePlayerModel> {
+    public async contractToModel(youtubeNode: YoutubePlayerContract): Promise<YoutubePlayerModel> {
         let youtubePlayerModel = new YoutubePlayerModel();
 
         youtubePlayerModel.videoId = youtubeNode.videoId;
@@ -23,7 +23,7 @@ export class YoutubeModelBinder implements IModelBinder {
         return youtubePlayerModel;
     }
 
-    public getConfig(youtubeModel: YoutubePlayerModel): YoutubePlayerContract {
+    public modelToContract(youtubeModel: YoutubePlayerModel): YoutubePlayerContract {
         let youtubeConfig: YoutubePlayerContract = {
             object: "block",
             type: "youtube-player",

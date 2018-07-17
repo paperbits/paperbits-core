@@ -7,7 +7,7 @@ import { SearchResultsContract } from "./searchResultsContract";
 export class SearchResultsModelBinder implements IModelBinder {
     constructor(
     ) {
-        this.nodeToModel = this.nodeToModel.bind(this);
+        this.contractToModel = this.contractToModel.bind(this);
     }
 
     public canHandleWidgetType(widgetType: string): boolean {
@@ -18,11 +18,11 @@ export class SearchResultsModelBinder implements IModelBinder {
         return model instanceof SearchResultsModel;
     }
 
-    public async nodeToModel(searchResultContract: SearchResultsContract): Promise<SearchResultsModel> {
+    public async contractToModel(searchResultContract: SearchResultsContract): Promise<SearchResultsModel> {
         return new SearchResultsModel();
     }
 
-    public getConfig(searchResultModel: SearchResultsModel): Contract {
+    public modelToContract(searchResultModel: SearchResultsModel): Contract {
         const searchResultConfig: SearchResultsContract = {
             object: "block",
             type: "search-results"

@@ -14,16 +14,16 @@ export class LayoutModelBinder {
         private readonly modelBinderSelector: ModelBinderSelector) {
 
         // rebinding...
-        this.nodeToModel = this.nodeToModel.bind(this);
+        this.contractToModel = this.contractToModel.bind(this);
     }
 
     public async getLayoutModel(url: string, readonly?: boolean): Promise<LayoutModel> {
         const layoutNode = await this.layoutService.getLayoutByRoute(url);
 
-        return await this.nodeToModel(layoutNode, url, readonly);
+        return await this.contractToModel(layoutNode, url, readonly);
     }
 
-    public async nodeToModel(layoutContract: LayoutContract, currentUrl: string, readonly?: boolean): Promise<LayoutModel> {
+    public async contractToModel(layoutContract: LayoutContract, currentUrl: string, readonly?: boolean): Promise<LayoutModel> {
         const layoutModel = new LayoutModel();
         layoutModel.title = layoutContract.title;
         layoutModel.description = layoutContract.description;
@@ -33,7 +33,7 @@ export class LayoutModelBinder {
 
         const modelPromises = layoutContentNode.nodes.map(async (config) => {
             const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(config.type);
-            return await modelBinder.nodeToModel(config, currentUrl, !readonly);
+            return await modelBinder.contractToModel(config, currentUrl, !readonly);
         });
 
         const widgetModels = await Promise.all<any>(modelPromises);
@@ -48,7 +48,7 @@ export class LayoutModelBinder {
             (widgetChildren && modelItems && widgetChildren.length !== modelItems.length);
     }
 
-    public getConfig(layoutModel: LayoutModel): Contract {
+    public modelToContract(layoutModel: LayoutModel): Contract {
         let layoutConfig: Contract = {
             object: "block",
             type: "layout",
@@ -56,7 +56,7 @@ export class LayoutModelBinder {
         };
         layoutModel.widgets.forEach(model => {
             const modelBinder = this.modelBinderSelector.getModelBinderByModel(model);
-            layoutConfig.nodes.push(modelBinder.getConfig(model));
+            layoutConfig.nodes.push(modelBinder.modelToContract(model));
         });
 
         return layoutConfig;
@@ -74,7 +74,7 @@ export class LayoutModelBinder {
         let url = this.routeHandler.getCurrentUrl();
         let layout = await this.layoutService.getLayoutByRoute(url);
         let file = await this.fileService.getFileByKey(layout.contentKey);
-        let config = this.getConfig(layoutModel);
+        let config = this.modelToContract(layoutModel);
 
         Object.assign(file, config);
 

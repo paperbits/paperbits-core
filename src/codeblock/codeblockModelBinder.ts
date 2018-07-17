@@ -12,12 +12,12 @@ export class CodeblockModelBinder implements IModelBinder {
         return model instanceof CodeModel;
     }
 
-    public async nodeToModel(node: Contract): Promise<CodeModel> {
+    public async contractToModel(node: Contract): Promise<CodeModel> {
         let codeModel = new CodeModel();
         return codeModel;
     }
 
-    public getConfig(codeModel: CodeModel): Contract {
+    public modelToContract(codeModel: CodeModel): Contract {
         let codeConfig: Contract = {
             object: "block",
             type: "codeblock",

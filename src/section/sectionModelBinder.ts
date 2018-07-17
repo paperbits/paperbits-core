@@ -2,7 +2,6 @@ import { SectionContract } from "./sectionContract";
 import { SectionModel } from "./sectionModel";
 import { IModelBinder } from "@paperbits/common/editing";
 import { BackgroundModelBinder } from "@paperbits/common/widgets/background";
-import { Contract } from "@paperbits/common";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 
 export class SectionModelBinder implements IModelBinder {
@@ -18,10 +17,10 @@ export class SectionModelBinder implements IModelBinder {
         private readonly modelBinderSelector: ModelBinderSelector,
         private readonly backgroundModelBinder: BackgroundModelBinder) {
 
-        this.nodeToModel = this.nodeToModel.bind(this);
+        this.contractToModel = this.contractToModel.bind(this);
     }
 
-    public async nodeToModel(sectionContract: SectionContract): Promise<SectionModel> {
+    public async contractToModel(sectionContract: SectionContract): Promise<SectionModel> {
         const sectionModel = new SectionModel();
 
         if (!sectionContract.nodes) {
@@ -41,12 +40,12 @@ export class SectionModelBinder implements IModelBinder {
         }
 
         if (sectionContract.background) {
-            sectionModel.background = await this.backgroundModelBinder.nodeToModel(sectionContract.background);
+            sectionModel.background = await this.backgroundModelBinder.contractToModel(sectionContract.background);
         }
 
         const modelPromises = sectionContract.nodes.map(async (node) => {
             let modelBinder: IModelBinder = this.modelBinderSelector.getModelBinderByNodeType(node.type);
-            return await modelBinder.nodeToModel(node);
+            return await modelBinder.contractToModel(node);
         });
 
         sectionModel.widgets = await Promise.all<any>(modelPromises);
@@ -54,7 +53,7 @@ export class SectionModelBinder implements IModelBinder {
         return sectionModel;
     }
 
-    public getConfig(sectionModel: SectionModel): Contract {
+    public modelToContract(sectionModel: SectionModel): SectionContract {
         const sectionContract: SectionContract = {
             type: "layout-section",
             object: "block",
@@ -81,7 +80,7 @@ export class SectionModelBinder implements IModelBinder {
 
         sectionModel.widgets.forEach(widgetModel => {
             const modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
-            sectionContract.nodes.push(modelBinder.getConfig(widgetModel));
+            sectionContract.nodes.push(modelBinder.modelToContract(widgetModel));
         });
 
         return sectionContract;
