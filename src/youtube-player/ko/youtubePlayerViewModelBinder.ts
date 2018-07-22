@@ -9,6 +9,10 @@ export class YoutubePlayerViewModelBinder implements IViewModelBinder<YoutubePla
         }
 
         viewModel.videoId(model.videoId);
+        viewModel.origin(model.origin);
+        viewModel.controls(model.controls);
+        viewModel.autoplay(model.autoplay);
+        viewModel.loop(model.loop);
 
         viewModel["widgetBinding"] = {
             displayName: "Youtube player",

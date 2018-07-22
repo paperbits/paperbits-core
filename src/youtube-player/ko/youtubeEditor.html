@@ -4,7 +4,49 @@
         <a href="#" class="btn pull-right" data-bind="click: closeEditor">✖</a>
     </h1>
     <hr />
-    <div class="alert alert-info">
-        This is a placeholder for future Youtube player editor.
-    </div>
+    <fieldset class="form" data-bind="scrollable: {}">
+        <div class="form-group form-group-collapsible">
+            <label class="form-label">
+                <a href="#" class="form-group-toggle" data-bind="collapse: '#sourceCollapse'"></a>
+                <b>Source</b>
+            </label>
+            <div id="sourceCollapse" class="collapse form-group-collapse">
+                <label class="form-label">Video ID</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" data-bind="textInput: videoId" maxlength="500" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group form-group-collapsible">
+            <label class="form-label">
+                <a href="#" class="form-group-toggle" data-bind="collapse: '#securityCollapse'"></a>
+                <b>Security</b>
+            </label>
+            <div id="securityCollapse" class="collapse form-group-collapse">
+                <label class="form-label">Origin URL</label>
+                <div class="input-group">
+                    <input type="url" class="form-control" data-bind="textInput: origin" placeholder="http://example.com" maxlength="2000" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group form-group-collapsible">
+            <label class="form-label">
+                <a href="#" class="form-group-toggle" data-bind="collapse: '#miscellaneousCollapse'"></a>
+                <b>Miscellaneous</b>
+            </label>
+            <div id="miscellaneousCollapse" class="collapse form-group-collapse">
+                <label class="form-label">
+                    <input type="checkbox" data-bind="checked: controls" />Controls</span>
+                </label>
+                <label class="form-label">
+                    <input type="checkbox" data-bind="checked: autoplay" />Autoplay</span>
+                </label>
+                <label class="form-label">
+                    <input type="checkbox" data-bind="checked: loop" />Loop</span>
+                </label>
+            </div>
+        </div>
+
+    </fieldset>
 </div>

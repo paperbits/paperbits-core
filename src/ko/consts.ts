@@ -1,0 +1,1 @@
+export const changeRateLimit = { rateLimit: { timeout: 500, method: "notifyWhenChangesStop" } };

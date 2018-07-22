@@ -1,2 +1,2 @@
 export * from "./ko.module";
-export * from './component';
+export * from "./component";
