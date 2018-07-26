@@ -4,7 +4,34 @@
         <a href="#" class="btn pull-right" data-bind="click: closeEditor">✖</a>
     </h1>
     <hr />
-    <div class="alert alert-info">
-        This is a placeholder for future testimonials editor.
-    </div>
+    <fieldset class="form" data-bind="scrollable: {}">
+        <div class="form-group form-group-collapsible">
+            <label class="form-label">
+                <a href="#" class="form-group-toggle" data-bind="collapse: '#propertiesCollapse'"></a>
+                <b>Properties</b>
+            </label>
+            <div id="propertiesCollapse" class="collapse form-group-collapse">
+                <label class="form-label">Message text</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" data-bind="textInput: textContent" maxlength="3000" />
+                </div>
+                <label class="form-label">All stars (max 10)</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" data-bind="textInput: allStarsCount" min="1" max="10" />
+                </div>
+                <label class="form-label">Stars selected</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" data-bind="textInput: starsCount" min="1" max="10" />
+                </div>
+                <label class="form-label">Author name</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" data-bind="textInput: author" maxlength="500" placeholder="John Doe"/>
+                </div>
+                <label class="form-label">Author title</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" data-bind="textInput: authorTitle" maxlength="1000" placeholder="CEO at Company"/>
+                </div>
+            </div>
+        </div>
+    </fieldset>
 </div>

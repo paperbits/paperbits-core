@@ -16,19 +16,27 @@ export class YoutubeModelBinder implements IModelBinder {
     }
 
     public async contractToModel(youtubeNode: YoutubePlayerContract): Promise<YoutubePlayerModel> {
-        let youtubePlayerModel = new YoutubePlayerModel();
+        const youtubePlayerModel = new YoutubePlayerModel();
 
         youtubePlayerModel.videoId = youtubeNode.videoId;
+        youtubePlayerModel.origin = youtubeNode.origin;
+        youtubePlayerModel.controls = youtubeNode.controls;
+        youtubePlayerModel.autoplay = youtubeNode.autoplay;
+        youtubePlayerModel.loop = youtubeNode.loop;
 
         return youtubePlayerModel;
     }
 
     public modelToContract(youtubeModel: YoutubePlayerModel): YoutubePlayerContract {
-        let youtubeConfig: YoutubePlayerContract = {
+        const youtubeConfig: YoutubePlayerContract = {
             object: "block",
             type: "youtube-player",
-            videoId: youtubeModel.videoId
-        }
+            videoId: youtubeModel.videoId,
+            origin: youtubeModel.origin,
+            controls: youtubeModel.controls,
+            autoplay: youtubeModel.autoplay,
+            loop: youtubeModel.loop
+        };
 
         return youtubeConfig;
     }

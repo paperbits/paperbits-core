@@ -1,9 +1,12 @@
 import { IModelBinder } from "@paperbits/common/editing/IModelBinder";
 import { Contract } from "@paperbits/common/contract";
-import { TestimonialsModel } from "./testimonialsModel";
-
+import { TestimonialsModel, TestimonialsContract } from ".";
 
 export class TestimonialsModelBinder implements IModelBinder {
+    constructor() {
+        this.contractToModel = this.contractToModel.bind(this);
+    }
+
     public canHandleWidgetType(widgetType: string): boolean {
         return widgetType === "testimonials";
     }
@@ -12,18 +15,27 @@ export class TestimonialsModelBinder implements IModelBinder {
         return model instanceof TestimonialsModel;
     }
 
-    public async contractToModel(sliderContract: Contract): Promise<TestimonialsModel> {
-        return new TestimonialsModel();
+    public async contractToModel(contract: TestimonialsContract): Promise<TestimonialsModel> {
+        const model = new TestimonialsModel();
+        model.textContent = contract.textContent;
+        model.allStarsCount  = contract.allStarsCount;
+        model.starsCount  = contract.starsCount;
+        model.author      = contract.author;
+        model.authorTitle = contract.authorTitle;
+        return model;
     }
 
-    public modelToContract(model: any): Contract {
-        let sliderContract: Contract = {
+    public modelToContract(model: TestimonialsModel): Contract {
+        const contract: Contract = {
             type: "testimonials",
             object: "block",
-            size: model.size,
-            style: model.style
-        }
+            textContent : model.textContent,
+            starsCount : model.starsCount, 
+            allStarsCount : model.allStarsCount, 
+            author : model.author,     
+            authorTitle : model.authorTitle
+        };
 
-        return sliderContract;
+        return contract;
     }
 }

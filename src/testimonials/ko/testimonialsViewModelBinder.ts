@@ -8,6 +8,12 @@ export class TestimonialsViewModelBinder implements IViewModelBinder<Testimonial
             viewModel = new TestimonialsViewModel();
         }
 
+        viewModel.textContent(model.textContent);
+        viewModel.allStarsCount(model.allStarsCount);
+        viewModel.starsCount(model.starsCount);
+        viewModel.author(model.author);
+        viewModel.authorTitle(model.authorTitle);
+
         viewModel["widgetBinding"] = {
             displayName: "Testimonials",
             model: model,
@@ -15,9 +21,9 @@ export class TestimonialsViewModelBinder implements IViewModelBinder<Testimonial
             applyChanges: () => {
                 this.modelToViewModel(model, readonly, viewModel);
             }
-        }
+        };
 
-        return viewModel
+        return viewModel;
     }
 
     public canHandleModel(model: TestimonialsModel): boolean {
