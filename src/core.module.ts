@@ -41,11 +41,13 @@ import { NavigationService } from "@paperbits/common/navigation";
 import { SiteService } from "@paperbits/common/sites";
 import { UrlService, UrlPermalinkResolver } from "@paperbits/common/urls";
 import { UnhandledErrorHandler } from "@paperbits/common/errors";
+import { PricingTableModule } from "./pricing-table/ko";
+
 export class CoreModule implements IInjectorModule {
-    register(injector: IInjector): void {
+    public register(injector: IInjector): void {
         /*** Core ***/
         injector.bindSingleton("httpClient", XmlHttpRequestClient);
-        //injector.bindSingleton("settingsProvider", SettingsProvider);
+        // injector.bindSingleton("settingsProvider", SettingsProvider);
         injector.bindSingleton("eventManager", DefaultEventManager);
         // injector.bindSingleton("routeHandler", DefaultRouteHandler);
         injector.bindSingleton("globalEventHandler", GlobalEventHandler);
@@ -69,7 +71,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("errorHandler", UnhandledErrorHandler);
 
         /*** Model binders ***/
-        //injector.bind("codeblockModelBinder", CodeblockModelBinder);
+        // injector.bind("codeblockModelBinder", CodeblockModelBinder);
 
         injector.bind("mediaPermalinkResolver", MediaPermalinkResolver);
         injector.bind("pagePermalinkResolver", PagePermalinkResolver);
@@ -93,10 +95,10 @@ export class CoreModule implements IInjectorModule {
 
         injector.bindModule(new KnockoutRegistrationLoaders());
 
-        injector.bindSingletonFactory<Array<IModelBinder>>("modelBinders", () => {
+        injector.bindSingletonFactory<IModelBinder[]>("modelBinders", () => {
             return new Array<IModelBinder>();
         });
-        injector.bindSingletonFactory<Array<IViewModelBinder<any, any>>>("viewModelBinders", () => {
+        injector.bindSingletonFactory<IViewModelBinder<any, any>[]>("viewModelBinders", () => {
             return new Array<IViewModelBinder<any, any>>();
         });
 
@@ -125,5 +127,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new TestimonialsModule());
         injector.bindModule(new SliderModule());
         injector.bindModule(new SearchResultsModule());
+        injector.bindModule(new PricingTableModule());
     }
 }

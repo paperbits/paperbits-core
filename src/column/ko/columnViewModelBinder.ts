@@ -93,7 +93,7 @@ export class ColumnViewModelBinder implements IViewModelBinder<ColumnModel, Colu
                 return canAccept;
             },
             onDragDrop: (dragSession: DragSession): void => {
-                if (dragSession.type == "widget") {
+                if (dragSession.type === "widget") {
                     model.widgets.splice(dragSession.insertIndex, 0, dragSession.sourceModel);
                 }
                 binding.applyChanges();

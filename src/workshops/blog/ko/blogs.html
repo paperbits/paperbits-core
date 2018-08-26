@@ -22,11 +22,9 @@
     <!--/ko-->
 
     <ul class="flex-item flex-item-grow list" data-bind="foreach: blogPosts, scrollable: {}">
-        <li class="list-item" data-bind="css: { selected: hasFocus }">
-            <a href="#" data-bind="click: $parent.selectBlogPost, hasFocus: hasFocus">
-                <i class="paperbits-icon paperbits-chat-45-2"></i>
-                <span data-bind="text: title"></span>
-            </a>
+        <li tabindex="0" class="list-item" data-bind="css: { selected: hasFocus }, click: $parent.selectBlogPost, hasFocus: hasFocus">
+            <i class="paperbits-icon paperbits-chat-45-2"></i>
+            <span data-bind="text: title"></span>
         </li>
     </ul>
 

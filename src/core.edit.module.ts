@@ -25,8 +25,6 @@ import { DropbucketModule } from "./workshops/dropbucket/ko/dropbucket.module";
 import { ViewportSelector } from "./workshops/viewports/ko/viewport-selector";
 import { HostBindingHandler } from "./ko/bindingHandlers";
 import { IContentDropHandler, IWidgetHandler, MediaHandlers, HtmlEditorProvider } from "@paperbits/common/editing";
-import { DefaultRouteHandler } from "@paperbits/common/routing";
-import { SettingsProvider } from "@paperbits/common/configuration";
 import { ColorSelector } from "./workshops/colors/ko/colorSelector";
 import { IPermalinkService } from "@paperbits/common/permalinks";
 import { IHyperlinkProvider, IViewManager, LityLightbox } from "@paperbits/common/ui";
@@ -41,12 +39,10 @@ import { MediaHyperlinkProvider } from "@paperbits/common/media";
 import { DragManager } from "@paperbits/common/ui/draggables";
 import { PlaceholderViewModel } from "./placeholder/ko/placeholderViewModel";
 import { SearchResultsEditorModule } from "./search-results/ko/searchResultsEditor.module";
+import { PricingTableEditorModule } from "./pricing-table/ko";
 
 export class CoreEditModule implements IInjectorModule {
-
-    constructor() {}
-
-    register(injector: IInjector): void {
+    public register(injector: IInjector): void {
         // injector.bindSingleton("settingsProvider", SettingsProvider);
         // injector.bindSingleton("routeHandler", DefaultRouteHandler); 
 
@@ -56,17 +52,17 @@ export class CoreEditModule implements IInjectorModule {
         injector.bind("urlHyperlinkProvider", UrlHyperlinkProvider);
 
         injector.bindFactory<IHyperlinkProvider[]>("resourcePickers", (ctx: IInjector) => {
-            let pageReourcePicker = ctx.resolve<IHyperlinkProvider>("pageHyperlinkProvider");
-            let blogReourcePicker = ctx.resolve<IHyperlinkProvider>("blogHyperlinkProvider");
-            let mediaReourcePicker = ctx.resolve<IHyperlinkProvider>("mediaHyperlinkProvider");
-            let urlHyperlinkProvider = ctx.resolve<IHyperlinkProvider>("urlHyperlinkProvider");
+            const pageReourcePicker = ctx.resolve<IHyperlinkProvider>("pageHyperlinkProvider");
+            const blogReourcePicker = ctx.resolve<IHyperlinkProvider>("blogHyperlinkProvider");
+            const mediaReourcePicker = ctx.resolve<IHyperlinkProvider>("mediaHyperlinkProvider");
+            const urlHyperlinkProvider = ctx.resolve<IHyperlinkProvider>("urlHyperlinkProvider");
 
             return [
                 pageReourcePicker,
                 blogReourcePicker,
                 mediaReourcePicker,
                 urlHyperlinkProvider
-            ]
+            ];
         });
 
         /*** UI ***/
@@ -77,10 +73,10 @@ export class CoreEditModule implements IInjectorModule {
 
         /*** Editors ***/
         injector.bindSingleton("htmlEditorProvider", HtmlEditorProvider);
-        injector.bindSingletonFactory<Array<IContentDropHandler>>("dropHandlers", (ctx: IInjector) => {
+        injector.bindSingletonFactory<IContentDropHandler[]>("dropHandlers", (ctx: IInjector) => {
             return new Array<IContentDropHandler>();
         });
-        injector.bindSingletonFactory<Array<IWidgetHandler>>("widgetHandlers", (ctx: IInjector) => {
+        injector.bindSingletonFactory<IWidgetHandler[]>("widgetHandlers", (ctx: IInjector) => {
             return new Array<IWidgetHandler>();
         });
        
@@ -96,8 +92,8 @@ export class CoreEditModule implements IInjectorModule {
         });        
 
         injector.bindComponent("hyperlinkSelector", (ctx: IInjector, params: {}) => {
-            let permalinkService = ctx.resolve<IPermalinkService>("permalinkService");
-            let resourcePickers = ctx.resolve<IHyperlinkProvider[]>("resourcePickers");
+            const permalinkService = ctx.resolve<IPermalinkService>("permalinkService");
+            const resourcePickers = ctx.resolve<IHyperlinkProvider[]>("resourcePickers");
 
             return new HyperlinkSelector(permalinkService, resourcePickers, params["hyperlink"], params["onChange"]);
         });
@@ -135,5 +131,6 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindModule(new TestimonialsEditorModule());
         injector.bindModule(new SliderEditorModule());
         injector.bindModule(new SearchResultsEditorModule());
+        injector.bindModule(new PricingTableEditorModule());
     }
 }

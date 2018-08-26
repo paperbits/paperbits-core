@@ -10,11 +10,9 @@
     <hr/>
     <div class="flex-container flex-container-column list-container">
         <ul class="list" data-bind="foreach: widgets, scrollable: {}">
-            <li class="list-item list-item-large list-item-float">
-                <a href="#" data-bind="hasFocus: hasFocus, click: $component.selectWidget">
-                    <i class="paperbits-icon" data-bind="css: css"></i>
-                    <span data-bind="text: displayName"></span>
-                </a>
+            <li tabindex="0" class="list-item list-item-large list-item-float" data-bind="hasFocus: hasFocus, click: $component.selectWidget">
+                <i class="paperbits-icon" data-bind="css: css"></i>
+                <span data-bind="text: displayName"></span>
             </li>
         </ul>
     </div>

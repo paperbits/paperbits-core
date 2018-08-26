@@ -1,9 +1,8 @@
 import * as ko from "knockout";
 import template from "./widgetSelector.html";
 import { WidgetItem } from "./widgetItem";
-import { IResourceSelector } from "@paperbits/common/ui";
+import { IResourceSelector, IViewManager } from "@paperbits/common/ui";
 import { IWidgetService } from "@paperbits/common/widgets";
-import { IViewManager } from "@paperbits/common/ui";
 import { Component } from "../../../ko/component";
 
 
@@ -15,7 +14,7 @@ import { Component } from "../../../ko/component";
 export class WidgetSelector implements IResourceSelector<Object> {
     public readonly onResourceSelected: (widgetModel: Object) => void;
 
-    public readonly widgets: KnockoutObservable<Array<WidgetItem>>;
+    public readonly widgets: KnockoutObservable<WidgetItem[]>;
     public readonly working: KnockoutObservable<boolean>;
 
     constructor(
@@ -32,7 +31,7 @@ export class WidgetSelector implements IResourceSelector<Object> {
 
         // setting up...
         this.working = ko.observable(true);
-        this.widgets = ko.observable<Array<WidgetItem>>();
+        this.widgets = ko.observable<WidgetItem[]>();
 
         this.loadWidgetOrders();
     }

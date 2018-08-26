@@ -1,12 +1,12 @@
 ﻿import * as ko from "knockout";
 import template from "./pages.html";
-import { IPageService } from "@paperbits/common/pages/IPageService";
-import { IRouteHandler } from "@paperbits/common/routing/IRouteHandler";
+import { IPageService } from "@paperbits/common/pages";
+import { IRouteHandler } from "@paperbits/common/routing";
 import { IPermalinkService } from "@paperbits/common/permalinks";
-import { IViewManager } from "@paperbits/common/ui/IViewManager";
-import { IFileService } from "@paperbits/common/files/IFileService";
+import { IViewManager } from "@paperbits/common/ui";
+import { IFileService } from "@paperbits/common/files";
 import { Keys } from "@paperbits/common/keyboard";
-import { IBlockService } from "@paperbits/common/blocks/IBlockService";
+import { IBlockService } from "@paperbits/common/blocks";
 import { Component } from "../../../ko/component";
 import { PageItem } from "./pageItem";
 

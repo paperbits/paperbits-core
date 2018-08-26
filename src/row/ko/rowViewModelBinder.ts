@@ -69,7 +69,7 @@ export class RowViewModelBinder implements IViewModelBinder<RowModel, RowViewMod
                 binding.applyChanges();
             },
 
-            getContextualEditor(element: HTMLElement, half: string): IContextualEditor {
+            getContextualEditor: (element: HTMLElement, half: string): IContextualEditor => {
                 const rowContextualEditor: IContextualEditor = {
                     element: element,
                     color: "#29c4a9",
@@ -81,19 +81,19 @@ export class RowViewModelBinder implements IViewModelBinder<RowModel, RowViewMod
                             name: "row-layout-selector",
                             params: {
                                 onSelect: (newRowModel: RowModel) => {
-                                    let parentElement = GridHelper.getParentElementWithModel(element);
-                                    let parentModel = GridHelper.getModel(parentElement);
-                                    let parentWidgetModel = GridHelper.getWidgetBinding(parentElement);
-                                    let rowModel = GridHelper.getModel(element);
+                                    const parentElement = GridHelper.getParentElementWithModel(element);
+                                    const parentModel = GridHelper.getModel(parentElement);
+                                    const parentWidgetModel = GridHelper.getWidgetBinding(parentElement);
+                                    const rowModel = GridHelper.getModel(element);
                                     let index = parentModel.widgets.indexOf(rowModel);
-        
+
                                     if (half === "bottom") {
                                         index++;
                                     }
-        
+
                                     parentModel.widgets.splice(index, 0, newRowModel);
                                     parentWidgetModel.applyChanges();
-        
+
                                     this.viewManager.clearContextualEditors();
                                 }
                             }
@@ -104,19 +104,19 @@ export class RowViewModelBinder implements IViewModelBinder<RowModel, RowViewMod
                         tooltip: "Delete row",
                         color: "#29c4a9",
                         callback: () => {
-                            let parentElement = GridHelper.getParentElementWithModel(element);
-                            let parentModel = GridHelper.getModel(parentElement);
-                            let parentBinding = GridHelper.getWidgetBinding(parentElement);
-                            let rowModel = GridHelper.getModel(element);
-        
+                            const parentElement = GridHelper.getParentElementWithModel(element);
+                            const parentModel = GridHelper.getModel(parentElement);
+                            const parentBinding = GridHelper.getWidgetBinding(parentElement);
+                            const rowModel = GridHelper.getModel(element);
+
                             parentModel.widgets.remove(rowModel);
                             parentBinding.applyChanges();
-        
+
                             this.viewManager.clearContextualEditors();
                         }
                     }
                 }
-        
+
                 return rowContextualEditor;
             }
         }

@@ -67,10 +67,14 @@ ko.bindingHandlers["stickTo"] = {
 
         updatePosition();
 
-        document.addEventListener("scroll", updatePosition);
+        const onScroll = async (event: MouseEvent): Promise<void> => {
+            requestAnimationFrame(updatePosition);
+        }
+
+        window.addEventListener("scroll", onScroll, true);
 
         ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
-            document.removeEventListener("scroll", updatePosition);
+            window.removeEventListener("scroll", onScroll, true);
         });
     }
 };

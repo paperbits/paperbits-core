@@ -6,14 +6,14 @@ import { ButtonViewModelBinder } from "./buttonViewModelBinder";
 import { IModelBinder } from "@paperbits/common/editing";
 
 export class ButtonModule implements IInjectorModule {
-    register(injector: IInjector): void {        
+    public register(injector: IInjector): void {        
         injector.bind("button", ButtonViewModel);
         injector.bind("buttonModelBinder", ButtonModelBinder);
-        const modelBinders = injector.resolve<Array<IModelBinder>>("modelBinders");
+        const modelBinders = injector.resolve<IModelBinder[]>("modelBinders");
         modelBinders.push(injector.resolve("buttonModelBinder"));
         
         injector.bind("buttonViewModelBinder", ButtonViewModelBinder);
-        const viewModelBinders = injector.resolve<Array<IViewModelBinder<any, any>>>("viewModelBinders");
+        const viewModelBinders = injector.resolve<IViewModelBinder<any, any>[]>("viewModelBinders");
         viewModelBinders.push(injector.resolve("buttonViewModelBinder"));
     }
 }

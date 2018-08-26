@@ -35,16 +35,16 @@ export class BalloonBindingHandler {
 
                 componentConfig.oncreate = (model, element) => {
                     balloonElement = element;
-                    reposition();
+                    setTimeout(updatePosition, 100); // Let element chance to render and determine sizes
                 }
 
-                const reposition = async (): Promise<void> => {
+                const updatePosition = async (): Promise<void> => {
                     const triggerRect = toggleElement.getBoundingClientRect();
                     const targetRect = balloonElement.getBoundingClientRect();
 
                     let position = options.position || "bottom";
 
-                    switch (options.position) {
+                    switch (position) {
                         case "top":
                             balloonY = triggerRect.top;
 
@@ -174,19 +174,18 @@ export class BalloonBindingHandler {
                         return;
                     }
 
-                    // TODO: This is expensive and frequent event. 
-                    requestAnimationFrame(reposition);
+                    requestAnimationFrame(updatePosition);
                 }
 
                 toggleElement.addEventListener("keydown", onKeyDown);
                 toggleElement.addEventListener("click", onClick);
-                document.addEventListener("scroll", onScroll);
+                window.addEventListener("scroll", onScroll, true);
                 eventManager.addEventListener("onPointerDown", onPointerDown);
 
                 ko.utils.domNodeDisposal.addDisposeCallback(toggleElement, () => {
                     toggleElement.removeEventListener("keydown", onKeyDown);
                     toggleElement.removeEventListener("click", onClick)
-                    document.removeEventListener("scroll", onScroll);
+                    window.removeEventListener("scroll", onScroll, true);
                     eventManager.removeEventListener("onPointerDown", onPointerDown);
 
                     viewManager.removeBalloon(componentConfig);

@@ -1,10 +1,10 @@
 ﻿import * as ko from "knockout";
 import template from "./layouts.html";
 import { Contract } from "@paperbits/common/contract";
-import { IRouteHandler } from '@paperbits/common/routing/IRouteHandler';
-import { IViewManager } from '@paperbits/common/ui/IViewManager';
-import { IFileService } from '@paperbits/common/files/IFileService';
-import { ILayoutService } from "@paperbits/common/layouts/ILayoutService";
+import { IRouteHandler } from "@paperbits/common/routing";
+import { IViewManager } from "@paperbits/common/ui";
+import { IFileService } from "@paperbits/common/files";
+import { ILayoutService } from "@paperbits/common/layouts";
 import { Keys } from "@paperbits/common/keyboard";
 import { LayoutItem } from "./layoutItem";
 import { Component } from "../../../ko/component";
@@ -99,7 +99,7 @@ export class LayoutsWorkshop {
     }
 
     public async deleteSelectedLayout(): Promise<void> {
-        //TODO: Show confirmation dialog according to mockup
+        // TODO: Show confirmation dialog according to mockup
         this.viewManager.closeWorkshop("layout-details-workshop");
 
         await this.layoutService.deleteLayout(this.selectedLayout().toLayout());
