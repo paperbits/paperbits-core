@@ -37,7 +37,7 @@ export class ResizableBindingHandler {
                     else {
                         element.classList.remove("resize-suspended");
                     }
-                }
+                };
 
                 setOptions(ko.unwrap(options));
 
@@ -53,7 +53,7 @@ export class ResizableBindingHandler {
                 const minHeight = style.minHeight;
 
                 const onPointerDown = (event: MouseEvent, edge: string): void => {
-                    if (directions == "none") {
+                    if (directions === "none") {
                         return;
                     }
 
@@ -72,7 +72,7 @@ export class ResizableBindingHandler {
                     initialOffsetY = event.clientY;
                     initialWidth = rect.width;
                     initialHeight = rect.height;
-                }
+                };
 
                 const onPointerUp = (event: MouseEvent): void => {
                     resizing = false;
@@ -82,7 +82,9 @@ export class ResizableBindingHandler {
                     if (onResizeCallback) {
                         onResizeCallback();
                     }
-                }
+
+                    
+                };
 
                 const onPointerMove = (event: MouseEvent): void => {
                     if (!resizing) {
@@ -128,13 +130,15 @@ export class ResizableBindingHandler {
                         element.style.height = height;
                         element.classList.add("resized-vertically");
                     }
-                }
+
+                    eventManager.dispatchEvent("onEditorResize");
+                };
 
                 if (directions.contains("vertically")) {
                     const topResizeHandle = element.ownerDocument.createElement("div");
                     topResizeHandle.classList.add("resize-handle", "resize-handle-top");
                     element.appendChild(topResizeHandle);
-                    topResizeHandle.addEventListener("mousedown", (e) => onPointerDown(e, "top"))
+                    topResizeHandle.addEventListener("mousedown", (e) => onPointerDown(e, "top"));
 
                     const bottomResizeHandle = element.ownerDocument.createElement("div");
                     bottomResizeHandle.classList.add("resize-handle", "resize-handle-bottom");

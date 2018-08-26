@@ -6,8 +6,7 @@
         <div class="input-group">
             <input type="text" class="form-control" data-bind="textInput: mediaItem.fileName, validationElement: mediaItem.fileName"
                 placeholder="i.e. Orders" maxlength="256" />
-            <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: mediaItem.fileName"
-                type="button">!</button>
+            <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: mediaItem.fileName" type="button">!</button>
         </div>
 
         <label class="form-label">
@@ -16,8 +15,7 @@
         <div class="input-group">
             <input type="text" class="form-control" data-bind="textInput: mediaItem.permalinkUrl, validationElement: mediaItem.permalinkUrl"
                 placeholder="http://www.site.com/" maxlength="2000" spellcheck="false" />
-            <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: mediaItem.permalinkUrl"
-                type="button">!</button>
+            <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: mediaItem.permalinkUrl" type="button">!</button>
         </div>
 
         <label class="form-label">
@@ -34,6 +32,11 @@
         <button class="btn" data-bind="click: deleteMedia">
             <i class="paperbits-icon paperbits-simple-remove"></i>
             Delete file
+        </button>
+
+        <button class="btn" data-bind="click: openCropper">
+            <i class="paperbits-icon paperbits-crop"></i>
+            Crop
         </button>
     </div>
 </div>

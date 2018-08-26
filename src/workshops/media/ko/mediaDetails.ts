@@ -1,9 +1,8 @@
 ﻿import * as ko from "knockout";
 import template from "./mediaDetails.html";
-import { IPermalink } from "@paperbits/common/permalinks";
-import { IPermalinkService } from "@paperbits/common/permalinks";
+import { IPermalink, IPermalinkService } from "@paperbits/common/permalinks";
 import { IMediaService } from "@paperbits/common/media";
-import { IViewManager } from "@paperbits/common/ui/IViewManager";
+import { IViewManager } from "@paperbits/common/ui";
 import { MediaItem } from "./mediaItem";
 import { Component } from "../../../ko/component";
 
@@ -32,6 +31,7 @@ export class MediaDetailsWorkshop {
         this.deleteMedia = this.deleteMedia.bind(this);
         this.updateMedia = this.updateMedia.bind(this);
         this.updatePermlaink = this.updatePermlaink.bind(this);
+        this.openCropper = this.openCropper.bind(this);
 
         this.mediaItem.fileName
             .extend({ required: true, onlyValid: true })
@@ -66,13 +66,23 @@ export class MediaDetailsWorkshop {
     }
 
     public async deleteMedia(): Promise<void> {
-        //TODO: Show confirmation dialog according to mockup
+        // TODO: Show confirmation dialog according to mockup
         await this.mediaService.deleteMedia(this.mediaItem.toMedia());
         this.viewManager.notifySuccess("Media library", `File "${this.mediaItem.fileName()}" was deleted.`);
         this.viewManager.closeWorkshop("media-details-workshop");
 
         if (this.onDeleteCallback) {
-            this.onDeleteCallback()
+            this.onDeleteCallback();
         }
+    }
+
+    public openCropper(): void {
+        this.viewManager.openViewAsPopup({
+            component: {
+                name: "picture-cropper",
+                params: { src: this.mediaItem.downloadUrl() }
+            },
+            resize: "vertically horizontally"
+        });
     }
 }

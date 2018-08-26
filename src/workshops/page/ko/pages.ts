@@ -111,7 +111,7 @@ export class PagesWorkshop {
     }
 
     public async deleteSelectedPage(): Promise<void> {
-        //TODO: Show confirmation dialog according to mockup
+        // TODO: Show confirmation dialog according to mockup
         this.viewManager.closeWorkshop("page-details-workshop");
 
         await this.pageService.deletePage(this.selectedPage().toContract());

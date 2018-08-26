@@ -34,9 +34,10 @@ import "./bindingHandlers/bindingHandlers.collapse";
 import "./bindingHandlers/bindingHandlers.container";
 import "./bindingHandlers/bindingHandlers.stickTo";
 import "./bindingHandlers/bindingHandlers.scrollable";
+import { CropperBindingHandler } from "../workshops/cropper/cropper";
 
 export class KoModule implements IInjectorModule {
-    register(injector: IInjector): void {
+    public register(injector: IInjector): void {
         injector.bindSingleton("viewManager", ViewManager);
         injector.bindComponent("tooltip", (ctx: IInjector, text: string) => { 
             return new Tooltip(text);
@@ -54,6 +55,7 @@ export class KoModule implements IInjectorModule {
         injector.bindSingleton("backgroundBindingHandler", BackgroundBindingHandler);
         injector.bindSingleton("resizableBindingHandler", ResizableBindingHandler);
         injector.bindSingleton("knockoutValidation", KnockoutValidation);
+        injector.bindSingleton("cropperBindingHandler", CropperBindingHandler);
         
         injector.bind("docWidget", DocumentViewModel);
         injector.bindSingleton("gridBindingHandler", GridBindingHandler);

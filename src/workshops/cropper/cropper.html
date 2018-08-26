@@ -1,0 +1,53 @@
+<div class="editor resizable-content flex-container flex-container-column crpr">
+    <div class="flex-item">
+        <h1>
+            Edit picture
+            <a href="#" class="btn pull-right" data-bind="click: closeEditor">✖</a>
+        </h1>
+        <hr />
+    </div>
+
+    <div class="flex-item flex-item-grow">
+        <div class="fit">
+            <img class="cropbox" data-bind="attr: { src: source }, cropper: cropperInstance"
+            />
+        </div>
+    </div>
+
+    <div class="flex-item">
+        <div class="btn-group">
+            <button class="btn" data-bind="click: setMoveMode">
+                <i class="paperbits-icon paperbits-zoom-99"></i>
+            </button>
+            <button class="btn" data-bind="click: setCropMode">
+                <i class="paperbits-icon paperbits-crop"></i>
+            </button>
+            <button class="btn" data-bind="click: zoomIn">
+                <i class="paperbits-icon paperbits-zoom-in"></i>
+            </button>
+            <button class="btn" data-bind="click: zoomOut">
+                <i class="paperbits-icon paperbits-zoom-out"></i>
+            </button>
+            <button class="btn" data-bind="click: rotateLeft">
+                <i class="paperbits-icon paperbits-rotate-left-2"></i>
+            </button>
+            <button class="btn" data-bind="click: rotateRight">
+                <i class="paperbits-icon paperbits-rotate-right-2"></i>
+            </button>
+            <button class="btn" data-bind="click: flipHorizontally">
+                <i class="paperbits-icon paperbits-enlarge-horizontal"></i>
+            </button>
+            <button class="btn" data-bind="click: flipVertically">
+                <i class="paperbits-icon paperbits-enlarge-vertical"></i>
+            </button>
+
+            <button class="btn" data-bind="click: crop">
+                <i class="paperbits-icon paperbits-check-2"></i>
+            </button>
+
+            <button class="btn" data-bind="click: clear">
+                    <i class="paperbits-icon paperbits-simple-remove"></i>
+                </button>
+        </div>
+    </div>
+</div>

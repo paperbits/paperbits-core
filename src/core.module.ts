@@ -1,5 +1,5 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { IViewModelBinder, ModelBinderSelector } from "@paperbits/common/widgets";
+import { IViewModelBinder, ModelBinderSelector, WidgetService } from "@paperbits/common/widgets";
 import { PictureModule } from "./picture/ko/picture.module";
 import { VideoPlayerModule } from "./video-player/ko/videoPlayer.module";
 import { YoutubePlayerModule } from "./youtube-player/ko/youtubePlayer.module";
@@ -16,7 +16,7 @@ import { ColumnModule } from "./column/ko/column.module";
 import { SectionModule } from "./section/ko/section.module";
 import { RowModule } from "./row/ko/row.module";
 import { SliderModule } from "./slider/ko/slider.module";
-import { SearchResultsModule } from "./search-results/ko/searchResults.module"
+import { SearchResultsModule } from "./search-results/ko/searchResults.module";
 import { GoogleTagManager } from "./gtm/ko/gtm";
 import { IntercomViewModel } from "./intercom/ko/intercomViewModel";
 import { TextblockModule } from "./textblock/ko/textblock.module";
@@ -30,7 +30,6 @@ import { PermalinkService, IPermalinkService, IPermalinkResolver, PermalinkResol
 import { XmlHttpRequestClient } from "@paperbits/common/http";
 import { DefaultEventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { LocalCache } from "@paperbits/common/caching";
-import { WidgetService } from "@paperbits/common/widgets";
 import { LayoutService } from "@paperbits/common/layouts/layoutService";
 import { PageService, PagePermalinkResolver } from "@paperbits/common/pages";
 import { BlogService, BlogPermalinkResolver } from "@paperbits/common/blogs";

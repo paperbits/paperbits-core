@@ -1,5 +1,5 @@
 ﻿import * as ko from "knockout";
-import * as Utils from '@paperbits/common/utils';
+import * as Utils from "@paperbits/common/utils";
 import { IView } from "@paperbits/common/ui/IView";
 import "@paperbits/common/extensions";
 
@@ -45,7 +45,7 @@ ko.bindingHandlers["surface"] = {
                 sticky: false,
                 payload: "surface",
                 preventDragging: (clickedElement: HTMLElement) => {
-                    return clickedElement.closest("a, .form, .btn, .toolbox-btn, .toolbox-dropdown") != null;
+                    return clickedElement.closest("a, .form, .btn, .toolbox-btn, .toolbox-dropdown .cropbox") !== null;
                 },
                 ondragend: (): void => {
                     if (!view || !view.component) {

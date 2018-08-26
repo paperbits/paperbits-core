@@ -324,18 +324,18 @@ export class ViewManager implements IViewManager {
         }, 4000);
     }
 
-    public openUploadDialog(): Promise<Array<File>> {
+    public openUploadDialog(): Promise<File[]> {
         uploadDialog.click();
 
         return new Promise<File[]>((resolve, reject) => {
             uploadDialog.onchange = () => {
                 resolve(Arrays.coerce(uploadDialog.files));
-            }
+            };
         });
     }
 
     public openViewAsPopup(view: IView): void {
-        if (this.widgetEditor() == view) {
+        if (this.widgetEditor() === view) {
             return;
         }
 
@@ -364,9 +364,9 @@ export class ViewManager implements IViewManager {
                 }
             },
             resize: binding.editorResize || "vertically horizontally"
-        }
+        };
 
-        this.openViewAsPopup(view)
+        this.openViewAsPopup(view);
     }
 
     public closeWidgetEditor(): void {
