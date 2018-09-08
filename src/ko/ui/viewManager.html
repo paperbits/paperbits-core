@@ -37,8 +37,15 @@
 
 <!-- ko with: widgetEditor() -->
 <div class="toolbox toolbox-position-left-offset" data-bind="resizable: resize, surface: $data">
-    <!-- ko component: { name: component.name, params: component.params, oncreate: component.oncreate } -->
-    <!--/ko -->
+    <div class="editor resizable-content">
+        <h1>
+            <span data-bind="text: heading"></span>
+            <a href="#" class="btn pull-right" data-bind="click: $component.closeWidgetEditor">✖</a>
+        </h1>
+        <hr />
+        <!-- ko component: { name: component.name, params: component.params, oncreate: component.oncreate } -->
+        <!--/ko -->
+    </div>
 </div>
 <!-- /ko -->
 

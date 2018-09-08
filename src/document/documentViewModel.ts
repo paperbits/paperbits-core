@@ -1,12 +1,10 @@
 import * as ko from "knockout";
 import template from "./document.html";
-import * as Utils from "@paperbits/common/utils";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
 import { Component } from "../ko/component";
-import { LayoutModelBinder } from "../layout/layoutModelBinder";
-import { LayoutViewModelBinder } from "../layout/ko";
-import { LayoutViewModel } from "../layout/ko/layoutViewModel";
+import { LayoutModelBinder } from "../layout";
+import { LayoutViewModelBinder, LayoutViewModel } from "../layout/ko";
 
 @Component({
     selector: "paperbits-document",
@@ -18,7 +16,6 @@ export class DocumentViewModel {
     private readonly layoutViewModelBinder: LayoutViewModelBinder;
     private readonly routeHandler: IRouteHandler;
     private readonly viewManager: IViewManager;
-    private readonly disposeBag: Utils.IFunctionBag = Utils.createFunctionBag();
 
     public readonly layoutModel: KnockoutObservable<LayoutViewModel>;
     public readonly disableTracking: KnockoutObservable<boolean>;

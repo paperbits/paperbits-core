@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./navigation.html";
 import { INavigationService } from "@paperbits/common/navigation/INavigationService";
-import { IViewManager } from "@paperbits/common/ui/IViewManager";
+import { IViewManager } from "@paperbits/common/ui";
 import { NavigationItemContract } from "@paperbits/common/navigation/navigationItemContract";
 import { NavigationTree } from "./navigationTree";
 import { NavigationItemViewModel } from "./navigationItemViewModel";

@@ -3,22 +3,12 @@ import template from "./dropbucket.html";
 import * as Utils from "@paperbits/common/utils";
 import { IViewManager } from "@paperbits/common/ui";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
-import { IMediaService, ICreatedMedia  } from "@paperbits/common/media";
+import { IMediaService, ICreatedMedia } from "@paperbits/common/media";
 import { IContentDropHandler, IContentDescriptor, IDataTransfer } from "@paperbits/common/editing";
 import { ProgressPromise } from "@paperbits/common";
 import { DropBucketItem } from "./dropbucketItem";
 import { Component } from "../../../ko/component";
 
-/*
-   - Drop bucket introduces a special container for dropping content,
-     which, if supported, could be picked up by a widget;
-
-   - If dropped content is supported by several widgets (i.e. Bing and Google maps), user will be able to choose;
-   
-   - All KNOWN content is dragged only from Vienna UI with attached context;
-   
-   - Widget/Content handler registrations should be injected in respective order;
-*/
 
 @Component({
     selector: "dropbucket",
@@ -27,13 +17,13 @@ import { Component } from "../../../ko/component";
 })
 export class DropBucket {
     private readonly eventManager: IEventManager;
-    private readonly dropHandlers: Array<IContentDropHandler>;
+    private readonly dropHandlers: IContentDropHandler[];
     private readonly mediaService: IMediaService;
     private readonly viewManager: IViewManager;
 
     public droppedItems: KnockoutObservableArray<DropBucketItem>;
 
-    constructor(globalEventHandler: GlobalEventHandler, eventManager: IEventManager, mediaService: IMediaService, dropHandlers: Array<IContentDropHandler>, viewManager: IViewManager) {
+    constructor(globalEventHandler: GlobalEventHandler, eventManager: IEventManager, mediaService: IMediaService, dropHandlers: IContentDropHandler[], viewManager: IViewManager) {
         this.eventManager = eventManager;
         this.mediaService = mediaService;
         this.viewManager = viewManager;
@@ -84,8 +74,7 @@ export class DropBucket {
         }
 
         if (contentDescriptor.uploadables && contentDescriptor.uploadables.length) {
-            for (let i = 0; i < contentDescriptor.uploadables.length; i++) {
-                const uploadable = contentDescriptor.uploadables[i];
+            for (const uploadable of contentDescriptor.uploadables) {
                 dropbucketItem.uploadables.push(uploadable);
             }
         }
@@ -100,22 +89,25 @@ export class DropBucket {
 
         this.droppedItems.removeAll();
 
-        let dataTransfer = event.dataTransfer;
+        const dataTransfer = event.dataTransfer;
+        const files = Array.prototype.slice.call(dataTransfer.files);
+
         let items: IDataTransfer[];
 
         if (dataTransfer.files.length > 0) {
             items = [];
-            for (let i = 0; i < dataTransfer.files.length; i++) {
+
+            for (const file of files) {
                 items.push({
-                    source: dataTransfer.files[i],
-                    name: dataTransfer.files[i].name,
-                    mimeType: dataTransfer.files[i].type
+                    source: file,
+                    name: file.name,
+                    mimeType: file.type
                 });
             }
         }
         else {
-            let urlData = dataTransfer.getData("url");
-            let parts = urlData.split("/");
+            const urlData = dataTransfer.getData("url");
+            const parts = urlData.split("/");
 
             items = [{
                 source: urlData,
@@ -179,11 +171,12 @@ export class DropBucket {
             title = "Piece of text";
         }
 
+        const files = Array.prototype.slice.call(dataTransfer.files);
         const dropbucketItem = new DropBucketItem();
         const uploadables = [];
 
-        for (let i = 0; i < dataTransfer.files.length; i++) {
-            uploadables.push(dataTransfer.files[i]);
+        for (const file of files) {
+            uploadables.push(file);
         }
 
         dropbucketItem.title = title;
@@ -231,7 +224,7 @@ export class DropBucket {
     }
 
     public uploadContentAsMedia(dropbucketItem: DropBucketItem): void {
-        let uploadables = dropbucketItem.uploadables();
+        const uploadables = dropbucketItem.uploadables();
 
         this.droppedItems.remove(dropbucketItem);
 
@@ -257,7 +250,7 @@ export class DropBucket {
             const onMediaUploadedCallback = dropbucketItem.widgetFactoryResult.onMediaUploadedCallback;
 
             if (onMediaUploadedCallback && typeof onMediaUploadedCallback === "function") {
-                //VK: Called by KO binding, so 2nd argument may be an event
+                // VK: Called by KO binding, so 2nd argument may be an event
                 uploadPromise.then(createdMedia => onMediaUploadedCallback(createdMedia));
             }
         });

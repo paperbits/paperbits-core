@@ -1,42 +1,34 @@
-﻿<div class="editor resizable-content flex-container flex-container-column">
-    <h1>
-        Video player
-        <a href="#" class="btn pull-right" data-bind="click: closeEditor">✖</a>
-    </h1>
-    <hr />
-    <fieldset class="form" data-bind="scrollable: {}">
-        <div class="form-group form-group-collapsible">
-            <label class="form-label">
-                <a href="#" class="form-group-toggle" data-bind="collapse: '#sourceCollapse'"></a>
-                <b>Source</b>
-            </label>
-            <div id="sourceCollapse" class="collapse form-group-collapse">
-                <div class="dropzone">
-                    <a href="#" class="dropzone-showbox" data-bind="balloon: { component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected, mediaFilter: $component.mediaFilter } } }">
-                        <!-- ko if: sourceUrl -->
-                        <video class="fit" controls>
-                            <source data-bind="attr: { src: sourceUrl }" />
-                        </video>
-                        <!-- /ko -->
-                    </a>
-                </div>
+﻿<fieldset class="form" data-bind="scrollable: {}">
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" data-bind="collapse: '#sourceCollapse'"></a>
+            <b>Source</b>
+        </label>
+        <div id="sourceCollapse" class="collapse form-group-collapse">
+            <div class="dropzone">
+                <a href="#" class="dropzone-showbox" data-bind="balloon: { component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected, mediaFilter: $component.mediaFilter } } }">
+                    <!-- ko if: sourceUrl -->
+                    <video class="fit" controls>
+                        <source data-bind="attr: { src: sourceUrl }" />
+                    </video>
+                    <!-- /ko -->
+                </a>
             </div>
         </div>
+    </div>
 
-        <div class="form-group form-group-collapsible">
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" data-bind="collapse: '#miscellaneousCollapse'"></a>
+            <b>Miscellaneous</b>
+        </label>
+        <div id="miscellaneousCollapse" class="collapse form-group-collapse">
             <label class="form-label">
-                <a href="#" class="form-group-toggle" data-bind="collapse: '#miscellaneousCollapse'"></a>
-                <b>Miscellaneous</b>
+                <input type="checkbox" data-bind="checked: controls" />Controls</span>
             </label>
-            <div id="miscellaneousCollapse" class="collapse form-group-collapse">
-                <label class="form-label">
-                    <input type="checkbox" data-bind="checked: controls" />Controls</span>
-                </label>
-                <label class="form-label">
-                    <input type="checkbox" data-bind="checked: autoplay" />Autoplay</span>
-                </label>
-            </div>
+            <label class="form-label">
+                <input type="checkbox" data-bind="checked: autoplay" />Autoplay</span>
+            </label>
         </div>
-
-    </fieldset>
-</div>
+    </div>
+</fieldset>

@@ -36,7 +36,7 @@ export class PictureModelBinder implements IModelBinder {
     }
 
     public modelToContract(pictureModel: PictureModel): PictureContract {
-        let pictureContract: PictureContract = {
+        const pictureContract: PictureContract = {
             object: "block",
             type: "picture",
             caption: pictureModel.caption,

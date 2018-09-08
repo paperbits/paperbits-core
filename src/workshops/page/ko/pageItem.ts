@@ -21,10 +21,9 @@ export class AnchorItem {
 }
 
 export class PageItem {
-    contentKey?: string;
-    permalinkKey?: string;
-
     public key: string;
+    public contentKey?: string;
+    public permalinkKey?: string;
     public permalinkUrl: KnockoutObservable<string>;
     public title: KnockoutObservable<string>;
     public description: KnockoutObservable<string>;
@@ -56,7 +55,7 @@ export class PageItem {
         }
     }
 
-    toContract(): PageContract {
+    public toContract(): PageContract {
         return {
             key: this.key,
             title: this.title(),

@@ -24,8 +24,8 @@ export class TextblockViewModelBinder implements IViewModelBinder<TextblockModel
             displayName: "Text",
             readonly: readonly,
             model: model,
-            flow: "liquid",
-            editor: "paperbits-text-editor",
+            flow: "block",
+            editor: "html-editor",
             editorResize: "horizontally",
             applyChanges: () => {
                 this.modelToViewModel(model, readonly, viewModel);

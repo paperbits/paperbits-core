@@ -6,7 +6,7 @@ import { TextblockViewModel } from "./textblockViewModel";
 import { Component } from "../../ko/component";
 
 @Component({
-    selector: "paperbits-text-editor",
+    selector: "html-editor",
     template: template,
     injectable: "textblockEditor"
 })

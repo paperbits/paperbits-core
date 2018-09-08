@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import template from "./buttonEditor.html";
-import { IWidgetEditor } from '@paperbits/common/widgets/IWidgetEditor';
-import { IViewManager } from '@paperbits/common/ui/IViewManager';
+import { IWidgetEditor } from "@paperbits/common/widgets";
+import { IViewManager } from "@paperbits/common/ui";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { ButtonModel } from "../buttonModel";
 import { Component } from "../../ko/component";

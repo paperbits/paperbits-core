@@ -1,5 +1,4 @@
-﻿import { IWidgetOrder } from "@paperbits/common/editing";
-import { IWidgetHandler } from "@paperbits/common/editing";
+﻿import { IWidgetOrder, IWidgetHandler } from "@paperbits/common/editing";
 import { ButtonModel } from "./buttonModel";
 
 
@@ -12,7 +11,7 @@ export class ButtonHandlers implements IWidgetHandler {
             createModel: async () => {
                 return new ButtonModel();
             }
-        }
+        };
 
         return widgetOrder;
     }

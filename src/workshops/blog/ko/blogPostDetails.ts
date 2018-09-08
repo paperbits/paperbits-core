@@ -4,7 +4,7 @@ import { IPermalink } from "@paperbits/common/permalinks";
 import { IPermalinkService } from "@paperbits/common/permalinks";
 import { IBlogService } from "@paperbits/common/blogs/IBlogService";
 import { IRouteHandler } from "@paperbits/common/routing/IRouteHandler";
-import { IViewManager } from "@paperbits/common/ui/IViewManager";
+import { IViewManager } from "@paperbits/common/ui";
 import { Component } from "../../../ko/component";
 import { BlogPostItem } from "./blogPostItem";
 

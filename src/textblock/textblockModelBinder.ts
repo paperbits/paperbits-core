@@ -14,7 +14,7 @@ export class TextblockModelBinder implements IModelBinder {
         for (let i = 0; i < leaves.length; i++) {
             const node = leaves[i];
 
-            if (node && node.type == "link") {
+            if (node && node.type === "link") {
                 const hyperlink: HyperlinkContract = <HyperlinkContract>node;
 
                 if (hyperlink.permalinkKey) {

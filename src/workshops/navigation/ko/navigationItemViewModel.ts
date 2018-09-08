@@ -1,5 +1,5 @@
 ﻿import * as ko from "knockout";
-import { NavigationItemContract } from "@paperbits/common/navigation/navigationItemContract";
+import { NavigationItemContract } from "@paperbits/common/navigation";
 
 export class NavigationItemViewModel {
     public key: string;
@@ -54,7 +54,7 @@ export class NavigationItemViewModel {
         }
 
         this.parent.nodes.remove(this);
-        let ownIndex = this.parent.parent.nodes.indexOf(this.parent);
+        const ownIndex = this.parent.parent.nodes.indexOf(this.parent);
         this.parent.parent.nodes.splice(ownIndex + 1, 0, this);
         this.parent = this.parent.parent;
 
@@ -62,13 +62,13 @@ export class NavigationItemViewModel {
     }
 
     private moveNodeRight(): void {
-        let index = this.parent.nodes().indexOf(this);
+        const index = this.parent.nodes().indexOf(this);
 
         if (index === 0) {
             return;
         }
 
-        let previousSibling = this.parent.nodes()[index - 1];
+        const previousSibling = this.parent.nodes()[index - 1];
         this.parent.nodes.remove(this);
         this.parent = previousSibling;
         previousSibling.nodes.push(this);
@@ -83,7 +83,7 @@ export class NavigationItemViewModel {
     public insertBefore(node: NavigationItemViewModel): void {
         if (this.parent && this.isSiblingNode(node) || this.isUncleNode(node) || this.isChildNode(node)) {
             node.parent.nodes.remove(node);
-            let ownIndex = this.parent.nodes.indexOf(this);
+            const ownIndex = this.parent.nodes.indexOf(this);
             this.parent.nodes.splice(ownIndex, 0, node);
             node.parent = this.parent;
 
@@ -94,7 +94,7 @@ export class NavigationItemViewModel {
     public insertAfter(node: NavigationItemViewModel): void {
         if (this.parent && this.isSiblingNode(node) || this.isUncleNode(node)) {
             node.parent.nodes.remove(node);
-            let ownIndex = this.parent.nodes.indexOf(this);
+            const ownIndex = this.parent.nodes.indexOf(this);
             this.parent.nodes.splice(ownIndex + 1, 0, node);
             node.parent = this.parent;
 
@@ -103,7 +103,7 @@ export class NavigationItemViewModel {
 
         if (this.parent && this.isChildNode(node)) {
             node.parent.nodes.remove(node);
-            let ownIndex = this.parent.nodes.indexOf(this);
+            const ownIndex = this.parent.nodes.indexOf(this);
             this.parent.nodes.splice(ownIndex, 0, node);
             node.parent = this.parent;
 
@@ -122,11 +122,9 @@ export class NavigationItemViewModel {
 
         switch (event.keyCode) {
             case 37:
-                //left
                 this.moveNodeLeft();
                 break;
             case 39:
-                //right
                 this.moveNodeRight();
                 break;
             default:

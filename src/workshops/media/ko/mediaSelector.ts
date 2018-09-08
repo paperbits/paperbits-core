@@ -5,7 +5,7 @@ import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
 import { MediaItem } from "./mediaItem";
 import { MediaContract } from '@paperbits/common/media/mediaContract';
 import { IMediaService } from '@paperbits/common/media/IMediaService';
-import { IViewManager } from "@paperbits/common/ui/IViewManager";
+import { IViewManager } from "@paperbits/common/ui";
 import { IMediaFilter } from "@paperbits/common/media";
 import { IEventManager } from "@paperbits/common/events";
 import { Component } from "../../../ko/component";

@@ -11,7 +11,7 @@ export class ButtonViewModelBinder implements IViewModelBinder<ButtonModel, Butt
         viewModel.label(model.label);
         viewModel.hyperlink(model.hyperlink);
 
-        let classes = [];
+        const classes = [];
 
         switch (model.style) {
             case "default":
@@ -45,11 +45,12 @@ export class ButtonViewModelBinder implements IViewModelBinder<ButtonModel, Butt
         viewModel["widgetBinding"] = {
             displayName: "Button",
             model: model,
+            flow: "inline",
             editor: "paperbits-button-editor",
             applyChanges: () => {
                 this.modelToViewModel(model, readonly, viewModel);
             }
-        }
+        };
 
         return viewModel;
     }

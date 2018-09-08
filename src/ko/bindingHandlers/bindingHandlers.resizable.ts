@@ -82,8 +82,6 @@ export class ResizableBindingHandler {
                     if (onResizeCallback) {
                         onResizeCallback();
                     }
-
-                    
                 };
 
                 const onPointerMove = (event: MouseEvent): void => {
@@ -113,22 +111,26 @@ export class ResizableBindingHandler {
                             break;
                     }
 
-                    if (isNumber(minWidth) && width < minWidth) {
-                        width = minWidth;
-                    }
-                    else {
-                        element.style.left = left;
-                        element.style.width = width;
-                        element.classList.add("resized-horizontally");
+                    if (initialEdge === "left" || initialEdge === "right") {
+                        if (isNumber(minWidth) && width < minWidth) {
+                            width = minWidth;
+                        }
+                        else {
+                            element.style.left = left;
+                            element.style.width = width;
+                            element.classList.add("resized-horizontally");
+                        }
                     }
 
-                    if (isNumber(minHeight) && height < minHeight) {
-                        height = minHeight;
-                    }
-                    else {
-                        element.style.top = top;
-                        element.style.height = height;
-                        element.classList.add("resized-vertically");
+                    if (initialEdge === "top" || initialEdge === "bottom") {
+                        if (isNumber(minHeight) && height < minHeight) {
+                            height = minHeight;
+                        }
+                        else {
+                            element.style.top = top;
+                            element.style.height = height;
+                            element.classList.add("resized-vertically");
+                        }
                     }
 
                     eventManager.dispatchEvent("onEditorResize");
@@ -163,6 +165,6 @@ export class ResizableBindingHandler {
                     eventManager.removeEventListener("onPointerUp", onPointerUp);
                 });
             }
-        }
+        };
     }
 }

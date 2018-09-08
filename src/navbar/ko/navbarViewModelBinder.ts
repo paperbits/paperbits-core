@@ -3,11 +3,9 @@ import { NavbarItemViewModel } from "./navbarItemViewModel";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { IViewModelBinder } from "@paperbits/common/widgets";
 import { IEventManager } from "@paperbits/common/events";
-import { NavigationEvents } from "@paperbits/common/navigation";
-import { NavigationItemContract } from "@paperbits/common/navigation";
+import { NavigationItemContract, NavigationItemModel, NavigationEvents } from "@paperbits/common/navigation";
 import { NavbarModel } from "../navbarModel";
 import { NavbarModelBinder } from "../navbarModelBinder";
-import { NavigationItemModel } from "@paperbits/common/navigation";
 
 
 export class NavbarViewModelBinder implements IViewModelBinder<NavbarModel, NavbarViewModel> {

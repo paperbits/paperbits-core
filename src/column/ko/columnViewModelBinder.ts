@@ -83,6 +83,7 @@ export class ColumnViewModelBinder implements IViewModelBinder<ColumnModel, Colu
             name: "column",
             displayName: "Column",
             readonly: readonly,
+            flow: "inline",
             model: model,
             editor: "layout-column-editor",
             applyChanges: () => {
@@ -115,7 +116,7 @@ export class ColumnViewModelBinder implements IViewModelBinder<ColumnModel, Colu
                             this.viewManager.openWidgetEditor(binding);
                         }
                     }]
-                }
+                };
 
                 const attachedModel = <ColumnModel>GridHelper.getModel(element);
 

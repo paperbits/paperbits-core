@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import template from "./youtubeEditor.html";
 import { IWidgetEditor } from "@paperbits/common/widgets/IWidgetEditor";
-import { IViewManager } from "@paperbits/common/ui/IViewManager";
+import { IViewManager } from "@paperbits/common/ui";
 import { Component } from "../../ko/component";
 import { YoutubePlayerModel } from "../youtubePlayerModel";
 import { changeRateLimit } from "../../ko/consts";

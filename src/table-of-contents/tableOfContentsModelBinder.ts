@@ -67,8 +67,6 @@ export class TableOfContentsModelBinder implements IModelBinder {
     }
 
     public async contractToModel(tableOfContentsContract: TableOfContentsContract): Promise<TableOfContentsModel> {
-        const type = "table-of-contents";
-
         const tableOfContentsModel = new TableOfContentsModel();
         tableOfContentsModel.title = tableOfContentsContract.title;
         tableOfContentsModel.navigationItemKey = tableOfContentsContract.navigationItemKey;
@@ -84,7 +82,7 @@ export class TableOfContentsModelBinder implements IModelBinder {
             if (assignedNavigationItem.navigationItems) { // has child nav items
                 const promises = assignedNavigationItem.navigationItems.map(async navigationItem => {
                     return await this.processNavigationItem(navigationItem, currentPageUrl);
-                })
+                });
 
                 const results = await Promise.all(promises);
 

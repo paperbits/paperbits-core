@@ -2,9 +2,8 @@ import * as ko from "knockout";
 import template from "./pageSelector.html";
 import { IResourceSelector } from "@paperbits/common/ui";
 import { PageItem, AnchorItem } from "./pageItem";
-import { PageContract } from '@paperbits/common/pages';
-import { IPermalinkService } from '@paperbits/common/permalinks';
-import { IPageService } from '@paperbits/common/pages';
+import { IPageService, PageContract } from "@paperbits/common/pages";
+import { IPermalinkService } from "@paperbits/common/permalinks";
 import { Component } from "../../../ko/component";
 
 @Component({

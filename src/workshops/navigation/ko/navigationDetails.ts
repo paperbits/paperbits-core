@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import template from "./navigationDetails.html";
-import { IViewManager } from "@paperbits/common/ui/IViewManager";
+import { IViewManager } from "@paperbits/common/ui";
 import { NavigationItemViewModel } from "./navigationItemViewModel";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { IPermalinkResolver } from "@paperbits/common/permalinks/IPermalinkResolver";

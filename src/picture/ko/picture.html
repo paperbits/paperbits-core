@@ -1,16 +1,23 @@
-<div class="picture" data-bind="css: css">
+<widget>
     <!-- ko if: layout() === "polaroid" -->
-    <img class="content" data-bind="background: background, attr: { alt: caption }" />
-    <!-- ko if: caption() -->
-    <label class="picture-caption" data-bind="text: caption"></label>
-    <!-- /ko -->
+    <div class="picture polaroid">
+        <img class="content" data-bind="background: background, attr: { alt: caption }" />
+        <!-- ko if: caption() -->
+        <label class="picture-caption" data-bind="text: caption"></label>
+        <!-- /ko -->
+    </div>
     <!-- /ko -->
 
     <!-- ko if: layout() === "circle" -->
-    <div class="content" data-bind="background: background, attr: { alt: caption }" ></div>
+    <div class="picture circle">
+        <div class="content" data-bind="background: background, attr: { alt: caption }"></div>
+    </div>
     <!-- /ko -->
 
     <!-- ko if: layout() === "noframe" -->
-    <img class="content" data-bind="background: background, attr: { alt: caption }" />
+    <div class="picture noframe" data-bind="css: css">
+        <img class="content" data-bind="background: background, attr: { alt: caption }" />
+    </div>
     <!-- /ko -->
-</div>
+
+</widget>

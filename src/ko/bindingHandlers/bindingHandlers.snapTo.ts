@@ -2,7 +2,7 @@
 
 ko.bindingHandlers["snapTo"] = {
     init(element: HTMLElement, valueAccessor: () => any) {
-        let config = valueAccessor();
+        const config = valueAccessor();
 
         if (ko.isObservable(config)) {
             config.subscribe(newConfig => {

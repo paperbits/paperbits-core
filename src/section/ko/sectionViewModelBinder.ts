@@ -6,6 +6,7 @@ import { SectionModel } from "../sectionModel";
 import { RowModel } from "../../row/rowModel";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
+import { DragSession } from "@paperbits/common/ui/draggables";
 
 export class SectionViewModelBinder implements IViewModelBinder<SectionModel, SectionViewModel> {
     constructor(
@@ -60,10 +61,21 @@ export class SectionViewModelBinder implements IViewModelBinder<SectionModel, Se
             displayName: "Section",
             readonly: readonly,
             model: model,
-            flow: "liquid",
+            flow: "block",
             editor: "layout-section-editor",
             applyChanges: () => {
                 this.modelToViewModel(model, readonly, viewModel);
+            },
+            onDragOver: (dragSession: DragSession): boolean => {
+                return dragSession.type === "row";
+            },
+            onDragDrop: (dragSession: DragSession): void => {
+                switch (dragSession.type) {
+                    case "row":
+                        model.widgets.splice(dragSession.insertIndex, 0, <RowModel>dragSession.sourceModel);
+                        break;
+                }
+                binding.applyChanges();
             },
 
             getContextualEditor: (element: HTMLElement, half: string, placeholderElement?: HTMLElement, placeholderHalf?: string): IContextualEditor => {
@@ -89,10 +101,10 @@ export class SectionViewModelBinder implements IViewModelBinder<SectionModel, Se
                                         sectionHalf = placeholderHalf;
                                     }
 
-                                    let mainElement = GridHelper.getParentElementWithModel(sectionElement);
-                                    let mainModel = GridHelper.getModel(mainElement);
-                                    let mainWidgetModel = GridHelper.getWidgetBinding(mainElement);
-                                    let sectionModel = <SectionModel>GridHelper.getModel(sectionElement);
+                                    const mainElement = GridHelper.getParentElementWithModel(sectionElement);
+                                    const mainModel = GridHelper.getModel(mainElement);
+                                    const mainWidgetModel = GridHelper.getWidgetBinding(mainElement);
+                                    const sectionModel = <SectionModel>GridHelper.getModel(sectionElement);
                                     let index = mainModel.widgets.indexOf(sectionModel);
 
                                     if (sectionHalf === "bottom") {
@@ -162,8 +174,8 @@ export class SectionViewModelBinder implements IViewModelBinder<SectionModel, Se
                             name: "row-layout-selector",
                             params: {
                                 onSelect: (newRowModel: RowModel) => {
-                                    let sectionModel = GridHelper.getModel(element);
-                                    let sectionBinding = GridHelper.getWidgetBinding(element);
+                                    const sectionModel = GridHelper.getModel(element);
+                                    const sectionBinding = GridHelper.getWidgetBinding(element);
 
                                     sectionModel.widgets.push(newRowModel);
                                     sectionBinding.applyChanges();

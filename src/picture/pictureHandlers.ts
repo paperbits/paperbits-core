@@ -1,17 +1,10 @@
 ﻿import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
-import { ICreatedMedia } from "@paperbits/common/media";
-import { IWidgetFactoryResult } from "@paperbits/common/editing";
-import { MediaContract } from "@paperbits/common/media";
-import { IWidgetOrder } from "@paperbits/common/editing";
-import { IContentDropHandler } from "@paperbits/common/editing";
-import { IWidgetHandler } from "@paperbits/common/editing";
-import { IDataTransfer } from "@paperbits/common/editing";
-import { IContentDescriptor } from "@paperbits/common/editing";
+import { ICreatedMedia, MediaContract } from "@paperbits/common/media";
+import { IWidgetOrder, IContentDropHandler, IWidgetHandler, IDataTransfer, IContentDescriptor, IWidgetFactoryResult } from "@paperbits/common/editing";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 import { PictureModelBinder } from "./pictureModelBinder";
-import { PictureViewModelBinder } from "./ko/pictureViewModelBinder";
-import { PictureContract } from "./pictureContract";
+import { PictureViewModelBinder } from "./ko";
 import { PictureModel } from "./pictureModel";
 
 const pictureIconUrl = "data:image/svg+xml;base64,PHN2ZyBjbGFzcz0ibmMtaWNvbiBvdXRsaW5lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjQ4cHgiIGhlaWdodD0iNDhweCIgdmlld0JveD0iMCAwIDQ4IDQ4Ij48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjUsIDAuNSkiPgo8cG9seWxpbmUgZGF0YS1jYXA9ImJ1dHQiIGRhdGEtY29sb3I9ImNvbG9yLTIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzQ0NDQ0NCIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHBvaW50cz0iMiwzNCAxMiwyNiAyMiwzNCAKCTM0LDIwIDQ2LDMwICIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciIgc3Ryb2tlLWxpbmVjYXA9ImJ1dHQiPjwvcG9seWxpbmU+CjxyZWN0IHg9IjIiIHk9IjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzQ0NDQ0NCIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0ic3F1YXJlIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHdpZHRoPSI0NCIgaGVpZ2h0PSI0MCIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciI+PC9yZWN0Pgo8Y2lyY2xlIGRhdGEtY29sb3I9ImNvbG9yLTIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzQ0NDQ0NCIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0ic3F1YXJlIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIGN4PSIyMCIgY3k9IjE2IiByPSI0IiBzdHJva2UtbGluZWpvaW49Im1pdGVyIj48L2NpcmNsZT4KPC9nPjwvc3ZnPg==";
@@ -20,25 +13,10 @@ const widgetDisplayName = "Picture";
 
 export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
     private static readonly imageFileExtensions = [".jpg", ".jpeg", ".png", ".svg", ".gif"];
-    private readonly pictureModelBinder: PictureModelBinder;
     private readonly pictureViewModelBinder: PictureViewModelBinder;
 
-    constructor(pictureModelBinder: PictureModelBinder, pictureViewModelBinder: PictureViewModelBinder) {
-        this.pictureModelBinder = pictureModelBinder;
+    constructor(pictureViewModelBinder: PictureViewModelBinder) {
         this.pictureViewModelBinder = pictureViewModelBinder;
-    }
-
-    private async prepareWidgetOrder(config: PictureContract): Promise<IWidgetOrder> {
-        const widgetOrder: IWidgetOrder = {
-            name: "picture",
-            displayName: widgetDisplayName,
-            iconClass: "paperbits-image-2",
-            createModel: async () => {
-                return await this.pictureModelBinder.contractToModel(config);
-            }
-        }
-
-        return widgetOrder;
     }
 
     private async getWidgetOrderByConfig(sourceUrl: string, caption: string): Promise<IWidgetOrder> {
@@ -101,7 +79,7 @@ export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
     }
 
     public getContentDescriptorFromMedia(media: MediaContract): IContentDescriptor {
-        if (!PictureHandlers.IsMediaFileImage(media)) {
+        if (!PictureHandlers.isMediaFile(media)) {
             return null;
         }
 
@@ -139,7 +117,7 @@ export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
         };
     }
 
-    public static IsMediaFileImage(media: MediaContract): boolean {
+    public static isMediaFile(media: MediaContract): boolean {
         return (media.contentType && media.contentType.indexOf("image") !== -1) || (media.filename && this.imageFileExtensions.some(e => media.filename.endsWith(e)));
 
     }

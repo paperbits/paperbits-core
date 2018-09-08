@@ -1,9 +1,8 @@
-﻿import * as ko from "knockout";
-import template from "./pageDetails.html";
+﻿import template from "./pageDetails.html";
 import { IPermalink, IPermalinkService } from "@paperbits/common/permalinks";
-import { IPageService } from "@paperbits/common/pages/IPageService";
-import { IRouteHandler } from "@paperbits/common/routing/IRouteHandler";
-import { IViewManager } from "@paperbits/common/ui/IViewManager";
+import { IPageService } from "@paperbits/common/pages";
+import { IRouteHandler } from "@paperbits/common/routing";
+import { IViewManager } from "@paperbits/common/ui";
 import { Component } from "../../../ko/component";
 import { PageItem } from "./pageItem";
 

@@ -1,7 +1,7 @@
 import { ColumnModel } from "./columnModel";
 import { ColumnContract } from "./columnContract";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
-import { IModelBinder } from "@paperbits/common/editing/IModelBinder";
+import { IModelBinder } from "@paperbits/common/editing";
 import { Contract } from "@paperbits/common";
 
 export class ColumnModelBinder implements IModelBinder {
@@ -31,7 +31,7 @@ export class ColumnModelBinder implements IModelBinder {
         if (contract.alignment) {
             columnModel.alignmentXs = contract.alignment.xs;
             columnModel.alignmentSm = contract.alignment.sm;
-            columnModel.alignmentMd = contract.alignment.md
+            columnModel.alignmentMd = contract.alignment.md;
             columnModel.alignmentLg = contract.alignment.lg;
             columnModel.alignmentXl = contract.alignment.xl;
         }
@@ -50,7 +50,7 @@ export class ColumnModelBinder implements IModelBinder {
 
         const modelPromises = contract.nodes.map(async (node) => {
             const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(node.type);
-            return await modelBinder.contractToModel(node);
+            return modelBinder.contractToModel(node);
         });
 
         columnModel.widgets = await Promise.all<any>(modelPromises);
@@ -59,15 +59,15 @@ export class ColumnModelBinder implements IModelBinder {
     }
 
     public modelToContract(columnModel: ColumnModel): Contract {
-        let columnConfig: ColumnContract = {
+        const columnConfig: ColumnContract = {
             type: "layout-column",
             object: "block",
             nodes: []
         };
 
         columnConfig.size = {};
-        columnConfig.alignment = {}
-        columnConfig.order = {}
+        columnConfig.alignment = {};
+        columnConfig.order = {};
 
         if (columnModel.sizeSm) {
             columnConfig.size.sm = columnModel.sizeSm.toString();

@@ -1,8 +1,8 @@
 import * as ko from "knockout";
-import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
-import { LayoutContract } from "@paperbits/common/layouts/layoutContract";
-import { ILayoutService } from "@paperbits/common/layouts/ILayoutService";
+import { IResourceSelector } from "@paperbits/common/ui";
+import { ILayoutService, LayoutContract } from "@paperbits/common/layouts";
 import { LayoutItem } from "./layoutItem";
+
 
 export class LayoutSelector implements IResourceSelector<LayoutContract> {
     private readonly layoutService: ILayoutService;
@@ -39,8 +39,8 @@ export class LayoutSelector implements IResourceSelector<LayoutContract> {
     public async searchLayouts(searchPattern: string = ""): Promise<void> {
         this.working(true);
 
-        let layouts = await this.layoutService.search(searchPattern);
-        let layoutItems = layouts.map(layout => new LayoutItem(layout));
+        const layouts = await this.layoutService.search(searchPattern);
+        const layoutItems = layouts.map(layout => new LayoutItem(layout));
         this.layouts(layoutItems);
         this.working(false);
     }

@@ -7,10 +7,9 @@ import { metaDataSetter } from "@paperbits/common/meta/metaDataSetter";
 import { IBag } from "@paperbits/common";
 import { IMediaService } from "@paperbits/common/media";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
-import { IComponent, IView, IViewManager, ViewManagerMode, IHighlightConfig, IContextualEditor } from "@paperbits/common/ui";
+import { IComponent, IView, IViewManager, ViewManagerMode, IHighlightConfig, IContextualEditor, ISplitterConfig } from "@paperbits/common/ui";
 import { ProgressIndicator } from "../ui";
 import { IRouteHandler } from "@paperbits/common/routing";
-import { ISplitterConfig } from "../bindingHandlers/bindingHandlers.splitter";
 import { ISiteService, ISettings } from "@paperbits/common/sites";
 import { IPageService, PageContract } from "@paperbits/common/pages";
 import { IPermalinkService } from "@paperbits/common/permalinks";
@@ -34,7 +33,7 @@ export class ViewManager implements IViewManager {
     public journeyName: KnockoutComputed<string>;
     public itemSelectorName: KnockoutObservable<string>;
     public progressIndicators: KnockoutObservableArray<ProgressIndicator>;
-    public balloons: KnockoutObservableArray<IComponent>
+    public balloons: KnockoutObservableArray<IComponent>;
     public primaryToolboxVisible: KnockoutObservable<boolean>;
     public widgetEditor: KnockoutObservable<IView>;
     public contextualEditors: KnockoutObservableArray<IContextualEditor>;
@@ -128,10 +127,10 @@ export class ViewManager implements IViewManager {
     }
 
     public async loadFavIcon(): Promise<void> {
-        let settings = await this.siteService.getSiteSettings();
+        const settings = await this.siteService.getSiteSettings();
 
         if (settings && settings.site.faviconPermalinkKey) {
-            let iconFile = await this.mediaService.getMediaByPermalinkKey(settings.site.faviconPermalinkKey);
+            const iconFile = await this.mediaService.getMediaByPermalinkKey(settings.site.faviconPermalinkKey);
 
             if (iconFile && iconFile.downloadUrl) {
                 metaDataSetter.setFavIcon(iconFile.downloadUrl);
@@ -141,10 +140,12 @@ export class ViewManager implements IViewManager {
 
     public async setTitle(settings?: ISettings, page?: PageContract): Promise<void> {
         let siteTitle, pageTitle;
+
         if (settings && settings.site) {
             siteTitle = settings.site.title;
-        } else {
-            let settings = await this.siteService.getSiteSettings();
+        }
+        else {
+            const settings = await this.siteService.getSiteSettings();
             if (settings && settings.site) {
                 siteTitle = settings.site.title;
             }
@@ -207,20 +208,20 @@ export class ViewManager implements IViewManager {
     }
 
     public addProgressIndicator(title: string, content: string): ProgressIndicator {
-        let indicator = new ProgressIndicator(title, content);
+        const indicator = new ProgressIndicator(title, content);
         this.progressIndicators.push(indicator);
 
         return indicator;
     }
 
     public notifySuccess(title: string, content: string): void {
-        let indicator = new ProgressIndicator(title, content, 100);
+        const indicator = new ProgressIndicator(title, content, 100);
         this.progressIndicators.push(indicator);
         this.scheduleIndicatorRemoval(indicator);
     }
 
     public addPromiseProgressIndicator<T>(promise: Promise<T>, title: string, content: string): void {
-        let indicator = new ProgressIndicator(title, content);
+        const indicator = new ProgressIndicator(title, content);
 
         this.progressIndicators.push(indicator);
 
@@ -240,7 +241,7 @@ export class ViewManager implements IViewManager {
     public updateJourneyComponent(view: IView): void {
         let journey = this.journey();
 
-        let existingComponent = journey.find(c => { return c.component.name === view.component.name; });
+        const existingComponent = journey.find(c => { return c.component.name === view.component.name; });
 
         if (existingComponent) {
             journey = journey.splice(0, journey.indexOf(existingComponent));
@@ -284,7 +285,7 @@ export class ViewManager implements IViewManager {
                 name: componentName,
                 params: parameters
             }
-        }
+        };
 
         this.updateJourneyComponent(session);
 
@@ -363,6 +364,7 @@ export class ViewManager implements IViewManager {
                     editorViewModel.setWidgetModel(binding.model, binding.applyChanges);
                 }
             },
+            heading: binding.displayName,
             resize: binding.editorResize || "vertically horizontally"
         };
 
@@ -405,7 +407,7 @@ export class ViewManager implements IViewManager {
         this.setSplitter(null);
         this.selectedElement(null);
 
-        if (this.mode != ViewManagerMode.configure) {
+        if (this.mode !== ViewManagerMode.configure) {
             this.mode = ViewManagerMode.selecting;
         }
     }
@@ -421,14 +423,14 @@ export class ViewManager implements IViewManager {
         this.splitterElement(config);
     }
 
-    public setSelectedElement(config: IHighlightConfig, ce: IContextualEditor): void {
+    public setSelectedElement(config: IHighlightConfig, contextualEditor: IContextualEditor): void {
         this.clearContextualEditors();
         this.closeWidgetEditor();
         this.selectedElement(null);
         this.selectedElement(config);
-        this.selectedElementContextualEditor(ce);
+        this.selectedElementContextualEditor(contextualEditor);
 
-        if (this.mode != ViewManagerMode.configure) {
+        if (this.mode !== ViewManagerMode.configure) {
             this.mode = ViewManagerMode.selected;
         }
 

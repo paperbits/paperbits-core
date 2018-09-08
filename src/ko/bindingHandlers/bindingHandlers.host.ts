@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
 import { GlobalEventHandler } from "@paperbits/common/events";
-import { IViewManager, ViewManagerMode } from "@paperbits/common/ui/IViewManager";
+import { IViewManager, ViewManagerMode } from "@paperbits/common/ui";
 import { IRouteHandler } from "@paperbits/common/routing/IRouteHandler";
 
 export class HostBindingHandler {
@@ -48,15 +48,16 @@ export class HostBindingHandler {
                             break;
 
                         default:
-                            throw "Unknown viewport";
+                            throw new Error("Unknown viewport");
                     }
                 })
 
                 const onClick = (event: MouseEvent): void => {
                     event.preventDefault(); // prevent default event handling for all controls
-                }
+                };
 
                 const onPointerDown = (event: MouseEvent): void => {
+                    // TODO: Move to GridEditor
                     const htmlElement = <HTMLElement>event.target;
                     const htmlLinkElement = <HTMLLinkElement>htmlElement.closest("A");
 
@@ -71,7 +72,7 @@ export class HostBindingHandler {
                     if (event.ctrlKey) { // Preventing click on links if Ctrl key is not pressed.
                         routeHandler.navigateTo(htmlLinkElement.href);
                     }
-                }
+                };
 
                 const onPointerMove = (event) => {
                     const elements = Utils.elementsFromPoint(element.ownerDocument, event.clientX, event.clientY);

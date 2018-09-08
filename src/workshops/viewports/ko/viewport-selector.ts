@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import template from "./viewport-selector.html";
-import { IViewManager } from "@paperbits/common/ui/IViewManager";
+import { IViewManager } from "@paperbits/common/ui";
 import { Component } from "../../../ko/component";
 
 @Component({

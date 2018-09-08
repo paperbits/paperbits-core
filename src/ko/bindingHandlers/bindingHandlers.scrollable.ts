@@ -13,14 +13,14 @@ ko.bindingHandlers["scrollable"] = {
                     return;
                 }
 
-                if (element.clientHeight != lastHeight || element.clientWidth != lastWidth) {
+                if (element.clientHeight !== lastHeight || element.clientWidth !== lastWidth) {
                     scrollbar.update();
                     lastHeight = element.clientHeight;
                     lastWidth = element.clientWidth;
                 }
                 setTimeout(checkElementSize, 100);
             });
-        }
+        };
 
         checkElementSize();
 
@@ -29,4 +29,4 @@ ko.bindingHandlers["scrollable"] = {
             scrollbar = null;
         });
     }
-}
+};

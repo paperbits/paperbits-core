@@ -9,7 +9,6 @@ export class TableOfContentsViewModelBinder implements IViewModelBinder<TableOfC
         }
 
         viewModel.title(model.title);
-        viewModel.navigationItemKey(model.navigationItemKey);
         viewModel.nodes(model.items);
 
         viewModel["widgetBinding"] = {
@@ -21,7 +20,7 @@ export class TableOfContentsViewModelBinder implements IViewModelBinder<TableOfC
                 Object.assign(model, updatedModel);
                 this.modelToViewModel(model, readonly, viewModel);
             }
-        }
+        };
 
         return viewModel;
     }

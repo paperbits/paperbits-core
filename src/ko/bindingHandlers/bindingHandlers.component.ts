@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 
-var componentLoadingOperationUniqueId = 0;
+let componentLoadingOperationUniqueId = 0;
 
 ko.bindingHandlers["component"] = {
     init: (element: HTMLElement, valueAccessor, ignored1, ignored2, bindingContext) => {
@@ -37,7 +37,7 @@ ko.bindingHandlers["component"] = {
                 throw new Error("No component name specified");
             }
 
-            var loadingOperationId = currentLoadingOperationId = ++componentLoadingOperationUniqueId;
+            const loadingOperationId = currentLoadingOperationId = ++componentLoadingOperationUniqueId;
 
             ko.components.get(componentName, componentDefinition => {
                 // If this is not the current load operation for this element, ignore it.
@@ -50,12 +50,12 @@ ko.bindingHandlers["component"] = {
 
                 // Instantiate and bind new component. Implicitly this cleans any old DOM nodes.
                 if (!componentDefinition) {
-                    throw new Error('Unknown component \'' + componentName + '\'');
+                    throw new Error(`Unknown component "${componentName}"`);
                 }
 
                 const root = cloneTemplateIntoElement(componentName, componentDefinition, element, !!(<any>componentDefinition).shadow);
                 const componentViewModel = createViewModel(componentDefinition, root, originalChildNodes, componentParams),
-                    childBindingContext = bindingContext['createChildContext'](componentViewModel, /* dataItemAlias */ undefined, ctx => {
+                    childBindingContext = bindingContext["createChildContext"](componentViewModel, /* dataItemAlias */ undefined, ctx => {
                         ctx["$component"] = componentViewModel;
                         ctx["$componentTemplateNodes"] = originalChildNodes;
                     });
@@ -73,13 +73,13 @@ ko.bindingHandlers["component"] = {
     }
 };
 
-ko.virtualElements.allowedBindings['component'] = true;
+ko.virtualElements.allowedBindings["component"] = true;
 
-var makeArray = (arrayLikeObject) => {
-    var result = [];
+const makeArray = (arrayLikeObject) => {
+    const result = [];
     for (var i = 0, j = arrayLikeObject.length; i < j; i++) {
         result.push(arrayLikeObject[i]);
-    };
+    }
     return result;
 };
 
@@ -92,7 +92,7 @@ var cloneNodes = (nodesArray, shouldCleanNodes) => {
 };
 
 function cloneTemplateIntoElement(componentName, componentDefinition, element, useShadow: boolean): HTMLElement {
-    var template = componentDefinition['template'];
+    var template = componentDefinition["template"];
 
     if (!template) {
         return element;
@@ -104,9 +104,9 @@ function cloneTemplateIntoElement(componentName, componentDefinition, element, u
 }
 
 function createViewModel(componentDefinition, element, originalChildNodes, componentParams) {
-    var componentViewModelFactory = componentDefinition['createViewModel'];
+    var componentViewModelFactory = componentDefinition["createViewModel"];
     return componentViewModelFactory
-        ? componentViewModelFactory.call(componentDefinition, componentParams, { 'element': element, 'templateNodes': originalChildNodes })
+        ? componentViewModelFactory.call(componentDefinition, componentParams, { "element": element, "templateNodes": originalChildNodes })
         : componentParams; // Template-only component
 }
 

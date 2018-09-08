@@ -1,7 +1,8 @@
 ﻿import * as ko from "knockout";
-import { IViewManager } from "@paperbits/common/ui/IViewManager";
+import { IViewManager } from "@paperbits/common/ui";
 import { IEventManager } from "@paperbits/common/events";
 import { GridEditor } from "../../grid/ko/gridEditor";
+import { GridBindingHandler } from ".";
 
 export class WidgetBindingHandler {
     public constructor(viewManager: IViewManager, eventManager: IEventManager) {
@@ -12,7 +13,7 @@ export class WidgetBindingHandler {
                 let currentViewModel,
                     currentLoadingOperationId,
                     disposeAssociatedComponentViewModel = () => {
-                        let currentViewModelDispose = currentViewModel && currentViewModel["dispose"];
+                        const currentViewModelDispose = currentViewModel && currentViewModel["dispose"];
                         if (typeof currentViewModelDispose === "function") {
                             currentViewModelDispose.call(currentViewModel);
                         }
@@ -26,15 +27,15 @@ export class WidgetBindingHandler {
 
                 ko.computed(() => {
                     let componentOnCreateHandler;
-                    let componentViewModel = ko.utils.unwrapObservable(valueAccessor());
-                    let loadingOperationId = currentLoadingOperationId = ++componentLoadingOperationUniqueId;
-                    let registration = ko.components["registry"].find(x => componentViewModel instanceof x.constructor);
+                    const componentViewModel = ko.utils.unwrapObservable(valueAccessor());
+                    const loadingOperationId = currentLoadingOperationId = ++componentLoadingOperationUniqueId;
+                    const registration = ko.components["registry"].find(x => componentViewModel instanceof x.constructor);
 
                     if (!registration) {
-                        throw `Could not find component registration for view model: ${componentViewModel}`;
+                        throw new Error(`Could not find component registration for view model: ${componentViewModel}`);
                     }
 
-                    let componentName = registration.name;
+                    const componentName = registration.name;
 
                     ko.components.get(componentName, componentDefinition => {
                         // If this is not the current load operation for this element, ignore it.
@@ -47,11 +48,11 @@ export class WidgetBindingHandler {
 
                         // Instantiate and bind new component. Implicitly this cleans any old DOM nodes.
                         if (!componentDefinition) {
-                            throw new Error('Unknown component \'' + componentName + '\'');
+                            throw new Error(`Unknown component "${componentName}".`);
                         }
-                        let root = cloneTemplateIntoElement(componentName, componentDefinition, element, !!(<any>componentDefinition).shadow);
+                        const root = cloneTemplateIntoElement(componentName, componentDefinition, element, !!(<any>componentDefinition).shadow);
 
-                        let childBindingContext = bindingContext['createChildContext'](componentViewModel, /* dataItemAlias */ undefined, ctx => {
+                        const childBindingContext = bindingContext["createChildContext"](componentViewModel, /* dataItemAlias */ undefined, ctx => {
                             ctx["$component"] = componentViewModel;
                             ctx["$componentTemplateNodes"] = originalChildNodes;
                         });
@@ -65,29 +66,29 @@ export class WidgetBindingHandler {
 
                         let correctedElement = element;
 
-                        if (correctedElement.nodeName == "#comment") {
+                        if (correctedElement.nodeName === "#comment") {
                             do {
                                 correctedElement = correctedElement.nextSibling;
                             }
-                            while (correctedElement != null && correctedElement.nodeName == "#comment")
+                            while (correctedElement !== null && correctedElement.nodeName === "#comment")
                         }
 
                         if (correctedElement) {
                             correctedElement["attachedViewModel"] = componentViewModel;
 
-                            GridEditor.attachWidgetDragEvents(correctedElement, viewManager, eventManager);
+                            GridBindingHandler.attachWidgetDragEvents(correctedElement, viewManager, eventManager);
                         }
                     });
                 }, null, { disposeWhenNodeIsRemoved: element });
 
-                return { 'controlsDescendantBindings': true };
+                return { "controlsDescendantBindings": true };
             }
         };
 
-        ko.virtualElements.allowedBindings['widget'] = true;
+        ko.virtualElements.allowedBindings["widget"] = true;
 
         const makeArray = (arrayLikeObject) => {
-            let result = [];
+            const result = [];
             for (let i = 0, j = arrayLikeObject.length; i < j; i++) {
                 result.push(arrayLikeObject[i]);
             };
@@ -96,14 +97,14 @@ export class WidgetBindingHandler {
 
         const cloneNodes = (nodesArray, shouldCleanNodes) => {
             for (var i = 0, j = nodesArray.length, newNodesArray = []; i < j; i++) {
-                var clonedNode = nodesArray[i].cloneNode(true);
+                const clonedNode = nodesArray[i].cloneNode(true);
                 newNodesArray.push(shouldCleanNodes ? ko.cleanNode(clonedNode) : clonedNode);
             }
             return newNodesArray;
         };
 
         function cloneTemplateIntoElement(componentName, componentDefinition, element, useShadow: boolean): HTMLElement {
-            const template = componentDefinition['template'];
+            const template = componentDefinition["template"];
 
             if (!template) {
                 return element;
@@ -115,9 +116,9 @@ export class WidgetBindingHandler {
         }
 
         function createViewModel(componentDefinition, element, originalChildNodes, componentParams) {
-            const componentViewModelFactory = componentDefinition['createViewModel'];
+            const componentViewModelFactory = componentDefinition["createViewModel"];
             return componentViewModelFactory
-                ? componentViewModelFactory.call(componentDefinition, componentParams, { 'element': element, 'templateNodes': originalChildNodes })
+                ? componentViewModelFactory.call(componentDefinition, componentParams, { "element": element, "templateNodes": originalChildNodes })
                 : componentParams; // Template-only component
         }
     }

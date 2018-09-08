@@ -13,10 +13,6 @@ export class PictureViewModelBinder implements IViewModelBinder<PictureModel, Pi
         viewModel.animation(model.animation);
         viewModel.background(model.background);
 
-        const classes = [];
-        classes.push(model.layout);
-        viewModel.css(classes.join(" "));
-
         viewModel["widgetBinding"] = {
             displayName: "Picture",
             readonly: readonly,
@@ -25,7 +21,7 @@ export class PictureViewModelBinder implements IViewModelBinder<PictureModel, Pi
             applyChanges: () => {
                 this.modelToViewModel(model, readonly, viewModel);
             }
-        }
+        };
 
         return viewModel;
     }
