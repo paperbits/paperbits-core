@@ -1,5 +1,4 @@
 import * as ko from "knockout";
-import * as Utils from "@paperbits/common/utils";
 import template from "./cropper.html";
 import { IViewManager } from "@paperbits/common/ui";
 import { Component } from "../../ko/component";

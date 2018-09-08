@@ -78,6 +78,7 @@ export class MediaDetailsWorkshop {
 
     public openCropper(): void {
         this.viewManager.openViewAsPopup({
+            heading: "Edit picture",
             component: {
                 name: "picture-cropper",
                 params: { src: this.mediaItem.downloadUrl() }
