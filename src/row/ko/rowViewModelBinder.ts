@@ -12,8 +12,7 @@ export class RowViewModelBinder implements IViewModelBinder<RowModel, RowViewMod
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly viewManager: IViewManager
-    ) {
-    }
+    ) { }
 
     public modelToViewModel(model: RowModel, readonly: boolean, viewModel?: RowViewModel): RowViewModel {
         if (!viewModel) {

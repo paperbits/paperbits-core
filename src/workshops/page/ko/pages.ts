@@ -52,8 +52,8 @@ export class PagesWorkshop {
 
     private async launchSearch(searchPattern: string = ""): Promise<void> {
         this.working(true);
-        let pages = await this.pageService.search(searchPattern);
-        let pageItems = pages.map(page => new PageItem(page));
+        const pages = await this.pageService.search(searchPattern);
+        const pageItems = pages.map(page => new PageItem(page));
 
         this.pages(pageItems);
         this.working(false);
@@ -69,6 +69,7 @@ export class PagesWorkshop {
 
     public selectPage(pageItem: PageItem): void {
         this.selectedPage(pageItem);
+        this.viewManager.setDocument({ src: "/theme/index.html", componentName: "page-document" });
         this.viewManager.setTitle(null, pageItem.toContract());
         this.viewManager.openViewAsWorkshop("Page", "page-details-workshop", {
             pageItem: pageItem,
@@ -86,10 +87,10 @@ export class PagesWorkshop {
         const contentTemplate = await this.blockService.getBlockByKey(templateBlockKey);
 
         const template = {
-            "object": "block",
-            "nodes": [contentTemplate.content],
-            "type": "page"
-        }
+            object: "block",
+            nodes: [contentTemplate.content],
+            type: "page"
+        };
 
         const createContentPromise = this.fileService.createFile(template);
         const results = await Promise.all<any>([createPermalinkPromise, createContentPromise]);

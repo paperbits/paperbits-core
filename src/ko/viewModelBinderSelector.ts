@@ -2,7 +2,7 @@ import { PlaceholderViewModelBinder } from "../placeholder/ko/placeholderViewMod
 import { IViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
 
 export class ViewModelBinderSelector {
-    constructor(private viewModelBinders: Array<IViewModelBinder<any, any>>) {}
+    constructor(private viewModelBinders: IViewModelBinder<any, any>[]) {}
 
     public getViewModelBinderByModel<TModel>(model: TModel): IViewModelBinder<any, any> {
         const viewModelBinder = this.viewModelBinders.find(x => x.canHandleModel(model));

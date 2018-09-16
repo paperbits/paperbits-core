@@ -1,15 +1,12 @@
 ﻿import * as ko from "knockout";
 import template from "./settings.html";
 import { Component } from "../../../ko/component";
-import { IViewManager } from '@paperbits/common/ui/IViewManager';
-import { ISiteService } from '@paperbits/common/sites/ISiteService';
-import { IMediaService } from '@paperbits/common/media/IMediaService';
-import { IPermalinkService } from '@paperbits/common/permalinks';
-import { MediaContract } from '@paperbits/common/media/mediaContract';
-import { ISettings } from "@paperbits/common/sites/ISettings";
-import { IMediaFilter } from "@paperbits/common/media";
-import { metaDataSetter } from "@paperbits/common/meta/metaDataSetter";
-import { BackgroundModel } from "@paperbits/common/widgets/background/backgroundModel";
+import { IViewManager } from "@paperbits/common/ui";
+import { ISiteService, ISettings } from "@paperbits/common/sites";
+import { IMediaService, IMediaFilter, MediaContract } from "@paperbits/common/media";
+import { IPermalinkService } from "@paperbits/common/permalinks";
+import { MetaDataSetter } from "@paperbits/common/meta";
+import { BackgroundModel } from "@paperbits/common/widgets/background";
 
 @Component({
     selector: "settings",
@@ -21,13 +18,14 @@ export class SettingsWorkshop {
     private readonly permalinkService: IPermalinkService;
     private readonly siteService: ISiteService;
     private readonly viewManager: IViewManager;
-    private readonly mediaFilter: IMediaFilter;
 
+    public readonly mediaFilter: IMediaFilter;
     public readonly working: KnockoutObservable<boolean>;
 
     public title: KnockoutObservable<string>;
     public description: KnockoutObservable<string>;
     public keywords: KnockoutObservable<string>;
+    public hostname: KnockoutObservable<string>;
     public author: KnockoutObservable<string>;
     public gmapsApiKey: KnockoutObservable<string>;
     public gtmContainerId: KnockoutObservable<string>;
@@ -46,18 +44,20 @@ export class SettingsWorkshop {
 
         // rebinding...     
         this.onMediaSelected = this.onMediaSelected.bind(this);
+        this.onSettingChange = this.onSettingChange.bind(this);
 
         // setting up...
         this.working = ko.observable<boolean>();
         this.mediaFilter = {
             propertyNames: ["contentType"],
-            propertyValue: metaDataSetter.iconContentType,
+            propertyValue: MetaDataSetter.iconContentType,
             startSearch: true
         };
 
         this.title = ko.observable<string>();
         this.description = ko.observable<string>();
         this.keywords = ko.observable<string>();
+        this.hostname = ko.observable<string>();
         this.author = ko.observable<string>();
         this.gmapsApiKey = ko.observable<string>();
         this.gtmContainerId = ko.observable<string>();
@@ -77,7 +77,8 @@ export class SettingsWorkshop {
         if (settings) {
             this.title(settings.site.title);
             this.description(settings.site.description);
-            this.keywords(settings.site.keywords);            
+            this.keywords(settings.site.keywords);
+            this.hostname(settings.site.hostname);
             this.author(settings.site.author);
             this.faviconSourceKey(settings.site.faviconPermalinkKey);
             this.setFaviconUri(settings.site.faviconPermalinkKey);
@@ -96,14 +97,15 @@ export class SettingsWorkshop {
         }
         this.working(false);
 
-        this.title.subscribe(this.onSettingChange.bind(this));
-        this.description.subscribe(this.onSettingChange.bind(this));
-        this.keywords.subscribe(this.onSettingChange.bind(this));
-        this.author.subscribe(this.onSettingChange.bind(this));
-        this.gmapsApiKey.subscribe(this.onSettingChange.bind(this));
-        this.gtmContainerId.subscribe(this.onSettingChange.bind(this));
-        this.intercomAppId.subscribe(this.onSettingChange.bind(this));
-        this.faviconSourceKey.subscribe(this.onSettingChange.bind(this));
+        this.title.subscribe(this.onSettingChange);
+        this.description.subscribe(this.onSettingChange);
+        this.keywords.subscribe(this.onSettingChange);
+        this.hostname.subscribe(this.onSettingChange);
+        this.author.subscribe(this.onSettingChange);
+        this.gmapsApiKey.subscribe(this.onSettingChange);
+        this.gtmContainerId.subscribe(this.onSettingChange);
+        this.intercomAppId.subscribe(this.onSettingChange);
+        this.faviconSourceKey.subscribe(this.onSettingChange);
     }
 
     private async onSettingChange(): Promise<void> {
@@ -112,6 +114,7 @@ export class SettingsWorkshop {
                 title: this.title(),
                 description: this.description(),
                 keywords: this.keywords(),
+                hostname: this.hostname(),
                 faviconPermalinkKey: this.faviconSourceKey(),
                 author: this.author()
             },
@@ -127,7 +130,7 @@ export class SettingsWorkshop {
                     apiKey: this.gmapsApiKey()
                 }
             }
-        }
+        };
 
         await this.siteService.setSiteSettings(config);
         await this.viewManager.setTitle(config, null);
@@ -152,8 +155,8 @@ export class SettingsWorkshop {
                 this.faviconFileName(faviconPermalink.uri);
                 this.viewManager.loadFavIcon();
 
-                let faviconModel = new BackgroundModel();
-                let faviconMedia = await this.mediaService.getMediaByKey(faviconPermalink.targetKey);
+                const faviconModel = new BackgroundModel();
+                const faviconMedia = await this.mediaService.getMediaByKey(faviconPermalink.targetKey);
 
                 faviconModel.sourceUrl = faviconMedia.downloadUrl;
 

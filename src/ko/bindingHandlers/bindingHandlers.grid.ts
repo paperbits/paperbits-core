@@ -3,12 +3,12 @@ import { IViewManager, ViewManagerMode } from "@paperbits/common/ui";
 import { LayoutModelBinder } from "../../layout/layoutModelBinder";
 import { GridHelper } from "@paperbits/common/editing";
 import { IEventManager } from "@paperbits/common/events";
-import { PageModelBinder } from "../../page/pageModelBinder";
+import { PageModelBinder } from "../../page";
 import { GridEditor } from "../../grid/ko/gridEditor";
 
 export class GridBindingHandler {
     constructor(viewManager: IViewManager, eventManager: IEventManager, pageModelBinder: PageModelBinder, layoutModelBinder: LayoutModelBinder) {
-        ko.bindingHandlers["layout-grid"] = {
+        ko.bindingHandlers["page-grid"] = {
             init(gridElement: HTMLElement) {
                 const gridEditor = new GridEditor(<any>viewManager, gridElement.ownerDocument);
 

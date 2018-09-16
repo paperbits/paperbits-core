@@ -1,6 +1,8 @@
 <div class="flex-container flex-container-column fit">
     <fieldset class="flex-item form">
-        <input class="form-control" type="search" data-bind="textInput: searchPattern" placeholder="Search blog posts..." />
+        <div class="form-group">
+            <input class="form-control" type="search" data-bind="textInput: searchPattern" placeholder="Search blog posts..." />
+        </div>
     </fieldset>
 
     <!-- ko if: !working() && blogPosts().length === 0 -->

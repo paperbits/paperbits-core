@@ -2,7 +2,7 @@
 // import "@webcomponents/webcomponentsjs/webcomponents-bundle";
 
 export function RuntimeComponent(config) {
-    return function (target) {
+    return (target) => {
         ko.components.register(config.selector, {
             template: config.template,
             viewModel: target
@@ -15,6 +15,6 @@ export function RuntimeComponent(config) {
             }
         }
 
-        window.customElements.define(config.selector, RuntimeComponentProxy);
-    }
+        customElements.define(config.selector, RuntimeComponentProxy);
+    };
 } 

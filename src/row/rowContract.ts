@@ -1,12 +1,6 @@
-import { Contract } from "@paperbits/common";
-
-export interface IDimensionalValues {
-    sm?: string;
-    md?: string;
-    lg?: string;
-}
+import { Contract, Breakpoints } from "@paperbits/common";
 
 export interface RowContract extends Contract {
-    justify?: IDimensionalValues;
-    align?: IDimensionalValues;
+    justify?: Breakpoints;
+    align?: Breakpoints;
 }

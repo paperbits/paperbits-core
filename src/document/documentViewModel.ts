@@ -4,29 +4,24 @@ import { IRouteHandler } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
 import { Component } from "../ko/component";
 import { LayoutModelBinder } from "../layout";
-import { LayoutViewModelBinder, LayoutViewModel } from "../layout/ko";
+import { LayoutViewModelBinder } from "../layout/ko";
+import { LayoutViewModel } from "../layout/ko/layoutViewModel";
 
 @Component({
-    selector: "paperbits-document",
+    selector: "page-document",
     template: template,
-    injectable: "docWidget"
+    injectable: "pageDocument"
 })
 export class DocumentViewModel {
-    private readonly layoutModelBinder: LayoutModelBinder;
-    private readonly layoutViewModelBinder: LayoutViewModelBinder;
-    private readonly routeHandler: IRouteHandler;
-    private readonly viewManager: IViewManager;
-
     public readonly layoutModel: KnockoutObservable<LayoutViewModel>;
     public readonly disableTracking: KnockoutObservable<boolean>;
 
-    constructor(layoutModelBinder: LayoutModelBinder, layoutViewModelBinder: LayoutViewModelBinder, routeHandler: IRouteHandler, viewManager: IViewManager) {
-        // initialization...
-        this.layoutModelBinder = layoutModelBinder;
-        this.layoutViewModelBinder = layoutViewModelBinder;
-        this.routeHandler = routeHandler;
-        this.viewManager = viewManager;
-
+    constructor(
+        private readonly layoutModelBinder: LayoutModelBinder,
+        private readonly layoutViewModelBinder: LayoutViewModelBinder,
+        private readonly routeHandler: IRouteHandler,
+        private readonly viewManager: IViewManager
+    ) {
         // rebinding...
         this.refreshContent = this.refreshContent.bind(this);
         this.onRouteChange = this.onRouteChange.bind(this);
@@ -52,7 +47,7 @@ export class DocumentViewModel {
 
         this.layoutModel(layoutViewModel);
 
-        this.disableTracking(!layoutMode)
+        this.disableTracking(!layoutMode);
         this.viewManager.removeShutter();
     }
 

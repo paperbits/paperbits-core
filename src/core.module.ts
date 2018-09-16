@@ -48,7 +48,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("httpClient", XmlHttpRequestClient);
         // injector.bindSingleton("settingsProvider", SettingsProvider);
         injector.bindSingleton("eventManager", DefaultEventManager);
-        // injector.bindSingleton("routeHandler", DefaultRouteHandler);
         injector.bindSingleton("globalEventHandler", GlobalEventHandler);
         injector.bindSingleton("localCache", LocalCache);
         injector.bindSingleton("offlineObjectStorage", OfflineObjectStorage);
@@ -70,8 +69,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("errorHandler", UnhandledErrorHandler);
 
         /*** Model binders ***/
-        // injector.bind("codeblockModelBinder", CodeblockModelBinder);
-
         injector.bind("mediaPermalinkResolver", MediaPermalinkResolver);
         injector.bind("pagePermalinkResolver", PagePermalinkResolver);
         injector.bind("blogPermalinkResolver", BlogPermalinkResolver);
@@ -101,10 +98,10 @@ export class CoreModule implements IInjectorModule {
             return new Array<IViewModelBinder<any, any>>();
         });
 
-        injector.bindSingleton("modelBinderSelector", ModelBinderSelector);    
+        injector.bindSingleton("modelBinderSelector", ModelBinderSelector);
         injector.bindSingleton("viewModelBinderSelector", ViewModelBinderSelector);
         injector.bind("gtm", GoogleTagManager);
-        injector.bind("intercom", IntercomViewModel);        
+        injector.bind("intercom", IntercomViewModel);
         injector.bindSingleton("intercomService", IntercomService);
         injector.bind("backgroundModelBinder", BackgroundModelBinder);
 

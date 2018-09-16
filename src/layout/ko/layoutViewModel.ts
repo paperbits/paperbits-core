@@ -1,9 +1,9 @@
 ﻿import * as ko from "knockout";
 import template from "./layout.html";
-import { Component } from "../../ko/component";
+import { Component } from "@paperbits/core/ko/component";
 
 @Component({
-    selector: "paperbits-layout",
+    selector: "page-layout",
     template: template
 })
 export class LayoutViewModel {

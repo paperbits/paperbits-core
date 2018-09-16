@@ -1,8 +1,8 @@
 import * as ko from "knockout";
 import template from "./sectionEditor.html";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
-import { IViewManager } from '@paperbits/common/ui/IViewManager';
-import { IWidgetEditor } from '@paperbits/common/widgets/IWidgetEditor';
+import { IViewManager } from "@paperbits/common/ui";
+import { IWidgetEditor } from "@paperbits/common/widgets";
 import { BackgroundModel } from "@paperbits/common/widgets/background/backgroundModel";
 import { Component } from "../../ko/component";
 import { SectionModel } from "../sectionModel";

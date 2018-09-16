@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./workshops.html";
-import { IViewManager } from '@paperbits/common/ui/IViewManager';
-import { IUserService } from "@paperbits/common/user/IUserService";
+import { IViewManager } from "@paperbits/common/ui";
+import { IUserService } from "@paperbits/common/user";
 import { IView } from "@paperbits/common/ui/IView";
 import { Component } from "../../ko/component";
 
@@ -57,6 +57,10 @@ export class Workshops {
 
     public openNavigation(): void {
         this.openViewAsWorkshop("Navigation", "navigation");
+    }
+
+    public openEmails(): void {
+        this.openViewAsWorkshop("Email templates", "emails");
     }
 
     public openSettings(): void {

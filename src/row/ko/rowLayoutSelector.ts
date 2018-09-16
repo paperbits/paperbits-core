@@ -5,7 +5,7 @@ import { Component } from "../../ko/component";
 import { ColumnModel } from "../../column/columnModel";
 import { RowModel } from "../rowModel";
 
-export interface ColumnSize {
+export interface columnSizeCfg {
     xs?: number;
     sm?: number;
     md?: number;
@@ -21,7 +21,7 @@ export interface ColumnSize {
 })
 export class RowLayoutSelector implements IResourceSelector<RowModel> {
     public readonly onResourceSelected: (rowModel: RowModel) => void;
-    public readonly rowConfigs: ColumnSize[][] = [
+    public readonly rowConfigs: columnSizeCfg[][] = [
         [{ xs: 12 }],
         [{ xs: 12, md: 6 }, { xs: 12, md: 6 }],
         [{ xs: 12, md: 4 }, { xs: 12, md: 4 }, { xs: 12, md: 4 }],
@@ -41,10 +41,10 @@ export class RowLayoutSelector implements IResourceSelector<RowModel> {
         this.onResourceSelected = onSelect;
     }
 
-    public selectRowLayout(columnSizes: ColumnSize[]): void {
+    public selectRowLayout(columnSizeCfgs: columnSizeCfg[]): void {
         let rowModel = new RowModel();
 
-        columnSizes.forEach(size => {
+        columnSizeCfgs.forEach(size => {
             let column = new ColumnModel();
             column.sizeXs = size.xs;
             column.sizeSm = size.sm;

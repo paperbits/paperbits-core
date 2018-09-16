@@ -132,7 +132,7 @@ export class ColumnViewModelBinder implements IViewModelBinder<ColumnModel, Colu
                                     const parentElement = GridHelper.getParentElementWithModel(element);
                                     const bindings = GridHelper.getParentWidgetBindings(parentElement);
                                     const provided = bindings
-                                        .filter(x => x.provides != null)
+                                        .filter(x => !!x.provides)
                                         .map(x => x.provides)
                                         .reduce((acc, val) => acc.concat(val));
         

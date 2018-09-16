@@ -38,7 +38,7 @@ export class NavigationDetailsWorkshop {
             const hyperlink = this.hyperlink();
 
             if (hyperlink) {
-                //return `${hyperlink.type}: ${hyperlink.title}`;
+                // return `${hyperlink.type}: ${hyperlink.title}`;
                 return `${hyperlink.title}`;
             }
 

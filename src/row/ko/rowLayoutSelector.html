@@ -7,7 +7,7 @@
 
     <!-- ko foreach: rowConfigs -->
     <div class="row-cfg" data-bind="foreach: $data, click: $component.selectRowLayout">
-        <div class="col-cfg" data-bind="columnSize: $data">
+        <div class="col-cfg" data-bind="columnSizeCfg: $data">
         </div>
     </div>
     <!-- /ko -->

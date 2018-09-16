@@ -3,11 +3,11 @@ import * as ko from "knockout";
 import * as Arrays from "@paperbits/common/arrays";
 import template from "./viewManager.html";
 import "@paperbits/common/extensions";
-import { metaDataSetter } from "@paperbits/common/meta/metaDataSetter";
+import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
 import { IBag } from "@paperbits/common";
 import { IMediaService } from "@paperbits/common/media";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
-import { IComponent, IView, IViewManager, ViewManagerMode, IHighlightConfig, IContextualEditor, ISplitterConfig } from "@paperbits/common/ui";
+import { IComponent, IView, IViewManager, ViewManagerMode, IHighlightConfig, IContextualEditor, ISplitterConfig, HostDocument } from "@paperbits/common/ui";
 import { ProgressIndicator } from "../ui";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { ISiteService, ISettings } from "@paperbits/common/sites";
@@ -19,6 +19,8 @@ import { IWidgetEditor } from "@paperbits/common/widgets";
 import { Component } from "../../ko/component";
 
 declare let uploadDialog;
+
+
 
 @Component({
     selector: "view-manager",
@@ -42,6 +44,9 @@ export class ViewManager implements IViewManager {
     public selectedElement: KnockoutObservable<IHighlightConfig>;
     public selectedElementContextualEditor: KnockoutObservable<IContextualEditor>;
     public viewport: KnockoutObservable<string>;
+
+    public doc: KnockoutObservable<HostDocument>;
+
     public shutter: KnockoutObservable<boolean>;
     public dragSession: KnockoutObservable<DragSession>;
 
@@ -99,7 +104,11 @@ export class ViewManager implements IViewManager {
         this.splitterElement = ko.observable<ISplitterConfig>();
         this.selectedElement = ko.observable<IHighlightConfig>();
         this.selectedElementContextualEditor = ko.observable<IContextualEditor>();
+
+
         this.viewport = ko.observable<string>("xl");
+        this.doc = ko.observable<HostDocument>({ src: "/theme/index.html", componentName: "page-document" });
+
         this.shutter = ko.observable<boolean>(true);
         this.dragSession = ko.observable();
 
@@ -117,8 +126,20 @@ export class ViewManager implements IViewManager {
         globalEventHandler.appendDocument(document);
 
         eventManager.addEventListener("onEscape", this.closeEditors);
+
         this.loadFavIcon();
         this.setTitle();
+    }
+
+    public setDocument(hostDocument: HostDocument): void {
+        if (this.doc().componentName === hostDocument.componentName) {
+            return;
+        }
+
+        // this.closeEditors();
+        this.clearContextualEditors();
+
+        this.doc(hostDocument);
     }
 
     private onRouteChange(): void {
@@ -133,7 +154,7 @@ export class ViewManager implements IViewManager {
             const iconFile = await this.mediaService.getMediaByPermalinkKey(settings.site.faviconPermalinkKey);
 
             if (iconFile && iconFile.downloadUrl) {
-                metaDataSetter.setFavIcon(iconFile.downloadUrl);
+                MetaDataSetter.setFavIcon(iconFile.downloadUrl);
             }
         }
     }
@@ -170,7 +191,7 @@ export class ViewManager implements IViewManager {
                 break;
         }
 
-        document.title = [siteTitle, pageTitle].join(" | ");
+        window.document.title = [siteTitle, pageTitle].join(" | ");
     }
 
     private getPageType(pageKey: string): string {
@@ -328,7 +349,7 @@ export class ViewManager implements IViewManager {
     public openUploadDialog(): Promise<File[]> {
         uploadDialog.click();
 
-        return new Promise<File[]>((resolve, reject) => {
+        return new Promise<File[]>((resolve) => {
             uploadDialog.onchange = () => {
                 resolve(Arrays.coerce(uploadDialog.files));
             };
@@ -406,6 +427,7 @@ export class ViewManager implements IViewManager {
         this.highlightedElement(null);
         this.setSplitter(null);
         this.selectedElement(null);
+        this.selectedElementContextualEditor(null);
 
         if (this.mode !== ViewManagerMode.configure) {
             this.mode = ViewManagerMode.selecting;
@@ -449,7 +471,6 @@ export class ViewManager implements IViewManager {
     public getViewport(): string {
         return this.viewport();
     }
-
 
     public setShutter(): void {
         this.shutter(true);

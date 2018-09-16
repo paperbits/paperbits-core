@@ -1,7 +1,9 @@
 <div class="flex-container flex-container-column fit">
     <fieldset class="flex-item form">
-        <input class="form-control" type="search" data-bind="textInput: searchPattern, valueUpdate: 'keyup'" placeholder="Search media..."
-        />
+        <div class="form-group">
+            <input class="form-control" type="search" data-bind="textInput: searchPattern, valueUpdate: 'keyup'" placeholder="Search media..."
+            />
+        </div>
     </fieldset>
 
     <!-- ko if: !working() && mediaItems().length === 0 -->

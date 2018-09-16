@@ -24,7 +24,6 @@ export class NavbarViewModelBinder implements IViewModelBinder<NavbarModel, Navb
         const navbarItemViewModel = new NavbarItemViewModel(label);
 
         if (navbarItemModel.nodes.length > 0) {
-            const tasks = [];
             const results = navbarItemModel.nodes.map(childNode => this.navbarItemModelToNavbarItemViewModel(childNode));
 
             results.forEach(child => {
@@ -51,7 +50,7 @@ export class NavbarViewModelBinder implements IViewModelBinder<NavbarModel, Navb
 
         const applyChanges = () => {
             this.modelToViewModel(navbarModel, readonly, viewModel);
-        }
+        };
 
         viewModel["widgetBinding"] = {
             displayName: "Navigation bar",
@@ -59,7 +58,7 @@ export class NavbarViewModelBinder implements IViewModelBinder<NavbarModel, Navb
             model: navbarModel,
             editor: "navbar-editor",
             applyChanges: applyChanges
-        }
+        };
 
         this.eventManager.addEventListener(NavigationEvents.onNavigationItemUpdate, async (updatedRootContract: NavigationItemContract) => {
             // TODO: Think about how to unsubscribe from this event.

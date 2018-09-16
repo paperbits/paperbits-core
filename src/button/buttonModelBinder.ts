@@ -19,7 +19,7 @@ export class ButtonModelBinder implements IModelBinder {
     }
 
     public async contractToModel(buttonContract: Contract): Promise<ButtonModel> {
-        let model = new ButtonModel();
+        const model = new ButtonModel();
         model.label = buttonContract.label;
         model.style = buttonContract.style;
         model.size = buttonContract.size;
@@ -32,20 +32,20 @@ export class ButtonModelBinder implements IModelBinder {
     }
 
     public modelToContract(buttonModel: ButtonModel): Contract {
-        let buttonConfig: Contract = {
+        const buttonConfig: Contract = {
             object: "block",
             type: "button",
             label: buttonModel.label,
             style: buttonModel.style,
             size: buttonModel.size
-        }
+        };
 
         if (buttonModel.hyperlink) {
             buttonConfig.hyperlink = {
                 target: buttonModel.hyperlink.target,
                 permalinkKey: buttonModel.hyperlink.permalinkKey,
                 href: buttonModel.hyperlink.href
-            }
+            };
         }
 
         return buttonConfig;

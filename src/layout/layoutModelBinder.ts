@@ -42,14 +42,8 @@ export class LayoutModelBinder {
         return layoutModel;
     }
 
-    private isChildrenChanged(widgetChildren: any[], modelItems: any[]) {
-        return (widgetChildren && !modelItems) ||
-            (!widgetChildren && modelItems) ||
-            (widgetChildren && modelItems && widgetChildren.length !== modelItems.length);
-    }
-
     public modelToContract(layoutModel: LayoutModel): Contract {
-        let layoutConfig: Contract = {
+        const layoutConfig: Contract = {
             object: "block",
             type: "layout",
             nodes: []
@@ -71,10 +65,10 @@ export class LayoutModelBinder {
     }
 
     public async updateContent(layoutModel: LayoutModel): Promise<void> {
-        let url = this.routeHandler.getCurrentUrl();
-        let layout = await this.layoutService.getLayoutByRoute(url);
-        let file = await this.fileService.getFileByKey(layout.contentKey);
-        let config = this.modelToContract(layoutModel);
+        const url = this.routeHandler.getCurrentUrl();
+        const layout = await this.layoutService.getLayoutByRoute(url);
+        const file = await this.fileService.getFileByKey(layout.contentKey);
+        const config = this.modelToContract(layoutModel);
 
         Object.assign(file, config);
 

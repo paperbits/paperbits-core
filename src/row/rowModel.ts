@@ -1,4 +1,4 @@
-import { WidgetModel } from "@paperbits/common/widgets/WidgetModel";
+import { WidgetModel } from "@paperbits/common/widgets";
 
 export class RowModel implements WidgetModel {
     public widgets: WidgetModel[];

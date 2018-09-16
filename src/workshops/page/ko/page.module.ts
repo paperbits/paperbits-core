@@ -8,7 +8,7 @@ import { PageDetailsWorkshop } from "./pageDetails";
 import { PageSelector } from "./pageSelector";
 
 export class PageWorkshopModule implements IInjectorModule {
-    register(injector: IInjector): void {                
+    public register(injector: IInjector): void {                
         injector.bind("pagesWorkshop", PagesWorkshop);
 
         injector.bindComponent("pageDetailsWorkshop", (ctx: IInjector, params) => {

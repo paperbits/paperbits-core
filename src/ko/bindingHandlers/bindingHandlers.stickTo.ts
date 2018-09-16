@@ -16,17 +16,17 @@ export interface StickToConfig {
 
 ko.bindingHandlers["stickTo"] = {
     init(element: HTMLElement, valueAccessor: () => StickToConfig) {
-        let config = valueAccessor();
+        const config = valueAccessor();
 
-        let updatePosition = () => {
+        const updatePosition = () => {
             if (!config.target) {
                 return;
             }
 
-            let parent = config.target.ownerDocument.defaultView.frameElement;
-            let parentRect = parent.getBoundingClientRect();
-            let rect = config.target.getBoundingClientRect();
-            let placement = config.placement || "border";
+            const parent = config.target.ownerDocument.defaultView.frameElement;
+            const parentRect = parent.getBoundingClientRect();
+            const rect = config.target.getBoundingClientRect();
+            const placement = config.placement || "border";
             let coordX: number;
             let coordY: number;
 
@@ -40,7 +40,7 @@ ko.bindingHandlers["stickTo"] = {
                 coordY = rect.top;
 
                 if (placement === "border") {
-                    coordY = coordY - Math.floor(element.clientHeight / 2)
+                    coordY = coordY - Math.floor(element.clientHeight / 2);
                 }
             }
 
@@ -48,7 +48,7 @@ ko.bindingHandlers["stickTo"] = {
                 coordY = rect.top + rect.height - element.clientHeight;
 
                 if (placement === "border") {
-                    coordY = coordY + Math.floor(element.clientHeight / 2)
+                    coordY = coordY + Math.floor(element.clientHeight / 2);
                 }
             }
 
@@ -63,13 +63,13 @@ ko.bindingHandlers["stickTo"] = {
             }
 
             element.style.top = parentRect.top + coordY + "px";
-        }
+        };
 
         updatePosition();
 
         const onScroll = async (event: MouseEvent): Promise<void> => {
             requestAnimationFrame(updatePosition);
-        }
+        };
 
         window.addEventListener("scroll", onScroll, true);
 

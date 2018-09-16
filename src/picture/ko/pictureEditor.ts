@@ -1,11 +1,13 @@
 ﻿import * as ko from "knockout";
 import template from "./pictureEditor.html";
-import { IViewManager } from '@paperbits/common/ui';
-import { IWidgetEditor } from '@paperbits/common/widgets';
+import { IViewManager } from "@paperbits/common/ui";
+import { IWidgetEditor } from "@paperbits/common/widgets";
 import { MediaContract } from "@paperbits/common/media";
+import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { Component } from "../../ko/component";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 import { PictureModel } from "../pictureModel";
+
 
 @Component({
     selector: "paperbits-picture-editor",
@@ -17,66 +19,89 @@ export class PictureEditor implements IWidgetEditor {
     private applyChangesCallback: () => void;
 
     public readonly caption: KnockoutObservable<string>;
-    public readonly action: KnockoutObservable<string>;
     public readonly layout: KnockoutObservable<string>;
     public readonly animation: KnockoutObservable<string>;
     public readonly background: KnockoutObservable<BackgroundModel>;
+    public readonly hyperlink: KnockoutObservable<HyperlinkModel>;
+    public readonly hyperlinkTitle: KnockoutComputed<string>;
+    public readonly width: KnockoutObservable<number>;
+    public readonly height: KnockoutObservable<number>;
 
     constructor(private viewManager: IViewManager) {
-        this.onCaptionUpdate = this.onCaptionUpdate.bind(this);
-        this.onLayoutUpdate = this.onLayoutUpdate.bind(this);
-        this.onAnimationUpdate = this.onAnimationUpdate.bind(this);
+        this.onHyperlinkChange = this.onHyperlinkChange.bind(this);
         this.onMediaSelected = this.onMediaSelected.bind(this);
+        this.onChange = this.onChange.bind(this);
 
         this.caption = ko.observable<string>();
-        this.caption.subscribe(this.onCaptionUpdate);
+        this.caption.subscribe(this.onChange);
 
-        this.action = ko.observable<string>();
         this.layout = ko.observable<string>();
-        this.layout.subscribe(this.onLayoutUpdate);
+        this.layout.subscribe(this.onChange);
+
+        this.hyperlink = ko.observable<HyperlinkModel>();
+        this.hyperlink.subscribe(this.onChange);
 
         this.animation = ko.observable<string>();
-        this.animation.subscribe(this.onAnimationUpdate);
+        this.animation.subscribe(this.onChange);
+
+        this.width = ko.observable<number>();
+        this.width.subscribe(this.onChange);
+
+        this.height = ko.observable<number>();
+        this.height.subscribe(this.onChange);
+
+        this.hyperlinkTitle = ko.computed<string>(() => {
+            return this.hyperlink() ? this.hyperlink().title : "Add a link...";
+        });
 
         this.background = ko.observable();
     }
 
-    private onCaptionUpdate(caption: string): void {
-        this.pictureModel.caption = caption;
-        this.applyChangesCallback();
-    }
-
-    private onLayoutUpdate(layout: string): void {
-        this.pictureModel.layout = layout;
-        this.applyChangesCallback();
-    }
-
-    private onAnimationUpdate(layout: string): void {
-        this.pictureModel.animation = layout;
-        this.applyChangesCallback();
-    }
-
     public setWidgetModel(picture: PictureModel, applyChangesCallback?: () => void): void {
         this.pictureModel = picture;
-        this.applyChangesCallback = applyChangesCallback;
-
         this.background(picture.background);
         this.caption(picture.caption);
         this.layout(picture.layout);
         this.animation(picture.animation);
+        this.hyperlink(picture.hyperlink);
+        this.width(picture.width);
+        this.height(picture.height);
+
+        this.applyChangesCallback = applyChangesCallback;
+    }
+
+    public onChange(): void {
+        if (!this.applyChangesCallback) {
+            return;
+        }
+
+        this.pictureModel.caption = this.caption();
+        this.pictureModel.layout = this.layout();
+        this.pictureModel.hyperlink = this.hyperlink();
+        this.pictureModel.animation = this.animation();
+        this.pictureModel.background = this.background();
+        this.pictureModel.width = this.width();
+        this.pictureModel.height = this.height();
+
+        this.applyChangesCallback();
     }
 
     public onMediaSelected(media: MediaContract): void {
-        const background = new BackgroundModel();
+        const background = new BackgroundModel(); // TODO: Let's use proper model here
         background.sourceKey = media.permalinkKey;
         background.sourceUrl = media.downloadUrl;
         background.size = "contain";
         background.position = "center center";
 
-        this.pictureModel.background = background;
-        this.background(background);
+        // TODO: use window.devicePixelRatio to assign sizes
 
-        this.applyChangesCallback();
+        this.background(background);
+        this.onChange();
+    }
+
+    public onHyperlinkChange(hyperlink: HyperlinkModel): void {
+        this.hyperlink(hyperlink);
+        this.onChange();
     }
 
     public closeEditor(): void {

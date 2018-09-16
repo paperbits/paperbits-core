@@ -21,15 +21,8 @@ export class SectionLayoutSelector implements IResourceSelector<SectionModel> {
     }
 
     public selectSectionLayout(layout: string): void {
-        let sectionModel;
-
-        if (layout === "slider") { // This will go away when blocks are implemented
-            sectionModel = new SliderModel();
-        }
-        else {
-            sectionModel = new SectionModel();
-            sectionModel.layout = layout;
-        }
+        const sectionModel = new SectionModel();
+        sectionModel.container = layout;
 
         if (this.onResourceSelected) {
             this.onResourceSelected(sectionModel);

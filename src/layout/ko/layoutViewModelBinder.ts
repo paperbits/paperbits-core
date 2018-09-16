@@ -16,7 +16,7 @@ export class LayoutViewModelBinder {
 
         const sectionViewModels = model.widgets
             .map(widgetModel => {
-                let widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
+                const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
 
                 if (!widgetViewModelBinder) {
                     return null;
@@ -24,23 +24,11 @@ export class LayoutViewModelBinder {
 
                 let widgetViewModel;
 
-                // if (!readonly && widgetModel instanceof PageModel) {
-                //     widgetViewModel = new PlaceholderViewModel();
-
-                //     widgetViewModel["widgetBinding"] = {
-                //         readonly: readonly,
-                //         model: new PlaceholderModel()
-                //     }
-                // }
-                // else {
-                //     widgetViewModel = widgetViewModelBinder.modelToViewModel(widgetModel, readonly);
-                // }
-
                 widgetViewModel = widgetViewModelBinder.modelToViewModel(widgetModel, readonly);
 
                 return widgetViewModel;
             })
-            .filter(x => x != null);
+            .filter(x => x !== null);
 
         viewModel.widgets(sectionViewModels);
 
@@ -50,7 +38,7 @@ export class LayoutViewModelBinder {
             applyChanges: () => {
                 this.modelToViewModel(model, readonly, viewModel);
             }
-        }
+        };
 
         return viewModel;
     }

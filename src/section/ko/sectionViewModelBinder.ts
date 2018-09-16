@@ -156,12 +156,12 @@ export class SectionViewModelBinder implements IViewModelBinder<SectionModel, Se
                                     params: GridHelper.getModel(element)
                                 },
                                 resize: "vertically horizontally"
-                            }
+                            };
 
                             this.viewManager.openViewAsPopup(view);
                         }
                     }]
-                }
+                };
 
                 const attachedModel = <SectionModel>GridHelper.getModel(element);
 
@@ -189,7 +189,7 @@ export class SectionViewModelBinder implements IViewModelBinder<SectionModel, Se
 
                 return sectionContextualEditor;
             }
-        }
+        };
 
         viewModel["widgetBinding"] = binding;
 

@@ -1,26 +1,33 @@
 <div class="flex-container flex-container-column fit">
     <fieldset class="flex-item flex-item-grow form" data-bind="scrollable: {}">
-        <label class="form-label">Title</label>
-        <div class="input-group">
-            <input type="text" class="form-control" data-bind="textInput: blogPostItem.title, validationElement: blogPostItem.title"
-                placeholder="e.g. Getting started" maxlength="256" />
-            <button class="btn btn-danger input-group-btn" type="button" data-bind="validationMessageToggle: blogPostItem.title">!</button>
+        <div class="form-group">
+            <label class="form-label">Title</label>
+            <div class="input-group">
+                <input type="text" class="form-control" data-bind="textInput: blogPostItem.title, validationElement: blogPostItem.title"
+                    placeholder="e.g. Getting started" maxlength="256" />
+                <button class="btn btn-danger input-group-btn" type="button" data-bind="validationMessageToggle: blogPostItem.title">!</button>
+            </div>
         </div>
 
-        <label class="form-label">Permalink</label>
-        <div class="input-group">
-            <input type="text" class="form-control" data-bind="textInput: blogPostItem.permalinkUrl, validationElement: blogPostItem.permalinkUrl"
-                placeholder="e.g. /blog/post" maxlength="2000" spellcheck="false" />
-            <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: blogPostItem.permalinkUrl"
-                type="button">!</button>
+        <div class="form-group">
+            <label class="form-label">Permalink</label>
+            <div class="input-group">
+                <input type="text" class="form-control" data-bind="textInput: blogPostItem.permalinkUrl, validationElement: blogPostItem.permalinkUrl"
+                    placeholder="e.g. /blog/post" maxlength="2000" spellcheck="false" />
+                <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: blogPostItem.permalinkUrl" type="button">!</button>
+            </div>
         </div>
 
-        <label class="form-label">Description</label>
-        <textarea class="form-control" data-bind="textInput: blogPostItem.description" maxlength="256"></textarea>
+        <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" data-bind="textInput: blogPostItem.description" maxlength="256"></textarea>
+        </div>
 
-        <label class="form-label">Keywords</label>
-        <input type="text" class="form-control" data-bind="textInput: blogPostItem.keywords" placeholder="e.g. blog" maxlength="256"
-        />
+        <div class="form-group">
+            <label class="form-label">Keywords</label>
+            <input type="text" class="form-control" data-bind="textInput: blogPostItem.keywords" placeholder="e.g. blog" maxlength="256"
+            />
+        </div>
     </fieldset>
 
     <div class="flex-item btn-group">

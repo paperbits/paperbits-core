@@ -9,9 +9,12 @@ export class PictureViewModelBinder implements IViewModelBinder<PictureModel, Pi
         }
 
         viewModel.caption(model.caption);
-        viewModel.layout(model.layout);
+        viewModel.layout(model.layout || "noframe");
         viewModel.animation(model.animation);
         viewModel.background(model.background);
+        viewModel.hyperlink(model.hyperlink);
+        viewModel.width(model.width);
+        viewModel.height(model.height);
 
         viewModel["widgetBinding"] = {
             displayName: "Picture",

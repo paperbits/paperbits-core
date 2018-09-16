@@ -7,10 +7,13 @@
 
         <div class="form-group">
             <label class="form-label">Link to</label>
-            <a href="#" class="form-control" data-bind="balloon: { component: { name: 'hyperlink-selector', params: { hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange } } }">
-                <i class="paperbits-icon paperbits-link-69-2 pull-right"></i>
-                <span data-bind="text: hyperlinkTitle"></span>
-            </a>
+            <div class="input-group">
+                <a href="#" class="form-control" data-bind="text: hyperlinkTitle, balloon: { component: { name: 'hyperlink-selector', params: { hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange } } }">
+                </a>
+                <div class="input-group-addon">
+                    <i class="paperbits-icon paperbits-link-69-2"></i>
+                </div>
+            </div>
         </div>
 
         <label class="form-label">Style</label>

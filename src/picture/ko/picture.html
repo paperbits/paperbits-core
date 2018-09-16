@@ -1,4 +1,4 @@
-<widget>
+<picture>
     <!-- ko if: layout() === "polaroid" -->
     <div class="picture polaroid">
         <img class="content" data-bind="background: background, attr: { alt: caption }" />
@@ -15,9 +15,9 @@
     <!-- /ko -->
 
     <!-- ko if: layout() === "noframe" -->
-    <div class="picture noframe" data-bind="css: css">
-        <img class="content" data-bind="background: background, attr: { alt: caption }" />
-    </div>
+    <a class="picture noframe" data-bind="hyperlink: hyperlink">
+        <img class="content" data-bind="background: background, attr: { alt: caption }, size: { width: width, height: height }" />
+    </a>
     <!-- /ko -->
 
-</widget>
+</picture>

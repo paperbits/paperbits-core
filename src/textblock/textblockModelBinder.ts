@@ -3,23 +3,21 @@ import { IPermalinkService } from "@paperbits/common/permalinks";
 import { Contract } from "@paperbits/common";
 import { TextblockModel } from "./textblockModel";
 
-export class TextblockModelBinder implements IModelBinder {
-    private readonly permalinkService: IPermalinkService;
 
-    constructor(permalinkService: IPermalinkService) {
-        this.permalinkService = permalinkService;
+export class TextblockModelBinder implements IModelBinder {
+    constructor(
+        private readonly permalinkService: IPermalinkService
+    ) {
     }
 
     private async resolveHyperlinks(leaves: Contract[]): Promise<void> {
-        for (let i = 0; i < leaves.length; i++) {
-            const node = leaves[i];
-
+        for (const node of leaves) {
             if (node && node.type === "link") {
                 const hyperlink: HyperlinkContract = <HyperlinkContract>node;
 
                 if (hyperlink.permalinkKey) {
                     const permalink = await this.permalinkService.getPermalinkByKey(hyperlink.permalinkKey);
-                    
+
                     if (permalink) {
                         hyperlink.href = permalink.uri;
 
@@ -46,7 +44,7 @@ export class TextblockModelBinder implements IModelBinder {
             if (node && node.leaves) {
                 await this.resolveHyperlinks(node.leaves);
             }
-            
+
             if (node && node.nodes) {
                 await this.resolveHyperlinks(node.nodes);
             }
@@ -54,9 +52,7 @@ export class TextblockModelBinder implements IModelBinder {
     }
 
     private async resolveAnchors(nodes: Contract[]) { // Should be BlockContract
-        for (let i = 0; i < nodes.length; i++) {
-            let node = nodes[i];
-
+        for (const node of nodes) {
             if (node && node["anchorKey"]) {
                 const anchorKey = node["anchorKey"];
                 const anchorPermalink = await this.permalinkService.getPermalinkByKey(anchorKey);
@@ -91,7 +87,7 @@ export class TextblockModelBinder implements IModelBinder {
             await this.resolveAnchors(node.nodes);
         }
 
-        return new TextblockModel({ "nodes": node.nodes });
+        return new TextblockModel({ nodes: node.nodes });
     }
 
     public canHandleWidgetType(widgetType: string): boolean {
@@ -113,11 +109,11 @@ export class TextblockModelBinder implements IModelBinder {
             state = model.state;
         }
 
-        let textblockConfig: Contract = {
+        const textblockConfig: Contract = {
             object: "widget",
             type: "text",
             nodes: state["nodes"]
-        }
+        };
 
         return textblockConfig;
     }

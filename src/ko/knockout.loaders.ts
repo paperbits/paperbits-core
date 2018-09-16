@@ -3,11 +3,11 @@ import { IInjector, IInjectorModule } from "@paperbits/common/injection";
 
 export class KnockoutRegistrationLoaders implements IInjectorModule {
     public register(injector: IInjector): void {
-        let injectableComponentLoader = {
+        const injectableComponentLoader = {
             loadViewModel(name, config, callback) {
                 if (config.injectable) {
-                    let viewModelConstructor = (params) => {
-                        let resolvedInjectable: any = injector.resolve(config.injectable);
+                    const viewModelConstructor = (params) => {
+                        const resolvedInjectable: any = injector.resolve(config.injectable);
 
                         if (resolvedInjectable.factory) {
                             return resolvedInjectable.factory(injector, params);
@@ -32,30 +32,30 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
             },
 
             loadComponent(componentName: string, config: any, callback: (definition: KnockoutComponentTypes.Definition) => void) {
-                let callbackWrapper: (result: KnockoutComponentTypes.Definition) => void = (resultWrapper: KnockoutComponentTypes.Definition) => {
+                const callbackWrapper: (result: KnockoutComponentTypes.Definition) => void = (resultWrapper: KnockoutComponentTypes.Definition) => {
 
-                    let createViewModelWrapper: (params: any, options: { element: Node; }) => any = (params: any, options: { element: Node; }) => {
+                    const createViewModelWrapper: (params: any, options: { element: Node; }) => any = (params: any, options: { element: Node; }) => {
                         if (config.preprocess) {
                             config.preprocess(options.element, params);
                         }
 
-                        let viewModel = resultWrapper.createViewModel(params, options);
+                        const viewModel = resultWrapper.createViewModel(params, options);
 
                         if (config.postprocess) {
                             config.postprocess(options.element, viewModel);
                         }
 
                         return viewModel;
-                    }
+                    };
 
-                    let definitionWrapper /*: KnockoutComponentTypes.Definition*/ = {
+                    const definitionWrapper /*: KnockoutComponentTypes.Definition*/ = {
                         template: resultWrapper.template,
                         createViewModel: createViewModelWrapper,
                         constructor: config.constructor
                     };
 
                     callback(definitionWrapper);
-                }
+                };
 
                 ko.components.defaultLoader.loadComponent(componentName, config, callbackWrapper);
             },

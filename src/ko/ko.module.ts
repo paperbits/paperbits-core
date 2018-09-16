@@ -13,22 +13,18 @@ import { ResizableBindingHandler } from "./bindingHandlers/bindingHandlers.resiz
 import { KnockoutValidation } from "./validation/validators";
 
 import "./knockout.editors";
-import "./bindingHandlers/bindingHandlers.background";
-import "./bindingHandlers/bindingHandlers.balloon";
 import "./bindingHandlers/bindingHandlers.codeEditor";
-import "./bindingHandlers/bindingHandlers.columnSize";
+import "./bindingHandlers/bindingHandlers.columnSizeCfg";
 import "./bindingHandlers/bindingHandlers.component";
-import "./bindingHandlers/bindingHandlers.content";
-import "./bindingHandlers/bindingHandlers.draggables";
 import "./bindingHandlers/bindingHandlers.highlight";
 import "./bindingHandlers/bindingHandlers.splitter";
-import "./bindingHandlers/bindingHandlers.lightbox";
 import "./bindingHandlers/bindingHandlers.resourcePicker";
 import "./bindingHandlers/bindingHandlers.hyperlink";
 import "./bindingHandlers/bindingHandlers.surface";
 import "./bindingHandlers/bindingHandlers.snapTo";
 import "./bindingHandlers/bindingHandlers.gridCommand";
 import "./bindingHandlers/bindingHandlers.align";
+import "./bindingHandlers/bindingHandlers.size";
 import "./bindingHandlers/bindingHandlers.validationMessageToggle";
 import "./bindingHandlers/bindingHandlers.collapse";
 import "./bindingHandlers/bindingHandlers.container";
@@ -57,7 +53,7 @@ export class KoModule implements IInjectorModule {
         injector.bindSingleton("knockoutValidation", KnockoutValidation);
         injector.bindSingleton("cropperBindingHandler", CropperBindingHandler);
         
-        injector.bind("docWidget", DocumentViewModel);
+        injector.bind("pageDocument", DocumentViewModel);
         injector.bindSingleton("gridBindingHandler", GridBindingHandler);
     }
 }

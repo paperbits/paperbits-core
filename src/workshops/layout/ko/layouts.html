@@ -4,8 +4,10 @@
 
 <div class="flex-container flex-container-column fit">
     <fieldset class="flex-item form">
-        <input class="form-control" type="search" data-bind="textInput: searchPattern, valueUpdate: 'keyup'" placeholder="Search layouts..."
-        />
+        <div class="form-group">
+            <input class="form-control" type="search" data-bind="textInput: searchPattern, valueUpdate: 'keyup'" placeholder="Search layouts..."
+            />
+        </div>
     </fieldset>
 
     <ul class="flex-item flex-item-grow list" data-bind="foreach: layouts, scrollable: {}">

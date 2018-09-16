@@ -1,7 +1,7 @@
 import { PictureModel } from "./pictureModel";
 import { PictureContract } from "./pictureContract";
 import { IModelBinder } from "@paperbits/common/editing";
-import { IPermalinkResolver } from "@paperbits/common/permalinks";
+import { IPermalinkResolver, HyperlinkModel } from "@paperbits/common/permalinks";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 
 export class PictureModelBinder implements IModelBinder {
@@ -20,12 +20,28 @@ export class PictureModelBinder implements IModelBinder {
         pictureModel.caption = pictureContract.caption;
         pictureModel.layout = pictureContract.layout;
         pictureModel.animation = pictureContract.animation ? pictureContract.animation : "none";
-        pictureModel.background = new BackgroundModel();
+        pictureModel.width = pictureContract.width;
+        pictureModel.height = pictureContract.height;
+
+        if (pictureContract.hyperlink) {
+            pictureModel.hyperlink = await this.permalinkResolver.getHyperlinkFromConfig(pictureContract.hyperlink);
+        }
 
         if (pictureContract.sourceKey) {
             try {
-                pictureModel.background.sourceUrl = await this.permalinkResolver.getUrlByPermalinkKey(pictureContract.sourceKey);
-                pictureModel.background.sourceKey = pictureContract.sourceKey;
+                const background = new BackgroundModel();
+                background.sourceUrl = await this.permalinkResolver.getUrlByPermalinkKey(pictureContract.sourceKey);
+                background.sourceKey = pictureContract.sourceKey;
+                pictureModel.background = background;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+
+        if (pictureContract.targetKey) {
+            try {
+                pictureModel.hyperlink = await this.permalinkResolver.getHyperlinkByPermalinkKey(pictureContract.targetKey);
             }
             catch (error) {
                 console.log(error);
@@ -41,11 +57,25 @@ export class PictureModelBinder implements IModelBinder {
             type: "picture",
             caption: pictureModel.caption,
             animation: pictureModel.animation,
-            layout: pictureModel.layout
-        }
+            layout: pictureModel.layout,
+            width: pictureModel.width,
+            height: pictureModel.height
+        };
 
         if (pictureModel.background) {
             pictureContract.sourceKey = pictureModel.background.sourceKey;
+        }
+
+        if (pictureModel.hyperlink) {
+            pictureContract.targetKey = pictureModel.hyperlink.permalinkKey;
+        }
+
+        if (pictureModel.hyperlink) {
+            pictureContract.hyperlink = {
+                target: pictureModel.hyperlink.target,
+                permalinkKey: pictureModel.hyperlink.permalinkKey,
+                href: pictureModel.hyperlink.href
+            };
         }
 
         return pictureContract;

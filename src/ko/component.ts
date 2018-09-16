@@ -10,7 +10,7 @@ export interface ComponentConfig {
 ko.components["registry"] = [];
 
 export function Component(config: ComponentConfig) {
-    return function (target) {
+    return (target) => {
         ko.components.register(config.selector, {
             template: config.template,
             viewModel: { injectable: config.injectable || target.name },

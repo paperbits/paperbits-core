@@ -2,29 +2,24 @@
 
 ko.bindingHandlers["columnSize"] = {
     init(element: HTMLElement, valueAccessor) {
-        let sizes = valueAccessor();
-        let size: number = sizes.xs;
 
-        if (sizes.sm) {
-            size = sizes.sm;
-        }
+        // if (this.sizeSm()) {
+        //     classes.push("col-sm-" + this.sizeSm());
+        //     element.classList.add("")
+        // }
 
-        if (sizes.md) {
-            size = sizes.md;
-        }
+        // if (this.sizeMd()) {
+        //     classes.push("col-md-" + this.sizeMd());
+        // }
 
-        if (sizes.lg) {
-            size = sizes.lg;
-        }
+        // if (this.sizeLg()) {
+        //     classes.push("col-lg-" + this.sizeLg());
+        // }
 
-        if (sizes.xl) {
-            size = sizes.xl;
-        }
+        // if (this.sizeXl()) {
+        //     classes.push("col-xl-" + this.sizeXl());
+        // }
 
-        let css = {};
-
-        css[`col-cfg-${size}`] = true;
-
-        ko.applyBindingsToNode(element, { css: css })
+        // //ko.applyBindingsToNode(element, { css: css })
     }
 };

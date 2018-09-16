@@ -3,7 +3,7 @@ import { BackgroundModel } from "@paperbits/common/widgets/background";
 
 ko.bindingHandlers["style"] = {
     update(element, valueAccessor) {
-        let value = ko.utils.unwrapObservable(valueAccessor() || {});
+        const value = ko.utils.unwrapObservable(valueAccessor() || {});
 
         ko.utils.objectForEach(value, function (styleName, styleValue) {
             styleValue = ko.utils.unwrapObservable(styleValue);
@@ -22,11 +22,11 @@ export class BackgroundBindingHandler {
     constructor() {
         ko.bindingHandlers["background"] = {
             init(element: HTMLElement, valueAccessor) {
-                let configuration = valueAccessor();
-                let styleObservable = ko.observable();
-                let cssObservable = ko.observable();
+                const configuration = valueAccessor();
+                const styleObservable = ko.observable();
+                const cssObservable = ko.observable();
 
-                let setBackground = (backgroundModel: BackgroundModel) => {
+                const setBackground = (backgroundModel: BackgroundModel) => {
                     if (element.nodeName === "IMG") {
                         if (backgroundModel.sourceUrl) {
                             element["src"] = backgroundModel.sourceUrl;
@@ -51,11 +51,11 @@ export class BackgroundBindingHandler {
                         Object.assign(style, { "background-image": null });
                     }
 
-                    Object.assign(style, { "background-position": backgroundModel.position || null })
+                    Object.assign(style, { "background-position": backgroundModel.position || null });
 
-                    Object.assign(style, { "background-size": backgroundModel.size || null })
+                    Object.assign(style, { "background-size": backgroundModel.size || null });
 
-                    Object.assign(style, { "background-repeat": backgroundModel.repeat || "no-repeat" })
+                    Object.assign(style, { "background-repeat": backgroundModel.repeat || "no-repeat" });
 
 
                     // if (config.videoUrl) {
@@ -80,7 +80,7 @@ export class BackgroundBindingHandler {
 
                     styleObservable(style);
                     cssObservable(css.join(" "));
-                }
+                };
 
                 ko.applyBindingsToNode(element, { style: styleObservable, css: cssObservable });
 
