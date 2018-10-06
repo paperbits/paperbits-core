@@ -2,24 +2,24 @@ import * as ko from "knockout";
 import template from "./navigationItemSelector.html";
 import { NavigationItemViewModel } from "./navigationItemViewModel";
 import { NavigationItemContract, INavigationService } from "@paperbits/common/navigation";
-import { IResourceSelector } from "@paperbits/common/ui";
 import { NavigationTree } from "./navigationTree";
-import { Component } from "../../../ko/component";
+import { Component, Event, Param } from "../../../ko/decorators";
 
 @Component({
     selector: "navigation-item-selector",
     template: template,
     injectable: "navigationItemSelector"
 })
-export class NavigationItemSelector implements IResourceSelector<NavigationItemContract> {
-    private selectedNavigationItem: KnockoutObservable<NavigationItemViewModel>;
-
+export class NavigationItemSelector {
     public navigationItemsTree: KnockoutObservable<NavigationTree>;
 
-    constructor(
-        private readonly navigationService: INavigationService,
-        public readonly onResourceSelected: (selections: NavigationItemContract) => void
-    ) {
+    @Param()
+    public selectedNavigationItem: KnockoutObservable<NavigationItemViewModel>;
+
+    @Event()
+    public onSelect: (selection: NavigationItemContract) => void;
+
+    constructor(private readonly navigationService: INavigationService) {
         // rebinding...
         this.selectNavigationItem = this.selectNavigationItem.bind(this);
         this.navigationItemsTree = ko.observable<NavigationTree>();
@@ -38,8 +38,8 @@ export class NavigationItemSelector implements IResourceSelector<NavigationItemC
     public async selectNavigationItem(navigationItem: NavigationItemViewModel): Promise<void> {
         this.selectedNavigationItem(navigationItem);
 
-        if (this.onResourceSelected) {
-            this.onResourceSelected(navigationItem.toContract());
+        if (this.onSelect) {
+            this.onSelect(navigationItem.toContract());
         }
     }
 }

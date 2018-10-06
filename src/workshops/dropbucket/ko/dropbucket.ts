@@ -1,5 +1,5 @@
-﻿import * as ko from "knockout";
-import template from "./dropbucket.html";
+﻿import template from "./dropbucket.html";
+import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
 import { IViewManager } from "@paperbits/common/ui";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
@@ -7,7 +7,8 @@ import { IMediaService, ICreatedMedia } from "@paperbits/common/media";
 import { IContentDropHandler, IContentDescriptor, IDataTransfer } from "@paperbits/common/editing";
 import { ProgressPromise } from "@paperbits/common";
 import { DropBucketItem } from "./dropbucketItem";
-import { Component } from "../../../ko/component";
+import { Component } from "../../../ko/decorators/component.decorator";
+import { IWidgetService } from "@paperbits/common/widgets";
 
 
 @Component({
@@ -16,18 +17,16 @@ import { Component } from "../../../ko/component";
     injectable: "dropbucket"
 })
 export class DropBucket {
-    private readonly eventManager: IEventManager;
-    private readonly dropHandlers: IContentDropHandler[];
-    private readonly mediaService: IMediaService;
-    private readonly viewManager: IViewManager;
-
     public droppedItems: KnockoutObservableArray<DropBucketItem>;
 
-    constructor(globalEventHandler: GlobalEventHandler, eventManager: IEventManager, mediaService: IMediaService, dropHandlers: IContentDropHandler[], viewManager: IViewManager) {
-        this.eventManager = eventManager;
-        this.mediaService = mediaService;
-        this.viewManager = viewManager;
-
+    constructor(
+        private readonly globalEventHandler: GlobalEventHandler,
+        private readonly eventManager: IEventManager,
+        private readonly mediaService: IMediaService,
+        private readonly dropHandlers: IContentDropHandler[],
+        private readonly viewManager: IViewManager,
+        private readonly widgetService: IWidgetService
+    ) {
         this.onDragDrop = this.onDragDrop.bind(this);
         this.onDragStart = this.onDragStart.bind(this);
         this.onDragEnd = this.onDragEnd.bind(this);
@@ -38,7 +37,7 @@ export class DropBucket {
         this.handleDroppedContent = this.handleDroppedContent.bind(this);
         this.handleUnknownContent = this.handleUnknownContent.bind(this);
 
-        globalEventHandler.addDragDropListener(this.onDragDrop);
+        this.globalEventHandler.addDragDropListener(this.onDragDrop);
         // globalEventHandler.addPasteListener(this.onPaste);
 
         this.dropHandlers = dropHandlers;
@@ -218,7 +217,10 @@ export class DropBucket {
         const dragSession = this.viewManager.getDragSession();
         const acceptorBinding = dragSession.targetBinding;
 
-        acceptorBinding.onDragDrop(dragSession);
+        if (acceptorBinding && acceptorBinding.handler) {
+            const widgetHandler = this.widgetService.getWidgetHandler(acceptorBinding.handler);
+            widgetHandler.onDragDrop(dragSession);
+        }
 
         this.eventManager.dispatchEvent("virtualDragEnd");
     }

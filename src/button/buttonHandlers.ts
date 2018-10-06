@@ -3,7 +3,7 @@ import { ButtonModel } from "./buttonModel";
 
 
 export class ButtonHandlers implements IWidgetHandler {
-    private async getWidgetOrderByConfig(): Promise<IWidgetOrder> {
+    public async getWidgetOrder(): Promise<IWidgetOrder> {
         const widgetOrder: IWidgetOrder = {
             name: "button",
             displayName: "Button",
@@ -14,9 +14,5 @@ export class ButtonHandlers implements IWidgetHandler {
         };
 
         return widgetOrder;
-    }
-
-    public getWidgetOrder(): Promise<IWidgetOrder> {
-        return Promise.resolve(this.getWidgetOrderByConfig());
     }
 }

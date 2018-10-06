@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import template from "./settings.html";
-import { Component } from "../../../ko/component";
+import { Component } from "../../../ko/decorators/component.decorator";
 import { IViewManager } from "@paperbits/common/ui";
 import { ISiteService, ISettings } from "@paperbits/common/sites";
 import { IMediaService, IMediaFilter, MediaContract } from "@paperbits/common/media";

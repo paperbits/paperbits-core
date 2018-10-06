@@ -1,32 +1,27 @@
 ﻿import * as ko from "knockout";
-import { IViewManager } from "@paperbits/common/ui";
-import { IEventManager } from "@paperbits/common/events";
-import { GridEditor } from "../../grid/ko/gridEditor";
-import { GridBindingHandler } from ".";
 
 export class WidgetBindingHandler {
-    public constructor(viewManager: IViewManager, eventManager: IEventManager) {
+    public constructor() {
         let componentLoadingOperationUniqueId = 0;
 
         ko.bindingHandlers["widget"] = {
             init(element, valueAccessor, ignored1, ignored2, bindingContext) {
-                let currentViewModel,
-                    currentLoadingOperationId,
-                    disposeAssociatedComponentViewModel = () => {
-                        const currentViewModelDispose = currentViewModel && currentViewModel["dispose"];
-                        if (typeof currentViewModelDispose === "function") {
-                            currentViewModelDispose.call(currentViewModel);
-                        }
-                        currentViewModel = null;
-                        // Any in-flight loading operation is no longer relevant, so make sure we ignore its completion
-                        currentLoadingOperationId = null;
-                    },
-                    originalChildNodes = makeArray(ko.virtualElements.childNodes(element));
+                let currentViewModel;
+                let currentLoadingOperationId;
+                const disposeAssociatedComponentViewModel = () => {
+                    const currentViewModelDispose = currentViewModel && currentViewModel["dispose"];
+                    if (typeof currentViewModelDispose === "function") {
+                        currentViewModelDispose.call(currentViewModel);
+                    }
+                    currentViewModel = null;
+                    // Any in-flight loading operation is no longer relevant, so make sure we ignore its completion
+                    currentLoadingOperationId = null;
+                };
+                const originalChildNodes = makeArray(ko.virtualElements.childNodes(element));
 
                 ko.utils.domNodeDisposal.addDisposeCallback(element, disposeAssociatedComponentViewModel);
 
                 ko.computed(() => {
-                    let componentOnCreateHandler;
                     const componentViewModel = ko.utils.unwrapObservable(valueAccessor());
                     const loadingOperationId = currentLoadingOperationId = ++componentLoadingOperationUniqueId;
                     const registration = ko.components["registry"].find(x => componentViewModel instanceof x.constructor);
@@ -60,28 +55,24 @@ export class WidgetBindingHandler {
                         currentViewModel = componentViewModel;
                         ko.applyBindingsToDescendants(childBindingContext, root);
 
-                        if (componentOnCreateHandler) {
-                            componentOnCreateHandler(componentViewModel, element);
-                        }
-
                         let correctedElement = element;
 
                         if (correctedElement.nodeName === "#comment") {
                             do {
                                 correctedElement = correctedElement.nextSibling;
                             }
-                            while (correctedElement !== null && correctedElement.nodeName === "#comment")
+                            while (correctedElement !== null && correctedElement.nodeName === "#comment");
                         }
 
                         if (correctedElement) {
                             correctedElement["attachedViewModel"] = componentViewModel;
 
-                            GridBindingHandler.attachWidgetDragEvents(correctedElement, viewManager, eventManager);
+                            ko.applyBindingsToNode(correctedElement, { layoutwidget: {} });
                         }
                     });
                 }, null, { disposeWhenNodeIsRemoved: element });
 
-                return { "controlsDescendantBindings": true };
+                return { controlsDescendantBindings: true };
             }
         };
 
@@ -91,12 +82,14 @@ export class WidgetBindingHandler {
             const result = [];
             for (let i = 0, j = arrayLikeObject.length; i < j; i++) {
                 result.push(arrayLikeObject[i]);
-            };
+            }
             return result;
         };
 
         const cloneNodes = (nodesArray, shouldCleanNodes) => {
-            for (var i = 0, j = nodesArray.length, newNodesArray = []; i < j; i++) {
+            const newNodesArray = [];
+            
+            for (let i = 0, j = nodesArray.length; i < j; i++) {
                 const clonedNode = nodesArray[i].cloneNode(true);
                 newNodesArray.push(shouldCleanNodes ? ko.cleanNode(clonedNode) : clonedNode);
             }
@@ -118,7 +111,7 @@ export class WidgetBindingHandler {
         function createViewModel(componentDefinition, element, originalChildNodes, componentParams) {
             const componentViewModelFactory = componentDefinition["createViewModel"];
             return componentViewModelFactory
-                ? componentViewModelFactory.call(componentDefinition, componentParams, { "element": element, "templateNodes": originalChildNodes })
+                ? componentViewModelFactory.call(componentDefinition, componentParams, { element: element, templateNodes: originalChildNodes })
                 : componentParams; // Template-only component
         }
     }

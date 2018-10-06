@@ -1,24 +1,30 @@
 import * as ko from "knockout";
+import template from "./layoutSelector.html";
 import { IResourceSelector } from "@paperbits/common/ui";
 import { ILayoutService, LayoutContract } from "@paperbits/common/layouts";
 import { LayoutItem } from "./layoutItem";
+import { Component, Param, Event, OnMounted } from "../../../ko/decorators";
 
 
+@Component({
+    selector: "layout-selector",
+    template: template,
+    injectable: "layoutSelector"
+})
 export class LayoutSelector implements IResourceSelector<LayoutContract> {
-    private readonly layoutService: ILayoutService;
-
     public readonly searchPattern: KnockoutObservable<string>;
     public readonly layouts: KnockoutObservableArray<LayoutItem>;
     public readonly working: KnockoutObservable<boolean>;
 
+    @Param()
     public selectedLayout: KnockoutObservable<LayoutItem>;
-    public onResourceSelected: (layout: LayoutContract) => void;
 
-    constructor(layoutService: ILayoutService, onSelect: (media: LayoutContract) => void) {
-        this.layoutService = layoutService;
+    @Event()
+    public onSelect: (layout: LayoutContract) => void;
 
+    constructor(private readonly layoutService: ILayoutService) {
+        this.onMounted = this.onMounted.bind(this);
         this.selectLayout = this.selectLayout.bind(this);
-        this.onResourceSelected = onSelect;
 
         this.layouts = ko.observableArray<LayoutItem>();
         this.selectedLayout = ko.observable<LayoutItem>();
@@ -32,7 +38,10 @@ export class LayoutSelector implements IResourceSelector<LayoutContract> {
         this.searchPattern = ko.observable<string>();
         this.searchPattern.subscribe(this.searchLayouts);
         this.working = ko.observable(true);
+    }
 
+    @OnMounted()
+    public async onMounted(): Promise<void> {
         this.searchLayouts();
     }
 
@@ -48,8 +57,8 @@ export class LayoutSelector implements IResourceSelector<LayoutContract> {
     public async selectLayout(layout: LayoutItem): Promise<void> {
         this.selectedLayout(layout);
 
-        if (this.onResourceSelected) {
-            this.onResourceSelected(layout.toLayout());
+        if (this.onSelect) {
+            this.onSelect(layout.toLayout());
         }
     }
 }

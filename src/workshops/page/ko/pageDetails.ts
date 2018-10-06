@@ -3,7 +3,7 @@ import { IPermalink, IPermalinkService } from "@paperbits/common/permalinks";
 import { IPageService } from "@paperbits/common/pages";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
-import { Component } from "../../../ko/component";
+import { Component, Param, Event, OnMounted } from "../../../ko/decorators";
 import { PageItem } from "./pageItem";
 
 @Component({
@@ -13,27 +13,28 @@ import { PageItem } from "./pageItem";
 })
 export class PageDetailsWorkshop {
     private pagePermalink: IPermalink;
-    private readonly onDeleteCallback: () => void;
 
+    @Param()
     public pageItem: PageItem;
+
+    @Event()
+    private readonly onDeleteCallback: () => void;
 
     constructor(
         private readonly pageService: IPageService,
         private readonly permalinkService: IPermalinkService,
         private readonly routeHandler: IRouteHandler,
         private readonly viewManager: IViewManager,
-        params
     ) {
-
-        // initialization...
-        this.pageItem = params.pageItem;
-        this.onDeleteCallback = params.onDeleteCallback;
-
         // rebinding...
+        this.onMounted = this.onMounted.bind(this);
         this.deletePage = this.deletePage.bind(this);
         this.updatePage = this.updatePage.bind(this);
         this.updatePermlaink = this.updatePermlaink.bind(this);
+    }
 
+    @OnMounted()
+    public async onMounted(): Promise<void> {
         this.pageItem.title
             .extend({ required: true, onlyValid: true })
             .subscribe(this.updatePage);
@@ -48,10 +49,6 @@ export class PageDetailsWorkshop {
             .extend({ uniquePermalink: this.pageItem.permalinkKey, required: true, onlyValid: true })
             .subscribe(this.updatePermlaink);
 
-        this.init();
-    }
-
-    private async init(): Promise<void> {
         const permalink = await this.permalinkService.getPermalinkByKey(this.pageItem.permalinkKey);
 
         this.pagePermalink = permalink;
@@ -68,7 +65,9 @@ export class PageDetailsWorkshop {
         this.pagePermalink.uri = this.pageItem.permalinkUrl();
         await this.permalinkService.updatePermalink(this.pagePermalink);
 
-        this.routeHandler.navigateTo(this.pagePermalink.uri, false);
+        this.routeHandler.notifyListeners = false;
+        this.routeHandler.navigateTo(this.pagePermalink.uri);
+        this.routeHandler.notifyListeners = true;
     }
 
     public async deletePage(): Promise<void> {

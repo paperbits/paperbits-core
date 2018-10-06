@@ -1,10 +1,9 @@
 import * as ko from "knockout";
 import template from "./navbarEditor.html";
 import { IWidgetEditor } from "@paperbits/common/widgets";
-import { IViewManager } from "@paperbits/common/ui";
 import { MediaContract } from "@paperbits/common/media";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
-import { Component } from "../../ko/component";
+import { Component } from "../../ko/decorators/component.decorator";
 import { NavbarModel } from "../navbarModel";
 
 @Component({
@@ -18,7 +17,7 @@ export class NavbarEditor implements IWidgetEditor {
 
     public background: KnockoutObservable<BackgroundModel>;
 
-    constructor(private viewManager: IViewManager) {
+    constructor() {
         this.onMediaSelected = this.onMediaSelected.bind(this);
         this.background = ko.observable<BackgroundModel>();
     }
@@ -46,9 +45,5 @@ export class NavbarEditor implements IWidgetEditor {
         backgroundModel.sourceUrl = media.downloadUrl;
 
         this.background(backgroundModel);
-    }
-
-    public closeEditor(): void {
-        this.viewManager.closeWidgetEditor();
     }
 }

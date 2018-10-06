@@ -72,18 +72,18 @@ export function LifecylceHook(hookName: string) {
     };
 }
 
-export let OnBeforeCreate = () => LifecylceHook("beforeCreate");
-export let OnCreated = () => LifecylceHook("created");
-export let OnBeforeMount = () => LifecylceHook("beforeMount");
-export let OnMounted = () => LifecylceHook("mounted");
-export let OnBeforeDestroy = () => LifecylceHook("beforeDestroy");
-export let OnDestroyed = () => LifecylceHook("destroyed");
-export let OnBeforeUpdate = () => LifecylceHook("beforeUpdate");
-export let OnUpdated = () => LifecylceHook("updated");
-export let OnActivated = () => LifecylceHook("activated");
-export let OnDeactivated = () => LifecylceHook("deactivated");
-export let OnRender = () => LifecylceHook("render");
-export let OnErrorCaptured = () => LifecylceHook("errorCaptured");
+export const OnBeforeCreate = () => LifecylceHook("beforeCreate");
+export const OnCreated = () => LifecylceHook("created");
+export const OnBeforeMount = () => LifecylceHook("beforeMount");
+export const OnMounted = () => LifecylceHook("mounted");
+export const OnBeforeDestroy = () => LifecylceHook("beforeDestroy");
+export const OnDestroyed = () => LifecylceHook("destroyed");
+export const OnBeforeUpdate = () => LifecylceHook("beforeUpdate");
+export const OnUpdated = () => LifecylceHook("updated");
+export const OnActivated = () => LifecylceHook("activated");
+export const OnDeactivated = () => LifecylceHook("deactivated");
+export const OnRender = () => LifecylceHook("render");
+export const OnErrorCaptured = () => LifecylceHook("errorCaptured");
 
 export function Computed(): MethodDecorator {
     return function (target: any, propertyKey: string) {

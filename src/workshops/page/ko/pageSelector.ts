@@ -3,8 +3,7 @@ import template from "./pageSelector.html";
 import { IResourceSelector } from "@paperbits/common/ui";
 import { PageItem, AnchorItem } from "./pageItem";
 import { IPageService, PageContract } from "@paperbits/common/pages";
-import { IPermalinkService } from "@paperbits/common/permalinks";
-import { Component } from "../../../ko/component";
+import { Component, Param, Event } from "../../../ko/decorators";
 
 @Component({
     selector: "page-selector",
@@ -12,23 +11,19 @@ import { Component } from "../../../ko/component";
     injectable: "pageSelector"
 })
 export class PageSelector implements IResourceSelector<PageContract> {
-    private readonly pageService: IPageService;
-    private readonly permalinkService: IPermalinkService;
-
     public readonly searchPattern: KnockoutObservable<string>;
     public readonly pages: KnockoutObservableArray<PageItem>;
     public readonly working: KnockoutObservable<boolean>;
 
+    @Param()
     public selectedPage: KnockoutObservable<PageItem>;
-    public onResourceSelected: (selection: PageContract) => void;
 
-    constructor(pageService: IPageService, permalinkService: IPermalinkService, onSelect: (page: PageContract) => void) {
-        this.pageService = pageService;
-        this.permalinkService = permalinkService;
+    @Event()
+    public onSelect: (selection: PageContract) => void;
 
+    constructor(private readonly pageService: IPageService) {
         this.selectPage = this.selectPage.bind(this);
         this.selectAnchor = this.selectAnchor.bind(this);
-        this.onResourceSelected = onSelect;
 
         this.pages = ko.observableArray<PageItem>();
         this.selectedPage = ko.observable<PageItem>();
@@ -59,14 +54,14 @@ export class PageSelector implements IResourceSelector<PageContract> {
     public async selectPage(page: PageItem, anchorKey?: string): Promise<void> {
         this.selectedPage(page);
 
-        if (this.onResourceSelected) {
-            this.onResourceSelected(page.toContract());
+        if (this.onSelect) {
+            this.onSelect(page.toContract());
         }
     }
 
     public async selectAnchor(anchor: AnchorItem): Promise<void> {
-        if (this.onResourceSelected) {
-            this.onResourceSelected(anchor.toContract());
+        if (this.onSelect) {
+            this.onSelect(anchor.toContract());
         }
     }
 }

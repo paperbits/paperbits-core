@@ -4,18 +4,18 @@ import { SearchResultsModel } from "../searchResultsModel";
 
 
 export class SearchResultsViewModelBinder implements IViewModelBinder<SearchResultsModel, SearchResultsViewModel> {
-    public modelToViewModel(model: SearchResultsModel, readonly: boolean, viewModel?: SearchResultsViewModel): SearchResultsViewModel {
+    public modelToViewModel(model: SearchResultsModel, viewModel?: SearchResultsViewModel): SearchResultsViewModel {
         if (!viewModel) {
             viewModel = new SearchResultsViewModel();
         }
 
         viewModel["widgetBinding"] = {
             displayName: "Search results",
-            readonly: readonly,
+            
             model: model,
             applyChanges: async (updatedModel: SearchResultsModel) => {
                 Object.assign(model, updatedModel);
-                this.modelToViewModel(model, readonly, viewModel);
+                this.modelToViewModel(model, viewModel);
             }
         }
 

@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import template from "./section.html";
 import { BackgroundModel } from "@paperbits/common/widgets/background/backgroundModel";
-import { Component } from "../../ko/component";
+import { Component } from "../../ko/decorators/component.decorator";
 import { WidgetViewModel } from "../../ko/widgetViewModel";
 
 @Component({

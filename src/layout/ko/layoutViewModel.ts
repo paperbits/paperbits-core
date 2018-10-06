@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import template from "./layout.html";
-import { Component } from "@paperbits/core/ko/component";
+import { Component } from "@paperbits/core/ko/decorators";
 
 @Component({
     selector: "page-layout",

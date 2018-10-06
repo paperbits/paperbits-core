@@ -1,18 +1,17 @@
 import * as ko from "knockout";
 import template from "./urlSelector.html";
-import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
 import { UrlItem } from "./urlItem";
-import { UrlContract } from '@paperbits/common/urls/urlContract';
-import { IPermalinkService } from '@paperbits/common/permalinks';
-import { IUrlService } from '@paperbits/common/urls/IUrlService';
-import { Component } from "../../../ko/component";
+import { UrlContract } from "@paperbits/common/urls/urlContract";
+import { IPermalinkService } from "@paperbits/common/permalinks";
+import { IUrlService } from "@paperbits/common/urls/IUrlService";
+import { Component, Event } from "../../../ko/decorators";
 
 @Component({
     selector: "url-selector",
     template: template,
     injectable: "urlSelector"
 })
-export class UrlSelector implements IResourceSelector<UrlContract> {
+export class UrlSelector {
     private readonly urlService: IUrlService;
     private readonly permalinkService: IPermalinkService;
 
@@ -21,15 +20,16 @@ export class UrlSelector implements IResourceSelector<UrlContract> {
     public readonly uri: KnockoutObservable<string>;
     public readonly working: KnockoutObservable<boolean>;
     public readonly selectedUrl: KnockoutObservable<UrlItem>;
-    public readonly onResourceSelected: (selection: UrlContract) => void;
 
-    constructor(urlService: IUrlService, permalinkService: IPermalinkService, onSelect: (url: UrlContract) => void) {
+    @Event()
+    public onSelect: (url: UrlContract) => void;
+
+    constructor(urlService: IUrlService, permalinkService: IPermalinkService) {
         this.urlService = urlService;
         this.permalinkService = permalinkService;
 
         this.selectUrl = this.selectUrl.bind(this);
         this.createUrl = this.createUrl.bind(this);
-        this.onResourceSelected = onSelect;
 
         this.uri = ko.observable<string>("https://");
         this.urls = ko.observableArray<UrlItem>();
@@ -61,8 +61,8 @@ export class UrlSelector implements IResourceSelector<UrlContract> {
     public async selectUrl(urlItem: UrlItem, anchorKey?: string): Promise<void> {
         this.selectedUrl(urlItem);
 
-        if (this.onResourceSelected) {
-            this.onResourceSelected(urlItem.toUrl());
+        if (this.onSelect) {
+            this.onSelect(urlItem.toUrl());
         }
     }
 

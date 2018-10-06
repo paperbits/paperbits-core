@@ -1,10 +1,9 @@
 ﻿import * as ko from "knockout";
 import template from "./pictureEditor.html";
-import { IViewManager } from "@paperbits/common/ui";
 import { IWidgetEditor } from "@paperbits/common/widgets";
 import { MediaContract } from "@paperbits/common/media";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
-import { Component } from "../../ko/component";
+import { Component } from "../../ko/decorators/component.decorator";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 import { PictureModel } from "../pictureModel";
 
@@ -27,7 +26,7 @@ export class PictureEditor implements IWidgetEditor {
     public readonly width: KnockoutObservable<number>;
     public readonly height: KnockoutObservable<number>;
 
-    constructor(private viewManager: IViewManager) {
+    constructor() {
         this.onHyperlinkChange = this.onHyperlinkChange.bind(this);
         this.onMediaSelected = this.onMediaSelected.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -102,9 +101,5 @@ export class PictureEditor implements IWidgetEditor {
     public onHyperlinkChange(hyperlink: HyperlinkModel): void {
         this.hyperlink(hyperlink);
         this.onChange();
-    }
-
-    public closeEditor(): void {
-        this.viewManager.closeWidgetEditor();
     }
 }

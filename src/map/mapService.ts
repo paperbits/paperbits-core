@@ -1,5 +1,5 @@
-//import * as GoogleMapsLoader from "google-maps";
-import { ISettingsProvider, Settings } from '@paperbits/common/configuration';
+// import * as GoogleMapsLoader from "google-maps";
+import { ISettingsProvider, Settings } from "@paperbits/common/configuration";
 
 export class MapService {
     constructor(
@@ -12,7 +12,7 @@ export class MapService {
         await this.load(config["apiKey"]);
 
         this.settingsProvider.onSettingChange(Settings.Config.GMaps, config => {
-            //GoogleMapsLoader.release(() => { this.load(config["apiKey"]); });
+            // GoogleMapsLoader.release(() => { this.load(config["apiKey"]); });
         });
     }
 

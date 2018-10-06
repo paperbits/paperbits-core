@@ -1,8 +1,7 @@
 import * as ko from "knockout";
 import template from "./youtubeEditor.html";
 import { IWidgetEditor } from "@paperbits/common/widgets/IWidgetEditor";
-import { IViewManager } from "@paperbits/common/ui";
-import { Component } from "../../ko/component";
+import { Component } from "../../ko/decorators/component.decorator";
 import { YoutubePlayerModel } from "../youtubePlayerModel";
 import { changeRateLimit } from "../../ko/consts";
 
@@ -21,9 +20,7 @@ export class YoutubeEditor implements IWidgetEditor {
     public autoplay: KnockoutObservable<boolean>;
     public loop: KnockoutObservable<boolean>;
 
-    constructor(
-        private readonly viewManager: IViewManager
-    ) {
+    constructor() {
         this.setWidgetModel = this.setWidgetModel.bind(this);
         this.onControlsUpdate = this.onControlsUpdate.bind(this);
 
@@ -57,9 +54,5 @@ export class YoutubeEditor implements IWidgetEditor {
         this.controls(model.controls);
         this.autoplay(model.autoplay);
         this.loop(model.loop);
-    }
-
-    public closeEditor(): void {
-        this.viewManager.closeWidgetEditor();
     }
 }

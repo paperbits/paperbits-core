@@ -3,7 +3,7 @@ import { IViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
 import { TestimonialsModel } from "../testimonialsModel";
 
 export class TestimonialsViewModelBinder implements IViewModelBinder<TestimonialsModel, TestimonialsViewModel>  {
-    public modelToViewModel(model: TestimonialsModel, readonly: boolean, viewModel?: TestimonialsViewModel): TestimonialsViewModel {
+    public modelToViewModel(model: TestimonialsModel, viewModel?: TestimonialsViewModel): TestimonialsViewModel {
         if (!viewModel) {
             viewModel = new TestimonialsViewModel();
         }
@@ -19,7 +19,7 @@ export class TestimonialsViewModelBinder implements IViewModelBinder<Testimonial
             model: model,
             editor: "testimonials-editor",
             applyChanges: () => {
-                this.modelToViewModel(model, readonly, viewModel);
+                this.modelToViewModel(model, viewModel);
             }
         };
 

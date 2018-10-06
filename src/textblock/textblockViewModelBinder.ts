@@ -10,7 +10,7 @@ export class TextblockViewModelBinder implements IViewModelBinder<TextblockModel
         this.htmlEditorFactory = htmlEditorFactory;
     }
 
-    public modelToViewModel(model: TextblockModel, readonly: boolean, viewModel?: TextblockViewModel): TextblockViewModel {
+    public modelToViewModel(model: TextblockModel, viewModel?: TextblockViewModel): TextblockViewModel {
         if (!viewModel) {
             viewModel = new TextblockViewModel(this.htmlEditorFactory.createHtmlEditor());
         }
@@ -22,13 +22,13 @@ export class TextblockViewModelBinder implements IViewModelBinder<TextblockModel
 
         const widgetBinding /*: IWidgetBinding */ = {
             displayName: "Text",
-            readonly: readonly,
+            
             model: model,
             flow: "block",
             editor: "html-editor",
             editorResize: "horizontally",
             applyChanges: () => {
-                this.modelToViewModel(model, readonly, viewModel);
+                this.modelToViewModel(model, viewModel);
             }
         }
 

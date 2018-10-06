@@ -1,9 +1,8 @@
 import * as ko from "knockout";
 import template from "./widgetSelector.html";
 import { WidgetItem } from "./widgetItem";
-import { IResourceSelector, IViewManager } from "@paperbits/common/ui";
-import { IWidgetService } from "@paperbits/common/widgets";
-import { Component } from "../../../ko/component";
+import { IWidgetService, WidgetModel } from "@paperbits/common/widgets";
+import { Component, Event, OnMounted } from "../../../ko/decorators";
 
 
 @Component({
@@ -11,28 +10,28 @@ import { Component } from "../../../ko/component";
     template: template,
     injectable: "widgetSelector"
 })
-export class WidgetSelector implements IResourceSelector<Object> {
-    public readonly onResourceSelected: (widgetModel: Object) => void;
-
+export class WidgetSelector {
     public readonly widgets: KnockoutObservable<WidgetItem[]>;
     public readonly working: KnockoutObservable<boolean>;
 
-    constructor(
-        private readonly viewManager: IViewManager,
-        private readonly widgetService: IWidgetService,
-        private readonly onSelect: (widgetModel: Object) => void,
-        private readonly onRequest: () => string[]
-    ) {
-        // initialization...
-        this.onResourceSelected = onSelect;
+    @Event()
+    public onSelect: (widgetModel: WidgetModel) => void;
 
+    @Event()
+    public onRequest: () => string[];
+
+    constructor(private readonly widgetService: IWidgetService) {
         // rebinding...
+        this.onMounted = this.onMounted.bind(this);
         this.selectWidget = this.selectWidget.bind(this);
 
         // setting up...
         this.working = ko.observable(true);
         this.widgets = ko.observable<WidgetItem[]>();
+    }
 
+    @OnMounted()
+    public onMounted(): void {
         this.loadWidgetOrders();
     }
 
@@ -61,10 +60,6 @@ export class WidgetSelector implements IResourceSelector<Object> {
 
     public async selectWidget(widgetItem: WidgetItem): Promise<void> {
         const model = await widgetItem.widgetOrder.createModel();
-        this.onResourceSelected(model);
-    }
-
-    public closeEditor(): void {
-        this.viewManager.closeWidgetEditor();
+        this.onSelect(model);
     }
 }

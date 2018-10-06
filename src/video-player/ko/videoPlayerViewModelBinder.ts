@@ -3,7 +3,7 @@ import { IViewModelBinder } from "@paperbits/common/widgets";
 import { VideoPlayerModel } from "../videoPlayerModel";
 
 export class VideoPlayerViewModelBinder implements IViewModelBinder<VideoPlayerModel, VideoPlayerViewModel> {
-    public modelToViewModel(model: VideoPlayerModel, readonly: boolean, viewModel?: VideoPlayerViewModel): VideoPlayerViewModel {
+    public modelToViewModel(model: VideoPlayerModel, viewModel?: VideoPlayerViewModel): VideoPlayerViewModel {
         if (!viewModel) {
             viewModel = new VideoPlayerViewModel();
         }
@@ -14,11 +14,11 @@ export class VideoPlayerViewModelBinder implements IViewModelBinder<VideoPlayerM
 
         viewModel["widgetBinding"] = {
             displayName: "Video player",
-            readonly: readonly,
+            
             model: model,
             editor: "video-player-editor",
             applyChanges: () => {
-                this.modelToViewModel(model, readonly, viewModel);
+                this.modelToViewModel(model, viewModel);
             }
         }
 

@@ -7,7 +7,7 @@ export class MapViewModelBinder {
         private readonly mapService: MapService
     ) { }
 
-    public modelToViewModel(model: MapModel, readonly: boolean, viewModel?: MapViewModel): MapViewModel {
+    public modelToViewModel(model: MapModel, viewModel?: MapViewModel): MapViewModel {
         if (!viewModel) {
             viewModel = new MapViewModel(this.mapService);
         }
@@ -19,11 +19,11 @@ export class MapViewModelBinder {
 
         viewModel["widgetBinding"] = {
             displayName: "Map",
-            readonly: readonly,
+            
             model: model,
             editor: "paperbits-map-editor",
             applyChanges: () => {
-                this.modelToViewModel(model, readonly, viewModel);
+                this.modelToViewModel(model, viewModel);
             }
         }
 

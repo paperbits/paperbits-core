@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import template from "./colorSelector.html";
-import { Component } from "../../../ko/component";
+import { Component, Param, Event } from "../../../ko/decorators";
 
 export interface IntentionItem {
     name: string;
@@ -14,15 +14,15 @@ export interface IntentionItem {
     injectable: "colorSelector"
 })
 export class ColorSelector {
-    private readonly selectedColor: KnockoutObservable<string>;
-    private readonly onSelect: Function;
+    @Param()
+    public readonly selectedColor: KnockoutObservable<string>;
+
+    @Event()
+    public  readonly onSelect: (color: string) => void;
 
     public intentions: IntentionItem[];
 
-    constructor(onSelect: Function, selectedColor: KnockoutObservable<string>) {
-        this.selectedColor = selectedColor;
-        this.onSelect = onSelect;
-
+    constructor() {
         this.selectIntention = this.selectIntention.bind(this);
 
         this.intentions = [];

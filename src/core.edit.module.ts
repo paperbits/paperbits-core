@@ -1,5 +1,4 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { IWidgetService } from "@paperbits/common/widgets";
 import { VideoPlayerEditorModule } from "./video-player/ko/videoPlayerEditor.module";
 import { PictureEditorModule } from "./picture/ko/pictureEditor.module";
 import { YoutubePlayerEditorModule } from "./youtube-player/ko/youtubePlayerEditor.module";
@@ -23,15 +22,14 @@ import { Workshops } from "./workshops/ko/workshops";
 import { TextblockEditorModule } from "./textblock/ko/textblockEditor.module";
 import { DropbucketModule } from "./workshops/dropbucket/ko/dropbucket.module";
 import { ViewportSelector } from "./workshops/viewports/ko/viewport-selector";
-import { HostBindingHandler } from "./ko/bindingHandlers";
+import { HostBindingHandler, BalloonBindingHandler, ResizableBindingHandler } from "./ko/bindingHandlers";
 import { IContentDropHandler, IWidgetHandler, MediaHandlers, HtmlEditorProvider } from "@paperbits/common/editing";
 import { ColorSelector } from "./workshops/colors/ko/colorSelector";
-import { IPermalinkService } from "@paperbits/common/permalinks";
-import { IHyperlinkProvider, IViewManager, LityLightbox } from "@paperbits/common/ui";
+import { IHyperlinkProvider, LityLightbox } from "@paperbits/common/ui";
 import { HyperlinkSelector } from "./workshops/hyperlinks/ko/hyperlinkSelector";
 import { WidgetSelector } from "./workshops/widgets/ko/widgetSelector";
 import { UrlSelector } from "./workshops/urls/ko/urlSelector";
-import { IUrlService } from "@paperbits/common/urls/IUrlService";
+import { PageEditorModule } from "./page/ko/pageEditor.module";
 import { PageHyperlinkProvider } from "@paperbits/common/pages";
 import { BlogHyperlinkProvider } from "@paperbits/common/blogs/blogHyperlinkProvider";
 import { UrlHyperlinkProvider } from "@paperbits/common/urls/urlHyperlinkProvider";
@@ -40,16 +38,29 @@ import { DragManager } from "@paperbits/common/ui/draggables";
 import { PlaceholderViewModel } from "./placeholder/ko/placeholderViewModel";
 import { SearchResultsEditorModule } from "./search-results/ko/searchResultsEditor.module";
 import { PricingTableEditorModule } from "./pricing-table/ko";
+import { ViewManager, Tooltip } from "./ko/ui";
+import { KnockoutValidation } from "./ko/validation/validators";
+import { CropperBindingHandler } from "./workshops/cropper/cropper";
+import { GridEditor } from "./grid/ko";
+
 
 export class CoreEditModule implements IInjectorModule {
     public register(injector: IInjector): void {
         // injector.bindSingleton("settingsProvider", SettingsProvider);
         // injector.bindSingleton("routeHandler", DefaultRouteHandler); 
 
+        injector.bindSingleton("viewManager", ViewManager);
         injector.bind("pageHyperlinkProvider", PageHyperlinkProvider);
         injector.bind("blogHyperlinkProvider", BlogHyperlinkProvider);
         injector.bind("mediaHyperlinkProvider", MediaHyperlinkProvider);
         injector.bind("urlHyperlinkProvider", UrlHyperlinkProvider);
+        injector.bind("gridEditor", GridEditor);
+
+        injector.bindSingleton("knockoutValidation", KnockoutValidation);
+        injector.bindSingleton("resizableBindingHandler", ResizableBindingHandler);
+        injector.bindSingleton("cropperBindingHandler", CropperBindingHandler);
+        injector.bindSingleton("balloonBindingHandler", BalloonBindingHandler);
+        injector.bind("tooltip", Tooltip);
 
         injector.bindFactory<IHyperlinkProvider[]>("resourcePickers", (ctx: IInjector) => {
             const pageReourcePicker = ctx.resolve<IHyperlinkProvider>("pageHyperlinkProvider");
@@ -73,43 +84,25 @@ export class CoreEditModule implements IInjectorModule {
 
         /*** Editors ***/
         injector.bindSingleton("htmlEditorProvider", HtmlEditorProvider);
-        injector.bindSingletonFactory<IContentDropHandler[]>("dropHandlers", (ctx: IInjector) => {
+        injector.bindSingletonFactory<IContentDropHandler[]>("dropHandlers", () => {
             return new Array<IContentDropHandler>();
         });
-        injector.bindSingletonFactory<IWidgetHandler[]>("widgetHandlers", (ctx: IInjector) => {
+        injector.bindSingletonFactory<IWidgetHandler[]>("widgetHandlers", () => {
             return new Array<IWidgetHandler>();
         });
-       
+
         injector.bindSingleton("mediaHandler", MediaHandlers);
 
         injector.bind("workshops", Workshops);
         injector.bind("viewportSelector", ViewportSelector);
         injector.bindSingleton("hostBindingHandler", HostBindingHandler);
-        injector.bind("settingsWorkshop", SettingsWorkshop);        
+        injector.bind("settingsWorkshop", SettingsWorkshop);
 
-        injector.bindComponent("colorSelector", (ctx: IInjector, params: {}) => {
-            return new ColorSelector(params["onSelect"], params["selectedColor"]);
-        });        
+        injector.bind("colorSelector", ColorSelector);
+        injector.bind("hyperlinkSelector", HyperlinkSelector);
+        injector.bind("widgetSelector", WidgetSelector);
+        injector.bind("urlSelector",  UrlSelector);
 
-        injector.bindComponent("hyperlinkSelector", (ctx: IInjector, params: {}) => {
-            const permalinkService = ctx.resolve<IPermalinkService>("permalinkService");
-            const resourcePickers = ctx.resolve<IHyperlinkProvider[]>("resourcePickers");
-
-            return new HyperlinkSelector(permalinkService, resourcePickers, params["hyperlink"], params["onChange"]);
-        });
-
-        injector.bindComponent("widgetSelector", (ctx: IInjector, params: {}) => {
-            const viewManager = ctx.resolve<IViewManager>("viewManager");
-            const widgetService = ctx.resolve<IWidgetService>("widgetService");
-            return new WidgetSelector(viewManager, widgetService, params["onSelect"], params["onRequest"]);
-        });
-
-        injector.bindComponent("urlSelector", (ctx: IInjector, params: {}) => {
-            const urlService = ctx.resolve<IUrlService>("urlService");
-            const permalinkService = ctx.resolve<IPermalinkService>("permalinkService");
-            return new UrlSelector(urlService, permalinkService, params["onSelect"]);
-        });
-        
         injector.bindModule(new DropbucketModule());
         injector.bindModule(new LayoutWorkshopModule());
         injector.bindModule(new PageWorkshopModule());
@@ -121,6 +114,7 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindModule(new RowEditorModule());
         injector.bindModule(new TextblockEditorModule());
         injector.bindModule(new SectionEditorModule());
+        injector.bindModule(new PageEditorModule());
         injector.bindModule(new NavbarEditorModule());
         injector.bindModule(new ButtonEditorModule());
         injector.bindModule(new MapEditorModule());

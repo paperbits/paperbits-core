@@ -1,8 +1,7 @@
 import * as ko from "knockout";
 import template from "./testimonialsEditor.html";
 import { IWidgetEditor } from "@paperbits/common/widgets/IWidgetEditor";
-import { IViewManager } from "@paperbits/common/ui";
-import { Component } from "../../ko/component";
+import { Component } from "../../ko/decorators/component.decorator";
 import { TestimonialsModel } from "../testimonialsModel";
 import { changeRateLimit } from "../../ko/consts";
 
@@ -21,9 +20,7 @@ export class TestimonialsEditor implements IWidgetEditor {
     public author: KnockoutObservable<string>;
     public authorTitle: KnockoutObservable<string>;
 
-    constructor(
-        private readonly viewManager: IViewManager
-    ) {
+    constructor() {
         this.setWidgetModel = this.setWidgetModel.bind(this);
         this.onControlsUpdate = this.onControlsUpdate.bind(this);
 
@@ -51,15 +48,11 @@ export class TestimonialsEditor implements IWidgetEditor {
     }
 
     private onControlsUpdate(): void {
-        this.model.textContent  = this.textContent();
-        this.model.starsCount  = +this.starsCount();
-        this.model.allStarsCount  = +this.allStarsCount();
+        this.model.textContent = this.textContent();
+        this.model.starsCount = +this.starsCount();
+        this.model.allStarsCount = +this.allStarsCount();
         this.model.author = this.author();
         this.model.authorTitle = this.authorTitle();
         this.applyChangesCallback();
-    }
-
-    public closeEditor(): void {
-        this.viewManager.closeWidgetEditor();
-    }
+    } s
 }

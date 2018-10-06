@@ -1,7 +1,6 @@
 import template from "./rowLayoutSelector.html";
 import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
-import { IViewManager } from "@paperbits/common/ui";
-import { Component } from "../../ko/component";
+import { Component, Event } from "../../ko/decorators";
 import { ColumnModel } from "../../column/columnModel";
 import { RowModel } from "../rowModel";
 
@@ -20,7 +19,6 @@ export interface columnSizeCfg {
     injectable: "rowLayoutSelector"
 })
 export class RowLayoutSelector implements IResourceSelector<RowModel> {
-    public readonly onResourceSelected: (rowModel: RowModel) => void;
     public readonly rowConfigs: columnSizeCfg[][] = [
         [{ xs: 12 }],
         [{ xs: 12, md: 6 }, { xs: 12, md: 6 }],
@@ -33,19 +31,18 @@ export class RowLayoutSelector implements IResourceSelector<RowModel> {
         [{ xs: 12, md: 3 }, { xs: 12, md: 6 }, { xs: 12, md: 3 }]
     ];
 
-    constructor(
-        private readonly viewManager: IViewManager,
-        private readonly onSelect: (rowModel: RowModel) => void
-    ) {
+    @Event()
+    public onSelect: (rowModel: RowModel) => void;
+
+    constructor() {
         this.selectRowLayout = this.selectRowLayout.bind(this);
-        this.onResourceSelected = onSelect;
     }
 
     public selectRowLayout(columnSizeCfgs: columnSizeCfg[]): void {
-        let rowModel = new RowModel();
+        const rowModel = new RowModel();
 
         columnSizeCfgs.forEach(size => {
-            let column = new ColumnModel();
+            const column = new ColumnModel();
             column.sizeXs = size.xs;
             column.sizeSm = size.sm;
             column.sizeMd = size.md;
@@ -54,12 +51,8 @@ export class RowLayoutSelector implements IResourceSelector<RowModel> {
             rowModel.widgets.push(column);
         });
 
-        if (this.onResourceSelected) {
-            this.onResourceSelected(rowModel);
+        if (this.onSelect) {
+            this.onSelect(rowModel);
         }
-    }
-
-    public closeEditor(): void {
-        this.viewManager.closeWidgetEditor();
     }
 }

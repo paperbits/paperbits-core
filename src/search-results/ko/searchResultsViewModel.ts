@@ -1,5 +1,5 @@
 import template from "./searchResults.html";
-import { Component } from "../../ko/component";
+import { Component } from "../../ko/decorators/component.decorator";
 
 @Component({
     selector: "search-result",

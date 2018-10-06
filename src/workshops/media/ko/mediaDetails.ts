@@ -4,7 +4,7 @@ import { IPermalink, IPermalinkService } from "@paperbits/common/permalinks";
 import { IMediaService } from "@paperbits/common/media";
 import { IViewManager } from "@paperbits/common/ui";
 import { MediaItem } from "./mediaItem";
-import { Component } from "../../../ko/component";
+import { Component, Param, Event, OnMounted } from "../../../ko/decorators";
 
 @Component({
     selector: "media-details-workshop",
@@ -14,25 +14,27 @@ import { Component } from "../../../ko/component";
 export class MediaDetailsWorkshop {
     private mediaPermalink: IPermalink;
 
+    @Param()
     public readonly mediaItem: MediaItem;
+
+    @Event()
     private readonly onDeleteCallback: () => void;
 
     constructor(
         private readonly mediaService: IMediaService,
         private readonly permalinkService: IPermalinkService,
-        private readonly viewManager: IViewManager,
-        params) {
-
-        // initialization...
-        this.mediaItem = params.mediaItem;
-        this.onDeleteCallback = params.onDeleteCallback;
-
+        private readonly viewManager: IViewManager
+    ) {
         // rebinding...
+        this.onMounted = this.onMounted.bind(this);
         this.deleteMedia = this.deleteMedia.bind(this);
         this.updateMedia = this.updateMedia.bind(this);
         this.updatePermlaink = this.updatePermlaink.bind(this);
         this.openCropper = this.openCropper.bind(this);
+    }
 
+    @OnMounted()
+    public async onMounted(): Promise<void> {
         this.mediaItem.fileName
             .extend({ required: true, onlyValid: true })
             .subscribe(this.updateMedia);
@@ -47,10 +49,6 @@ export class MediaDetailsWorkshop {
             .extend({ uniquePermalink: this.mediaItem.permalinkKey, onlyValid: true })
             .subscribe(this.updatePermlaink);
 
-        this.init();
-    }
-
-    private async init(): Promise<void> {
         const permalink = await this.permalinkService.getPermalinkByKey(this.mediaItem.permalinkKey);
 
         this.mediaPermalink = permalink;
@@ -81,7 +79,7 @@ export class MediaDetailsWorkshop {
             heading: "Edit picture",
             component: {
                 name: "picture-cropper",
-                params: { src: this.mediaItem.downloadUrl() }
+                params: { sourceUrl: this.mediaItem.downloadUrl() }
             },
             resize: "vertically horizontally"
         });

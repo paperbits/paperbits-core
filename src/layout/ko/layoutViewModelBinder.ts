@@ -1,15 +1,12 @@
 import { LayoutViewModel } from "./layoutViewModel";
 import { LayoutModel } from "../layoutModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
+import { IWidgetBinding } from "@paperbits/common/editing";
 
 export class LayoutViewModelBinder {
-    private readonly viewModelBinderSelector: ViewModelBinderSelector;
+    constructor(private readonly viewModelBinderSelector: ViewModelBinderSelector) { }
 
-    constructor(viewModelBinderSelector: ViewModelBinderSelector) {
-        this.viewModelBinderSelector = viewModelBinderSelector;
-    }
-
-    public modelToViewModel(model: LayoutModel, readonly: boolean, viewModel?: LayoutViewModel): LayoutViewModel {
+    public modelToViewModel(model: LayoutModel, viewModel?: LayoutViewModel): LayoutViewModel {
         if (!viewModel) {
             viewModel = new LayoutViewModel();
         }
@@ -24,7 +21,7 @@ export class LayoutViewModelBinder {
 
                 let widgetViewModel;
 
-                widgetViewModel = widgetViewModelBinder.modelToViewModel(widgetModel, readonly);
+                widgetViewModel = widgetViewModelBinder.modelToViewModel(widgetModel);
 
                 return widgetViewModel;
             })
@@ -32,13 +29,15 @@ export class LayoutViewModelBinder {
 
         viewModel.widgets(sectionViewModels);
 
-        viewModel["widgetBinding"] = {
-            readonly: readonly,
+        const binding: IWidgetBinding = {
+            name: "layout",
             model: model,
             applyChanges: () => {
-                this.modelToViewModel(model, readonly, viewModel);
+                this.modelToViewModel(model, viewModel);
             }
         };
+
+        viewModel["widgetBinding"] = binding;
 
         return viewModel;
     }

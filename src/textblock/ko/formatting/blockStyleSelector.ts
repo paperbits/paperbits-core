@@ -1,6 +1,6 @@
 import template from "./blockStyleSelector.html";
 import { IHtmlEditorProvider } from "@paperbits/common/editing";
-import { Component } from "../../../ko/component";
+import { Component } from "../../../ko/decorators/component.decorator";
 
 @Component({
     selector: "block-style-selector",

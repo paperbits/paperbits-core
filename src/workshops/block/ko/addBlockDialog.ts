@@ -1,8 +1,7 @@
 import template from "./addBlockDialog.html";
 import * as ko from "knockout";
-import { IBlockService } from '@paperbits/common/blocks/IBlockService';
-import { IViewManager } from "@paperbits/common/ui";
-import { Component } from "../../../ko/component";
+import { IBlockService } from "@paperbits/common/blocks/IBlockService";
+import { Component } from "../../../ko/decorators/component.decorator";
 import { SectionModelBinder } from "../../../section/sectionModelBinder";
 import { SectionModel } from "../../../section/sectionModel";
 
@@ -16,7 +15,6 @@ export class AddBlockDialog {
     public readonly name: KnockoutObservable<string>;
 
     constructor(
-        private readonly viewManager: IViewManager,
         private readonly blockService: IBlockService,
         private readonly sectionModelBinder: SectionModelBinder,
         private readonly sectionModel: SectionModel
@@ -32,11 +30,5 @@ export class AddBlockDialog {
         const content = this.sectionModelBinder.modelToContract(this.sectionModel);
 
         await this.blockService.createBlock(this.name(), "", content);
-
-        this.closeEditor();
-    }
-
-    public closeEditor(): void {
-        this.viewManager.closeWidgetEditor();
     }
 }

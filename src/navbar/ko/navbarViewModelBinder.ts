@@ -38,7 +38,7 @@ export class NavbarViewModelBinder implements IViewModelBinder<NavbarModel, Navb
         return navbarItemViewModel;
     }
 
-    public modelToViewModel(navbarModel: NavbarModel, readonly: boolean, viewModel?: NavbarViewModel): NavbarViewModel {
+    public modelToViewModel(navbarModel: NavbarModel, viewModel?: NavbarViewModel): NavbarViewModel {
         if (!viewModel) {
             viewModel = new NavbarViewModel();
         }
@@ -49,12 +49,12 @@ export class NavbarViewModelBinder implements IViewModelBinder<NavbarModel, Navb
         viewModel.pictureSourceUrl(navbarModel.pictureSourceUrl);
 
         const applyChanges = () => {
-            this.modelToViewModel(navbarModel, readonly, viewModel);
+            this.modelToViewModel(navbarModel, viewModel);
         };
 
         viewModel["widgetBinding"] = {
             displayName: "Navigation bar",
-            readonly: readonly,
+            
             model: navbarModel,
             editor: "navbar-editor",
             applyChanges: applyChanges

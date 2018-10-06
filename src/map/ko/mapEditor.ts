@@ -1,8 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./mapEditor.html";
-import { IWidgetEditor } from '@paperbits/common/widgets';
-import { IViewManager } from '@paperbits/common/ui';
-import { Component } from "../../ko/component";
+import { IWidgetEditor } from "@paperbits/common/widgets";
+import { Component } from "../../ko/decorators/component.decorator";
 import { MapModel } from "../mapModel";
 
 @Component({
@@ -19,9 +18,7 @@ export class MapEditor implements IWidgetEditor {
     public zoomControl: KnockoutObservable<boolean>;
     public layout: KnockoutObservable<string>;
 
-    constructor(
-        private readonly viewManager: IViewManager
-    ) {
+    constructor() {
         this.onLocationUpdate = this.onLocationUpdate.bind(this);
         this.onCaptionUpdate = this.onCaptionUpdate.bind(this);
         this.onLayoutUpdate = this.onLayoutUpdate.bind(this);
@@ -56,10 +53,12 @@ export class MapEditor implements IWidgetEditor {
     }
 
     private onZoomControlUpdate(enabled: boolean): void {
-        if (enabled)
+        if (enabled) {
             this.map.zoomControl = "show";
-        else
+        }
+        else {
             this.map.zoomControl = "hide";
+        }
 
         this.applyChangesCallback();
     }
@@ -72,9 +71,5 @@ export class MapEditor implements IWidgetEditor {
         this.caption(map.caption);
         this.layout(map.layout);
         this.zoomControl(this.map.zoomControl === "show");
-    }
-
-    public closeEditor(): void {
-        this.viewManager.closeWidgetEditor();
     }
 }

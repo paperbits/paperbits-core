@@ -1,8 +1,7 @@
 ﻿import * as ko from "knockout";
 import * as MediaUtils from "@paperbits/common/media/mediaUtils";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
-import { IWidgetOrder } from '@paperbits/common/editing';
-import { IWidgetFactoryResult } from "@paperbits/common/editing";
+import { IWidgetOrder, IWidgetFactoryResult } from "@paperbits/common/editing";
 
 export class MediaItem {
     public key: string;
@@ -61,6 +60,6 @@ export class MediaItem {
             contentType: this.contentType(),
             downloadUrl: this.downloadUrl(),
             permalinkKey: this.permalinkKey
-        }
+        };
     }
 }

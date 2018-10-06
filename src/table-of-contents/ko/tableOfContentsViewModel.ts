@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import template from "./tableOfContents.html";
 import { NavigationItemModel } from "@paperbits/common/navigation";
-import { Component } from "../../ko/component";
+import { Component } from "../../ko/decorators/component.decorator";
 
 @Component({
     selector: "table-of-contents",

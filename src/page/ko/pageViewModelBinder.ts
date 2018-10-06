@@ -1,10 +1,10 @@
 import { PageViewModel } from "./pageViewModel";
-import { IViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
-import { DragSession } from "@paperbits/common/ui/draggables/dragSession";
+import { IViewModelBinder } from "@paperbits/common/widgets";
 import { PageModel } from "../pageModel";
-import { SectionModel } from "../../section/sectionModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
+import { PageHandlers } from "../pageHandlers";
+import { IWidgetBinding } from "@paperbits/common/editing";
 
 export class PageViewModelBinder implements IViewModelBinder<PageModel, PageViewModel> {
     private readonly viewModelBinderSelector: ViewModelBinderSelector;
@@ -13,7 +13,7 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
         this.viewModelBinderSelector = viewModelBinderSelector;
     }
 
-    public modelToViewModel(model: PageModel, readonly: boolean, pageViewModel?: PageViewModel): any {
+    public modelToViewModel(model: PageModel, pageViewModel?: PageViewModel): any {
         if (!pageViewModel) {
             pageViewModel = new PageViewModel();
         }
@@ -26,11 +26,11 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
                     return null;
                 }
 
-                let widgetViewModel = widgetViewModelBinder.modelToViewModel(widgetModel, !readonly);
+                const widgetViewModel = widgetViewModelBinder.modelToViewModel(widgetModel);
 
                 return widgetViewModel;
             })
-            .filter(x => x != null);
+            .filter(x => x !== null);
 
         if (widgetViewModels.length === 0) {
             widgetViewModels.push(new PlaceholderViewModel("Page"));
@@ -38,25 +38,15 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
 
         pageViewModel.widgets(widgetViewModels);
 
-        const binding = {
-            readonly: readonly,
+        const binding: IWidgetBinding = {
+            name: "page",
             model: model,
+            handler: PageHandlers,
             provides: ["static", "scripts", "keyboard"],
             applyChanges: () => {
-                this.modelToViewModel(model, readonly, pageViewModel);
-            },
-            onDragOver: (dragSession: DragSession): boolean => {
-                return dragSession.type === "section";
-            },
-            onDragDrop: (dragSession: DragSession): void => {
-                switch (dragSession.type) {
-                    case "section":
-                        model.widgets.splice(dragSession.insertIndex, 0, <SectionModel>dragSession.sourceModel);
-                        break;
-                }
-                binding.applyChanges();
+                this.modelToViewModel(model, pageViewModel);
             }
-        }
+        };
 
         pageViewModel["widgetBinding"] = binding;
 

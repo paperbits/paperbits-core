@@ -14,12 +14,12 @@ export class SliderViewModelBinder {
     ) {
     }
 
-    public modelToViewModel(model: SliderModel, readonly: boolean, viewModel?: SliderViewModel): SliderViewModel {
+    public modelToViewModel(model: SliderModel, viewModel?: SliderViewModel): SliderViewModel {
         if (!viewModel) {
             viewModel = new SliderViewModel();
         }
 
-        let classes = [];
+        const classes = [];
 
         switch (model.size) {
             case "small":
@@ -40,19 +40,19 @@ export class SliderViewModelBinder {
 
         if (viewModel.slides) {
             viewModel.slides(model.slides.map(slideModel => {
-                let rowViewModels = slideModel.rows.map(rowModel => {
-                    return this.rowViewModelBinder.modelToViewModel(rowModel, readonly);
-                })
+                const rowViewModels = slideModel.rows.map(rowModel => {
+                    return this.rowViewModelBinder.modelToViewModel(rowModel);
+                });
 
-                let slideViewModel = new SlideViewModel();
+                const slideViewModel = new SlideViewModel();
 
                 slideViewModel.rows(rowViewModels);
                 slideViewModel.layout(slideModel.layout);
                 slideViewModel.background(slideModel.background);
                 slideViewModel.thumbnail(slideModel.thumbnail);
 
-                let classes = [];
-                let backgroundColorKey = slideModel.background.colorKey;
+                const classes = [];
+                const backgroundColorKey = slideModel.background.colorKey;
                 // let intentionMap = this.intentionsProvider.getIntentions();
                 // let backgroundIntention = intentionMap.container.background[backgroundColorKey];
 
@@ -85,7 +85,7 @@ export class SliderViewModelBinder {
             model: model,
             editor: "paperbits-slider-editor",
             applyChanges: () => {
-                this.modelToViewModel(model, readonly, viewModel);
+                this.modelToViewModel(model, viewModel);
             },
 
             getContextualEditor: (widgetElement: HTMLElement, activeSliderHalf: string): IContextualEditor => {
@@ -102,13 +102,13 @@ export class SliderViewModelBinder {
                             name: "section-layout-selector",
                             params: {
                                 onSelect: (newSectionModel: SectionModel) => {
-                                    let sectionElement = widgetElement;
-                                    let sectionHalf = activeSliderHalf;
+                                    const sectionElement = widgetElement;
+                                    const sectionHalf = activeSliderHalf;
 
-                                    let mainElement = GridHelper.getParentElementWithModel(sectionElement);
-                                    let mainModel = GridHelper.getModel(mainElement);
-                                    let mainWidgetModel = GridHelper.getWidgetBinding(mainElement);
-                                    let sectionModel = <SectionModel>GridHelper.getModel(sectionElement);
+                                    const mainElement = GridHelper.getParentElementWithModel(sectionElement);
+                                    const mainModel = GridHelper.getModel(mainElement);
+                                    const mainWidgetModel = GridHelper.getWidgetBinding(mainElement);
+                                    const sectionModel = <SectionModel>GridHelper.getModel(sectionElement);
                                     let index = mainModel.widgets.indexOf(sectionModel);
 
                                     if (sectionHalf === "bottom") {
@@ -127,10 +127,10 @@ export class SliderViewModelBinder {
                         tooltip: "Delete slider",
                         color: "#607d8b",
                         callback: () => {
-                            let sourceMainElement = widgetElement.parentElement;
-                            let sourceMainModel = GridHelper.getModel(sourceMainElement);
-                            let sourceMainWidgetModel = GridHelper.getWidgetBinding(sourceMainElement);
-                            let widgetModel = GridHelper.getModel(widgetElement);
+                            const sourceMainElement = widgetElement.parentElement;
+                            const sourceMainModel = GridHelper.getModel(sourceMainElement);
+                            const sourceMainWidgetModel = GridHelper.getWidgetBinding(sourceMainElement);
+                            const widgetModel = GridHelper.getModel(widgetElement);
 
                             if (sourceMainModel) {
                                 sourceMainModel.widgets.remove(widgetModel);
@@ -146,10 +146,10 @@ export class SliderViewModelBinder {
                         position: "center",
                         color: "#607d8b",
                         callback: () => {
-                            let model = <SliderModel>GridHelper.getModel(widgetElement);
+                            const model = <SliderModel>GridHelper.getModel(widgetElement);
                             model.previousSlide();
 
-                            let widgetModel = GridHelper.getWidgetBinding(widgetElement);
+                            const widgetModel = GridHelper.getWidgetBinding(widgetElement);
                             widgetModel.applyChanges();
                         }
                     },
@@ -159,10 +159,10 @@ export class SliderViewModelBinder {
                         position: "center",
                         color: "#607d8b",
                         callback: () => {
-                            let model = <SliderModel>GridHelper.getModel(widgetElement);
+                            const model = <SliderModel>GridHelper.getModel(widgetElement);
                             model.nextSlide();
 
-                            let widgetModel = GridHelper.getWidgetBinding(widgetElement);
+                            const widgetModel = GridHelper.getWidgetBinding(widgetElement);
                             widgetModel.applyChanges();
                         }
                     },
@@ -175,7 +175,7 @@ export class SliderViewModelBinder {
                             this.viewManager.openWidgetEditor(binding);
                         }
                     }]
-                }
+                };
 
                 const slideModel = sliderModel.slides[sliderModel.activeSlideNumber];
 
@@ -188,7 +188,7 @@ export class SliderViewModelBinder {
                             name: "row-layout-selector",
                             params: {
                                 onSelect: (newRowModel: RowModel) => {
-                                    let sliderBinding = GridHelper.getWidgetBinding(widgetElement);
+                                    const sliderBinding = GridHelper.getWidgetBinding(widgetElement);
 
                                     slideModel.rows.push(newRowModel);
                                     sliderBinding.applyChanges();
@@ -197,12 +197,12 @@ export class SliderViewModelBinder {
                                 }
                             }
                         }
-                    }
+                    };
                 }
 
                 return sliderContextualEditor;
             }
-        }
+        };
 
         return viewModel;
     }

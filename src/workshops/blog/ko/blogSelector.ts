@@ -1,11 +1,9 @@
 import * as ko from "knockout";
 import template from "./blogSelector.html";
-import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
+import { IResourceSelector } from "@paperbits/common/ui";
 import { BlogPostItem } from "./blogPostItem";
-import { BlogPostContract } from '@paperbits/common/blogs/BlogPostContract';
-import { IPermalinkService } from '@paperbits/common/permalinks';
-import { IBlogService } from '@paperbits/common/blogs/IBlogService';
-import { Component } from "../../../ko/component";
+import { IBlogService, BlogPostContract } from "@paperbits/common/blogs";
+import { Component, Param, Event, OnMounted } from "../../../ko/decorators";
 
 @Component({
     selector: "blog-selector",
@@ -13,22 +11,19 @@ import { Component } from "../../../ko/component";
     injectable: "blogSelector"
 })
 export class BlogSelector implements IResourceSelector<BlogPostContract> {
-    private readonly blogService: IBlogService;
-    private readonly permalinkService: IPermalinkService;
-
     public readonly searchPattern: KnockoutObservable<string>;
     public readonly posts: KnockoutObservableArray<BlogPostItem>;
     public readonly working: KnockoutObservable<boolean>;
 
+    @Param()
     public selectedPost: KnockoutObservable<BlogPostItem>;
-    public onResourceSelected: (blog: BlogPostContract) => void;
 
-    constructor(blogService: IBlogService, permalinkService: IPermalinkService, onSelect: (blogPost: BlogPostContract) => void) {
-        this.blogService = blogService;
-        this.permalinkService = permalinkService;
+    @Event()
+    public onSelect: (blog: BlogPostContract) => void;
 
+    constructor(private readonly blogService: IBlogService) {
+        this.onMounted = this.onMounted.bind(this);
         this.selectPost = this.selectPost.bind(this);
-        this.onResourceSelected = onSelect;
 
         this.posts = ko.observableArray<BlogPostItem>();
         this.selectedPost = ko.observable<BlogPostItem>();
@@ -42,15 +37,18 @@ export class BlogSelector implements IResourceSelector<BlogPostContract> {
         this.searchPattern = ko.observable<string>();
         this.searchPattern.subscribe(this.searchPosts);
         this.working = ko.observable(true);
+    }
 
+    @OnMounted()
+    public async onMounted(): Promise<void> {
         this.searchPosts();
     }
 
     public async searchPosts(searchPattern: string = ""): Promise<void> {
         this.working(true);
 
-        let blogs = await this.blogService.search(searchPattern);
-        let blogItems = blogs.map(blog => new BlogPostItem(blog));
+        const blogs = await this.blogService.search(searchPattern);
+        const blogItems = blogs.map(blog => new BlogPostItem(blog));
         this.posts(blogItems);
         this.working(false);
     }
@@ -58,8 +56,8 @@ export class BlogSelector implements IResourceSelector<BlogPostContract> {
     public async selectPost(blog: BlogPostItem): Promise<void> {
         this.selectedPost(blog);
 
-        if (this.onResourceSelected) {
-            this.onResourceSelected(blog.toBlogPost());
+        if (this.onSelect) {
+            this.onSelect(blog.toBlogPost());
         }
     }
 }

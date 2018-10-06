@@ -1,14 +1,11 @@
 import * as ko from "knockout";
-import template from "./cropper.html";
-import { IViewManager } from "@paperbits/common/ui";
-import { Component } from "../../ko/component";
-
-
 import * as Cropper from "cropperjs";
+import template from "./cropper.html";
+import { Component } from "../../ko/decorators/component.decorator";
 import { IEventManager } from "@paperbits/common/events";
+import { Param } from "../../ko/decorators";
 
 export class CropperBindingHandler {
-
     constructor(eventManager: IEventManager) {
         ko.bindingHandlers["cropper"] = {
             init: (imageElement: HTMLImageElement, valueAccessor) => {
@@ -46,12 +43,11 @@ export class CropperBindingHandler {
 })
 export class PictureCropper {
     public cropperInstance: KnockoutObservable<any>;
-    public source: KnockoutObservable<string>;
 
-    constructor(
-        private readonly viewManager: IViewManager,
-        private readonly sourceUrl: string
-    ) {
+    @Param()
+    public sourceUrl: KnockoutObservable<string>;
+
+    constructor() {
         this.setMoveMode = this.setMoveMode.bind(this);
         this.setCropMode = this.setCropMode.bind(this);
         this.zoomIn = this.zoomIn.bind(this);
@@ -63,7 +59,7 @@ export class PictureCropper {
         this.crop = this.crop.bind(this);
         this.clear = this.clear.bind(this);
 
-        this.source = ko.observable(sourceUrl);
+        this.sourceUrl = ko.observable();
         this.cropperInstance = ko.observable(null);
     }
 
@@ -132,9 +128,5 @@ export class PictureCropper {
 
     public clear(): void {
         this.cropperInstance().clear();
-    }
-
-    public closeEditor(): void {
-        this.viewManager.closeWidgetEditor();
     }
 }

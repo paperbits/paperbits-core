@@ -1,9 +1,9 @@
 ﻿import * as ko from "knockout";
 import template from "./tableOfContentsEditor.html";
-import { IViewManager } from '@paperbits/common/ui';
-import { IWidgetEditor } from '@paperbits/common/widgets';
+import { IViewManager } from "@paperbits/common/ui";
+import { IWidgetEditor } from "@paperbits/common/widgets";
 import { NavigationItemContract } from "@paperbits/common/navigation";
-import { Component } from "../../ko/component";
+import { Component } from "../../ko/decorators/component.decorator";
 import { TableOfContentsModel } from "../tableOfContentsModel";
 import { TableOfContentsModelBinder } from "../tableOfContentsModelBinder";
 import { TableOfContentsContract } from "../tableOfContentsContract";
@@ -38,16 +38,12 @@ export class TableOfContentsEditor implements IWidgetEditor {
         const contract: TableOfContentsContract = {
             title: this.tableOfContentsModel.title,
             navigationItemKey: navigationItem.key
-        }
+        };
 
         const model = await this.tableOfContentsModelBinder.contractToModel(contract);
 
         this.navigationItemTitle(navigationItem.label);
 
         this.applyChangesCallback(model);
-    }
-
-    public closeEditor(): void {
-        this.viewManager.closeWidgetEditor();
     }
 }

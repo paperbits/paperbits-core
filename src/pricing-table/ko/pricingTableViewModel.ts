@@ -1,5 +1,5 @@
 ﻿import template from "./pricingTable.html";
-import { Component } from "../../ko/component";
+import { Component } from "../../ko/decorators/component.decorator";
 
 
 @Component({

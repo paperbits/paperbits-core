@@ -4,26 +4,26 @@ let componentLoadingOperationUniqueId = 0;
 
 ko.bindingHandlers["component"] = {
     init: (element: HTMLElement, valueAccessor, ignored1, ignored2, bindingContext) => {
-        let currentViewModel,
-            currentLoadingOperationId,
-            disposeAssociatedComponentViewModel = () => {
-                const currentViewModelDispose = currentViewModel && currentViewModel["dispose"];
+        let currentViewModel;
+        let currentLoadingOperationId;
+        const disposeAssociatedComponentViewModel = () => {
+            const currentViewModelDispose = currentViewModel && currentViewModel["dispose"];
 
-                if (typeof currentViewModelDispose === "function") {
-                    currentViewModelDispose.call(currentViewModel);
-                }
-                currentViewModel = null;
-                // Any in-flight loading operation is no longer relevant, so make sure we ignore its completion
-                currentLoadingOperationId = null;
-            },
-            originalChildNodes = makeArray(ko.virtualElements.childNodes(element));
+            if (typeof currentViewModelDispose === "function") {
+                currentViewModelDispose.call(currentViewModel);
+            }
+            currentViewModel = null;
+            // Any in-flight loading operation is no longer relevant, so make sure we ignore its completion
+            currentLoadingOperationId = null;
+        };
+        const originalChildNodes = makeArray(ko.virtualElements.childNodes(element));
 
         ko.utils.domNodeDisposal.addDisposeCallback(element, disposeAssociatedComponentViewModel);
 
         ko.computed(() => {
             let componentOnCreateHandler;
-            var value = ko.utils.unwrapObservable(valueAccessor()),
-                componentName, componentParams;
+            const value = ko.utils.unwrapObservable(valueAccessor());
+            let componentName, componentParams;
 
             if (typeof value === "string") {
                 componentName = value;

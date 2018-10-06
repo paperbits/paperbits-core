@@ -3,7 +3,7 @@ import { IViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
 import { ButtonModel } from "../buttonModel";
 
 export class ButtonViewModelBinder implements IViewModelBinder<ButtonModel, ButtonViewModel>  {
-    public modelToViewModel(model: ButtonModel, readonly: boolean, viewModel?: ButtonViewModel): ButtonViewModel {
+    public modelToViewModel(model: ButtonModel, viewModel?: ButtonViewModel): ButtonViewModel {
         if (!viewModel) {
             viewModel = new ButtonViewModel();
         }
@@ -48,7 +48,7 @@ export class ButtonViewModelBinder implements IViewModelBinder<ButtonModel, Butt
             flow: "inline",
             editor: "paperbits-button-editor",
             applyChanges: () => {
-                this.modelToViewModel(model, readonly, viewModel);
+                this.modelToViewModel(model, viewModel);
             }
         };
 

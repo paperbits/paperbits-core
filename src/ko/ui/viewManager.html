@@ -1,13 +1,9 @@
 <workshops></workshops>
 <dropbucket></dropbucket>
 
-<div class="viewport" data-bind="host: { viewport: viewport, doc: doc }"></div>
+<div class="viewport" data-bind="host: { viewport: viewport, doc: hostDocument }"></div>
 
-<!--ko if: shutter()-->
-<div class="shutter">
-    <spinner></spinner>
-</div>
-<!--/ko-->
+
 
 <div class="indicators" data-bind="foreach: progressIndicators">
     <!--ko if: complete()-->

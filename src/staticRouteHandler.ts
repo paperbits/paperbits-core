@@ -6,19 +6,18 @@
  * found in the LICENSE file and at https://paperbits.io/license.
  */
 
-
 import { IRouteHandler } from "@paperbits/common/routing";
-import { IEventManager } from "@paperbits/common/events";
-
 
 export class StaticRouteHandler implements IRouteHandler {
     private currentUrl: string;
+    private metadata: Object;
     private callbacks: any[];
 
     constructor() {
         this.currentUrl = "/";
         this.navigateTo = this.navigateTo.bind(this);
         this.getCurrentUrl = this.getCurrentUrl.bind(this);
+        this.getCurrentUrlMetadata = this.getCurrentUrlMetadata.bind(this);
 
         this.callbacks = [];
     }
@@ -41,5 +40,9 @@ export class StaticRouteHandler implements IRouteHandler {
 
     public getCurrentUrl(): string {
         return this.currentUrl;
+    }
+
+    public getCurrentUrlMetadata(): Object {
+        return this.metadata;
     }
 }

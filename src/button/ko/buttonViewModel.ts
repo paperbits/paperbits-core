@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import template from "./button.html";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
-import { Component } from "../../ko/component";
+import { Component } from "../../ko/decorators/component.decorator";
 
 @Component({
     selector: "paperbits-button",

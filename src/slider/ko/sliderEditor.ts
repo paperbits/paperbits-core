@@ -3,7 +3,7 @@ import template from "./sliderEditor.html";
 import { IWidgetEditor } from '@paperbits/common/widgets/IWidgetEditor';
 import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { BackgroundModel } from "@paperbits/common/widgets/background/backgroundModel";
-import { Component } from "../../ko/component";
+import { Component } from "../../ko/decorators/component.decorator";
 import { SliderModel, SlideModel } from "../sliderModel";
 
 export class SliderEditorSlide {

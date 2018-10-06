@@ -3,6 +3,8 @@ import * as Utils from "@paperbits/common/utils";
 import { IViewManager, ViewManagerMode, IHighlightConfig, IContextualEditor } from "@paperbits/common/ui";
 import { IWidgetBinding, GridHelper } from "@paperbits/common/editing";
 import { Keys } from "@paperbits/common/keyboard";
+import { IWidgetService } from "@paperbits/common/widgets";
+import { IRouteHandler } from "@paperbits/common/routing";
 
 export class GridEditor {
     private activeHighlightedElement: HTMLElement;
@@ -12,14 +14,13 @@ export class GridEditor {
     private pointerY: number;
     private selectedContextualEditor: IContextualEditor;
     private actives: object;
+    private ownerDocument: Document;
 
     constructor(
         private readonly viewManager: IViewManager,
-        private readonly ownerDocument: Document
+        private readonly widgetService: IWidgetService,
+        private readonly routeHandler: IRouteHandler
     ) {
-        this.viewManager = viewManager;
-        this.ownerDocument = ownerDocument;
-
         this.rerenderEditors = this.rerenderEditors.bind(this);
         this.onPointerDown = this.onPointerDown.bind(this);
         this.attach = this.attach.bind(this);
@@ -111,8 +112,12 @@ export class GridEditor {
         else {
             let contextualEditor;
 
-            if (widgetBinding.getContextualEditor) {
-                contextualEditor = widgetBinding.getContextualEditor(element, "top");
+            if (widgetBinding.handler) {
+                const handler = this.widgetService.getWidgetHandler(widgetBinding.handler);
+
+                if (handler && handler.getContextualEditor) {
+                    contextualEditor = handler.getContextualEditor(element, "top");
+                }
             }
             else {
                 contextualEditor = this.getWidgetContextualEditor(element, "top");
@@ -183,12 +188,15 @@ export class GridEditor {
             .map(element => {
                 const binding = GridHelper.getWidgetBinding(element);
 
-                if (binding && binding.onDragOver && binding.onDragOver(dragSession)) {
-                    return element;
+                if (binding && binding.handler) {
+                    const handler = this.widgetService.getWidgetHandler(binding.handler);
+
+                    if (binding && handler.onDragOver && handler.onDragOver(dragSession)) {
+                        return element;
+                    }
                 }
-                else {
-                    return null;
-                }
+
+                return null;
             })
             .find(x => x !== null);
 
@@ -408,16 +416,32 @@ export class GridEditor {
         return widgetContextualEditor;
     }
 
-    private rerenderEditors(pointerX: number, pointerY: number, elements: HTMLElement[]): void {
+    private async rerenderEditors(pointerX: number, pointerY: number, elements: HTMLElement[]): Promise<void> {
         let highlightedElement: HTMLElement;
         let highlightedText: string;
         const tobeDeleted = Object.keys(this.actives);
+
+        let layoutEditing = false;
+
+        const metadata = this.routeHandler.getCurrentUrlMetadata();
+
+        if (metadata && metadata["usePagePlaceholder"]) {
+            layoutEditing = metadata["usePagePlaceholder"];
+        }
 
         for (let i = elements.length - 1; i >= 0; i--) {
             const element = elements[i];
             const widgetBinding = GridHelper.getWidgetBinding(element);
 
             if (!widgetBinding || widgetBinding.readonly) {
+                continue;
+            }
+
+            /* Filters */
+            const bindings = GridHelper.getParentWidgetBindings(element);
+            const windgetIsInContent = bindings.some(x => x.name === "page" || x.name === "email-layout");
+
+            if ((!windgetIsInContent && !layoutEditing)) {
                 continue;
             }
 
@@ -434,10 +458,15 @@ export class GridEditor {
             if (!active || element !== active.element || half !== active.half) {
                 let contextualEditor;
 
-                if (widgetBinding.getContextualEditor) {
-                    contextualEditor = widgetBinding.getContextualEditor(element, half);
+                if (widgetBinding.handler) {
+                    const handler = this.widgetService.getWidgetHandler(widgetBinding.handler);
+
+                    if (handler.getContextualEditor) {
+                        contextualEditor = handler.getContextualEditor(element, half);
+                    }
                 }
-                else {
+
+                if (!contextualEditor) {
                     contextualEditor = this.getWidgetContextualEditor(element, half);
                 }
 
@@ -461,7 +490,8 @@ export class GridEditor {
         }
     }
 
-    public attach(): void {
+    public attach(ownerDocument: Document): void {
+        this.ownerDocument = ownerDocument;
         // Firefox doesn't fire "mousemove" events by some reason
         this.ownerDocument.addEventListener("mousemove", this.onPointerMove.bind(this), true);
         this.ownerDocument.addEventListener("scroll", this.onWindowScroll.bind(this));

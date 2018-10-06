@@ -7,7 +7,7 @@ import { IFileService } from "@paperbits/common/files";
 import { ILayoutService } from "@paperbits/common/layouts";
 import { Keys } from "@paperbits/common/keyboard";
 import { LayoutItem } from "./layoutItem";
-import { Component } from "../../../ko/component";
+import { Component, OnMounted } from "../../../ko/decorators";
 
 @Component({
     selector: "layouts",
@@ -15,26 +15,21 @@ import { Component } from "../../../ko/component";
     injectable: "layoutsWorkshop"
 })
 export class LayoutsWorkshop {
-    private readonly layoutService: ILayoutService;
-    private readonly fileService: IFileService;
-    private readonly routeHandler: IRouteHandler;
-    private readonly viewManager: IViewManager;
     private template: Contract;
 
     public readonly searchPattern: KnockoutObservable<string>;
     public readonly layouts: KnockoutObservableArray<LayoutItem>;
     public readonly working: KnockoutObservable<boolean>;
+    public readonly selectedLayout: KnockoutObservable<LayoutItem>;
 
-    public selectedLayout: KnockoutObservable<LayoutItem>;
-
-    constructor(layoutService: ILayoutService, fileService: IFileService, routeHandler: IRouteHandler, viewManager: IViewManager) {
-        // initialization...
-        this.layoutService = layoutService;
-        this.fileService = fileService;
-        this.routeHandler = routeHandler;
-        this.viewManager = viewManager;
-
+    constructor(
+        private readonly layoutService: ILayoutService,
+        private readonly fileService: IFileService,
+        private readonly routeHandler: IRouteHandler,
+        private readonly viewManager: IViewManager
+    ) {
         // rebinding...
+        this.onMounted = this.onMounted.bind(this);
         this.searchLayouts = this.searchLayouts.bind(this);
         this.addLayout = this.addLayout.bind(this);
         this.selectLayout = this.selectLayout.bind(this);
@@ -46,12 +41,10 @@ export class LayoutsWorkshop {
         this.searchPattern = ko.observable<string>();
         this.searchPattern.subscribe(this.searchLayouts);
         this.working = ko.observable(true);
-
-        this.init();
-        this.searchLayouts();
     }
 
-    public async init(): Promise<void> {
+    @OnMounted()
+    public async onMounted(): Promise<void> {
         this.template = {
             "object": "block",
             "nodes": [{
@@ -59,7 +52,9 @@ export class LayoutsWorkshop {
                 "type": "page"
             }],
             "type": "layout"
-        }
+        };
+
+        this.searchLayouts();
     }
 
     public async searchLayouts(searchPattern: string = ""): Promise<void> {
@@ -74,7 +69,7 @@ export class LayoutsWorkshop {
 
     public selectLayout(layoutItem: LayoutItem): void {
         this.selectedLayout(layoutItem);
-        
+
         this.viewManager.openViewAsWorkshop("Layout", "layout-details-workshop", {
             layoutItem: layoutItem,
             onDeleteCallback: () => {

@@ -3,7 +3,7 @@ import { IViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
 import { YoutubePlayerModel } from "../youtubePlayerModel";
 
 export class YoutubePlayerViewModelBinder implements IViewModelBinder<YoutubePlayerModel, YoutubePlayerViewModel> {
-    public modelToViewModel(model: YoutubePlayerModel, readonly: boolean, viewModel?: YoutubePlayerViewModel): YoutubePlayerViewModel {
+    public modelToViewModel(model: YoutubePlayerModel, viewModel?: YoutubePlayerViewModel): YoutubePlayerViewModel {
         if (!viewModel) {
             viewModel = new YoutubePlayerViewModel();
         }
@@ -16,13 +16,12 @@ export class YoutubePlayerViewModelBinder implements IViewModelBinder<YoutubePla
 
         viewModel["widgetBinding"] = {
             displayName: "Youtube player",
-            readonly: readonly,
             model: model,
             editor: "youtube-editor",
             applyChanges: () => {
-                this.modelToViewModel(model, readonly, viewModel);
+                this.modelToViewModel(model, viewModel);
             }
-        }
+        };
 
         return viewModel;
     }

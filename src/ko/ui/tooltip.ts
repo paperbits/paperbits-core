@@ -1,5 +1,6 @@
 import template from "./tooltip.html";
-import { Component } from "../../ko/component";
+import { Component } from "../decorators/component.decorator";
+import { Param } from "../decorators";
 
 @Component({
     selector: "tooltip",
@@ -7,5 +8,6 @@ import { Component } from "../../ko/component";
     injectable: "tooltip"
 })
 export class Tooltip {
-    constructor(private readonly text: string) { }
+    @Param()
+    public text: string;
 }

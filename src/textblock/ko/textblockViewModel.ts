@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./textblock.html";
 import { IHtmlEditor } from "@paperbits/common/editing/IHtmlEditor";
-import { Component } from "../../ko/component";
+import { Component } from "../../ko/decorators/component.decorator";
 
 @Component({
     selector: "paperbits-text",

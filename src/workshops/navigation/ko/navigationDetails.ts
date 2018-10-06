@@ -2,9 +2,8 @@
 import template from "./navigationDetails.html";
 import { IViewManager } from "@paperbits/common/ui";
 import { NavigationItemViewModel } from "./navigationItemViewModel";
-import { HyperlinkModel } from "@paperbits/common/permalinks";
-import { IPermalinkResolver } from "@paperbits/common/permalinks/IPermalinkResolver";
-import { Component } from "../../../ko/component";
+import { HyperlinkModel, IPermalinkResolver } from "@paperbits/common/permalinks";
+import { Component, Event, OnMounted, Param } from "../../../ko/decorators";
 
 @Component({
     selector: "navigation-details-workshop",
@@ -12,23 +11,21 @@ import { Component } from "../../../ko/component";
     injectable: "navigationDetailsWorkshop"
 })
 export class NavigationDetailsWorkshop {
-    private readonly onDeleteCallback: () => void;
-
     public readonly hyperlinkTitle: KnockoutComputed<string>;
     public readonly hyperlink: KnockoutObservable<HyperlinkModel>;
-    public readonly navigationItem: NavigationItemViewModel;
+
+    @Event()
+    public onDeleteCallback: () => void;
+
+    @Param()
+    public navigationItem: NavigationItemViewModel;
 
     constructor(
         private readonly permalinkResolver: IPermalinkResolver,
-        private readonly viewManager: IViewManager,
-        params
+        private readonly viewManager: IViewManager
     ) {
-
-        // initialization...
-        this.navigationItem = params.navigationItem;
-        this.onDeleteCallback = params.onDeleteCallback;
-
         // rebinding...
+        this.onMounted = this.onMounted.bind(this);
         this.deleteNavigationItem = this.deleteNavigationItem.bind(this);
         this.onHyperlinkChange = this.onHyperlinkChange.bind(this);
 
@@ -44,7 +41,10 @@ export class NavigationDetailsWorkshop {
 
             return "Click to select a link...";
         });
+    }
 
+    @OnMounted()
+    public async onMounted(): Promise<void> {
         if (this.navigationItem.permalinkKey()) {
             this.init(this.navigationItem.permalinkKey());
         }
@@ -68,7 +68,7 @@ export class NavigationDetailsWorkshop {
         this.viewManager.closeWorkshop("navigation-details-workshop");
 
         if (this.onDeleteCallback) {
-            this.onDeleteCallback()
+            this.onDeleteCallback();
         }
     }
 }

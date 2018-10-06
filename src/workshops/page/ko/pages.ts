@@ -7,7 +7,7 @@ import { IViewManager } from "@paperbits/common/ui";
 import { IFileService } from "@paperbits/common/files";
 import { Keys } from "@paperbits/common/keyboard";
 import { IBlockService } from "@paperbits/common/blocks";
-import { Component } from "../../../ko/component";
+import { Component } from "../../../ko/decorators/component.decorator";
 import { PageItem } from "./pageItem";
 
 const templateBlockKey = "blocks/8730d297-af39-8166-83b6-9439addca789";
@@ -69,7 +69,7 @@ export class PagesWorkshop {
 
     public selectPage(pageItem: PageItem): void {
         this.selectedPage(pageItem);
-        this.viewManager.setDocument({ src: "/theme/index.html", componentName: "page-document" });
+        this.viewManager.setDocument({ src: "/index.html", componentName: "page-document" });
         this.viewManager.setTitle(null, pageItem.toContract());
         this.viewManager.openViewAsWorkshop("Page", "page-details-workshop", {
             pageItem: pageItem,

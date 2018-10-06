@@ -5,7 +5,7 @@ import { IViewManager } from "@paperbits/common/ui";
 import { NavigationItemContract } from "@paperbits/common/navigation/navigationItemContract";
 import { NavigationTree } from "./navigationTree";
 import { NavigationItemViewModel } from "./navigationItemViewModel";
-import { Component } from "../../../ko/component";
+import { Component } from "../../../ko/decorators/component.decorator";
 
 @Component({
     selector: "navigation",
@@ -44,7 +44,7 @@ export class NavigationWorkshop {
     }
 
     public async onNavigationUpdate(navigationItems: Array<NavigationItemContract>): Promise<void> {
-        //this.navigationService.updateNavigationItem(topLevelMenus[0]); //TODO: For now user can have only one menu
+        //this.navigationService.updateNavigationItem(topLevelMenus[0]); // TODO: For now user can have only one menu
 
         await this.navigationService.updateNavigation(navigationItems);
     }

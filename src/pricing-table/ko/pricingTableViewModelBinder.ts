@@ -3,18 +3,18 @@ import { IViewModelBinder } from "@paperbits/common/widgets";
 import { PricingTableModel } from "../pricingTableModel";
 
 export class PricingTableViewModelBinder implements IViewModelBinder<PricingTableModel, PricingTableViewModel> {
-    public modelToViewModel(model: PricingTableModel, readonly: boolean, viewModel?: PricingTableViewModel): PricingTableViewModel {
+    public modelToViewModel(model: PricingTableModel, viewModel?: PricingTableViewModel): PricingTableViewModel {
         if (!viewModel) {
             viewModel = new PricingTableViewModel();
         }
 
         viewModel["widgetBinding"] = {
             displayName: "Pricing table",
-            readonly: readonly,
+            
             model: model,
             editor: "pricing-table-editor",
             applyChanges: () => {
-                this.modelToViewModel(model, readonly, viewModel);
+                this.modelToViewModel(model, viewModel);
             }
         }
 

@@ -3,7 +3,7 @@ import { IViewModelBinder } from "@paperbits/common/widgets";
 import { PictureModel } from "../pictureModel";
 
 export class PictureViewModelBinder implements IViewModelBinder<PictureModel, PictureViewModel> {
-    public modelToViewModel(model: PictureModel, readonly: boolean, viewModel?: PictureViewModel): PictureViewModel {
+    public modelToViewModel(model: PictureModel, viewModel?: PictureViewModel): PictureViewModel {
         if (!viewModel) {
             viewModel = new PictureViewModel();
         }
@@ -18,11 +18,11 @@ export class PictureViewModelBinder implements IViewModelBinder<PictureModel, Pi
 
         viewModel["widgetBinding"] = {
             displayName: "Picture",
-            readonly: readonly,
+            
             model: model,
             editor: "paperbits-picture-editor",
             applyChanges: () => {
-                this.modelToViewModel(model, readonly, viewModel);
+                this.modelToViewModel(model, viewModel);
             }
         };
 

@@ -3,13 +3,13 @@ import template from "./media.html";
 import * as Utils from "@paperbits/common/utils";
 import { IMediaService } from "@paperbits/common/media";
 import { IViewManager } from "@paperbits/common/ui";
-import { IContentDropHandler } from "@paperbits/common/editing";
+import { IContentDropHandler, IContentDescriptor } from "@paperbits/common/editing";
 import { MediaItem } from "./mediaItem";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { Keys } from "@paperbits/common/keyboard";
-import { IContentDescriptor } from "@paperbits/common/editing";
 import { IEventManager } from "@paperbits/common/events";
-import { Component } from "../../../ko/component";
+import { Component } from "../../../ko/decorators/component.decorator";
+import { IWidgetService } from "@paperbits/common/widgets";
 
 @Component({
     selector: "media",
@@ -28,7 +28,8 @@ export class MediaWorkshop {
         private readonly eventManager: IEventManager,
         private readonly mediaService: IMediaService,
         private readonly viewManager: IViewManager,
-        private readonly dropHandlers: Array<IContentDropHandler>
+        private readonly dropHandlers: IContentDropHandler[],
+        private readonly widgetService: IWidgetService
     ) {
         // rebinding...
         this.searchMedia = this.searchMedia.bind(this);
@@ -51,24 +52,23 @@ export class MediaWorkshop {
     private async launchSearch(searchPattern: string = ""): Promise<void> {
         this.working(true);
 
-        const result: Array<MediaItem> = [];
+        const result: MediaItem[] = [];
 
         this.mediaItems(result);
 
         const mediaFiles = await this.mediaService.search(searchPattern);
 
         mediaFiles.forEach(async media => {
-            //TODO: Move this logic to drag start. MediaItem can get descriptor byitself;
+            // TODO: Move this logic to drag start. MediaItem can get descriptor byitself;
 
             const mediaItem = new MediaItem(media);
-
             const descriptor = this.findContentDescriptor(media);
 
             if (descriptor && descriptor.getWidgetOrder) {
-                let order = await descriptor.getWidgetOrder();
+                const order = await descriptor.getWidgetOrder();
                 mediaItem.widgetOrder = order;
 
-                //mediaItem.downloadUrl  = order.
+                // mediaItem.downloadUrl  = order.
             }
 
             this.mediaItems.push(mediaItem);
@@ -80,9 +80,7 @@ export class MediaWorkshop {
     private findContentDescriptor(media: MediaContract): IContentDescriptor {
         let result: IContentDescriptor;
 
-        for (let i = 0; i < this.dropHandlers.length; i++) {
-            const handler = this.dropHandlers[i];
-
+        for (const handler of this.dropHandlers) {
             if (!handler.getContentDescriptorFromMedia) {
                 continue;
             }
@@ -116,8 +114,7 @@ export class MediaWorkshop {
 
         const uploadPromises = [];
 
-        for (let index = 0; index < files.length; index++) {
-            const file = files[index];
+        for (const file of files) {
             const content = await Utils.readFileAsByteArray(file);
             const uploadPromise = this.mediaService.createMedia(file.name, content, file.type);
 
@@ -143,7 +140,7 @@ export class MediaWorkshop {
     }
 
     public async deleteSelectedMedia(): Promise<void> {
-        //TODO: Show confirmation dialog according to mockup
+        // TODO: Show confirmation dialog according to mockup
         this.viewManager.closeWorkshop("media-details-workshop");
 
         await this.mediaService.deleteMedia(this.selectedMediaItem().toMedia());
@@ -171,7 +168,10 @@ export class MediaWorkshop {
         const dragSession = this.viewManager.getDragSession();
         const acceptorBinding = dragSession.targetBinding;
 
-        acceptorBinding.onDragDrop(dragSession);
+        if (acceptorBinding && acceptorBinding.handler) {
+            const widgetHandler = this.widgetService.getWidgetHandler(acceptorBinding.handler);
+            widgetHandler.onDragDrop(dragSession);
+        }
 
         this.eventManager.dispatchEvent("virtualDragEnd");
     }

@@ -1,10 +1,9 @@
 import * as ko from "knockout";
 import template from "./buttonEditor.html";
 import { IWidgetEditor } from "@paperbits/common/widgets";
-import { IViewManager } from "@paperbits/common/ui";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { ButtonModel } from "../buttonModel";
-import { Component } from "../../ko/component";
+import { Component } from "../../ko/decorators/component.decorator";
 
 @Component({
     selector: "paperbits-button-editor",
@@ -21,7 +20,7 @@ export class ButtonEditor implements IWidgetEditor {
     public readonly hyperlink: KnockoutObservable<HyperlinkModel>;
     public readonly hyperlinkTitle: KnockoutObservable<string>;
 
-    constructor(private viewManager: IViewManager) {
+    constructor() {
         this.onChange = this.onChange.bind(this);
         this.onHyperlinkChange = this.onHyperlinkChange.bind(this);
 
@@ -73,9 +72,5 @@ export class ButtonEditor implements IWidgetEditor {
         this.onHyperlinkChange(buttonModel.hyperlink);
 
         this.applyChangesCallback = applyChangesCallback;
-    }
-
-    public closeEditor(): void {
-        this.viewManager.closeWidgetEditor();
     }
 }

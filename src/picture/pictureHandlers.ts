@@ -34,7 +34,7 @@ export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
                 pictureModel.caption = caption;
                 pictureModel.layout = defaultLayout;
 
-                const pictureViewModel = this.pictureViewModelBinder.modelToViewModel(pictureModel, false);
+                const pictureViewModel = this.pictureViewModelBinder.modelToViewModel(pictureModel);
                 const htmlElement = document.createElement("widget");
 
                 htmlElement.style.width = "150px";

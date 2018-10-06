@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import template from "./navbar.html";
-import { Component } from "../../ko/component";
+import { Component } from "../../ko/decorators/component.decorator";
 import { NavbarItemViewModel } from "./navbarItemViewModel";
 
 @Component({

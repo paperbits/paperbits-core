@@ -1,10 +1,9 @@
 ﻿import * as ko from "knockout";
 import template from "./videoEditor.html";
-import { IWidgetEditor } from '@paperbits/common/widgets';
-import { MediaContract } from '@paperbits/common/media/mediaContract';
-import { IViewManager } from '@paperbits/common/ui';
+import { IWidgetEditor } from "@paperbits/common/widgets";
+import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { IMediaFilter } from "@paperbits/common/media";
-import { Component } from "../../ko/component";
+import { Component } from "../../ko/decorators/component.decorator";
 import { VideoPlayerModel } from "../videoPlayerModel";
 
 @Component({
@@ -22,9 +21,7 @@ export class VideoEditor implements IWidgetEditor {
 
     public readonly mediaFilter: IMediaFilter;
 
-    constructor(
-        private readonly viewManager: IViewManager
-    ) {
+    constructor() {
         this.onSourceUrlUpdate = this.onSourceUrlUpdate.bind(this);
         this.onControlsUpdate = this.onControlsUpdate.bind(this);
         this.onAutoplayUpdate = this.onAutoplayUpdate.bind(this);
@@ -76,9 +73,5 @@ export class VideoEditor implements IWidgetEditor {
         this.sourceUrl(this.video.sourceUrl);
 
         this.applyChangesCallback();
-    }
-
-    public closeEditor(): void {
-        this.viewManager.closeWidgetEditor();
     }
 }

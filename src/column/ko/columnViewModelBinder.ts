@@ -1,21 +1,15 @@
 import { ColumnViewModel } from "./columnViewModel";
-import { IViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
-import { DragSession } from "@paperbits/common/ui/draggables/dragSession";
-import { IWidgetBinding, GridHelper } from "@paperbits/common/editing";
-import { IContextualEditor, IViewManager } from "@paperbits/common/ui";
+import { IViewModelBinder } from "@paperbits/common/widgets";
+import { IWidgetBinding } from "@paperbits/common/editing";
 import { ColumnModel } from "../columnModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
+import { ColumnHandlers } from "../columnHandlers";
 
 export class ColumnViewModelBinder implements IViewModelBinder<ColumnModel, ColumnViewModel> {
-    constructor(
-        private readonly viewModelBinderSelector: ViewModelBinderSelector,
-        private readonly viewManager: IViewManager
-    ) {
-        this.viewModelBinderSelector = viewModelBinderSelector;
-    }
+    constructor(private readonly viewModelBinderSelector: ViewModelBinderSelector) { }
 
-    public modelToViewModel(model: ColumnModel, readonly: boolean, columnViewModel?: ColumnViewModel): ColumnViewModel {
+    public modelToViewModel(model: ColumnModel, columnViewModel?: ColumnViewModel): ColumnViewModel {
         if (!columnViewModel) {
             columnViewModel = new ColumnViewModel();
         }
@@ -23,7 +17,7 @@ export class ColumnViewModelBinder implements IViewModelBinder<ColumnModel, Colu
         const widgetViewModels = model.widgets
             .map(widgetModel => {
                 const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-                const widgetViewModel = widgetViewModelBinder.modelToViewModel(widgetModel, readonly);
+                const widgetViewModel = widgetViewModelBinder.modelToViewModel(widgetModel);
 
                 return widgetViewModel;
             });
@@ -82,79 +76,22 @@ export class ColumnViewModelBinder implements IViewModelBinder<ColumnModel, Colu
         const binding: IWidgetBinding = {
             name: "column",
             displayName: "Column",
-            readonly: readonly,
+            
             flow: "inline",
             model: model,
             editor: "layout-column-editor",
+            handler: ColumnHandlers,
+
+            /**
+             * editor: LayoutColumnEditor,
+             * contextMenu: ColumnContextMenu,
+             * type: "inline"
+             */
+
             applyChanges: () => {
-                this.modelToViewModel(model, readonly, columnViewModel);
-            },
-            onDragOver: (dragSession: DragSession): boolean => {
-                const canAccept = !readonly && dragSession.type === "widget";
-                return canAccept;
-            },
-            onDragDrop: (dragSession: DragSession): void => {
-                if (dragSession.type === "widget") {
-                    model.widgets.splice(dragSession.insertIndex, 0, dragSession.sourceModel);
-                }
-                binding.applyChanges();
-            },
-
-            getContextualEditor: (element: HTMLElement, half: string, placeholderElement?: HTMLElement, placeholderHalf?: string): IContextualEditor => {
-                const columnContextualEditor: IContextualEditor = {
-                    element: element,
-                    color: "#4c5866",
-                    hoverCommand: null,
-                    deleteCommand: null,
-                    selectionCommands: [{
-                        tooltip: "Edit column",
-                        iconClass: "paperbits-edit-72",
-                        position: "top right",
-                        color: "#4c5866",
-                        callback: () => {
-                            const binding = GridHelper.getWidgetBinding(element);
-                            this.viewManager.openWidgetEditor(binding);
-                        }
-                    }]
-                };
-
-                const attachedModel = <ColumnModel>GridHelper.getModel(element);
-
-                if (attachedModel.widgets.length === 0) {
-                    columnContextualEditor.hoverCommand = {
-                        color: "#607d8b",
-                        position: "center",
-                        tooltip: "Add widget",
-                        component: {
-                            name: "widget-selector",
-                            params: {
-                                onRequest: () => {
-                                    const parentElement = GridHelper.getParentElementWithModel(element);
-                                    const bindings = GridHelper.getParentWidgetBindings(parentElement);
-                                    const provided = bindings
-                                        .filter(x => !!x.provides)
-                                        .map(x => x.provides)
-                                        .reduce((acc, val) => acc.concat(val));
-        
-                                    return provided;
-                                },
-                                onSelect: (widgetModel: any) => {
-                                    const columnModel = <ColumnModel>GridHelper.getModel(element);
-                                    const columnWidgetBinding = GridHelper.getWidgetBinding(element);
-
-                                    columnModel.widgets.push(widgetModel);
-                                    columnWidgetBinding.applyChanges();
-
-                                    this.viewManager.clearContextualEditors();
-                                }
-                            }
-                        }
-                    }
-                }
-
-                return columnContextualEditor;
+                this.modelToViewModel(model, columnViewModel);
             }
-        }
+        };
 
         columnViewModel["widgetBinding"] = binding;
 

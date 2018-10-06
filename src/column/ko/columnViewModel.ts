@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import template from "./column.html";
-import { Component } from "../../ko/component";
+import { Component } from "../../ko/decorators/component.decorator";
 
 @Component({
     selector: "layout-column",

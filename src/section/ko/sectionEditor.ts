@@ -1,10 +1,9 @@
 import * as ko from "knockout";
 import template from "./sectionEditor.html";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
-import { IViewManager } from "@paperbits/common/ui";
 import { IWidgetEditor } from "@paperbits/common/widgets";
 import { BackgroundModel } from "@paperbits/common/widgets/background/backgroundModel";
-import { Component } from "../../ko/component";
+import { Component } from "../../ko/decorators/component.decorator";
 import { SectionModel } from "../sectionModel";
 
 @Component({
@@ -27,9 +26,7 @@ export class SectionEditor implements IWidgetEditor {
     public readonly backgroundHasColor: KnockoutComputed<boolean>;
     public readonly background: KnockoutObservable<BackgroundModel>;
 
-    constructor(
-        private readonly viewManager: IViewManager
-    ) {
+    constructor() {
         this.setWidgetModel = this.setWidgetModel.bind(this);
         this.onMediaSelected = this.onMediaSelected.bind(this);
         this.onColorSelected = this.onColorSelected.bind(this);
@@ -140,9 +137,5 @@ export class SectionEditor implements IWidgetEditor {
 
     public comingSoon(): void {
         alert("This feature is coming soon!");
-    }
-
-    public closeEditor(): void {
-        this.viewManager.closeWidgetEditor();
     }
 }

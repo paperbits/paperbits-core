@@ -14,7 +14,7 @@ ko.bindingHandlers["validationMessageToggle"] = {
             balloon: {
                 component: {
                     name: "tooltip",
-                    params: observable.error
+                    params: { text: observable.error }
                 },
                 position: "top",
                 isOpen: ko.observable()

@@ -16,7 +16,7 @@ import { IPermalinkService } from "@paperbits/common/permalinks";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { IWidgetEditor } from "@paperbits/common/widgets";
-import { Component } from "../../ko/component";
+import { Component } from "../decorators/component.decorator";
 
 declare let uploadDialog;
 
@@ -45,7 +45,7 @@ export class ViewManager implements IViewManager {
     public selectedElementContextualEditor: KnockoutObservable<IContextualEditor>;
     public viewport: KnockoutObservable<string>;
 
-    public doc: KnockoutObservable<HostDocument>;
+    public hostDocument: KnockoutObservable<HostDocument>;
 
     public shutter: KnockoutObservable<boolean>;
     public dragSession: KnockoutObservable<DragSession>;
@@ -107,7 +107,7 @@ export class ViewManager implements IViewManager {
 
 
         this.viewport = ko.observable<string>("xl");
-        this.doc = ko.observable<HostDocument>({ src: "/theme/index.html", componentName: "page-document" });
+        this.hostDocument = ko.observable<HostDocument>({ src: "/index.html", componentName: "page-document" });
 
         this.shutter = ko.observable<boolean>(true);
         this.dragSession = ko.observable();
@@ -132,14 +132,14 @@ export class ViewManager implements IViewManager {
     }
 
     public setDocument(hostDocument: HostDocument): void {
-        if (this.doc().componentName === hostDocument.componentName) {
+        if (this.hostDocument().componentName === hostDocument.componentName) {
             return;
         }
 
         // this.closeEditors();
         this.clearContextualEditors();
 
-        this.doc(hostDocument);
+        this.hostDocument(hostDocument);
     }
 
     private onRouteChange(): void {

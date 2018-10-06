@@ -66,7 +66,7 @@ export class VideoHandlers implements IWidgetHandler, IContentDropHandler {
                 const videoPlayerModel = new VideoPlayerModel();
                 videoPlayerModel.sourceUrl = sourceUrl;
 
-                const videoPlayerViewModel = this.videoPlayerViewModelBinder.modelToViewModel(videoPlayerModel, false);
+                const videoPlayerViewModel = this.videoPlayerViewModelBinder.modelToViewModel(videoPlayerModel);
                 const htmlElement = document.createElement("widget");
 
                 htmlElement.style.width = "150px";

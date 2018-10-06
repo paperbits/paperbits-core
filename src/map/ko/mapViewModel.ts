@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import template from "./map.html";
-import { Component } from "../../ko/component";
+import { Component, OnMounted } from "../../ko/decorators";
 import { MapService } from "../mapService";
 
 @Component({
@@ -15,19 +15,18 @@ export class MapViewModel {
     public animation: KnockoutObservable<string>;
     public zoomControl: KnockoutObservable<string>;
 
-    constructor(
-        private readonly mapService: MapService
-    ) {
+    constructor(private readonly mapService: MapService) {
+        this.onMounted = this.onMounted.bind(this);
+
         this.googleMapsLoaded = ko.observable(false);
         this.location = ko.observable<string>("Seattle, WA");
         this.caption = ko.observable<string>("Seattle, WA");
         this.layout = ko.observable<string>();
         this.zoomControl = ko.observable<string>("hide");
-
-        this.init();
     }
 
-    private async init(): Promise<void> {
+    @OnMounted()
+    public async onMounted(): Promise<void> {
         await this.mapService.loadGoogleMaps();
 
         this.googleMapsLoaded(true);

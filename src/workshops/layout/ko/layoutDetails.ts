@@ -1,10 +1,10 @@
 ﻿import * as ko from "knockout";
 import template from "./layoutDetails.html";
-import { IRouteHandler } from '@paperbits/common/routing/IRouteHandler';
-import { IViewManager } from '@paperbits/common/ui/IViewManager';
-import { ILayoutService } from "@paperbits/common/layouts/ILayoutService";
+import { IRouteHandler } from "@paperbits/common/routing";
+import { IViewManager } from "@paperbits/common/ui";
+import { ILayoutService } from "@paperbits/common/layouts/";
 import { LayoutItem } from "./layoutItem";
-import { Component } from "../../../ko/component";
+import { Component, Param, Event, OnMounted } from "../../../ko/decorators";
 
 @Component({
     selector: "layout-details-workshop",
@@ -12,26 +12,27 @@ import { Component } from "../../../ko/component";
     injectable: "layoutDetails"
 })
 export class LayoutDetails {
-    private readonly onDeleteCallback: () => void;
-
+    @Param()
     public readonly layoutItem: LayoutItem;
+
+    @Event()
+    public readonly onDeleteCallback: () => void;
+
     public isNotDefault: boolean;
 
     constructor(
         private readonly layoutService: ILayoutService,
         private readonly routeHandler: IRouteHandler,
-        private readonly viewManager: IViewManager,
-        params
+        private readonly viewManager: IViewManager
     ) {
-
-        // initialization...
-        this.layoutItem = params.layoutItem;
-        this.onDeleteCallback = params.onDeleteCallback;
-
         // rebinding...
+        this.onMounted = this.onMounted.bind(this);
         this.deleteLayout = this.deleteLayout.bind(this);
         this.updateLayout = this.updateLayout.bind(this);
+    }
 
+    @OnMounted()
+    public async onMounted(): Promise<void> {
         this.layoutItem.title
             .extend({ required: true })
             .subscribe(this.updateLayout);
@@ -43,13 +44,9 @@ export class LayoutDetails {
         this.layoutItem.description
             .subscribe(this.updateLayout);
 
-        this.init();
-    }
-
-    private async init(): Promise<void> {
         const uri = this.layoutItem.uriTemplate();
         this.isNotDefault = (uri !== "/");
-        this.routeHandler.navigateTo(uri);
+        this.routeHandler.navigateTo(uri, { usePagePlaceholder: true });
     }
 
     private async updateLayout(): Promise<void> {
@@ -59,14 +56,14 @@ export class LayoutDetails {
     }
 
     public async deleteLayout(): Promise<void> {
-        //TODO: Show confirmation dialog according to mockup
+        // TODO: Show confirmation dialog according to mockup
         await this.layoutService.deleteLayout(this.layoutItem.toLayout());
 
         this.viewManager.notifySuccess("Layouts", `Page "${this.layoutItem.title()}" was deleted.`);
         this.viewManager.closeWorkshop("layout-details-workshop");
 
         if (this.onDeleteCallback) {
-            this.onDeleteCallback()
+            this.onDeleteCallback();
         }
 
         this.routeHandler.navigateTo("/");

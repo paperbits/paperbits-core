@@ -1,8 +1,7 @@
 import * as ko from "knockout";
 import template from "./document.html";
 import { IRouteHandler } from "@paperbits/common/routing";
-import { IViewManager } from "@paperbits/common/ui";
-import { Component } from "../ko/component";
+import { Component, OnMounted } from "../ko/decorators";
 import { LayoutModelBinder } from "../layout";
 import { LayoutViewModelBinder } from "../layout/ko";
 import { LayoutViewModel } from "../layout/ko/layoutViewModel";
@@ -14,15 +13,14 @@ import { LayoutViewModel } from "../layout/ko/layoutViewModel";
 })
 export class DocumentViewModel {
     public readonly layoutModel: KnockoutObservable<LayoutViewModel>;
-    public readonly disableTracking: KnockoutObservable<boolean>;
 
     constructor(
         private readonly layoutModelBinder: LayoutModelBinder,
         private readonly layoutViewModelBinder: LayoutViewModelBinder,
-        private readonly routeHandler: IRouteHandler,
-        private readonly viewManager: IViewManager
+        private readonly routeHandler: IRouteHandler
     ) {
         // rebinding...
+        this.onMounted = this.onMounted.bind(this);
         this.refreshContent = this.refreshContent.bind(this);
         this.onRouteChange = this.onRouteChange.bind(this);
 
@@ -30,25 +28,20 @@ export class DocumentViewModel {
         this.routeHandler.addRouteChangeListener(this.onRouteChange);
 
         this.layoutModel = ko.observable<LayoutViewModel>();
-        this.disableTracking = ko.observable(false);
+    }
 
+    @OnMounted()
+    public async onMounted(): Promise<void> {
         this.refreshContent();
     }
 
     private async refreshContent(): Promise<void> {
-        this.viewManager.setShutter();
-
         this.layoutModel(null);
-
-        const layoutMode = this.viewManager.journeyName() === "Layouts";
-        const readonly = !layoutMode;
-        const layoutModel = await this.layoutModelBinder.getLayoutModel(this.routeHandler.getCurrentUrl(), readonly);
-        const layoutViewModel = this.layoutViewModelBinder.modelToViewModel(layoutModel, readonly);
+      
+        const layoutModel = await this.layoutModelBinder.getLayoutModel();
+        const layoutViewModel = this.layoutViewModelBinder.modelToViewModel(layoutModel);
 
         this.layoutModel(layoutViewModel);
-
-        this.disableTracking(!layoutMode);
-        this.viewManager.removeShutter();
     }
 
     private async onRouteChange(): Promise<void> {

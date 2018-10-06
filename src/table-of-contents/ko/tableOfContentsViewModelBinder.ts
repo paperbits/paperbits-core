@@ -3,7 +3,7 @@ import { TableOfContentsViewModel } from "./tableOfContentsViewModel";
 import { TableOfContentsModel } from "../tableOfContentsModel";
 
 export class TableOfContentsViewModelBinder implements IViewModelBinder<TableOfContentsModel, TableOfContentsViewModel> {
-    public modelToViewModel(model: TableOfContentsModel, readonly: boolean, viewModel?: TableOfContentsViewModel): TableOfContentsViewModel {
+    public modelToViewModel(model: TableOfContentsModel, viewModel?: TableOfContentsViewModel): TableOfContentsViewModel {
         if (!viewModel) {
             viewModel = new TableOfContentsViewModel();
         }
@@ -13,12 +13,12 @@ export class TableOfContentsViewModelBinder implements IViewModelBinder<TableOfC
 
         viewModel["widgetBinding"] = {
             displayName: "Table of contents",
-            readonly: readonly,
+            
             model: model,
             editor: "table-of-contents-editor",
             applyChanges: async (updatedModel: TableOfContentsModel) => {
                 Object.assign(model, updatedModel);
-                this.modelToViewModel(model, readonly, viewModel);
+                this.modelToViewModel(model, viewModel);
             }
         };
 

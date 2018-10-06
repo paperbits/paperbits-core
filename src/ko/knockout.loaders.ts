@@ -9,11 +9,60 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                     const viewModelConstructor = (params) => {
                         const resolvedInjectable: any = injector.resolve(config.injectable);
 
+                        let instance = resolvedInjectable;
+
                         if (resolvedInjectable.factory) {
-                            return resolvedInjectable.factory(injector, params);
+                            instance = resolvedInjectable.factory(injector, params);
                         }
 
-                        return resolvedInjectable;
+                        const parameterDescriptions = Reflect.getMetadata("params", instance.constructor);
+
+                        if (parameterDescriptions) {
+                            parameterDescriptions.forEach(parameterName => {
+                                const instanceValue = instance[parameterName];
+                                const paramerterValue = params[parameterName];
+
+                                if (ko.isObservable(instanceValue)) {
+                                    if (ko.isObservable(paramerterValue)) {
+                                        // Assigning initial value
+                                        instanceValue(paramerterValue());
+
+                                        // Subscribing for all future changes
+                                        paramerterValue.subscribe((value) => {
+                                            instanceValue(value);
+                                        });
+                                    }
+                                    else {
+                                        instanceValue(paramerterValue);
+                                    }
+                                }
+                                else {
+                                    instance[parameterName] = ko.unwrap(paramerterValue);
+                                }
+                            });
+                        }
+
+                        const eventDescriptions = Reflect.getMetadata("events", instance.constructor);
+
+                        if (eventDescriptions) {
+                            eventDescriptions.forEach(methodReference => {
+                                instance[methodReference] = params[methodReference];
+                            });
+                        }
+
+                        const onMountedMethodDescriptions = Reflect.getMetadata("onmounted", instance.constructor);
+
+                        if (onMountedMethodDescriptions) {
+                            onMountedMethodDescriptions.forEach(methodDescription => {
+                                const methodReference = instance[methodDescription];
+
+                                if (methodReference) {
+                                    methodReference();
+                                }
+                            });
+                        }
+
+                        return instance;
                     };
 
                     ko.components.defaultLoader.loadViewModel(name, viewModelConstructor, callback);

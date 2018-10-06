@@ -7,7 +7,8 @@ import { IPermalinkService } from "@paperbits/common/permalinks";
 import { IPageService } from "@paperbits/common/pages";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { HtmlEditorEvents } from "@paperbits/common/editing";
-import { Component } from "../../../ko/component";
+import { Component } from "../../../ko/decorators/component.decorator";
+import { IViewManager } from "@paperbits/common/ui";
 
 @Component({
     selector: "formatting",
@@ -37,7 +38,8 @@ export class FormattingTools {
         private readonly eventManager: IEventManager,
         private readonly permalinkService: IPermalinkService,
         private readonly pageService: IPageService,
-        private readonly routeHandler: IRouteHandler
+        private readonly routeHandler: IRouteHandler,
+        private readonly viewManager: IViewManager
     ) {
         this.updateFormattingState = this.updateFormattingState.bind(this);
         this.toggleUnorderedList = this.toggleUnorderedList.bind(this);
@@ -61,7 +63,7 @@ export class FormattingTools {
     }
 
     private updateFormattingState(): void {
-        const selectionState = this.htmlEditorProvider.getCurrentHtmlEditor().getSelectionState();
+        const selectionState = this.htmlEditorProvider.getCurrentHtmlEditor().getSelectionState(this.viewManager.getViewport());
 
         this.bold(selectionState.bold);
         this.italic(selectionState.italic);
@@ -103,7 +105,7 @@ export class FormattingTools {
     }
 
     public toggleNn(): void {
-        //this.htmlEditorProvider.getCurrentHtmlEditor().setList(this.intentions.container.list.nested_numbering);
+        // this.htmlEditorProvider.getCurrentHtmlEditor().setList(this.intentions.container.list.nested_numbering);
         this.updateFormattingState();
     }
 
@@ -165,7 +167,7 @@ export class FormattingTools {
 
     public async toggleAnchor(): Promise<void> {
         const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
-        const selectionState = htmlEditor.getSelectionState();
+        const selectionState = htmlEditor.getSelectionState(this.viewManager.getViewport());
         const anchorKey = selectionState.anchorKey;
         const currentUrl = this.routeHandler.getCurrentUrl();
         const permalink = await this.permalinkService.getPermalinkByUrl(currentUrl);
@@ -250,19 +252,19 @@ export class FormattingTools {
     }
 
     public toggleAlignLeft(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().alignLeft();
+        this.htmlEditorProvider.getCurrentHtmlEditor().alignLeft(this.viewManager.getViewport());
     }
 
     public toggleAlignCenter(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().alignCenter();
+        this.htmlEditorProvider.getCurrentHtmlEditor().alignCenter(this.viewManager.getViewport());
     }
 
     public toggleAlignRight(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().alignRight();
+        this.htmlEditorProvider.getCurrentHtmlEditor().alignRight(this.viewManager.getViewport());
     }
 
     public toggleJustify(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().justify();
+        this.htmlEditorProvider.getCurrentHtmlEditor().justify(this.viewManager.getViewport());
     }
 
     public resetToNormal(): void {

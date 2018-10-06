@@ -1,15 +1,17 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { ModelBinderSelector } from "@paperbits/common/widgets";
+import { IWidgetHandler } from "@paperbits/common/editing";
 import { SectionLayoutSelector } from "./sectionLayoutSelector";
 import { SectionEditor } from "./sectionEditor";
+import { SectionHandlers } from "../sectionHandlers";
+
 
 export class SectionEditorModule implements IInjectorModule {
-    register(injector: IInjector): void {
-        injector.bindComponent("sectionLayoutSelector", (ctx: IInjector, params: {}) => {
-            const modelBinderSelector = ctx.resolve<ModelBinderSelector>("modelBinderSelector");
-            return new SectionLayoutSelector(modelBinderSelector, params["onSelect"]);
-        });
-
+    public register(injector: IInjector): void {
+        injector.bind("sectionLayoutSelector", SectionLayoutSelector);
         injector.bind("sectionEditor", SectionEditor);
+        injector.bind("sectionHandler", SectionHandlers);
+
+        const widgetHandlers: IWidgetHandler[] = injector.resolve("widgetHandlers");
+        widgetHandlers.push(injector.resolve<SectionHandlers>("sectionHandler"));
     }
 }

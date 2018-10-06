@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import template from "./hyperlinkSelector.html";
 import { HyperlinkModel, IPermalinkService } from "@paperbits/common/permalinks";
 import { IHyperlinkProvider } from "@paperbits/common/ui";
-import { Component } from "../../../ko/component";
+import { Component, Event, Param, OnMounted } from "../../../ko/decorators";
 
 @Component({
     selector: "hyperlink-selector",
@@ -12,32 +12,37 @@ import { Component } from "../../../ko/component";
 export class HyperlinkSelector {
     public readonly selectedResourcePicker: KnockoutObservable<IHyperlinkProvider>;
 
+    @Param()
+    public hyperlink: KnockoutObservable<HyperlinkModel>;
+
+    @Event()
+    public onChange: (hyperlink: HyperlinkModel) => void;
+
     constructor(
         private readonly permalinkService: IPermalinkService,
-        private readonly resourcePickers: IHyperlinkProvider[],
-        private readonly hyperlink: KnockoutObservable<HyperlinkModel>,
-        private readonly onHyperlinkChange: (hyperlink: HyperlinkModel) => void) {
-
-        this.permalinkService = permalinkService;
-        this.resourcePickers = resourcePickers;
-        this.onHyperlinkChange = onHyperlinkChange;
-
+        private readonly resourcePickers: IHyperlinkProvider[]
+    ) {
         // rebinding...
+        this.onMounted = this.onMounted.bind(this);
         this.updateHyperlinkState = this.updateHyperlinkState.bind(this);
         this.onResourceSelected = this.onResourceSelected.bind(this);
         this.onResourcePickerChange = this.onResourcePickerChange.bind(this);
 
         // setting up...
-        this.hyperlink = ko.observable<HyperlinkModel>(ko.unwrap(hyperlink));
+        this.hyperlink = ko.observable<HyperlinkModel>();
         this.selectedResourcePicker = ko.observable<IHyperlinkProvider>(null);
-        this.updateHyperlinkState(hyperlink());
+    }
+
+    @OnMounted()
+    public onMounted(): void {
+        this.updateHyperlinkState(this.hyperlink());
         this.selectedResourcePicker.subscribe(this.onResourcePickerChange);
     }
 
     private onResourcePickerChange(resourcePicker: IHyperlinkProvider): void {
         if (resourcePicker === null) {
             this.hyperlink(null);
-            this.onHyperlinkChange(null);
+            this.onChange(null);
         }
     }
 
@@ -48,8 +53,8 @@ export class HyperlinkSelector {
     public onResourceSelected(hyperlink: HyperlinkModel): void {
         this.hyperlink(hyperlink);
 
-        if (this.onHyperlinkChange) {
-            this.onHyperlinkChange(hyperlink);
+        if (this.onChange) {
+            this.onChange(hyperlink);
         }
     }
 
