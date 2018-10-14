@@ -2,9 +2,9 @@ import * as ko from "knockout";
 import { LayoutContract } from "@paperbits/common/layouts/layoutContract";
 
 export class LayoutItem {
-    contentKey?: string;
+    public contentKey?: string;
 
-    public static readonly newLayoutUri = "/new layout";
+    public static readonly newLayoutUri = "/new-layout";
 
     public key: string;
     public title: KnockoutObservable<string>;
@@ -22,13 +22,13 @@ export class LayoutItem {
         this.hasFocus = ko.observable<boolean>(false);
     }
 
-    toLayout(): LayoutContract {
+    public toLayout(): LayoutContract {
         return {
             key: this.key,
             title: this.title(),
             description: this.description(),
             uriTemplate: this.uriTemplate(),
             contentKey: this.contentKey
-        }
+        };
     }
 }

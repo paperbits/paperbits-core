@@ -16,7 +16,7 @@ export class GridBindingHandler {
         widgetService: IWidgetService,
         gridEditor: GridEditor
     ) {
-        ko.bindingHandlers["page-grid"] = {
+        ko.bindingHandlers["grid"] = {
             init(gridElement: HTMLElement) {
                 // TODO: Replace active observer with some reactive logic.
                 const observer = new MutationObserver(mutations => {
@@ -110,7 +110,7 @@ export class GridBindingHandler {
 
             placeholderElement.style.height = placeholderHeight;
             placeholderElement.style.width = placeholderWidth;
-            placeholderElement.classList.add("placeholder");
+            placeholderElement.classList.add("dragged-origin");
 
             sourceElement.parentNode.insertBefore(placeholderElement, sourceElement.nextSibling);
 
@@ -171,7 +171,7 @@ export class GridBindingHandler {
             const placeholderElement = sourceElement.ownerDocument.createElement("div");
             placeholderElement.style.height = placeholderHeight;
             placeholderElement.style.width = placeholderWidth;
-            placeholderElement.classList.add("placeholder");
+            placeholderElement.classList.add("dragged-origin");
 
             sourceElement.parentNode.insertBefore(placeholderElement, sourceElement.nextSibling);
 
@@ -233,7 +233,7 @@ export class GridBindingHandler {
             const placeholderElement = sourceElement.ownerDocument.createElement("div");
             placeholderElement.style.height = placeholderHeight;
             placeholderElement.style.width = placeholderWidth;
-            placeholderElement.classList.add("placeholder");
+            placeholderElement.classList.add("dragged-origin");
 
             sourceElement.parentNode.insertBefore(placeholderElement, sourceElement.nextSibling);
 
@@ -299,7 +299,7 @@ export class GridBindingHandler {
             const placeholderElement = sourceElement.ownerDocument.createElement("div");
             placeholderElement.style.height = placeholderHeight;
             placeholderElement.style.width = placeholderWidth;
-            placeholderElement.classList.add("placeholder");
+            placeholderElement.classList.add("dragged-origin");
 
             sourceElement.parentNode.insertBefore(placeholderElement, sourceElement.nextSibling);
 

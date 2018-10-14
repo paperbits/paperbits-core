@@ -71,6 +71,10 @@ export class HostBindingHandler {
             },
 
             update: (element: HTMLElement, valueAccessor: any) => {
+                if (this.documentViewModel) {
+                    this.documentViewModel.dispose();
+                }
+
                 const config = valueAccessor();
 
                 Array.prototype.slice.call(element.children).forEach(child => {
@@ -132,14 +136,19 @@ export class HostBindingHandler {
         return hostElement;
     }
 
+    private documentViewModel;
+
     private setRootElement(parentElement: HTMLElement, componentName: string): void {
+
+
         const documentElement = parentElement.querySelector(componentName);
-        ko.applyBindings({}, documentElement);
 
-        // const documentElement = document.createElement("root");
-        // documentElement.setAttribute("class", "fit");
-
-        // parentElement.appendChild(documentElement);
-        // ko.applyBindingsToNode(documentElement, { component: { name: componentName } });
+        ko.applyBindingsToNode(documentElement, {
+            component: {
+                name: componentName, oncreate: (documentViewModel) => {
+                    this.documentViewModel = documentViewModel;
+                }
+            }
+        });
     }
 }

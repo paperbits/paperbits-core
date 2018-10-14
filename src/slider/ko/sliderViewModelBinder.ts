@@ -92,7 +92,6 @@ export class SliderViewModelBinder {
                 const sliderModel = <SliderModel>GridHelper.getModel(widgetElement);
 
                 const sliderContextualEditor: IContextualEditor = {
-                    element: widgetElement,
                     color: "#607d8b",
                     hoverCommand: {
                         position: activeSliderHalf,

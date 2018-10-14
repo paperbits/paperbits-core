@@ -27,7 +27,7 @@ export class NavigationTree {  // TODO: This should be refactored into ModelBind
         this.nodes = ko.observableArray<NavigationItemViewModel>(nodes);
         this.selectedNode = ko.observable<NavigationItemViewModel>();
         this.focusedNode = ko.observable<NavigationItemViewModel>();
-        this.onUpdate = new ko.subscribable<Array<NavigationItemContract>>();
+        this.onUpdate = new ko.subscribable<NavigationItemContract[]>();
 
         this.placeholderElement = document.createElement("div");
         this.placeholderElement.className = "placeholder";

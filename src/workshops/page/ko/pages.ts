@@ -69,7 +69,7 @@ export class PagesWorkshop {
 
     public selectPage(pageItem: PageItem): void {
         this.selectedPage(pageItem);
-        this.viewManager.setDocument({ src: "/index.html", componentName: "page-document" });
+        this.viewManager.setDocument({ src: "/page.html", componentName: "page-document" });
         this.viewManager.setTitle(null, pageItem.toContract());
         this.viewManager.openViewAsWorkshop("Page", "page-details-workshop", {
             pageItem: pageItem,

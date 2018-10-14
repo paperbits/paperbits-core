@@ -30,6 +30,7 @@ import { HyperlinkSelector } from "./workshops/hyperlinks/ko/hyperlinkSelector";
 import { WidgetSelector } from "./workshops/widgets/ko/widgetSelector";
 import { UrlSelector } from "./workshops/urls/ko/urlSelector";
 import { PageEditorModule } from "./page/ko/pageEditor.module";
+import { LayoutEditorModule } from "./layout/ko/layoutEditor.module";
 import { PageHyperlinkProvider } from "@paperbits/common/pages";
 import { BlogHyperlinkProvider } from "@paperbits/common/blogs/blogHyperlinkProvider";
 import { UrlHyperlinkProvider } from "@paperbits/common/urls/urlHyperlinkProvider";
@@ -114,6 +115,7 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindModule(new RowEditorModule());
         injector.bindModule(new TextblockEditorModule());
         injector.bindModule(new SectionEditorModule());
+        injector.bindModule(new LayoutEditorModule());
         injector.bindModule(new PageEditorModule());
         injector.bindModule(new NavbarEditorModule());
         injector.bindModule(new ButtonEditorModule());

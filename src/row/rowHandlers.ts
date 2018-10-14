@@ -1,4 +1,4 @@
-import { IWidgetHandler, GridHelper } from "@paperbits/common/editing";
+import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IContextualEditor, IViewManager } from "@paperbits/common/ui";
 import { ColumnModel } from "../column/columnModel";
@@ -28,30 +28,25 @@ export class RowHandlers implements IWidgetHandler {
         dragSession.targetBinding.applyChanges();
     }
 
-    public getContextualEditor(element: HTMLElement, half: string): IContextualEditor {
+    public getContextualEditor(context: WidgetContext): IContextualEditor {
         const rowContextualEditor: IContextualEditor = {
-            element: element,
             color: "#29c4a9",
             hoverCommand: {
                 color: "#29c4a9",
-                position: half,
+                position: context.half,
                 tooltip: "Add row",
                 component: {
                     name: "row-layout-selector",
                     params: {
                         onSelect: (newRowModel: RowModel) => {
-                            const parentElement = GridHelper.getParentElementWithModel(element);
-                            const parentModel = GridHelper.getModel(parentElement);
-                            const parentWidgetModel = GridHelper.getWidgetBinding(parentElement);
-                            const rowModel = GridHelper.getModel(element);
-                            let index = parentModel.widgets.indexOf(rowModel);
+                            let index = context.parentModel.widgets.indexOf(context.model);
 
-                            if (half === "bottom") {
+                            if (context.half === "bottom") {
                                 index++;
                             }
 
-                            parentModel.widgets.splice(index, 0, newRowModel);
-                            parentWidgetModel.applyChanges();
+                            context.parentModel.widgets.splice(index, 0, newRowModel);
+                            context.parentBinding.applyChanges();
 
                             this.viewManager.clearContextualEditors();
                         }
@@ -63,13 +58,8 @@ export class RowHandlers implements IWidgetHandler {
                 tooltip: "Delete row",
                 color: "#29c4a9",
                 callback: () => {
-                    const parentElement = GridHelper.getParentElementWithModel(element);
-                    const parentModel = GridHelper.getModel(parentElement);
-                    const parentBinding = GridHelper.getWidgetBinding(parentElement);
-                    const rowModel = GridHelper.getModel(element);
-
-                    parentModel.widgets.remove(rowModel);
-                    parentBinding.applyChanges();
+                    context.parentModel.widgets.remove(context.model);
+                    context.parentBinding.applyChanges();
 
                     this.viewManager.clearContextualEditors();
                 }

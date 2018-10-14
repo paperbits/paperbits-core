@@ -107,7 +107,7 @@ export class ViewManager implements IViewManager {
 
 
         this.viewport = ko.observable<string>("xl");
-        this.hostDocument = ko.observable<HostDocument>({ src: "/index.html", componentName: "page-document" });
+        this.hostDocument = ko.observable<HostDocument>({ src: "/page.html", componentName: "page-document" });
 
         this.shutter = ko.observable<boolean>(true);
         this.dragSession = ko.observable();

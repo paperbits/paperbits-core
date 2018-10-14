@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import * as Utils from "@paperbits/common/utils";
 import { IViewManager, ViewManagerMode, IHighlightConfig, IContextualEditor } from "@paperbits/common/ui";
-import { IWidgetBinding, GridHelper } from "@paperbits/common/editing";
+import { IWidgetBinding, GridHelper, WidgetContext } from "@paperbits/common/editing";
 import { Keys } from "@paperbits/common/keyboard";
 import { IWidgetService } from "@paperbits/common/widgets";
 import { IRouteHandler } from "@paperbits/common/routing";
@@ -42,6 +42,63 @@ export class GridEditor {
         }
 
         return true;
+    }
+
+    private getContextualEditor(element: HTMLElement, half: string): IContextualEditor {
+        const bindings = GridHelper.getParentWidgetBindings(element);
+
+        const providers = bindings
+            .filter(x => !!x.provides)
+            .map(x => x.provides)
+            .reduce((acc, val) => acc.concat(val), []);
+
+        let model;
+        let binding;
+
+        if (element) {
+            model = GridHelper.getModel(element);
+            binding = GridHelper.getWidgetBinding(element);
+        }
+
+        let parentModel;
+        let parentBinding;
+
+        const parentElement = GridHelper.getParentElementWithModel(element);
+
+        if (parentElement) {
+            parentModel = GridHelper.getModel(parentElement);
+            parentBinding = GridHelper.getWidgetBinding(parentElement);
+        }
+
+        const context: WidgetContext = {
+            parentModel: parentModel,
+            parentBinding: parentBinding,
+            model: model,
+            binding: binding,
+            half: half,
+            providers: providers
+        };
+
+        let contextualEditor: IContextualEditor;
+
+        if (context.binding.handler) {
+            const handler = this.widgetService.getWidgetHandler(context.binding.handler);
+
+            if (handler.getContextualEditor) {
+                contextualEditor = handler.getContextualEditor(context);
+            }
+        }
+
+        if (!contextualEditor) {
+            contextualEditor = this.getWidgetContextualEditor(context);
+        }
+
+        contextualEditor.element = element;
+        contextualEditor.selectionCommands = contextualEditor.selectionCommands || null;
+        contextualEditor.hoverCommand = contextualEditor.hoverCommand || null;
+        contextualEditor.deleteCommand = contextualEditor.deleteCommand || null;
+
+        return contextualEditor;
     }
 
     private isModelSelected(binding: IWidgetBinding): boolean {
@@ -110,18 +167,7 @@ export class GridEditor {
             }
         }
         else {
-            let contextualEditor;
-
-            if (widgetBinding.handler) {
-                const handler = this.widgetService.getWidgetHandler(widgetBinding.handler);
-
-                if (handler && handler.getContextualEditor) {
-                    contextualEditor = handler.getContextualEditor(element, "top");
-                }
-            }
-            else {
-                contextualEditor = this.getWidgetContextualEditor(element, "top");
-            }
+            const contextualEditor = this.getContextualEditor(element, "top");
 
             if (!contextualEditor) {
                 return;
@@ -175,7 +221,7 @@ export class GridEditor {
 
         const elements = this.getUnderlyingElements();
 
-        if (elements.some(element => element.classList.contains("placeholder"))) {
+        if (elements.some(element => element.classList.contains("dragged-origin"))) {
             delete dragSession.targetElement;
             delete dragSession.targetBinding;
 
@@ -351,39 +397,26 @@ export class GridEditor {
         this.rerenderEditors(this.pointerX, this.pointerY, elements);
     }
 
-    private getWidgetContextualEditor(widgetElement: HTMLElement, activeWidgetHalf: string): IContextualEditor {
+    private getWidgetContextualEditor(context: WidgetContext): IContextualEditor {
         const widgetContextualEditor: IContextualEditor = {
-            element: widgetElement,
             color: "#607d8b",
             hoverCommand: {
                 color: "#607d8b",
-                position: activeWidgetHalf,
+                position: context.half,
                 tooltip: "Add widget",
                 component: {
                     name: "widget-selector",
                     params: {
-                        onRequest: () => {
-                            const parentElement = GridHelper.getParentElementWithModel(widgetElement);
-                            const bindings = GridHelper.getParentWidgetBindings(parentElement);
-                            const provided = bindings
-                                .filter(x => !!x.provides)
-                                .map(x => x.provides)
-                                .reduce((acc, val) => acc.concat(val));
-
-                            return provided;
-                        },
+                        onRequest: () => context.providers,
                         onSelect: (newWidgetModel: any) => {
-                            const parentBinding = GridHelper.getParentWidgetBinding(widgetElement);
-                            const activeWidgetModel = GridHelper.getModel(widgetElement);
+                            let index = context.parentModel.widgets.indexOf(context.model);
 
-                            let index = parentBinding.model.widgets.indexOf(activeWidgetModel);
-
-                            if (activeWidgetHalf === "bottom") {
+                            if (context.half === "bottom") {
                                 index++;
                             }
 
-                            parentBinding.model.widgets.splice(index, 0, newWidgetModel);
-                            parentBinding.applyChanges();
+                            context.parentBinding.model.widgets.splice(index, 0, newWidgetModel);
+                            context.parentBinding.applyChanges();
 
                             this.viewManager.clearContextualEditors();
                         }
@@ -394,10 +427,8 @@ export class GridEditor {
                 tooltip: "Delete widget",
                 color: "#607d8b",
                 callback: () => {
-                    const widgetModel = GridHelper.getModel(widgetElement);
-                    const parentBinding = GridHelper.getParentWidgetBinding(widgetElement);
-                    parentBinding.model.widgets.remove(widgetModel);
-                    parentBinding.applyChanges();
+                    context.parentModel.widgets.remove(context.model);
+                    context.parentBinding.applyChanges();
                     this.viewManager.clearContextualEditors();
                 },
             },
@@ -406,10 +437,7 @@ export class GridEditor {
                 iconClass: "paperbits-edit-72",
                 position: "top right",
                 color: "#607d8b",
-                callback: () => {
-                    const binding = GridHelper.getWidgetBinding(widgetElement);
-                    this.viewManager.openWidgetEditor(binding);
-                }
+                callback: () => this.viewManager.openWidgetEditor(context.binding)
             }]
         };
 
@@ -456,19 +484,7 @@ export class GridEditor {
             const active = this.actives[widgetBinding.name];
 
             if (!active || element !== active.element || half !== active.half) {
-                let contextualEditor;
-
-                if (widgetBinding.handler) {
-                    const handler = this.widgetService.getWidgetHandler(widgetBinding.handler);
-
-                    if (handler.getContextualEditor) {
-                        contextualEditor = handler.getContextualEditor(element, half);
-                    }
-                }
-
-                if (!contextualEditor) {
-                    contextualEditor = this.getWidgetContextualEditor(element, half);
-                }
+                const contextualEditor = this.getContextualEditor(element, half);
 
                 this.viewManager.setContextualEditor(widgetBinding.name, contextualEditor);
 

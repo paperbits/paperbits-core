@@ -18,7 +18,8 @@ export class LayoutDetails {
     @Event()
     public readonly onDeleteCallback: () => void;
 
-    public isNotDefault: boolean;
+    public isDefaultLayout: KnockoutComputed<boolean>;
+    public canDelete: KnockoutComputed<boolean>;
 
     constructor(
         private readonly layoutService: ILayoutService,
@@ -44,8 +45,16 @@ export class LayoutDetails {
         this.layoutItem.description
             .subscribe(this.updateLayout);
 
+        this.isDefaultLayout = ko.pureComputed(() => {
+            return this.layoutItem.uriTemplate() === "/";
+        });
+
+        this.canDelete = ko.pureComputed(() => {
+            return !this.isDefaultLayout();
+        });
+
         const uri = this.layoutItem.uriTemplate();
-        this.isNotDefault = (uri !== "/");
+        
         this.routeHandler.navigateTo(uri, { usePagePlaceholder: true });
     }
 

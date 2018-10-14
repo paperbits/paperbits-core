@@ -7,11 +7,7 @@ import { PageHandlers } from "../pageHandlers";
 import { IWidgetBinding } from "@paperbits/common/editing";
 
 export class PageViewModelBinder implements IViewModelBinder<PageModel, PageViewModel> {
-    private readonly viewModelBinderSelector: ViewModelBinderSelector;
-
-    constructor(viewModelBinderSelector: ViewModelBinderSelector) {
-        this.viewModelBinderSelector = viewModelBinderSelector;
-    }
+    constructor(private readonly viewModelBinderSelector: ViewModelBinderSelector) { }
 
     public modelToViewModel(model: PageModel, pageViewModel?: PageViewModel): any {
         if (!pageViewModel) {
@@ -33,19 +29,18 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
             .filter(x => x !== null);
 
         if (widgetViewModels.length === 0) {
-            widgetViewModels.push(new PlaceholderViewModel("Page"));
+            widgetViewModels.push(new PlaceholderViewModel("Content"));
         }
 
         pageViewModel.widgets(widgetViewModels);
 
         const binding: IWidgetBinding = {
+            displayName: "Content",
             name: "page",
             model: model,
             handler: PageHandlers,
             provides: ["static", "scripts", "keyboard"],
-            applyChanges: () => {
-                this.modelToViewModel(model, pageViewModel);
-            }
+            applyChanges: () => this.modelToViewModel(model, pageViewModel)
         };
 
         pageViewModel["widgetBinding"] = binding;

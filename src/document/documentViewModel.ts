@@ -37,7 +37,7 @@ export class DocumentViewModel {
 
     private async refreshContent(): Promise<void> {
         this.layoutModel(null);
-      
+
         const layoutModel = await this.layoutModelBinder.getLayoutModel();
         const layoutViewModel = this.layoutViewModelBinder.modelToViewModel(layoutModel);
 

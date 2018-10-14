@@ -11,7 +11,7 @@ export class LayoutModule implements IInjectorModule {
         //this.modelBinders.push(injector.resolve("layoutModelBinder"));
 
         injector.bind("layoutViewModelBinder", LayoutViewModelBinder);
-        const viewModelBinders = injector.resolve<Array<IViewModelBinder<any, any>>>("viewModelBinders");
+        const viewModelBinders = injector.resolve<IViewModelBinder<any, any>[]>("viewModelBinders");
         viewModelBinders.push(injector.resolve("layoutViewModelBinder"));
     }
 }

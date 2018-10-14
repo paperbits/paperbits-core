@@ -11,7 +11,7 @@
     <div class="form-group">
         <label class="form-label">URL template </label>
         <div class="input-group">
-            <input type="text" class="form-control" data-bind="textInput: layoutItem.uriTemplate, validationElement: layoutItem.uriTemplate"
+            <input type="text" class="form-control" data-bind="textInput: layoutItem.uriTemplate, validationElement: layoutItem.uriTemplate, attr: { readonly: isDefaultLayout }"
                 placeholder="/" maxlength="2000" />
             <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: layoutItem.uriTemplate" type="button">!</button>
         </div>
@@ -24,7 +24,7 @@
 </fieldset>
 
 <div class="btn-group">
-    <!--ko if: isNotDefault-->
+    <!--ko if: canDelete -->
     <button class="btn" data-bind="click: deleteLayout">
         <i class="paperbits-icon paperbits-simple-remove"></i>
         Delete layout

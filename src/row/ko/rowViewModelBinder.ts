@@ -4,6 +4,7 @@ import { RowModel } from "../rowModel";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { RowHandlers } from "../rowHandlers";
+import { IWidgetBinding } from "@paperbits/common/editing";
 
 export class RowViewModelBinder implements IViewModelBinder<RowModel, RowViewModel> {
     constructor(private readonly viewModelBinderSelector: ViewModelBinderSelector) { }
@@ -35,10 +36,9 @@ export class RowViewModelBinder implements IViewModelBinder<RowModel, RowViewMod
         viewModel.justifyMd(model.justifyMd);
         viewModel.justifyLg(model.justifyLg);
 
-        const binding = {
+        const binding: IWidgetBinding = {
             name: "row",
             displayName: "Row",
-            
             model: model,
             handler: RowHandlers,
             applyChanges: () => {
