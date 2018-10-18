@@ -5,21 +5,7 @@ import { Component } from "../../ko/decorators/component.decorator";
 @Component({
     selector: "layout-column",
     template: template,
-    injectable: "column",
-    postprocess: (element: Node, viewModel) => {
-        // TODO: Get rid of hack!
-        if (element.nodeName == "#comment") {
-            do {
-                element = element.nextSibling;
-            }
-            while (element != null && element.nodeName == "#comment")
-        }
-
-        ko.applyBindingsToNode(element, {
-            layoutcolumn: {},
-            css: viewModel.css
-        });
-    }
+    injectable: "column"
 })
 export class ColumnViewModel {
     public widgets: KnockoutObservableArray<Object>;
@@ -59,7 +45,7 @@ export class ColumnViewModel {
         this.orderXl = ko.observable<number>();
 
         this.css = ko.computed(() => {
-            let classes = [];
+            const classes = [];
 
             // There's no XS size
 
@@ -100,23 +86,23 @@ export class ColumnViewModel {
             }
 
             if (this.orderXs()) {
-                classes.push(this.getOrderClass(this.orderXs(), "xs"))
+                classes.push(this.getOrderClass(this.orderXs(), "xs"));
             }
 
             if (this.orderSm()) {
-                classes.push(this.getOrderClass(this.orderSm(), "sm"))
+                classes.push(this.getOrderClass(this.orderSm(), "sm"));
             }
 
             if (this.orderMd()) {
-                classes.push(this.getOrderClass(this.orderMd(), "md"))
+                classes.push(this.getOrderClass(this.orderMd(), "md"));
             }
 
             if (this.orderLg()) {
-                classes.push(this.getOrderClass(this.orderLg(), "lg"))
+                classes.push(this.getOrderClass(this.orderLg(), "lg"));
             }
 
             if (this.orderXl()) {
-                classes.push(this.getOrderClass(this.orderXl(), "xl"))
+                classes.push(this.getOrderClass(this.orderXl(), "xl"));
             }
 
             return classes.join(" ");
