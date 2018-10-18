@@ -39,7 +39,6 @@ export class ColumnViewModelBinder implements IViewModelBinder<ColumnModel, Colu
 
         if (model.alignment) {
             model.alignment = Utils.optimizeBreakpoints(model.alignment);
-            console.log(model.alignment);
             columnViewModel.alignmentXs(model.alignment.xs);
             columnViewModel.alignmentSm(model.alignment.sm);
             columnViewModel.alignmentMd(model.alignment.md);

@@ -111,8 +111,6 @@ export class PageModelBinder implements IModelBinder {
 
         Object.assign(file, contentContract);
 
-        console.log(file);
-
         await this.fileService.updateFile(file);
     }
 }

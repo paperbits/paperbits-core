@@ -19,7 +19,6 @@ export class ColumnModelBinder implements IModelBinder {
     }
 
     public async contractToModel(contract: ColumnContract): Promise<ColumnModel> {
-        console.log(contract);
         const columnModel = new ColumnModel();
 
         if (contract.size) {
