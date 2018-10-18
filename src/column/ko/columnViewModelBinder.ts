@@ -1,3 +1,4 @@
+import * as Utils from "@paperbits/common/utils";
 import { ColumnViewModel } from "./columnViewModel";
 import { IViewModelBinder } from "@paperbits/common/widgets";
 import { IWidgetBinding } from "@paperbits/common/editing";
@@ -27,56 +28,38 @@ export class ColumnViewModelBinder implements IViewModelBinder<ColumnModel, Colu
         }
 
         columnViewModel.widgets(widgetViewModels);
-        columnViewModel.sizeSm(model.sizeSm);
-        columnViewModel.sizeMd(model.sizeMd);
-        columnViewModel.sizeLg(model.sizeLg);
-        columnViewModel.sizeXl(model.sizeXl);
 
-        if (model.alignmentXs) {
-            columnViewModel.alignmentXs(model.alignmentXs);
-        }
-        else {
-            columnViewModel.alignmentXs("middle center");
+        if (model.size) {
+            model.size = Utils.optimizeBreakpoints(model.size);
+            columnViewModel.sizeSm(model.size.sm);
+            columnViewModel.sizeMd(model.size.md);
+            columnViewModel.sizeLg(model.size.lg);
+            columnViewModel.sizeXl(model.size.xl);
         }
 
-        if (model.alignmentSm) {
-            columnViewModel.alignmentSm(model.alignmentSm);
-        }
-        else {
-            columnViewModel.alignmentSm("middle center");
-        }
-
-        if (model.alignmentMd) {
-            columnViewModel.alignmentMd(model.alignmentMd);
-        }
-        else {
-            columnViewModel.alignmentMd("middle center");
+        if (model.alignment) {
+            model.alignment = Utils.optimizeBreakpoints(model.alignment);
+            console.log(model.alignment);
+            columnViewModel.alignmentXs(model.alignment.xs);
+            columnViewModel.alignmentSm(model.alignment.sm);
+            columnViewModel.alignmentMd(model.alignment.md);
+            columnViewModel.alignmentLg(model.alignment.lg);
+            columnViewModel.alignmentXl(model.alignment.xl);
         }
 
-        if (model.alignmentLg) {
-            columnViewModel.alignmentLg(model.alignmentLg);
+        if (model.order) {
+            model.order = Utils.optimizeBreakpoints(model.order);
+            columnViewModel.orderXs(model.order.xs);
+            columnViewModel.orderSm(model.order.sm);
+            columnViewModel.orderMd(model.order.md);
+            columnViewModel.orderLg(model.order.lg);
+            columnViewModel.orderXl(model.order.xl);
         }
-        else {
-            columnViewModel.alignmentLg("middle center");
-        }
-
-        if (model.alignmentXl) {
-            columnViewModel.alignmentXl(model.alignmentXl);
-        }
-        else {
-            columnViewModel.alignmentXl("middle center");
-        }
-
-        columnViewModel.orderXs(model.orderXs);
-        columnViewModel.orderSm(model.orderSm);
-        columnViewModel.orderMd(model.orderMd);
-        columnViewModel.orderLg(model.orderLg);
-        columnViewModel.orderXl(model.orderXl);
 
         const binding: IWidgetBinding = {
             name: "column",
             displayName: "Column",
-            
+
             flow: "inline",
             model: model,
             editor: "layout-column-editor",

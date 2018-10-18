@@ -43,11 +43,11 @@ export class RowLayoutSelector implements IResourceSelector<RowModel> {
 
         columnSizeCfgs.forEach(size => {
             const column = new ColumnModel();
-            column.sizeXs = size.xs;
-            column.sizeSm = size.sm;
-            column.sizeMd = size.md;
-            column.sizeLg = size.lg;
-            column.sizeXl = size.xl;
+            column.size.xs = size.xs;
+            column.size.sm = size.sm;
+            column.size.md = size.md;
+            column.size.lg = size.lg;
+            column.size.xl = size.xl;
             rowModel.widgets.push(column);
         });
 

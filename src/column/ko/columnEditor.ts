@@ -54,28 +54,28 @@ export class ColumnEditor implements IWidgetEditor {
 
         switch (viewport) {
             case "xl":
-                this.column.alignmentXl = this.alignment();
-                this.column.orderXl = this.order();
+                this.column.alignment.xl = this.alignment();
+                this.column.order.xl = this.order();
                 break;
 
             case "lg":
-                this.column.alignmentLg = this.alignment();
-                this.column.orderLg = this.order();
+                this.column.alignment.lg = this.alignment();
+                this.column.order.lg = this.order();
                 break;
 
             case "md":
-                this.column.alignmentMd = this.alignment();
-                this.column.orderMd = this.order();
+                this.column.alignment.md = this.alignment();
+                this.column.order.md = this.order();
                 break;
 
             case "sm":
-                this.column.alignmentSm = this.alignment();
-                this.column.orderSm = this.order();
+                this.column.alignment.sm = this.alignment();
+                this.column.order.sm = this.order();
                 break;
 
             case "xs":
-                this.column.alignmentXs = this.alignment();
-                this.column.orderXs = this.order();
+                this.column.alignment.xs = this.alignment();
+                this.column.order.xs = this.order();
                 break;
 
             default:
@@ -96,23 +96,23 @@ export class ColumnEditor implements IWidgetEditor {
     public determineAlignment(viewport: string, model: ColumnModel): string {
         switch (viewport) {
             case "xl":
-                return model.alignmentXl || this.determineAlignment("lg", model);
+                return model.alignment.xl || this.determineAlignment("lg", model);
                 break;
 
             case "lg":
-                return model.alignmentLg || this.determineAlignment("md", model);
+                return model.alignment.lg || this.determineAlignment("md", model);
                 break;
 
             case "md":
-                return model.alignmentMd || this.determineAlignment("sm", model);
+                return model.alignment.md || this.determineAlignment("sm", model);
                 break;
 
             case "sm":
-                return model.alignmentSm || this.determineAlignment("xs", model);
+                return model.alignment.sm || this.determineAlignment("xs", model);
                 break;
 
             case "xs":
-                return model.alignmentXs || "start start";
+                return model.alignment.xs || "start start";
                 break;
 
             default:
@@ -123,23 +123,23 @@ export class ColumnEditor implements IWidgetEditor {
     public determineOrder(viewport: string, model: ColumnModel): number {
         switch (viewport) {
             case "xl":
-                return model.orderXl || this.determineOrder("lg", model);
+                return model.order.xl || this.determineOrder("lg", model);
                 break;
 
             case "lg":
-                return model.orderLg || this.determineOrder("md", model);
+                return model.order.lg || this.determineOrder("md", model);
                 break;
 
             case "md":
-                return model.orderMd || this.determineOrder("sm", model);
+                return model.order.md || this.determineOrder("sm", model);
                 break;
 
             case "sm":
-                return model.orderSm || this.determineOrder("xs", model);
+                return model.order.sm || this.determineOrder("xs", model);
                 break;
 
             case "xs":
-                return model.orderXs || null;
+                return model.order.xs || null;
                 break;
 
             default:

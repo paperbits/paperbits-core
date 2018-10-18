@@ -95,22 +95,24 @@ export class PageModelBinder implements IModelBinder {
     }
 
     public async updateContent(pageModel): Promise<void> {
-        // const url = this.routeHandler.getCurrentUrl();
-        // const permalink = await this.permalinkService.getPermalinkByUrl(url);
-        // const pageKey = permalink.targetKey;
-        // const page = await this.pageService.getPageByKey(pageKey);
-        // const file = await this.fileService.getFileByKey(page.contentKey);
-        // const contentContract: Contract = {
-        //     nodes: []
-        // };
+        const url = this.routeHandler.getCurrentUrl();
+        const permalink = await this.permalinkService.getPermalinkByUrl(url);
+        const pageKey = permalink.targetKey;
+        const page = await this.pageService.getPageByKey(pageKey);
+        const file = await this.fileService.getFileByKey(page.contentKey);
+        const contentContract: Contract = {
+            nodes: []
+        };
 
-        // pageModel.widgets.forEach(section => {
-        //     const modelBinder = this.modelBinderSelector.getModelBinderByModel(section);
-        //     contentContract.nodes.push(modelBinder.modelToContract(section));
-        // });
+        pageModel.widgets.forEach(section => {
+            const modelBinder = this.modelBinderSelector.getModelBinderByModel(section);
+            contentContract.nodes.push(modelBinder.modelToContract(section));
+        });
 
-        // Object.assign(file, contentContract);
+        Object.assign(file, contentContract);
 
-        // await this.fileService.updateFile(file);
+        console.log(file);
+
+        await this.fileService.updateFile(file);
     }
 }
