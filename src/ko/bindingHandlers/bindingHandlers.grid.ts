@@ -1,9 +1,7 @@
 import * as ko from "knockout";
 import { IViewManager, ViewManagerMode } from "@paperbits/common/ui";
-import { LayoutModelBinder } from "../../layout/layoutModelBinder";
 import { GridHelper } from "@paperbits/common/editing";
 import { IEventManager } from "@paperbits/common/events";
-import { PageModelBinder } from "../../page";
 import { GridEditor } from "../../grid/ko/gridEditor";
 import { IWidgetService } from "@paperbits/common/widgets";
 
@@ -11,61 +9,12 @@ export class GridBindingHandler {
     constructor(
         viewManager: IViewManager,
         eventManager: IEventManager,
-        pageModelBinder: PageModelBinder,
-        layoutModelBinder: LayoutModelBinder,
         widgetService: IWidgetService,
-        gridEditor: GridEditor
+        gridEditor: GridEditor,
     ) {
         ko.bindingHandlers["grid"] = {
             init(gridElement: HTMLElement) {
-                // TODO: Replace active observer with some reactive logic.
-                const observer = new MutationObserver(mutations => {
-                    if (viewManager.mode === ViewManagerMode.dragging) {
-                        return;
-                    }
-
-                    const layoutModel = GridHelper.getModel(gridElement);
-                    layoutModelBinder.updateContent(layoutModel);
-                });
-
-                observer.observe(gridElement, {
-                    attributes: true,
-                    childList: true,
-                    characterData: true,
-                    subtree: true
-                });
-
-                ko.utils.domNodeDisposal.addDisposeCallback(gridElement, () => {
-                    gridEditor.detach();
-                    observer.disconnect();
-                });
-
                 gridEditor.attach(gridElement.ownerDocument);
-            }
-        };
-
-        ko.bindingHandlers["content-grid"] = {
-            init(gridElement: HTMLElement) {
-                // TODO: Replace active observer with some reactive logic.
-                const observer = new MutationObserver(mutations => {
-                    if (viewManager.mode === ViewManagerMode.dragging) {
-                        return;
-                    }
-
-                    const model = GridHelper.getModel(gridElement);
-                    pageModelBinder.updateContent(model);
-                });
-
-                observer.observe(gridElement, {
-                    attributes: true,
-                    childList: true,
-                    characterData: true,
-                    subtree: true
-                });
-
-                ko.utils.domNodeDisposal.addDisposeCallback(gridElement, () => {
-                    observer.disconnect();
-                });
             }
         };
 
@@ -97,23 +46,19 @@ export class GridBindingHandler {
     }
 
     public static attachSectionDragEvents(sourceElement: HTMLElement, viewManager: IViewManager, eventManager: IEventManager, widgetService: IWidgetService): void {
-        const onDragStart = (item): HTMLElement => {
+        const onDragStart = (): HTMLElement => {
             const placeholderWidth = sourceElement.clientWidth - 1 + "px";
             const placeholderHeight = sourceElement.clientHeight - 1 + "px";
-
             const sourceBinding = GridHelper.getWidgetBinding(sourceElement);
             const sourceModel = GridHelper.getModel(sourceElement);
             const sourceParentElement = GridHelper.getParentElementWithModel(sourceElement);
             const parentModel = GridHelper.getModel(sourceParentElement);
             const parentBinding = GridHelper.getWidgetBinding(sourceParentElement);
             const placeholderElement = sourceElement.ownerDocument.createElement("div");
-
             placeholderElement.style.height = placeholderHeight;
             placeholderElement.style.width = placeholderWidth;
             placeholderElement.classList.add("dragged-origin");
-
             sourceElement.parentNode.insertBefore(placeholderElement, sourceElement.nextSibling);
-
             viewManager.beginDrag({
                 type: "section",
                 sourceElement: sourceElement,
@@ -122,7 +67,6 @@ export class GridBindingHandler {
                 parentModel: parentModel,
                 parentBinding: parentBinding
             });
-
             return sourceElement;
         };
 
@@ -282,27 +226,22 @@ export class GridBindingHandler {
     }
 
     public static attachWidgetDragEvents(sourceElement: HTMLElement, viewManager: IViewManager, eventManager: IEventManager, widgetService: IWidgetService): void {
-        const onDragStart = (item): HTMLElement => {
+        const onDragStart = (): HTMLElement => {
             if (viewManager.mode === ViewManagerMode.configure) {
                 return;
             }
-
             const placeholderWidth = sourceElement.clientWidth - 1 + "px";
             const placeholderHeight = sourceElement.clientHeight - 1 + "px";
-
             const sourceBinding = GridHelper.getWidgetBinding(sourceElement);
             const sourceModel = GridHelper.getModel(sourceElement);
             const sourceParentElement = GridHelper.getParentElementWithModel(sourceElement);
             const parentModel = GridHelper.getModel(sourceParentElement);
             const parentBinding = GridHelper.getWidgetBinding(sourceParentElement);
-
             const placeholderElement = sourceElement.ownerDocument.createElement("div");
             placeholderElement.style.height = placeholderHeight;
             placeholderElement.style.width = placeholderWidth;
             placeholderElement.classList.add("dragged-origin");
-
             sourceElement.parentNode.insertBefore(placeholderElement, sourceElement.nextSibling);
-
             viewManager.beginDrag({
                 type: "widget",
                 sourceElement: sourceElement,
@@ -311,7 +250,6 @@ export class GridBindingHandler {
                 parentModel: parentModel,
                 parentBinding: parentBinding,
             });
-
             return sourceElement;
         };
 

@@ -8,3 +8,15 @@
     <p class="not-configured">It seems that you don't have navigation items here.</p>
     <!--/ko-->
 </div>
+
+<script id="tableOfContentsItem" type="text/html">
+    <ul class="nav" data-bind="foreach: { data: $data.nodes, as: 'item' }">
+        <li class="nav-item" data-bind="css: { active: item.isActive }">
+            <a class="nav-link" data-bind="text: item.label, attr: { href: item.url }"></a>
+
+            <!--ko if: item.nodes.length > 0 -->
+            <!--ko template: { name: 'tableOfContentsItem', data: item }--><!--/ko-->
+            <!--/ko-->
+        </li>
+    </ul>
+</script>

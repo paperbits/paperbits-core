@@ -1,31 +1,26 @@
 import { PageModel } from "./pageModel";
+import { Contract } from "@paperbits/common";
 import { IModelBinder } from "@paperbits/common/editing";
 import { IPageService, PageContract } from "@paperbits/common/pages";
 import { IPermalinkService, IPermalink } from "@paperbits/common/permalinks";
 import { IFileService } from "@paperbits/common/files";
 import { IRouteHandler } from "@paperbits/common/routing";
-import { IEventManager } from "@paperbits/common/events";
 import { ModelBinderSelector, WidgetModel } from "@paperbits/common/widgets";
-import { Contract } from "@paperbits/common";
 import { PlaceholderModel } from "@paperbits/common/widgets/placeholder";
 
 
 export class PageModelBinder implements IModelBinder {
     private pageNotFound: IPermalink;
-
+  
     constructor(
         private readonly pageService: IPageService,
         private readonly permalinkService: IPermalinkService,
         private readonly fileService: IFileService,
         private readonly routeHandler: IRouteHandler,
-        private readonly eventManager: IEventManager,
         private readonly modelBinderSelector: ModelBinderSelector
     ) {
         // rebinding...
         this.contractToModel = this.contractToModel.bind(this);
-        this.updateContent = this.updateContent.bind(this);
-
-        this.eventManager.addEventListener("onContentUpdate", this.updateContent);
     }
 
     public canHandleWidgetType(widgetType: string): boolean {
@@ -92,25 +87,5 @@ export class PageModelBinder implements IModelBinder {
         };
 
         return pageContract;
-    }
-
-    public async updateContent(pageModel): Promise<void> {
-        const url = this.routeHandler.getCurrentUrl();
-        const permalink = await this.permalinkService.getPermalinkByUrl(url);
-        const pageKey = permalink.targetKey;
-        const page = await this.pageService.getPageByKey(pageKey);
-        const file = await this.fileService.getFileByKey(page.contentKey);
-        const contentContract: Contract = {
-            nodes: []
-        };
-
-        pageModel.widgets.forEach(section => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByModel(section);
-            contentContract.nodes.push(modelBinder.modelToContract(section));
-        });
-
-        Object.assign(file, contentContract);
-
-        await this.fileService.updateFile(file);
     }
 }

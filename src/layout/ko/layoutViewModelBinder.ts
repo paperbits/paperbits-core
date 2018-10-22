@@ -1,11 +1,79 @@
 import { LayoutViewModel } from "./layoutViewModel";
 import { LayoutModel } from "../layoutModel";
+import { LayoutModelBinder } from "../layoutModelBinder";
 import { LayoutHandlers } from "../layoutHandlers";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { IWidgetBinding } from "@paperbits/common/editing";
+import { IEventManager } from "@paperbits/common/events";
+import { IRouteHandler } from "@paperbits/common/routing";
+import { IFileService } from "@paperbits/common/files";
+import { ModelBinderSelector } from "@paperbits/common/widgets";
+import { ILayoutService } from "@paperbits/common/layouts";
+
 
 export class LayoutViewModelBinder {
-    constructor(private readonly viewModelBinderSelector: ViewModelBinderSelector) { }
+    constructor(
+        private readonly viewModelBinderSelector: ViewModelBinderSelector,
+        private readonly eventManager: IEventManager,
+        private readonly fileService: IFileService,
+        private readonly layoutService: ILayoutService,
+        private readonly routeHandler: IRouteHandler,
+        private readonly modelBinderSelector: ModelBinderSelector,
+        private readonly layoutModelBinder: LayoutModelBinder
+    ) { 
+        this.getLayoutViewModel = this.getLayoutViewModel.bind(this);
+    }
+
+    public createBinding(model: LayoutModel, viewModel: LayoutViewModel): void {
+        let savingTimeout;
+
+        const updateContent = async (): Promise<void> => {
+            const url = this.routeHandler.getCurrentUrl();
+            const layout = await this.layoutService.getLayoutByRoute(url);
+            const file = await this.fileService.getFileByKey(layout.contentKey);
+
+            const contentContract = {
+                nodes: []
+            };
+
+            model.widgets.forEach(section => {
+                const modelBinder = this.modelBinderSelector.getModelBinderByModel(section);
+                contentContract.nodes.push(modelBinder.modelToContract(section));
+            });
+
+            Object.assign(file, contentContract);
+
+            await this.fileService.updateFile(file);
+        };
+
+        const scheduleUpdate = async (): Promise<void> => {
+            clearTimeout(savingTimeout);
+            savingTimeout = setTimeout(updateContent, 600);
+        };
+
+        const binding: IWidgetBinding = {
+            name: "layout",
+            model: model,
+            handler: LayoutHandlers,
+            provides: ["static", "scripts", "keyboard"],
+            applyChanges: () => {
+                this.modelToViewModel(model, viewModel);
+                this.eventManager.dispatchEvent("onContentUpdate");
+            },
+            onCreate: () => {
+                const metadata = this.routeHandler.getCurrentUrlMetadata();
+
+                if (!metadata || !metadata["usePagePlaceholder"]) {
+                    return;
+                }
+
+                this.eventManager.addEventListener("onContentUpdate", scheduleUpdate);
+            },
+            onDispose: () => this.eventManager.removeEventListener("onContentUpdate", scheduleUpdate)
+        };
+
+        viewModel["widgetBinding"] = binding;
+    }
 
     public modelToViewModel(model: LayoutModel, viewModel?: LayoutViewModel): LayoutViewModel {
         if (!viewModel) {
@@ -26,20 +94,23 @@ export class LayoutViewModelBinder {
 
         viewModel.widgets(sectionViewModels);
 
-        const binding: IWidgetBinding = {
-            name: "layout",
-            model: model,
-            handler: LayoutHandlers,
-            provides: ["static", "scripts", "keyboard"],
-            applyChanges: () => this.modelToViewModel(model, viewModel)
-        };
-
-        viewModel["widgetBinding"] = binding;
+        if (!viewModel["widgetBinding"]) {
+            this.createBinding(model, viewModel);
+        }
 
         return viewModel;
     }
 
     public canHandleModel(model: LayoutModel): boolean {
         return model instanceof LayoutModel;
+    }
+
+    public async getLayoutViewModel(): Promise<any> {
+        const url = this.routeHandler.getCurrentUrl();
+        const layoutNode = await this.layoutService.getLayoutByRoute(url);
+        const layoutModel = await this.layoutModelBinder.contractToModel(layoutNode);
+        const layoutViewModel = this.modelToViewModel(layoutModel);
+
+        return layoutViewModel;
     }
 }

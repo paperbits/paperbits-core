@@ -5,10 +5,14 @@ import { SectionModel } from "../sectionModel";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { SectionHandlers } from "../sectionHandlers";
+import { IEventManager } from "@paperbits/common/events";
 
 
 export class SectionViewModelBinder implements IViewModelBinder<SectionModel, SectionViewModel> {
-    constructor(private readonly viewModelBinderSelector: ViewModelBinderSelector) { }
+    constructor(
+        private readonly viewModelBinderSelector: ViewModelBinderSelector,
+        private readonly eventManager: IEventManager
+    ) { }
 
     public modelToViewModel(model: SectionModel, viewModel?: SectionViewModel): SectionViewModel {
         if (!viewModel) {
@@ -53,13 +57,14 @@ export class SectionViewModelBinder implements IViewModelBinder<SectionModel, Se
         const binding: IWidgetBinding = {
             name: "section",
             displayName: "Section",
-            
+
             model: model,
             flow: "block",
             editor: "layout-section-editor",
             handler: SectionHandlers,
             applyChanges: () => {
                 this.modelToViewModel(model, viewModel);
+                this.eventManager.dispatchEvent("onContentUpdate");
             }
         };
 

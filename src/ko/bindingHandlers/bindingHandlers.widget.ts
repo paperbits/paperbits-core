@@ -6,16 +6,34 @@ export class WidgetBindingHandler {
 
         ko.bindingHandlers["widget"] = {
             init(element, valueAccessor, ignored1, ignored2, bindingContext) {
+                const abc = ko.utils.unwrapObservable(valueAccessor());
+
+                if (!abc) {
+                    return;
+                }
+
                 let currentViewModel;
                 let currentLoadingOperationId;
+
                 const disposeAssociatedComponentViewModel = () => {
                     const currentViewModelDispose = currentViewModel && currentViewModel["dispose"];
+
+                    if (currentViewModel) {
+                        const binding = currentViewModel["widgetBinding"];
+
+                        if (binding && binding.onDispose) {
+                            binding.onDispose();
+                        }
+                    }
+
                     if (typeof currentViewModelDispose === "function") {
                         currentViewModelDispose.call(currentViewModel);
                     }
                     currentViewModel = null;
                     // Any in-flight loading operation is no longer relevant, so make sure we ignore its completion
                     currentLoadingOperationId = null;
+
+
                 };
                 const originalChildNodes = makeArray(ko.virtualElements.childNodes(element));
 
@@ -23,11 +41,22 @@ export class WidgetBindingHandler {
 
                 ko.computed(() => {
                     const componentViewModel = ko.utils.unwrapObservable(valueAccessor());
+
+                    if (!componentViewModel) {
+                        return;
+                    }
+
                     const loadingOperationId = currentLoadingOperationId = ++componentLoadingOperationUniqueId;
                     const registration = ko.components["registry"].find(x => componentViewModel instanceof x.constructor);
 
                     if (!registration) {
                         throw new Error(`Could not find component registration for view model: ${componentViewModel}`);
+                    }
+
+                    const binding = componentViewModel["widgetBinding"];
+
+                    if (binding && binding.onCreate) {
+                        binding.onCreate();
                     }
 
                     const componentName = registration.name;
@@ -72,7 +101,7 @@ export class WidgetBindingHandler {
                     });
                 }, null, { disposeWhenNodeIsRemoved: element });
 
-                return { controlsDescendantBindings: true };
+                return { controlsDescendantBindings: false };
             }
         };
 
@@ -88,7 +117,7 @@ export class WidgetBindingHandler {
 
         const cloneNodes = (nodesArray, shouldCleanNodes) => {
             const newNodesArray = [];
-            
+
             for (let i = 0, j = nodesArray.length; i < j; i++) {
                 const clonedNode = nodesArray[i].cloneNode(true);
                 newNodesArray.push(shouldCleanNodes ? ko.cleanNode(clonedNode) : clonedNode);

@@ -5,9 +5,13 @@ import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel"
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { RowHandlers } from "../rowHandlers";
 import { IWidgetBinding } from "@paperbits/common/editing";
+import { IEventManager } from "@paperbits/common/events";
 
 export class RowViewModelBinder implements IViewModelBinder<RowModel, RowViewModel> {
-    constructor(private readonly viewModelBinderSelector: ViewModelBinderSelector) { }
+    constructor(
+        private readonly viewModelBinderSelector: ViewModelBinderSelector,
+        private readonly eventManager: IEventManager
+    ) { }
 
     public modelToViewModel(model: RowModel, viewModel?: RowViewModel): RowViewModel {
         if (!viewModel) {
@@ -43,6 +47,7 @@ export class RowViewModelBinder implements IViewModelBinder<RowModel, RowViewMod
             handler: RowHandlers,
             applyChanges: () => {
                 this.modelToViewModel(model, viewModel);
+                this.eventManager.dispatchEvent("onContentUpdate");
             }
         };
 

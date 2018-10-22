@@ -6,9 +6,13 @@ import { ColumnModel } from "../columnModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { ColumnHandlers } from "../columnHandlers";
+import { IEventManager } from "@paperbits/common/events";
 
 export class ColumnViewModelBinder implements IViewModelBinder<ColumnModel, ColumnViewModel> {
-    constructor(private readonly viewModelBinderSelector: ViewModelBinderSelector) { }
+    constructor(
+        private readonly viewModelBinderSelector: ViewModelBinderSelector,
+        private readonly eventManager: IEventManager
+    ) { }
 
     public modelToViewModel(model: ColumnModel, columnViewModel?: ColumnViewModel): ColumnViewModel {
         if (!columnViewModel) {
@@ -72,6 +76,7 @@ export class ColumnViewModelBinder implements IViewModelBinder<ColumnModel, Colu
 
             applyChanges: () => {
                 this.modelToViewModel(model, columnViewModel);
+                this.eventManager.dispatchEvent("onContentUpdate");
             }
         };
 

@@ -1,10 +1,12 @@
 import { MapViewModel } from "./mapViewModel";
 import { MapService } from "../mapService";
 import { MapModel } from "../mapModel";
+import { IEventManager } from "@paperbits/common/events";
 
 export class MapViewModelBinder {
     constructor(
-        private readonly mapService: MapService
+        private readonly mapService: MapService,
+        private readonly eventManager: IEventManager
     ) { }
 
     public modelToViewModel(model: MapModel, viewModel?: MapViewModel): MapViewModel {
@@ -24,6 +26,7 @@ export class MapViewModelBinder {
             editor: "paperbits-map-editor",
             applyChanges: () => {
                 this.modelToViewModel(model, viewModel);
+                this.eventManager.dispatchEvent("onContentUpdate");
             }
         }
 

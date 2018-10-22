@@ -6,13 +6,14 @@ import { RowViewModelBinder } from "../../row/ko/rowViewModelBinder";
 import { SliderModel } from "../sliderModel";
 import { SectionModel } from "../../section/sectionModel";
 import { RowModel } from "../../row/rowModel";
+import { IEventManager } from "@paperbits/common/events";
 
 export class SliderViewModelBinder {
     constructor(
         private readonly rowViewModelBinder: RowViewModelBinder,
-        private readonly viewManager: IViewManager
-    ) {
-    }
+        private readonly viewManager: IViewManager,
+        private readonly eventManager: IEventManager
+    ) { }
 
     public modelToViewModel(model: SliderModel, viewModel?: SliderViewModel): SliderViewModel {
         if (!viewModel) {
@@ -86,6 +87,7 @@ export class SliderViewModelBinder {
             editor: "paperbits-slider-editor",
             applyChanges: () => {
                 this.modelToViewModel(model, viewModel);
+                this.eventManager.dispatchEvent("onContentUpdate");
             },
 
             getContextualEditor: (widgetElement: HTMLElement, activeSliderHalf: string): IContextualEditor => {

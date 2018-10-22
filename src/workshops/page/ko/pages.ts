@@ -9,6 +9,7 @@ import { Keys } from "@paperbits/common/keyboard";
 import { IBlockService } from "@paperbits/common/blocks";
 import { Component } from "../../../ko/decorators/component.decorator";
 import { PageItem } from "./pageItem";
+import { LayoutViewModelBinder } from "../../../layout/ko";
 
 const templateBlockKey = "blocks/8730d297-af39-8166-83b6-9439addca789";
 
@@ -23,8 +24,7 @@ export class PagesWorkshop {
     public readonly searchPattern: KnockoutObservable<string>;
     public readonly pages: KnockoutObservableArray<PageItem>;
     public readonly working: KnockoutObservable<boolean>;
-
-    public selectedPage: KnockoutObservable<PageItem>;
+    public readonly selectedPage: KnockoutObservable<PageItem>;
 
     constructor(
         private readonly pageService: IPageService,
@@ -32,7 +32,8 @@ export class PagesWorkshop {
         private readonly permalinkService: IPermalinkService,
         private readonly routeHandler: IRouteHandler,
         private readonly blockService: IBlockService,
-        private readonly viewManager: IViewManager
+        private readonly viewManager: IViewManager,
+        private readonly layoutViewModelBinder: LayoutViewModelBinder
     ) {
         // rebinding...
         this.searchPages = this.searchPages.bind(this);
@@ -69,7 +70,7 @@ export class PagesWorkshop {
 
     public selectPage(pageItem: PageItem): void {
         this.selectedPage(pageItem);
-        this.viewManager.setDocument({ src: "/page.html", componentName: "page-document" });
+        this.viewManager.setDocument({ src: "/page.html", getLayoutViewModel: this.layoutViewModelBinder.getLayoutViewModel });
         this.viewManager.setTitle(null, pageItem.toContract());
         this.viewManager.openViewAsWorkshop("Page", "page-details-workshop", {
             pageItem: pageItem,

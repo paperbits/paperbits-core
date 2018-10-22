@@ -143,6 +143,21 @@ export class GridEditor {
             return;
         }
 
+        const bindings = GridHelper.getParentWidgetBindings(element);
+        const windgetIsInContent = bindings.some(x => x.name === "page" || x.name === "email-layout");
+
+        let layoutEditing = false;
+
+        const metadata = this.routeHandler.getCurrentUrlMetadata();
+
+        if (metadata && metadata["usePagePlaceholder"]) {
+            layoutEditing = metadata["usePagePlaceholder"];
+        }
+
+        if ((!windgetIsInContent && !layoutEditing)) {
+            return;
+        }
+
         const widgetBinding = GridHelper.getWidgetBinding(element);
 
         if (!widgetBinding) {
@@ -261,7 +276,6 @@ export class GridEditor {
             const sourceElementFlow = dragSession.sourceBinding.flow || "inline";
 
             const quadrant = Utils.pointerToClientQuadrant(this.pointerX, this.pointerY, hoveredElement);
-
 
             if (intersection.length > 0) {
                 hoveredElement = intersection[0];

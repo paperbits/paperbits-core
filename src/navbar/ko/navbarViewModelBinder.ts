@@ -9,15 +9,11 @@ import { NavbarModelBinder } from "../navbarModelBinder";
 
 
 export class NavbarViewModelBinder implements IViewModelBinder<NavbarModel, NavbarViewModel> {
-    private readonly routeHandler: IRouteHandler;
-    private readonly eventManager: IEventManager;
-    private readonly navbarModelBinder: NavbarModelBinder;
-
-    constructor(routeHandler: IRouteHandler, eventManager: IEventManager, navbarModelBinder: NavbarModelBinder) {
-        this.routeHandler = routeHandler;
-        this.eventManager = eventManager;
-        this.navbarModelBinder = navbarModelBinder;
-    }
+    constructor(
+        private readonly routeHandler: IRouteHandler,
+        private readonly eventManager: IEventManager,
+        private readonly navbarModelBinder: NavbarModelBinder
+    ) { }
 
     private navbarItemModelToNavbarItemViewModel(navbarItemModel: NavigationItemModel): NavbarItemViewModel {
         const label = navbarItemModel.label;
@@ -48,16 +44,15 @@ export class NavbarViewModelBinder implements IViewModelBinder<NavbarModel, Navb
         viewModel.navigationRoot(navigationRoot);
         viewModel.pictureSourceUrl(navbarModel.pictureSourceUrl);
 
-        const applyChanges = () => {
-            this.modelToViewModel(navbarModel, viewModel);
-        };
-
         viewModel["widgetBinding"] = {
             displayName: "Navigation bar",
-            
+
             model: navbarModel,
             editor: "navbar-editor",
-            applyChanges: applyChanges
+            applyChanges: () => {
+                this.modelToViewModel(navbarModel, viewModel);
+                this.eventManager.dispatchEvent("onContentUpdate");
+            }
         };
 
         this.eventManager.addEventListener(NavigationEvents.onNavigationItemUpdate, async (updatedRootContract: NavigationItemContract) => {

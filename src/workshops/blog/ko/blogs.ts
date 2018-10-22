@@ -9,6 +9,7 @@ import { Keys } from "@paperbits/common/keyboard";
 import { IFileService } from "@paperbits/common/files/IFileService";
 import { Component } from "../../../ko/decorators/component.decorator";
 import { BlogPostItem } from "./blogPostItem";
+import { LayoutViewModelBinder } from "../../../layout/ko";
 
 const templateBlockKey = "blocks/8730d297-af39-8166-83b6-9439addca789";
 
@@ -31,7 +32,8 @@ export class BlogWorkshop {
         private readonly permalinkService: IPermalinkService,
         private readonly routeHandler: IRouteHandler,
         private readonly blockService: IBlockService,
-        private readonly viewManager: IViewManager
+        private readonly viewManager: IViewManager,
+        private readonly layoutViewModelBinder: LayoutViewModelBinder
     ) {
         // initialization...
         this.blogService = blogService;
@@ -58,8 +60,8 @@ export class BlogWorkshop {
     public async launchSearch(searchPattern: string): Promise<void> {
         this.working(true);
 
-        let blogposts = await this.blogService.search(searchPattern);
-        let blogpostItems = blogposts.map(blogPost => new BlogPostItem(blogPost));
+        const blogposts = await this.blogService.search(searchPattern);
+        const blogpostItems = blogposts.map(blogPost => new BlogPostItem(blogPost));
 
         this.blogPosts(blogpostItems);
 
@@ -76,6 +78,7 @@ export class BlogWorkshop {
 
     public selectBlogPost(blogPostItem: BlogPostItem): void {
         this.selectedBlogPost(blogPostItem);
+        this.viewManager.setDocument({ src: "/page.html", getLayoutViewModel: this.layoutViewModelBinder.getLayoutViewModel });
         this.viewManager.openViewAsWorkshop("Blog post", "blog-post-details-workshop", {
             blogPostItem: blogPostItem,
             onDeleteCallback: () => {
@@ -98,7 +101,7 @@ export class BlogWorkshop {
         }
 
         const createContentPromise = this.fileService.createFile(template);
-        
+
         const results = await Promise.all<any>([createPermalinkPromise, createContentPromise]);
         const permalink = results[0];
         const content = results[1];
@@ -116,7 +119,7 @@ export class BlogWorkshop {
     }
 
     public async deleteSelectedBlogPost(): Promise<void> {
-        //TODO: Show confirmation dialog according to mockup
+        // TODO: Show confirmation dialog according to mockup
         await this.blogService.deleteBlogPost(this.selectedBlogPost().toBlogPost());
 
         this.routeHandler.navigateTo("/");

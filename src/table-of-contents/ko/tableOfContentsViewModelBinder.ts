@@ -1,8 +1,11 @@
 import { IViewModelBinder } from "@paperbits/common/widgets";
 import { TableOfContentsViewModel } from "./tableOfContentsViewModel";
 import { TableOfContentsModel } from "../tableOfContentsModel";
+import { IEventManager } from "@paperbits/common/events";
 
 export class TableOfContentsViewModelBinder implements IViewModelBinder<TableOfContentsModel, TableOfContentsViewModel> {
+    constructor(private readonly eventManager: IEventManager) { }
+
     public modelToViewModel(model: TableOfContentsModel, viewModel?: TableOfContentsViewModel): TableOfContentsViewModel {
         if (!viewModel) {
             viewModel = new TableOfContentsViewModel();
@@ -13,12 +16,13 @@ export class TableOfContentsViewModelBinder implements IViewModelBinder<TableOfC
 
         viewModel["widgetBinding"] = {
             displayName: "Table of contents",
-            
+
             model: model,
             editor: "table-of-contents-editor",
             applyChanges: async (updatedModel: TableOfContentsModel) => {
                 Object.assign(model, updatedModel);
                 this.modelToViewModel(model, viewModel);
+                this.eventManager.dispatchEvent("onContentUpdate");
             }
         };
 

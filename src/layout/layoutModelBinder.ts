@@ -3,7 +3,6 @@ import { IFileService } from "@paperbits/common/files";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { LayoutModel } from "./layoutModel";
 import { ILayoutService, LayoutContract } from "@paperbits/common/layouts";
-import { Contract } from "@paperbits/common";
 
 export class LayoutModelBinder {
     constructor(
@@ -58,24 +57,5 @@ export class LayoutModelBinder {
         });
 
         return layoutConfig;
-    }
-
-    public async setConfig(layout: LayoutContract, config: Contract): Promise<void> {
-        const file = await this.fileService.getFileByKey(layout.contentKey);
-
-        Object.assign(file, config);
-
-        await this.fileService.updateFile(file);
-    }
-
-    public async updateContent(layoutModel: LayoutModel): Promise<void> {
-        const url = this.routeHandler.getCurrentUrl();
-        const layout = await this.layoutService.getLayoutByRoute(url);
-        const file = await this.fileService.getFileByKey(layout.contentKey);
-        const config = this.modelToContract(layoutModel);
-
-        Object.assign(file, config);
-
-        await this.fileService.updateFile(file);
     }
 }

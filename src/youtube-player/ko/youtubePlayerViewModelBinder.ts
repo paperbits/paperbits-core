@@ -1,8 +1,11 @@
 import { YoutubePlayerViewModel } from "./youtubePlayerViewModel";
 import { IViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
 import { YoutubePlayerModel } from "../youtubePlayerModel";
+import { IEventManager } from "@paperbits/common/events";
 
 export class YoutubePlayerViewModelBinder implements IViewModelBinder<YoutubePlayerModel, YoutubePlayerViewModel> {
+    constructor(private readonly eventManager: IEventManager) { }
+
     public modelToViewModel(model: YoutubePlayerModel, viewModel?: YoutubePlayerViewModel): YoutubePlayerViewModel {
         if (!viewModel) {
             viewModel = new YoutubePlayerViewModel();
@@ -20,6 +23,7 @@ export class YoutubePlayerViewModelBinder implements IViewModelBinder<YoutubePla
             editor: "youtube-editor",
             applyChanges: () => {
                 this.modelToViewModel(model, viewModel);
+                this.eventManager.dispatchEvent("onContentUpdate");
             }
         };
 

@@ -1,8 +1,11 @@
 import { PictureViewModel } from "./pictureViewModel";
 import { IViewModelBinder } from "@paperbits/common/widgets";
 import { PictureModel } from "../pictureModel";
+import { IEventManager } from "@paperbits/common/events";
 
 export class PictureViewModelBinder implements IViewModelBinder<PictureModel, PictureViewModel> {
+    constructor(private readonly eventManager: IEventManager) {    }
+
     public modelToViewModel(model: PictureModel, viewModel?: PictureViewModel): PictureViewModel {
         if (!viewModel) {
             viewModel = new PictureViewModel();
@@ -18,11 +21,12 @@ export class PictureViewModelBinder implements IViewModelBinder<PictureModel, Pi
 
         viewModel["widgetBinding"] = {
             displayName: "Picture",
-            
+
             model: model,
             editor: "paperbits-picture-editor",
             applyChanges: () => {
                 this.modelToViewModel(model, viewModel);
+                this.eventManager.dispatchEvent("onContentUpdate");
             }
         };
 

@@ -107,7 +107,7 @@ export class ViewManager implements IViewManager {
 
 
         this.viewport = ko.observable<string>("xl");
-        this.hostDocument = ko.observable<HostDocument>({ src: "/page.html", componentName: "page-document" });
+        this.hostDocument = ko.observable<HostDocument>();
 
         this.shutter = ko.observable<boolean>(true);
         this.dragSession = ko.observable();
@@ -132,7 +132,9 @@ export class ViewManager implements IViewManager {
     }
 
     public setDocument(hostDocument: HostDocument): void {
-        if (this.hostDocument().componentName === hostDocument.componentName) {
+        const currentHostDocument = this.hostDocument();
+
+        if (currentHostDocument && currentHostDocument.src === hostDocument.src) {
             return;
         }
 

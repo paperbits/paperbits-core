@@ -1,6 +1,5 @@
 import * as ko from "knockout";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { DocumentViewModel } from "../document/documentViewModel";
 import { GridBindingHandler } from "./bindingHandlers/bindingHandlers.grid";
 import { ContentBindingHandler } from "./bindingHandlers/bindingHandlers.content";
 import { LightboxBindingHandler } from "./bindingHandlers/bindingHandlers.lightbox";
@@ -38,9 +37,6 @@ export class KoModule implements IInjectorModule {
         injector.bindSingleton("draggablesBindingHandler", DraggablesBindingHandler);
         injector.bindSingleton("widgetBindingHandler", WidgetBindingHandler);
         injector.bindSingleton("backgroundBindingHandler", BackgroundBindingHandler);
-       
-        
-        injector.bind("pageDocument", DocumentViewModel);
         injector.bindSingleton("gridBindingHandler", GridBindingHandler);
     }
 }
