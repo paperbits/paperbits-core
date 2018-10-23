@@ -7,11 +7,13 @@
  */
 
 import { IRouteHandler } from "@paperbits/common/routing";
+import { IRouteChecker } from "@paperbits/common/routing/IRouteChecker";
 
 export class StaticRouteHandler implements IRouteHandler {
     private currentUrl: string;
     private metadata: Object;
     private callbacks: any[];
+    protected routeCheckers: IRouteChecker[];
 
     constructor() {
         this.currentUrl = "/";
@@ -44,5 +46,22 @@ export class StaticRouteHandler implements IRouteHandler {
 
     public getCurrentUrlMetadata(): Object {
         return this.metadata;
+    }
+
+    public addRouteChecker(routeChecker: IRouteChecker) {
+        if (routeChecker) {
+            this.routeCheckers.push(routeChecker);
+        }
+    }
+
+    public removeRouteChecker(routeCheckerName: string) {
+        if (routeCheckerName) {
+            const removeIndex = this.routeCheckers.findIndex(item => item.name === routeCheckerName);
+            if (removeIndex !== -1) {
+                this.routeCheckers.splice(removeIndex, 1);
+            } else {
+                console.log(`routeChecker with name '${routeCheckerName}' was not found`);
+            }
+        }
     }
 }
