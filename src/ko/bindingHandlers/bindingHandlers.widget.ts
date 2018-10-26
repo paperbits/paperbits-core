@@ -47,7 +47,8 @@ export class WidgetBindingHandler {
                     }
 
                     const loadingOperationId = currentLoadingOperationId = ++componentLoadingOperationUniqueId;
-                    const registration = ko.components["registry"].find(x => componentViewModel instanceof x.constructor);
+
+                    const registration  = Reflect.getMetadata("knockout-component", componentViewModel.constructor);
 
                     if (!registration) {
                         throw new Error(`Could not find component registration for view model: ${componentViewModel}`);

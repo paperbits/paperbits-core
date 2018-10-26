@@ -7,10 +7,8 @@ export interface ComponentConfig {
     postprocess?: (element: Node, viewModel) => void;
 }
 
-ko.components["registry"] = [];
-
 export function Component(config: ComponentConfig) {
-    return (target) => {
+    return function (target) {
         ko.components.register(config.selector, {
             template: config.template,
             viewModel: { injectable: config.injectable || target.name },
@@ -18,6 +16,6 @@ export function Component(config: ComponentConfig) {
             synchrounous: true
         });
 
-        ko.components["registry"].push({ name: config.selector, constructor: target });
+        Reflect.defineMetadata("knockout-component", { name: config.selector, constructor: target }, target);
     };
 } 
