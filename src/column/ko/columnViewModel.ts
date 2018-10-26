@@ -10,10 +10,10 @@ import { Component } from "../../ko/decorators/component.decorator";
 export class ColumnViewModel {
     public widgets: KnockoutObservableArray<Object>;
     public css: KnockoutComputed<string>;
-    public sizeSm: KnockoutObservable<number>;
-    public sizeMd: KnockoutObservable<number>;
-    public sizeLg: KnockoutObservable<number>;
-    public sizeXl: KnockoutObservable<number>;
+    public sizeSm: KnockoutObservable<string>;
+    public sizeMd: KnockoutObservable<string>;
+    public sizeLg: KnockoutObservable<string>;
+    public sizeXl: KnockoutObservable<string>;
     public alignmentXs: KnockoutObservable<string>;
     public alignmentSm: KnockoutObservable<string>;
     public alignmentMd: KnockoutObservable<string>;
@@ -24,19 +24,25 @@ export class ColumnViewModel {
     public orderMd: KnockoutObservable<number>;
     public orderLg: KnockoutObservable<number>;
     public orderXl: KnockoutObservable<number>;
+    public overflow: KnockoutComputed<Object>;
+    public overflowX: KnockoutObservable<string>;
+    public overflowY: KnockoutObservable<string>;
 
     constructor() {
         this.widgets = ko.observableArray<Object>();
-        this.sizeSm = ko.observable<number>();
-        this.sizeMd = ko.observable<number>();
-        this.sizeLg = ko.observable<number>();
-        this.sizeXl = ko.observable<number>();
+        this.sizeSm = ko.observable<string>();
+        this.sizeMd = ko.observable<string>();
+        this.sizeLg = ko.observable<string>();
+        this.sizeXl = ko.observable<string>();
 
         this.alignmentXs = ko.observable<string>();
         this.alignmentSm = ko.observable<string>();
         this.alignmentMd = ko.observable<string>();
         this.alignmentLg = ko.observable<string>();
         this.alignmentXl = ko.observable<string>();
+
+        this.overflowX = ko.observable<string>();
+        this.overflowY = ko.observable<string>();
 
         this.orderXs = ko.observable<number>();
         this.orderSm = ko.observable<number>();
@@ -47,22 +53,20 @@ export class ColumnViewModel {
         this.css = ko.computed(() => {
             const classes = [];
 
-            // There's no XS size
-
             if (this.sizeSm()) {
-                classes.push("col-sm-" + this.sizeSm());
+                classes.push(this.getSizeClass(this.sizeSm(), "sm"));
             }
 
             if (this.sizeMd()) {
-                classes.push("col-md-" + this.sizeMd());
+                classes.push(this.getSizeClass(this.sizeMd(), "md"));
             }
 
             if (this.sizeLg()) {
-                classes.push("col-lg-" + this.sizeLg());
+                classes.push(this.getSizeClass(this.sizeLg(), "lg"));
             }
 
             if (this.sizeXl()) {
-                classes.push("col-xl-" + this.sizeXl());
+                classes.push(this.getSizeClass(this.sizeXl(), "xl"));
             }
 
             if (this.alignmentXs()) {
@@ -107,28 +111,50 @@ export class ColumnViewModel {
 
             return classes.join(" ");
         });
+
+        this.overflow = ko.computed(() => {
+            return {
+                x: this.overflowX(),
+                y: this.overflowY()
+            };
+        });
     }
 
-    private getOrderClass(order: number, targetSize: string): string {
-        let size = "";
+    private getSizeClass(size: string, targetBreakpoint: string): string {
+        let breakpoint = "";
 
-        if (targetSize !== "xs") {
-            size = targetSize + "-";
+        if (targetBreakpoint !== "xs") {
+            breakpoint = targetBreakpoint + "-";
         }
 
-        return `order-${size}${order}`;
+        if (size === "auto") {
+            size = "";
+        }
+
+        return `col-${breakpoint}${size}`;
     }
 
-    private getAlignmentClass(alignmentString: string, targetSize: string): string {
+    private getOrderClass(order: number, targetBreakpoint: string): string {
+        let breakpoint = "";
+
+        if (targetBreakpoint !== "xs") {
+            breakpoint = targetBreakpoint + "-";
+        }
+
+        return `order-${breakpoint}${order}`;
+    }
+
+    private getAlignmentClass(alignmentString: string, targetBreakpoint: string): string {
         const alignment = alignmentString.split(" ");
         const vertical = alignment[0];
         const horizontal = alignment[1];
-        let size = "";
 
-        if (targetSize !== "xs") {
-            size = targetSize + "-";
+        let breakpoint = "";
+
+        if (targetBreakpoint !== "xs") {
+            breakpoint = targetBreakpoint + "-";
         }
 
-        return `align-content-${size}${vertical} align-items-${size}${vertical} justify-content-${size}${horizontal}`;
+        return `align-content-${breakpoint}${vertical} align-items-${breakpoint}${vertical} justify-content-${breakpoint}${horizontal}`;
     }
 }

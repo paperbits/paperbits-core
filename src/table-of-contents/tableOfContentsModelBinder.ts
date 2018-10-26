@@ -5,7 +5,7 @@ import { IModelBinder } from "@paperbits/common/editing";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { TableOfContentsContract } from "./tableOfContentsContract";
 import { Contract } from "@paperbits/common";
-import { IPageService } from "@paperbits/common/pages";
+import { IPageService, PageContract } from "@paperbits/common/pages";
 
 
 export class TableOfContentsModelBinder implements IModelBinder {
@@ -26,7 +26,7 @@ export class TableOfContentsModelBinder implements IModelBinder {
         return model instanceof TableOfContentsModel;
     }
 
-    private async processAnchorItems(permalink: IPermalink, anchors): Promise<NavigationItemModel[]> {
+    private async processAnchorItems(anchors): Promise<NavigationItemModel[]> {
         const anchorPromises = Object.keys(anchors).map(async anchorKey => {
             const permalinkKey = anchorKey.replaceAll("|", "/");
             const anchorPermalink = await this.permalinkService.getPermalinkByKey(permalinkKey);
@@ -47,19 +47,22 @@ export class TableOfContentsModelBinder implements IModelBinder {
     }
 
     private async processNavigationItem(navigationItem: NavigationItemContract, currentPageUrl: string): Promise<NavigationItemModel> {
-        const permalink = await this.permalinkService.getPermalinkByKey(navigationItem.permalinkKey);
-
         const navbarItemModel = new NavigationItemModel();
         navbarItemModel.label = navigationItem.label;
-        navbarItemModel.url = permalink.uri;
 
-        if (permalink.uri === currentPageUrl) {
-            navbarItemModel.isActive = true;
+        if (navigationItem.permalinkKey) {
+            const permalink = await this.permalinkService.getPermalinkByKey(navigationItem.permalinkKey);
+            
+            navbarItemModel.url = permalink.uri;
 
-            const page = await this.pageService.getPageByKey(permalink.targetKey);
-
-            if (page.anchors) {
-                navbarItemModel.nodes = await this.processAnchorItems(permalink, page.anchors);
+            if (permalink.uri === currentPageUrl) {
+                navbarItemModel.isActive = true;
+    
+                const page = await this.pageService.getPageByKey(permalink.targetKey);
+    
+                if (page.anchors) {
+                    navbarItemModel.nodes = await this.processAnchorItems(page.anchors);
+                }
             }
         }
 
@@ -74,7 +77,12 @@ export class TableOfContentsModelBinder implements IModelBinder {
 
         const currentPageUrl = this.routeHandler.getCurrentUrl();
         const currentPagePermalink = await this.permalinkService.getPermalinkByUrl(currentPageUrl);
-        const page = await this.pageService.getPageByKey(currentPagePermalink.targetKey);
+
+        let page: PageContract;
+
+        if (currentPagePermalink) {
+            page = await this.pageService.getPageByKey(currentPagePermalink.targetKey);
+        }
 
         if (tableOfContentsContract.navigationItemKey) {
             const assignedNavigationItem = await this.navigationService.getNavigationItem(tableOfContentsContract.navigationItemKey);
@@ -92,16 +100,16 @@ export class TableOfContentsModelBinder implements IModelBinder {
                 const permalink = await this.permalinkService.getPermalinkByKey(assignedNavigationItem.permalinkKey);
 
                 if (permalink.uri === currentPageUrl) {
-                    if (page.anchors) {
-                        const anchors = await this.processAnchorItems(currentPagePermalink, page.anchors);
+                    if (page && page.anchors) {
+                        const anchors = await this.processAnchorItems(page.anchors);
                         tableOfContentsModel.items = anchors;
                     }
                 }
             }
         }
         else {
-            if (page.anchors) {
-                const anchors = await this.processAnchorItems(currentPagePermalink, page.anchors);
+            if (page && page.anchors) {
+                const anchors = await this.processAnchorItems(page.anchors);
                 tableOfContentsModel.items = anchors;
             }
         }

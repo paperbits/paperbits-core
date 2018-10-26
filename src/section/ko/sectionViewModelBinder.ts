@@ -35,6 +35,7 @@ export class SectionViewModelBinder implements IViewModelBinder<SectionModel, Se
         viewModel.container(model.container);
         viewModel.background(model.background);
         viewModel.snapTo(model.snap);
+        viewModel.height(model.height);
 
         // if (model.background) {
         //     let backgroundColorKey = model.background.colorKey;

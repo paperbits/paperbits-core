@@ -6,8 +6,7 @@
  * found in the LICENSE file and at https://paperbits.io/license.
  */
 
-import { IRouteHandler } from "@paperbits/common/routing";
-import { IRouteChecker } from "@paperbits/common/routing/IRouteChecker";
+import { IRouteHandler, IRouteChecker } from "@paperbits/common/routing";
 
 export class StaticRouteHandler implements IRouteHandler {
     private currentUrl: string;

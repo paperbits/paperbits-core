@@ -11,17 +11,23 @@ import { ColumnModel } from "../columnModel";
     injectable: "columnEditor"
 })
 export class ColumnEditor implements IWidgetEditor {
-    private readonly viewManager: IViewManager;
-
     private column: ColumnModel;
     private applyChangesCallback: () => void;
     private readonly verticalAlignment: KnockoutObservable<string>;
     private readonly horizontalAlignment: KnockoutObservable<string>;
 
     public readonly alignment: KnockoutObservable<string>;
+    public readonly scrollOnOverlow: KnockoutObservable<boolean>;
     public readonly order: KnockoutObservable<number>;
 
-    constructor(viewManager: IViewManager) {
+    constructor(private readonly viewManager: IViewManager) {
+        this.alignLeft.bind(this);
+        this.alignRight.bind(this);
+        this.alignCenter.bind(this);
+        this.alignTop.bind(this);
+        this.alignBottom.bind(this);
+        this.alignMiddle.bind(this);
+
         this.viewManager = viewManager;
         this.setWidgetModel = this.setWidgetModel.bind(this);
 
@@ -31,15 +37,11 @@ export class ColumnEditor implements IWidgetEditor {
         this.verticalAlignment = ko.observable<string>();
         this.horizontalAlignment = ko.observable<string>();
 
+        this.scrollOnOverlow = ko.observable<boolean>();
+        this.scrollOnOverlow.subscribe(this.onChange.bind(this));
+
         this.order = ko.observable<number>();
         this.order.subscribe(this.onChange.bind(this));
-
-        this.alignLeft.bind(this);
-        this.alignRight.bind(this);
-        this.alignCenter.bind(this);
-        this.alignTop.bind(this);
-        this.alignBottom.bind(this);
-        this.alignMiddle.bind(this);
     }
 
     /**
@@ -79,8 +81,10 @@ export class ColumnEditor implements IWidgetEditor {
                 break;
 
             default:
-                throw "Unknown viewport";
+                throw new Error("Unknown viewport");
         }
+
+        this.column.overflowX = this.column.overflowY = this.scrollOnOverlow() ? "scroll" : null;
 
         this.applyChangesCallback();
     }
@@ -116,7 +120,7 @@ export class ColumnEditor implements IWidgetEditor {
                 break;
 
             default:
-                throw "Unknown viewport";
+                throw new Error("Unknown viewport");
         }
     }
 
@@ -154,6 +158,8 @@ export class ColumnEditor implements IWidgetEditor {
 
         const alignment = this.determineAlignment(viewport, column);
         this.alignment(alignment);
+
+        this.scrollOnOverlow(column.overflowY === "scroll");
 
         const directions = this.alignment().split(" ");
         this.verticalAlignment(directions[0]);

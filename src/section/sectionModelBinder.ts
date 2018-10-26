@@ -23,28 +23,18 @@ export class SectionModelBinder implements IModelBinder {
     public async contractToModel(sectionContract: SectionContract): Promise<SectionModel> {
         const sectionModel = new SectionModel();
 
-        if (!sectionContract.nodes) {
-            sectionContract.nodes = [];
-        }
-
-        if (sectionContract.layout) {
-            sectionModel.container = sectionContract.layout;
-        }
-
-        if (sectionContract.padding) {
-            sectionModel.padding = sectionContract.padding;
-        }
-
-        if (sectionContract.snapping) {
-            sectionModel.snap = sectionContract.snapping;
-        }
+        sectionContract.nodes = sectionContract.nodes || [];
+        sectionModel.container = sectionContract.layout;
+        sectionModel.padding = sectionContract.padding;
+        sectionModel.snap = sectionContract.snapping;
+        sectionModel.height = sectionContract.height;
 
         if (sectionContract.background) {
             sectionModel.background = await this.backgroundModelBinder.contractToModel(sectionContract.background);
         }
 
         const modelPromises = sectionContract.nodes.map(async (node) => {
-            let modelBinder: IModelBinder = this.modelBinderSelector.getModelBinderByNodeType(node.type);
+            const modelBinder: IModelBinder = this.modelBinderSelector.getModelBinderByNodeType(node.type);
             return await modelBinder.contractToModel(node);
         });
 
@@ -60,7 +50,8 @@ export class SectionModelBinder implements IModelBinder {
             nodes: [],
             layout: sectionModel.container,
             padding: sectionModel.padding,
-            snapping: sectionModel.snap
+            snapping: sectionModel.snap,
+            height: sectionModel.height
         };
 
         if (sectionModel.background) {
@@ -68,13 +59,13 @@ export class SectionModelBinder implements IModelBinder {
                 color: sectionModel.background.colorKey,
                 size: sectionModel.background.size,
                 position: sectionModel.background.position
-            }
+            };
 
             if (sectionModel.background.sourceType === "picture") {
                 sectionContract.background.picture = {
                     sourcePermalinkKey: sectionModel.background.sourceKey,
                     repeat: sectionModel.background.repeat
-                }
+                };
             }
         }
 

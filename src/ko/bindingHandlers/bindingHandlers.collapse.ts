@@ -2,7 +2,7 @@ import * as ko from "knockout";
 
 ko.bindingHandlers["collapse"] = {
     init: (triggerElement: HTMLElement, valueAccessor) => {
-        //timeout to let other bindings to bind id for collapsable container
+        // timeout to let other bindings to bind id for collapsable container
         setTimeout(() => {
             const targetSelector = ko.unwrap(valueAccessor());
             const targetElement = document.querySelector(targetSelector);

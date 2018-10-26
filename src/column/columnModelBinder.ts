@@ -36,6 +36,9 @@ export class ColumnModelBinder implements IModelBinder {
             columnModel.order = contract.order;
         }
 
+        columnModel.overflowX = contract.overflowX;
+        columnModel.overflowY = contract.overflowY;
+
         if (!contract.nodes) {
             contract.nodes = [];
         }
@@ -50,18 +53,20 @@ export class ColumnModelBinder implements IModelBinder {
         return columnModel;
     }
 
-    public modelToContract(columnModel: ColumnModel): Contract {
+    public modelToContract(model: ColumnModel): Contract {
         const contract: ColumnContract = {
             type: "layout-column",
             object: "block",
             nodes: []
         };
 
-        contract.size = columnModel.size;
-        contract.alignment = columnModel.alignment;
-        contract.order = columnModel.order;
+        contract.size = model.size;
+        contract.alignment = model.alignment;
+        contract.order = model.order;
+        contract.overflowX = model.overflowX;
+        contract.overflowY = model.overflowY;
 
-        columnModel.widgets.forEach(widgetModel => {
+        model.widgets.forEach(widgetModel => {
             const modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
             contract.nodes.push(modelBinder.modelToContract(widgetModel));
         });

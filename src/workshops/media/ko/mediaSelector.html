@@ -17,7 +17,7 @@
             <spinner></spinner>
             <!--/ko-->
             <li class="list-item list-item-float" data-bind="css: { selected: media.hasFocus }, dragsource: { sticky: true, payload: $data, ondragstart: $component.onDragStart, ondragend: $component.onDragEnd }">
-                <a class="thumbnail" href="#" data-bind="click: $component.selectMedia.bind($data, media), hasFocus: media.hasFocus, event: { keydown: $component.keydown }, style: { 'background-image': 'url('+media.thumbnailUrl()+')' }, attr: { title: media.fileName() }"></a>
+                <a class="thumbnail" href="#" data-bind="click: $component.selectMedia, hasFocus: media.hasFocus, event: { keydown: $component.keydown }, style: { 'background-image': 'url('+media.thumbnailUrl()+')' }, attr: { title: media.fileName() }"></a>
             </li>
         </ul>
 

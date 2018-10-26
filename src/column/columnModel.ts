@@ -6,6 +6,8 @@ export class ColumnModel implements WidgetModel {
     public size: Breakpoints;
     public alignment: Breakpoints;
     public order: Breakpoints;
+    public overflowX: string;
+    public overflowY: string;
 
     constructor() {
         this.widgets = [];

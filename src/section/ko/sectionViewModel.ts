@@ -13,11 +13,13 @@ export class SectionViewModel implements WidgetViewModel {
     public container: KnockoutObservable<string>;
     public snapTo: KnockoutObservable<string>;
     public background: KnockoutObservable<BackgroundModel>;
+    public height: KnockoutObservable<string>;
 
     constructor() {
         this.widgets = ko.observableArray<WidgetViewModel>();
         this.container = ko.observable<string>();
         this.snapTo = ko.observable<string>();
         this.background = ko.observable<BackgroundModel>();
+        this.height = ko.observable<string>();
     }
 }

@@ -25,6 +25,7 @@ export class SectionEditor implements IWidgetEditor {
     public readonly backgroundHasPicture: KnockoutComputed<boolean>;
     public readonly backgroundHasColor: KnockoutComputed<boolean>;
     public readonly background: KnockoutObservable<BackgroundModel>;
+    public readonly stretch: KnockoutObservable<boolean>;
 
     constructor() {
         this.setWidgetModel = this.setWidgetModel.bind(this);
@@ -40,6 +41,9 @@ export class SectionEditor implements IWidgetEditor {
 
         this.snap = ko.observable<string>();
         this.snap.subscribe(this.onChange.bind(this));
+
+        this.stretch = ko.observable<boolean>();
+        this.stretch.subscribe(this.onChange.bind(this));
 
         this.backgroundSize = ko.observable<string>();
         this.backgroundSize.subscribe(this.onChange.bind(this));
@@ -57,16 +61,15 @@ export class SectionEditor implements IWidgetEditor {
         this.backgroundHasPicture = ko.pureComputed(() =>
             this.background() &&
             this.background().sourceKey &&
-            this.background().sourceKey != null
+            this.background().sourceKey !== null
         );
 
         this.backgroundHasColor = ko.pureComputed(() =>
             this.background() &&
             this.background().colorKey &&
-            this.background().colorKey != null
+            this.background().colorKey !== null
         );
     }
-
 
     /**
      * Collecting changes from the editor UI and invoking callback method.
@@ -78,6 +81,7 @@ export class SectionEditor implements IWidgetEditor {
         this.section.container = this.layout();
         this.section.padding = this.padding();
         this.section.snap = this.snap();
+        this.section.height = this.stretch() ? "stretch" : null;
 
         if (this.section.background) {
             this.section.background.colorKey = this.backgroundColorKey();
@@ -122,6 +126,7 @@ export class SectionEditor implements IWidgetEditor {
         this.layout(this.section.container);
         this.padding(this.section.padding);
         this.snap(this.section.snap);
+        this.stretch(this.section.height === "stretch");
 
         if (this.section.background) {
             this.backgroundColorKey(this.section.background.colorKey);

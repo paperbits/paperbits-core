@@ -34,6 +34,7 @@ export class MediaSelector {
         private readonly widgetService: IWidgetService
     ) {
         this.onMounted = this.onMounted.bind(this);
+        this.selectMedia = this.selectMedia.bind(this);
 
         // setting up...
         this.mediaItems = ko.observableArray<MediaItem>();

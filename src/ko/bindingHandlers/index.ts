@@ -8,6 +8,8 @@ export * from "./bindingHandlers.columnSize";
 export * from "./bindingHandlers.columnSizeCfg";
 export * from "./bindingHandlers.component";
 export * from "./bindingHandlers.container";
+export * from "./bindingHandlers.height";
+export * from "./bindingHandlers.overflow";
 export * from "./bindingHandlers.content";
 export * from "./bindingHandlers.draggables";
 export * from "./bindingHandlers.grid";

@@ -59,6 +59,9 @@ export class ColumnViewModelBinder implements IViewModelBinder<ColumnModel, Colu
             columnViewModel.orderXl(model.order.xl);
         }
 
+        columnViewModel.overflowX(model.overflowX);
+        columnViewModel.overflowY(model.overflowY);
+
         const binding: IWidgetBinding = {
             name: "column",
             displayName: "Column",
