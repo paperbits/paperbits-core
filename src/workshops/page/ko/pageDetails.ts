@@ -1,5 +1,5 @@
 ﻿import template from "./pageDetails.html";
-import { IPermalink, IPermalinkService } from "@paperbits/common/permalinks";
+import { PermalinkContract, IPermalinkService } from "@paperbits/common/permalinks";
 import { IPageService } from "@paperbits/common/pages";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
@@ -12,7 +12,7 @@ import { PageItem } from "./pageItem";
     injectable: "pageDetailsWorkshop"
 })
 export class PageDetailsWorkshop {
-    private pagePermalink: IPermalink;
+    private pagePermalink: PermalinkContract;
 
     @Param()
     public pageItem: PageItem;

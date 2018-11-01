@@ -2,7 +2,7 @@ import { PageModel } from "./pageModel";
 import { Contract } from "@paperbits/common";
 import { IModelBinder } from "@paperbits/common/editing";
 import { IPageService, PageContract } from "@paperbits/common/pages";
-import { IPermalinkService, IPermalink } from "@paperbits/common/permalinks";
+import { IPermalinkService, PermalinkContract } from "@paperbits/common/permalinks";
 import { IFileService } from "@paperbits/common/files";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { ModelBinderSelector, WidgetModel } from "@paperbits/common/widgets";
@@ -10,7 +10,7 @@ import { PlaceholderModel } from "@paperbits/common/widgets/placeholder";
 
 
 export class PageModelBinder implements IModelBinder {
-    private pageNotFound: IPermalink;
+    private pageNotFound: PermalinkContract;
   
     constructor(
         private readonly pageService: IPageService,
@@ -73,7 +73,7 @@ export class PageModelBinder implements IModelBinder {
         return pageModel;
     }
 
-    private async getPageNotFound(): Promise<IPermalink> {
+    private async getPageNotFound(): Promise<PermalinkContract> {
         if (!this.pageNotFound) {
             this.pageNotFound = await this.permalinkService.getPermalinkByUrl("/404");
         }

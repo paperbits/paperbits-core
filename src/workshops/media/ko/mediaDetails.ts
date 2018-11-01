@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import template from "./mediaDetails.html";
-import { IPermalink, IPermalinkService } from "@paperbits/common/permalinks";
+import { PermalinkContract, IPermalinkService } from "@paperbits/common/permalinks";
 import { IMediaService } from "@paperbits/common/media";
 import { IViewManager } from "@paperbits/common/ui";
 import { MediaItem } from "./mediaItem";
@@ -12,7 +12,7 @@ import { Component, Param, Event, OnMounted } from "../../../ko/decorators";
     injectable: "mediaDetailsWorkshop"
 })
 export class MediaDetailsWorkshop {
-    private mediaPermalink: IPermalink;
+    private mediaPermalink: PermalinkContract;
 
     @Param()
     public readonly mediaItem: MediaItem;

@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import template from "./blogPostDetails.html";
-import { IPermalink, IPermalinkService } from "@paperbits/common/permalinks";
+import { PermalinkContract, IPermalinkService } from "@paperbits/common/permalinks";
 import { IBlogService } from "@paperbits/common/blogs/IBlogService";
 import { IRouteHandler } from "@paperbits/common/routing/IRouteHandler";
 import { IViewManager } from "@paperbits/common/ui";
@@ -13,7 +13,7 @@ import { BlogPostItem } from "./blogPostItem";
     injectable: "blogPostDetailsWorkshop"
 })
 export class BlogPostDetailsWorkshop {
-    private blogPostPermalink: IPermalink;
+    private blogPostPermalink: PermalinkContract;
 
     @Param()
     public readonly blogPostItem: BlogPostItem;
