@@ -9,9 +9,7 @@ export class NavbarHandlers implements IWidgetHandler {
             iconClass: "paperbits-menu-34",
             requires: ["scripts"],
             createModel: async () => {
-                const model = new NavbarModel();
-                model.rootKey = "main";
-                return model;
+                return new NavbarModel();
             }
         };
 

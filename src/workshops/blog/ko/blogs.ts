@@ -2,16 +2,11 @@
 import template from "./blogs.html";
 import { IBlogService } from "@paperbits/common/blogs/IBlogService";
 import { IRouteHandler } from "@paperbits/common/routing/IRouteHandler";
-import { IPermalinkService } from "@paperbits/common/permalinks";
 import { IViewManager } from "@paperbits/common/ui";
-import { IBlockService } from "@paperbits/common/blocks/IBlockService";
 import { Keys } from "@paperbits/common/keyboard";
-import { IFileService } from "@paperbits/common/files/IFileService";
 import { Component } from "../../../ko/decorators/component.decorator";
 import { BlogPostItem } from "./blogPostItem";
 import { LayoutViewModelBinder } from "../../../layout/ko";
-
-const templateBlockKey = "blocks/8730d297-af39-8166-83b6-9439addca789";
 
 @Component({
     selector: "blogs",
@@ -28,20 +23,10 @@ export class BlogWorkshop {
 
     constructor(
         private readonly blogService: IBlogService,
-        private readonly fileService: IFileService,
-        private readonly permalinkService: IPermalinkService,
         private readonly routeHandler: IRouteHandler,
-        private readonly blockService: IBlockService,
         private readonly viewManager: IViewManager,
         private readonly layoutViewModelBinder: LayoutViewModelBinder
     ) {
-        // initialization...
-        this.blogService = blogService;
-        this.fileService = fileService;
-        this.permalinkService = permalinkService;
-        this.routeHandler = routeHandler;
-        this.viewManager = viewManager;
-
         // rebinding...
         this.searchBlogPosts = this.searchBlogPosts.bind(this);
         this.addBlogPost = this.addBlogPost.bind(this);
@@ -90,31 +75,14 @@ export class BlogWorkshop {
     public async addBlogPost(): Promise<void> {
         this.working(true);
 
-        const blogpost = await this.blogService.createBlogPost("New blog post", "", "");
-        const createPermalinkPromise = this.permalinkService.createPermalink("/blog/new", blogpost.key);
-        const contentTemplate = await this.blockService.getBlockByKey(templateBlockKey);
+        const postUrl = "/blog/new";
+        const post = await this.blogService.createBlogPost(postUrl, "New blog post", "", "");
+        const postItem = new BlogPostItem(post);
 
-        const template = {
-            "object": "block",
-            "nodes": [contentTemplate.content],
-            "type": "page"
-        }
+        this.blogPosts.push(postItem);
+        this.selectBlogPost(postItem);
 
-        const createContentPromise = this.fileService.createFile(template);
-
-        const results = await Promise.all<any>([createPermalinkPromise, createContentPromise]);
-        const permalink = results[0];
-        const content = results[1];
-
-        blogpost.permalinkKey = permalink.key;
-        blogpost.contentKey = content.key;
-
-        await this.blogService.updateBlogPost(blogpost);
-
-        const blogPostItem = new BlogPostItem(blogpost);
-
-        this.blogPosts.push(blogPostItem);
-        this.selectBlogPost(blogPostItem);
+        this.routeHandler.navigateTo(postUrl);
         this.working(false);
     }
 

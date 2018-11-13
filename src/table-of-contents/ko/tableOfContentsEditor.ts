@@ -20,10 +20,7 @@ export class TableOfContentsEditor implements IWidgetEditor {
 
     public readonly navigationItemTitle: KnockoutObservable<string>;
 
-    constructor(
-        private readonly viewManager: IViewManager,
-        private readonly tableOfContentsModelBinder: TableOfContentsModelBinder
-    ) {
+    constructor(private readonly tableOfContentsModelBinder: TableOfContentsModelBinder) {
         this.onNavigationItemChange = this.onNavigationItemChange.bind(this);
 
         this.navigationItemTitle = ko.observable<string>("Click to select navigation item...");

@@ -2,11 +2,12 @@
     <a class="navbar-brand" href="/" data-bind="if: $component.pictureSourceUrl">
         <img data-bind="attr: { src: $component.pictureSourceUrl }" />
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapse" aria-controls="collaps" aria-expanded="false"
-        aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapse" aria-controls="collaps"
+        aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div id="collapse" class="collapse navbar-collapse" data-bind="with: navigationRoot()">
+    <!--ko if: navigationRoot-->
+    <div id="collapse" class="collapse navbar-collapse" data-bind="with: navigationRoot">
         <ul class="nav navbar-nav ml-auto" data-bind="foreach: nodes()">
             <!--ko if: nodes().length > 0 -->
             <li class="nav-item dropdown">
@@ -25,6 +26,10 @@
             <!--/ko-->
         </ul>
     </div>
+    <!--/ko-->
+    <!--ko ifnot: navigationRoot -->
+    <p class="not-configured">It seems that you don't have navigation items here.</p>
+    <!--/ko-->
 </nav>
 
 <script id="navigationItemTemplate" type="text/html">

@@ -39,9 +39,11 @@ export class NavbarViewModelBinder implements IViewModelBinder<NavbarModel, Navb
             viewModel = new NavbarViewModel();
         }
 
-        const navigationRoot = this.navbarItemModelToNavbarItemViewModel(navbarModel.root);
-
-        viewModel.navigationRoot(navigationRoot);
+        if (navbarModel.root) {
+            const navigationRoot = this.navbarItemModelToNavbarItemViewModel(navbarModel.root);
+            viewModel.navigationRoot(navigationRoot);
+        }
+        
         viewModel.pictureSourceUrl(navbarModel.pictureSourceUrl);
 
         viewModel["widgetBinding"] = {
@@ -59,7 +61,7 @@ export class NavbarViewModelBinder implements IViewModelBinder<NavbarModel, Navb
             // TODO: Think about how to unsubscribe from this event.
 
             if (updatedRootContract.key === navbarModel.rootKey) {
-                const updatedRootModel = await this.navbarModelBinder.navigationItemToNavbarItemModel(updatedRootContract, this.routeHandler.getCurrentUrl());
+                const updatedRootModel = await this.navbarModelBinder.navigationItemToNavbarItemModel(updatedRootContract);
                 viewModel.navigationRoot(this.navbarItemModelToNavbarItemViewModel(updatedRootModel));
             }
         });

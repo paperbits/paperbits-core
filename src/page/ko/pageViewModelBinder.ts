@@ -6,7 +6,6 @@ import { PageHandlers } from "../pageHandlers";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { IPageService } from "@paperbits/common/pages";
 import { IPermalinkService } from "@paperbits/common/permalinks";
-import { IFileService } from "@paperbits/common/files";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { IEventManager } from "@paperbits/common/events";
 
@@ -16,7 +15,6 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly pageService: IPageService,
         private readonly permalinkService: IPermalinkService,
-        private readonly fileService: IFileService,
         private readonly routeHandler: IRouteHandler,
         private readonly modelBinderSelector: ModelBinderSelector,
         private readonly eventManager: IEventManager
@@ -29,8 +27,7 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
             const url = this.routeHandler.getCurrentUrl();
             const permalink = await this.permalinkService.getPermalinkByUrl(url);
             const pageKey = permalink.targetKey;
-            const page = await this.pageService.getPageByKey(pageKey);
-            const file = await this.fileService.getFileByKey(page.contentKey);
+            const pageContent = await this.pageService.getPageContent(pageKey);
 
             const contentContract = {
                 nodes: []
@@ -41,9 +38,9 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
                 contentContract.nodes.push(modelBinder.modelToContract(section));
             });
 
-            Object.assign(file, contentContract);
+            Object.assign(pageContent, contentContract);
 
-            await this.fileService.updateFile(file);
+            await this.pageService.updatePageContent(pageKey, pageContent);
         };
 
         const scheduleUpdate = async (): Promise<void> => {

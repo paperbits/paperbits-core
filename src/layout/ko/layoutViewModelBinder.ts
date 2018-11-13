@@ -6,7 +6,6 @@ import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { IEventManager } from "@paperbits/common/events";
 import { IRouteHandler } from "@paperbits/common/routing";
-import { IFileService } from "@paperbits/common/files";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { ILayoutService } from "@paperbits/common/layouts";
 
@@ -15,7 +14,6 @@ export class LayoutViewModelBinder {
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly eventManager: IEventManager,
-        private readonly fileService: IFileService,
         private readonly layoutService: ILayoutService,
         private readonly routeHandler: IRouteHandler,
         private readonly modelBinderSelector: ModelBinderSelector,
@@ -30,7 +28,7 @@ export class LayoutViewModelBinder {
         const updateContent = async (): Promise<void> => {
             const url = this.routeHandler.getCurrentUrl();
             const layout = await this.layoutService.getLayoutByRoute(url);
-            const file = await this.fileService.getFileByKey(layout.contentKey);
+            const layoutContent = await this.layoutService.getLayoutContent(layout.key);
 
             const contentContract = {
                 nodes: []
@@ -41,9 +39,9 @@ export class LayoutViewModelBinder {
                 contentContract.nodes.push(modelBinder.modelToContract(section));
             });
 
-            Object.assign(file, contentContract);
+            Object.assign(layoutContent, contentContract);
 
-            await this.fileService.updateFile(file);
+            await this.layoutService.updateLayoutContent(layout.key, layoutContent);
         };
 
         const scheduleUpdate = async (): Promise<void> => {

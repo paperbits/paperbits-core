@@ -1,12 +1,10 @@
 import { IRouteHandler } from "@paperbits/common/routing";
-import { IFileService } from "@paperbits/common/files";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { LayoutModel } from "./layoutModel";
 import { ILayoutService, LayoutContract } from "@paperbits/common/layouts";
 
 export class LayoutModelBinder {
     constructor(
-        private readonly fileService: IFileService,
         private readonly layoutService: ILayoutService,
         private readonly routeHandler: IRouteHandler,
         private readonly modelBinderSelector: ModelBinderSelector
@@ -28,9 +26,9 @@ export class LayoutModelBinder {
         layoutModel.description = layoutContract.description;
         layoutModel.uriTemplate = layoutContract.uriTemplate;
 
-        const layoutContentNode = await this.fileService.getFileByKey(layoutContract.contentKey);
+        const layoutContent = await this.layoutService.getLayoutContent(layoutContract.key);
 
-        const modelPromises = layoutContentNode.nodes.map(async (config) => {
+        const modelPromises = layoutContent.nodes.map(async (config) => {
             const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(config.type);
             return await modelBinder.contractToModel(config);
         });

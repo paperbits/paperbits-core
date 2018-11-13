@@ -2,16 +2,12 @@
 import template from "./pages.html";
 import { IPageService } from "@paperbits/common/pages";
 import { IRouteHandler } from "@paperbits/common/routing";
-import { IPermalinkService } from "@paperbits/common/permalinks";
 import { IViewManager } from "@paperbits/common/ui";
-import { IFileService } from "@paperbits/common/files";
 import { Keys } from "@paperbits/common/keyboard";
-import { IBlockService } from "@paperbits/common/blocks";
 import { Component } from "../../../ko/decorators/component.decorator";
 import { PageItem } from "./pageItem";
 import { LayoutViewModelBinder } from "../../../layout/ko";
 
-const templateBlockKey = "blocks/8730d297-af39-8166-83b6-9439addca789";
 
 @Component({
     selector: "pages",
@@ -28,10 +24,7 @@ export class PagesWorkshop {
 
     constructor(
         private readonly pageService: IPageService,
-        private readonly fileService: IFileService,
-        private readonly permalinkService: IPermalinkService,
         private readonly routeHandler: IRouteHandler,
-        private readonly blockService: IBlockService,
         private readonly viewManager: IViewManager,
         private readonly layoutViewModelBinder: LayoutViewModelBinder
     ) {
@@ -83,32 +76,14 @@ export class PagesWorkshop {
     public async addPage(): Promise<void> {
         this.working(true);
 
-        const page = await this.pageService.createPage("New page", "", "");
-        const createPermalinkPromise = this.permalinkService.createPermalink("/new", page.key);
-        const contentTemplate = await this.blockService.getBlockByKey(templateBlockKey);
-
-        const template = {
-            object: "block",
-            nodes: [contentTemplate.content],
-            type: "page"
-        };
-
-        const createContentPromise = this.fileService.createFile(template);
-        const results = await Promise.all<any>([createPermalinkPromise, createContentPromise]);
-        const permalink = results[0];
-        const content = results[1];
-
-        page.permalinkKey = permalink.key;
-        page.contentKey = content.key;
-
-        await this.pageService.updatePage(page);
-
-        this.routeHandler.navigateTo(permalink.uri);
-
-        const pageItem = new PageItem(page);
+        const pageUrl = "/new";
+        const pageContract = await this.pageService.createPage(pageUrl, "New page", "", "");
+        const pageItem = new PageItem(pageContract);
 
         this.pages.push(pageItem);
         this.selectPage(pageItem);
+
+        this.routeHandler.navigateTo(pageUrl);
         this.working(false);
     }
 

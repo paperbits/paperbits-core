@@ -4,8 +4,6 @@ import { LayoutContract } from "@paperbits/common/layouts/layoutContract";
 export class LayoutItem {
     public contentKey?: string;
 
-    public static readonly newLayoutUri = "/new-layout";
-
     public key: string;
     public title: KnockoutObservable<string>;
     public description: KnockoutObservable<string>;

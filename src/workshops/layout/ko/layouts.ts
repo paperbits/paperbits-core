@@ -3,7 +3,6 @@ import template from "./layouts.html";
 import { Contract } from "@paperbits/common/contract";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
-import { IFileService } from "@paperbits/common/files";
 import { ILayoutService } from "@paperbits/common/layouts";
 import { Keys } from "@paperbits/common/keyboard";
 import { LayoutItem } from "./layoutItem";
@@ -24,12 +23,10 @@ export class LayoutsWorkshop {
 
     constructor(
         private readonly layoutService: ILayoutService,
-        private readonly fileService: IFileService,
         private readonly routeHandler: IRouteHandler,
         private readonly viewManager: IViewManager
     ) {
         // rebinding...
-        this.onMounted = this.onMounted.bind(this);
         this.searchLayouts = this.searchLayouts.bind(this);
         this.addLayout = this.addLayout.bind(this);
         this.selectLayout = this.selectLayout.bind(this);
@@ -44,19 +41,6 @@ export class LayoutsWorkshop {
     }
 
     @OnMounted()
-    public async onMounted(): Promise<void> {
-        this.template = {
-            "object": "block",
-            "nodes": [{
-                "object": "block",
-                "type": "page"
-            }],
-            "type": "layout"
-        };
-
-        this.searchLayouts();
-    }
-
     public async searchLayouts(searchPattern: string = ""): Promise<void> {
         this.working(true);
 
@@ -80,17 +64,14 @@ export class LayoutsWorkshop {
 
     public async addLayout(): Promise<void> {
         this.working(true);
-        const layout = await this.layoutService.createLayout("New Layout", "", LayoutItem.newLayoutUri);
-        const content = await this.fileService.createFile(this.template);
 
-        layout.contentKey = content.key;
-
-        await this.layoutService.updateLayout(layout);
-
+        const layoutUrlTemplate = "/new-layout";
+        const layout = await this.layoutService.createLayout("New Layout", "", layoutUrlTemplate);
         const layoutItem = new LayoutItem(layout);
 
         this.layouts.push(layoutItem);
         this.selectLayout(layoutItem);
+
         this.working(false);
     }
 

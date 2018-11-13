@@ -1,6 +1,5 @@
-﻿import { IWidgetOrder } from '@paperbits/common/editing';
-import { IWidgetHandler } from '@paperbits/common/editing';
-import { TableOfContentsModel } from './tableOfContentsModel';
+﻿import { IWidgetOrder, IWidgetHandler } from "@paperbits/common/editing";
+import { TableOfContentsModel } from "./tableOfContentsModel";
 
 export class TableOfContentsHandlers implements IWidgetHandler {
     public async getWidgetOrder(): Promise<IWidgetOrder> {
@@ -10,7 +9,7 @@ export class TableOfContentsHandlers implements IWidgetHandler {
             iconClass: "paperbits-cheque-3",
             requires: ["scripts"],
             createModel: async () => new TableOfContentsModel()
-        }
+        };
 
         return widgetOrder;
     }
