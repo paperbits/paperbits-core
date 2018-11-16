@@ -1,17 +1,19 @@
 ﻿import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
-import { GlobalEventHandler } from "@paperbits/common/events";
+import { GlobalEventHandler, IEventManager } from "@paperbits/common/events";
 import { IViewManager, ViewManagerMode, HostDocument } from "@paperbits/common/ui";
 import { IRouteHandler } from "@paperbits/common/routing";
 
 export class HostBindingHandler {
     private readonly layoutViewModel: KnockoutObservable<any>;
+    private documentViewModel;
     private hostDocument: HostDocument;
 
     constructor(
         private readonly globalEventHandler: GlobalEventHandler,
         private readonly viewManager: IViewManager,
-        private readonly routeHandler: IRouteHandler
+        private readonly routeHandler: IRouteHandler,
+        private readonly eventManager: IEventManager
     ) {
         this.refreshContent = this.refreshContent.bind(this);
         this.onRouteChange = this.onRouteChange.bind(this);
@@ -138,6 +140,17 @@ export class HostBindingHandler {
 
             hostElement.contentDocument.addEventListener("click", onClick, true);
             hostElement.contentDocument.addEventListener("mousedown", onPointerDown, true);
+
+            const originalPushState = hostElement.contentDocument.defaultView.window.history.pushState;
+            const originalHistory = hostElement.contentDocument.defaultView.window.history;
+            const routeHandler = this.routeHandler;
+
+            hostElement.contentDocument.defaultView.window.history.pushState(null, null, routeHandler.getCurrentUrl());
+
+            hostElement.contentDocument.defaultView.window.history.pushState = function () {
+                originalPushState.apply(originalHistory, arguments);
+                routeHandler.navigateTo(arguments[2]);
+            };
         };
 
         hostElement.addEventListener("load", onLoad, false);
@@ -151,8 +164,6 @@ export class HostBindingHandler {
         return hostElement;
     }
 
-    private documentViewModel;
-
     private async setRootElement(bodyElement: HTMLElement): Promise<void> {
         const layoutViewModel = await this.hostDocument.getLayoutViewModel();
         this.layoutViewModel(layoutViewModel);
@@ -161,7 +172,16 @@ export class HostBindingHandler {
     }
 
     private async refreshContent(): Promise<void> {
-        this.layoutViewModel(null);
+        const currentLayoutViewModel = this.layoutViewModel();
+
+        if (currentLayoutViewModel && currentLayoutViewModel.uriTemplate) {
+            const result = Utils.matchUrl(this.routeHandler.getCurrentUrl(), currentLayoutViewModel.uriTemplate());
+
+            if (result) {
+                return;
+            }
+        }
+
         const layoutViewModel = await this.hostDocument.getLayoutViewModel();
         this.layoutViewModel(layoutViewModel);
     }

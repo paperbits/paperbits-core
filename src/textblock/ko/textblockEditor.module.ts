@@ -8,10 +8,10 @@ import { HyperlinkEditor } from "./hyperlink/hyperlinkEditor";
 import { TextblockEditor } from "./textblockEditor";
 
 export class TextblockEditorModule implements IInjectorModule {
-    register(injector: IInjector): void {
+    public register(injector: IInjector): void {
         injector.bindSingleton("textblockHandler", TextblockHandlers);
 
-        const widgetHandlers:Array<IWidgetHandler> = injector.resolve("widgetHandlers");
+        const widgetHandlers: IWidgetHandler[] = injector.resolve("widgetHandlers");
         widgetHandlers.push(injector.resolve<TextblockHandlers>("textblockHandler"));
 
         injector.bind("formattingTools", FormattingTools);

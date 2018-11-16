@@ -104,6 +104,18 @@ export class CoreEditModule implements IInjectorModule {
         injector.bind("widgetSelector", WidgetSelector);
         injector.bind("urlSelector",  UrlSelector);
 
+        injector.bindModule(new TextblockEditorModule());
+        injector.bindModule(new PictureEditorModule());
+        injector.bindModule(new ButtonEditorModule());
+        injector.bindModule(new MapEditorModule());
+        injector.bindModule(new VideoPlayerEditorModule());
+        injector.bindModule(new YoutubePlayerEditorModule());
+        injector.bindModule(new TestimonialsEditorModule());
+        injector.bindModule(new TableOfContentsEditorModule());
+        injector.bindModule(new NavbarEditorModule());
+        injector.bindModule(new SearchResultsEditorModule());
+        injector.bindModule(new PricingTableEditorModule());
+
         injector.bindModule(new DropbucketModule());
         injector.bindModule(new LayoutWorkshopModule());
         injector.bindModule(new PageWorkshopModule());
@@ -113,20 +125,9 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindModule(new NavigationWorkshopModule());
         injector.bindModule(new ColumnEditorModule());
         injector.bindModule(new RowEditorModule());
-        injector.bindModule(new TextblockEditorModule());
         injector.bindModule(new SectionEditorModule());
         injector.bindModule(new LayoutEditorModule());
         injector.bindModule(new PageEditorModule());
-        injector.bindModule(new NavbarEditorModule());
-        injector.bindModule(new ButtonEditorModule());
-        injector.bindModule(new MapEditorModule());
-        injector.bindModule(new TableOfContentsEditorModule());
-        injector.bindModule(new PictureEditorModule());
-        injector.bindModule(new VideoPlayerEditorModule());
-        injector.bindModule(new YoutubePlayerEditorModule());
-        injector.bindModule(new TestimonialsEditorModule());
         injector.bindModule(new SliderEditorModule());
-        injector.bindModule(new SearchResultsEditorModule());
-        injector.bindModule(new PricingTableEditorModule());
     }
 }

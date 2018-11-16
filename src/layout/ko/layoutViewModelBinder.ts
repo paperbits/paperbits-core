@@ -90,6 +90,7 @@ export class LayoutViewModelBinder {
             })
             .filter(x => x !== null);
 
+        viewModel.uriTemplate(model.uriTemplate);
         viewModel.widgets(sectionViewModels);
 
         if (!viewModel["widgetBinding"]) {
