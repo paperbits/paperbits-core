@@ -4,7 +4,7 @@ import * as Arrays from "@paperbits/common/arrays";
 import template from "./viewManager.html";
 import "@paperbits/common/extensions";
 import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
-import { IBag } from "@paperbits/common";
+import { Bag } from "@paperbits/common";
 import { IMediaService } from "@paperbits/common/media";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { IComponent, IView, IViewManager, ViewManagerMode, IHighlightConfig, IContextualEditor, ISplitterConfig, HostDocument } from "@paperbits/common/ui";
@@ -16,7 +16,7 @@ import { IPermalinkService } from "@paperbits/common/permalinks";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { IWidgetEditor } from "@paperbits/common/widgets";
-import { Component } from "../decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 
 declare let uploadDialog;
 
@@ -28,7 +28,7 @@ declare let uploadDialog;
     injectable: "viewManager"
 })
 export class ViewManager implements IViewManager {
-    private contextualEditorsBag: IBag<IContextualEditor> = {};
+    private contextualEditorsBag: Bag<IContextualEditor> = {};
     private currentPage: PageContract;
 
     public journey: KnockoutObservableArray<IView>;
@@ -382,9 +382,14 @@ export class ViewManager implements IViewManager {
         const view: IView = {
             component: {
                 name: binding.editor,
-                params: {},
+                params: {
+                    model: binding.model,
+                    onChange: binding.applyChanges
+                },
                 oncreate: (editorViewModel: IWidgetEditor) => {
-                    editorViewModel.setWidgetModel(binding.model, binding.applyChanges);
+                    if (editorViewModel.setWidgetModel) {
+                        editorViewModel.setWidgetModel(binding.model, binding.applyChanges);
+                    }
                 }
             },
             heading: binding.displayName,

@@ -3,7 +3,7 @@ import template from "./textblockEditor.html";
 import { IWidgetEditor } from "@paperbits/common/widgets/IWidgetEditor";
 import { IEventManager } from "@paperbits/common/events";
 import { TextblockViewModel } from "./textblockViewModel";
-import { Component } from "../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "html-editor",

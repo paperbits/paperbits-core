@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import template from "./viewport-selector.html";
 import { IViewManager } from "@paperbits/common/ui";
-import { Component } from "../../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "viewport-selector",

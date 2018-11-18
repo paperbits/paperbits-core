@@ -4,7 +4,7 @@ import { IBlogService } from "@paperbits/common/blogs/IBlogService";
 import { IRouteHandler } from "@paperbits/common/routing/IRouteHandler";
 import { IViewManager } from "@paperbits/common/ui";
 import { Keys } from "@paperbits/common/keyboard";
-import { Component } from "../../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 import { BlogPostItem } from "./blogPostItem";
 import { LayoutViewModelBinder } from "../../../layout/ko";
 

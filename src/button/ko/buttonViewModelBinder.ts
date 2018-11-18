@@ -13,37 +13,7 @@ export class ButtonViewModelBinder implements IViewModelBinder<ButtonModel, Butt
 
         viewModel.label(model.label);
         viewModel.hyperlink(model.hyperlink);
-
-        const classes = [];
-
-        switch (model.style) {
-            case "default":
-                classes.push("btn-default");
-                break;
-
-            case "primary":
-                classes.push("btn-primary");
-                break;
-
-            case "inverted":
-                classes.push("btn-inverted");
-                break;
-        }
-
-        switch (model.size) {
-            case "small":
-                classes.push("btn-sm");
-                break;
-
-            case "regular":
-                break;
-
-            case "large":
-                classes.push("btn-lg");
-                break;
-        }
-
-        viewModel.css(classes.join(" "));
+        viewModel.styles(model.styles);
 
         viewModel["widgetBinding"] = {
             displayName: "Button",

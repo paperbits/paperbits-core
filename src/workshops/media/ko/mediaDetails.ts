@@ -4,7 +4,7 @@ import { PermalinkContract, IPermalinkService } from "@paperbits/common/permalin
 import { IMediaService } from "@paperbits/common/media";
 import { IViewManager } from "@paperbits/common/ui";
 import { MediaItem } from "./mediaItem";
-import { Component, Param, Event, OnMounted } from "../../../ko/decorators";
+import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "media-details-workshop",

@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import template from "./picture.html";
-import { Component } from "../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 

@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import template from "./gtm.html";
 import { IGtmConfig } from "@paperbits/common/sites/ISettings";
 import { ISettingsProvider } from '@paperbits/common/configuration/ISettingsProvider';
-import { Component } from "../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
    
 @Component({
     selector: "paperbits-gtm",

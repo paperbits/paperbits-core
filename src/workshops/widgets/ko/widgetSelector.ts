@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import template from "./widgetSelector.html";
 import { WidgetItem } from "./widgetItem";
 import { IWidgetService, WidgetModel } from "@paperbits/common/widgets";
-import { Component, Event, OnMounted } from "../../../ko/decorators";
+import { Component, Event, OnMounted } from "@paperbits/common/ko/decorators";
 
 
 @Component({

@@ -32,7 +32,7 @@ ko.bindingHandlers["surface"] = {
 
                 if (Number.isInteger(editorSettings.top)) {
                     if (editorSettings.top + editorSettings.height > document.body.clientHeight) {
-                        editorSettings.top = document.body.clientHeight - editorSettings.height;
+                        editorSettings.top = 10;
                     }
 
                     element.style.top = editorSettings.top + "px";
@@ -89,7 +89,7 @@ ko.bindingHandlers["surface"] = {
                     }
 
                     if (view.resize.contains("vertically")) {
-                        Utils.setValue(`${view.component.name}/height`, settings, element.clientHeight)
+                        Utils.setValue(`${view.component.name}/height`, settings, element.clientHeight);
                     }
 
                     localStorage["settings"] = JSON.stringify(settings);

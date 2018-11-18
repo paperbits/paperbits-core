@@ -4,7 +4,7 @@ import { IPageService } from "@paperbits/common/pages";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
 import { Keys } from "@paperbits/common/keyboard";
-import { Component } from "../../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 import { PageItem } from "./pageItem";
 import { LayoutViewModelBinder } from "../../../layout/ko";
 

@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import template from "./columnEditor.html";
 import { IViewManager } from "@paperbits/common/ui";
 import { IWidgetEditor } from "@paperbits/common/widgets/IWidgetEditor";
-import { Component } from "../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 import { ColumnModel } from "../columnModel";
 
 @Component({

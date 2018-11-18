@@ -3,7 +3,7 @@ import { PermalinkContract, IPermalinkService } from "@paperbits/common/permalin
 import { IPageService } from "@paperbits/common/pages";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
-import { Component, Param, Event, OnMounted } from "../../../ko/decorators";
+import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { PageItem } from "./pageItem";
 
 @Component({

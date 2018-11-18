@@ -4,7 +4,7 @@ import { UrlItem } from "./urlItem";
 import { UrlContract } from "@paperbits/common/urls/urlContract";
 import { IPermalinkService } from "@paperbits/common/permalinks";
 import { IUrlService } from "@paperbits/common/urls/IUrlService";
-import { Component, Event } from "../../../ko/decorators";
+import { Component, Event } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "url-selector",

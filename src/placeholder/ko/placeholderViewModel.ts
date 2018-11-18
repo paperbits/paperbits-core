@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import template from "./placeholder.html";
-import { Component } from "../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "paperbits-placeholder",

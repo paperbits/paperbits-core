@@ -1,7 +1,7 @@
 import template from "./addBlockDialog.html";
 import * as ko from "knockout";
 import { IBlockService } from "@paperbits/common/blocks/IBlockService";
-import { Component } from "../../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 import { SectionModelBinder } from "../../../section/sectionModelBinder";
 import { SectionModel } from "../../../section/sectionModel";
 

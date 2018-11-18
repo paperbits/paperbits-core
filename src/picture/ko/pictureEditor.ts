@@ -3,7 +3,7 @@ import template from "./pictureEditor.html";
 import { IWidgetEditor } from "@paperbits/common/widgets";
 import { MediaContract } from "@paperbits/common/media";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
-import { Component } from "../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 import { PictureModel } from "../pictureModel";
 

@@ -21,8 +21,7 @@ export class ButtonModelBinder implements IModelBinder {
     public async contractToModel(buttonContract: Contract): Promise<ButtonModel> {
         const model = new ButtonModel();
         model.label = buttonContract.label;
-        model.style = buttonContract.style;
-        model.size = buttonContract.size;
+        model.styles = buttonContract.styles || { appearance: "components/button/default" };
 
         if (buttonContract.hyperlink) {
             model.hyperlink = await this.permalinkResolver.getHyperlinkFromConfig(buttonContract.hyperlink);
@@ -36,8 +35,7 @@ export class ButtonModelBinder implements IModelBinder {
             object: "block",
             type: "button",
             label: buttonModel.label,
-            style: buttonModel.style,
-            size: buttonModel.size
+            styles: buttonModel.styles
         };
 
         if (buttonModel.hyperlink) {

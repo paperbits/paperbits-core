@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import template from "./testimonials.html";
-import { Component } from "../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 import { changeRateLimit } from "../../ko/consts";
 
 @Component({

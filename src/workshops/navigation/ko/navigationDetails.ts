@@ -3,7 +3,7 @@ import template from "./navigationDetails.html";
 import { IViewManager } from "@paperbits/common/ui";
 import { NavigationItemViewModel } from "./navigationItemViewModel";
 import { HyperlinkModel, IPermalinkResolver } from "@paperbits/common/permalinks";
-import { Component, Event, OnMounted, Param } from "../../../ko/decorators";
+import { Component, Event, OnMounted, Param } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "navigation-details-workshop",

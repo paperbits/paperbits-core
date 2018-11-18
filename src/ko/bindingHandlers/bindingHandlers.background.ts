@@ -1,4 +1,5 @@
-﻿import * as ko from "knockout";
+﻿import { StyleService } from "@paperbits/styles";
+import * as ko from "knockout";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 
 ko.bindingHandlers["style"] = {
@@ -19,14 +20,14 @@ ko.bindingHandlers["style"] = {
 };
 
 export class BackgroundBindingHandler {
-    constructor() {
+    constructor(styleService: StyleService) {
         ko.bindingHandlers["background"] = {
             init(element: HTMLElement, valueAccessor) {
                 const configuration = valueAccessor();
                 const styleObservable = ko.observable();
                 const cssObservable = ko.observable();
 
-                const setBackground = (backgroundModel: BackgroundModel) => {
+                const setBackground = async (backgroundModel: BackgroundModel) => {
                     if (element.nodeName === "IMG") {
                         if (backgroundModel.sourceUrl) {
                             element["src"] = backgroundModel.sourceUrl;
@@ -38,7 +39,13 @@ export class BackgroundBindingHandler {
                     const css = [];
 
                     if (backgroundModel.colorKey) {
-                        Object.assign(style, { "background-color": `bg-${backgroundModel.colorKey}` });
+                        const color = await styleService.getColorByKey(backgroundModel.colorKey);
+                        if (color) {
+                            Object.assign(style, { "background-color": color.value });
+                        }
+                        else {
+                            console.warn(`Could not find color with key ${backgroundModel.colorKey}`);
+                        }
                     }
                     else if (backgroundModel.color) {
                         Object.assign(style, { "background-color": backgroundModel.color || null });

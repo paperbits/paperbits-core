@@ -35,6 +35,11 @@
                 <i class="paperbits-icon paperbits-preferences-circle"></i>
             </a>
         </li>
+        <li class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': viewManager.journeyName() == 'Styles' }">
+            <a href="#" title="Styles" role="button" data-bind="click: openStyles">
+                <i class="paperbits-icon paperbits-palette"></i>
+            </a>
+        </li>
         <li class="toolbox-btn pull-down">
             <a href="#" title="Account" role="button" data-bind="click: openProfile">
                 <div class="photo" data-bind="style: { 'background-image': 'url('+userPhotoUrl()+')' }">

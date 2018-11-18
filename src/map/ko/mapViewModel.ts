@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import template from "./map.html";
-import { Component, OnMounted } from "../../ko/decorators";
+import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { MapService } from "../mapService";
 
 @Component({

@@ -3,7 +3,7 @@ import template from "./pageSelector.html";
 import { IResourceSelector } from "@paperbits/common/ui";
 import { PageItem, AnchorItem } from "./pageItem";
 import { IPageService, PageContract } from "@paperbits/common/pages";
-import { Component, Param, Event } from "../../../ko/decorators";
+import { Component, Param, Event } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "page-selector",

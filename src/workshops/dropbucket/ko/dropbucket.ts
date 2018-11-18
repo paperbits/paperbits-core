@@ -7,7 +7,7 @@ import { IMediaService, ICreatedMedia } from "@paperbits/common/media";
 import { IContentDropHandler, IContentDescriptor, IDataTransfer } from "@paperbits/common/editing";
 import { ProgressPromise } from "@paperbits/common";
 import { DropBucketItem } from "./dropbucketItem";
-import { Component } from "../../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 import { IWidgetService } from "@paperbits/common/widgets";
 
 

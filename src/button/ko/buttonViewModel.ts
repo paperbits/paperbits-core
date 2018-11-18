@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import template from "./button.html";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
-import { Component } from "../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "paperbits-button",
@@ -9,12 +9,12 @@ import { Component } from "../../ko/decorators/component.decorator";
 })
 export class ButtonViewModel {
     public label: KnockoutObservable<string>;
-    public css: KnockoutObservable<Object>;
+    public styles: KnockoutObservable<Object>;
     public hyperlink: KnockoutObservable<HyperlinkModel>;
 
     constructor() {
         this.label = ko.observable<string>("Button");
-        this.css = ko.observable<Object>();
+        this.styles = ko.observable<Object>();
         this.hyperlink = ko.observable<HyperlinkModel>();
     }
 }

@@ -1,7 +1,7 @@
 ﻿import template from "./pricingTableEditor.html";
 import { IViewManager } from "@paperbits/common/ui";
 import { IWidgetEditor } from "@paperbits/common/widgets";
-import { Component } from "../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 import { PricingTableModel } from "../pricingTableModel";
 
 @Component({

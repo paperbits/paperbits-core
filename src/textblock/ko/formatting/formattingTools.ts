@@ -7,8 +7,9 @@ import { IPermalinkService } from "@paperbits/common/permalinks";
 import { IPageService } from "@paperbits/common/pages";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { HtmlEditorEvents } from "@paperbits/common/editing";
-import { Component } from "../../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 import { IViewManager } from "@paperbits/common/ui";
+import { FontContract } from "@paperbits/styles/contracts";
 
 @Component({
     selector: "formatting",
@@ -43,6 +44,7 @@ export class FormattingTools {
     ) {
         this.updateFormattingState = this.updateFormattingState.bind(this);
         this.toggleUnorderedList = this.toggleUnorderedList.bind(this);
+        this.onFontSelected = this.onFontSelected.bind(this);
 
         this.style = ko.observable<string>();
         this.styled = ko.observable<boolean>();
@@ -270,6 +272,10 @@ export class FormattingTools {
     public resetToNormal(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().resetToNormal();
         this.updateFormattingState();
+    }
+
+    public onFontSelected(font: FontContract): void {
+        console.warn("Not implemented");
     }
 
     public dispose(): void {

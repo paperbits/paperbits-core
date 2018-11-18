@@ -1,42 +1,65 @@
 import * as ko from "knockout";
+import { StyleService } from "@paperbits/styles";
 import template from "./buttonEditor.html";
-import { IWidgetEditor } from "@paperbits/common/widgets";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { ButtonModel } from "../buttonModel";
-import { Component } from "../../ko/decorators/component.decorator";
+import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "paperbits-button-editor",
     template: template,
     injectable: "buttonEditor"
 })
-export class ButtonEditor implements IWidgetEditor {
-    private buttonModel: ButtonModel;
-    private applyChangesCallback: () => void;
-
+export class ButtonEditor {
     public readonly label: KnockoutObservable<string>;
-    public readonly style: KnockoutObservable<string>;
-    public readonly size: KnockoutObservable<string>;
     public readonly hyperlink: KnockoutObservable<HyperlinkModel>;
     public readonly hyperlinkTitle: KnockoutObservable<string>;
+    public readonly appearanceStyles: KnockoutObservableArray<any>;
+    public readonly appearanceStyle: KnockoutObservable<any>;
+    public readonly sizeStyles: KnockoutObservableArray<any>;
+    public readonly sizeStyle: KnockoutObservable<any>;
 
-    constructor() {
-        this.onChange = this.onChange.bind(this);
+    constructor(private readonly styleService: StyleService) {
+        this.applyChanges = this.applyChanges.bind(this);
         this.onHyperlinkChange = this.onHyperlinkChange.bind(this);
+        this.initialize = this.initialize.bind(this);
 
         this.label = ko.observable<string>();
-        this.label.subscribe(this.onChange);
-
-        this.style = ko.observable<string>();
-        this.style.subscribe(this.onChange);
-
-        this.size = ko.observable<string>();
-        this.size.subscribe(this.onChange);
-
+        this.appearanceStyles = ko.observableArray<any>();
+        this.appearanceStyle = ko.observable<any>();
+        this.sizeStyles = ko.observableArray<any>();
+        this.sizeStyle = ko.observable<any>();
         this.hyperlink = ko.observable<HyperlinkModel>();
-        this.hyperlink.subscribe(this.onChange);
-
         this.hyperlinkTitle = ko.observable<string>();
+    }
+
+    @Param()
+    private model: ButtonModel;
+
+    @Event()
+    public onChange: (model: ButtonModel) => void;
+
+    @OnMounted()
+    public async initialize(): Promise<void> {
+        const buttonVariations = await this.styleService.getComponentVariations("button");
+
+        this.appearanceStyles(buttonVariations.filter(x => x.category === "appearance"));
+        this.sizeStyles(buttonVariations.filter(x => x.category === "size").concat({ displayName: "Default", key: undefined }));
+
+        this.label(this.model.label);
+
+        if (this.model.styles) {
+            this.sizeStyle(this.model.styles.size);
+            this.appearanceStyle(this.model.styles.appearance);
+        }
+
+        this.hyperlink(this.model.hyperlink);
+        this.onHyperlinkChange(this.model.hyperlink);
+
+        this.sizeStyle.subscribe(this.applyChanges);
+        this.appearanceStyle.subscribe(this.applyChanges);
+        this.label.subscribe(this.applyChanges);
+        this.hyperlink.subscribe(this.applyChanges);
     }
 
     public onHyperlinkChange(hyperlink: HyperlinkModel): void {
@@ -49,28 +72,14 @@ export class ButtonEditor implements IWidgetEditor {
         }
     }
 
-    private onChange(): void {
-        if (!this.applyChangesCallback) {
-            return;
-        }
+    private applyChanges(): void {
+        this.model.label = this.label();
+        this.model.hyperlink = this.hyperlink();
+        this.model.styles = {
+            appearance: this.appearanceStyle(),
+            size: this.sizeStyle()
+        };
 
-        this.buttonModel.label = this.label();
-        this.buttonModel.style = this.style();
-        this.buttonModel.size = this.size();
-        this.buttonModel.hyperlink = this.hyperlink();
-
-        this.applyChangesCallback();
-    }
-
-    public setWidgetModel(buttonModel: ButtonModel, applyChangesCallback?: () => void): void {
-        this.buttonModel = buttonModel;
-
-        this.label(buttonModel.label);
-        this.style(buttonModel.style);
-        this.size(buttonModel.size);
-        this.hyperlink(buttonModel.hyperlink);
-        this.onHyperlinkChange(buttonModel.hyperlink);
-
-        this.applyChangesCallback = applyChangesCallback;
+        this.onChange(this.model);
     }
 }

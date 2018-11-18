@@ -3,7 +3,7 @@ import template from "./layoutSelector.html";
 import { IResourceSelector } from "@paperbits/common/ui";
 import { ILayoutService, LayoutContract } from "@paperbits/common/layouts";
 import { LayoutItem } from "./layoutItem";
-import { Component, Param, Event, OnMounted } from "../../../ko/decorators";
+import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 
 
 @Component({

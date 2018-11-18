@@ -6,7 +6,7 @@ import { IViewManager } from "@paperbits/common/ui";
 import { ILayoutService } from "@paperbits/common/layouts";
 import { Keys } from "@paperbits/common/keyboard";
 import { LayoutItem } from "./layoutItem";
-import { Component, OnMounted } from "../../../ko/decorators";
+import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "layouts",

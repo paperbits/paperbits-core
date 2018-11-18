@@ -1,9 +1,10 @@
+import { ColorContract } from "@paperbits/styles/contracts";
 import * as ko from "knockout";
 import template from "./sectionEditor.html";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { IWidgetEditor } from "@paperbits/common/widgets";
 import { BackgroundModel } from "@paperbits/common/widgets/background/backgroundModel";
-import { Component } from "../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 import { SectionModel } from "../sectionModel";
 
 @Component({
@@ -104,9 +105,9 @@ export class SectionEditor implements IWidgetEditor {
         this.applyChangesCallback();
     }
 
-    public onColorSelected(colorKey: string): void {
+    public onColorSelected(color: ColorContract): void {
         this.section.background = this.section.background || {};
-        this.section.background.colorKey = colorKey;
+        this.section.background.colorKey = color ? color.key : undefined;
 
         this.background(this.section.background);
         this.applyChangesCallback();

@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import template from "./colorSelector.html";
-import { Component, Param, Event } from "../../../ko/decorators";
+import { Component, Param, Event } from "@paperbits/common/ko/decorators";
 
 export interface IntentionItem {
     name: string;

@@ -3,7 +3,7 @@ import template from "./workshops.html";
 import { IViewManager } from "@paperbits/common/ui";
 import { IUserService } from "@paperbits/common/user";
 import { IView } from "@paperbits/common/ui/IView";
-import { Component } from "../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "workshops",
@@ -65,6 +65,12 @@ export class Workshops {
 
     public openSettings(): void {
         this.openViewAsWorkshop("Site settings", "settings");
+    }
+
+    public openStyles(): void {
+        this.viewManager.setDocument({
+            src: "/theme.html"
+        });
     }
 
     public openProfile(): void {

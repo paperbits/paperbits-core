@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import template from "./hyperlinkSelector.html";
 import { HyperlinkModel, IPermalinkService } from "@paperbits/common/permalinks";
 import { IHyperlinkProvider } from "@paperbits/common/ui";
-import { Component, Event, Param, OnMounted } from "../../../ko/decorators";
+import { Component, Event, Param, OnMounted } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "hyperlink-selector",

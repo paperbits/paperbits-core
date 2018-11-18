@@ -4,7 +4,7 @@ import { IRouteHandler } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
 import { ILayoutService } from "@paperbits/common/layouts/";
 import { LayoutItem } from "./layoutItem";
-import { Component, Param, Event, OnMounted } from "../../../ko/decorators";
+import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "layout-details-workshop",

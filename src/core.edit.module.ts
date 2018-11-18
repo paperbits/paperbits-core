@@ -99,7 +99,7 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindSingleton("hostBindingHandler", HostBindingHandler);
         injector.bind("settingsWorkshop", SettingsWorkshop);
 
-        injector.bind("colorSelector", ColorSelector);
+        // injector.bind("colorSelector", ColorSelector);
         injector.bind("hyperlinkSelector", HyperlinkSelector);
         injector.bind("widgetSelector", WidgetSelector);
         injector.bind("urlSelector",  UrlSelector);

@@ -3,7 +3,7 @@ import template from "./navigationItemSelector.html";
 import { NavigationItemViewModel } from "./navigationItemViewModel";
 import { NavigationItemContract, INavigationService } from "@paperbits/common/navigation";
 import { NavigationTree } from "./navigationTree";
-import { Component, Event, Param } from "../../../ko/decorators";
+import { Component, Event, Param } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "navigation-item-selector",

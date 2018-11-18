@@ -3,7 +3,7 @@ import template from "./videoEditor.html";
 import { IWidgetEditor } from "@paperbits/common/widgets";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { IMediaFilter } from "@paperbits/common/media";
-import { Component } from "../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 import { VideoPlayerModel } from "../videoPlayerModel";
 
 @Component({

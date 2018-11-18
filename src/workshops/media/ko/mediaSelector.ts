@@ -5,7 +5,7 @@ import { MediaItem } from "./mediaItem";
 import { IMediaService, IMediaFilter, MediaContract } from "@paperbits/common/media";
 import { IViewManager } from "@paperbits/common/ui";
 import { IEventManager } from "@paperbits/common/events";
-import { Component, Param, Event, OnMounted } from "../../../ko/decorators";
+import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { IWidgetService } from "@paperbits/common/widgets";
 
 @Component({

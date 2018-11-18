@@ -19,6 +19,6 @@ export class TextblockEditorModule implements IInjectorModule {
         injector.bind("textblockEditor", TextblockEditor);
 
         injector.bind("blockStyleSelector", BlockStyleSelector);
-        injector.bind("fontSelector", FontSelector);
+        // injector.bind("fontSelector", FontSelector);
     }
 }

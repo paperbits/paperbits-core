@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import template from "./slider.html";
 import * as Utils from "@paperbits/common/utils";
 import { SlideViewModel } from "./slideViewModel";
-import { Component } from "../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "slider",

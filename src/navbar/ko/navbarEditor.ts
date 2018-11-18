@@ -3,7 +3,7 @@ import template from "./navbarEditor.html";
 import { IWidgetEditor } from "@paperbits/common/widgets";
 import { MediaContract } from "@paperbits/common/media";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
-import { Component } from "../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 import { NavbarModel } from "../navbarModel";
 import { NavigationItemContract } from "@paperbits/common/navigation";
 import { NavbarModelBinder } from "../navbarModelBinder";

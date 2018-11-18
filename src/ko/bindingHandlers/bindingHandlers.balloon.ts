@@ -36,7 +36,7 @@ export class BalloonBindingHandler {
                 componentConfig.oncreate = (model, element) => {
                     balloonElement = element;
                     setTimeout(updatePosition, 100); // Let element chance to render and determine sizes
-                }
+                };
 
                 const updatePosition = async (): Promise<void> => {
                     const triggerRect = toggleElement.getBoundingClientRect();
@@ -82,7 +82,7 @@ export class BalloonBindingHandler {
 
                     balloonElement.style.top = `${balloonY}px`;
                     balloonElement.style.left = `${balloonX}px`;
-                }
+                };
 
                 const open = (): void => {
                     viewManager.addBalloon(componentConfig);

@@ -1,6 +1,6 @@
 import template from "./fontSelector.html";
 import { IHtmlEditorProvider } from "@paperbits/common/editing";
-import { Component } from "../../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "font-selector",

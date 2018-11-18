@@ -1,9 +1,9 @@
 import * as ko from "knockout";
 import * as Cropper from "cropperjs";
 import template from "./cropper.html";
-import { Component } from "../../ko/decorators/component.decorator";
+import { Component } from "@paperbits/common/ko/decorators";
 import { IEventManager } from "@paperbits/common/events";
-import { Param } from "../../ko/decorators";
+import { Param } from "@paperbits/common/ko/decorators";
 
 export class CropperBindingHandler {
     constructor(eventManager: IEventManager) {
