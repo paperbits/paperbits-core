@@ -1,6 +1,6 @@
 import * as ko from "knockout";
-import { StyleService } from "@paperbits/styles";
 import template from "./buttonEditor.html";
+import { StyleService } from "@paperbits/styles";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { ButtonModel } from "../buttonModel";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
@@ -34,7 +34,7 @@ export class ButtonEditor {
     }
 
     @Param()
-    private model: ButtonModel;
+    public model: ButtonModel;
 
     @Event()
     public onChange: (model: ButtonModel) => void;
