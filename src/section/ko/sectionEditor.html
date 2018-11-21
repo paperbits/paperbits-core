@@ -1,81 +1,6 @@
 <fieldset class="form flex-item flex-item-grow" data-bind="scrollable: {}">
-    <div class="form-group form-group-collapsible">
-        <label class="form-label">
-            <a href="#" class="form-group-toggle" data-bind="collapse: '#backgroundCollapse'"></a>
-            <b>Background</b>
-        </label>
-
-        <div id="backgroundCollapse" class="collapse form-group-collapse">
-            <div class="tabs">
-                <div class="tab" data-bind="css: { 'tab-is-active': !backgroundHasPicture() && !backgroundHasColor() }" title="No background">
-                    <a href="#" data-bind="click: clearBackground">
-                        <i class="paperbits-icon paperbits-ban"></i>
-                    </a>
-                </div>
-
-                <div class="tab" data-bind="css: { 'tab-is-active': backgroundHasPicture }" title="Background picture">
-
-                    <a href="#" data-bind="balloon: { component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected } } }">
-                        <i class="paperbits-icon paperbits-image-2"></i>
-                    </a>
-                </div>
-
-                <div class="tab" data-bind="css: { 'tab-is-active': backgroundHasColor }" title="Background color">
-                    <a href="#" data-bind="balloon: { component: { name: 'color-selector', params: { onSelect: $component.onColorSelected, selectedColor: $component.backgroundColorKey } } }">
-                        <i class="paperbits-icon paperbits-paint-bucket-40"></i>
-                    </a>
-                </div>
-            </div>
-
-            <!-- ko if: backgroundHasPicture() -->
-
-            <div class="dropzone">
-                <div class="dropzone-controls">
-                    <svg alignment="top left" data-bind="alignment: backgroundPosition">
-                        <polygon points="2,2 14,2 14,14" />
-                    </svg>
-                    <svg alignment="top center" data-bind="alignment: backgroundPosition">
-                        <polygon points="2,2 14,2 14,14" />
-                    </svg>
-                    <svg alignment="top right" data-bind="alignment: backgroundPosition">
-                        <polygon points="2,2 14,2 14,14" />
-                    </svg>
-                    <svg alignment="center left" data-bind="alignment: backgroundPosition">
-                        <polygon points="2,2 14,2 14,14" />
-                    </svg>
-                    <svg alignment="center right" data-bind="alignment: backgroundPosition">
-                        <polygon points="2,2 14,2 14,14" />
-                    </svg>
-                    <svg alignment="bottom left" data-bind="alignment: backgroundPosition">
-                        <polygon points="2,2 14,2 14,14" />
-                    </svg>
-                    <svg alignment="bottom center" data-bind="alignment: backgroundPosition">
-                        <polygon points="2,2 14,2 14,14" />
-                    </svg>
-                    <svg alignment="bottom right" data-bind="alignment: backgroundPosition">
-                        <polygon points="2,2 14,2 14,14" />
-                    </svg>
-                    <a href="#" class="dropzone-showbox" alignment="center center" data-bind="alignment: backgroundPosition">
-                        <div class="fit" data-bind="background: background"></div>
-                    </a>
-                </div>
-            </div>
-
-            <label class="form-label">
-                <span class="help"></span>Background picture sizing
-            </label>
-            <div class="form-group">
-                <label class="form-label">
-                    <input name="size" type="radio" value="contain" data-bind="checked: backgroundSize" />Contain
-                </label>
-                <label class="form-label">
-                    <input name="size" type="radio" value="cover" data-bind="checked: backgroundSize" />Cover
-                </label>
-            </div>
-
-            <!-- /ko -->
-        </div>
-    </div>
+    <background params="{ background: styles.background, onUpdate: onBackgroundUpdate }"></background>
+    <typography params="{ typography: styles.typography, onUpdate: onTypographyUpdate }"></typography>
 
     <div class="form-group form-group-collapsible">
         <label class="form-label">
@@ -134,7 +59,8 @@
                     <input name="padding" type="radio" value="with-padding" data-bind="checked: padding" />With padding
                 </label>
                 <label class="form-label">
-                    <input name="padding" type="radio" value="without-padding" data-bind="checked: padding" />Without padding
+                    <input name="padding" type="radio" value="without-padding" data-bind="checked: padding" />Without
+                    padding
                 </label>
             </div>
         </div>

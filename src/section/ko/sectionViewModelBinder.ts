@@ -33,32 +33,13 @@ export class SectionViewModelBinder implements IViewModelBinder<SectionModel, Se
 
         viewModel.widgets(viewModels);
         viewModel.container(model.container);
-        viewModel.background(model.background);
+        viewModel.styles(model.styles);
         viewModel.snapTo(model.snap);
         viewModel.height(model.height);
-
-        // if (model.background) {
-        //     let backgroundColorKey = model.background.colorKey;
-        //     let intentions = this.intentionsProvider.getIntentions();
-
-        //     // TODO: Review background usage.
-        //     let backgroundIntention = intentions.container.background[backgroundColorKey];
-        //     ``
-        //     if (!backgroundIntention) {
-        //         backgroundIntention = intentions.container.background.section_bg_default;
-        //     }
-
-        //     sectionClasses.push(backgroundIntention.params());
-        // }
-
-        // if (model.padding === "with-padding") {
-        //     sectionClasses.push("with-padding");
-        // }
 
         const binding: IWidgetBinding = {
             name: "section",
             displayName: "Section",
-
             model: model,
             flow: "block",
             editor: "layout-section-editor",

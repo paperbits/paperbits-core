@@ -7,13 +7,13 @@ export class SectionModel {
     public padding: string;
     public snap: string;
     public height: string;
-    public background: BackgroundModel;
+    public styles: Object;
 
     constructor() {
         this.container = "container";
         this.padding = "with-padding";
         this.snap = "none";
-        this.background = new BackgroundModel();
+        this.styles = {};
         this.widgets = [];
     }
 }

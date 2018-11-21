@@ -7,7 +7,7 @@ import { Component } from "@paperbits/common/ko/decorators";
     selector: "paperbits-button",
     template: template
 })
-export class ButtonViewModel {
+export class Button {
     public label: KnockoutObservable<string>;
     public styles: KnockoutObservable<Object>;
     public hyperlink: KnockoutObservable<HyperlinkModel>;

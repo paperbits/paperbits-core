@@ -1,7 +1,6 @@
 import { SectionContract } from "./sectionContract";
 import { SectionModel } from "./sectionModel";
 import { IModelBinder } from "@paperbits/common/editing";
-import { BackgroundModelBinder } from "@paperbits/common/widgets/background";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 
 export class SectionModelBinder implements IModelBinder {
@@ -14,8 +13,7 @@ export class SectionModelBinder implements IModelBinder {
     }
 
     constructor(
-        private readonly modelBinderSelector: ModelBinderSelector,
-        private readonly backgroundModelBinder: BackgroundModelBinder) {
+        private readonly modelBinderSelector: ModelBinderSelector) {
 
         this.contractToModel = this.contractToModel.bind(this);
     }
@@ -28,10 +26,7 @@ export class SectionModelBinder implements IModelBinder {
         sectionModel.padding = sectionContract.padding;
         sectionModel.snap = sectionContract.snapping;
         sectionModel.height = sectionContract.height;
-
-        if (sectionContract.background) {
-            sectionModel.background = await this.backgroundModelBinder.contractToModel(sectionContract.background);
-        }
+        sectionModel.styles = sectionContract.styles;
 
         const modelPromises = sectionContract.nodes.map(async (node) => {
             const modelBinder: IModelBinder = this.modelBinderSelector.getModelBinderByNodeType(node.type);
@@ -51,23 +46,11 @@ export class SectionModelBinder implements IModelBinder {
             layout: sectionModel.container,
             padding: sectionModel.padding,
             snapping: sectionModel.snap,
-            height: sectionModel.height
+            height: sectionModel.height,
+            styles: sectionModel.styles
         };
 
-        if (sectionModel.background) {
-            sectionContract.background = {
-                color: sectionModel.background.colorKey,
-                size: sectionModel.background.size,
-                position: sectionModel.background.position
-            };
-
-            if (sectionModel.background.sourceType === "picture") {
-                sectionContract.background.picture = {
-                    sourcePermalinkKey: sectionModel.background.sourceKey,
-                    repeat: sectionModel.background.repeat
-                };
-            }
-        }
+        sectionContract.styles = sectionModel.styles;
 
         sectionModel.widgets.forEach(widgetModel => {
             const modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
