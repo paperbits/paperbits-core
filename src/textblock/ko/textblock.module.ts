@@ -7,17 +7,10 @@ import { HtmlEditorBindingHandler } from "../../ko/bindingHandlers/bindingHandle
 import { IModelBinder } from "@paperbits/common/editing";
 
 export class TextblockModule implements IInjectorModule {
-    register(injector: IInjector): void {
+    public register(injector: IInjector): void {
         injector.bind("textblock", TextblockViewModel);
-        
-        injector.bind("textModelBinder", TextblockModelBinder);
-        const modelBinders = injector.resolve<Array<IModelBinder>>("modelBinders");
-        modelBinders.push(injector.resolve("textModelBinder"));
-
         injector.bindSingleton("htmlEditorBindingHandler", HtmlEditorBindingHandler);
-        
-        injector.bind("textblockViewModelBinder", TextblockViewModelBinder);
-        const viewModelBinders = injector.resolve<Array<IViewModelBinder<any, any>>>("viewModelBinders");
-        viewModelBinders.push(injector.resolve("textblockViewModelBinder"));
+        injector.bindToCollection("modelBinders", TextblockModelBinder);
+        injector.bindToCollection("viewModelBinders", TextblockViewModelBinder);
     }
 }

@@ -6,14 +6,9 @@ import { PictureViewModel } from "./pictureViewModel";
 import { IModelBinder } from "@paperbits/common/editing";
 
 export class PictureModule implements IInjectorModule {
-    register(injector: IInjector): void {        
+    public register(injector: IInjector): void {        
         injector.bind("picture", PictureViewModel);
-        injector.bind("pictureModelBinder", PictureModelBinder);
-        const modelBinders = injector.resolve<Array<IModelBinder>>("modelBinders");
-        modelBinders.push(injector.resolve("pictureModelBinder"));
-
-        injector.bind("pictureViewModelBinder", PictureViewModelBinder);
-        const viewModelBinders = injector.resolve<Array<IViewModelBinder<any, any>>>("viewModelBinders");
-        viewModelBinders.push(injector.resolve("pictureViewModelBinder"));
+        injector.bindToCollection("modelBinders", PictureModelBinder);
+        injector.bindToCollection("viewModelBinders", PictureViewModelBinder);
     }
 }

@@ -13,6 +13,14 @@ export class LayoutModelBinder {
         this.contractToModel = this.contractToModel.bind(this);
     }
 
+    public canHandleWidgetType(widgetType: string): boolean {
+        return widgetType === "layout";
+    }
+
+    public canHandleModel(model): boolean {
+        return model instanceof LayoutModel;
+    }
+
     public async getLayoutModel(): Promise<LayoutModel> {
         const url = this.routeHandler.getCurrentUrl();
         const layoutNode = await this.layoutService.getLayoutByRoute(url);

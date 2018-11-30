@@ -89,15 +89,11 @@ export class CoreModule implements IInjectorModule {
 
         injector.bindModule(new KnockoutRegistrationLoaders());
 
-        injector.bindSingletonFactory<IModelBinder[]>("modelBinders", () => {
-            return new Array<IModelBinder>();
-        });
-        injector.bindSingletonFactory<IViewModelBinder<any, any>[]>("viewModelBinders", () => {
-            return new Array<IViewModelBinder<any, any>>();
-        });
+        injector.bindCollection("modelBinders");
+        injector.bindCollection("viewModelBinders");
 
-        injector.bindSingleton("modelBinderSelector", ModelBinderSelector);
-        injector.bindSingleton("viewModelBinderSelector", ViewModelBinderSelector);
+        injector.bind("modelBinderSelector", ModelBinderSelector);
+        injector.bind("viewModelBinderSelector", ViewModelBinderSelector);
         injector.bind("gtm", GoogleTagManager);
         injector.bind("intercom", IntercomViewModel);
         injector.bindSingleton("intercomService", IntercomService);

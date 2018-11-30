@@ -1,16 +1,9 @@
 ﻿import { IWidgetOrder, IContentDropHandler, IContentDescriptor, IDataTransfer, IWidgetHandler } from "@paperbits/common/editing";
-import { YoutubeModelBinder } from "./youtubeModelBinder";
 import { YoutubePlayerModel } from "./youtubePlayerModel";
 
 const defaultYoutubeClipId = "KK9bwTlAvgo";
 
 export class YoutubeHandlers implements IWidgetHandler, IContentDropHandler {
-    private readonly youtubePlayerModelBinder: YoutubeModelBinder;
-
-    constructor(youtubeModelBinder: YoutubeModelBinder) {
-        this.youtubePlayerModelBinder = youtubeModelBinder;
-    }
-
     private async getWidgetOrderByConfig(youtubeClipId: string): Promise<IWidgetOrder> {
         const widgetOrder: IWidgetOrder = {
             name: "youtube-player",

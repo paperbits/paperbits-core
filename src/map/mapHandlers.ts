@@ -1,22 +1,9 @@
-﻿import { IWidgetOrder } from '@paperbits/common/editing';
-import { IContentDropHandler } from '@paperbits/common/editing';
-import { IContentDescriptor } from '@paperbits/common/editing';
-import { IDataTransfer } from '@paperbits/common/editing';
-import { IWidgetHandler } from '@paperbits/common/editing';
-import { ISettingsProvider } from '@paperbits/common/configuration';
-import { MapModelBinder } from './mapModelBinder';
-import { MapContract } from './mapContract';
-//import * as GoogleMapsLoader from "google-maps";
+﻿import { MapViewModel } from './ko/mapViewModel';
+import { IContentDropHandler, IContentDescriptor, IDataTransfer, IWidgetOrder, IWidgetHandler } from "@paperbits/common/editing";
+import { MapContract } from "./mapContract";
+// import * as GoogleMapsLoader from "google-maps";
 
 export class MapHandlers implements IWidgetHandler, IContentDropHandler {
-    private readonly settingsProvider: ISettingsProvider;
-    private readonly mapModelBinder: MapModelBinder;
-
-    constructor(settingsProvider: ISettingsProvider, mapModelBinder: MapModelBinder) {
-        this.settingsProvider = settingsProvider;
-        this.mapModelBinder = mapModelBinder;
-    }
-
     private async prepareWidgetOrder(config: MapContract): Promise<IWidgetOrder> {
         const widgetOrder: IWidgetOrder = {
             name: "map",
@@ -24,9 +11,11 @@ export class MapHandlers implements IWidgetHandler, IContentDropHandler {
             iconClass: "paperbits-m-location",
             requires: ["scripts"],
             createModel: async () => {
-                return await this.mapModelBinder.contractToModel(config);
+                // return await this.mapModelBinder.contractToModel(config);
+                // return new MapViewModel();
+                return null;
             }
-        }
+        };
 
         return widgetOrder;
     }
@@ -37,7 +26,7 @@ export class MapHandlers implements IWidgetHandler, IContentDropHandler {
             type: "map",
             location: location,
             caption: caption
-        }
+        };
         return await this.prepareWidgetOrder(config);
     }
 
@@ -80,7 +69,7 @@ export class MapHandlers implements IWidgetHandler, IContentDropHandler {
                 else {
                     match = new RegExp("/@([^/]+)").exec(url);
                     if (match && match.length > 1) {
-                        let locationParts = match[1].split(",");
+                        const locationParts = match[1].split(",");
                         location = locationParts.slice(0, 2).join(",");
                     }
                 }

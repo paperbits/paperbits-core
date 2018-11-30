@@ -8,16 +8,10 @@ import { MapService } from "../mapService";
 import { IModelBinder } from "@paperbits/common/editing";
 
 export class MapModule implements IInjectorModule {
-    register(injector: IInjector): void {
+    public register(injector: IInjector): void {
         injector.bindSingleton("mapService", MapService);
-
         injector.bind("map", MapViewModel);
-        injector.bind("mapModelBinder", MapModelBinder);
-        const modelBinders = injector.resolve<Array<IModelBinder>>("modelBinders");
-        modelBinders.push(injector.resolve("mapModelBinder"));
-
-        injector.bind("mapViewModelBinder", MapViewModelBinder);
-        const viewModelBinders = injector.resolve<Array<IViewModelBinder<any, any>>>("viewModelBinders");
-        viewModelBinders.push(injector.resolve("mapViewModelBinder"));
+        injector.bindToCollection("modelBinders", MapModelBinder);
+        injector.bindToCollection("viewModelBinders", MapViewModelBinder);
     }
 }

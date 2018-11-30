@@ -15,46 +15,46 @@ export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
     private static readonly imageFileExtensions = [".jpg", ".jpeg", ".png", ".svg", ".gif"];
     private readonly pictureViewModelBinder: PictureViewModelBinder;
 
-    constructor(pictureViewModelBinder: PictureViewModelBinder) {
-        this.pictureViewModelBinder = pictureViewModelBinder;
-    }
+    // constructor(pictureViewModelBinder: PictureViewModelBinder) {
+    //     this.pictureViewModelBinder = pictureViewModelBinder;
+    // }
 
     private async getWidgetOrderByConfig(sourceUrl: string, caption: string): Promise<IWidgetOrder> {
         const widgetOrder: IWidgetOrder = {
             name: "picture",
             displayName: widgetDisplayName,
             iconClass: "paperbits-image-2",
-            createWidget: (): IWidgetFactoryResult => {
-                const backgroundModel = new BackgroundModel();
-                backgroundModel.sourceUrl = sourceUrl;
+            // createWidget: (): IWidgetFactoryResult => {
+            //     const backgroundModel = new BackgroundModel();
+            //     backgroundModel.sourceUrl = sourceUrl;
 
-                // We create HTML element here just for dragging animation
-                const pictureModel = new PictureModel();
-                pictureModel.background = backgroundModel;
-                pictureModel.caption = caption;
-                pictureModel.layout = defaultLayout;
+            //     // We create HTML element here just for dragging animation
+            //     const pictureModel = new PictureModel();
+            //     pictureModel.background = backgroundModel;
+            //     pictureModel.caption = caption;
+            //     pictureModel.layout = defaultLayout;
 
-                const pictureViewModel = this.pictureViewModelBinder.modelToViewModel(pictureModel);
-                const htmlElement = document.createElement("widget");
+            //     const pictureViewModel = this.pictureViewModelBinder.modelToViewModel(pictureModel);
+            //     const htmlElement = document.createElement("widget");
 
-                htmlElement.style.width = "150px";
-                htmlElement.style.height = "150px";
-                htmlElement.style.overflow = "hidden";
-                htmlElement.style.backgroundSize = "cover";
-                htmlElement.classList.add("no-pointer-events");
+            //     htmlElement.style.width = "150px";
+            //     htmlElement.style.height = "150px";
+            //     htmlElement.style.overflow = "hidden";
+            //     htmlElement.style.backgroundSize = "cover";
+            //     htmlElement.classList.add("no-pointer-events");
 
-                ko.applyBindingsToNode(htmlElement, { widget: pictureViewModel });
+            //     ko.applyBindingsToNode(htmlElement, { widget: pictureViewModel });
 
-                return {
-                    element: htmlElement,
-                    widgetModel: pictureModel,
-                    widgetBinding: pictureViewModel["widgetBinding"],
-                    onMediaUploadedCallback: (media: ICreatedMedia) => {
-                        pictureModel.background.sourceKey = media.permalink.key;
-                        pictureModel.background.sourceUrl = media.media.downloadUrl;
-                    }
-                }
-            },
+            //     return {
+            //         element: htmlElement,
+            //         widgetModel: pictureModel,
+            //         widgetBinding: pictureViewModel["widgetBinding"],
+            //         onMediaUploadedCallback: (media: ICreatedMedia) => {
+            //             pictureModel.background.sourceKey = media.permalink.key;
+            //             pictureModel.background.sourceUrl = media.media.downloadUrl;
+            //         }
+            //     }
+            // },
             createModel: async () => {
                 const backgroundModel = new BackgroundModel();
                 backgroundModel.sourceUrl = sourceUrl;

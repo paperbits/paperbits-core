@@ -5,13 +5,8 @@ import { TestimonialsViewModelBinder } from "./testimonialsViewModelBinder";
 import { IModelBinder } from "@paperbits/common/editing";
 
 export class TestimonialsModule implements IInjectorModule {
-    register(injector: IInjector): void {   
-        injector.bind("testimonialsModelBinder", TestimonialsModelBinder);
-        const modelBinders = injector.resolve<Array<IModelBinder>>("modelBinders");
-        modelBinders.push(injector.resolve("testimonialsModelBinder"));
-
-        injector.bind("testimonialsViewModelBinder", TestimonialsViewModelBinder);
-        const viewModelBinders = injector.resolve<Array<IViewModelBinder<any, any>>>("viewModelBinders");
-        viewModelBinders.push(injector.resolve("testimonialsViewModelBinder"));
+    public register(injector: IInjector): void {   
+        injector.bindToCollection("modelBinders", TestimonialsModelBinder);
+        injector.bindToCollection("viewModelBinders", TestimonialsViewModelBinder);
     }
 }

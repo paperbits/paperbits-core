@@ -1,16 +1,9 @@
 ﻿import * as ko from "knockout";
 import * as MediaUtils from "@paperbits/common/media/mediaUtils";
 import { ICreatedMedia } from "@paperbits/common/media";
-import { IWidgetFactoryResult } from "@paperbits/common/editing";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
-import { IWidgetOrder } from "@paperbits/common/editing";
-import { IWidgetHandler } from "@paperbits/common/editing";
-import { IContentDropHandler } from "@paperbits/common/editing";
-import { IContentDescriptor } from "@paperbits/common/editing";
-import { IDataTransfer } from "@paperbits/common/editing";
+import { IContentDropHandler, IContentDescriptor, IDataTransfer, IWidgetOrder, IWidgetHandler, IWidgetFactoryResult } from "@paperbits/common/editing";
 import { IPermalinkService } from "@paperbits/common/permalinks";
-import { VideoPlayerModelBinder } from "../videoPlayerModelBinder";
-import { VideoPlayerViewModelBinder } from "./videoPlayerViewModelBinder";
 import { VideoPlayerContract } from "../videoPlayerContract";
 import { VideoPlayerModel } from "../videoPlayerModel";
 
@@ -19,8 +12,6 @@ export class VideoHandlers implements IWidgetHandler, IContentDropHandler {
 
     constructor(
         private readonly permalinkService: IPermalinkService,
-        private readonly videoPlayerModelBinder: VideoPlayerModelBinder,
-        private readonly videoPlayerViewModelBinder: VideoPlayerViewModelBinder,
     ) { }
 
     protected matches(filename: string): boolean {
@@ -59,39 +50,41 @@ export class VideoHandlers implements IWidgetHandler, IContentDropHandler {
                     autoplay: false
                 }
 
-                return await this.videoPlayerModelBinder.contractToModel(config);
-            },
-            createWidget: (): IWidgetFactoryResult => {
-                // We create HTML element here just for dragging animation
-                const videoPlayerModel = new VideoPlayerModel();
-                videoPlayerModel.sourceUrl = sourceUrl;
+                // return await this.videoPlayerModelBinder.contractToModel(config);
 
-                const videoPlayerViewModel = this.videoPlayerViewModelBinder.modelToViewModel(videoPlayerModel);
-                const htmlElement = document.createElement("widget");
+                return null;
+            }
+            // createWidget: (): IWidgetFactoryResult => {
+            //     // We create HTML element here just for dragging animation
+            //     const videoPlayerModel = new VideoPlayerModel();
+            //     videoPlayerModel.sourceUrl = sourceUrl;
 
-                htmlElement.style.width = "150px";
-                htmlElement.style.height = "150px";
-                htmlElement.style.overflow = "hidden";
-                htmlElement.style.backgroundSize = "cover";
-                htmlElement.classList.add("no-pointer-events");
+            //     const videoPlayerViewModel = this.videoPlayerViewModelBinder.modelToViewModel(videoPlayerModel);
+            //     const htmlElement = document.createElement("widget");
 
-                ko.applyBindingsToNode(htmlElement, { widget: videoPlayerViewModel });
+            //     htmlElement.style.width = "150px";
+            //     htmlElement.style.height = "150px";
+            //     htmlElement.style.overflow = "hidden";
+            //     htmlElement.style.backgroundSize = "cover";
+            //     htmlElement.classList.add("no-pointer-events");
 
-                return {
-                    element: htmlElement,
-                    widgetModel: videoPlayerModel,
-                    widgetBinding: videoPlayerViewModel["widgetBinding"],
-                    onMediaUploadedCallback: (media: ICreatedMedia) => {
-                        videoPlayerModel.sourceUrl = media.media.downloadUrl;
-                        videoPlayerModel.sourceKey = media.permalink.key;
+            //     ko.applyBindingsToNode(htmlElement, { widget: videoPlayerViewModel });
 
-                        /*
-                            At this moment the viewmodel declared above doesn't exist anymore,
-                            after dropping widget into column, it will be redrawn and new viewmodel created.
-                        */
-                    }
-                }
-            },
+            //     return {
+            //         element: htmlElement,
+            //         widgetModel: videoPlayerModel,
+            //         widgetBinding: videoPlayerViewModel["widgetBinding"],
+            //         onMediaUploadedCallback: (media: ICreatedMedia) => {
+            //             videoPlayerModel.sourceUrl = media.media.downloadUrl;
+            //             videoPlayerModel.sourceKey = media.permalink.key;
+
+            //             /*
+            //                 At this moment the viewmodel declared above doesn't exist anymore,
+            //                 after dropping widget into column, it will be redrawn and new viewmodel created.
+            //             */
+            //         }
+            //     }
+            // },
         }
 
         return widgetOrder;
