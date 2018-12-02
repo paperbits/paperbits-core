@@ -1,9 +1,7 @@
 import * as ko from "knockout";
 import template from "./navbarEditor.html";
-import { IWidgetEditor } from "@paperbits/common/widgets";
-import { MediaContract } from "@paperbits/common/media";
-import { BackgroundModel } from "@paperbits/common/widgets/background";
-import { Component } from "@paperbits/common/ko/decorators";
+import { MediaContract, MediaService } from "@paperbits/common/media";
+import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { NavbarModel } from "../navbarModel";
 import { NavigationItemContract } from "@paperbits/common/navigation";
 import { NavbarModelBinder } from "../navbarModelBinder";
@@ -13,42 +11,59 @@ import { NavbarModelBinder } from "../navbarModelBinder";
     template: template,
     injectable: "navbarEditor"
 })
-export class NavbarEditor implements IWidgetEditor {
-    private navbarModel: NavbarModel;
-    private applyChangesCallback?: () => void;
-
-    public background: KnockoutObservable<BackgroundModel>;
+export class NavbarEditor {
+    public logoUrl: KnockoutObservable<string>;
     public readonly navigationItemTitle: KnockoutObservable<string>;
 
-    constructor(private readonly navbarModelBinder: NavbarModelBinder) {
+    constructor(
+        private readonly navbarModelBinder: NavbarModelBinder,
+        private readonly mediaService: MediaService
+    ) {
+        this.initialize = this.initialize.bind(this);
         this.onMediaSelected = this.onMediaSelected.bind(this);
         this.onNavigationItemChange = this.onNavigationItemChange.bind(this);
-        this.background = ko.observable<BackgroundModel>();
+        this.logoUrl = ko.observable<string>();
 
         this.navigationItemTitle = ko.observable<string>("Click to select navigation item...");
     }
 
-    public setWidgetModel(navbarModel: NavbarModel, applyChangesCallback?: () => void): void {
-        this.navbarModel = navbarModel;
-        this.applyChangesCallback = applyChangesCallback;
+    @Param()
+    public model: NavbarModel;
+
+    @Event()
+    public onChange: (model: NavbarModel) => void;
+
+    @OnMounted()
+    public async initialize(): Promise<void> {
+        if (this.model.pictureSourceKey) {
+            const media = await this.mediaService.getMediaByPermalinkKey(this.model.pictureSourceKey);
+            this.logoUrl(`url(${media.downloadUrl})`);
+        }
+    }
+
+    private applyChanges(): void {
+        this.onChange(this.model);
     }
 
     public onMediaSelected(media: MediaContract): void {
-        this.navbarModel.pictureSourceKey = media.permalinkKey;
-        this.navbarModel.pictureSourceUrl = media.downloadUrl;
+        if (media) {
+            this.model.pictureSourceKey = media.permalinkKey;
+            this.model.pictureSourceUrl = media.downloadUrl;
+            this.logoUrl(`url(${media.downloadUrl})`);
+        }
+        else {
+            this.model.pictureSourceKey = undefined;
+            this.model.pictureSourceUrl = undefined;
+        }
 
-        this.applyChangesCallback();
-
-        const backgroundModel = new BackgroundModel();
-        backgroundModel.sourceUrl = media.downloadUrl;
-
-        this.background(backgroundModel);
+        this.applyChanges();
     }
 
     public async onNavigationItemChange(navigationItem: NavigationItemContract): Promise<void> {
-        this.navbarModel.rootKey = navigationItem.key;
-        this.navbarModel.root =  await this.navbarModelBinder.navigationItemToNavbarItemModel(navigationItem);
+        this.model.rootKey = navigationItem.key;
+        this.model.root = await this.navbarModelBinder.navigationItemToNavbarItemModel(navigationItem);
         this.navigationItemTitle(navigationItem.label);
-        this.applyChangesCallback();
+
+        this.applyChanges();
     }
 }
