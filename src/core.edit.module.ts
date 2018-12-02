@@ -24,7 +24,6 @@ import { DropbucketModule } from "./workshops/dropbucket/ko/dropbucket.module";
 import { ViewportSelector } from "./workshops/viewports/ko/viewport-selector";
 import { HostBindingHandler, BalloonBindingHandler, ResizableBindingHandler } from "./ko/bindingHandlers";
 import { IContentDropHandler, IWidgetHandler, MediaHandlers, HtmlEditorProvider } from "@paperbits/common/editing";
-import { ColorSelector } from "./workshops/colors/ko/colorSelector";
 import { IHyperlinkProvider, LityLightbox } from "@paperbits/common/ui";
 import { HyperlinkSelector } from "./workshops/hyperlinks/ko/hyperlinkSelector";
 import { WidgetSelector } from "./workshops/widgets/ko/widgetSelector";
@@ -99,7 +98,6 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindSingleton("hostBindingHandler", HostBindingHandler);
         injector.bind("settingsWorkshop", SettingsWorkshop);
 
-        // injector.bind("colorSelector", ColorSelector);
         injector.bind("hyperlinkSelector", HyperlinkSelector);
         injector.bind("widgetSelector", WidgetSelector);
         injector.bind("urlSelector",  UrlSelector);
