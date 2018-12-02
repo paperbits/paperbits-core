@@ -6,7 +6,7 @@ import { IModelBinder } from "@paperbits/common/editing";
 
 export class TableOfContentsModule implements IInjectorModule {
     public register(injector: IInjector): void { 
-        injector.bindToCollection("modelBinders", TableOfContentsModelBinder);
-        injector.bindToCollection("viewModelBinders", TableOfContentsViewModelBinder);
+        injector.bindToCollection("modelBinders", TableOfContentsModelBinder, "tableOfContentsModelBinder");
+        injector.bindToCollection("viewModelBinders", TableOfContentsViewModelBinder, "tableOfContentsViewModelBinder");
     }
 }
