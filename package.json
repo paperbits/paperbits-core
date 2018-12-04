@@ -24,6 +24,7 @@
         "@paperbits/styles": "0.1.26",
         "cropperjs": "^1.4.0",
         "es6-shim": "^0.35.3",
+        "file-saver": "^2.0.0",
         "google-maps": "^3.2.1",
         "knockout": "^3.5.0-beta",
         "knockout.validation": "^2.0.3",

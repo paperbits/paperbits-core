@@ -1,4 +1,5 @@
 ﻿import * as ko from "knockout";
+import * as FileSaver from "file-saver";
 import template from "./mediaDetails.html";
 import { PermalinkContract, IPermalinkService } from "@paperbits/common/permalinks";
 import { IMediaService } from "@paperbits/common/media";
@@ -72,6 +73,10 @@ export class MediaDetailsWorkshop {
         if (this.onDeleteCallback) {
             this.onDeleteCallback();
         }
+    }
+
+    public async downloadMedia(): Promise<void> {
+        FileSaver.saveAs(this.mediaItem.downloadUrl(), this.mediaItem.fileName(), { type: this.mediaItem.contentType() });
     }
 
     public openCropper(): void {
