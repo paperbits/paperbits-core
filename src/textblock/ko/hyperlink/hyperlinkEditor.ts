@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./hyperlinkEditor.html";
-import { IHtmlEditorProvider } from '@paperbits/common/editing/htmlEditorProvider'
-import { IEventManager } from '@paperbits/common/events';
+import { IHtmlEditorProvider } from "@paperbits/common/editing/htmlEditorProvider";
+import { IEventManager } from "@paperbits/common/events";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { HyperlinkContract } from "@paperbits/common/editing";
 import { PermalinkResolver } from "@paperbits/common/permalinks/permalinkResolver";
@@ -41,29 +41,21 @@ export class HyperlinkEditor {
             return;
         }
 
-        let hyperlinkConfig;
-
-        if (hyperlink.href) {
-            hyperlinkConfig = { href: hyperlink.href, target: hyperlink.target };
-        }
-
         if (hyperlink.permalinkKey) {
-            let permalink = await this.permalinkService.getPermalinkByKey(hyperlink.permalinkKey);
-            hyperlinkConfig = { href: permalink.uri, permalinkKey: hyperlink.permalinkKey, target: hyperlink.target };
+            const permalink = await this.permalinkService.getPermalinkByKey(hyperlink.permalinkKey);
+            hyperlink.href = permalink.uri;
+
+            const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+            htmlEditor.setHyperlink(hyperlink);
         }
-
-        let htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
-
-        htmlEditor.setHyperlink(hyperlinkConfig);
     }
 
     private async onSelectionChange(): Promise<void> {
-        let htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
-        let hyperlinkConfig: HyperlinkContract = htmlEditor.getHyperlink();
-        let hyperlink = null;
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+        let hyperlink = htmlEditor.getHyperlink();
 
-        if (hyperlinkConfig) {
-            hyperlink = await this.permalinkResolver.getHyperlinkFromConfig(hyperlinkConfig);
+        if (hyperlink) {
+            hyperlink = await this.permalinkResolver.getHyperlinkByPermalinkKey(hyperlink.permalinkKey);
         }
 
         this.hyperlink(hyperlink);
@@ -75,6 +67,6 @@ export class HyperlinkEditor {
     }
 
     public dispose(): void {
-        this.eventManager.removeEventListener("htmlEditorChanged", this.onSelectionChange)
+        this.eventManager.removeEventListener("htmlEditorChanged", this.onSelectionChange);
     }
 }

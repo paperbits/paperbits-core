@@ -13,7 +13,7 @@ export class BlockStyleSelector {
     ) { }
 
     public resetToNormal(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().resetToNormal();
+        this.htmlEditorProvider.getCurrentHtmlEditor().toggleParagraph();
     }
 
     public toggleH1(): void {
@@ -44,7 +44,7 @@ export class BlockStyleSelector {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleQuote();
     }
 
-    public toggleCode(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleCode();
+    public toggleFormatted(): void {
+        this.htmlEditorProvider.getCurrentHtmlEditor().toggleFormatted();
     }
 }

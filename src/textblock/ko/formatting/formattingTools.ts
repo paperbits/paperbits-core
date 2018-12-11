@@ -8,7 +8,6 @@ import { IPageService } from "@paperbits/common/pages";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { HtmlEditorEvents } from "@paperbits/common/editing";
 import { Component } from "@paperbits/common/ko/decorators";
-import { IViewManager } from "@paperbits/common/ui";
 import { FontContract } from "@paperbits/styles/contracts";
 
 @Component({
@@ -39,8 +38,7 @@ export class FormattingTools {
         private readonly eventManager: IEventManager,
         private readonly permalinkService: IPermalinkService,
         private readonly pageService: IPageService,
-        private readonly routeHandler: IRouteHandler,
-        private readonly viewManager: IViewManager
+        private readonly routeHandler: IRouteHandler
     ) {
         this.updateFormattingState = this.updateFormattingState.bind(this);
         this.toggleUnorderedList = this.toggleUnorderedList.bind(this);
@@ -65,45 +63,53 @@ export class FormattingTools {
     }
 
     private updateFormattingState(): void {
-        const selectionState = this.htmlEditorProvider.getCurrentHtmlEditor().getSelectionState(this.viewManager.getViewport());
+        const selectionState = this.htmlEditorProvider.getCurrentHtmlEditor().getSelectionState();
 
         this.bold(selectionState.bold);
         this.italic(selectionState.italic);
         this.underlined(selectionState.underlined);
-        this.ul(selectionState.ul);
-        this.ol(selectionState.ol);
-        this.pre(selectionState.pre);
-        this.alignment(selectionState.alignment || "left");
-        this.font(selectionState.font || "serif");
+        this.ul(selectionState.bulletedList);
+        this.ol(selectionState.orderedList);
+
         this.anchored(!!selectionState.anchorKey);
 
-        if (selectionState.normal) {
-            this.style("Normal");
+        switch (selectionState.block) {
+            case "heading1":
+                this.style("Heading 1");
+                break;
+
+            case "heading2":
+                this.style("Heading 2");
+                break;
+
+            case "heading3":
+                this.style("Heading 3");
+                break;
+
+            case "heading4":
+                this.style("Heading 4");
+                break;
+
+            case "heading5":
+                this.style("Heading 5");
+                break;
+
+            case "heading6":
+                this.style("Heading 6");
+                break;
+
+            case "quote":
+                this.style("Quote");
+                break;
+
+            case "formatted":
+                this.style("Formatted");
+                break;
+
+            default:
+                this.style("Normal");
         }
-        else if (selectionState.h1) {
-            this.style("Heading 1");
-        }
-        else if (selectionState.h2) {
-            this.style("Heading 2");
-        }
-        else if (selectionState.h3) {
-            this.style("Heading 3");
-        }
-        else if (selectionState.h4) {
-            this.style("Heading 4");
-        }
-        else if (selectionState.h5) {
-            this.style("Heading 5");
-        }
-        else if (selectionState.h6) {
-            this.style("Heading 6");
-        }
-        else if (selectionState.quote) {
-            this.style("Quote");
-        }
-        else if (selectionState.pre) {
-            this.style("Code snippet");
-        }
+
     }
 
     public toggleNn(): void {
@@ -131,8 +137,8 @@ export class FormattingTools {
     //     this.updateFormattingState();
     // }
 
-    public clearStyle(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().resetToNormal();
+    public toggleParagraph(): void {
+        this.htmlEditorProvider.getCurrentHtmlEditor().toggleParagraph();
         this.updateFormattingState();
     }
 
@@ -169,7 +175,7 @@ export class FormattingTools {
 
     public async toggleAnchor(): Promise<void> {
         const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
-        const selectionState = htmlEditor.getSelectionState(this.viewManager.getViewport());
+        const selectionState = htmlEditor.getSelectionState();
         const anchorKey = selectionState.anchorKey;
         const currentUrl = this.routeHandler.getCurrentUrl();
         const permalink = await this.permalinkService.getPermalinkByUrl(currentUrl);
@@ -248,29 +254,29 @@ export class FormattingTools {
         this.updateFormattingState();
     }
 
-    public toggleCode(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleCode();
+    public toggleFormatted(): void {
+        this.htmlEditorProvider.getCurrentHtmlEditor().toggleFormatted();
         this.updateFormattingState();
     }
 
     public toggleAlignLeft(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().alignLeft(this.viewManager.getViewport());
+        this.htmlEditorProvider.getCurrentHtmlEditor().alignLeft();
     }
 
     public toggleAlignCenter(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().alignCenter(this.viewManager.getViewport());
+        this.htmlEditorProvider.getCurrentHtmlEditor().alignCenter();
     }
 
     public toggleAlignRight(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().alignRight(this.viewManager.getViewport());
+        this.htmlEditorProvider.getCurrentHtmlEditor().alignRight();
     }
 
     public toggleJustify(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().justify(this.viewManager.getViewport());
+        this.htmlEditorProvider.getCurrentHtmlEditor().justify();
     }
 
     public resetToNormal(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().resetToNormal();
+        this.htmlEditorProvider.getCurrentHtmlEditor().toggleParagraph();
         this.updateFormattingState();
     }
 

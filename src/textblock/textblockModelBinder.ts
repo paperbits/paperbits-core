@@ -73,8 +73,6 @@ export class TextblockModelBinder implements IModelBinder {
     }
 
     public async contractToModel(node: Contract): Promise<TextblockModel> {
-        // TODO: Scan for unresolved hyperlink permalinks (this is compensation of Slate not being able to do async work)
-
         if (node.nodes) {
             await this.resolveHyperlinks(node.nodes);
         }
@@ -87,7 +85,9 @@ export class TextblockModelBinder implements IModelBinder {
             await this.resolveAnchors(node.nodes);
         }
 
-        return new TextblockModel({ nodes: node.nodes });
+        this.convertNode(node);
+
+        return new TextblockModel(node.content);
     }
 
     public canHandleWidgetType(widgetType: string): boolean {
@@ -112,9 +112,62 @@ export class TextblockModelBinder implements IModelBinder {
         const textblockConfig: Contract = {
             object: "widget",
             type: "text",
-            nodes: state["nodes"]
+            nodes: state
         };
 
         return textblockConfig;
+    }
+
+    private convertNode(parentNode): any {
+        if (parentNode.leaves) {
+            for (const node of parentNode.leaves) {
+                this.convertNode(node);
+            }
+
+            parentNode.content = parentNode.leaves;
+            delete parentNode.leaves;
+        }
+
+        if (parentNode.nodes) {
+            for (const node of parentNode.nodes) {
+                this.convertNode(node);
+            }
+
+            parentNode.content = parentNode.nodes;
+            delete parentNode.nodes;
+        }
+
+        if (parentNode["type"] === "heading-one") {
+            parentNode["type"] = "heading1";
+        }
+
+        if (parentNode["type"] === "heading-two") {
+            parentNode["type"] = "heading2";
+        }
+
+        if (parentNode["type"] === "heading-three") {
+            parentNode["type"] = "heading3";
+        }
+
+        if (parentNode["type"] === "list-item") {
+            parentNode["type"] = "list_item";
+        }
+
+        if (parentNode["type"] === "bulleted-list") {
+            parentNode["type"] = "bulleted_list";
+        }
+
+        // if (parentNode["type"] === "link") {
+        //     parentNode["type"] = "hyperlink";
+        // }
+
+        if (parentNode["type"] === "line-break") {
+            parentNode["type"] = "linebreak";
+        }
+
+        if (parentNode["object"] && parentNode["object"] === "leaf") {
+            parentNode["type"] = "text";
+            delete parentNode["object"];
+        }
     }
 }

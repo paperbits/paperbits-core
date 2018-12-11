@@ -11,17 +11,10 @@ export class HtmlEditorBindingHandler {
                 const stateObservable: KnockoutObservable<Object> = config.state;
                 const htmlEditor: IHtmlEditor = ko.unwrap(config.htmlEditor);
 
-                htmlEditor.attachToElement(element);
-
-                const onSelectionChange = () => {
-                    eventManager.dispatchEvent("htmlEditorChanged", htmlEditor);
-                }
-                htmlEditor.addSelectionChangeListener(onSelectionChange);
-
-                const onEscapeKeyPressed = () => { htmlEditor.detachFromElement(); }
+                const onEscapeKeyPressed = () => { htmlEditor.detachFromElement(); };
                 eventManager.addEventListener("onEscape", onEscapeKeyPressed);
 
-                const onWidgetEditorClose = () => { htmlEditor.detachFromElement(); }
+                const onWidgetEditorClose = () => { htmlEditor.detachFromElement(); };
 
                 eventManager.addEventListener("onWidgetEditorClose", onWidgetEditorClose);
 
@@ -31,19 +24,20 @@ export class HtmlEditorBindingHandler {
                     }
 
                     htmlEditor.attachToElement(element);
-                }
-
-                eventManager.addEventListener("enableHtmlEditor", onHtmlEditorRequested);
+                };
 
                 htmlEditor.setState(stateObservable());
+                htmlEditor.attachToElement(element);
 
                 stateObservable.subscribe(state => {
                     htmlEditor.setState(state);
                 });
 
+                eventManager.addEventListener("enableHtmlEditor", onHtmlEditorRequested);
+
                 ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
                     htmlEditor.detachFromElement();
-                    htmlEditor.removeSelectionChangeListener(onSelectionChange);
+                    // htmlEditor.removeSelectionChangeListener(onSelectionChange);
                     eventManager.removeEventListener("onEscape", onEscapeKeyPressed);
                     eventManager.removeEventListener("onWidgetEditorClose", onWidgetEditorClose);
                     eventManager.removeEventListener("enableHtmlEditor", onHtmlEditorRequested);
