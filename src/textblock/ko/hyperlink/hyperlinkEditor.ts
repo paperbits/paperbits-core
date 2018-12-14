@@ -1,11 +1,11 @@
 ﻿import * as ko from "knockout";
 import template from "./hyperlinkEditor.html";
+import { IContentItemService } from "@paperbits/common/contentItems";
 import { IHtmlEditorProvider } from "@paperbits/common/editing/htmlEditorProvider";
 import { IEventManager } from "@paperbits/common/events";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { HyperlinkContract } from "@paperbits/common/editing";
 import { PermalinkResolver } from "@paperbits/common/permalinks/permalinkResolver";
-import { IPermalinkService } from "@paperbits/common/permalinks";
 import { Component } from "@paperbits/common/ko/decorators";
 
 @Component({
@@ -14,17 +14,16 @@ import { Component } from "@paperbits/common/ko/decorators";
     injectable: "hyperlinkEditor"
 })
 export class HyperlinkEditor {
-    private readonly htmlEditorProvider: IHtmlEditorProvider;
-    private readonly permalinkResolver: PermalinkResolver;
-    private readonly permalinkService: IPermalinkService;
-    private readonly eventManager: IEventManager;
-
     public readonly hyperlink: KnockoutObservable<HyperlinkModel>;
 
-    constructor(htmlEditorProvider: IHtmlEditorProvider, permalinkResolver: PermalinkResolver, permalinkService: IPermalinkService, eventManager: IEventManager) {
+    constructor(
+        private readonly htmlEditorProvider: IHtmlEditorProvider,
+        private readonly permalinkResolver: PermalinkResolver,
+        private readonly contentItemService: IContentItemService,
+        private readonly eventManager: IEventManager
+    ) {
         this.htmlEditorProvider = htmlEditorProvider;
         this.permalinkResolver = permalinkResolver;
-        this.permalinkService = permalinkService;
         this.eventManager = eventManager;
 
         this.onSelectionChange = this.onSelectionChange.bind(this);
@@ -41,21 +40,29 @@ export class HyperlinkEditor {
             return;
         }
 
-        if (hyperlink.permalinkKey) {
-            const permalink = await this.permalinkService.getPermalinkByKey(hyperlink.permalinkKey);
-            hyperlink.href = permalink.uri;
+        let hyperlinkContract;
 
-            const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
-            htmlEditor.setHyperlink(hyperlink);
+        if (hyperlink.href) {
+            hyperlinkContract = { href: hyperlink.href, target: hyperlink.target };
         }
+
+        if (hyperlink.targetKey) {
+            const contentItem = await this.contentItemService.getContentItemByKey(hyperlink.targetKey);
+            hyperlinkContract = { href: contentItem.permalink, permalinkKey: hyperlink.targetKey, target: hyperlink.target };
+        }
+
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        htmlEditor.setHyperlink(hyperlinkContract);
     }
 
     private async onSelectionChange(): Promise<void> {
         const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
-        let hyperlink = htmlEditor.getHyperlink();
+        const hyperlinkConfig: HyperlinkContract = htmlEditor.getHyperlink();
+        let hyperlink = null;
 
         if (hyperlink) {
-            hyperlink = await this.permalinkResolver.getHyperlinkByPermalinkKey(hyperlink.permalinkKey);
+            hyperlink = await this.permalinkResolver.getHyperlinkByContentItemKey(hyperlink.permalinkKey);
         }
 
         this.hyperlink(hyperlink);

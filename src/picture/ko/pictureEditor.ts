@@ -87,7 +87,7 @@ export class PictureEditor implements IWidgetEditor {
 
     public onMediaSelected(media: MediaContract): void {
         const background = new BackgroundModel(); // TODO: Let's use proper model here
-        background.sourceKey = media.permalinkKey;
+        background.sourceKey = media.key;
         background.sourceUrl = media.downloadUrl;
         background.size = "contain";
         background.position = "center center";

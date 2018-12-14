@@ -23,21 +23,21 @@ import { TextblockModule } from "./textblock/ko/textblock.module";
 import { BackgroundModelBinder } from "@paperbits/common/widgets/background";
 import { IntercomService } from "./intercom/intercomService";
 import { KnockoutRegistrationLoaders } from "./ko/knockout.loaders";
-import { IModelBinder } from "@paperbits/common/editing";
 import { ViewModelBinderSelector } from "./ko/viewModelBinderSelector";
 import { SavingHandler, OfflineObjectStorage, AnchorMiddleware } from "@paperbits/common/persistence";
-import { PermalinkService, IPermalinkService, IPermalinkResolver, PermalinkResolver } from "@paperbits/common/permalinks";
+import { PermalinkResolver } from "@paperbits/common/permalinks";
 import { XmlHttpRequestClient } from "@paperbits/common/http";
 import { DefaultEventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { LocalCache } from "@paperbits/common/caching";
 import { LayoutService } from "@paperbits/common/layouts/layoutService";
-import { PageService, PagePermalinkResolver } from "@paperbits/common/pages";
-import { BlogService, BlogPermalinkResolver } from "@paperbits/common/blogs";
-import { MediaService, MediaPermalinkResolver } from "@paperbits/common/media";
+import { ContentItemService } from "@paperbits/common/contentItems/contentItemService";
+import { PageService } from "@paperbits/common/pages";
+import { BlogService } from "@paperbits/common/blogs";
+import { MediaService } from "@paperbits/common/media";
 import { BlockService } from "@paperbits/common/blocks";
 import { NavigationService } from "@paperbits/common/navigation";
 import { SiteService } from "@paperbits/common/sites";
-import { UrlService, UrlPermalinkResolver } from "@paperbits/common/urls";
+import { UrlService } from "@paperbits/common/urls";
 import { UnhandledErrorHandler } from "@paperbits/common/errors";
 import { PricingTableModule } from "./pricing-table/ko";
 
@@ -53,7 +53,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("anchorMiddleware", AnchorMiddleware);
 
         /*** Services ***/
-        injector.bindSingleton("permalinkService", PermalinkService);
+        injector.bindSingleton("contentItemService", ContentItemService);
         injector.bindSingleton("widgetService", WidgetService);
         injector.bindSingleton("layoutService", LayoutService);
         injector.bindSingleton("pageService", PageService);
@@ -65,27 +65,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("urlService", UrlService);
         injector.bindSingleton("savingHandler", SavingHandler);
         injector.bindSingleton("errorHandler", UnhandledErrorHandler);
-
-        /*** Model binders ***/
-        injector.bind("mediaPermalinkResolver", MediaPermalinkResolver);
-        injector.bind("pagePermalinkResolver", PagePermalinkResolver);
-        injector.bind("blogPermalinkResolver", BlogPermalinkResolver);
-        injector.bind("urlPermalinkResolver", UrlPermalinkResolver);
-
-        injector.bindSingletonFactory("permalinkResolver", (ctx: IInjector) => {
-            const permalinkService = ctx.resolve<IPermalinkService>("permalinkService");
-            const mediaPermalinkResolver = ctx.resolve<IPermalinkResolver>("mediaPermalinkResolver");
-            const pagePermalinkResolver = ctx.resolve<IPermalinkResolver>("pagePermalinkResolver");
-            const blogPermalinkResolver = ctx.resolve<IPermalinkResolver>("blogPermalinkResolver");
-            const urlPermalinkResolver = ctx.resolve<IPermalinkResolver>("urlPermalinkResolver");
-
-            return new PermalinkResolver(permalinkService, [
-                mediaPermalinkResolver,
-                pagePermalinkResolver,
-                blogPermalinkResolver,
-                urlPermalinkResolver
-            ]);
-        });
+        injector.bindSingleton("permalinkResolver", PermalinkResolver);
 
         injector.bindModule(new KnockoutRegistrationLoaders());
 

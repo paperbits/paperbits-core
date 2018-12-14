@@ -1,19 +1,10 @@
 import { VideoPlayerModel } from "./videoPlayerModel";
 import { VideoPlayerContract } from "./VideoPlayerContract";
 import { IModelBinder } from "@paperbits/common/editing";
-import { IPermalinkService } from "@paperbits/common/permalinks";
 import { IMediaService } from "@paperbits/common/media";
 
-const DefaultSourceUrl = "http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_640x360.m4v";
-
 export class VideoPlayerModelBinder implements IModelBinder {
-    private readonly permalinkService: IPermalinkService;
-    private readonly mediaService: IMediaService;
-
-    constructor(permalinkService: IPermalinkService, mediaService: IMediaService) {
-        this.permalinkService = permalinkService;
-        this.mediaService = mediaService;
-    }
+    constructor(private readonly mediaService: IMediaService) { }
 
     public canHandleWidgetType(widgetType: string): boolean {
         return widgetType === "video-player";
@@ -24,48 +15,41 @@ export class VideoPlayerModelBinder implements IModelBinder {
     }
 
     public async contractToModel(videoPlayerNode: VideoPlayerContract): Promise<VideoPlayerModel> {
-        let videoPlayerModel = new VideoPlayerModel();
+        const videoPlayerModel = new VideoPlayerModel();
         videoPlayerModel.controls = videoPlayerNode.controls;
         videoPlayerModel.autoplay = videoPlayerNode.autoplay;
 
         if (videoPlayerNode.sourceKey) {
             videoPlayerModel.sourceKey = videoPlayerNode.sourceKey;
+            const media = await this.mediaService.getMediaByKey(videoPlayerNode.sourceKey);
 
-            let permalink = await this.permalinkService.getPermalinkByKey(videoPlayerNode.sourceKey)
-
-            if (!permalink) {
-                console.warn(`Permalink with key ${videoPlayerNode.sourceKey} not found.`);
+            if (media) {
+                videoPlayerModel.sourceUrl = media.downloadUrl;
             }
             else {
-                let media = await this.mediaService.getMediaByKey(permalink.targetKey);
-
-                if (media) {
-                    videoPlayerModel.sourceUrl = media.downloadUrl;
-                }
-                else {
-                    // videoPlayerModel.sourceUrl = DefaultSourceUrl
-                    console.warn(`Media file with key ${permalink.targetKey} not found, setting default image.`);
-                }
+                // videoPlayerModel.sourceUrl = DefaultSourceUrl
+                console.warn(`Media file with key ${videoPlayerNode.sourceKey} not found, setting default image.`);
             }
+
         }
         else if (videoPlayerNode.sourceUrl) {
             videoPlayerModel.sourceUrl = videoPlayerNode.sourceUrl;
         }
         else {
-            videoPlayerModel.sourceUrl = null;//DefaultSourceUrl;
+            videoPlayerModel.sourceUrl = null; // DefaultSourceUrl;
         }
 
         return videoPlayerModel;
     }
 
     public modelToContract(videoPlayerModel: VideoPlayerModel): VideoPlayerContract {
-        let videoConfig: VideoPlayerContract = {
+        const videoConfig: VideoPlayerContract = {
             object: "block",
             type: "video-player",
             sourceKey: videoPlayerModel.sourceKey,
             controls: videoPlayerModel.controls,
             autoplay: videoPlayerModel.autoplay
-        }
+        };
 
         return videoConfig;
     }

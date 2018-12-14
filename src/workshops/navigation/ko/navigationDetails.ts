@@ -45,20 +45,20 @@ export class NavigationDetailsWorkshop {
 
     @OnMounted()
     public async onMounted(): Promise<void> {
-        if (this.navigationItem.permalinkKey()) {
-            this.init(this.navigationItem.permalinkKey());
+        if (this.navigationItem.targetKey()) {
+            this.init(this.navigationItem.targetKey());
         }
     }
 
-    private async init(permalinkKey: string): Promise<void> {
-        const hyperlink = await this.permalinkResolver.getHyperlinkByPermalinkKey(permalinkKey);
+    private async init(targetKey: string): Promise<void> {
+        const hyperlink = await this.permalinkResolver.getHyperlinkByContentItemKey(targetKey);
 
         this.hyperlink(hyperlink);
     }
 
     public onHyperlinkChange(hyperlink: HyperlinkModel): void {
         this.hyperlink(hyperlink);
-        this.navigationItem.permalinkKey(hyperlink.permalinkKey);
+        this.navigationItem.targetKey(hyperlink.targetKey);
     }
 
     public deleteNavigationItem(): void {

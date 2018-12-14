@@ -1,6 +1,4 @@
-﻿import * as ko from "knockout";
-import template from "./blogPostDetails.html";
-import { PermalinkContract, IPermalinkService } from "@paperbits/common/permalinks";
+﻿import template from "./blogPostDetails.html";
 import { IBlogService } from "@paperbits/common/blogs/IBlogService";
 import { IRouteHandler } from "@paperbits/common/routing/IRouteHandler";
 import { IViewManager } from "@paperbits/common/ui";
@@ -13,8 +11,6 @@ import { BlogPostItem } from "./blogPostItem";
     injectable: "blogPostDetailsWorkshop"
 })
 export class BlogPostDetailsWorkshop {
-    private blogPostPermalink: PermalinkContract;
-
     @Param()
     public readonly blogPostItem: BlogPostItem;
 
@@ -23,7 +19,6 @@ export class BlogPostDetailsWorkshop {
 
     constructor(
         private readonly blogService: IBlogService,
-        private readonly permalinkService: IPermalinkService,
         private readonly routeHandler: IRouteHandler,
         private readonly viewManager: IViewManager
     ) {
@@ -46,15 +41,14 @@ export class BlogPostDetailsWorkshop {
         this.blogPostItem.keywords
             .subscribe(this.updateBlogPost);
 
-        this.blogPostItem.permalinkUrl
-            .extend({ uniquePermalink: this.blogPostItem.permalinkKey, required: true, onlyValid: true })
+        this.blogPostItem.permalink
+            .extend({ uniquePermalink: this.blogPostItem.permalink, required: true, onlyValid: true })
             .subscribe(this.updatePermlaink);
 
-        const permalink = await this.permalinkService.getPermalinkByKey(this.blogPostItem.permalinkKey);
+        const blogPost = await this.blogService.getBlogPostByKey(this.blogPostItem.key);
 
-        this.blogPostPermalink = permalink;
-        this.blogPostItem.permalinkUrl(permalink.uri);
-        this.routeHandler.navigateTo(permalink.uri);
+        this.blogPostItem.permalink(blogPost.permalink);
+        this.routeHandler.navigateTo(blogPost.permalink);
     }
 
     private async updateBlogPost(): Promise<void> {
@@ -64,12 +58,12 @@ export class BlogPostDetailsWorkshop {
     }
 
     private async updatePermlaink(): Promise<void> {
-        this.blogPostPermalink.uri = this.blogPostItem.permalinkUrl();
-        await this.permalinkService.updatePermalink(this.blogPostPermalink);
-
+        const permalink = this.blogPostItem.permalink();
         this.routeHandler.notifyListeners = false;
-        this.routeHandler.navigateTo(this.blogPostPermalink.uri);
+        // this.routeHandler.navigateTo(permalink);
         this.routeHandler.notifyListeners = true;
+
+        this.updateBlogPost();
     }
 
     public async deleteBlogPost(): Promise<void> {

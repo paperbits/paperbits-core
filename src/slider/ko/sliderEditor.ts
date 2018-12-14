@@ -104,7 +104,7 @@ export class SliderEditor implements IWidgetEditor {
     }
 
     public onMediaSelected(media: MediaContract): void {
-        this.activeSlideModel.background.sourceKey = media.permalinkKey;
+        this.activeSlideModel.background.sourceKey = media.key;
         this.activeSlideModel.background.sourceUrl = media.downloadUrl;
 
         this.background.valueHasMutated();
@@ -112,10 +112,10 @@ export class SliderEditor implements IWidgetEditor {
     }
 
     public onThumbnailSelected(media: MediaContract): void {
-        this.activeSlideModel.thumbnail.sourceKey = media.permalinkKey;
+        this.activeSlideModel.thumbnail.sourceKey = media.key;
         this.activeSlideModel.thumbnail.sourceUrl = media.downloadUrl;
 
-        let sliderEditorSlide = this.slides()[this.sliderModel.activeSlideNumber]
+        const sliderEditorSlide = this.slides()[this.sliderModel.activeSlideNumber];
 
         sliderEditorSlide.thumbnail.valueHasMutated();
 

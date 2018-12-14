@@ -4,7 +4,7 @@ import { NavigationItemContract } from "@paperbits/common/navigation";
 export class NavigationItemViewModel {
     public key: string;
     public label: KnockoutObservable<string>;
-    public permalinkKey: KnockoutObservable<string>;
+    public targetKey: KnockoutObservable<string>;
     public parent: NavigationItemViewModel;
     public nodes: KnockoutObservableArray<NavigationItemViewModel>;
     public collapsed: KnockoutObservable<boolean>;
@@ -31,8 +31,8 @@ export class NavigationItemViewModel {
 
         document.addEventListener("keydown", this.onKeyDown, false);
 
-        this.permalinkKey = ko.observable<string>(navitem.permalinkKey);
-        this.permalinkKey.subscribe(() => this.onUpdate.notifySubscribers());
+        this.targetKey = ko.observable<string>(navitem.targetKey);
+        this.targetKey.subscribe(() => this.onUpdate.notifySubscribers());
         this.label.subscribe(() => this.onUpdate.notifySubscribers());
     }
 
@@ -147,7 +147,7 @@ export class NavigationItemViewModel {
         const navigationItem: NavigationItemContract = {
             key: this.key,
             label: this.label(),
-            permalinkKey: this.permalinkKey(),
+            targetKey: this.targetKey(),
             navigationItems: navigationItems
         };
 

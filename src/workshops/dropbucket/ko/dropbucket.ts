@@ -3,7 +3,7 @@ import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
 import { IViewManager } from "@paperbits/common/ui";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
-import { IMediaService, ICreatedMedia } from "@paperbits/common/media";
+import { IMediaService, MediaContract } from "@paperbits/common/media";
 import { IContentDropHandler, IContentDescriptor, IDataTransfer } from "@paperbits/common/editing";
 import { ProgressPromise } from "@paperbits/common";
 import { DropBucketItem } from "./dropbucketItem";
@@ -231,7 +231,7 @@ export class DropBucket {
         this.droppedItems.remove(dropbucketItem);
 
         uploadables.forEach(async uploadable => {
-            let uploadPromise: ProgressPromise<ICreatedMedia>;
+            let uploadPromise: ProgressPromise<MediaContract>;
 
             if (typeof uploadable === "string") {
                 const name = uploadable.split("/").pop().split("?")[0];

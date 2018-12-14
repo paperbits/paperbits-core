@@ -37,7 +37,6 @@ export class HtmlEditorBindingHandler {
 
                 ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
                     htmlEditor.detachFromElement();
-                    // htmlEditor.removeSelectionChangeListener(onSelectionChange);
                     eventManager.removeEventListener("onEscape", onEscapeKeyPressed);
                     eventManager.removeEventListener("onWidgetEditorClose", onWidgetEditorClose);
                     eventManager.removeEventListener("enableHtmlEditor", onHtmlEditorRequested);

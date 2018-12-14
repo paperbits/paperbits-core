@@ -1,9 +1,8 @@
 import * as ko from "knockout";
-import template from "./formattingTools.html";
 import * as Utils from "@paperbits/common/utils";
+import template from "./formattingTools.html";
 import { IEventManager } from "@paperbits/common/events";
 import { IHtmlEditorProvider } from "@paperbits/common/editing/htmlEditorProvider";
-import { IPermalinkService } from "@paperbits/common/permalinks";
 import { IPageService } from "@paperbits/common/pages";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { HtmlEditorEvents } from "@paperbits/common/editing";
@@ -36,7 +35,6 @@ export class FormattingTools {
     constructor(
         private readonly htmlEditorProvider: IHtmlEditorProvider,
         private readonly eventManager: IEventManager,
-        private readonly permalinkService: IPermalinkService,
         private readonly pageService: IPageService,
         private readonly routeHandler: IRouteHandler
     ) {
@@ -174,38 +172,38 @@ export class FormattingTools {
     }
 
     public async toggleAnchor(): Promise<void> {
-        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
-        const selectionState = htmlEditor.getSelectionState();
-        const anchorKey = selectionState.anchorKey;
-        const currentUrl = this.routeHandler.getCurrentUrl();
-        const permalink = await this.permalinkService.getPermalinkByUrl(currentUrl);
-        const pageContract = await this.pageService.getPageByKey(permalink.targetKey);
+        // const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+        // const selectionState = htmlEditor.getSelectionState(this.viewManager.getViewport());
+        // const anchorKey = selectionState.anchorKey;
+        // const currentUrl = this.routeHandler.getCurrentUrl();
+        // const permalink = await this.permalinkService.getPermalinkByUrl(currentUrl);
+        // const pageContract = await this.pageService.getPageByKey(permalink.targetKey);
 
-        if (!anchorKey) {
-            const anchorId = Utils.slugify(htmlEditor.getSelectionText());
-            const anchorPermalink = await this.permalinkService.createPermalink(`${anchorId}`, null, permalink.key);
+        // if (!anchorKey) {
+        //     const anchorId = Utils.slugify(htmlEditor.getSelectionText());
+        //     const anchorPermalink = await this.permalinkService.createPermalink(`${anchorId}`, null, permalink.key);
 
-            htmlEditor.setAnchor(anchorId, anchorPermalink.key);
+        //     htmlEditor.setAnchor(anchorId, anchorPermalink.key);
 
-            // TODO: Probably we should show dialog and allow users to enter anchor title.
-            const anchorTitle = htmlEditor.getSelectionText();
-            const anchors = pageContract.anchors || {};
-            anchors[anchorPermalink.key.replaceAll("/", "|")] = anchorTitle;
-            pageContract.anchors = anchors;
+        //     // TODO: Probably we should show dialog and allow users to enter anchor title.
+        //     const anchorTitle = htmlEditor.getSelectionText();
+        //     const anchors = pageContract.anchors || {};
+        //     anchors[anchorPermalink.key.replaceAll("/", "|")] = anchorTitle;
+        //     pageContract.anchors = anchors;
 
-            await this.pageService.updatePage(pageContract);
-        }
-        else {
-            this.htmlEditorProvider.getCurrentHtmlEditor().removeAnchor();
-            await this.permalinkService.deletePermalinkByKey(anchorKey);
+        //     await this.pageService.updatePage(pageContract);
+        // }
+        // else {
+        //     this.htmlEditorProvider.getCurrentHtmlEditor().removeAnchor();
+        //     await this.permalinkService.deletePermalinkByKey(anchorKey);
 
-            if (pageContract.anchors) {
-                pageContract.anchors[anchorKey.replaceAll("/", "|")] = null;
-                await this.pageService.updatePage(pageContract);
-            }
-        }
+        //     if (pageContract.anchors) {
+        //         pageContract.anchors[anchorKey.replaceAll("/", "|")] = null;
+        //         await this.pageService.updatePage(pageContract);
+        //     }
+        // }
 
-        this.updateFormattingState();
+        // this.updateFormattingState();
 
         /*
             1. Create permalink and get its key;

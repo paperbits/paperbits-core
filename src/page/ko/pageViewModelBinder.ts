@@ -5,7 +5,6 @@ import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PageHandlers } from "../pageHandlers";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { IPageService } from "@paperbits/common/pages";
-import { IPermalinkService } from "@paperbits/common/permalinks";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { IEventManager } from "@paperbits/common/events";
 
@@ -14,7 +13,6 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly pageService: IPageService,
-        private readonly permalinkService: IPermalinkService,
         private readonly routeHandler: IRouteHandler,
         private readonly modelBinderSelector: ModelBinderSelector,
         private readonly eventManager: IEventManager
@@ -25,9 +23,8 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
 
         const updateContent = async (): Promise<void> => {
             const url = this.routeHandler.getCurrentUrl();
-            const permalink = await this.permalinkService.getPermalinkByUrl(url);
-            const pageKey = permalink.targetKey;
-            const pageContent = await this.pageService.getPageContent(pageKey);
+            const page = await this.pageService.getPageByUrl(url);
+            const pageContent = await this.pageService.getPageContent(page.key);
 
             const contentContract = {
                 nodes: []
@@ -40,7 +37,7 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
 
             Object.assign(pageContent, contentContract);
 
-            await this.pageService.updatePageContent(pageKey, pageContent);
+            await this.pageService.updatePageContent(page.key, pageContent);
         };
 
         const scheduleUpdate = async (): Promise<void> => {

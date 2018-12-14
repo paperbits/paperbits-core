@@ -4,7 +4,6 @@ import { Component } from "@paperbits/common/ko/decorators";
 import { IViewManager } from "@paperbits/common/ui";
 import { ISiteService, ISettings } from "@paperbits/common/sites";
 import { IMediaService, IMediaFilter, MediaContract } from "@paperbits/common/media";
-import { IPermalinkService } from "@paperbits/common/permalinks";
 import { MetaDataSetter } from "@paperbits/common/meta";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 
@@ -15,7 +14,6 @@ import { BackgroundModel } from "@paperbits/common/widgets/background";
 })
 export class SettingsWorkshop {
     private readonly mediaService: IMediaService;
-    private readonly permalinkService: IPermalinkService;
     private readonly siteService: ISiteService;
     private readonly viewManager: IViewManager;
 
@@ -35,10 +33,9 @@ export class SettingsWorkshop {
     public favicon: KnockoutObservable<BackgroundModel>;
 
 
-    constructor(mediaService: IMediaService, permalinkService: IPermalinkService, siteService: ISiteService, viewManager: IViewManager) {
+    constructor(mediaService: IMediaService, siteService: ISiteService, viewManager: IViewManager) {
         // initialization...
         this.mediaService = mediaService;
-        this.permalinkService = permalinkService;
         this.siteService = siteService;
         this.viewManager = viewManager;
 
@@ -80,8 +77,8 @@ export class SettingsWorkshop {
             this.keywords(settings.site.keywords);
             this.hostname(settings.site.hostname);
             this.author(settings.site.author);
-            this.faviconSourceKey(settings.site.faviconPermalinkKey);
-            this.setFaviconUri(settings.site.faviconPermalinkKey);
+            this.faviconSourceKey(settings.site.faviconSourceKey);
+            this.setFaviconUri(settings.site.faviconSourceKey);
 
             if (settings.integration) {
                 if (settings.integration.googlemaps) {
@@ -115,7 +112,7 @@ export class SettingsWorkshop {
                 description: this.description(),
                 keywords: this.keywords(),
                 hostname: this.hostname(),
-                faviconPermalinkKey: this.faviconSourceKey(),
+                faviconSourceKey: this.faviconSourceKey(),
                 author: this.author()
             },
             integration: {
@@ -138,8 +135,8 @@ export class SettingsWorkshop {
 
     public onMediaSelected(media: MediaContract): void {
         if (media) {
-            this.faviconSourceKey(media.permalinkKey);
-            this.setFaviconUri(media.permalinkKey);
+            this.faviconSourceKey(media.key);
+            this.setFaviconUri(media.key);
         }
         else {
             this.faviconFileName(null);
@@ -147,18 +144,16 @@ export class SettingsWorkshop {
         }
     }
 
-    private async setFaviconUri(permalinkKey: string) {
-        if (permalinkKey) {
-            const faviconPermalink = await this.permalinkService.getPermalinkByKey(permalinkKey);
+    private async setFaviconUri(sourceKey: string) {
+        if (sourceKey) {
+            const mediaContract = await this.mediaService.getMediaByKey(sourceKey);
 
-            if (faviconPermalink) {
-                this.faviconFileName(faviconPermalink.uri);
+            if (mediaContract) {
+                this.faviconFileName(mediaContract.downloadUrl);
                 this.viewManager.loadFavIcon();
 
                 const faviconModel = new BackgroundModel();
-                const faviconMedia = await this.mediaService.getMediaByKey(faviconPermalink.targetKey);
-
-                faviconModel.sourceUrl = faviconMedia.downloadUrl;
+                faviconModel.sourceUrl = mediaContract.downloadUrl;
 
                 this.favicon(faviconModel);
             }

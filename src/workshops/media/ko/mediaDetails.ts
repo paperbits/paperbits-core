@@ -1,7 +1,6 @@
 ﻿import * as ko from "knockout";
 import * as FileSaver from "file-saver";
 import template from "./mediaDetails.html";
-import { PermalinkContract, IPermalinkService } from "@paperbits/common/permalinks";
 import { IMediaService } from "@paperbits/common/media";
 import { IViewManager } from "@paperbits/common/ui";
 import { MediaItem } from "./mediaItem";
@@ -13,8 +12,6 @@ import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorat
     injectable: "mediaDetailsWorkshop"
 })
 export class MediaDetailsWorkshop {
-    private mediaPermalink: PermalinkContract;
-
     @Param()
     public readonly mediaItem: MediaItem;
 
@@ -23,14 +20,12 @@ export class MediaDetailsWorkshop {
 
     constructor(
         private readonly mediaService: IMediaService,
-        private readonly permalinkService: IPermalinkService,
         private readonly viewManager: IViewManager
     ) {
         // rebinding...
         this.onMounted = this.onMounted.bind(this);
         this.deleteMedia = this.deleteMedia.bind(this);
         this.updateMedia = this.updateMedia.bind(this);
-        this.updatePermlaink = this.updatePermlaink.bind(this);
         this.openCropper = this.openCropper.bind(this);
     }
 
@@ -46,22 +41,17 @@ export class MediaDetailsWorkshop {
         this.mediaItem.keywords
             .subscribe(this.updateMedia);
 
-        this.mediaItem.permalinkUrl
-            .extend({ uniquePermalink: this.mediaItem.permalinkKey, onlyValid: true })
-            .subscribe(this.updatePermlaink);
+        this.mediaItem.permalink
+            .extend({ uniquePermalink: this.mediaItem.key, onlyValid: true })
+            .subscribe(this.updateMedia);
 
-        const permalink = await this.permalinkService.getPermalinkByKey(this.mediaItem.permalinkKey);
+        const mediaContract = await this.mediaService.getMediaByKey(this.mediaItem.key);
 
-        this.mediaPermalink = permalink;
-        this.mediaItem.permalinkUrl(permalink.uri);
+        this.mediaItem.permalink(mediaContract.permalink);
     }
 
     private async updateMedia(): Promise<void> {
         await this.mediaService.updateMedia(this.mediaItem.toMedia());
-    }
-
-    private async updatePermlaink(): Promise<void> {
-        await this.permalinkService.updatePermalink(this.mediaPermalink);
     }
 
     public async deleteMedia(): Promise<void> {

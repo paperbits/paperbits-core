@@ -30,7 +30,7 @@ export class PictureModelBinder implements IModelBinder {
         if (pictureContract.sourceKey) {
             try {
                 const background = new BackgroundModel();
-                background.sourceUrl = await this.permalinkResolver.getUrlByPermalinkKey(pictureContract.sourceKey);
+                background.sourceUrl = await this.permalinkResolver.getUrlByContentItemKey(pictureContract.sourceKey);
                 background.sourceKey = pictureContract.sourceKey;
                 pictureModel.background = background;
             }
@@ -41,7 +41,7 @@ export class PictureModelBinder implements IModelBinder {
 
         if (pictureContract.targetKey) {
             try {
-                pictureModel.hyperlink = await this.permalinkResolver.getHyperlinkByPermalinkKey(pictureContract.targetKey);
+                pictureModel.hyperlink = await this.permalinkResolver.getHyperlinkByContentItemKey(pictureContract.targetKey);
             }
             catch (error) {
                 console.log(error);
@@ -67,13 +67,13 @@ export class PictureModelBinder implements IModelBinder {
         }
 
         if (pictureModel.hyperlink) {
-            pictureContract.targetKey = pictureModel.hyperlink.permalinkKey;
+            pictureContract.targetKey = pictureModel.hyperlink.targetKey;
         }
 
         if (pictureModel.hyperlink) {
             pictureContract.hyperlink = {
                 target: pictureModel.hyperlink.target,
-                permalinkKey: pictureModel.hyperlink.permalinkKey,
+                permalinkKey: pictureModel.hyperlink.targetKey,
                 href: pictureModel.hyperlink.href
             };
         }

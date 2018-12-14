@@ -68,7 +68,7 @@ export class VideoEditor implements IWidgetEditor {
 
     public onMediaSelected(media: MediaContract): void {
         this.video.sourceUrl = media.downloadUrl;
-        this.video.sourceKey = media.permalinkKey;
+        this.video.sourceKey = media.key;
 
         this.sourceUrl(this.video.sourceUrl);
 

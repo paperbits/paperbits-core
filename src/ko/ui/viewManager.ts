@@ -12,7 +12,6 @@ import { ProgressIndicator } from "../ui";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { ISiteService, ISettings } from "@paperbits/common/sites";
 import { IPageService, PageContract } from "@paperbits/common/pages";
-import { IPermalinkService } from "@paperbits/common/permalinks";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { IWidgetEditor } from "@paperbits/common/widgets";
@@ -58,7 +57,6 @@ export class ViewManager implements IViewManager {
         private readonly routeHandler: IRouteHandler,
         private readonly mediaService: IMediaService,
         private readonly pageService: IPageService,
-        private readonly permalinkService: IPermalinkService,
         private readonly siteService: ISiteService) {
 
         this.eventManager = eventManager;
@@ -66,7 +64,6 @@ export class ViewManager implements IViewManager {
         this.routeHandler = routeHandler;
         this.mediaService = mediaService;
         this.pageService = pageService;
-        this.permalinkService = permalinkService;
         this.siteService = siteService;
 
         // rebinding...
@@ -152,8 +149,8 @@ export class ViewManager implements IViewManager {
     public async loadFavIcon(): Promise<void> {
         const settings = await this.siteService.getSiteSettings();
 
-        if (settings && settings.site.faviconPermalinkKey) {
-            const iconFile = await this.mediaService.getMediaByPermalinkKey(settings.site.faviconPermalinkKey);
+        if (settings && settings.site.faviconSourceKey) {
+            const iconFile = await this.mediaService.getMediaByKey(settings.site.faviconSourceKey);
 
             if (iconFile && iconFile.downloadUrl) {
                 MetaDataSetter.setFavIcon(iconFile.downloadUrl);
@@ -209,20 +206,7 @@ export class ViewManager implements IViewManager {
 
     public async getCurrentPage(): Promise<PageContract> {
         const url = this.routeHandler.getCurrentUrl();
-        let permalink = await this.permalinkService.getPermalinkByUrl(url);
-
-        if (!permalink) {
-            permalink = await this.permalinkService.getPermalinkByUrl("/404");
-        }
-
-        const pageKey = permalink.targetKey;
-
-        if (this.currentPage && this.currentPage.permalinkKey === pageKey) {
-            return this.currentPage;
-        }
-
-        this.currentPage = await this.pageService.getPageByKey(pageKey);
-
+        this.currentPage = await this.pageService.getPageByUrl(url);
         return this.currentPage;
     }
 

@@ -16,15 +16,14 @@ export class AnchorItem {
         return {
             title: this.title,
             permalinkKey: this.permalinkKey
-        }
+        };
     }
 }
 
 export class PageItem {
     public key: string;
     public contentKey?: string;
-    public permalinkKey?: string;
-    public permalinkUrl: KnockoutObservable<string>;
+    public permalink: KnockoutObservable<string>;
     public title: KnockoutObservable<string>;
     public description: KnockoutObservable<string>;
     public keywords: KnockoutObservable<string>;
@@ -34,25 +33,24 @@ export class PageItem {
 
     constructor(page: PageContract) {
         this.contentKey = page.contentKey;
-        this.permalinkKey = page.permalinkKey;
         this.key = page.key;
 
-        this.permalinkUrl = ko.observable<string>();
+        this.permalink = ko.observable<string>();
         this.title = ko.observable<string>(page.title);
         this.description = ko.observable<string>(page.description);
         this.keywords = ko.observable<string>(page.keywords);
         this.hasFocus = ko.observable<boolean>(false);
         this.anchors = [];
 
-        if (page.anchors) {
-            Object.keys(page.anchors).forEach(key => {
-                const anchorItem = new AnchorItem();
-                anchorItem.title = `${page.title} > ${page.anchors[key]}`;
-                anchorItem.shortTitle = page.anchors[key];
-                anchorItem.permalinkKey = key.replaceAll("|", "/");
-                this.anchors.push(anchorItem);
-            })
-        }
+        // if (page.anchors) {
+        //     Object.keys(page.anchors).forEach(key => {
+        //         const anchorItem = new AnchorItem();
+        //         anchorItem.title = `${page.title} > ${page.anchors[key]}`;
+        //         anchorItem.shortTitle = page.anchors[key];
+        //         anchorItem.permalinkKey = key.replaceAll("|", "/");
+        //         this.anchors.push(anchorItem);
+        //     });
+        // }
     }
 
     public toContract(): PageContract {
@@ -62,7 +60,7 @@ export class PageItem {
             description: this.description(),
             keywords: this.keywords(),
             contentKey: this.contentKey,
-            permalinkKey: this.permalinkKey
-        }
+            permalink: this.permalink()
+        };
     }
 }

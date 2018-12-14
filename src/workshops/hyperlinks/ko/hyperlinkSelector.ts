@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import template from "./hyperlinkSelector.html";
-import { HyperlinkModel, IPermalinkService } from "@paperbits/common/permalinks";
+import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { IHyperlinkProvider } from "@paperbits/common/ui";
 import { Component, Event, Param, OnMounted } from "@paperbits/common/ko/decorators";
 
@@ -19,7 +19,6 @@ export class HyperlinkSelector {
     public onChange: (hyperlink: HyperlinkModel) => void;
 
     constructor(
-        private readonly permalinkService: IPermalinkService,
         private readonly resourcePickers: IHyperlinkProvider[]
     ) {
         // rebinding...
@@ -67,9 +66,8 @@ export class HyperlinkSelector {
 
         let hyperlinkProvider: IHyperlinkProvider;
 
-        if (hyperlink.permalinkKey) {
-            const permalink = await this.permalinkService.getPermalinkByKey(hyperlink.permalinkKey);
-            hyperlinkProvider = this.resourcePickers.find(x => x.canHandleHyperlink(permalink));
+        if (hyperlink.targetKey) {
+            hyperlinkProvider = this.resourcePickers.find(x => x.canHandleHyperlink(hyperlink.targetKey));
         }
 
         if (!hyperlinkProvider) {

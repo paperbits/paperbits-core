@@ -1,14 +1,14 @@
 
 import * as ko from "knockout";
 import * as validation from "knockout.validation";
-import { IPermalinkService } from "@paperbits/common/permalinks";
+import { IContentItemService } from "@paperbits/common/contentItems";
 import { ILayoutService } from "@paperbits/common/layouts/ILayoutService";
 
 const errorClassName = "is-invalid";
 
 export class KnockoutValidation {
     constructor(
-        private readonly permalinkService: IPermalinkService,
+        private readonly contentItemService: IContentItemService,
         private readonly layoutService: ILayoutService
     ) {
         validation.init({
@@ -42,18 +42,18 @@ export class KnockoutValidation {
 
         validation.rules["uniquePermalink"] = {
             async: true,
-            validator: async (permalinkUri: string, permalinkKey: string, callback: (isInUse: boolean) => void) => {
+            validator: async (permalinkUri: string, contentItemKey: string, callback: (isInUse: boolean) => void) => {
                 if (!permalinkUri) {
                     return;
                 }
 
-                const permalink = await this.permalinkService.getPermalinkByUrl(permalinkUri);
-                const conflict = permalink && permalink.key !== permalinkKey;
+                const page = await this.contentItemService.getContentItemByUrl(permalinkUri);
+                const conflict = page && page.key !== contentItemKey;
 
                 callback(!conflict);
             },
             message: "This permalink is already in use."
-        }
+        };
 
         validation.rules["uniqueLayoutUri"] = {
             async: true,

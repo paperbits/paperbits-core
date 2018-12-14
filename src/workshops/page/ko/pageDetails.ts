@@ -1,5 +1,4 @@
 ﻿import template from "./pageDetails.html";
-import { PermalinkContract, IPermalinkService } from "@paperbits/common/permalinks";
 import { IPageService } from "@paperbits/common/pages";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
@@ -12,8 +11,6 @@ import { PageItem } from "./pageItem";
     injectable: "pageDetailsWorkshop"
 })
 export class PageDetailsWorkshop {
-    private pagePermalink: PermalinkContract;
-
     @Param()
     public pageItem: PageItem;
 
@@ -22,7 +19,6 @@ export class PageDetailsWorkshop {
 
     constructor(
         private readonly pageService: IPageService,
-        private readonly permalinkService: IPermalinkService,
         private readonly routeHandler: IRouteHandler,
         private readonly viewManager: IViewManager,
     ) {
@@ -45,15 +41,14 @@ export class PageDetailsWorkshop {
         this.pageItem.keywords
             .subscribe(this.updatePage);
 
-        this.pageItem.permalinkUrl
-            .extend({ uniquePermalink: this.pageItem.permalinkKey, required: true, onlyValid: true })
+        this.pageItem.permalink
+            .extend({ uniquePermalink: this.pageItem.permalink, required: true, onlyValid: true })
             .subscribe(this.updatePermlaink);
 
-        const permalink = await this.permalinkService.getPermalinkByKey(this.pageItem.permalinkKey);
+        const permalink = await this.pageService.getPageByKey(this.pageItem.key);
 
-        this.pagePermalink = permalink;
-        this.pageItem.permalinkUrl(permalink.uri);
-        this.routeHandler.navigateTo(permalink.uri);
+        this.pageItem.permalink(permalink.permalink);
+        this.routeHandler.navigateTo(permalink.permalink);
     }
 
     private async updatePage(): Promise<void> {
@@ -62,12 +57,12 @@ export class PageDetailsWorkshop {
     }
 
     private async updatePermlaink(): Promise<void> {
-        this.pagePermalink.uri = this.pageItem.permalinkUrl();
-        await this.permalinkService.updatePermalink(this.pagePermalink);
-
+        const permalink = this.pageItem.permalink();
         this.routeHandler.notifyListeners = false;
-        this.routeHandler.navigateTo(this.pagePermalink.uri);
+        // this.routeHandler.navigateTo(permalink);
         this.routeHandler.notifyListeners = true;
+
+        this.updatePage();
     }
 
     public async deletePage(): Promise<void> {

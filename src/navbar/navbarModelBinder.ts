@@ -1,15 +1,16 @@
 import { NavbarModel } from "./navbarModel";
 import { NavbarContract } from "./navbarContract";
 import { IModelBinder } from "@paperbits/common/editing";
+import { IContentItemService } from "@paperbits/common/contentItems";
 import { INavigationService, NavigationItemContract, NavigationItemModel } from "@paperbits/common/navigation";
-import { IPermalinkService, IPermalinkResolver } from "@paperbits/common/permalinks";
+import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { Contract } from "@paperbits/common/contract";
 
 export class NavbarModelBinder implements IModelBinder {
     constructor(
         private readonly navigationService: INavigationService,
-        private readonly permalinkService: IPermalinkService,
+        private readonly contentItemService: IContentItemService,
         private readonly routeHandler: IRouteHandler,
         private readonly permalinkResolver: IPermalinkResolver) {
     }
@@ -23,10 +24,10 @@ export class NavbarModelBinder implements IModelBinder {
         navbarModel.rootKey = navbarContract.rootKey;
         navbarModel.pictureSourceKey = navbarContract.rootKey;
 
-        if (navbarContract.pictureSourceKey) {
+        if (navbarContract.sourceKey) {
             try {
-                navbarModel.pictureSourceUrl = await this.permalinkResolver.getUrlByPermalinkKey(navbarContract.pictureSourceKey);
-                navbarModel.pictureSourceKey = navbarContract.pictureSourceKey;
+                navbarModel.pictureSourceUrl = await this.permalinkResolver.getUrlByContentItemKey(navbarContract.sourceKey);
+                navbarModel.pictureSourceKey = navbarContract.sourceKey;
             }
             catch (error) {
                 console.log(error);
@@ -62,9 +63,9 @@ export class NavbarModelBinder implements IModelBinder {
                 navbarItem.nodes.push(child);
             });
         }
-        else if (navigationItemContract.permalinkKey) {
-            const permalink = await this.permalinkService.getPermalinkByKey(navigationItemContract.permalinkKey);
-            navbarItem.url = permalink.uri;
+        else if (navigationItemContract.targetKey) {
+            const contentItem = await this.contentItemService.getContentItemByKey(navigationItemContract.targetKey);
+            navbarItem.url = contentItem.permalink;
         }
         else {
             console.warn(`No permalink key for item:`);
@@ -80,7 +81,7 @@ export class NavbarModelBinder implements IModelBinder {
             object: "block",
             type: "navbar",
             rootKey: navbarModel.rootKey,
-            pictureSourceKey: navbarModel.pictureSourceKey
+            sourceKey: navbarModel.pictureSourceKey
         };
 
         return navbarContract;

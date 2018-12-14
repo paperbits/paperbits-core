@@ -1,9 +1,7 @@
 import * as ko from "knockout";
 import template from "./urlSelector.html";
 import { UrlItem } from "./urlItem";
-import { UrlContract } from "@paperbits/common/urls/urlContract";
-import { IPermalinkService } from "@paperbits/common/permalinks";
-import { IUrlService } from "@paperbits/common/urls/IUrlService";
+import { IUrlService, UrlContract } from "@paperbits/common/urls";
 import { Component, Event } from "@paperbits/common/ko/decorators";
 
 @Component({
@@ -12,9 +10,6 @@ import { Component, Event } from "@paperbits/common/ko/decorators";
     injectable: "urlSelector"
 })
 export class UrlSelector {
-    private readonly urlService: IUrlService;
-    private readonly permalinkService: IPermalinkService;
-
     public readonly searchPattern: KnockoutObservable<string>;
     public readonly urls: KnockoutObservableArray<UrlItem>;
     public readonly uri: KnockoutObservable<string>;
@@ -24,10 +19,7 @@ export class UrlSelector {
     @Event()
     public onSelect: (url: UrlContract) => void;
 
-    constructor(urlService: IUrlService, permalinkService: IPermalinkService) {
-        this.urlService = urlService;
-        this.permalinkService = permalinkService;
-
+    constructor(private readonly urlService: IUrlService) {
         this.selectUrl = this.selectUrl.bind(this);
         this.createUrl = this.createUrl.bind(this);
 
@@ -68,13 +60,7 @@ export class UrlSelector {
 
     public async createUrl(): Promise<void> {
         const newUri = this.uri();
-
-        const url = await this.urlService.createUrl(newUri);
-        const permalink = await this.permalinkService.createPermalink(newUri, url.key);
-
-        url.permalinkKey = permalink.key;
-
-        await this.urlService.updateUrl(url);
+        await this.urlService.createUrl(newUri, newUri);
 
         this.uri("https://");
         await this.searchUrls();

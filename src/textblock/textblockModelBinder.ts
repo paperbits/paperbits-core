@@ -1,45 +1,44 @@
 import { IModelBinder, HyperlinkContract } from "@paperbits/common/editing";
-import { IPermalinkService } from "@paperbits/common/permalinks";
 import { Contract } from "@paperbits/common";
 import { TextblockModel } from "./textblockModel";
 
 
 export class TextblockModelBinder implements IModelBinder {
     constructor(
-        private readonly permalinkService: IPermalinkService
+        
     ) {
     }
 
     private async resolveHyperlinks(leaves: Contract[]): Promise<void> {
         for (const node of leaves) {
-            if (node && node.type === "link") {
-                const hyperlink: HyperlinkContract = <HyperlinkContract>node;
+            // if (node && node.type === "link") {
+            //     const hyperlink: HyperlinkContract = <HyperlinkContract>node;
 
-                if (hyperlink.permalinkKey) {
-                    const permalink = await this.permalinkService.getPermalinkByKey(hyperlink.permalinkKey);
+            //     if (hyperlink.permalinkKey) {
+            //         const permalink = await this.permalinkService.getPermalinkByKey(hyperlink.permalinkKey);
 
-                    if (permalink) {
-                        hyperlink.href = permalink.uri;
+            //         if (permalink) {
+            //             hyperlink.href = permalink.uri;
 
-                        if (permalink.parentKey) {
-                            const parentPermalink = await this.permalinkService.getPermalinkByKey(permalink.parentKey);
+            //             if (permalink.parentKey) {
+            //                 const parentPermalink = await this.permalinkService.getPermalinkByKey(permalink.parentKey);
 
-                            if (parentPermalink) {
-                                // TODO: Probably we should use separate property of permalink instead of URI, i.e. "hash".
-                                hyperlink.href = `${parentPermalink.uri}#${hyperlink.href}`;
-                            }
-                            else {
-                                // TODO: Show permalink is broken somehow
-                                console.warn(`Broken parent permalink: ${permalink.parentKey}.`);
-                            }
-                        }
-                    }
-                    else {
-                        // TODO: Show permalink is broken somehow
-                        console.warn(`Broken permalink: ${hyperlink.permalinkKey}.`);
-                    }
-                }
-            }
+            //                 if (parentPermalink) {
+            //                     // TODO: Probably we should use separate property of permalink instead of URI, i.e. "hash".
+            //                     hyperlink.href = `${parentPermalink.uri}#${hyperlink.href}`;
+            //                 }
+            //                 else {
+            //                     // TODO: Show permalink is broken somehow
+            //                     console.warn(`Broken parent permalink: ${permalink.parentKey}.`);
+            //                 }
+            //             }
+            //         }
+            //         else {
+            //             // TODO: Show permalink is broken somehow
+            //             console.warn(`Broken permalink: ${hyperlink.permalinkKey}.`);
+            //         }
+            //     }
+            // }
 
             if (node && node.leaves) {
                 await this.resolveHyperlinks(node.leaves);
@@ -52,24 +51,24 @@ export class TextblockModelBinder implements IModelBinder {
     }
 
     private async resolveAnchors(nodes: Contract[]) { // Should be BlockContract
-        for (const node of nodes) {
-            if (node && node["anchorKey"]) {
-                const anchorKey = node["anchorKey"];
-                const anchorPermalink = await this.permalinkService.getPermalinkByKey(anchorKey);
+        // for (const node of nodes) {
+        //     if (node && node["anchorKey"]) {
+        //         const anchorKey = node["anchorKey"];
+        //         const anchorPermalink = await this.permalinkService.getPermalinkByKey(anchorKey);
 
-                if (anchorPermalink) {
-                    node["anchorHash"] = anchorPermalink.uri;
-                }
-                else {
-                    // TODO: Show permalink is broken somehow
-                    console.warn(`Broken anchor permalink: ${anchorKey}.`);
-                }
-            }
+        //         if (anchorPermalink) {
+        //             node["anchorHash"] = anchorPermalink.uri;
+        //         }
+        //         else {
+        //             // TODO: Show permalink is broken somehow
+        //             console.warn(`Broken anchor permalink: ${anchorKey}.`);
+        //         }
+        //     }
 
-            if (node && node.nodes) {
-                await this.resolveAnchors(node.nodes);
-            }
-        }
+        //     if (node && node.nodes) {
+        //         await this.resolveAnchors(node.nodes);
+        //     }
+        // }
     }
 
     public async contractToModel(node: Contract): Promise<TextblockModel> {

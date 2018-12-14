@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
-import { ICreatedMedia, MediaContract } from "@paperbits/common/media";
+import { MediaContract } from "@paperbits/common/media";
 import { IWidgetOrder, IContentDropHandler, IWidgetHandler, IDataTransfer, IContentDescriptor, IWidgetFactoryResult } from "@paperbits/common/editing";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 import { PictureModelBinder } from "./pictureModelBinder";
@@ -118,7 +118,6 @@ export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
     }
 
     public static isMediaFile(media: MediaContract): boolean {
-        return (media.contentType && media.contentType.indexOf("image") !== -1) || (media.filename && this.imageFileExtensions.some(e => media.filename.endsWith(e)));
-
+        return (media.mimeType && media.mimeType.indexOf("image") !== -1) || (media.filename && this.imageFileExtensions.some(e => media.filename.endsWith(e)));
     }
 }

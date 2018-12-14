@@ -2,7 +2,7 @@ import { PageModel } from "./pageModel";
 import { Contract } from "@paperbits/common";
 import { IModelBinder } from "@paperbits/common/editing";
 import { IPageService, PageContract } from "@paperbits/common/pages";
-import { IPermalinkService, PermalinkContract } from "@paperbits/common/permalinks";
+import { PermalinkContract } from "@paperbits/common/permalinks";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { ModelBinderSelector, WidgetModel } from "@paperbits/common/widgets";
 import { PlaceholderModel } from "@paperbits/common/widgets/placeholder";
@@ -13,7 +13,6 @@ export class PageModelBinder implements IModelBinder {
   
     constructor(
         private readonly pageService: IPageService,
-        private readonly permalinkService: IPermalinkService,
         private readonly routeHandler: IRouteHandler,
         private readonly modelBinderSelector: ModelBinderSelector
     ) {
@@ -44,14 +43,7 @@ export class PageModelBinder implements IModelBinder {
 
         if (!pageContract.key) {
             const url = this.routeHandler.getCurrentUrl();
-            let permalink = await this.permalinkService.getPermalinkByUrl(url);
-
-            if (!permalink) {
-                permalink = await this.getPageNotFound();
-            }
-
-            const pageKey = permalink.targetKey;
-            pageContract = await this.pageService.getPageByKey(pageKey);
+            pageContract = await this.pageService.getPageByUrl(url);
         }
 
         const pageModel = new PageModel();
@@ -69,13 +61,6 @@ export class PageModelBinder implements IModelBinder {
         pageModel.widgets = models;
 
         return pageModel;
-    }
-
-    private async getPageNotFound(): Promise<PermalinkContract> {
-        if (!this.pageNotFound) {
-            this.pageNotFound = await this.permalinkService.getPermalinkByUrl("/404");
-        }
-        return this.pageNotFound;
     }
 
     public modelToContract(pageModel: PageModel): Contract {

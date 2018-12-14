@@ -36,7 +36,7 @@ export class NavbarEditor {
     @OnMounted()
     public async initialize(): Promise<void> {
         if (this.model.pictureSourceKey) {
-            const media = await this.mediaService.getMediaByPermalinkKey(this.model.pictureSourceKey);
+            const media = await this.mediaService.getMediaByKey(this.model.pictureSourceKey);
             this.logoUrl(`url(${media.downloadUrl})`);
         }
     }
@@ -47,7 +47,7 @@ export class NavbarEditor {
 
     public onMediaSelected(media: MediaContract): void {
         if (media) {
-            this.model.pictureSourceKey = media.permalinkKey;
+            this.model.pictureSourceKey = media.key;
             this.model.pictureSourceUrl = media.downloadUrl;
             this.logoUrl(`url(${media.downloadUrl})`);
         }
