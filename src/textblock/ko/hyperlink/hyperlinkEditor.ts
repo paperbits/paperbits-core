@@ -58,11 +58,10 @@ export class HyperlinkEditor {
 
     private async onSelectionChange(): Promise<void> {
         const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
-        const hyperlinkConfig: HyperlinkContract = htmlEditor.getHyperlink();
-        let hyperlink = null;
+        let hyperlink = htmlEditor.getHyperlink();
 
         if (hyperlink) {
-            hyperlink = await this.permalinkResolver.getHyperlinkByContentItemKey(hyperlink.permalinkKey);
+            hyperlink = await this.permalinkResolver.getHyperlinkByContentItemKey(hyperlink.targetKey);
         }
 
         this.hyperlink(hyperlink);

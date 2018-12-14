@@ -23,7 +23,7 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
 
         const updateContent = async (): Promise<void> => {
             const url = this.routeHandler.getCurrentUrl();
-            const page = await this.pageService.getPageByUrl(url);
+            const page = await this.pageService.getPageByPermalink(url);
             const pageContent = await this.pageService.getPageContent(page.key);
 
             const contentContract = {

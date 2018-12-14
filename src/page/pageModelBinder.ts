@@ -43,7 +43,7 @@ export class PageModelBinder implements IModelBinder {
 
         if (!pageContract.key) {
             const url = this.routeHandler.getCurrentUrl();
-            pageContract = await this.pageService.getPageByUrl(url);
+            pageContract = await this.pageService.getPageByPermalink(url);
         }
 
         const pageModel = new PageModel();

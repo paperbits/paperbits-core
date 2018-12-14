@@ -206,7 +206,7 @@ export class ViewManager implements IViewManager {
 
     public async getCurrentPage(): Promise<PageContract> {
         const url = this.routeHandler.getCurrentUrl();
-        this.currentPage = await this.pageService.getPageByUrl(url);
+        this.currentPage = await this.pageService.getPageByPermalink(url);
         return this.currentPage;
     }
 
