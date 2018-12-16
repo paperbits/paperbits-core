@@ -59,7 +59,7 @@ export class PageDetailsWorkshop {
     private async updatePermlaink(): Promise<void> {
         const permalink = this.pageItem.permalink();
         this.routeHandler.notifyListeners = false;
-        // this.routeHandler.navigateTo(permalink);
+        this.routeHandler.navigateTo(permalink);
         this.routeHandler.notifyListeners = true;
 
         this.updatePage();

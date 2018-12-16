@@ -23,7 +23,6 @@ export class PageSelector implements IResourceSelector<PageContract> {
 
     constructor(private readonly pageService: IPageService) {
         this.selectPage = this.selectPage.bind(this);
-        this.selectAnchor = this.selectAnchor.bind(this);
 
         this.pages = ko.observableArray<PageItem>();
         this.selectedPage = ko.observable<PageItem>();
@@ -56,12 +55,6 @@ export class PageSelector implements IResourceSelector<PageContract> {
 
         if (this.onSelect) {
             this.onSelect(page.toContract());
-        }
-    }
-
-    public async selectAnchor(anchor: AnchorItem): Promise<void> {
-        if (this.onSelect) {
-            this.onSelect(anchor.toContract());
         }
     }
 }

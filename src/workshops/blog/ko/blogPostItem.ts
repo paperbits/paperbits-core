@@ -13,12 +13,11 @@ export class BlogPostItem {
 
     constructor(blogPost: BlogPostContract) {
         this.contentKey = blogPost.contentKey;
-
         this.key = blogPost.key;
-        this.permalink = ko.observable<string>();
         this.title = ko.observable<string>(blogPost.title);
         this.description = ko.observable<string>(blogPost.description);
         this.keywords = ko.observable<string>(blogPost.keywords);
+        this.permalink = ko.observable<string>(blogPost.permalink);
         this.hasFocus = ko.observable<boolean>(false);
     }
 

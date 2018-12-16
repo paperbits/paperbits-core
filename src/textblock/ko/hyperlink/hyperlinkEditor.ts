@@ -40,20 +40,8 @@ export class HyperlinkEditor {
             return;
         }
 
-        let hyperlinkContract;
-
-        if (hyperlink.href) {
-            hyperlinkContract = { href: hyperlink.href, target: hyperlink.target };
-        }
-
-        if (hyperlink.targetKey) {
-            const contentItem = await this.contentItemService.getContentItemByKey(hyperlink.targetKey);
-            hyperlinkContract = { href: contentItem.permalink, permalinkKey: hyperlink.targetKey, target: hyperlink.target };
-        }
-
         const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
-
-        htmlEditor.setHyperlink(hyperlinkContract);
+        htmlEditor.setHyperlink(hyperlink);
     }
 
     private async onSelectionChange(): Promise<void> {

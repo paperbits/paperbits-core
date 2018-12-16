@@ -10,7 +10,7 @@ import { Component, Event, Param, OnMounted } from "@paperbits/common/ko/decorat
     injectable: "hyperlinkSelector"
 })
 export class HyperlinkSelector {
-    public readonly selectedResourcePicker: KnockoutObservable<IHyperlinkProvider>;
+    public readonly hyperlinkProvider: KnockoutObservable<IHyperlinkProvider>;
 
     @Param()
     public hyperlink: KnockoutObservable<HyperlinkModel>;
@@ -24,18 +24,18 @@ export class HyperlinkSelector {
         // rebinding...
         this.onMounted = this.onMounted.bind(this);
         this.updateHyperlinkState = this.updateHyperlinkState.bind(this);
-        this.onResourceSelected = this.onResourceSelected.bind(this);
+        this.onHyperlinkSelected = this.onHyperlinkSelected.bind(this);
         this.onResourcePickerChange = this.onResourcePickerChange.bind(this);
 
         // setting up...
         this.hyperlink = ko.observable<HyperlinkModel>();
-        this.selectedResourcePicker = ko.observable<IHyperlinkProvider>(null);
+        this.hyperlinkProvider = ko.observable<IHyperlinkProvider>(null);
     }
 
     @OnMounted()
     public onMounted(): void {
         this.updateHyperlinkState(this.hyperlink());
-        this.selectedResourcePicker.subscribe(this.onResourcePickerChange);
+        this.hyperlinkProvider.subscribe(this.onResourcePickerChange);
     }
 
     private onResourcePickerChange(resourcePicker: IHyperlinkProvider): void {
@@ -45,11 +45,7 @@ export class HyperlinkSelector {
         }
     }
 
-    /**
-     * Called by IResourcePicker when user selected a resource.
-     * @param hyperlink 
-     */
-    public onResourceSelected(hyperlink: HyperlinkModel): void {
+    public onHyperlinkSelected(hyperlink: HyperlinkModel): void {
         this.hyperlink(hyperlink);
 
         if (this.onChange) {
@@ -59,7 +55,7 @@ export class HyperlinkSelector {
 
     private async updateHyperlinkState(hyperlink: HyperlinkModel): Promise<void> {
         if (!hyperlink) {
-            this.selectedResourcePicker(null);
+            this.hyperlinkProvider(null);
             this.hyperlink(null);
             return;
         }
@@ -75,6 +71,6 @@ export class HyperlinkSelector {
         }
 
         this.hyperlink(hyperlink);
-        this.selectedResourcePicker(hyperlinkProvider);
+        this.hyperlinkProvider(hyperlinkProvider);
     }
 }

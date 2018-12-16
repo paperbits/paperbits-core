@@ -35,6 +35,7 @@ export class ColumnViewModelBinder implements IViewModelBinder<ColumnModel, Colu
 
         if (model.size) {
             model.size = Utils.optimizeBreakpoints(model.size);
+            columnViewModel.sizeXs(model.size.xs);
             columnViewModel.sizeSm(model.size.sm);
             columnViewModel.sizeMd(model.size.md);
             columnViewModel.sizeLg(model.size.lg);

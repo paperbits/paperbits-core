@@ -4,11 +4,6 @@ import { TextblockModel } from "./textblockModel";
 
 
 export class TextblockModelBinder implements IModelBinder {
-    constructor(
-        
-    ) {
-    }
-
     private async resolveHyperlinks(leaves: Contract[]): Promise<void> {
         for (const node of leaves) {
             // if (node && node.type === "link") {

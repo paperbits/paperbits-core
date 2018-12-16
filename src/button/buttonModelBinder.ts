@@ -41,7 +41,7 @@ export class ButtonModelBinder implements IModelBinder {
         if (buttonModel.hyperlink) {
             buttonConfig.hyperlink = {
                 target: buttonModel.hyperlink.target,
-                permalinkKey: buttonModel.hyperlink.targetKey,
+                targetKey: buttonModel.hyperlink.targetKey,
                 href: buttonModel.hyperlink.href
             };
         }

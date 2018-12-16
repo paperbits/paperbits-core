@@ -47,7 +47,7 @@ export class KnockoutValidation {
                     return;
                 }
 
-                const page = await this.contentItemService.getContentItemByUrl(permalinkUri);
+                const page = await this.contentItemService.getContentItemByPermalink(permalinkUri);
                 const conflict = page && page.key !== contentItemKey;
 
                 callback(!conflict);

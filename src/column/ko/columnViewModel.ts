@@ -10,6 +10,7 @@ import { Component } from "@paperbits/common/ko/decorators";
 export class ColumnViewModel {
     public widgets: KnockoutObservableArray<Object>;
     public css: KnockoutComputed<string>;
+    public sizeXs: KnockoutObservable<string>;
     public sizeSm: KnockoutObservable<string>;
     public sizeMd: KnockoutObservable<string>;
     public sizeLg: KnockoutObservable<string>;
@@ -30,6 +31,7 @@ export class ColumnViewModel {
 
     constructor() {
         this.widgets = ko.observableArray<Object>();
+        this.sizeXs = ko.observable<string>();
         this.sizeSm = ko.observable<string>();
         this.sizeMd = ko.observable<string>();
         this.sizeLg = ko.observable<string>();
@@ -52,6 +54,10 @@ export class ColumnViewModel {
 
         this.css = ko.computed(() => {
             const classes = [];
+
+            if (this.sizeXs()) {
+                classes.push(this.getSizeClass(this.sizeXs(), "xs"));
+            }
 
             if (this.sizeSm()) {
                 classes.push(this.getSizeClass(this.sizeSm(), "sm"));
@@ -126,7 +132,7 @@ export class ColumnViewModel {
         if (targetBreakpoint !== "xs") {
             breakpoint = targetBreakpoint + "-";
         }
-
+      
         if (size === "auto") {
             size = "";
         }

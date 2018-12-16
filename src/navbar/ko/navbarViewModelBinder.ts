@@ -1,6 +1,5 @@
 import { NavbarViewModel } from "./navbarViewModel";
 import { NavbarItemViewModel } from "./navbarItemViewModel";
-import { IRouteHandler } from "@paperbits/common/routing";
 import { IViewModelBinder } from "@paperbits/common/widgets";
 import { IEventManager } from "@paperbits/common/events";
 import { NavigationItemContract, NavigationItemModel, NavigationEvents } from "@paperbits/common/navigation";
@@ -10,7 +9,6 @@ import { NavbarModelBinder } from "../navbarModelBinder";
 
 export class NavbarViewModelBinder implements IViewModelBinder<NavbarModel, NavbarViewModel> {
     constructor(
-        private readonly routeHandler: IRouteHandler,
         private readonly eventManager: IEventManager,
         private readonly navbarModelBinder: NavbarModelBinder
     ) { }

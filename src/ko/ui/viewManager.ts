@@ -12,6 +12,7 @@ import { ProgressIndicator } from "../ui";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { ISiteService, ISettings } from "@paperbits/common/sites";
 import { IPageService, PageContract } from "@paperbits/common/pages";
+import { IContentItemService, ContentItemContract } from "@paperbits/common/contentItems";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { IWidgetEditor } from "@paperbits/common/widgets";
@@ -116,7 +117,6 @@ export class ViewManager implements IViewManager {
         this.globalEventHandler.addDragEndListener(this.onDragEnd);
         this.globalEventHandler.addDragLeaveScreenListener(this.unfoldEverything);
 
-
         this.eventManager.addEventListener("virtualDragEnd", this.onDragEnd);
 
         this.routeHandler.addRouteChangeListener(this.onRouteChange.bind(this));
@@ -170,6 +170,7 @@ export class ViewManager implements IViewManager {
                 siteTitle = settings.site.title;
             }
         }
+
         if (!page) {
             page = await this.getCurrentPage();
             pageTitle = page.title;
@@ -205,8 +206,8 @@ export class ViewManager implements IViewManager {
     }
 
     public async getCurrentPage(): Promise<PageContract> {
-        const url = this.routeHandler.getCurrentUrl();
-        this.currentPage = await this.pageService.getPageByPermalink(url);
+        const currentUrl = this.routeHandler.getCurrentUrl();
+        this.currentPage = await this.pageService.getPageByPermalink(currentUrl);
         return this.currentPage;
     }
 

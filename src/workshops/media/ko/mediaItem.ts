@@ -22,10 +22,10 @@ export class MediaItem {
     constructor(mediaContract: MediaContract) {
         this.key = mediaContract.key;
         this.blobKey = mediaContract.blobKey;
-        this.permalink = ko.observable<string>();
         this.fileName = ko.observable<string>(mediaContract.filename);
         this.description = ko.observable<string>(mediaContract.description);
         this.keywords = ko.observable<string>(mediaContract.keywords);
+        this.permalink = ko.observable<string>(mediaContract.permalink);
         this.contentType = ko.observable<string>(mediaContract.mimeType);
         this.hasFocus = ko.observable<boolean>();
         this.thumbnailUrl = ko.observable<string>();

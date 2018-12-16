@@ -41,10 +41,6 @@ export class NavbarEditor {
         }
     }
 
-    private applyChanges(): void {
-        this.onChange(this.model);
-    }
-
     public onMediaSelected(media: MediaContract): void {
         if (media) {
             this.model.pictureSourceKey = media.key;
@@ -56,7 +52,7 @@ export class NavbarEditor {
             this.model.pictureSourceUrl = undefined;
         }
 
-        this.applyChanges();
+        this.onChange(this.model);
     }
 
     public async onNavigationItemChange(navigationItem: NavigationItemContract): Promise<void> {
@@ -64,6 +60,6 @@ export class NavbarEditor {
         this.model.root = await this.navbarModelBinder.navigationItemToNavbarItemModel(navigationItem);
         this.navigationItemTitle(navigationItem.label);
 
-        this.applyChanges();
+        this.onChange(this.model);
     }
 }

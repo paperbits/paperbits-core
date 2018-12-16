@@ -6,31 +6,31 @@
             <div class="form">
                 <div class="form-group">
                     <label class="form-label">
-                        <input name="size" type="radio" data-bind="value: null, checked: $component.selectedResourcePicker" /> None
+                        <input name="size" type="radio" data-bind="value: null, checked: $component.hyperlinkProvider" /> None
                     </label>
                     <!--ko foreach: { data: resourcePickers, as: 'resourcePicker' } -->
                     <label class="form-label">
-                        <input name="resorcePicker" type="radio" data-bind="value: resourcePicker, checked: $component.selectedResourcePicker" /> <span data-bind="text: resourcePicker.name"></span>
+                        <input name="resorcePicker" type="radio" data-bind="value: resourcePicker, checked: $component.hyperlinkProvider" /> <span data-bind="text: resourcePicker.name"></span>
                     </label>
                     <!--/ko-->
                 </div>
             </div>
         </div>
-        <!-- ko with: selectedResourcePicker() -->
+        <!-- ko with: hyperlinkProvider -->
         <div class="flex-item">
             <div class="flex-container flex-container-column">
                 <div class="flex-item">
-                    <!--ko with: $component.hyperlink() -->
+                    <!--ko with: $component.hyperlink -->
                     <b data-bind="text: title"></b>
                     <!--/ko-->
 
-                    <!--ko ifnot: $component.hyperlink() -->
+                    <!--ko ifnot: $component.hyperlink -->
                     <b>(Not selected)</b>
                     <!--/ko-->
 
                     <hr />
                 </div>
-                <div class="flex-item flex-item-grow" data-bind="resourcePicker: { resourcePicker: $component.selectedResourcePicker, onSelect: $component.onResourceSelected, hyperlink: $component.hyperlink }">
+                <div class="flex-item flex-item-grow" data-bind="resourcePicker: { resourcePicker: $component.hyperlinkProvider, onSelect: $component.onHyperlinkSelected, hyperlink: $component.hyperlink }">
                 </div>
             </div>
         </div>

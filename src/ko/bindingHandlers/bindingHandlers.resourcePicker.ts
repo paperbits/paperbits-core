@@ -1,6 +1,5 @@
 import * as ko from "knockout";
-import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
-import { IHyperlinkProvider } from "@paperbits/common/ui/IHyperlinkProvider";
+import { IResourceSelector, IHyperlinkProvider  } from "@paperbits/common/ui";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 
 ko.bindingHandlers["resourcePicker"] = {
@@ -16,7 +15,7 @@ ko.bindingHandlers["resourcePicker"] = {
             if (onSelectCallback) {
                 onSelectCallback(newResource);
             }
-        }
+        };
 
         ko.applyBindingsToNode(element, {
             component: {
@@ -30,9 +29,9 @@ ko.bindingHandlers["resourcePicker"] = {
                     onSelectCallback = (newResource) => {
                         const hyperlink = resourcePicker.getHyperlinkFromResource(newResource);
                         onSelect(hyperlink);
-                    }
+                    };
                 }
             }
-        })
+        });
     }
-}
+};

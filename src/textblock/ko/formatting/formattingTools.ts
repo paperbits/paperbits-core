@@ -8,6 +8,7 @@ import { IRouteHandler } from "@paperbits/common/routing";
 import { HtmlEditorEvents } from "@paperbits/common/editing";
 import { Component } from "@paperbits/common/ko/decorators";
 import { FontContract } from "@paperbits/styles/contracts";
+import { IViewManager } from "@paperbits/common/ui";
 
 @Component({
     selector: "formatting",
@@ -36,7 +37,8 @@ export class FormattingTools {
         private readonly htmlEditorProvider: IHtmlEditorProvider,
         private readonly eventManager: IEventManager,
         private readonly pageService: IPageService,
-        private readonly routeHandler: IRouteHandler
+        private readonly routeHandler: IRouteHandler,
+        private readonly viewManager: IViewManager
     ) {
         this.updateFormattingState = this.updateFormattingState.bind(this);
         this.toggleUnorderedList = this.toggleUnorderedList.bind(this);
@@ -258,19 +260,19 @@ export class FormattingTools {
     }
 
     public toggleAlignLeft(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().alignLeft();
+        this.htmlEditorProvider.getCurrentHtmlEditor().alignLeft(this.viewManager.getViewport());
     }
 
     public toggleAlignCenter(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().alignCenter();
+        this.htmlEditorProvider.getCurrentHtmlEditor().alignCenter(this.viewManager.getViewport());
     }
 
     public toggleAlignRight(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().alignRight();
+        this.htmlEditorProvider.getCurrentHtmlEditor().alignRight(this.viewManager.getViewport());
     }
 
     public toggleJustify(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().justify();
+        this.htmlEditorProvider.getCurrentHtmlEditor().justify(this.viewManager.getViewport());
     }
 
     public resetToNormal(): void {

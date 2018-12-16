@@ -6,7 +6,7 @@ import { LayoutViewModelBinder } from "./layoutViewModelBinder";
 
 export class LayoutModule implements IInjectorModule {
     public register(injector: IInjector): void {        
-        injector.bind("layoutWidget", LayoutViewModel);
+        injector.bind("layout", LayoutViewModel);
         injector.bindToCollection("modelBinders", LayoutModelBinder, "layoutModelBinder");
         injector.bindToCollection("viewModelBinders", LayoutViewModelBinder, "layoutViewModelBinder");
     }

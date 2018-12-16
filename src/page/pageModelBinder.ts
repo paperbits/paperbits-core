@@ -2,15 +2,12 @@ import { PageModel } from "./pageModel";
 import { Contract } from "@paperbits/common";
 import { IModelBinder } from "@paperbits/common/editing";
 import { IPageService, PageContract } from "@paperbits/common/pages";
-import { PermalinkContract } from "@paperbits/common/permalinks";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { ModelBinderSelector, WidgetModel } from "@paperbits/common/widgets";
 import { PlaceholderModel } from "@paperbits/common/widgets/placeholder";
 
 
 export class PageModelBinder implements IModelBinder {
-    private pageNotFound: PermalinkContract;
-  
     constructor(
         private readonly pageService: IPageService,
         private readonly routeHandler: IRouteHandler,
@@ -41,9 +38,11 @@ export class PageModelBinder implements IModelBinder {
             return pageModel;
         }
 
-        if (!pageContract.key) {
-            const url = this.routeHandler.getCurrentUrl();
-            pageContract = await this.pageService.getPageByPermalink(url);
+        const currentUrl = this.routeHandler.getCurrentUrl();
+        pageContract = await this.pageService.getPageByPermalink(currentUrl);
+
+        if (!pageContract) {
+            pageContract = await this.pageService.getPageByPermalink("/404");
         }
 
         const pageModel = new PageModel();
@@ -52,12 +51,13 @@ export class PageModelBinder implements IModelBinder {
         pageModel.keywords = pageContract.keywords;
 
         const pageContent = await this.pageService.getPageContent(pageContract.key);
+
         const modelPromises = pageContent.nodes.map(async (config) => {
             const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(config.type);
             return await modelBinder.contractToModel(config);
         });
 
-        const models = await Promise.all<any>(modelPromises);
+        const models = await Promise.all<WidgetModel>(modelPromises);
         pageModel.widgets = models;
 
         return pageModel;

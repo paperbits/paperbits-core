@@ -1,11 +1,15 @@
 import { PictureModel } from "./pictureModel";
 import { PictureContract } from "./pictureContract";
 import { IModelBinder } from "@paperbits/common/editing";
-import { IPermalinkResolver, HyperlinkModel } from "@paperbits/common/permalinks";
+import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
+import { IMediaService } from "@paperbits/common/media";
 
 export class PictureModelBinder implements IModelBinder {
-    constructor(private readonly permalinkResolver: IPermalinkResolver) { }
+    constructor(
+        private readonly mediaService: IMediaService,
+        private readonly permalinkResolver: IPermalinkResolver
+    ) { }
 
     public canHandleWidgetType(widgetType: string): boolean {
         return widgetType === "picture";
@@ -23,15 +27,14 @@ export class PictureModelBinder implements IModelBinder {
         pictureModel.width = pictureContract.width;
         pictureModel.height = pictureContract.height;
 
-        if (pictureContract.hyperlink) {
-            pictureModel.hyperlink = await this.permalinkResolver.getHyperlinkFromConfig(pictureContract.hyperlink);
-        }
-
         if (pictureContract.sourceKey) {
             try {
+                const media = await this.mediaService.getMediaByKey(pictureContract.sourceKey);
+
                 const background = new BackgroundModel();
-                background.sourceUrl = await this.permalinkResolver.getUrlByContentItemKey(pictureContract.sourceKey);
-                background.sourceKey = pictureContract.sourceKey;
+                background.sourceKey = media.key;
+                background.sourceUrl = media.downloadUrl;
+
                 pictureModel.background = background;
             }
             catch (error) {
