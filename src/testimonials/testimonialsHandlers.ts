@@ -1,35 +1,23 @@
 ﻿import { TestimonialsModel } from "./testimonialsModel";
 import { IWidgetOrder, IWidgetHandler } from "@paperbits/common/editing";
-import { TestimonialsModelBinder, TestimonialsContract } from ".";
 
 export class TestimonialsHandlers implements IWidgetHandler {
-    private async prepareWidgetOrder(config: TestimonialsContract): Promise<IWidgetOrder> {
+    public async getWidgetOrder(): Promise<IWidgetOrder> {
         const widgetOrder: IWidgetOrder = {
             name: "testimonials",
             displayName: "Testimonials",
             iconClass: "paperbits-favourite-31",
             createModel: async () => {
-                return new TestimonialsModel();
+                const model = new TestimonialsModel();
+                model.starsCount = 5;
+                model.allStarsCount = 5;
+                model.author = "John Doe";
+                model.authorTitle = "CEO at Contoso";
+                model.textContent = "Testimonials text";
+                return model;
             }
         };
 
         return widgetOrder;
-    }
-
-    private async getWidgetOrderByConfig(): Promise<IWidgetOrder> {
-        const config: TestimonialsContract = {
-            object: "block",
-            type: "testimonials",
-            textContent : "Testimonials text",
-            starsCount : 5, 
-            allStarsCount : 5, 
-            author : "John Doe",     
-            authorTitle : "CEO at Company"
-        };
-        return this.prepareWidgetOrder(config);
-    }
-
-    public getWidgetOrder(): Promise<IWidgetOrder> {
-        return Promise.resolve(this.getWidgetOrderByConfig());
     }
 }
