@@ -4,7 +4,7 @@ import * as Utils from "@paperbits/common";
 import template from "./sectionEditor.html";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { SectionModel } from "../sectionModel";
-import { StyleService } from "@paperbits/styles";
+import { StyleService, } from "@paperbits/styles";
 import { BackgroundContract, TypographyContract } from "@paperbits/styles/contracts";
 
 @Component({
@@ -16,7 +16,8 @@ export class SectionEditor {
     public readonly layout: KnockoutObservable<string>;
     public readonly padding: KnockoutObservable<string>;
     public readonly snap: KnockoutObservable<string>;
-    public readonly styles: KnockoutObservable<Object>;
+    public readonly background: KnockoutObservable<BackgroundContract>;
+    public readonly typography: KnockoutObservable<TypographyContract>;
     public readonly stretch: KnockoutObservable<boolean>;
 
     constructor(private readonly styleService: StyleService) {
@@ -28,7 +29,8 @@ export class SectionEditor {
         this.padding = ko.observable<string>();
         this.snap = ko.observable<string>();
         this.stretch = ko.observable<boolean>();
-        this.styles = ko.observable<object>();
+        this.background = ko.observable<BackgroundContract>();
+        this.typography = ko.observable<TypographyContract>();
     }
 
     @Param()
@@ -38,21 +40,27 @@ export class SectionEditor {
     public onChange: (model: SectionModel) => void;
 
     @OnMounted()
-    public initialize(): void {
+    public async initialize(): Promise<void> {
         this.layout(this.model.container);
         this.padding(this.model.padding);
         this.snap(this.model.snap);
         this.stretch(this.model.height === "stretch");
 
-        if (this.model.styles) {
-            this.styles(this.model.styles);
+        if (this.model.styles && this.model.styles["instance"]) {
+            const sectionStyles = await this.styleService.getStyleByKey(this.model.styles["instance"]);
+
+            if (sectionStyles) {
+                this.background(sectionStyles.background);
+                this.typography(sectionStyles.typography);
+            }
         }
 
         this.layout.subscribe(this.applyChanges.bind(this));
         this.padding.subscribe(this.applyChanges.bind(this));
         this.snap.subscribe(this.applyChanges.bind(this));
         this.stretch.subscribe(this.applyChanges.bind(this));
-        this.styles.subscribe(this.applyChanges.bind(this));
+        this.background.subscribe(this.applyChanges.bind(this));
+        this.typography.subscribe(this.applyChanges.bind(this));
     }
 
     /**
@@ -79,7 +87,6 @@ export class SectionEditor {
         }
 
         this.styleService.setInstanceStyle(instanceKey, { background: background });
-
         this.applyChanges();
     }
 
@@ -95,7 +102,6 @@ export class SectionEditor {
         }
 
         this.styleService.setInstanceStyle(instanceKey, { typography: typography });
-
         this.applyChanges();
     }
 }
