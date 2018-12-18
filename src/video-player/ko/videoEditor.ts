@@ -37,7 +37,7 @@ export class VideoEditor implements IWidgetEditor {
         this.autoplay.subscribe(this.onAutoplayUpdate);
 
         this.mediaFilter = {
-            propertyNames: ["contentType"],
+            propertyNames: ["mimeType"],
             propertyValue: "video/mp4",
             startSearch: true
         };

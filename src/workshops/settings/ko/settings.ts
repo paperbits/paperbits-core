@@ -46,7 +46,7 @@ export class SettingsWorkshop {
         // setting up...
         this.working = ko.observable<boolean>();
         this.mediaFilter = {
-            propertyNames: ["contentType"],
+            propertyNames: ["mimeType"],
             propertyValue: MetaDataSetter.iconContentType,
             startSearch: true
         };
