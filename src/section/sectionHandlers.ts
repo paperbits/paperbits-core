@@ -3,10 +3,14 @@ import { DragSession } from "@paperbits/common/ui/draggables";
 import { WidgetContext } from "@paperbits/common/editing";
 import { SectionModel } from "./sectionModel";
 import { RowModel } from "../row/rowModel";
+import { IEventManager } from "@paperbits/common/events";
 
 
 export class SectionHandlers {
-    constructor(private readonly viewManager: IViewManager) { }
+    constructor(
+        private readonly viewManager: IViewManager,
+        private readonly eventManager: IEventManager
+        ) { }
 
     public onDragOver(dragSession: DragSession): boolean {
         return dragSession.type === "row";
@@ -58,6 +62,7 @@ export class SectionHandlers {
                     context.parentModel.widgets.remove(context.model);
                     context.parentBinding.applyChanges();
                     this.viewManager.clearContextualEditors();
+                    this.eventManager.dispatchEvent("onContentUpdate");
                 }
             },
             selectionCommands: [{
