@@ -43,9 +43,9 @@ export class CodeHandlers extends MediaHandlers implements IWidgetHandler, ICont
                 return { element: htmlElement }
             },
             createModel: async () => {
-                //return pictureWidgetModel.model;
+                // return pictureWidgetModel.model;
             }
-        }
+        };
 
         return widgetOrder;
     }

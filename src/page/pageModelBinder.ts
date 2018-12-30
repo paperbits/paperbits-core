@@ -45,20 +45,30 @@ export class PageModelBinder implements IModelBinder {
             pageContract = await this.pageService.getPageByPermalink("/404");
         }
 
+        if (pageContract) {
+            const pageModel = new PageModel();
+            pageModel.title = pageContract.title;
+            pageModel.description = pageContract.description;
+            pageModel.keywords = pageContract.keywords;
+    
+            const pageContent = await this.pageService.getPageContent(pageContract.key);
+    
+            const modelPromises = pageContent.nodes.map(async (config) => {
+                const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(config.type);
+                return await modelBinder.contractToModel(config);
+            });
+    
+            const models = await Promise.all<WidgetModel>(modelPromises);
+            pageModel.widgets = models;
+    
+            return pageModel;
+        }
+
         const pageModel = new PageModel();
-        pageModel.title = pageContract.title;
-        pageModel.description = pageContract.description;
-        pageModel.keywords = pageContract.keywords;
-
-        const pageContent = await this.pageService.getPageContent(pageContract.key);
-
-        const modelPromises = pageContent.nodes.map(async (config) => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(config.type);
-            return await modelBinder.contractToModel(config);
-        });
-
-        const models = await Promise.all<WidgetModel>(modelPromises);
-        pageModel.widgets = models;
+        pageModel.title = "";
+        pageModel.description = "";
+        pageModel.keywords = "";
+        pageModel.widgets = [<any>new PlaceholderModel(pageContract, "No pages")];
 
         return pageModel;
     }

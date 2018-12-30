@@ -173,28 +173,31 @@ export class ViewManager implements IViewManager {
 
         if (!page) {
             page = await this.getCurrentPage();
-            pageTitle = page.title;
         }
 
-        let pageType;
-        pageType = this.getPageType(page.key);
+        if (page) {
+            let pageType;
+            pageType = this.getContentType(page.key);
 
-        switch (pageType) {
-            case "page":
-                pageTitle = page.title;
-                break;
-            case "post":
-                pageTitle = `Blog - ${page.title}`;
-                break;
-            case "news":
-                pageTitle = `News - ${page.title}`;
-                break;
+            switch (pageType) {
+                case "page":
+                    pageTitle = page.title;
+                    break;
+                case "post":
+                    pageTitle = `Blog - ${page.title}`;
+                    break;
+                case "news":
+                    pageTitle = `News - ${page.title}`;
+                    break;
+                default:
+                    throw new Error("Unknown content type");
+            }
+
+            window.document.title = [siteTitle, pageTitle].join(" | ");
         }
-
-        window.document.title = [siteTitle, pageTitle].join(" | ");
     }
 
-    private getPageType(pageKey: string): string {
+    private getContentType(pageKey: string): string {
         let pageType = "page";
         if (pageKey.startsWith("posts")) {
             pageType = "post";
@@ -347,6 +350,8 @@ export class ViewManager implements IViewManager {
         if (this.widgetEditor() === view) {
             return;
         }
+
+        view.component.params.onClose = () => this.closeWidgetEditor();
 
         this.clearContextualEditors();
         this.closeWidgetEditor();

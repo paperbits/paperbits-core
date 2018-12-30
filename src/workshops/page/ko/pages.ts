@@ -45,19 +45,20 @@ export class PagesWorkshop {
     }
 
     private async launchSearch(searchPattern: string = ""): Promise<void> {
-        this.working(true);
         const pages = await this.pageService.search(searchPattern);
         const pageItems = pages.map(page => new PageItem(page));
 
         this.pages(pageItems);
-        this.working(false);
     }
 
     public async searchPages(searchPattern: string = ""): Promise<void> {
+        this.working(true);
+        this.pages([]);
         clearTimeout(this.searchTimeout);
 
-        this.searchTimeout = setTimeout(() => {
-            this.launchSearch(searchPattern);
+        this.searchTimeout = setTimeout(async () => {
+            await this.launchSearch(searchPattern);
+            this.working(false);
         }, 600);
     }
 

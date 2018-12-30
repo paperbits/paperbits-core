@@ -51,6 +51,7 @@ export class SectionHandlers {
                             context.parentBinding.applyChanges();
 
                             this.viewManager.clearContextualEditors();
+                            this.eventManager.dispatchEvent("onContentUpdate");
                         }
                     }
                 }
@@ -79,9 +80,10 @@ export class SectionHandlers {
                 color: "#2b87da",
                 callback: () => {
                     const view: IView = {
+                        heading: "Add to library",
                         component: {
                             name: "add-block-dialog",
-                            params: context.model
+                            params: { sectionModel: context.model }
                         },
                         resize: "vertically horizontally"
                     };
@@ -107,6 +109,7 @@ export class SectionHandlers {
                             sectionBinding.applyChanges();
 
                             this.viewManager.clearContextualEditors();
+                            this.eventManager.dispatchEvent("onContentUpdate");
                         }
                     }
                 }

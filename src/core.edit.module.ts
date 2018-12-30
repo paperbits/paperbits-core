@@ -37,11 +37,11 @@ import { MediaHyperlinkProvider } from "@paperbits/common/media";
 import { DragManager } from "@paperbits/common/ui/draggables";
 import { PlaceholderViewModel } from "./placeholder/ko/placeholderViewModel";
 import { SearchResultsEditorModule } from "./search-results/ko/searchResultsEditor.module";
-import { PricingTableEditorModule } from "./pricing-table/ko";
 import { ViewManager, Tooltip } from "./ko/ui";
 import { KnockoutValidation } from "./ko/validation/validators";
 import { CropperBindingHandler } from "./workshops/cropper/cropper";
 import { GridEditor } from "./grid/ko";
+import { CardEditorModule } from "./card/ko/cardEditor.module";
 
 
 export class CoreEditModule implements IInjectorModule {
@@ -112,8 +112,6 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindModule(new TableOfContentsEditorModule());
         injector.bindModule(new NavbarEditorModule());
         injector.bindModule(new SearchResultsEditorModule());
-        injector.bindModule(new PricingTableEditorModule());
-
         injector.bindModule(new DropbucketModule());
         injector.bindModule(new LayoutWorkshopModule());
         injector.bindModule(new PageWorkshopModule());
@@ -127,5 +125,6 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindModule(new LayoutEditorModule());
         injector.bindModule(new PageEditorModule());
         injector.bindModule(new SliderEditorModule());
+        injector.bindModule(new CardEditorModule());
     }
 }
