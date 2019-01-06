@@ -1,46 +1,39 @@
+import { PermalinkResolver } from "@paperbits/common/permalinks";
 import { IModelBinder, HyperlinkContract } from "@paperbits/common/editing";
 import { Contract } from "@paperbits/common";
 import { TextblockModel } from "./textblockModel";
 
 
 export class TextblockModelBinder implements IModelBinder {
-    private async resolveHyperlinks(leaves: Contract[]): Promise<void> {
-        for (const node of leaves) {
-            // if (node && node.type === "link") {
-            //     const hyperlink: HyperlinkContract = <HyperlinkContract>node;
+    constructor(private readonly permalinkResolver: PermalinkResolver) { }
 
-            //     if (hyperlink.permalinkKey) {
-            //         const permalink = await this.permalinkService.getPermalinkByKey(hyperlink.permalinkKey);
+    private async resolveHyperlinks(nodes: Contract[]): Promise<void> {
+        for (const node of nodes) {
+            if (node && node.type === "hyperlink") {
+                const hyperlink: HyperlinkContract = <HyperlinkContract>node;
 
-            //         if (permalink) {
-            //             hyperlink.href = permalink.uri;
+                if (hyperlink.attrs.contentTypeKey) {
+                    const url = await this.permalinkResolver.getUrlByTargetKey(hyperlink.attrs.contentTypeKey);
 
-            //             if (permalink.parentKey) {
-            //                 const parentPermalink = await this.permalinkService.getPermalinkByKey(permalink.parentKey);
+                    if (url) {
+                        hyperlink.attrs.href = url;
+                    }
+                    else {
+                        console.warn(`Broken permalink: ${hyperlink.attrs.contentTypeKey}.`);
+                    }
+                }
+            }
 
-            //                 if (parentPermalink) {
-            //                     // TODO: Probably we should use separate property of permalink instead of URI, i.e. "hash".
-            //                     hyperlink.href = `${parentPermalink.uri}#${hyperlink.href}`;
-            //                 }
-            //                 else {
-            //                     // TODO: Show permalink is broken somehow
-            //                     console.warn(`Broken parent permalink: ${permalink.parentKey}.`);
-            //                 }
-            //             }
-            //         }
-            //         else {
-            //             // TODO: Show permalink is broken somehow
-            //             console.warn(`Broken permalink: ${hyperlink.permalinkKey}.`);
-            //         }
-            //     }
-            // }
-
-            if (node && node.leaves) {
-                await this.resolveHyperlinks(node.leaves);
+            if (node && node.content) {
+                await this.resolveHyperlinks(node.content);
             }
 
             if (node && node.nodes) {
                 await this.resolveHyperlinks(node.nodes);
+            }
+
+            if (node && node.marks) {
+                await this.resolveHyperlinks(node.marks);
             }
         }
     }
@@ -67,8 +60,15 @@ export class TextblockModelBinder implements IModelBinder {
     }
 
     public async contractToModel(node: Contract): Promise<TextblockModel> {
+        this.convertNode(node);
+
+
         if (node.nodes) {
             await this.resolveHyperlinks(node.nodes);
+        }
+
+        if (node.content) {
+            await this.resolveHyperlinks(node.content);
         }
 
         if (node.leaves) {
@@ -78,8 +78,6 @@ export class TextblockModelBinder implements IModelBinder {
         if (node.nodes) {
             await this.resolveAnchors(node.nodes);
         }
-
-        this.convertNode(node);
 
         return new TextblockModel(node.content);
     }
@@ -151,9 +149,9 @@ export class TextblockModelBinder implements IModelBinder {
             parentNode["type"] = "bulleted_list";
         }
 
-        // if (parentNode["type"] === "link") {
-        //     parentNode["type"] = "hyperlink";
-        // }
+        if (parentNode["type"] === "hyperlink") {
+            parentNode["type"] = "link";
+        }
 
         if (parentNode["type"] === "line-break") {
             parentNode["type"] = "linebreak";

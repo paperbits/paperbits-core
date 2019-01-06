@@ -1,7 +1,7 @@
 <workshops></workshops>
 <dropbucket></dropbucket>
 
-<div class="viewport" data-bind="host: { viewport: viewport, doc: hostDocument }"></div>
+<div class="viewport" data-bind="host: { viewport: viewport, host: host }"></div>
 
 
 
@@ -33,7 +33,7 @@
 
 <!-- ko with: widgetEditor() -->
 <div class="toolbox toolbox-position-left-offset" data-bind="resizable: resize, surface: $data">
-    <div class="editor resizable-content">
+    <div class="editor resizable-content flex-container flex-container-column">
         <h1>
             <span data-bind="text: heading"></span>
             <a href="#" class="btn pull-right" data-bind="click: $component.closeWidgetEditor">✖</a>

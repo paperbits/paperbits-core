@@ -48,6 +48,7 @@ export class PageDetailsWorkshop {
         const permalink = await this.pageService.getPageByKey(this.pageItem.key);
 
         this.pageItem.permalink(permalink.permalink);
+        this.viewManager.setHost({ name: "page-host" });
         this.routeHandler.navigateTo(permalink.permalink);
     }
 

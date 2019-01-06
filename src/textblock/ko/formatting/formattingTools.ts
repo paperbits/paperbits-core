@@ -6,7 +6,7 @@ import { IHtmlEditorProvider } from "@paperbits/common/editing/htmlEditorProvide
 import { IPageService } from "@paperbits/common/pages";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { HtmlEditorEvents } from "@paperbits/common/editing";
-import { Component } from "@paperbits/common/ko/decorators";
+import { Component, OnDestroyed } from "@paperbits/common/ko/decorators";
 import { FontContract } from "@paperbits/styles/contracts";
 import { IViewManager } from "@paperbits/common/ui";
 

@@ -14,7 +14,10 @@ export class TableOfContentsViewModel {
 
     constructor() {
         this.title = ko.observable<string>();
-        this.nodes = ko.observableArray<NavigationItemModel>();
-        this.isEmpty = ko.pureComputed(() => this.nodes().length === 0);
+        this.nodes = ko.observableArray<NavigationItemModel>([]);
+        this.isEmpty = ko.pureComputed(() => {
+            const nodes = this.nodes();
+            return !nodes || nodes.length === 0;
+        });
     }
 }

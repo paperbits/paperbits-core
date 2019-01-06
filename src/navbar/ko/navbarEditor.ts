@@ -37,7 +37,10 @@ export class NavbarEditor {
     public async initialize(): Promise<void> {
         if (this.model.pictureSourceKey) {
             const media = await this.mediaService.getMediaByKey(this.model.pictureSourceKey);
-            this.logoUrl(`url(${media.downloadUrl})`);
+
+            if (media) {
+                this.logoUrl(`url(${media.downloadUrl})`);
+            }
         }
     }
 

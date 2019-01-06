@@ -7,7 +7,7 @@ import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
 import { Bag } from "@paperbits/common";
 import { IMediaService } from "@paperbits/common/media";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
-import { IComponent, IView, IViewManager, ViewManagerMode, IHighlightConfig, IContextualEditor, ISplitterConfig, HostDocument } from "@paperbits/common/ui";
+import { IComponent, IView, IViewManager, ViewManagerMode, IHighlightConfig, IContextualEditor, ISplitterConfig } from "@paperbits/common/ui";
 import { ProgressIndicator } from "../ui";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { ISiteService, ISettings } from "@paperbits/common/sites";
@@ -45,7 +45,7 @@ export class ViewManager implements IViewManager {
     public selectedElementContextualEditor: KnockoutObservable<IContextualEditor>;
     public viewport: KnockoutObservable<string>;
 
-    public hostDocument: KnockoutObservable<HostDocument>;
+    public host: KnockoutObservable<IComponent>;
 
     public shutter: KnockoutObservable<boolean>;
     public dragSession: KnockoutObservable<DragSession>;
@@ -105,7 +105,9 @@ export class ViewManager implements IViewManager {
 
 
         this.viewport = ko.observable<string>("xl");
-        this.hostDocument = ko.observable<HostDocument>();
+
+
+        this.host = ko.observable<IComponent>({ name: "page-host" });
 
         this.shutter = ko.observable<boolean>(true);
         this.dragSession = ko.observable();
@@ -128,17 +130,15 @@ export class ViewManager implements IViewManager {
         this.setTitle();
     }
 
-    public setDocument(hostDocument: HostDocument): void {
-        const currentHostDocument = this.hostDocument();
-
-        if (currentHostDocument && currentHostDocument.src === hostDocument.src) {
+    public setHost(component: IComponent): void {
+        if (this.host().name === component.name) {
             return;
         }
 
         // this.closeEditors();
         this.clearContextualEditors();
 
-        this.hostDocument(hostDocument);
+        this.host(component);
     }
 
     private onRouteChange(): void {

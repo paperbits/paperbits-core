@@ -1,3 +1,4 @@
+import { PageHost } from "./workshops/page/ko/pageHost";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { IViewModelBinder, ModelBinderSelector, WidgetService } from "@paperbits/common/widgets";
 import { PictureModule } from "./picture/ko/picture.module";
@@ -78,6 +79,8 @@ export class CoreModule implements IInjectorModule {
         injector.bind("intercom", IntercomViewModel);
         injector.bindSingleton("intercomService", IntercomService);
         injector.bind("backgroundModelBinder", BackgroundModelBinder);
+
+        injector.bind("pageHost", PageHost);
 
         injector.bindModule(new KoModule());
         injector.bindModule(new LayoutModule());

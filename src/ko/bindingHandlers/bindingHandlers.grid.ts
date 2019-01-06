@@ -18,6 +18,8 @@ export class GridBindingHandler {
             }
         };
 
+        ko.virtualElements.allowedBindings["grid"] = true;
+
         ko.bindingHandlers["layoutsection"] = {
             init(sourceElement: HTMLElement) {
                 GridBindingHandler.attachSectionDragEvents(sourceElement, viewManager, eventManager, widgetService);

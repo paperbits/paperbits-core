@@ -62,6 +62,18 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                             });
                         }
 
+                        const onDestroyedMethodDescriptions = Reflect.getMetadata("ondestroyed", instance.constructor);
+
+                        if (onDestroyedMethodDescriptions) {
+                            onDestroyedMethodDescriptions.forEach(methodDescription => {
+                                const methodReference = instance[methodDescription];
+
+                                if (methodReference) {
+                                    methodReference();
+                                }
+                            });
+                        }
+
                         return instance;
                     };
 

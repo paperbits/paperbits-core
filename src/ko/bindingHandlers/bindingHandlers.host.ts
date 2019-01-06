@@ -5,24 +5,17 @@ import { IViewManager, ViewManagerMode, HostDocument } from "@paperbits/common/u
 import { IRouteHandler } from "@paperbits/common/routing";
 
 export class HostBindingHandler {
-    private readonly layoutViewModel: KnockoutObservable<any>;
-    private hostDocument: HostDocument;
+    private readonly hostComponent: KnockoutObservable<any>;
 
     constructor(
         private readonly globalEventHandler: GlobalEventHandler,
         private readonly viewManager: IViewManager,
         private readonly routeHandler: IRouteHandler
     ) {
-        this.refreshContent = this.refreshContent.bind(this);
-        this.onRouteChange = this.onRouteChange.bind(this);
-
-        this.layoutViewModel = ko.observable();
+        this.hostComponent = ko.observable();
 
         ko.bindingHandlers["host"] = {
             init: (element: HTMLElement, valueAccessor: () => any) => {
-
-                this.routeHandler.addRouteChangeListener(this.onRouteChange);
-
                 const config = valueAccessor();
 
                 const onPointerMove = (event: MouseEvent): void => {
@@ -79,35 +72,21 @@ export class HostBindingHandler {
                 ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
                     document.removeEventListener("mousemove", onPointerMove);
                 });
+
+                const hostElement = this.createIFrame();
+                element.appendChild(hostElement);
             },
 
             update: (element: HTMLElement, valueAccessor: any) => {
-                this.layoutViewModel(null);
-
-                if (this.documentViewModel) {
-                    this.documentViewModel.dispose();
-                }
-
                 const config = valueAccessor();
-
-                Array.prototype.slice.call(element.children).forEach(child => {
-                    element.removeChild(child);
-                });
-
-
-                this.hostDocument = config.doc();
-
-                if (this.hostDocument) {
-                    const hostElement = this.createIFrame();
-                    element.appendChild(hostElement);
-                }
+                this.hostComponent(config.host());
             }
         };
     }
 
     private createIFrame(): HTMLIFrameElement {
         const hostElement = document.createElement("iframe");
-        hostElement.src = this.hostDocument.src;
+        hostElement.src = "/page.html";
         hostElement.classList.add("host");
 
         const onClick = (event: MouseEvent): void => {
@@ -142,41 +121,16 @@ export class HostBindingHandler {
 
         hostElement.addEventListener("load", onLoad, false);
 
-        // ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
-        //     hostElement.removeEventListener("load", onLoad, false);
-        //     hostElement.contentDocument.removeEventListener("click", onClick, true);
-        //     hostElement.contentDocument.removeEventListener("mousedown", onPointerDown, true);
-        // });
-
         return hostElement;
     }
 
     private documentViewModel;
 
     private async setRootElement(bodyElement: HTMLElement): Promise<void> {
-        if (this.hostDocument.getLayoutViewModel) {
-            const layoutViewModel = await this.hostDocument.getLayoutViewModel();
-            this.layoutViewModel(layoutViewModel);
-            ko.applyBindingsToNode(bodyElement, { if: this.layoutViewModel, widget: this.layoutViewModel, grid: {} });
-        }
-        else {
-            const livingStyleGuide = bodyElement.querySelector("living-style-guide");
-            ko.applyBindings({}, livingStyleGuide);
-        }
+        ko.applyBindingsToNode(bodyElement, { component: this.hostComponent });
 
         const styleElement = document.createElement("style");
         bodyElement.ownerDocument.head.appendChild(styleElement);
         ko.applyBindingsToNode(styleElement, { styleSheet: {} });
-    }
-
-    private async refreshContent(): Promise<void> {
-        this.layoutViewModel(null);
-
-        const layoutViewModel = await this.hostDocument.getLayoutViewModel();
-        this.layoutViewModel(layoutViewModel);
-    }
-
-    private async onRouteChange(): Promise<void> {
-        await this.refreshContent();
     }
 }

@@ -47,7 +47,7 @@ export class SliderModelBinder implements IModelBinder {
                 if (slideContract.thumbnail) {
                     slideModel.thumbnail = new BackgroundModel();
                     slideModel.thumbnail.sourceKey = slideContract.thumbnail.sourceKey;
-                    slideModel.thumbnail.sourceUrl = await this.permalinkResolver.getUrlByContentItemKey(slideContract.thumbnail.sourceKey);
+                    slideModel.thumbnail.sourceUrl = await this.permalinkResolver.getUrlByTargetKey(slideContract.thumbnail.sourceKey);
                 }
 
                 return slideModel;

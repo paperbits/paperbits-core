@@ -7,11 +7,27 @@ ko.bindingHandlers["component"] = {
         let currentViewModel;
         let currentLoadingOperationId;
         const disposeAssociatedComponentViewModel = () => {
-            const currentViewModelDispose = currentViewModel && currentViewModel["dispose"];
+            if (currentViewModel) {
+                const onDestroyedMethodDescriptions = Reflect.getMetadata("ondestroyed", currentViewModel.constructor);
 
-            if (typeof currentViewModelDispose === "function") {
-                currentViewModelDispose.call(currentViewModel);
+                if (onDestroyedMethodDescriptions) {
+                    onDestroyedMethodDescriptions.forEach(methodDescription => {
+                        const methodReference = currentViewModel[methodDescription];
+    
+                        if (methodReference) {
+                            methodReference();
+                        }
+                    });
+                }
+                else {
+                    const currentViewModelDispose = currentViewModel && currentViewModel["dispose"];
+    
+                    if (typeof currentViewModelDispose === "function") {
+                        currentViewModelDispose.call(currentViewModel);
+                    }
+                }
             }
+
             currentViewModel = null;
             // Any in-flight loading operation is no longer relevant, so make sure we ignore its completion
             currentLoadingOperationId = null;
@@ -27,7 +43,8 @@ ko.bindingHandlers["component"] = {
 
             if (typeof value === "string") {
                 componentName = value;
-            } else {
+            }
+            else {
                 componentName = ko.utils.unwrapObservable(value["name"]);
                 componentParams = ko.utils.unwrapObservable(value["params"]);
                 componentOnCreateHandler = ko.utils.unwrapObservable(value["oncreate"]);

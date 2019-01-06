@@ -18,9 +18,12 @@ export class NavbarModelBinder implements IModelBinder {
     public async contractToModel(navbarContract: NavbarContract): Promise<NavbarModel> {
         const navbarModel = new NavbarModel();
         const navigationItemContract = await this.navigationService.getNavigationItem(navbarContract.rootKey);
-        const navbarItemModel = await this.navigationItemToNavbarItemModel(navigationItemContract);
 
-        navbarModel.root = navbarItemModel;
+        if (navigationItemContract) {
+            const navbarItemModel = await this.navigationItemToNavbarItemModel(navigationItemContract);
+            navbarModel.root = navbarItemModel;
+        }
+       
         navbarModel.rootKey = navbarContract.rootKey;
         navbarModel.pictureSourceKey = navbarContract.rootKey;
 

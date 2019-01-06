@@ -49,7 +49,7 @@ export class HyperlinkEditor {
         let hyperlink = htmlEditor.getHyperlink();
 
         if (hyperlink) {
-            hyperlink = await this.permalinkResolver.getHyperlinkByContentItemKey(hyperlink.targetKey);
+            hyperlink = await this.permalinkResolver.getHyperlinkByTargetKey(hyperlink.targetKey);
         }
 
         this.hyperlink(hyperlink);

@@ -5,7 +5,7 @@ import { IWidgetBinding, GridHelper, WidgetContext } from "@paperbits/common/edi
 import { Keys } from "@paperbits/common/keyboard";
 import { IWidgetService } from "@paperbits/common/widgets";
 import { IRouteHandler } from "@paperbits/common/routing";
-
+import * as ko from "knockout";
 export class GridEditor {
     private activeHighlightedElement: HTMLElement;
     private scrolling: boolean;
@@ -61,13 +61,10 @@ export class GridEditor {
         }
 
         let parentModel;
-        let parentBinding;
+        const parentBinding = GridHelper.getParentWidgetBinding(element);
 
-        const parentElement = GridHelper.getParentElementWithModel(element);
-
-        if (parentElement) {
-            parentModel = GridHelper.getModel(parentElement);
-            parentBinding = GridHelper.getWidgetBinding(parentElement);
+        if (parentBinding) {
+            parentModel = parentBinding.model;
         }
 
         const context: WidgetContext = {
@@ -135,7 +132,9 @@ export class GridEditor {
         }
 
         const elements = this.getUnderlyingElements();
-        const element = elements.find(element => {
+        const roots = GridHelper.getComponentRoots(elements);
+
+        const element = roots.find(element => {
             return GridHelper.getWidgetBinding(element) !== null;
         });
 
@@ -471,11 +470,13 @@ export class GridEditor {
             layoutEditing = metadata["usePagePlaceholder"];
         }
 
+        let current = null;
+
         for (let i = elements.length - 1; i >= 0; i--) {
             const element = elements[i];
             const widgetBinding = GridHelper.getWidgetBinding(element);
 
-            if (!widgetBinding || widgetBinding.readonly) {
+            if (!widgetBinding || widgetBinding.readonly || widgetBinding === current) {
                 continue;
             }
 
@@ -492,6 +493,8 @@ export class GridEditor {
 
             highlightedElement = element;
             highlightedText = widgetBinding.displayName;
+
+            current = widgetBinding;
 
             const quadrant = Utils.pointerToClientQuadrant(pointerX, pointerY, element);
             const half = quadrant.vertical;

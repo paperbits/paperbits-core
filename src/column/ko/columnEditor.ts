@@ -147,7 +147,7 @@ export class ColumnEditor implements IWidgetEditor {
                 break;
 
             default:
-                throw "Unknown viewport";
+                throw new Error("Unknown viewport");
         }
     }
 

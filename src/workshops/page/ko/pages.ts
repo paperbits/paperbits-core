@@ -25,8 +25,7 @@ export class PagesWorkshop {
     constructor(
         private readonly pageService: IPageService,
         private readonly routeHandler: IRouteHandler,
-        private readonly viewManager: IViewManager,
-        private readonly layoutViewModelBinder: LayoutViewModelBinder
+        private readonly viewManager: IViewManager
     ) {
         // rebinding...
         this.searchPages = this.searchPages.bind(this);
@@ -64,7 +63,7 @@ export class PagesWorkshop {
 
     public selectPage(pageItem: PageItem): void {
         this.selectedPage(pageItem);
-        this.viewManager.setDocument({ src: "/page.html", getLayoutViewModel: this.layoutViewModelBinder.getLayoutViewModel });
+       
         this.viewManager.setTitle(null, pageItem.toContract());
         this.viewManager.openViewAsWorkshop("Page", "page-details-workshop", {
             pageItem: pageItem,
@@ -105,3 +104,5 @@ export class PagesWorkshop {
         return true;
     }
 }
+
+
