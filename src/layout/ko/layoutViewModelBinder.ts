@@ -106,8 +106,8 @@ export class LayoutViewModelBinder {
 
     public async getLayoutViewModel(): Promise<any> {
         const url = this.routeHandler.getCurrentUrl();
-        const layoutNode = await this.layoutService.getLayoutByRoute(url);
-        const layoutModel = await this.layoutModelBinder.contractToModel(layoutNode);
+        const layoutContract = await this.layoutService.getLayoutByRoute(url);
+        const layoutModel = await this.layoutModelBinder.contractToModel(layoutContract);
         const layoutViewModel = this.modelToViewModel(layoutModel);
 
         return layoutViewModel;

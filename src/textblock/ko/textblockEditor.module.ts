@@ -9,15 +9,10 @@ import { TextblockEditor } from "./textblockEditor";
 
 export class TextblockEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {
-        injector.bindSingleton("textblockHandler", TextblockHandlers);
-
-        const widgetHandlers: IWidgetHandler[] = injector.resolve("widgetHandlers");
-        widgetHandlers.push(injector.resolve<TextblockHandlers>("textblockHandler"));
-
+        injector.bindToCollection<IWidgetHandler>("widgetHandlers", TextblockHandlers, "textblockHandler");
         injector.bind("formattingTools", FormattingTools);
         injector.bind("hyperlinkEditor", HyperlinkEditor);
         injector.bind("textblockEditor", TextblockEditor);
-
         injector.bind("blockStyleSelector", BlockStyleSelector);
         // injector.bind("fontSelector", FontSelector);
     }

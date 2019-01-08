@@ -6,12 +6,7 @@ import { MapHandlers } from "../mapHandlers";
 export class MapEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("mapEditor", MapEditor);
-        injector.bindSingleton("mapDropHandler", MapHandlers);
-
-        const dropHandlers: IContentDropHandler[] = injector.resolve("dropHandlers");
-        dropHandlers.push(injector.resolve<MapHandlers>("mapDropHandler"));
-
-        const widgetHandlers: IWidgetHandler[] = injector.resolve("widgetHandlers");
-        widgetHandlers.push(injector.resolve<MapHandlers>("mapDropHandler"));
+        injector.bindToCollection<IWidgetHandler>("widgetHandlers", MapHandlers, "mapHandler");
+         injector.bindToCollection<IContentDropHandler>("dropHandlers", MapHandlers, "mapHandler");
     }
 }

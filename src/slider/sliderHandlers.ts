@@ -1,7 +1,7 @@
-﻿import { IWidgetOrder } from '@paperbits/common/editing';
-import { IWidgetHandler } from '@paperbits/common/editing';
+﻿import { IWidgetOrder } from "@paperbits/common/editing";
+import { IWidgetHandler } from "@paperbits/common/editing";
 import { Contract } from "@paperbits/common/contract";
-import { SliderModelBinder } from './sliderModelBinder';
+import { SliderModelBinder } from "./sliderModelBinder";
 
 export class SliderHandlers implements IWidgetHandler {
     private readonly sliderModelBinder: SliderModelBinder;
@@ -18,7 +18,7 @@ export class SliderHandlers implements IWidgetHandler {
             createModel: async () => {
                 return await this.sliderModelBinder.contractToModel(config);
             }
-        }
+        };
 
         return widgetOrder;
     }
@@ -29,7 +29,7 @@ export class SliderHandlers implements IWidgetHandler {
             type: "slider",
             label: "Slider",
             style: "default"
-        }
+        };
         return await this.prepareWidgetOrder(config);
     }
 

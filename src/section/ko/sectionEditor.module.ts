@@ -9,9 +9,6 @@ export class SectionEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("sectionLayoutSelector", SectionLayoutSelector);
         injector.bind("sectionEditor", SectionEditor);
-        injector.bind("sectionHandler", SectionHandlers);
-
-        const widgetHandlers: IWidgetHandler[] = injector.resolve("widgetHandlers");
-        widgetHandlers.push(injector.resolve<SectionHandlers>("sectionHandler"));
+        injector.bindToCollection<IWidgetHandler>("widgetHandlers", SectionHandlers, "sectionHandler");
     }
 }

@@ -44,6 +44,12 @@ import { CardModule } from "./card/ko/card.module";
 
 export class CoreModule implements IInjectorModule {
     public register(injector: IInjector): void {
+        
+        injector.bindCollection("widgetHandlers");
+        injector.bindCollection("modelBinders");
+        injector.bindCollection("viewModelBinders");
+       
+
         /*** Core ***/
         injector.bindSingleton("httpClient", XmlHttpRequestClient);
         // injector.bindSingleton("settingsProvider", SettingsProvider);
@@ -69,9 +75,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("permalinkResolver", PermalinkResolver);
 
         injector.bindModule(new KnockoutRegistrationLoaders());
-
-        injector.bindCollection("modelBinders");
-        injector.bindCollection("viewModelBinders");
 
         injector.bind("modelBinderSelector", ModelBinderSelector);
         injector.bind("viewModelBinderSelector", ViewModelBinderSelector);

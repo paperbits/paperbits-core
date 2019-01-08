@@ -6,9 +6,6 @@ import { ColumnHandlers } from "../columnHandlers";
 export class ColumnEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {        
         injector.bind("columnEditor", ColumnEditor);
-        injector.bind("columnHandler", ColumnHandlers);
-
-        const widgetHandlers: IWidgetHandler[] = injector.resolve("widgetHandlers");
-        widgetHandlers.push(injector.resolve<ColumnHandlers>("columnHandler"));
+        injector.bindToCollection<IWidgetHandler>("widgetHandlers", ColumnHandlers, "columnHandler");
     }
 }

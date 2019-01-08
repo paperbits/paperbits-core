@@ -46,6 +46,7 @@ import { CardEditorModule } from "./card/ko/cardEditor.module";
 
 export class CoreEditModule implements IInjectorModule {
     public register(injector: IInjector): void {
+        injector.bindCollection("dropHandlers");
         // injector.bindSingleton("settingsProvider", SettingsProvider);
         // injector.bindSingleton("routeHandler", DefaultRouteHandler); 
 
@@ -84,13 +85,6 @@ export class CoreEditModule implements IInjectorModule {
 
         /*** Editors ***/
         injector.bindSingleton("htmlEditorProvider", HtmlEditorProvider);
-        injector.bindSingletonFactory<IContentDropHandler[]>("dropHandlers", () => {
-            return new Array<IContentDropHandler>();
-        });
-        injector.bindSingletonFactory<IWidgetHandler[]>("widgetHandlers", () => {
-            return new Array<IWidgetHandler>();
-        });
-
         injector.bindSingleton("mediaHandler", MediaHandlers);
 
         injector.bind("workshops", Workshops);

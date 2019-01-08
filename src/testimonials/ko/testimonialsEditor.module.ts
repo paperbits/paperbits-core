@@ -4,12 +4,8 @@ import { TestimonialsEditor } from "./testimonialsEditor";
 import { TestimonialsHandlers } from "../testimonialsHandlers";
 
 export class TestimonialsEditorModule implements IInjectorModule {
-
-    register(injector: IInjector): void {
+    public register(injector: IInjector): void {
         injector.bind("testimonialsEditor", TestimonialsEditor);
-        injector.bindSingleton("testimonialsHandler", TestimonialsHandlers);
-
-        const widgetHandlers:Array<IWidgetHandler> = injector.resolve("widgetHandlers");
-        widgetHandlers.push(injector.resolve<TestimonialsHandlers>("testimonialsHandler"));
+        injector.bindToCollection<IWidgetHandler>("widgetHandlers", TestimonialsHandlers, "testimonialsHandler");
     }
 }

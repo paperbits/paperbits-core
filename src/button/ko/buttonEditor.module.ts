@@ -6,9 +6,6 @@ import { ButtonHandlers } from "../buttonHandlers";
 export class ButtonEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("buttonEditor", ButtonEditor);
-        injector.bindSingleton("buttonHandler", ButtonHandlers);
-
-        const widgetHandlers: IWidgetHandler[] = injector.resolve("widgetHandlers");
-        widgetHandlers.push(injector.resolve<ButtonHandlers>("buttonHandler"));
+        injector.bindToCollection("widgetHandlers", ButtonHandlers, "buttonHandler");
     }
 }

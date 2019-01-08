@@ -6,9 +6,6 @@ import { CardHandlers } from "../cardHandlers";
 export class CardEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {        
         injector.bind("cardEditor", CardEditor);
-        injector.bind("cardHandler", CardHandlers);
-
-        const widgetHandlers: IWidgetHandler[] = injector.resolve("widgetHandlers");
-        widgetHandlers.push(injector.resolve<CardHandlers>("cardHandler"));
+        // injector.bindToCollection<IWidgetHandler>("widgetHandlers", CardHandlers, "cardHandler");
     }
 }

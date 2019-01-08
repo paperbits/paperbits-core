@@ -4,9 +4,6 @@ import { PageHandlers } from "../pageHandlers";
 
 export class PageEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {        
-        injector.bind("pageHandler", PageHandlers);
-        
-        const widgetHandlers: IWidgetHandler[] = injector.resolve("widgetHandlers");
-        widgetHandlers.push(injector.resolve<PageHandlers>("pageHandler"));
+        injector.bindToCollection<IWidgetHandler>("widgetHandlers", PageHandlers, "pageHandler");
     }
 }
