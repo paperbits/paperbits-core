@@ -28,17 +28,17 @@ export class PictureModelBinder implements IModelBinder {
         pictureModel.height = pictureContract.height;
 
         if (pictureContract.sourceKey) {
-            try {
-                const media = await this.mediaService.getMediaByKey(pictureContract.sourceKey);
+            const media = await this.mediaService.getMediaByKey(pictureContract.sourceKey);
 
+            if (media) {
                 const background = new BackgroundModel();
                 background.sourceKey = media.key;
                 background.sourceUrl = media.downloadUrl;
 
                 pictureModel.background = background;
             }
-            catch (error) {
-                console.log(error);
+            else {
+                console.warn(`Unable to set picture. Media with source key ${pictureContract.sourceKey} not found.`);
             }
         }
 

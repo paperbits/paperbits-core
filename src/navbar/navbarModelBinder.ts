@@ -23,18 +23,19 @@ export class NavbarModelBinder implements IModelBinder {
             const navbarItemModel = await this.navigationItemToNavbarItemModel(navigationItemContract);
             navbarModel.root = navbarItemModel;
         }
-       
+
         navbarModel.rootKey = navbarContract.rootKey;
         navbarModel.pictureSourceKey = navbarContract.rootKey;
 
         if (navbarContract.sourceKey) {
-            try {
-                const media = await this.mediaService.getMediaByKey(navbarContract.sourceKey);
+            const media = await this.mediaService.getMediaByKey(navbarContract.sourceKey);
+
+            if (media) {
                 navbarModel.pictureSourceKey = media.key;
                 navbarModel.pictureSourceUrl = media.downloadUrl;
             }
-            catch (error) {
-                console.log(error);
+            else {
+                console.warn(`Unable to set navbar branding. Media with source key ${navbarContract.sourceKey} not found.`);
             }
         }
 
