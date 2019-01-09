@@ -1,6 +1,8 @@
+import { DefaultRouteHandler } from "@paperbits/common/routing";
+import { SettingsProvider } from "@paperbits/common/configuration";
 import { PageHost } from "./workshops/page/ko/pageHost";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { IViewModelBinder, ModelBinderSelector, WidgetService } from "@paperbits/common/widgets";
+import { ModelBinderSelector, WidgetService } from "@paperbits/common/widgets";
 import { PictureModule } from "./picture/ko/picture.module";
 import { VideoPlayerModule } from "./video-player/ko/videoPlayer.module";
 import { YoutubePlayerModule } from "./youtube-player/ko/youtubePlayer.module";
@@ -44,15 +46,14 @@ import { CardModule } from "./card/ko/card.module";
 
 export class CoreModule implements IInjectorModule {
     public register(injector: IInjector): void {
-        
         injector.bindCollection("widgetHandlers");
         injector.bindCollection("modelBinders");
         injector.bindCollection("viewModelBinders");
-       
 
         /*** Core ***/
+        injector.bindSingleton("settingsProvider", SettingsProvider);
+        injector.bindSingleton("routeHandler", DefaultRouteHandler);
         injector.bindSingleton("httpClient", XmlHttpRequestClient);
-        // injector.bindSingleton("settingsProvider", SettingsProvider);
         injector.bindSingleton("eventManager", DefaultEventManager);
         injector.bindSingleton("globalEventHandler", GlobalEventHandler);
         injector.bindSingleton("localCache", LocalCache);
@@ -74,17 +75,15 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("errorHandler", UnhandledErrorHandler);
         injector.bindSingleton("permalinkResolver", PermalinkResolver);
 
-        injector.bindModule(new KnockoutRegistrationLoaders());
-
         injector.bind("modelBinderSelector", ModelBinderSelector);
         injector.bind("viewModelBinderSelector", ViewModelBinderSelector);
         injector.bind("gtm", GoogleTagManager);
         injector.bind("intercom", IntercomViewModel);
         injector.bindSingleton("intercomService", IntercomService);
         injector.bind("backgroundModelBinder", BackgroundModelBinder);
-
         injector.bind("pageHost", PageHost);
 
+        injector.bindModule(new KnockoutRegistrationLoaders());
         injector.bindModule(new KoModule());
         injector.bindModule(new LayoutModule());
         injector.bindModule(new PageModule());
