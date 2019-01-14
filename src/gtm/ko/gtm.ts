@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import template from "./gtm.html";
-import { IGtmConfig } from "@paperbits/common/sites";
+import { GoogleTagManagerConfig } from "@paperbits/common/sites";
 import { ISettingsProvider } from "@paperbits/common/configuration";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 
@@ -29,7 +29,7 @@ export class GoogleTagManager {
         this.boot(config.gtm);
     }
 
-    private boot(gtm: IGtmConfig): void {
+    private boot(gtm: GoogleTagManagerConfig): void {
         if (gtm.containerId === null) {
             return;
         }

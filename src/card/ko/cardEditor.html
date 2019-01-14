@@ -1,6 +1,5 @@
 <fieldset class="form flex-item flex-item-grow" data-bind="scrollable: {}">
-    <p>Card editor is coming soon</p>
-    <!-- <div class="form-group form-group-collapsible">
+    <div class="form-group form-group-collapsible">
         <label class="form-label">
             <a href="#" class="form-group-toggle" data-bind="collapse: '#alignmentCollapse'"></a>
             <b>Content alignment</b>
@@ -35,6 +34,9 @@
         </div>
     </div>
 
+    <background params="{ background: $component.background, onUpdate: onBackgroundUpdate }"></background>
+    <typography params="{ typography: $component.typography, onUpdate: onTypographyUpdate }"></typography>
+
     <div class="form-group form-group-collapsible">
         <label class="form-label">
             <a href="#" class="form-group-toggle" data-bind="collapse: '#contentFlowCollapse'"></a>
@@ -45,5 +47,5 @@
                 <input name="scrollOnOverlow" type="checkbox" data-bind="checked: scrollOnOverlow" />Scroll on overflow
             </label>
         </div>
-    </div> -->
+    </div>
 </fieldset>

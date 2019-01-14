@@ -6,9 +6,11 @@ export class CardModel implements WidgetModel {
     public alignment: Breakpoints;
     public overflowX: string;
     public overflowY: string;
+    public styles: Object;
 
     constructor() {
         this.widgets = [];
         this.alignment = {};
+        this.styles = {};
     }
 }

@@ -4,7 +4,7 @@ import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { MapService } from "../mapService";
 
 @Component({
-    selector: "paperbits-googlemaps",
+    selector: "paperbits-googleMaps",
     template: template
 })
 export class MapViewModel {

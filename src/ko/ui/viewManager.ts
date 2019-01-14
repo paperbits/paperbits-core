@@ -10,7 +10,7 @@ import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { IComponent, IView, IViewManager, ViewManagerMode, IHighlightConfig, IContextualEditor, ISplitterConfig } from "@paperbits/common/ui";
 import { ProgressIndicator } from "../ui";
 import { IRouteHandler } from "@paperbits/common/routing";
-import { ISiteService, ISettings } from "@paperbits/common/sites";
+import { ISiteService, SettingsContract } from "@paperbits/common/sites";
 import { IPageService, PageContract } from "@paperbits/common/pages";
 import { IContentItemService, ContentItemContract } from "@paperbits/common/contentItems";
 import { DragSession } from "@paperbits/common/ui/draggables";
@@ -158,7 +158,7 @@ export class ViewManager implements IViewManager {
         }
     }
 
-    public async setTitle(settings?: ISettings, page?: PageContract): Promise<void> {
+    public async setTitle(settings?: SettingsContract, page?: PageContract): Promise<void> {
         let siteTitle, pageTitle;
 
         if (settings && settings.site) {

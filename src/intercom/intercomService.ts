@@ -1,6 +1,6 @@
-import { IIntercomLead } from '../intercom/IIntercomLead';
-import { IIntercomService } from './IIntercomService';
-import { ISettingsProvider } from '@paperbits/common/configuration';
+import { IIntercomLead } from "../intercom/IIntercomLead";
+import { IIntercomService } from "./IIntercomService";
+import { ISettingsProvider } from "@paperbits/common/configuration";
 
 export class IntercomService implements IIntercomService {
     private readonly settingsProvider: ISettingsProvider;
@@ -15,29 +15,29 @@ export class IntercomService implements IIntercomService {
     }
 
     private async loadConfig(): Promise<void> {
-        let intercomSetting = await this.settingsProvider.getSetting("intercom");
+        const intercomSetting = await this.settingsProvider.getSetting("intercom");
         this.boot(intercomSetting["appId"], intercomSetting["settings"]);
     }
 
     private boot(appId: string, intercomSettings: Object) {
         if (typeof window["Intercom"] === "function") {
-            window["Intercom"]('reattach_activator');
-            window["Intercom"]('update', intercomSettings);
+            window["Intercom"]("reattach_activator");
+            window["Intercom"]("update", intercomSettings);
         }
         else {
-            let intercomHandle = function () {
-                intercomHandle["c"](arguments)
+            const intercomHandle = function () {
+                intercomHandle["c"](arguments);
             };
             intercomHandle["q"] = [];
             intercomHandle["c"] = function (args) {
-                intercomHandle["q"].push(args)
+                intercomHandle["q"].push(args);
             };
 
-            let scriptElement = window.document.createElement("script");
+            const scriptElement = window.document.createElement("script");
             scriptElement.type = "text/javascript";
             scriptElement.async = true;
             scriptElement.src = `https://widget.intercom.io/widget/${appId}`;
-            let x = window.document.getElementsByTagName('body')[0];
+            const x = window.document.getElementsByTagName("body")[0];
             x.appendChild(scriptElement);
 
             window["Intercom"] = intercomHandle;

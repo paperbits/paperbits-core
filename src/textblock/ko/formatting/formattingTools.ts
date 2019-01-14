@@ -70,6 +70,7 @@ export class FormattingTools {
         this.underlined(selectionState.underlined);
         this.ul(selectionState.bulletedList);
         this.ol(selectionState.orderedList);
+        this.alignment(selectionState.alignment);
 
         this.anchored(!!selectionState.anchorKey);
 

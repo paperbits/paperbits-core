@@ -2,7 +2,7 @@
 import template from "./settings.html";
 import { Component } from "@paperbits/common/ko/decorators";
 import { IViewManager } from "@paperbits/common/ui";
-import { ISiteService, ISettings } from "@paperbits/common/sites";
+import { ISiteService, SettingsContract } from "@paperbits/common/sites";
 import { IMediaService, IMediaFilter, MediaContract } from "@paperbits/common/media";
 import { MetaDataSetter } from "@paperbits/common/meta";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
@@ -26,6 +26,7 @@ export class SettingsWorkshop {
     public hostname: KnockoutObservable<string>;
     public author: KnockoutObservable<string>;
     public gmapsApiKey: KnockoutObservable<string>;
+    public googleFontsApiKey: KnockoutObservable<string>;
     public gtmContainerId: KnockoutObservable<string>;
     public intercomAppId: KnockoutObservable<string>;
     public faviconSourceKey: KnockoutObservable<string>;
@@ -57,6 +58,7 @@ export class SettingsWorkshop {
         this.hostname = ko.observable<string>();
         this.author = ko.observable<string>();
         this.gmapsApiKey = ko.observable<string>();
+        this.googleFontsApiKey = ko.observable<string>();
         this.gtmContainerId = ko.observable<string>();
         this.intercomAppId = ko.observable<string>();
         this.faviconSourceKey = ko.observable<string>();
@@ -81,14 +83,17 @@ export class SettingsWorkshop {
             this.setFaviconUri(settings.site.faviconSourceKey);
 
             if (settings.integration) {
-                if (settings.integration.googlemaps) {
-                    this.gmapsApiKey(settings.integration.googlemaps.apiKey);
+                if (settings.integration.googleMaps) {
+                    this.gmapsApiKey(settings.integration.googleMaps.apiKey);
                 }
                 if (settings.integration.gtm) {
                     this.gtmContainerId(settings.integration.gtm.containerId);
                 }
                 if (settings.integration.intercom) {
                     this.intercomAppId(settings.integration.intercom.appId);
+                }
+                if (settings.integration.googleFonts) {
+                    this.googleFontsApiKey(settings.integration.googleFonts.apiKey);
                 }
             }
         }
@@ -100,13 +105,14 @@ export class SettingsWorkshop {
         this.hostname.subscribe(this.onSettingChange);
         this.author.subscribe(this.onSettingChange);
         this.gmapsApiKey.subscribe(this.onSettingChange);
+        this.googleFontsApiKey.subscribe(this.onSettingChange);
         this.gtmContainerId.subscribe(this.onSettingChange);
         this.intercomAppId.subscribe(this.onSettingChange);
         this.faviconSourceKey.subscribe(this.onSettingChange);
     }
 
     private async onSettingChange(): Promise<void> {
-        const config: ISettings = {
+        const config: SettingsContract = {
             site: {
                 title: this.title(),
                 description: this.description(),
@@ -123,8 +129,11 @@ export class SettingsWorkshop {
                     containerId: this.gtmContainerId(),
                     dataLayerName: this.gtmContainerId()
                 },
-                googlemaps: {
+                googleMaps: {
                     apiKey: this.gmapsApiKey()
+                },
+                googleFonts: {
+                    apiKey: this.googleFontsApiKey()
                 }
             }
         };

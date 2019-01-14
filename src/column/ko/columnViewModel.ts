@@ -20,6 +20,13 @@ export class ColumnViewModel {
     public alignmentMd: KnockoutObservable<string>;
     public alignmentLg: KnockoutObservable<string>;
     public alignmentXl: KnockoutObservable<string>;
+
+    public offsetXs: KnockoutObservable<string>;
+    public offsetSm: KnockoutObservable<string>;
+    public offsetMd: KnockoutObservable<string>;
+    public offsetLg: KnockoutObservable<string>;
+    public offsetXl: KnockoutObservable<string>;
+
     public orderXs: KnockoutObservable<number>;
     public orderSm: KnockoutObservable<number>;
     public orderMd: KnockoutObservable<number>;
@@ -42,6 +49,12 @@ export class ColumnViewModel {
         this.alignmentMd = ko.observable<string>();
         this.alignmentLg = ko.observable<string>();
         this.alignmentXl = ko.observable<string>();
+
+        this.offsetXs = ko.observable<string>();
+        this.offsetSm = ko.observable<string>();
+        this.offsetMd = ko.observable<string>();
+        this.offsetLg = ko.observable<string>();
+        this.offsetXl = ko.observable<string>();
 
         this.overflowX = ko.observable<string>();
         this.overflowY = ko.observable<string>();
@@ -95,6 +108,26 @@ export class ColumnViewModel {
                 classes.push(this.getAlignmentClass(this.alignmentXl(), "xl"));
             }
 
+            if (this.offsetXs()) {
+                classes.push(this.getOffsetClass(this.offsetXs(), "xs"));
+            }
+
+            if (this.offsetSm()) {
+                classes.push(this.getOffsetClass(this.offsetSm(), "sm"));
+            }
+
+            if (this.offsetMd()) {
+                classes.push(this.getOffsetClass(this.offsetMd(), "md"));
+            }
+
+            if (this.offsetLg()) {
+                classes.push(this.getOffsetClass(this.offsetLg(), "lg"));
+            }
+
+            if (this.offsetXl()) {
+                classes.push(this.getOffsetClass(this.offsetXl(), "xl"));
+            }
+
             if (this.orderXs()) {
                 classes.push(this.getOrderClass(this.orderXs(), "xs"));
             }
@@ -140,6 +173,16 @@ export class ColumnViewModel {
         return `col-${breakpoint}${size}`;
     }
 
+    private getOffsetClass(offset: string, targetBreakpoint: string): string {
+        let breakpoint = "";
+
+        if (targetBreakpoint !== "xs") {
+            breakpoint = targetBreakpoint + "-";
+        }
+
+        return `offset-${breakpoint}${offset}`;
+    }
+
     private getOrderClass(order: number, targetBreakpoint: string): string {
         let breakpoint = "";
 
@@ -161,6 +204,6 @@ export class ColumnViewModel {
             breakpoint = targetBreakpoint + "-";
         }
 
-        return `align-content-${breakpoint}${vertical} align-items-${breakpoint}${vertical} justify-content-${breakpoint}${horizontal}`;
+        return `align-content-${breakpoint}${horizontal} align-items-${breakpoint}${horizontal} justify-content-${breakpoint}${vertical}`;
     }
 }

@@ -156,18 +156,16 @@ export class DropBucket {
     }
 
     private handleUnknownContent(dataTransfer: DataTransfer): void {
-        let title: string;
-        let description: string = "";
+        if (dataTransfer.files.length === 0) {
+            return;
+        }
+
+        let title = "File";
+        let description = dataTransfer.files[0].name;
 
         if (dataTransfer.files.length > 1) {
             title = `${dataTransfer.files.length} files`;
-        }
-        else if (dataTransfer.files.length > 0) {
-            title = "File";
-            description = dataTransfer.files[0].name;
-        }
-        else {
-            title = "Piece of text";
+            description = "";
         }
 
         const files = Array.prototype.slice.call(dataTransfer.files);

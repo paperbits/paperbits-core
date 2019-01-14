@@ -6,6 +6,7 @@ ko.bindingHandlers["component"] = {
     init: (element: HTMLElement, valueAccessor, ignored1, ignored2, bindingContext) => {
         let currentViewModel;
         let currentLoadingOperationId;
+        
         const disposeAssociatedComponentViewModel = () => {
             if (currentViewModel) {
                 const onDestroyedMethodDescriptions = Reflect.getMetadata("ondestroyed", currentViewModel.constructor);
@@ -13,7 +14,7 @@ ko.bindingHandlers["component"] = {
                 if (onDestroyedMethodDescriptions) {
                     onDestroyedMethodDescriptions.forEach(methodDescription => {
                         const methodReference = currentViewModel[methodDescription];
-    
+
                         if (methodReference) {
                             methodReference();
                         }
@@ -21,7 +22,7 @@ ko.bindingHandlers["component"] = {
                 }
                 else {
                     const currentViewModelDispose = currentViewModel && currentViewModel["dispose"];
-    
+
                     if (typeof currentViewModelDispose === "function") {
                         currentViewModelDispose.call(currentViewModel);
                     }
@@ -100,30 +101,31 @@ const makeArray = (arrayLikeObject) => {
     return result;
 };
 
-var cloneNodes = (nodesArray, shouldCleanNodes) => {
+const cloneNodes = (nodesArray, shouldCleanNodes) => {
     for (var i = 0, j = nodesArray.length, newNodesArray = []; i < j; i++) {
-        var clonedNode = nodesArray[i].cloneNode(true);
+        const clonedNode = nodesArray[i].cloneNode(true);
         newNodesArray.push(shouldCleanNodes ? ko.cleanNode(clonedNode) : clonedNode);
     }
     return newNodesArray;
 };
 
 function cloneTemplateIntoElement(componentName, componentDefinition, element, useShadow: boolean): HTMLElement {
-    var template = componentDefinition["template"];
+    const template = componentDefinition["template"];
 
     if (!template) {
         return element;
     }
 
-    var clonedNodesArray = cloneNodes(template, false);
+    const clonedNodesArray = cloneNodes(template, false);
     ko.virtualElements.setDomNodeChildren(element, clonedNodesArray);
     return element;
 }
 
 function createViewModel(componentDefinition, element, originalChildNodes, componentParams) {
-    var componentViewModelFactory = componentDefinition["createViewModel"];
+    const componentViewModelFactory = componentDefinition["createViewModel"];
+
     return componentViewModelFactory
-        ? componentViewModelFactory.call(componentDefinition, componentParams, { "element": element, "templateNodes": originalChildNodes })
+        ? componentViewModelFactory.call(componentDefinition, componentParams, { element: element, templateNodes: originalChildNodes })
         : componentParams; // Template-only component
 }
 

@@ -54,7 +54,7 @@ export class TableOfContentsModelBinder implements IModelBinder {
         tableOfContentsModel.navigationItemKey = tableOfContentsContract.navigationItemKey;
         tableOfContentsModel.items = [];
 
-        // const currentPageUrl = this.routeHandler.getCurrentUrl();
+        const currentPageUrl = this.routeHandler.getCurrentUrl();
         // const currentPagePermalink = await this.permalinkService.getPermalinkByUrl(currentPageUrl);
 
         // let page: PageContract;
@@ -63,35 +63,35 @@ export class TableOfContentsModelBinder implements IModelBinder {
         //     page = await this.pageService.getPageByKey(currentPagePermalink.targetKey);
         // }
 
-        // if (tableOfContentsContract.navigationItemKey) {
-        //     const assignedNavigationItem = await this.navigationService.getNavigationItem(tableOfContentsContract.navigationItemKey);
+        if (tableOfContentsContract.navigationItemKey) {
+            const assignedNavigationItem = await this.navigationService.getNavigationItem(tableOfContentsContract.navigationItemKey);
 
-        //     if (assignedNavigationItem.navigationItems) { // has child nav items
-        //         const promises = assignedNavigationItem.navigationItems.map(async navigationItem => {
-        //             return await this.processNavigationItem(navigationItem, currentPageUrl);
-        //         });
+            if (assignedNavigationItem.navigationItems) { // has child nav items
+                const promises = assignedNavigationItem.navigationItems.map(async navigationItem => {
+                    return await this.processNavigationItem(navigationItem, currentPageUrl);
+                });
 
-        //         const results = await Promise.all(promises);
+                const results = await Promise.all(promises);
 
-        //         tableOfContentsModel.items = results;
-        //     }
-        //     else {
-        //         const permalink = await this.permalinkService.getPermalinkByKey(assignedNavigationItem.permalinkKey);
+                tableOfContentsModel.items = results;
+            }
+            else {
+                // const permalink = await this.permalinkService.getPermalinkByKey(assignedNavigationItem.permalinkKey);
 
-        //         if (permalink.uri === currentPageUrl) {
-        //             if (page && page.anchors) {
-        //                 const anchors = await this.processAnchorItems(page.anchors);
-        //                 tableOfContentsModel.items = anchors;
-        //             }
-        //         }
-        //     }
-        // }
-        // else {
-        //     if (page && page.anchors) {
-        //         const anchors = await this.processAnchorItems(page.anchors);
-        //         tableOfContentsModel.items = anchors;
-        //     }
-        // }
+                // if (permalink.uri === currentPageUrl) {
+                //     if (page && page.anchors) {
+                //         const anchors = await this.processAnchorItems(page.anchors);
+                //         tableOfContentsModel.items = anchors;
+                //     }
+                // }
+            }
+        }
+        else {
+            // if (page && page.anchors) {
+            //     const anchors = await this.processAnchorItems(page.anchors);
+            //     tableOfContentsModel.items = anchors;
+            // }
+        }
 
         return tableOfContentsModel;
     }

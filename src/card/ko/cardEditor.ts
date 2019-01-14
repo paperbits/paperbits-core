@@ -1,83 +1,97 @@
 import * as ko from "knockout";
+import * as Utils from "@paperbits/common";
 import template from "./cardEditor.html";
 import { IViewManager } from "@paperbits/common/ui";
-import { IWidgetEditor } from "@paperbits/common/widgets/IWidgetEditor";
-import { Component } from "@paperbits/common/ko/decorators";
+import { IWidgetEditor } from "@paperbits/common/widgets";
+import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { CardModel } from "../cardModel";
+import { StyleService, } from "@paperbits/styles";
+import { BackgroundContract, TypographyContract } from "@paperbits/styles/contracts";
 
 @Component({
     selector: "card-editor",
     template: template,
     injectable: "cardEditor"
 })
-export class CardEditor implements IWidgetEditor {
-    private card: CardModel;
-    private applyChangesCallback: () => void;
+export class CardEditor {
     private readonly verticalAlignment: KnockoutObservable<string>;
     private readonly horizontalAlignment: KnockoutObservable<string>;
 
     public readonly alignment: KnockoutObservable<string>;
     public readonly scrollOnOverlow: KnockoutObservable<boolean>;
+    public readonly background: KnockoutObservable<BackgroundContract>;
+    public readonly typography: KnockoutObservable<TypographyContract>;
 
-    constructor(private readonly viewManager: IViewManager) {
+    constructor(
+        private readonly viewManager: IViewManager,
+        private readonly styleService: StyleService
+    ) {
         this.alignLeft.bind(this);
         this.alignRight.bind(this);
         this.alignCenter.bind(this);
         this.alignTop.bind(this);
         this.alignBottom.bind(this);
         this.alignMiddle.bind(this);
+        this.onBackgroundUpdate = this.onBackgroundUpdate.bind(this);
+        this.onTypographyUpdate = this.onTypographyUpdate.bind(this);
 
         this.viewManager = viewManager;
-        this.setWidgetModel = this.setWidgetModel.bind(this);
+        this.initialize = this.initialize.bind(this);
 
         this.alignment = ko.observable<string>();
-        this.alignment.subscribe(this.onChange.bind(this));
+        this.alignment.subscribe(this.applyChanges.bind(this));
 
         this.verticalAlignment = ko.observable<string>();
         this.horizontalAlignment = ko.observable<string>();
 
         this.scrollOnOverlow = ko.observable<boolean>();
-        this.scrollOnOverlow.subscribe(this.onChange.bind(this));
+        this.scrollOnOverlow.subscribe(this.applyChanges.bind(this));
+
+        this.background = ko.observable<BackgroundContract>();
+        this.typography = ko.observable<TypographyContract>();
     }
+
+    @Param()
+    public model: CardModel;
+
+    @Event()
+    public onChange: (model: CardModel) => void;
 
     /**
      * Collecting changes from the editor UI and invoking callback method.
      */
-    private onChange(): void {
-        if (!this.applyChangesCallback) {
-            return;
-        }
 
+    private applyChanges(): void {
         const viewport = this.viewManager.getViewport();
 
         switch (viewport) {
             case "xl":
-                this.card.alignment.xl = this.alignment();
+                this.model.alignment.xl = this.alignment();
                 break;
 
             case "lg":
-                this.card.alignment.lg = this.alignment();
+                this.model.alignment.lg = this.alignment();
                 break;
 
             case "md":
-                this.card.alignment.md = this.alignment();
+                this.model.alignment.md = this.alignment();
                 break;
 
             case "sm":
-                this.card.alignment.sm = this.alignment();
+                this.model.alignment.sm = this.alignment();
                 break;
 
             case "xs":
-                this.card.alignment.xs = this.alignment();
+                this.model.alignment.xs = this.alignment();
                 break;
 
             default:
                 throw new Error("Unknown viewport");
         }
 
-        this.card.overflowX = this.card.overflowY = this.scrollOnOverlow() ? "scroll" : null;
+        this.model.overflowX = this.model.overflowY = this.scrollOnOverlow() ? "scroll" : null;
 
-        this.applyChangesCallback();
+        this.onChange(this.model);
     }
 
     public alignContent(alignment: string): void {
@@ -115,22 +129,28 @@ export class CardEditor implements IWidgetEditor {
         }
     }
 
-    public setWidgetModel(card: CardModel, applyChangesCallback?: () => void): void {
-        this.card = card;
-
+    @OnMounted()
+    public async initialize(): Promise<void> {
         const viewport = this.viewManager.getViewport();
 
-        const alignment = this.determineAlignment(viewport, card);
+        const alignment = this.determineAlignment(viewport, this.model);
         this.alignment(alignment);
 
-        this.scrollOnOverlow(card.overflowY === "scroll");
+        this.scrollOnOverlow(this.model.overflowY === "scroll");
 
         const directions = this.alignment().split(" ");
         this.verticalAlignment(directions[0]);
         this.horizontalAlignment(directions[1]);
 
 
-        this.applyChangesCallback = applyChangesCallback;
+        if (this.model.styles && this.model.styles["instance"]) {
+            const styles = await this.styleService.getStyleByKey(this.model.styles["instance"]);
+
+            if (styles) {
+                this.background(styles.background);
+                this.typography(styles.typography);
+            }
+        }
     }
 
     public toggleHorizontal(): void {
@@ -201,5 +221,35 @@ export class CardEditor implements IWidgetEditor {
         }
 
         this.align();
+    }
+
+    public onBackgroundUpdate(background: BackgroundContract): void {
+        let instanceKey;
+
+        if (this.model.styles && this.model.styles["instance"]) {
+            instanceKey = this.model.styles["instance"];
+        }
+        else {
+            instanceKey = `instances/card-${Utils.identifier()}`;
+            this.model.styles = { instance: instanceKey };
+        }
+
+        this.styleService.setInstanceStyle(instanceKey, { background: background });
+        this.applyChanges();
+    }
+
+    public onTypographyUpdate(typography: TypographyContract): void {
+        let instanceKey;
+
+        if (this.model.styles && this.model.styles["instance"]) {
+            instanceKey = this.model.styles["instance"];
+        }
+        else {
+            instanceKey = `instances/card-${Utils.identifier()}`;
+            this.model.styles = { instance: instanceKey };
+        }
+
+        this.styleService.setInstanceStyle(instanceKey, { typography: typography });
+        this.applyChanges();
     }
 }

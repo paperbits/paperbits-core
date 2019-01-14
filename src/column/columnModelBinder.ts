@@ -31,6 +31,11 @@ export class ColumnModelBinder implements IModelBinder {
             columnModel.alignment = contract.alignment;
         }
 
+        if (contract.offset) {
+            contract.offset = Utils.optimizeBreakpoints(contract.offset);
+            columnModel.offset = contract.offset;
+        }
+
         if (contract.order) {
             contract.order = Utils.optimizeBreakpoints(contract.order);
             columnModel.order = contract.order;

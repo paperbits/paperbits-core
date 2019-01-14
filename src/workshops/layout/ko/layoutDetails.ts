@@ -50,7 +50,7 @@ export class LayoutDetails {
         });
 
         this.canDelete = ko.pureComputed(() => {
-            return !this.isDefaultLayout();
+            return true; // !this.isDefaultLayout();
         });
 
         const uri = this.layoutItem.uriTemplate();

@@ -53,9 +53,9 @@ export class GridBindingHandler {
             const placeholderHeight = sourceElement.clientHeight - 1 + "px";
             const sourceBinding = GridHelper.getWidgetBinding(sourceElement);
             const sourceModel = GridHelper.getModel(sourceElement);
-            const sourceParentElement = GridHelper.getParentElementWithModel(sourceElement);
-            const parentModel = GridHelper.getModel(sourceParentElement);
-            const parentBinding = GridHelper.getWidgetBinding(sourceParentElement);
+            const parentBinding = GridHelper.getParentWidgetBinding(sourceElement);
+            const parentModel = parentBinding.model;
+
             const placeholderElement = sourceElement.ownerDocument.createElement("div");
             placeholderElement.style.height = placeholderHeight;
             placeholderElement.style.width = placeholderWidth;
@@ -107,12 +107,10 @@ export class GridBindingHandler {
         const onDragStart = (): HTMLElement => {
             const placeholderWidth = sourceElement.clientWidth - 1 + "px";
             const placeholderHeight = sourceElement.clientHeight - 1 + "px";
-
             const sourceBinding = GridHelper.getWidgetBinding(sourceElement);
             const sourceModel = GridHelper.getModel(sourceElement);
-            const sourceParentElement = GridHelper.getParentElementWithModel(sourceElement);
-            const parentModel = GridHelper.getModel(sourceParentElement);
-            const parentBinding = GridHelper.getWidgetBinding(sourceParentElement);
+            const parentBinding = GridHelper.getParentWidgetBinding(sourceElement);
+            const parentModel = parentBinding.model;
 
             const placeholderElement = sourceElement.ownerDocument.createElement("div");
             placeholderElement.style.height = placeholderHeight;
@@ -169,12 +167,10 @@ export class GridBindingHandler {
         const onDragStart = (): HTMLElement => {
             const placeholderWidth = sourceElement.clientWidth - 1 + "px";
             const placeholderHeight = sourceElement.clientHeight - 1 + "px";
-
             const sourceBinding = GridHelper.getWidgetBinding(sourceElement);
             const sourceModel = GridHelper.getModel(sourceElement);
-            const sourceParentElement = GridHelper.getParentElementWithModel(sourceElement);
-            const parentModel = GridHelper.getModel(sourceParentElement);
-            const parentBinding = GridHelper.getWidgetBinding(sourceParentElement);
+            const parentBinding = GridHelper.getParentWidgetBinding(sourceElement);
+            const parentModel = parentBinding.model;
 
             const placeholderElement = sourceElement.ownerDocument.createElement("div");
             placeholderElement.style.height = placeholderHeight;
@@ -236,9 +232,9 @@ export class GridBindingHandler {
             const placeholderHeight = sourceElement.clientHeight - 1 + "px";
             const sourceBinding = GridHelper.getWidgetBinding(sourceElement);
             const sourceModel = GridHelper.getModel(sourceElement);
-            const sourceParentElement = GridHelper.getParentElementWithModel(sourceElement);
-            const parentModel = GridHelper.getModel(sourceParentElement);
-            const parentBinding = GridHelper.getWidgetBinding(sourceParentElement);
+            const parentBinding = GridHelper.getParentWidgetBinding(sourceElement);
+            const parentModel = parentBinding.model;
+
             const placeholderElement = sourceElement.ownerDocument.createElement("div");
             placeholderElement.style.height = placeholderHeight;
             placeholderElement.style.width = placeholderWidth;

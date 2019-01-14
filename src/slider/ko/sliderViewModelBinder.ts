@@ -103,23 +103,23 @@ export class SliderViewModelBinder {
                             name: "section-layout-selector",
                             params: {
                                 onSelect: (newSectionModel: SectionModel) => {
-                                    const sectionElement = widgetElement;
-                                    const sectionHalf = activeSliderHalf;
+                                    // const sectionElement = widgetElement;
+                                    // const sectionHalf = activeSliderHalf;
 
-                                    const mainElement = GridHelper.getParentElementWithModel(sectionElement);
-                                    const mainModel = GridHelper.getModel(mainElement);
-                                    const mainWidgetModel = GridHelper.getWidgetBinding(mainElement);
-                                    const sectionModel = <SectionModel>GridHelper.getModel(sectionElement);
-                                    let index = mainModel.widgets.indexOf(sectionModel);
+                                    // const mainElement = GridHelper.getParentElementWithModel(sectionElement);
+                                    // const mainModel = GridHelper.getModel(mainElement);
+                                    // const mainWidgetModel = GridHelper.getWidgetBinding(mainElement);
+                                    // const sectionModel = <SectionModel>GridHelper.getModel(sectionElement);
+                                    // let index = mainModel.widgets.indexOf(sectionModel);
 
-                                    if (sectionHalf === "bottom") {
-                                        index++;
-                                    }
+                                    // if (sectionHalf === "bottom") {
+                                    //     index++;
+                                    // }
 
-                                    mainModel.widgets.splice(index, 0, newSectionModel);
-                                    mainWidgetModel.applyChanges();
+                                    // mainModel.widgets.splice(index, 0, newSectionModel);
+                                    // mainWidgetModel.applyChanges();
 
-                                    this.viewManager.clearContextualEditors();
+                                    // this.viewManager.clearContextualEditors();
                                 }
                             }
                         }

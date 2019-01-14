@@ -19,7 +19,6 @@ export class HyperlinkEditor {
     constructor(
         private readonly htmlEditorProvider: IHtmlEditorProvider,
         private readonly permalinkResolver: PermalinkResolver,
-        private readonly contentItemService: IContentItemService,
         private readonly eventManager: IEventManager
     ) {
         this.htmlEditorProvider = htmlEditorProvider;

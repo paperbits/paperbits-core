@@ -1,3 +1,4 @@
+import { TextblockModel } from "./../textblock/textblockModel";
 import { CardModel } from "./cardModel";
 import { IWidgetOrder, IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { IEventManager } from "@paperbits/common/events";
@@ -39,6 +40,7 @@ export class CardHandlers implements IWidgetHandler {
             },
             selectionCommands: [{
                 tooltip: "Edit card",
+                iconClass: "paperbits-edit-72",
                 position: "top right",
                 color: "#4c5866",
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
@@ -72,8 +74,23 @@ export class CardHandlers implements IWidgetHandler {
         const widgetOrder: IWidgetOrder = {
             name: "card",
             displayName: "Card",
+            iconClass: "paperbits-polaroid",
             createModel: async () => {
-                return new CardModel();
+                const textblock: any = new TextblockModel([
+                    {
+                        type: "heading1",
+                        content: [{ type: "text", text: "Card" }]
+                    },
+                    {
+                        type: "paragraph",
+                        content: [{ type: "text", text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor..." }]
+                    }
+                ]);
+
+                const model = new CardModel();
+                model.widgets.push(textblock);
+
+                return model;
             }
         };
 

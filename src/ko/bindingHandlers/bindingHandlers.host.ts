@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
 import { GlobalEventHandler } from "@paperbits/common/events";
-import { IViewManager, ViewManagerMode, HostDocument } from "@paperbits/common/ui";
+import { IViewManager, ViewManagerMode } from "@paperbits/common/ui";
 import { IRouteHandler } from "@paperbits/common/routing";
 
 export class HostBindingHandler {

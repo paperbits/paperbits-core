@@ -14,6 +14,29 @@ export class CardViewModelBinder implements IViewModelBinder<CardModel, CardView
         private readonly eventManager: IEventManager
     ) { }
 
+    private toTitleCase(str: string): string {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    private getAlignmentClass(styles: Object, alignmentString: string, targetBreakpoint: string): void {
+        if (!alignmentString) {
+            return;
+        }
+
+        const alignment = alignmentString.split(" ");
+        const vertical = alignment[0];
+        const horizontal = alignment[1];
+
+        const x = styles["alignX"] || {};
+        const y = styles["alignY"] || {};
+
+        x[targetBreakpoint] = `utils/content/alignHorizontally${this.toTitleCase(horizontal)}`;
+        y[targetBreakpoint] = `utils/content/alignVertically${this.toTitleCase(vertical)}`;
+
+        styles["alignX"] = x;
+        styles["alignY"] = y;
+    }
+
     public modelToViewModel(model: CardModel, cardViewModel?: CardViewModel): CardViewModel {
         if (!cardViewModel) {
             cardViewModel = new CardViewModel();
@@ -31,29 +54,30 @@ export class CardViewModelBinder implements IViewModelBinder<CardModel, CardView
             widgetViewModels.push(new PlaceholderViewModel("Card"));
         }
 
+        const styles = {};
+
+        Object.assign(styles, model.styles);
+
         cardViewModel.widgets(widgetViewModels);
 
         if (model.alignment) {
             model.alignment = Utils.optimizeBreakpoints(model.alignment);
-            cardViewModel.alignmentXs(model.alignment.xs);
-            cardViewModel.alignmentSm(model.alignment.sm);
-            cardViewModel.alignmentMd(model.alignment.md);
-            cardViewModel.alignmentLg(model.alignment.lg);
-            cardViewModel.alignmentXl(model.alignment.xl);
+            this.getAlignmentClass(styles, model.alignment.xs, "xs");
+            this.getAlignmentClass(styles, model.alignment.sm, "sm");
+            this.getAlignmentClass(styles, model.alignment.md, "md");
+            this.getAlignmentClass(styles, model.alignment.lg, "lg");
+            this.getAlignmentClass(styles, model.alignment.xl, "xl");
         }
 
-        cardViewModel.overflowX(model.overflowX);
-        cardViewModel.overflowY(model.overflowY);
+        cardViewModel.styles(styles);
 
         const binding: IWidgetBinding = {
             name: "card",
             displayName: "Card",
-
             flow: "inline",
             model: model,
             editor: "card-editor",
             handler: CardHandlers,
-
             applyChanges: () => {
                 this.modelToViewModel(model, cardViewModel);
                 this.eventManager.dispatchEvent("onContentUpdate");

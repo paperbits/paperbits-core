@@ -19,15 +19,17 @@ export class CardModelBinder implements IModelBinder {
     }
 
     public async contractToModel(contract: CardContract): Promise<CardModel> {
-        const cardModel = new CardModel();
+        const model = new CardModel();
 
         if (contract.alignment) {
             contract.alignment = Utils.optimizeBreakpoints(contract.alignment);
-            cardModel.alignment = contract.alignment;
+            model.alignment = contract.alignment;
         }
 
-        cardModel.overflowX = contract.overflowX;
-        cardModel.overflowY = contract.overflowY;
+        model.overflowX = contract.overflowX;
+        model.overflowY = contract.overflowY;
+        model.styles = contract.styles;
+
 
         if (!contract.nodes) {
             contract.nodes = [];
@@ -38,15 +40,16 @@ export class CardModelBinder implements IModelBinder {
             return modelBinder.contractToModel(node);
         });
 
-        cardModel.widgets = await Promise.all<any>(modelPromises);
+        model.widgets = await Promise.all<any>(modelPromises);
 
-        return cardModel;
+        return model;
     }
 
     public modelToContract(model: CardModel): Contract {
         const contract: CardContract = {
             type: "card",
             object: "block",
+            styles: model.styles,
             nodes: []
         };
 
