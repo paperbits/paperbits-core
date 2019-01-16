@@ -32,7 +32,7 @@ export class LayoutModelBinder {
         const layoutModel = new LayoutModel();
         layoutModel.title = layoutContract.title;
         layoutModel.description = layoutContract.description;
-        layoutModel.uriTemplate = layoutContract.uriTemplate;
+        layoutModel.permalinkTemplate = layoutContract.permalinkTemplate;
 
         const layoutContent = await this.layoutService.getLayoutContent(layoutContract.key);
 
@@ -51,7 +51,7 @@ export class LayoutModelBinder {
         const layoutConfig: LayoutContract = {
             title: layoutModel.title,
             description: layoutModel.description,
-            uriTemplate: layoutModel.uriTemplate,
+            permalinkTemplate: layoutModel.permalinkTemplate,
             object: "block",
             type: "layout",
             nodes: []

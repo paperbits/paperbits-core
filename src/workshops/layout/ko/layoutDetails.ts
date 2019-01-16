@@ -38,7 +38,7 @@ export class LayoutDetails {
             .extend({ required: true })
             .subscribe(this.updateLayout);
 
-        this.layoutItem.uriTemplate
+        this.layoutItem.permalinkTemplate
             .extend({ uniqueLayoutUri: this.layoutItem.key })
             .subscribe(this.updateLayout);
 
@@ -46,14 +46,14 @@ export class LayoutDetails {
             .subscribe(this.updateLayout);
 
         this.isDefaultLayout = ko.pureComputed(() => {
-            return this.layoutItem.uriTemplate() === "/";
+            return this.layoutItem.permalinkTemplate() === "/";
         });
 
         this.canDelete = ko.pureComputed(() => {
             return true; // !this.isDefaultLayout();
         });
 
-        const uri = this.layoutItem.uriTemplate();
+        const uri = this.layoutItem.permalinkTemplate();
         
         this.routeHandler.navigateTo(uri, { usePagePlaceholder: true });
     }

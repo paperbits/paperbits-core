@@ -57,12 +57,12 @@ export class KnockoutValidation {
 
         validation.rules["uniqueLayoutUri"] = {
             async: true,
-            validator: async (uriTemplate, layoutKey, callback) => {
-                if (!uriTemplate) {
+            validator: async (permalinkTemplate, layoutKey, callback) => {
+                if (!permalinkTemplate) {
                     return;
                 }
 
-                const layout = await this.layoutService.getLayoutByUriTemplate(uriTemplate);
+                const layout = await this.layoutService.getLayoutByUriTemplate(permalinkTemplate);
                 const conflict = layout && layout.key !== layoutKey;
 
                 callback(!conflict);

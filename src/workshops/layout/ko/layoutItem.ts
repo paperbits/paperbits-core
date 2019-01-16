@@ -7,7 +7,7 @@ export class LayoutItem {
     public key: string;
     public title: KnockoutObservable<string>;
     public description: KnockoutObservable<string>;
-    public uriTemplate: KnockoutObservable<string>;
+    public permalinkTemplate: KnockoutObservable<string>;
     public hasFocus: KnockoutObservable<boolean>;
 
     constructor(layout: LayoutContract) {
@@ -16,7 +16,7 @@ export class LayoutItem {
         this.key = layout.key;
         this.title = ko.observable<string>(layout.title);
         this.description = ko.observable<string>(layout.description);
-        this.uriTemplate = ko.observable<string>(layout.uriTemplate);
+        this.permalinkTemplate = ko.observable<string>(layout.permalinkTemplate);
         this.hasFocus = ko.observable<boolean>(false);
     }
 
@@ -25,7 +25,7 @@ export class LayoutItem {
             key: this.key,
             title: this.title(),
             description: this.description(),
-            uriTemplate: this.uriTemplate(),
+            permalinkTemplate: this.permalinkTemplate(),
             contentKey: this.contentKey
         };
     }
