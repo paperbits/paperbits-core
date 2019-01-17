@@ -7,7 +7,7 @@ import { IPageService } from "@paperbits/common/pages";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { HtmlEditorEvents } from "@paperbits/common/editing";
 import { Component, OnDestroyed } from "@paperbits/common/ko/decorators";
-import { FontContract } from "@paperbits/styles/contracts";
+import { FontContract, ColorContract } from "@paperbits/styles/contracts";
 import { IViewManager } from "@paperbits/common/ui";
 
 @Component({
@@ -22,7 +22,7 @@ export class FormattingTools {
     public highlighted: KnockoutObservable<boolean>;
     public pre: KnockoutObservable<boolean>;
     public style: KnockoutObservable<string>;
-    public styled: KnockoutObservable<boolean>;
+    public colored: KnockoutObservable<string>;
     public alignment: KnockoutObservable<string>;
     public justified: KnockoutObservable<boolean>;
     public anchored: KnockoutObservable<boolean>;
@@ -44,9 +44,10 @@ export class FormattingTools {
         this.updateFormattingState = this.updateFormattingState.bind(this);
         this.toggleUnorderedList = this.toggleUnorderedList.bind(this);
         this.onFontSelected = this.onFontSelected.bind(this);
+        this.onColorSelected = this.onColorSelected.bind(this);
 
         this.style = ko.observable<string>();
-        this.styled = ko.observable<boolean>();
+        this.colored = ko.observable<string>();
         this.font = ko.observable<string>();
         this.sized = ko.observable<boolean>();
         this.ol = ko.observable<boolean>();
@@ -291,6 +292,17 @@ export class FormattingTools {
 
     public onFontSelected(font: FontContract): void {
         console.warn("Not implemented");
+    }
+
+    public onColorSelected(color: ColorContract): void {
+        if (color) {
+            this.htmlEditorProvider.getCurrentHtmlEditor().setColor(color.key);
+        }
+        else {
+            this.htmlEditorProvider.getCurrentHtmlEditor().removeColor();
+        }
+
+        this.updateFormattingState();
     }
 
     public dispose(): void {

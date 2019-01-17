@@ -38,7 +38,7 @@
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': highlighted() }" title="Highlight">
     <a href="#" data-bind="click: toggleHighlighted">
-        <i class="paperbits-icon paperbits-underline"></i>
+        <i class="paperbits-icon paperbits-marker-2"></i>
     </a>
 </div>
 <div title="Style" class="toolbox-btn toolbox-dropdown">
@@ -67,11 +67,11 @@
         <i class="paperbits-icon paperbits-align-justify"></i>
     </a>
 </div>
-<!-- <div title="Text style" class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': styled() }">
-    <a href="#" data-bind="balloon: { component: { name: 'intention-selector', params: { title: 'Text style', intentions: styleIntentions, selectedIntention: styleIntention, setIntentionSelectorCallback: setStyle } } }">
+<div title="Text color" class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': colored() }">
+    <a href="#" data-bind="balloon: { component: { name: 'color-selector', params: { onSelect: $component.onColorSelected } } }">
         <i class="paperbits-icon paperbits-color"></i>
     </a>
-</div> -->
+</div>
 <!-- <div class="toolbox-btn" title="Text size" data-bind="css: { 'toolbox-btn-is-active': sized() }">
     <a href="#" data-bind="click: toggleSize">
         <i class="paperbits-icon paperbits-size"></i>
