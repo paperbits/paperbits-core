@@ -36,6 +36,11 @@
         <i class="paperbits-icon paperbits-underline"></i>
     </a>
 </div>
+<div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': highlighted() }" title="Highlight">
+    <a href="#" data-bind="click: toggleHighlighted">
+        <i class="paperbits-icon paperbits-underline"></i>
+    </a>
+</div>
 <div title="Style" class="toolbox-btn toolbox-dropdown">
     <a href="#" data-bind="text: style, balloon: { component: { name: 'block-style-selector' } }"></a>
 </div>

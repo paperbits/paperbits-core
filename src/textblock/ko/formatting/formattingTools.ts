@@ -19,6 +19,7 @@ export class FormattingTools {
     public bold: KnockoutObservable<boolean>;
     public italic: KnockoutObservable<boolean>;
     public underlined: KnockoutObservable<boolean>;
+    public highlighted: KnockoutObservable<boolean>;
     public pre: KnockoutObservable<boolean>;
     public style: KnockoutObservable<string>;
     public styled: KnockoutObservable<boolean>;
@@ -53,6 +54,7 @@ export class FormattingTools {
         this.bold = ko.observable<boolean>();
         this.italic = ko.observable<boolean>();
         this.underlined = ko.observable<boolean>();
+        this.highlighted = ko.observable<boolean>();
         this.ul = ko.observable<boolean>();
         this.ol = ko.observable<boolean>();
         this.pre = ko.observable<boolean>();
@@ -68,6 +70,7 @@ export class FormattingTools {
         this.bold(selectionState.bold);
         this.italic(selectionState.italic);
         this.underlined(selectionState.underlined);
+        this.highlighted(selectionState.highlighted);
         this.ul(selectionState.bulletedList);
         this.ol(selectionState.orderedList);
         this.alignment(selectionState.alignment);
@@ -145,6 +148,11 @@ export class FormattingTools {
 
     public toggleUnderlined(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleUnderlined();
+        this.updateFormattingState();
+    }
+
+    public toggleHighlighted(): void {
+        this.htmlEditorProvider.getCurrentHtmlEditor().toggleHighlighted();
         this.updateFormattingState();
     }
 
