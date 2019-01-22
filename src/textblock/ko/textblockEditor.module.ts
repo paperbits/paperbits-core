@@ -2,7 +2,6 @@ import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { IWidgetHandler } from "@paperbits/common/editing";
 import { TextblockHandlers } from "../textblockHandlers";
 import { BlockStyleSelector } from "./formatting/blockStyleSelector";
-import { FontSelector } from "./formatting/fontSelector";
 import { FormattingTools } from "./formatting/formattingTools";
 import { HyperlinkEditor } from "./hyperlink/hyperlinkEditor";
 import { TextblockEditor } from "./textblockEditor";
@@ -14,6 +13,5 @@ export class TextblockEditorModule implements IInjectorModule {
         injector.bind("hyperlinkEditor", HyperlinkEditor);
         injector.bind("textblockEditor", TextblockEditor);
         injector.bind("blockStyleSelector", BlockStyleSelector);
-        // injector.bind("fontSelector", FontSelector);
     }
 }

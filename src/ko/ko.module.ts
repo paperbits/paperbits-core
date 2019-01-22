@@ -1,7 +1,6 @@
 import * as ko from "knockout";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { GridBindingHandler } from "./bindingHandlers/bindingHandlers.grid";
-import { ContentBindingHandler } from "./bindingHandlers/bindingHandlers.content";
 import { LightboxBindingHandler } from "./bindingHandlers/bindingHandlers.lightbox";
 import { DraggablesBindingHandler } from "./bindingHandlers/bindingHandlers.draggables";
 import { WidgetBindingHandler } from "./bindingHandlers/bindingHandlers.widget";
@@ -32,13 +31,6 @@ export class KoModule implements IInjectorModule {
     public register(injector: IInjector): void {
         ko.virtualElements.allowedBindings["widget"] = true;
         ko.virtualElements.allowedBindings["layoutrow"] = true;
-        ko.virtualElements.allowedBindings["component"] = true;
-
-        injector.bindSingleton("contentBindingHandler", ContentBindingHandler);
-        injector.bindSingleton("lighboxBindingHandler", LightboxBindingHandler);
-        injector.bindSingleton("draggablesBindingHandler", DraggablesBindingHandler);
-        injector.bindSingleton("widgetBindingHandler", WidgetBindingHandler);
-        injector.bindSingleton("backgroundBindingHandler", BackgroundBindingHandler);
-        injector.bindSingleton("gridBindingHandler", GridBindingHandler);
+        ko.virtualElements.allowedBindings["component"] = true;     
     }
 }

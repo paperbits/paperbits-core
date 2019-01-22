@@ -1,3 +1,5 @@
+import { BackgroundBindingHandler } from "./ko/bindingHandlers/bindingHandlers.background";
+import { WidgetBindingHandler } from "./ko/bindingHandlers/bindingHandlers.widget";
 import { DefaultRouteHandler } from "@paperbits/common/routing";
 import { SettingsProvider } from "@paperbits/common/configuration";
 import { PageHost } from "./workshops/page/ko/pageHost";
@@ -41,14 +43,18 @@ import { BlockService } from "@paperbits/common/blocks";
 import { NavigationService } from "@paperbits/common/navigation";
 import { SiteService } from "@paperbits/common/sites";
 import { UrlService } from "@paperbits/common/urls";
-import { UnhandledErrorHandler } from "@paperbits/common/errors";
 import { CardModule } from "./card/ko/card.module";
 
+/**
+ * Module registering core components.
+ */
 export class CoreModule implements IInjectorModule {
     public register(injector: IInjector): void {
+        injector.bindCollection("autostart");
         injector.bindCollection("widgetHandlers");
         injector.bindCollection("modelBinders");
         injector.bindCollection("viewModelBinders");
+        
 
         /*** Core ***/
         injector.bindSingleton("settingsProvider", SettingsProvider);
@@ -57,7 +63,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("eventManager", DefaultEventManager);
         injector.bindSingleton("globalEventHandler", GlobalEventHandler);
         injector.bindSingleton("localCache", LocalCache);
-        injector.bindSingleton("offlineObjectStorage", OfflineObjectStorage);
+        
         injector.bindSingleton("anchorMiddleware", AnchorMiddleware);
 
         /*** Services ***/
@@ -71,8 +77,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("navigationService", NavigationService);
         injector.bindSingleton("siteService", SiteService);
         injector.bindSingleton("urlService", UrlService);
-        injector.bindSingleton("savingHandler", SavingHandler);
-        injector.bindSingleton("errorHandler", UnhandledErrorHandler);
         injector.bindSingleton("permalinkResolver", PermalinkResolver);
 
         injector.bind("modelBinderSelector", ModelBinderSelector);
@@ -103,5 +107,8 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new SliderModule());
         injector.bindModule(new SearchResultsModule());
         injector.bindModule(new CardModule());
+
+        injector.bindToCollection("autostart", WidgetBindingHandler);
+        injector.bindToCollection("autostart", BackgroundBindingHandler);
     }
 }

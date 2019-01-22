@@ -5,7 +5,7 @@ import { IWidgetBinding, GridHelper, WidgetContext } from "@paperbits/common/edi
 import { Keys } from "@paperbits/common/keyboard";
 import { IWidgetService } from "@paperbits/common/widgets";
 import { IRouteHandler } from "@paperbits/common/routing";
-import * as ko from "knockout";
+
 export class GridEditor {
     private activeHighlightedElement: HTMLElement;
     private scrolling: boolean;
@@ -263,7 +263,10 @@ export class GridEditor {
         if (acceptorElement) {
             const childNodes = Array.prototype.slice
                 .call(acceptorElement.childNodes)
-                .filter(node => GridHelper.getModel(node) !== null && node !== dragSession.sourceElement);
+                .filter(node =>
+                    node.nodeName !== "#comment" &&
+                    node !== dragSession.sourceElement &&
+                    GridHelper.getModel(node) !== null);
 
             const intersection = _.intersection(childNodes, elements);
 

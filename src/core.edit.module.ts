@@ -1,3 +1,7 @@
+import { LightboxBindingHandler } from "./ko/bindingHandlers/bindingHandlers.lightbox";
+import { GridBindingHandler } from "./ko/bindingHandlers/bindingHandlers.grid";
+import { DraggablesBindingHandler } from "./ko/bindingHandlers/bindingHandlers.draggables";
+import { CoreModule } from "./core.module";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { VideoPlayerEditorModule } from "./video-player/ko/videoPlayerEditor.module";
 import { PictureEditorModule } from "./picture/ko/pictureEditor.module";
@@ -23,7 +27,7 @@ import { TextblockEditorModule } from "./textblock/ko/textblockEditor.module";
 import { DropbucketModule } from "./workshops/dropbucket/ko/dropbucket.module";
 import { ViewportSelector } from "./workshops/viewports/ko/viewport-selector";
 import { HostBindingHandler, BalloonBindingHandler, ResizableBindingHandler } from "./ko/bindingHandlers";
-import { IContentDropHandler, IWidgetHandler, MediaHandlers, HtmlEditorProvider } from "@paperbits/common/editing";
+import { MediaHandlers, HtmlEditorProvider } from "@paperbits/common/editing";
 import { IHyperlinkProvider, LityLightbox } from "@paperbits/common/ui";
 import { HyperlinkSelector } from "./workshops/hyperlinks/ko/hyperlinkSelector";
 import { WidgetSelector } from "./workshops/widgets/ko/widgetSelector";
@@ -35,6 +39,8 @@ import { BlogHyperlinkProvider } from "@paperbits/common/blogs/blogHyperlinkProv
 import { UrlHyperlinkProvider } from "@paperbits/common/urls/urlHyperlinkProvider";
 import { MediaHyperlinkProvider } from "@paperbits/common/media";
 import { DragManager } from "@paperbits/common/ui/draggables";
+import { SavingHandler } from "@paperbits/common/persistence/savingHandler";
+import { UnhandledErrorHandler } from "@paperbits/common/errors";
 import { PlaceholderViewModel } from "./placeholder/ko/placeholderViewModel";
 import { SearchResultsEditorModule } from "./search-results/ko/searchResultsEditor.module";
 import { ViewManager, Tooltip } from "./ko/ui";
@@ -46,21 +52,20 @@ import { CardEditorModule } from "./card/ko/cardEditor.module";
 
 export class CoreEditModule implements IInjectorModule {
     public register(injector: IInjector): void {
-        injector.bindCollection("dropHandlers");
-        // injector.bindSingleton("settingsProvider", SettingsProvider);
-        // injector.bindSingleton("routeHandler", DefaultRouteHandler); 
+        injector.bindModule(new CoreModule());
 
+        injector.bindCollection("dropHandlers");
         injector.bindSingleton("viewManager", ViewManager);
         injector.bind("pageHyperlinkProvider", PageHyperlinkProvider);
         injector.bind("blogHyperlinkProvider", BlogHyperlinkProvider);
         injector.bind("mediaHyperlinkProvider", MediaHyperlinkProvider);
         injector.bind("urlHyperlinkProvider", UrlHyperlinkProvider);
         injector.bind("gridEditor", GridEditor);
-
-        injector.bindSingleton("knockoutValidation", KnockoutValidation);
-        injector.bindSingleton("resizableBindingHandler", ResizableBindingHandler);
-        injector.bindSingleton("cropperBindingHandler", CropperBindingHandler);
-        injector.bindSingleton("balloonBindingHandler", BalloonBindingHandler);
+        injector.bindToCollection("autostart", KnockoutValidation);
+        injector.bindToCollection("autostart", ResizableBindingHandler);
+        injector.bindToCollection("autostart", CropperBindingHandler);
+        injector.bindToCollection("autostart", BalloonBindingHandler);
+        injector.bindToCollection("autostart", UnhandledErrorHandler);
         injector.bind("tooltip", Tooltip);
 
         injector.bindFactory<IHyperlinkProvider[]>("resourcePickers", (ctx: IInjector) => {
@@ -82,20 +87,15 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindSingleton("lightbox", LityLightbox);
         injector.bind("placeholderWidget", PlaceholderViewModel);
 
-
         /*** Editors ***/
         injector.bindSingleton("htmlEditorProvider", HtmlEditorProvider);
         injector.bindSingleton("mediaHandler", MediaHandlers);
-
         injector.bind("workshops", Workshops);
         injector.bind("viewportSelector", ViewportSelector);
-        injector.bindSingleton("hostBindingHandler", HostBindingHandler);
         injector.bind("settingsWorkshop", SettingsWorkshop);
-
         injector.bind("hyperlinkSelector", HyperlinkSelector);
         injector.bind("widgetSelector", WidgetSelector);
         injector.bind("urlSelector",  UrlSelector);
-
         injector.bindModule(new TextblockEditorModule());
         injector.bindModule(new PictureEditorModule());
         injector.bindModule(new ButtonEditorModule());
@@ -120,5 +120,11 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindModule(new PageEditorModule());
         injector.bindModule(new SliderEditorModule());
         injector.bindModule(new CardEditorModule());
+        
+        injector.bindToCollection("autostart", HostBindingHandler);
+        injector.bindToCollection("autostart", SavingHandler);
+        injector.bindToCollection("autostart", DraggablesBindingHandler);
+        injector.bindToCollection("autostart", GridBindingHandler);
+        injector.bindToCollection("autostart", LightboxBindingHandler);
     }
 }

@@ -9,8 +9,8 @@ import { IModelBinder } from "@paperbits/common/editing";
 export class TextblockModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("textblock", TextblockViewModel);
-        injector.bindSingleton("htmlEditorBindingHandler", HtmlEditorBindingHandler);
         injector.bindToCollection("modelBinders", TextblockModelBinder);
         injector.bindToCollection("viewModelBinders", TextblockViewModelBinder);
+        injector.bindToCollection("autostart", HtmlEditorBindingHandler);
     }
 }
