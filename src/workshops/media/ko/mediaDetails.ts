@@ -74,7 +74,7 @@ export class MediaDetailsWorkshop {
             heading: "Edit picture",
             component: {
                 name: "picture-cropper",
-                params: { sourceUrl: this.mediaItem.downloadUrl() }
+                params: { mediaItem: this.mediaItem }
             },
             resize: "vertically horizontally"
         });

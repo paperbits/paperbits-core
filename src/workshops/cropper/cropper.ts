@@ -1,9 +1,11 @@
 import * as ko from "knockout";
 import * as Cropper from "cropperjs";
 import template from "./cropper.html";
-import { Component } from "@paperbits/common/ko/decorators";
+import { Component, Param } from "@paperbits/common/ko/decorators";
 import { IEventManager } from "@paperbits/common/events";
-import { Param } from "@paperbits/common/ko/decorators";
+import { IMediaService } from "@paperbits/common/media";
+import { IViewManager } from "@paperbits/common/ui";
+import { MediaItem } from "../media/ko/mediaItem";
 
 export class CropperBindingHandler {
     constructor(eventManager: IEventManager) {
@@ -45,9 +47,12 @@ export class PictureCropper {
     public cropperInstance: KnockoutObservable<any>;
 
     @Param()
-    public sourceUrl: KnockoutObservable<string>;
+    public readonly mediaItem: MediaItem;
 
-    constructor() {
+    constructor(
+        private readonly mediaService: IMediaService,
+        private readonly viewManager: IViewManager
+    ) {
         this.setMoveMode = this.setMoveMode.bind(this);
         this.setCropMode = this.setCropMode.bind(this);
         this.zoomIn = this.zoomIn.bind(this);
@@ -58,8 +63,6 @@ export class PictureCropper {
         this.flipVertically = this.flipVertically.bind(this);
         this.crop = this.crop.bind(this);
         this.clear = this.clear.bind(this);
-
-        this.sourceUrl = ko.observable();
         this.cropperInstance = ko.observable(null);
     }
 
@@ -115,15 +118,27 @@ export class PictureCropper {
     }
 
     public crop(): void {
-        throw new Error("This functionality is not ready yet.");
-
         const cropper = this.cropperInstance();
-
-        cropper.getCroppedCanvas().toBlob(async (blob) => {
-            // console.log(await Utils.readBlobAsDataUrl(blob));
-
-            // TODO: Save back to media library
+        const canvas = <HTMLCanvasElement> cropper.getCroppedCanvas();
+        
+        canvas.toBlob(async (blob) => {
+            const reader = new FileReader();
+            reader.addEventListener("loadend", async () => {
+                const arrayBuffer = <ArrayBuffer> reader.result;
+                await this.updateMediaContent(new Uint8Array(arrayBuffer));
+            });
+            reader.readAsArrayBuffer(blob);
         });
+    }
+
+    private async updateMediaContent(content: Uint8Array): Promise<void> {
+        const uploadPromise = this.mediaService.updateMediaContent(this.mediaItem.toMedia(), content);
+        uploadPromise.then(updatedItem => {
+            this.mediaItem.downloadUrl(updatedItem.downloadUrl);
+            const cropper = this.cropperInstance();
+            cropper.replace(updatedItem.downloadUrl);
+        });
+        await this.viewManager.addPromiseProgressIndicator(uploadPromise, "Media library", `Updating ${this.mediaItem.fileName()}...`);
     }
 
     public clear(): void {
