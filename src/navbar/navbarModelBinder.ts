@@ -15,27 +15,31 @@ export class NavbarModelBinder implements IModelBinder {
         private readonly routeHandler: IRouteHandler
     ) { }
 
-    public async contractToModel(navbarContract: NavbarContract): Promise<NavbarModel> {
+    public async contractToModel(contract: NavbarContract): Promise<NavbarModel> {
+        if (!contract) {
+            throw new Error(`Parameter "contract" not specified.`);
+        }
+
         const navbarModel = new NavbarModel();
-        const navigationItemContract = await this.navigationService.getNavigationItem(navbarContract.rootKey);
+        const navigationItemContract = await this.navigationService.getNavigationItem(contract.rootKey);
 
         if (navigationItemContract) {
             const navbarItemModel = await this.navigationItemToNavbarItemModel(navigationItemContract);
             navbarModel.root = navbarItemModel;
         }
 
-        navbarModel.rootKey = navbarContract.rootKey;
-        navbarModel.pictureSourceKey = navbarContract.rootKey;
+        navbarModel.rootKey = contract.rootKey;
+        navbarModel.pictureSourceKey = contract.rootKey;
 
-        if (navbarContract.sourceKey) {
-            const media = await this.mediaService.getMediaByKey(navbarContract.sourceKey);
+        if (contract.sourceKey) {
+            const media = await this.mediaService.getMediaByKey(contract.sourceKey);
 
             if (media) {
                 navbarModel.pictureSourceKey = media.key;
                 navbarModel.pictureSourceUrl = media.downloadUrl;
             }
             else {
-                console.warn(`Unable to set navbar branding. Media with source key ${navbarContract.sourceKey} not found.`);
+                console.warn(`Unable to set navbar branding. Media with source key ${contract.sourceKey} not found.`);
             }
         }
 
@@ -50,15 +54,19 @@ export class NavbarModelBinder implements IModelBinder {
         return model instanceof NavbarModel;
     }
 
-    public async navigationItemToNavbarItemModel(navigationItemContract: NavigationItemContract): Promise<NavigationItemModel> {
+    public async navigationItemToNavbarItemModel(contract: NavigationItemContract): Promise<NavigationItemModel> {
+        if (!contract) {
+            throw new Error(`Parameter "contract" not specified.`);
+        }
+
         const navbarItem = new NavigationItemModel();
 
-        navbarItem.label = navigationItemContract.label;
+        navbarItem.label = contract.label;
 
-        if (navigationItemContract.navigationItems) {
+        if (contract.navigationItems) {
             const tasks = [];
 
-            navigationItemContract.navigationItems.forEach(child => {
+            contract.navigationItems.forEach(child => {
                 tasks.push(this.navigationItemToNavbarItemModel(child));
             });
 
@@ -68,8 +76,8 @@ export class NavbarModelBinder implements IModelBinder {
                 navbarItem.nodes.push(child);
             });
         }
-        else if (navigationItemContract.targetKey) {
-            const contentItem = await this.contentItemService.getContentItemByKey(navigationItemContract.targetKey);
+        else if (contract.targetKey) {
+            const contentItem = await this.contentItemService.getContentItemByKey(contract.targetKey);
 
             if (contentItem) {
                 navbarItem.url = contentItem.permalink;
@@ -78,7 +86,7 @@ export class NavbarModelBinder implements IModelBinder {
         }
         else {
             console.warn(`No permalink key for item:`);
-            console.warn(navigationItemContract);
+            console.warn(contract);
         }
         navbarItem.isActive = navbarItem.url === this.routeHandler.getCurrentUrl();
 

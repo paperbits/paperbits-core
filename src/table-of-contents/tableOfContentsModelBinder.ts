@@ -33,12 +33,12 @@ export class TableOfContentsModelBinder implements IModelBinder {
 
         if (navigationItem.targetKey) {
             const contentItem = await this.contentItemService.getContentItemByKey(navigationItem.targetKey);
-            
+
             navbarItemModel.url = contentItem.permalink;
 
             if (contentItem.permalink === currentPageUrl) {
                 navbarItemModel.isActive = true;
-    
+
                 if (contentItem.anchors) {
                     // navbarItemModel.nodes = await this.processAnchorItems(page.anchors);
                 }
@@ -48,10 +48,14 @@ export class TableOfContentsModelBinder implements IModelBinder {
         return navbarItemModel;
     }
 
-    public async contractToModel(tableOfContentsContract: TableOfContentsContract): Promise<TableOfContentsModel> {
+    public async contractToModel(contract: TableOfContentsContract): Promise<TableOfContentsModel> {
+        if (!contract) {
+            throw new Error(`Parameter "contract" not specified.`);
+        }
+
         const tableOfContentsModel = new TableOfContentsModel();
-        tableOfContentsModel.title = tableOfContentsContract.title;
-        tableOfContentsModel.navigationItemKey = tableOfContentsContract.navigationItemKey;
+        tableOfContentsModel.title = contract.title;
+        tableOfContentsModel.navigationItemKey = contract.navigationItemKey;
         tableOfContentsModel.items = [];
 
         const currentPageUrl = this.routeHandler.getCurrentUrl();
@@ -63,10 +67,10 @@ export class TableOfContentsModelBinder implements IModelBinder {
         //     page = await this.pageService.getPageByKey(currentPagePermalink.targetKey);
         // }
 
-        if (tableOfContentsContract.navigationItemKey) {
-            const assignedNavigationItem = await this.navigationService.getNavigationItem(tableOfContentsContract.navigationItemKey);
+        if (contract.navigationItemKey) {
+            const assignedNavigationItem = await this.navigationService.getNavigationItem(contract.navigationItemKey);
 
-            if (assignedNavigationItem.navigationItems) { // has child nav items
+            if (assignedNavigationItem && assignedNavigationItem.navigationItems) { // has child nav items
                 const promises = assignedNavigationItem.navigationItems.map(async navigationItem => {
                     return await this.processNavigationItem(navigationItem, currentPageUrl);
                 });
