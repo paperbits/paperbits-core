@@ -29,7 +29,7 @@ export class NavbarModelBinder implements IModelBinder {
         }
 
         navbarModel.rootKey = contract.rootKey;
-        navbarModel.pictureSourceKey = contract.rootKey;
+        navbarModel.pictureSourceKey = contract.sourceKey;
 
         if (contract.sourceKey) {
             const media = await this.mediaService.getMediaByKey(contract.sourceKey);
