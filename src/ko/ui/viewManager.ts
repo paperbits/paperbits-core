@@ -18,7 +18,7 @@ import { IWidgetBinding } from "@paperbits/common/editing";
 import { IWidgetEditor } from "@paperbits/common/widgets";
 import { Component } from "@paperbits/common/ko/decorators";
 
-declare let uploadDialog;
+declare let uploadDialog: HTMLInputElement;
 
 
 
@@ -341,7 +341,9 @@ export class ViewManager implements IViewManager {
 
         return new Promise<File[]>((resolve) => {
             uploadDialog.onchange = () => {
-                resolve(Arrays.coerce(uploadDialog.files));
+                const selectedFiles = Arrays.coerce<File>(uploadDialog.files);
+                uploadDialog.value = "";
+                resolve(selectedFiles);
             };
         });
     }
