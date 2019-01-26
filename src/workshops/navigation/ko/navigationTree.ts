@@ -9,9 +9,9 @@ export class NavigationTree {  // TODO: This should be refactored into ModelBind
     public nodes: KnockoutObservableArray<NavigationItemViewModel>;
     public selectedNode: KnockoutObservable<NavigationItemViewModel>;
     public focusedNode: KnockoutObservable<NavigationItemViewModel>;
-    public onUpdate: KnockoutSubscribable<Array<NavigationItemContract>>;
+    public onUpdate: KnockoutSubscribable<NavigationItemContract[]>;
 
-    constructor(items: Array<NavigationItemContract>) {
+    constructor(items: NavigationItemContract[]) {
         this.onFocusChange = this.onFocusChange.bind(this);
         this.addNode = this.addNode.bind(this);
         this.onNodeDragStart = this.onNodeDragStart.bind(this);
@@ -43,9 +43,7 @@ export class NavigationTree {  // TODO: This should be refactored into ModelBind
     }
 
     private dispatchUpdates(): void {
-        const items = new Array<NavigationItemContract>();
-
-        this.nodes().forEach(n => items.push(n.toContract()));
+        const items = this.getNavigationItems();
         this.onUpdate.notifySubscribers(items);
     }
 
@@ -62,7 +60,7 @@ export class NavigationTree {  // TODO: This should be refactored into ModelBind
 
         if (navItem.navigationItems) {
             navItem.navigationItems.forEach(child => {
-                let childNode = this.modelToViewModel(child);
+                const childNode = this.modelToViewModel(child);
                 childNode.parent = viewModel;
                 viewModel.nodes.push(childNode);
             });
@@ -75,7 +73,7 @@ export class NavigationTree {  // TODO: This should be refactored into ModelBind
         const navitem: NavigationItemContract = {
             key: Utils.guid(),
             label: label
-        }
+        };
 
         const node = new NavigationItemViewModel(navitem);
 
@@ -102,7 +100,12 @@ export class NavigationTree {  // TODO: This should be refactored into ModelBind
         return node;
     }
 
-    public getNavigationItems(): Array<NavigationItemContract> {
+    public removeRootNode(item: NavigationItemViewModel): void {
+        this.nodes.remove(item);
+        this.dispatchUpdates();
+    }
+
+    public getNavigationItems(): NavigationItemContract[] {
         const navigationItems = [];
 
         this.nodes().forEach(x => navigationItems.push(x.toContract()));

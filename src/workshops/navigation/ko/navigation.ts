@@ -43,9 +43,7 @@ export class NavigationWorkshop {
         navigationTree.onUpdate.subscribe(this.onNavigationUpdate);
     }
 
-    public async onNavigationUpdate(navigationItems: Array<NavigationItemContract>): Promise<void> {
-        //this.navigationService.updateNavigationItem(topLevelMenus[0]); // TODO: For now user can have only one menu
-
+    public async onNavigationUpdate(navigationItems: NavigationItemContract[]): Promise<void> {
         await this.navigationService.updateNavigation(navigationItems);
     }
 
@@ -64,7 +62,12 @@ export class NavigationWorkshop {
 
         this.viewManager.openViewAsWorkshop("Navigation item", "navigation-details-workshop", {
             navigationItem: navigationItem,
-            onDeleteCallback: () => {
+            onDeleteCallback: (isRootItem: boolean) => {
+                if (isRootItem) {
+                    this.navigationItemsTree().removeRootNode(navigationItem);
+                    this.viewManager.notifySuccess("Navigation", `Navigation item "${navigationItem.label()}" was deleted.`);
+                    this.viewManager.closeWorkshop("navigation-details-workshop");
+                }
                 this.searchNavigationItems();
             }
         });

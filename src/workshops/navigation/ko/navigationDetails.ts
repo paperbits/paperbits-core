@@ -15,7 +15,7 @@ export class NavigationDetailsWorkshop {
     public readonly hyperlink: KnockoutObservable<HyperlinkModel>;
 
     @Event()
-    public onDeleteCallback: () => void;
+    public onDeleteCallback: (isRootItem: boolean) => void;
 
     @Param()
     public navigationItem: NavigationItemViewModel;
@@ -62,13 +62,18 @@ export class NavigationDetailsWorkshop {
     }
 
     public deleteNavigationItem(): void {
-        this.navigationItem.remove();
+        let isRootItem = false;
+        if (this.navigationItem.parent) {
+            this.navigationItem.remove();
 
-        this.viewManager.notifySuccess("Navigation", `Navigation item "${this.navigationItem.label()}" was deleted.`);
-        this.viewManager.closeWorkshop("navigation-details-workshop");
+            this.viewManager.notifySuccess("Navigation", `Navigation item "${this.navigationItem.label()}" was deleted.`);
+            this.viewManager.closeWorkshop("navigation-details-workshop");
+        } else {
+            isRootItem = true;
+        }
 
         if (this.onDeleteCallback) {
-            this.onDeleteCallback();
+            this.onDeleteCallback(isRootItem);
         }
     }
 }
