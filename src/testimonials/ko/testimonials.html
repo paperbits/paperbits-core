@@ -1,8 +1,6 @@
 <div class="testimonials">
         <blockquote>
-            <i>
-                <span data-bind="text: textContent"></span>
-            </i>
+            <span data-bind="text: textContent"></span>
         </blockquote>
         <!-- ko foreach: { data: [...Array(allStarsCount()).keys()] } -->
             <!-- ko if: $index() <= $parent.starsCount()-1 -->

@@ -54,5 +54,5 @@ export class TestimonialsEditor implements IWidgetEditor {
         this.model.author = this.author();
         this.model.authorTitle = this.authorTitle();
         this.applyChangesCallback();
-    } s
+    }
 }
