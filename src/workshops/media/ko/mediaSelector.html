@@ -14,9 +14,9 @@
 
         <ul class="flex-item flex-item-grow list" data-bind="foreach: { data: mediaItems, as: 'media' }, scrollable: {}">
             <!--ko if: $component.working()-->
-            <spinner></spinner>
+            <spinner></spinner>            
             <!--/ko-->
-            <li class="list-item list-item-float" data-bind="css: { selected: media.hasFocus }, dragsource: { sticky: true, payload: $data, ondragstart: $component.onDragStart, ondragend: $component.onDragEnd }">
+            <li class="list-item list-item-image" data-bind="css: { selected: media.hasFocus }, dragsource: { sticky: true, payload: $data, ondragstart: $component.onDragStart, ondragend: $component.onDragEnd }">
                 <a class="thumbnail" href="#" data-bind="click: $component.selectMedia, hasFocus: media.hasFocus, event: { keydown: $component.keydown }, style: { 'background-image': 'url('+media.thumbnailUrl()+')' }, attr: { title: media.fileName() }"></a>
             </li>
         </ul>
