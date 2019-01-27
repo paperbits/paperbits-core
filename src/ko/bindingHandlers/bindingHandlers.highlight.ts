@@ -1,29 +1,29 @@
 ﻿import * as ko from "knockout";
-import { IHighlightConfig } from "@paperbits/common/ui/IHighlightConfig";
+import { IHighlightConfig } from "@paperbits/common/ui";
 
 ko.bindingHandlers["highlight"] = {
     init(element: HTMLElement, valueAccessor: () => IHighlightConfig) {
-        let config = valueAccessor();
+        const config = valueAccessor();
 
         element["highlightConfig"] = config;
 
-        let updatePosition = () => {
-            let currentConfig = <IHighlightConfig>element["highlightConfig"];
+        const updatePosition = () => {
+            const currentConfig = <IHighlightConfig>element["highlightConfig"];
 
             if (!currentConfig || !currentConfig.element) {
                 return;
             }
 
-            let parent = currentConfig.element.ownerDocument.defaultView.frameElement;
-            let parentRect = parent.getBoundingClientRect();
+            const parent = currentConfig.element.ownerDocument.defaultView.frameElement;
+            const parentRect = parent.getBoundingClientRect();
 
-            let rect = currentConfig.element.getBoundingClientRect();
+            const rect = currentConfig.element.getBoundingClientRect();
             element.style.left = parentRect.left + rect.left + "px";
             element.style.top = parentRect.top + rect.top + "px";
             element.style.width = rect.width + "px";
             element.style.height = rect.height + "px";
             element.title = currentConfig.text || "Widget";
-        }
+        };
         element["highlightUpdate"] = updatePosition;
 
 
@@ -37,7 +37,7 @@ ko.bindingHandlers["highlight"] = {
     },
 
     update(element: HTMLElement, valueAccessor: () => IHighlightConfig) {
-        let config = valueAccessor();
+        const config = valueAccessor();
 
         element["highlightConfig"] = ko.unwrap(config);
         element["highlightUpdate"]();

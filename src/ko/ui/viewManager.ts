@@ -44,6 +44,7 @@ export class ViewManager implements IViewManager {
     public selectedElement: KnockoutObservable<IHighlightConfig>;
     public selectedElementContextualEditor: KnockoutObservable<IContextualEditor>;
     public viewport: KnockoutObservable<string>;
+    public hostDocument: Document;
 
     public host: KnockoutObservable<IComponent>;
 
@@ -361,7 +362,7 @@ export class ViewManager implements IViewManager {
         this.mode = ViewManagerMode.configure;
     }
 
-    public getWidgetview(): IView {
+    public getOpenView(): IView {
         return this.widgetEditor();
     }
 
@@ -510,5 +511,9 @@ export class ViewManager implements IViewManager {
 
     public removeBalloon(component: IComponent): void {
         this.balloons.remove(component);
+    }
+
+    public getHostDocument(): Document {
+        return this.hostDocument;
     }
 }

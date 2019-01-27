@@ -16,6 +16,7 @@ export class GridEditor {
     private actives: object;
     private ownerDocument: Document;
 
+
     constructor(
         private readonly viewManager: IViewManager,
         private readonly widgetService: IWidgetService,
@@ -31,7 +32,7 @@ export class GridEditor {
     }
 
     private isModelBeingEdited(binding: IWidgetBinding): boolean {
-        const session = this.viewManager.getWidgetview();
+        const session = this.viewManager.getOpenView();
 
         if (!session) {
             return false;
@@ -189,7 +190,8 @@ export class GridEditor {
 
             const config: IHighlightConfig = {
                 element: element,
-                text: widgetBinding["displayName"]
+                text: widgetBinding["displayName"],
+                color: contextualEditor.color
             };
 
             this.viewManager.setSelectedElement(config, contextualEditor);
@@ -463,6 +465,7 @@ export class GridEditor {
     private async rerenderEditors(pointerX: number, pointerY: number, elements: HTMLElement[]): Promise<void> {
         let highlightedElement: HTMLElement;
         let highlightedText: string;
+        let highlightColor: string;
         const tobeDeleted = Object.keys(this.actives);
 
         let layoutEditing = false;
@@ -503,9 +506,11 @@ export class GridEditor {
             const half = quadrant.vertical;
             const active = this.actives[widgetBinding.name];
 
-            if (!active || element !== active.element || half !== active.half) {
-                const contextualEditor = this.getContextualEditor(element, half);
+            const contextualEditor = this.getContextualEditor(element, half);
 
+            highlightColor = contextualEditor.color;
+
+            if (!active || element !== active.element || half !== active.half) {
                 this.viewManager.setContextualEditor(widgetBinding.name, contextualEditor);
 
                 this.actives[widgetBinding.name] = {
@@ -522,7 +527,7 @@ export class GridEditor {
 
         if (this.activeHighlightedElement !== highlightedElement) {
             this.activeHighlightedElement = highlightedElement;
-            this.viewManager.setHighlight({ element: highlightedElement, text: highlightedText });
+            this.viewManager.setHighlight({ element: highlightedElement, text: highlightedText, color: highlightColor });
         }
     }
 

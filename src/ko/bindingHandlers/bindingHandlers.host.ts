@@ -117,6 +117,8 @@ export class HostBindingHandler {
 
             hostElement.contentDocument.addEventListener("click", onClick, true);
             hostElement.contentDocument.addEventListener("mousedown", onPointerDown, true);
+
+            this.viewManager["hostDocument"] = hostElement.contentDocument;
         };
 
         hostElement.addEventListener("load", onLoad, false);
