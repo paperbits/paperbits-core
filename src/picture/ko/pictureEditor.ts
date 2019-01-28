@@ -29,6 +29,7 @@ export class PictureEditor implements IWidgetEditor {
     constructor() {
         this.onHyperlinkChange = this.onHyperlinkChange.bind(this);
         this.onMediaSelected = this.onMediaSelected.bind(this);
+        this.setWidgetModel = this.setWidgetModel.bind(this);
         this.onChange = this.onChange.bind(this);
 
         this.caption = ko.observable<string>();
@@ -86,15 +87,19 @@ export class PictureEditor implements IWidgetEditor {
     }
 
     public onMediaSelected(media: MediaContract): void {
-        const background = new BackgroundModel(); // TODO: Let's use proper model here
-        background.sourceKey = media.key;
-        background.sourceUrl = media.downloadUrl;
-        background.size = "contain";
-        background.position = "center center";
+        if (!media) {
+            this.background(null);
+        } else {
+            const background = new BackgroundModel(); // TODO: Let's use proper model here
+            background.sourceKey = media.key;
+            background.sourceUrl = media.downloadUrl;
+            background.size = "contain";
+            background.position = "center center";
+            // TODO: use window.devicePixelRatio to assign sizes
 
-        // TODO: use window.devicePixelRatio to assign sizes
-
-        this.background(background);
+            this.background(background);
+        }
+        
         this.onChange();
     }
 

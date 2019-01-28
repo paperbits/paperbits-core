@@ -67,9 +67,13 @@ export class VideoEditor implements IWidgetEditor {
     }
 
     public onMediaSelected(media: MediaContract): void {
-        this.video.sourceUrl = media.downloadUrl;
-        this.video.sourceKey = media.key;
-
+        if (media) {
+            this.video.sourceUrl = media.downloadUrl;
+            this.video.sourceKey = media.key;
+        } else {
+            this.video.sourceUrl = undefined;
+            this.video.sourceKey = undefined;
+        }
         this.sourceUrl(this.video.sourceUrl);
 
         this.applyChangesCallback();

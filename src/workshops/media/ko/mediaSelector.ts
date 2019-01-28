@@ -73,6 +73,11 @@ export class MediaSelector {
         this.onSelect(media.toMedia());
     }
 
+    public async selectNone(): Promise<void> {
+        this.selectedMedia(undefined);
+        this.onSelect(undefined);
+    }
+
     public onMediaUploaded(): void {
         this.searchMedia();
     }

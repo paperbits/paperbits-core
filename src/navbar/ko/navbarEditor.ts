@@ -53,6 +53,7 @@ export class NavbarEditor {
         else {
             this.model.pictureSourceKey = undefined;
             this.model.pictureSourceUrl = undefined;
+            this.logoUrl(undefined);
         }
 
         this.onChange(this.model);

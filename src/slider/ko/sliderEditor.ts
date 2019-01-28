@@ -104,6 +104,11 @@ export class SliderEditor implements IWidgetEditor {
     }
 
     public onMediaSelected(media: MediaContract): void {
+        if (!media) {
+            this.clearBackground();
+            return;
+        }
+        
         this.activeSlideModel.background.sourceKey = media.key;
         this.activeSlideModel.background.sourceUrl = media.downloadUrl;
 
