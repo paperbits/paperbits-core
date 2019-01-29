@@ -50,7 +50,8 @@ export class TestimonialsEditor implements IWidgetEditor {
     private onControlsUpdate(): void {
         this.model.textContent = this.textContent();
         this.model.starsCount = +this.starsCount();
-        this.model.allStarsCount = +this.allStarsCount();
+        const count = +this.allStarsCount();
+        this.model.allStarsCount = count <= 10 ? count : 10;
         this.model.author = this.author();
         this.model.authorTitle = this.authorTitle();
         this.applyChangesCallback();
