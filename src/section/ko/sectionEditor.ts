@@ -7,6 +7,10 @@ import { SectionModel } from "../sectionModel";
 import { StyleService, } from "@paperbits/styles";
 import { BackgroundContract, TypographyContract } from "@paperbits/styles/contracts";
 
+const styleKeySnapTop = "utils/block/snapToTop";
+const styleKeySnapBottom = "utils/block/snapToBottom";
+const styleKeyStretch = "utils/block/stretch";
+
 @Component({
     selector: "layout-section-editor",
     template: template,
@@ -27,8 +31,8 @@ export class SectionEditor {
 
         this.layout = ko.observable<string>();
         this.padding = ko.observable<string>();
-        this.snap = ko.observable<string>();
-        this.stretch = ko.observable<boolean>();
+        this.snap = ko.observable<string>("none");
+        this.stretch = ko.observable<boolean>(false);
         this.background = ko.observable<BackgroundContract>();
         this.typography = ko.observable<TypographyContract>();
     }
@@ -43,15 +47,33 @@ export class SectionEditor {
     public async initialize(): Promise<void> {
         this.layout(this.model.container);
         this.padding(this.model.padding);
-        this.snap(this.model.snap);
-        this.stretch(this.model.height === "stretch");
 
-        if (this.model.styles && this.model.styles["instance"]) {
-            const sectionStyles = await this.styleService.getStyleByKey(this.model.styles["instance"]);
+        if (this.model.styles) {
+            if (this.model.styles["instance"]) {
+                const sectionStyles = await this.styleService.getStyleByKey(this.model.styles["instance"]);
 
-            if (sectionStyles) {
-                this.background(sectionStyles.background);
-                this.typography(sectionStyles.typography);
+                if (sectionStyles) {
+                    this.background(sectionStyles.background);
+                    this.typography(sectionStyles.typography);
+                }
+            }
+
+            if (this.model.styles["size"]) {
+                this.stretch(true);
+            }
+
+            if (this.model.styles["snap"]) {
+                const snapStyleKey = this.model.styles["snap"]["xs"];
+
+                switch (snapStyleKey) {
+                    case styleKeySnapTop:
+                        this.snap("top");
+                        break;
+
+                    case styleKeySnapBottom:
+                        this.snap("bottom");
+                        break;
+                }
             }
         }
 
@@ -67,10 +89,29 @@ export class SectionEditor {
      * Collecting changes from the editor UI and invoking callback method.
      */
     private applyChanges(): void {
+        this.model.styles = this.model.styles || {};
         this.model.container = this.layout();
         this.model.padding = this.padding();
-        this.model.snap = this.snap();
-        this.model.height = this.stretch() ? "stretch" : undefined;
+
+        if (this.stretch()) {
+            this.model.styles["size"] = { xs: styleKeyStretch };
+        }
+        else {
+            delete this.model.styles["size"];
+        }
+
+        switch (this.snap()) {
+            case "top":
+                this.model.styles["snap"] = { xs: styleKeySnapTop };
+                break;
+
+            case "bottom":
+                this.model.styles["snap"] = { xs: styleKeySnapBottom };
+                break;
+
+            default:
+                delete this.model.styles["snap"];
+        }
 
         this.onChange(this.model);
     }

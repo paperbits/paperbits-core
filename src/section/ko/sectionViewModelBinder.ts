@@ -34,8 +34,6 @@ export class SectionViewModelBinder implements IViewModelBinder<SectionModel, Se
         viewModel.widgets(viewModels);
         viewModel.container(model.container);
         viewModel.styles(model.styles);
-        viewModel.snapTo(model.snap);
-        viewModel.height(model.height);
 
         const binding: IWidgetBinding = {
             name: "section",
