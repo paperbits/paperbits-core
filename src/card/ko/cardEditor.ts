@@ -21,6 +21,8 @@ export class CardEditor {
     public readonly scrollOnOverlow: KnockoutObservable<boolean>;
     public readonly background: KnockoutObservable<BackgroundContract>;
     public readonly typography: KnockoutObservable<TypographyContract>;
+    public readonly appearanceStyles: KnockoutObservableArray<any>;
+    public readonly appearanceStyle: KnockoutObservable<any>;
 
     constructor(
         private readonly viewManager: IViewManager,
@@ -38,17 +40,20 @@ export class CardEditor {
         this.viewManager = viewManager;
         this.initialize = this.initialize.bind(this);
 
+        this.applyChanges = this.applyChanges.bind(this);
+
         this.alignment = ko.observable<string>();
-        this.alignment.subscribe(this.applyChanges.bind(this));
 
         this.verticalAlignment = ko.observable<string>();
         this.horizontalAlignment = ko.observable<string>();
 
         this.scrollOnOverlow = ko.observable<boolean>();
-        this.scrollOnOverlow.subscribe(this.applyChanges.bind(this));
 
         this.background = ko.observable<BackgroundContract>();
         this.typography = ko.observable<TypographyContract>();
+
+        this.appearanceStyles = ko.observableArray<any>();
+        this.appearanceStyle = ko.observable<any>();
     }
 
     @Param()
@@ -91,6 +96,8 @@ export class CardEditor {
 
         this.model.overflowX = this.model.overflowY = this.scrollOnOverlow() ? "scroll" : null;
 
+        this.model.styles.appearance = this.appearanceStyle();
+
         this.onChange(this.model);
     }
 
@@ -131,6 +138,7 @@ export class CardEditor {
 
     @OnMounted()
     public async initialize(): Promise<void> {
+        
         const viewport = this.viewManager.getViewport();
 
         const alignment = this.determineAlignment(viewport, this.model);
@@ -142,15 +150,25 @@ export class CardEditor {
         this.verticalAlignment(directions[0]);
         this.horizontalAlignment(directions[1]);
 
+        const variations = await this.styleService.getComponentVariations("card");
+        this.appearanceStyles(variations.filter(x => x.category === "appearance"));
 
-        if (this.model.styles && this.model.styles["instance"]) {
-            const styles = await this.styleService.getStyleByKey(this.model.styles["instance"]);
+        if (this.model.styles) {
+            if (this.model.styles["instance"]) {
+                const styles = await this.styleService.getStyleByKey(this.model.styles["instance"]);
 
-            if (styles) {
-                this.background(styles.background);
-                this.typography(styles.typography);
+                if (styles) {
+                    this.background(styles.background);
+                    this.typography(styles.typography);
+                }
             }
+
+            this.appearanceStyle(this.model.styles.appearance);
         }
+        
+        this.alignment.subscribe(this.applyChanges);
+        this.scrollOnOverlow.subscribe(this.applyChanges);      
+        this.appearanceStyle.subscribe(this.applyChanges);
     }
 
     public toggleHorizontal(): void {
@@ -231,7 +249,7 @@ export class CardEditor {
         }
         else {
             instanceKey = `instances/card-${Utils.identifier()}`;
-            this.model.styles = { instance: instanceKey };
+            this.model.styles.instance = instanceKey;
         }
 
         this.styleService.setInstanceStyle(instanceKey, { background: background });
@@ -246,7 +264,7 @@ export class CardEditor {
         }
         else {
             instanceKey = `instances/card-${Utils.identifier()}`;
-            this.model.styles = { instance: instanceKey };
+            this.model.styles.instance = instanceKey;
         }
 
         this.styleService.setInstanceStyle(instanceKey, { typography: typography });

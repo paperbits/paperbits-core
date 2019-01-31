@@ -6,11 +6,11 @@ export class CardModel implements WidgetModel {
     public alignment: Breakpoints;
     public overflowX: string;
     public overflowY: string;
-    public styles: Object;
+    public styles: any;
 
     constructor() {
         this.widgets = [];
         this.alignment = {};
-        this.styles = {};
+        this.styles = { appearance: "components/card/default" };
     }
 }
