@@ -7,14 +7,4 @@ export interface SectionContract extends Contract {
      *  Layout types: container, full width.
      */
     layout?: string;
-
-    /**
-     * by content, screen size
-     */
-    height?: string;
-
-    /**
-     * Possible values: top, bottom.
-     */
-    snapping: string;
 }

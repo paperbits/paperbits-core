@@ -119,6 +119,28 @@ export class HostBindingHandler {
             hostElement.contentDocument.addEventListener("mousedown", onPointerDown, true);
 
             this.viewManager["hostDocument"] = hostElement.contentDocument;
+
+            /* Intercepting push state of hosted window */
+            const hostedWindowHistory = hostElement.contentDocument.defaultView.window.history;
+            const hostedWindoworiginalPushState = hostedWindowHistory.pushState;
+
+            const routeHandler = this.routeHandler;
+
+            const onRouteChange = () => {
+                hostedWindowHistory.pushState({ host: true }, null, routeHandler.getCurrentUrl());
+            };
+
+            routeHandler.addRouteChangeListener(onRouteChange);
+
+            hostedWindowHistory.pushState(null, null, routeHandler.getCurrentUrl());
+
+            hostedWindowHistory.pushState = (data: any, title: string, url: string) => {
+                if (data && data.host) {
+                    return;
+                }
+
+                window.history.pushState(null, null, url);
+            };
         };
 
         hostElement.addEventListener("load", onLoad, false);

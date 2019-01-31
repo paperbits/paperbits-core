@@ -10,15 +10,11 @@ import { WidgetViewModel } from "../../ko/widgetViewModel";
 export class SectionViewModel implements WidgetViewModel {
     public widgets: KnockoutObservableArray<WidgetViewModel>;
     public container: KnockoutObservable<string>;
-    public snapTo: KnockoutObservable<string>;
-    public height: KnockoutObservable<string>;
     public styles: KnockoutObservable<Object>;
 
     constructor() {
         this.widgets = ko.observableArray<WidgetViewModel>();
         this.container = ko.observable<string>();
-        this.snapTo = ko.observable<string>();
-        this.height = ko.observable<string>();
         this.styles = ko.observable<Object>();
     }
 }

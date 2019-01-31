@@ -12,11 +12,7 @@ export class SectionModelBinder implements IModelBinder {
         return model instanceof SectionModel;
     }
 
-    constructor(
-        private readonly modelBinderSelector: ModelBinderSelector) {
-
-        this.contractToModel = this.contractToModel.bind(this);
-    }
+    constructor(private readonly modelBinderSelector: ModelBinderSelector) { }
 
     public async contractToModel(contract: SectionContract): Promise<SectionModel> {
         const model = new SectionModel();
@@ -24,8 +20,6 @@ export class SectionModelBinder implements IModelBinder {
         contract.nodes = contract.nodes || [];
         model.container = contract.layout;
         model.padding = contract.padding;
-        model.snap = contract.snapping;
-        model.height = contract.height;
         model.styles = contract.styles;
 
         const modelPromises = contract.nodes.map(async (node) => {
@@ -45,8 +39,6 @@ export class SectionModelBinder implements IModelBinder {
             nodes: [],
             layout: sectionModel.container,
             padding: sectionModel.padding,
-            snapping: sectionModel.snap,
-            height: sectionModel.height,
             styles: sectionModel.styles
         };
 
