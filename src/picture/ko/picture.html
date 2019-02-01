@@ -1,23 +1,12 @@
 <picture>
-    <!-- ko if: layout() === "polaroid" -->
-    <div class="picture polaroid">
-        <img class="content" data-bind="background: background, attr: { alt: caption }" />
-        <!-- ko if: caption() -->
-        <label class="picture-caption" data-bind="text: caption"></label>
-        <!-- /ko -->
-    </div>
-    <!-- /ko -->
-
-    <!-- ko if: layout() === "circle" -->
-    <div class="picture circle">
-        <div class="content" data-bind="background: background, attr: { alt: caption }"></div>
-    </div>
-    <!-- /ko -->
-
-    <!-- ko if: layout() === "noframe" -->
+    <!-- ko if: hyperlink -->
     <a class="picture noframe" data-bind="hyperlink: hyperlink">
         <img class="content" data-bind="background: background, attr: { alt: caption }, size: { width: width, height: height }" />
     </a>
     <!-- /ko -->
-
+    <!-- ko ifnot: hyperlink -->
+    <div class="picture noframe">
+        <img class="content" data-bind="background: background, attr: { alt: caption }, size: { width: width, height: height }" />
+    </div>
+    <!-- /ko -->
 </picture>
