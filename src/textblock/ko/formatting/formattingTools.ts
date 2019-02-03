@@ -1,14 +1,15 @@
+
 import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
 import template from "./formattingTools.html";
 import { IEventManager } from "@paperbits/common/events";
-import { IHtmlEditorProvider } from "@paperbits/common/editing/htmlEditorProvider";
+import { IHtmlEditorProvider, HtmlEditorEvents, alignmentStyleKeys } from "@paperbits/common/editing";
 import { IPageService } from "@paperbits/common/pages";
 import { IRouteHandler } from "@paperbits/common/routing";
-import { HtmlEditorEvents } from "@paperbits/common/editing";
 import { Component, OnDestroyed } from "@paperbits/common/ko/decorators";
 import { FontContract, ColorContract } from "@paperbits/styles/contracts";
 import { IViewManager } from "@paperbits/common/ui";
+import { Breakpoints } from "@paperbits/common";
 
 @Component({
     selector: "formatting",
@@ -74,7 +75,32 @@ export class FormattingTools {
         this.highlighted(selectionState.highlighted);
         this.ul(selectionState.bulletedList);
         this.ol(selectionState.orderedList);
-        this.alignment(selectionState.alignment);
+
+        let alignment = "left";
+
+        if (selectionState.alignment) {
+            const breakpoint = Utils.getClosestBreakpoint(selectionState.alignment, this.viewManager.getViewport());
+            const alignmentStyleKey = selectionState.alignment[breakpoint];
+
+            switch (alignmentStyleKey) {
+                case alignmentStyleKeys.left:
+                    alignment = "left";
+                    break;
+                case alignmentStyleKeys.center:
+                    alignment = "center";
+                    break;
+                case alignmentStyleKeys.right:
+                    alignment = "right";
+                    break;
+                case alignmentStyleKeys.justify:
+                    alignment = "justify";
+                    break;
+                default:
+                    console.warn(`Unknown alignment style key: ${alignmentStyleKey}`);
+            }
+        }
+
+        this.alignment(alignment);
 
         this.anchored(!!selectionState.anchorKey);
 
