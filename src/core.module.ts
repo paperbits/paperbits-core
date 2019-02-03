@@ -31,6 +31,7 @@ import { KnockoutRegistrationLoaders } from "./ko/knockout.loaders";
 import { ViewModelBinderSelector } from "./ko/viewModelBinderSelector";
 import { SavingHandler, OfflineObjectStorage, AnchorMiddleware } from "@paperbits/common/persistence";
 import { PermalinkResolver } from "@paperbits/common/permalinks";
+import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkResolver";
 import { XmlHttpRequestClient } from "@paperbits/common/http";
 import { DefaultEventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { LocalCache } from "@paperbits/common/caching";
@@ -78,6 +79,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("siteService", SiteService);
         injector.bindSingleton("urlService", UrlService);
         injector.bindSingleton("permalinkResolver", PermalinkResolver);
+        injector.bindSingleton("mediaPermalinkResolver", MediaPermalinkResolver);
 
         injector.bind("modelBinderSelector", ModelBinderSelector);
         injector.bind("viewModelBinderSelector", ViewModelBinderSelector);

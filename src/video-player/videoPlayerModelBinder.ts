@@ -1,10 +1,11 @@
+import { IPermalinkResolver } from "@paperbits/common/permalinks";
+import { IModelBinder } from "@paperbits/common/editing";
 import { VideoPlayerModel } from "./videoPlayerModel";
 import { VideoPlayerContract } from "./VideoPlayerContract";
-import { IModelBinder } from "@paperbits/common/editing";
-import { IMediaService } from "@paperbits/common/media";
+
 
 export class VideoPlayerModelBinder implements IModelBinder {
-    constructor(private readonly mediaService: IMediaService) { }
+    constructor(private readonly mediaPermalinkResolver: IPermalinkResolver) { }
 
     public canHandleWidgetType(widgetType: string): boolean {
         return widgetType === "video-player";
@@ -14,32 +15,27 @@ export class VideoPlayerModelBinder implements IModelBinder {
         return model instanceof VideoPlayerModel;
     }
 
-    public async contractToModel(videoPlayerNode: VideoPlayerContract): Promise<VideoPlayerModel> {
-        const videoPlayerModel = new VideoPlayerModel();
-        videoPlayerModel.controls = videoPlayerNode.controls;
-        videoPlayerModel.autoplay = videoPlayerNode.autoplay;
+    public async contractToModel(contract: VideoPlayerContract): Promise<VideoPlayerModel> {
+        const model = new VideoPlayerModel();
+        model.controls = contract.controls;
+        model.autoplay = contract.autoplay;
 
-        if (videoPlayerNode.sourceKey) {
-            videoPlayerModel.sourceKey = videoPlayerNode.sourceKey;
-            const media = await this.mediaService.getMediaByKey(videoPlayerNode.sourceKey);
+        if (contract.sourceKey) {
+            model.sourceKey = contract.sourceKey;
+            model.sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(contract.sourceKey);
 
-            if (media) {
-                videoPlayerModel.sourceUrl = media.downloadUrl;
+            if (model.sourceUrl) {
+                console.warn(`Unable to set video. Media file with key ${contract.sourceKey} not found.`);
             }
-            else {
-                // videoPlayerModel.sourceUrl = DefaultSourceUrl
-                console.warn(`Media file with key ${videoPlayerNode.sourceKey} not found, setting default image.`);
-            }
-
         }
-        else if (videoPlayerNode.sourceUrl) {
-            videoPlayerModel.sourceUrl = videoPlayerNode.sourceUrl;
+        else if (contract.sourceUrl) {
+            model.sourceUrl = contract.sourceUrl;
         }
         else {
-            videoPlayerModel.sourceUrl = null; // DefaultSourceUrl;
+            model.sourceUrl = null; // DefaultSourceUrl;
         }
 
-        return videoPlayerModel;
+        return model;
     }
 
     public modelToContract(videoPlayerModel: VideoPlayerModel): VideoPlayerContract {

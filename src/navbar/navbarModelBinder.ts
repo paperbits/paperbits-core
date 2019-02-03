@@ -1,15 +1,15 @@
 import { NavbarModel } from "./navbarModel";
 import { NavbarContract } from "./navbarContract";
-import { IMediaService } from "@paperbits/common/media";
 import { IModelBinder } from "@paperbits/common/editing";
 import { IContentItemService } from "@paperbits/common/contentItems";
 import { INavigationService, NavigationItemContract, NavigationItemModel } from "@paperbits/common/navigation";
 import { IRouteHandler } from "@paperbits/common/routing";
+import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { Contract } from "@paperbits/common/contract";
 
 export class NavbarModelBinder implements IModelBinder {
     constructor(
-        private readonly mediaService: IMediaService,
+        private readonly mediaPermalinkResolver: IPermalinkResolver,
         private readonly navigationService: INavigationService,
         private readonly contentItemService: IContentItemService,
         private readonly routeHandler: IRouteHandler
@@ -32,13 +32,10 @@ export class NavbarModelBinder implements IModelBinder {
         navbarModel.pictureSourceKey = contract.sourceKey;
 
         if (contract.sourceKey) {
-            const media = await this.mediaService.getMediaByKey(contract.sourceKey);
+            navbarModel.pictureSourceKey = contract.sourceKey;
+            navbarModel.pictureSourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(contract.sourceKey);
 
-            if (media) {
-                navbarModel.pictureSourceKey = media.key;
-                navbarModel.pictureSourceUrl = media.downloadUrl;
-            }
-            else {
+            if (navbarModel.pictureSourceUrl) {
                 console.warn(`Unable to set navbar branding. Media with source key ${contract.sourceKey} not found.`);
             }
         }

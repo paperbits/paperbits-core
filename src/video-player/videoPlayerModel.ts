@@ -1,6 +1,6 @@
 export class VideoPlayerModel {
-    sourceKey?: string;
-    sourceUrl?: string;
-    controls?: boolean;
-    autoplay?: boolean;
+    public sourceKey?: string;
+    public sourceUrl?: string;
+    public controls?: boolean;
+    public autoplay?: boolean;
 }

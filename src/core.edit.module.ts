@@ -48,6 +48,7 @@ import { KnockoutValidation } from "./ko/validation/validators";
 import { CropperBindingHandler } from "./workshops/cropper/cropper";
 import { GridEditor } from "./grid/ko";
 import { CardEditorModule } from "./card/ko/cardEditor.module";
+import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkResolver.design";
 
 
 export class CoreEditModule implements IInjectorModule {
@@ -96,6 +97,7 @@ export class CoreEditModule implements IInjectorModule {
         injector.bind("hyperlinkSelector", HyperlinkSelector);
         injector.bind("widgetSelector", WidgetSelector);
         injector.bind("urlSelector",  UrlSelector);
+        injector.bindSingleton("mediaPermalinkResolver", MediaPermalinkResolver);
         injector.bindModule(new TextblockEditorModule());
         injector.bindModule(new PictureEditorModule());
         injector.bindModule(new ButtonEditorModule());

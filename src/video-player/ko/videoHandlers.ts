@@ -39,40 +39,9 @@ export class VideoHandlers implements IWidgetHandler, IContentDropHandler {
             iconClass: "paperbits-action-74",
             requires: ["scripts"],
             createModel: async () => {
-                return null;
+                return new VideoPlayerModel();
             }
-            // createWidget: (): IWidgetFactoryResult => {
-            //     // We create HTML element here just for dragging animation
-            //     const videoPlayerModel = new VideoPlayerModel();
-            //     videoPlayerModel.sourceUrl = sourceUrl;
-
-            //     const videoPlayerViewModel = this.videoPlayerViewModelBinder.modelToViewModel(videoPlayerModel);
-            //     const htmlElement = document.createElement("widget");
-
-            //     htmlElement.style.width = "150px";
-            //     htmlElement.style.height = "150px";
-            //     htmlElement.style.overflow = "hidden";
-            //     htmlElement.style.backgroundSize = "cover";
-            //     htmlElement.classList.add("no-pointer-events");
-
-            //     ko.applyBindingsToNode(htmlElement, { widget: videoPlayerViewModel });
-
-            //     return {
-            //         element: htmlElement,
-            //         widgetModel: videoPlayerModel,
-            //         widgetBinding: videoPlayerViewModel["widgetBinding"],
-            //         onMediaUploadedCallback: (media: ICreatedMedia) => {
-            //             videoPlayerModel.sourceUrl = media.media.downloadUrl;
-            //             videoPlayerModel.sourceKey = media.permalink.key;
-
-            //             /*
-            //                 At this moment the viewmodel declared above doesn't exist anymore,
-            //                 after dropping widget into column, it will be redrawn and new viewmodel created.
-            //             */
-            //         }
-            //     }
-            // },
-        }
+        };
 
         return widgetOrder;
     }

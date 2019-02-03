@@ -3,12 +3,11 @@ import { PictureContract } from "./pictureContract";
 import { IModelBinder } from "@paperbits/common/editing";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
-import { IMediaService } from "@paperbits/common/media";
 
 export class PictureModelBinder implements IModelBinder {
     constructor(
-        private readonly mediaService: IMediaService,
-        private readonly permalinkResolver: IPermalinkResolver
+        private readonly permalinkResolver: IPermalinkResolver,
+        private readonly mediaPermalinkResolver: IPermalinkResolver
     ) { }
 
     public canHandleWidgetType(widgetType: string): boolean {
@@ -28,16 +27,12 @@ export class PictureModelBinder implements IModelBinder {
         pictureModel.height = pictureContract.height;
 
         if (pictureContract.sourceKey) {
-            const media = await this.mediaService.getMediaByKey(pictureContract.sourceKey);
+            const background = new BackgroundModel();
+            background.sourceKey = pictureContract.sourceKey;
+            background.sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(pictureContract.sourceKey);
+            pictureModel.background = background;
 
-            if (media) {
-                const background = new BackgroundModel();
-                background.sourceKey = media.key;
-                background.sourceUrl = media.downloadUrl;
-
-                pictureModel.background = background;
-            }
-            else {
+            if (!background.sourceUrl) {
                 console.warn(`Unable to set picture. Media with source key ${pictureContract.sourceKey} not found.`);
             }
         }
