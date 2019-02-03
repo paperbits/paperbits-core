@@ -35,7 +35,7 @@ export class NavbarModelBinder implements IModelBinder {
             navbarModel.pictureSourceKey = contract.sourceKey;
             navbarModel.pictureSourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(contract.sourceKey);
 
-            if (navbarModel.pictureSourceUrl) {
+            if (!navbarModel.pictureSourceUrl) {
                 console.warn(`Unable to set navbar branding. Media with source key ${contract.sourceKey} not found.`);
             }
         }

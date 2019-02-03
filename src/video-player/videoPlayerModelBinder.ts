@@ -24,7 +24,7 @@ export class VideoPlayerModelBinder implements IModelBinder {
             model.sourceKey = contract.sourceKey;
             model.sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(contract.sourceKey);
 
-            if (model.sourceUrl) {
+            if (!model.sourceUrl) {
                 console.warn(`Unable to set video. Media file with key ${contract.sourceKey} not found.`);
             }
         }
