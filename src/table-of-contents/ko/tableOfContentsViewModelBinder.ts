@@ -13,6 +13,7 @@ export class TableOfContentsViewModelBinder implements IViewModelBinder<TableOfC
 
         viewModel.title(model.title);
         viewModel.nodes(model.items);
+        viewModel.maxHeading(model.maxHeading);
 
         viewModel["widgetBinding"] = {
             displayName: "Table of contents",

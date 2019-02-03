@@ -7,5 +7,10 @@
                 <span data-bind="text: navigationItemTitle"></span>
             </a>
         </div>
+
+        <div class="form-group">
+            <label class="form-label">Max heading level</label>
+            <select class="form-control" data-bind="options: headingOptions, value: selectedOption, optionsText: 'label', optionsValue: 'value'"></select>
+        </div>
     </div>
 </fieldset>

@@ -9,11 +9,13 @@ import { Component } from "@paperbits/common/ko/decorators";
 })
 export class TableOfContentsViewModel {
     public title: KnockoutObservable<string>;
+    public maxHeading: KnockoutObservable<number>;
     public nodes: KnockoutObservableArray<NavigationItemModel>;
     public isEmpty: KnockoutComputed<boolean>;
 
     constructor() {
         this.title = ko.observable<string>();
+        this.maxHeading = ko.observable<number>();
         this.nodes = ko.observableArray<NavigationItemModel>([]);
         this.isEmpty = ko.pureComputed(() => {
             const nodes = this.nodes();

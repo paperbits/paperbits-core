@@ -8,6 +8,10 @@ import { TableOfContentsModel } from "../tableOfContentsModel";
 import { TableOfContentsModelBinder } from "../tableOfContentsModelBinder";
 import { TableOfContentsContract } from "../tableOfContentsContract";
 
+interface IHeadingOption {
+    label: string;
+    value: number;
+}
 
 @Component({
     selector: "table-of-contents-editor",
@@ -19,14 +23,31 @@ export class TableOfContentsEditor implements IWidgetEditor {
     private applyChangesCallback: (updatedModel?) => void;
 
     public readonly navigationItemTitle: KnockoutObservable<string>;
+    public readonly headingOptions: KnockoutObservableArray<IHeadingOption>;
+    public selectedOption: KnockoutObservable<number>;
 
-    constructor(private readonly tableOfContentsModelBinder: TableOfContentsModelBinder) {
+    constructor(private readonly tableOfContentsModelBinder: TableOfContentsModelBinder) {        
+        this.onChange = this.onChange.bind(this);
+        this.selectedOption = ko.observable();
+        this.headingOptions = ko.observableArray<IHeadingOption>([
+            { label: "Heading 1", value: 1 },
+            { label: "Heading 2", value: 2 },
+            { label: "Heading 3", value: 3 },
+            { label: "Heading 4", value: 4 },
+            { label: "Heading 5", value: 5 },
+            { label: "Heading 6", value: 6 }
+        ]);
         this.onNavigationItemChange = this.onNavigationItemChange.bind(this);
+        this.selectedOption.subscribe(this.onChange);
 
         this.navigationItemTitle = ko.observable<string>("Click to select navigation item...");
     }
 
     public setWidgetModel(tableOfContents: TableOfContentsModel, applyChangesCallback?: (updatedModel?) => void): void {
+        this.selectedOption(tableOfContents && tableOfContents.maxHeading || 1);
+        if (tableOfContents && tableOfContents.title) {
+            this.navigationItemTitle(tableOfContents.title);            
+        }
         this.tableOfContentsModel = tableOfContents;
         this.applyChangesCallback = applyChangesCallback;
     }
@@ -38,9 +59,17 @@ export class TableOfContentsEditor implements IWidgetEditor {
         };
 
         const model = await this.tableOfContentsModelBinder.contractToModel(contract);
-
+        this.tableOfContentsModel = model;
         this.navigationItemTitle(navigationItem.label);
+        this.onChange();
+    }
 
-        this.applyChangesCallback(model);
+    public onChange(): void {
+        if (!this.applyChangesCallback || !this.tableOfContentsModel) {
+            return;
+        }
+
+        this.tableOfContentsModel.maxHeading = this.selectedOption();
+        this.applyChangesCallback(this.tableOfContentsModel);
     }
 }
