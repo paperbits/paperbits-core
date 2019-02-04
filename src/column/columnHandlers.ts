@@ -24,14 +24,14 @@ export class ColumnHandlers implements IWidgetHandler {
 
     public getContextualEditor(context: WidgetContext): IContextualEditor {
         const columnContextualEditor: IContextualEditor = {
-            color: "#4c5866",
+            color: "#32b973",
             hoverCommand: null,
             deleteCommand: null,
             selectionCommands: [{
                 tooltip: "Edit column",
                 iconClass: "paperbits-edit-72",
                 position: "top right",
-                color: "#4c5866",
+                color: "#32b973",
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
             }]
         };

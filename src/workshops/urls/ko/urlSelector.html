@@ -15,7 +15,7 @@
     </div>
 
     <ul class="flex-item flex-item-grow list" data-bind="foreach: urls, scrollable: {}">
-        <li class="list-item" data-bind="css: { selected: hasFocus }, click: $component.selectUrl, hasFocus: hasFocus, event: { keydown: $component.keydown }">
+        <li class="list-item" data-bind="css: { selected: hasFocus }, click: $component.selectUrl, hasFocus: hasFocus, event: { keydown: $component.keydown }, attr: { title: title }">
             <i class="paperbits-icon paperbits-link-69-2"></i>
             <span class="list-item-label" data-bind="text: title"></span>
         </li>
