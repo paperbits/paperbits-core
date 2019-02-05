@@ -204,6 +204,6 @@ export class ColumnViewModel {
             breakpoint = targetBreakpoint + "-";
         }
 
-        return `align-content-${breakpoint}${horizontal} align-items-${breakpoint}${horizontal} justify-content-${breakpoint}${vertical}`;
+        return `align-content-${breakpoint}${vertical} align-items-${breakpoint}${vertical} justify-content-${breakpoint}${horizontal}`;
     }
 }
