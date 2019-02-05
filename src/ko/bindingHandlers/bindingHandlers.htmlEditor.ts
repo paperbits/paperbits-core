@@ -11,11 +11,10 @@ export class HtmlEditorBindingHandler {
                 const stateObservable: KnockoutObservable<Object> = config.state;
                 const htmlEditor: IHtmlEditor = ko.unwrap(config.htmlEditor);
 
-                const onEscapeKeyPressed = () => { htmlEditor.detachFromElement(); };
+                const onEscapeKeyPressed = () => htmlEditor.detachFromElement();
                 eventManager.addEventListener("onEscape", onEscapeKeyPressed);
 
-                const onWidgetEditorClose = () => { htmlEditor.detachFromElement(); };
-
+                const onWidgetEditorClose = () => htmlEditor.detachFromElement();
                 eventManager.addEventListener("onWidgetEditorClose", onWidgetEditorClose);
 
                 const onHtmlEditorRequested = () => {
@@ -23,23 +22,21 @@ export class HtmlEditorBindingHandler {
                         return;
                     }
 
-                    htmlEditor.attachToElement(element);
+                    htmlEditor.enable();
                 };
-
-                htmlEditor.setState(stateObservable());
+                
                 htmlEditor.attachToElement(element);
+                htmlEditor.setState(stateObservable());
 
-                stateObservable.subscribe(state => {
-                    htmlEditor.setState(state);
-                });
+                stateObservable.subscribe(state => htmlEditor.setState(state));
 
                 eventManager.addEventListener("enableHtmlEditor", onHtmlEditorRequested);
 
                 ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
-                    htmlEditor.detachFromElement();
                     eventManager.removeEventListener("onEscape", onEscapeKeyPressed);
                     eventManager.removeEventListener("onWidgetEditorClose", onWidgetEditorClose);
                     eventManager.removeEventListener("enableHtmlEditor", onHtmlEditorRequested);
+                    htmlEditor.detachFromElement();
                 });
             }
         };
