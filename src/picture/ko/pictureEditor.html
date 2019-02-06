@@ -20,11 +20,13 @@
         </label>
         <div id="miscellaneousCollapse" class="collapse form-group-collapse">
             <div class="form-group">
+                <button class="btn info-icon-btn" type="button" data-bind="infoMessageToggle: 'An alternate text for an image'"></button>
                 <label class="form-label">Caption</label>
                 <input type="text" class="form-control" data-bind="textInput: caption" maxlength="256" />
             </div>
 
             <div class="form-group">
+                <button class="btn info-icon-btn" type="button" data-bind="infoMessageToggle: 'An item that will be navigated on click action.'"></button>
                 <label class="form-label">Link to</label>
                 <div class="input-group">
                     <a href="#" class="form-control" data-bind="text: hyperlinkTitle, balloon: { component: { name: 'hyperlink-selector', params: { hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange } } }">

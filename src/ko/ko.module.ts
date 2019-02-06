@@ -19,6 +19,7 @@ import "./bindingHandlers/bindingHandlers.gridCommand";
 import "./bindingHandlers/bindingHandlers.align";
 import "./bindingHandlers/bindingHandlers.size";
 import "./bindingHandlers/bindingHandlers.validationMessageToggle";
+import "./bindingHandlers/bindingHandlers.infoMessageToggle";
 import "./bindingHandlers/bindingHandlers.collapse";
 import "./bindingHandlers/bindingHandlers.container";
 import "./bindingHandlers/bindingHandlers.overflow";

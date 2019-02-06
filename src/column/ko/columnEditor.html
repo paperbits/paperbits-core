@@ -35,6 +35,7 @@
     </div>
 
     <div class="form-group form-group-collapsible">
+        <button class="btn info-icon-btn" type="button" data-bind="infoMessageToggle: 'Manage scrolling settings for container'"></button>
         <label class="form-label">
             <a href="#" class="form-group-toggle" data-bind="collapse: '#contentFlowCollapse'"></a>
             <b>Content flow</b>
@@ -52,7 +53,8 @@
             <b>Miscellaneous</b>
         </label>
         <div id="miscellaneousCollapse" class="collapse form-group-collapse">
-            <label>Order in row</label>
+            <button class="btn info-icon-btn" type="button" data-bind="infoMessageToggle: 'Manage an element order in a parent container'"></button>
+            <label class="form-label" >Order in row</label>
             <div class="form-group">
                 <input type="number" class="form-control" max="12" min="1" data-bind="textInput: order">
             </div>

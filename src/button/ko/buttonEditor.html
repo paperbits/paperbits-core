@@ -1,10 +1,12 @@
 <fieldset class="form" data-bind="scrollable: {}">
-    <label class="form-label">Label</label>
     <div class="form-group">
+        <button class="btn info-icon-btn" type="button" data-bind="infoMessageToggle: 'Text on element'"></button>
+        <label class="form-label">Label</label>
         <input type="text" class="form-control" data-bind="textInput: label" maxlength="256" />
     </div>
 
     <div class="form-group">
+        <button class="btn info-icon-btn" type="button" data-bind="infoMessageToggle: 'An item that will be navigated on click action.'"></button>
         <label class="form-label">Link to</label>
         <div class="input-group">
             <a href="#" class="form-control" data-bind="text: hyperlinkTitle, balloon: { component: { name: 'hyperlink-selector', params: { hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange } } }">
@@ -16,11 +18,13 @@
     </div>
 
     <div class="form-group">
+        <button class="btn info-icon-btn" type="button" data-bind="infoMessageToggle: 'Predefined appearance from style guide.'"></button>
         <label class="form-label">Appearance</label>
         <select class="form-control" data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
     </div>
 
     <div class="form-group">
+        <button class="btn info-icon-btn" type="button" data-bind="infoMessageToggle: 'Predefined size from style guide.'"></button>
         <label class="form-label">Size</label>
         <select class="form-control" data-bind="options: sizeStyles, value: sizeStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
     </div>
