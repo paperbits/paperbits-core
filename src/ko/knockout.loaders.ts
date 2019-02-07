@@ -15,6 +15,12 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                             instance = resolvedInjectable.factory(injector, params);
                         }
 
+                        Object.getOwnPropertyNames(instance.constructor.prototype).forEach(prop => {
+                            if (typeof instance[prop] === "function" && prop !== "constructor") {
+                                instance[prop] = instance[prop].bind(instance);
+                            }
+                        });
+
                         const parameterDescriptions = Reflect.getMetadata("params", instance.constructor);
 
                         if (parameterDescriptions) {
