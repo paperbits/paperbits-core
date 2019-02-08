@@ -22,7 +22,7 @@ export class LayoutModelBinder {
     }
 
     public async getLayoutModel(): Promise<LayoutModel> {
-        const url = this.routeHandler.getCurrentUrl();
+        const url = this.routeHandler.getPath();
         const layoutNode = await this.layoutService.getLayoutByRoute(url);
 
         return await this.contractToModel(layoutNode);

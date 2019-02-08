@@ -26,7 +26,7 @@ export class LayoutViewModelBinder {
         let savingTimeout;
 
         const updateContent = async (): Promise<void> => {
-            const url = this.routeHandler.getCurrentUrl();
+            const url = this.routeHandler.getPath();
             const layout = await this.layoutService.getLayoutByRoute(url);
             const layoutContent = await this.layoutService.getLayoutContent(layout.key);
 
@@ -105,7 +105,7 @@ export class LayoutViewModelBinder {
     }
 
     public async getLayoutViewModel(): Promise<any> {
-        const url = this.routeHandler.getCurrentUrl();
+        const url = this.routeHandler.getPath();
         const layoutContract = await this.layoutService.getLayoutByRoute(url);
         const layoutModel = await this.layoutModelBinder.contractToModel(layoutContract);
         const layoutViewModel = this.modelToViewModel(layoutModel);

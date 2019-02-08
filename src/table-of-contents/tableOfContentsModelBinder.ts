@@ -147,7 +147,7 @@ export class TableOfContentsModelBinder implements IModelBinder {
         tableOfContentsModel.maxHeading = contract.maxHeading || 1;
         tableOfContentsModel.items = [];
 
-        const currentPageUrl = this.routeHandler.getCurrentUrl();
+        const currentPageUrl = this.routeHandler.getPath();
 
         if (contract.navigationItemKey) {
             const assignedNavigationItem = await this.navigationService.getNavigationItem(contract.navigationItemKey);

@@ -25,7 +25,7 @@ export class BlogModelBinder implements IModelBinder {
 
     public async contractToModel(blogPostContract: BlogPostContract): Promise<BlogPostModel> {
         if (!blogPostContract.key) {
-            const currentUrl = this.routeHandler.getCurrentUrl();
+            const currentUrl = this.routeHandler.getPath();
             blogPostContract = await this.blogService.getBlogPostByPermalink(currentUrl);
         }
 
@@ -60,7 +60,7 @@ export class BlogModelBinder implements IModelBinder {
     }
 
     public async updateContent(blogModel: BlogPostModel): Promise<void> {
-        const url = this.routeHandler.getCurrentUrl();
+        const url = this.routeHandler.getPath();
         const post = await this.blogService.getBlogPostByPermalink(url);
         const content = await this.blogService.getBlogPostContent(post.key);
         const config = this.modelToContract(blogModel);

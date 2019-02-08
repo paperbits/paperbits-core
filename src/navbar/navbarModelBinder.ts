@@ -85,7 +85,7 @@ export class NavbarModelBinder implements IModelBinder {
             console.warn(`No permalink key for item:`);
             console.warn(contract);
         }
-        navbarItem.isActive = navbarItem.url === this.routeHandler.getCurrentUrl();
+        navbarItem.isActive = navbarItem.url === this.routeHandler.getPath();
 
         return navbarItem;
     }

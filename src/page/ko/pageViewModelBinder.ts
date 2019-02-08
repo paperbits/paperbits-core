@@ -22,7 +22,7 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
         let savingTimeout;
 
         const updateContent = async (): Promise<void> => {
-            const url = this.routeHandler.getCurrentUrl();
+            const url = this.routeHandler.getPath();
             const page = await this.pageService.getPageByPermalink(url);
             const pageContent = await this.pageService.getPageContent(page.key);
 

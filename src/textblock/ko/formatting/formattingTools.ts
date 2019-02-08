@@ -213,7 +213,7 @@ export class FormattingTools {
         // const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
         // const selectionState = htmlEditor.getSelectionState(this.viewManager.getViewport());
         // const anchorKey = selectionState.anchorKey;
-        // const currentUrl = this.routeHandler.getCurrentUrl();
+        // const currentUrl = this.routeHandler.getPath();
         // const permalink = await this.permalinkService.getPermalinkByUrl(currentUrl);
         // const pageContract = await this.pageService.getPageByKey(permalink.targetKey);
 

@@ -127,7 +127,7 @@ export class HostBindingHandler {
             const routeHandler = this.routeHandler;
 
             const onRouteChange = () => {
-                hostedWindowHistory.pushState({ host: true }, "HOST2", routeHandler.getCurrentUrl());
+                hostedWindowHistory.pushState({ host: true }, null, routeHandler.getCurrentUrl());
             };
 
             routeHandler.addRouteChangeListener(onRouteChange);
