@@ -2,9 +2,8 @@ import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { IViewModelBinder } from "@paperbits/common/widgets";
 import { TextblockViewModelBinder } from "../textblockViewModelBinder";
 import { TextblockViewModel } from "./textblockViewModel";
-import { TextblockModelBinder } from "../TextblockModelBinder";
+import { TextblockModelBinder } from "../textblockModelBinder";
 import { HtmlEditorBindingHandler } from "../../ko/bindingHandlers/bindingHandlers.htmlEditor";
-import { IModelBinder } from "@paperbits/common/editing";
 
 export class TextblockModule implements IInjectorModule {
     public register(injector: IInjector): void {

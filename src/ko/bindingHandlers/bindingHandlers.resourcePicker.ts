@@ -32,6 +32,6 @@ ko.bindingHandlers["resourcePicker"] = {
                     };
                 }
             }
-        });
+        }, null);
     }
 };

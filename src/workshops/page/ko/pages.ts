@@ -17,10 +17,10 @@ import { LayoutViewModelBinder } from "../../../layout/ko";
 export class PagesWorkshop {
     private searchTimeout: any;
 
-    public readonly searchPattern: KnockoutObservable<string>;
-    public readonly pages: KnockoutObservableArray<PageItem>;
-    public readonly working: KnockoutObservable<boolean>;
-    public readonly selectedPage: KnockoutObservable<PageItem>;
+    public readonly searchPattern: ko.Observable<string>;
+    public readonly pages: ko.ObservableArray<PageItem>;
+    public readonly working: ko.Observable<boolean>;
+    public readonly selectedPage: ko.Observable<PageItem>;
 
     constructor(
         private readonly pageService: IPageService,

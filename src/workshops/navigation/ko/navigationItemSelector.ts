@@ -11,10 +11,10 @@ import { Component, Event, Param } from "@paperbits/common/ko/decorators";
     injectable: "navigationItemSelector"
 })
 export class NavigationItemSelector {
-    public navigationItemsTree: KnockoutObservable<NavigationTree>;
+    public navigationItemsTree: ko.Observable<NavigationTree>;
 
     @Param()
-    public selectedNavigationItem: KnockoutObservable<NavigationItemViewModel>;
+    public selectedNavigationItem: ko.Observable<NavigationItemViewModel>;
 
     @Event()
     public onSelect: (selection: NavigationItemContract) => void;

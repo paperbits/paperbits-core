@@ -8,11 +8,11 @@ import { changeRateLimit } from "../../ko/consts";
     template: template
 })
 export class TestimonialsViewModel {
-    public textContent: KnockoutObservable<string>;
-    public starsCount: KnockoutObservable<number>;
-    public allStarsCount: KnockoutObservable<number>;
-    public author: KnockoutObservable<string>;
-    public authorTitle: KnockoutObservable<string>;
+    public textContent: ko.Observable<string>;
+    public starsCount: ko.Observable<number>;
+    public allStarsCount: ko.Observable<number>;
+    public author: ko.Observable<string>;
+    public authorTitle: ko.Observable<string>;
 
     constructor() {
         this.textContent = ko.observable<string>().extend(changeRateLimit);

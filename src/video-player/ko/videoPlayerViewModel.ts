@@ -7,9 +7,9 @@ import { Component } from "@paperbits/common/ko/decorators";
     template: template
 })
 export class VideoPlayerViewModel {
-    public sourceUrl: KnockoutObservable<string>;
-    public controls: KnockoutObservable<boolean>;
-    public autoplay: KnockoutObservable<boolean>;
+    public sourceUrl: ko.Observable<string>;
+    public controls: ko.Observable<boolean>;
+    public autoplay: ko.Observable<boolean>;
 
     constructor() {
         this.sourceUrl = ko.observable<string>();

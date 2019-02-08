@@ -97,7 +97,7 @@ export class WidgetBindingHandler {
                         if (correctedElement) {
                             correctedElement["attachedViewModel"] = componentViewModel;
 
-                            ko.applyBindingsToNode(correctedElement, { layoutwidget: {} });
+                            ko.applyBindingsToNode(correctedElement, { layoutwidget: {} }, null);
                         }
                     });
                 }, null, { disposeWhenNodeIsRemoved: element });

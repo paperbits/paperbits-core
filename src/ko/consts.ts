@@ -1,1 +1,1 @@
-export const changeRateLimit = { rateLimit: { timeout: 500, method: "notifyWhenChangesStop" } };
+export const changeRateLimit: ko.ObservableExtenderOptions = { rateLimit: { timeout: 500, method: "notifyWhenChangesStop" } };

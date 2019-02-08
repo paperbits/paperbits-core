@@ -8,10 +8,10 @@ import { Component } from "@paperbits/common/ko/decorators";
     injectable: "layout"
 })
 export class LayoutViewModel {
-    public title: KnockoutObservable<string>;
-    public description: KnockoutObservable<string>;
-    public permalinkTemplate: KnockoutObservable<string>;
-    public widgets: KnockoutObservableArray<Object>;
+    public title: ko.Observable<string>;
+    public description: ko.Observable<string>;
+    public permalinkTemplate: ko.Observable<string>;
+    public widgets: ko.ObservableArray<Object>;
 
     constructor() {
         this.widgets = ko.observableArray<Object>();

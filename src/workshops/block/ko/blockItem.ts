@@ -1,5 +1,5 @@
 ﻿import * as ko from "knockout";
-import { BlockContract } from "@paperbits/common/blocks/BlockContract";
+import { BlockContract } from "@paperbits/common/blocks/blockContract";
 import { Contract } from "@paperbits/common/contract";
 
 
@@ -7,9 +7,9 @@ export class BlockItem {
     public key: string;
     public content: Contract;
 
-    public hasFocus: KnockoutObservable<boolean>;
-    public title: KnockoutObservable<string>;
-    public description: KnockoutObservable<string>;
+    public hasFocus: ko.Observable<boolean>;
+    public title: ko.Observable<string>;
+    public description: ko.Observable<string>;
 
     constructor(block: BlockContract) {
         this.key = block.key;

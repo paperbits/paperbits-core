@@ -83,7 +83,7 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                         return instance;
                     };
 
-                    ko.components.defaultLoader.loadViewModel(name, viewModelConstructor, callback);
+                    (<any>ko.components.defaultLoader).loadViewModel(name, viewModelConstructor, callback);
                 }
                 else {
                     // Unrecognized config format. Let another loader handle it.
@@ -95,7 +95,7 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                 const parseHtmlFragment = <any>ko.utils.parseHtmlFragment;
                 const nodes = parseHtmlFragment(templateHtml, document);
 
-                ko.components.defaultLoader.loadTemplate(name, nodes, callback);
+                (<any>ko.components.defaultLoader).loadTemplate(name, nodes, callback);
             },
 
             loadComponent(componentName: string, config: any, callback: (definition: KnockoutComponentTypes.Definition) => void) {
@@ -124,7 +124,7 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                     callback(definitionWrapper);
                 };
 
-                ko.components.defaultLoader.loadComponent(componentName, config, callbackWrapper);
+                (<any>ko.components.defaultLoader).loadComponent(componentName, config, callbackWrapper);
             },
         };
 

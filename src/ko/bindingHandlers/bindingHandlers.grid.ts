@@ -100,7 +100,7 @@ export class GridBindingHandler {
 
         ko.applyBindingsToNode(sourceElement, {
             dragsource: { sticky: true, ondragstart: onDragStart, ondragend: onDragEnd, preventDragging: preventDragging }
-        });
+        }, null);
     }
 
     public static attachRowDragEvents(sourceElement: HTMLElement, viewManager: IViewManager, eventManager: IEventManager, widgetService: IWidgetService): void {
@@ -160,7 +160,7 @@ export class GridBindingHandler {
 
         ko.applyBindingsToNode(sourceElement, {
             dragsource: { sticky: true, ondragstart: onDragStart, ondragend: onDragEnd, preventDragging: preventDragging }
-        });
+        }, null);
     }
 
     public static attachColumnDragEvents(sourceElement: HTMLElement, viewManager: IViewManager, eventManager: IEventManager, widgetService: IWidgetService): void {
@@ -220,7 +220,7 @@ export class GridBindingHandler {
 
         ko.applyBindingsToNode(sourceElement, {
             dragsource: { sticky: true, ondragstart: onDragStart, ondragend: onDragEnd, preventDragging: preventDragging }
-        });
+        }, null);
     }
 
     public static attachWidgetDragEvents(sourceElement: HTMLElement, viewManager: IViewManager, eventManager: IEventManager, widgetService: IWidgetService): void {
@@ -280,6 +280,6 @@ export class GridBindingHandler {
 
         ko.applyBindingsToNode(sourceElement, {
             dragsource: { sticky: true, ondragstart: onDragStart, ondragend: onDragEnd, preventDragging: preventDragging }
-        });
+        }, null);
     }
 }

@@ -32,7 +32,7 @@ export class PageDetailsWorkshop {
     @OnMounted()
     public async onMounted(): Promise<void> {
         this.pageItem.title
-            .extend({ required: true, onlyValid: true })
+            .extend(<any>{ required: true, onlyValid: true })
             .subscribe(this.updatePage);
 
         this.pageItem.description
@@ -42,7 +42,7 @@ export class PageDetailsWorkshop {
             .subscribe(this.updatePage);
 
         this.pageItem.permalink
-            .extend({ uniquePermalink: this.pageItem.permalink, required: true, onlyValid: true })
+            .extend(<any>{ uniquePermalink: this.pageItem.permalink, required: true, onlyValid: true })
             .subscribe(this.updatePermlaink);
 
         const permalink = await this.pageService.getPageByKey(this.pageItem.key);

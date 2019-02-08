@@ -1,4 +1,4 @@
-import { WidgetModel } from "@paperbits/common/widgets/WidgetModel";
+import { WidgetModel } from "@paperbits/common/widgets/widgetModel";
 
 export class PageModel {
     public title: string;

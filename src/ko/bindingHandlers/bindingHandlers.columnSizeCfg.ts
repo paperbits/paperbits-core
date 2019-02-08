@@ -21,10 +21,10 @@ ko.bindingHandlers["columnSizeCfg"] = {
             size = sizes.xl;
         }
 
-        let css = {};
+        const css = {};
 
         css[`col-cfg-${size}`] = true;
 
-        ko.applyBindingsToNode(element, { css: css })
+        ko.applyBindingsToNode(element, { css: css }, null)
     }
 };

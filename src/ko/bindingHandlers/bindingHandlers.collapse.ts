@@ -26,11 +26,11 @@ ko.bindingHandlers["collapse"] = {
 
             ko.applyBindingsToNode(targetElement, {
                 css: { collapsed: ko.pureComputed(() => !visibleObservable()) }
-            });
+            }, null);
 
             ko.applyBindingsToNode(triggerElement, {
                 css: { collapsed: ko.pureComputed(() => !visibleObservable()) }
-            });
+            }, null);
 
             ko.utils.domNodeDisposal.addDisposeCallback(triggerElement, () => {
                 triggerElement.removeEventListener("mousedown", onPointerDown);

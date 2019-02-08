@@ -11,12 +11,12 @@ import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorat
     injectable: "blogSelector"
 })
 export class BlogSelector implements IResourceSelector<BlogPostContract> {
-    public readonly searchPattern: KnockoutObservable<string>;
-    public readonly posts: KnockoutObservableArray<BlogPostItem>;
-    public readonly working: KnockoutObservable<boolean>;
+    public readonly searchPattern: ko.Observable<string>;
+    public readonly posts: ko.ObservableArray<BlogPostItem>;
+    public readonly working: ko.Observable<boolean>;
 
     @Param()
-    public selectedPost: KnockoutObservable<BlogPostItem>;
+    public selectedPost: ko.Observable<BlogPostItem>;
 
     @Event()
     public onSelect: (blog: BlogPostContract) => void;

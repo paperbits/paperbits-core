@@ -3,11 +3,11 @@ import { BackgroundModel } from "@paperbits/common/widgets/background/background
 import { RowViewModel } from "../../row/ko/rowViewModel";
 
 export class SlideViewModel {
-    public rows: KnockoutObservableArray<RowViewModel>;
-    public layout: KnockoutObservable<string>;
-    public thumbnail: KnockoutObservable<BackgroundModel>;
-    public background: KnockoutObservable<BackgroundModel>;
-    public css: KnockoutObservable<string>;
+    public rows: ko.ObservableArray<RowViewModel>;
+    public layout: ko.Observable<string>;
+    public thumbnail: ko.Observable<BackgroundModel>;
+    public background: ko.Observable<BackgroundModel>;
+    public css: ko.Observable<string>;
 
     constructor() {
         this.rows = ko.observableArray<RowViewModel>();

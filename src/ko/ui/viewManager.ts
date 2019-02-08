@@ -30,25 +30,25 @@ export class ViewManager implements IViewManager {
     private contextualEditorsBag: Bag<IContextualEditor> = {};
     private currentPage: PageContract;
 
-    public journey: KnockoutObservableArray<IView>;
-    public journeyName: KnockoutComputed<string>;
-    public itemSelectorName: KnockoutObservable<string>;
-    public progressIndicators: KnockoutObservableArray<ProgressIndicator>;
-    public balloons: KnockoutObservableArray<IComponent>;
-    public primaryToolboxVisible: KnockoutObservable<boolean>;
-    public widgetEditor: KnockoutObservable<IView>;
-    public contextualEditors: KnockoutObservableArray<IContextualEditor>;
-    public highlightedElement: KnockoutObservable<IHighlightConfig>;
-    public splitterElement: KnockoutObservable<ISplitterConfig>;
-    public selectedElement: KnockoutObservable<IHighlightConfig>;
-    public selectedElementContextualEditor: KnockoutObservable<IContextualEditor>;
-    public viewport: KnockoutObservable<string>;
+    public journey: ko.ObservableArray<IView>;
+    public journeyName: ko.Computed<string>;
+    public itemSelectorName: ko.Observable<string>;
+    public progressIndicators: ko.ObservableArray<ProgressIndicator>;
+    public balloons: ko.ObservableArray<IComponent>;
+    public primaryToolboxVisible: ko.Observable<boolean>;
+    public widgetEditor: ko.Observable<IView>;
+    public contextualEditors: ko.ObservableArray<IContextualEditor>;
+    public highlightedElement: ko.Observable<IHighlightConfig>;
+    public splitterElement: ko.Observable<ISplitterConfig>;
+    public selectedElement: ko.Observable<IHighlightConfig>;
+    public selectedElementContextualEditor: ko.Observable<IContextualEditor>;
+    public viewport: ko.Observable<string>;
     public hostDocument: Document;
 
-    public host: KnockoutObservable<IComponent>;
+    public host: ko.Observable<IComponent>;
 
-    public shutter: KnockoutObservable<boolean>;
-    public dragSession: KnockoutObservable<DragSession>;
+    public shutter: ko.Observable<boolean>;
+    public dragSession: ko.Observable<DragSession>;
 
     public mode: ViewManagerMode;
 

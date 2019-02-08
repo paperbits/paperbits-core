@@ -12,6 +12,6 @@ ko.bindingHandlers["alignment"] = {
             css: {
                 active: ko.pureComputed(() => observable() === alignment)
             }
-        })
+        }, null);
     }
 }

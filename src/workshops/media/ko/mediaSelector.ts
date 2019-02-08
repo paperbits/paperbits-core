@@ -14,12 +14,12 @@ import { IWidgetService } from "@paperbits/common/widgets";
     injectable: "mediaSelector"
 })
 export class MediaSelector {
-    public readonly searchPattern: KnockoutObservable<string>;
-    public readonly mediaItems: KnockoutObservableArray<MediaItem>;
-    public readonly working: KnockoutObservable<boolean>;
+    public readonly searchPattern: ko.Observable<string>;
+    public readonly mediaItems: ko.ObservableArray<MediaItem>;
+    public readonly working: ko.Observable<boolean>;
 
     @Param()
-    public selectedMedia: KnockoutObservable<MediaItem>;
+    public selectedMedia: ko.Observable<MediaItem>;
 
     @Param()
     public mediaFilter: IMediaFilter;

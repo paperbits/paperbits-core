@@ -5,7 +5,7 @@ import { IViewManager, ViewManagerMode } from "@paperbits/common/ui";
 import { IRouteHandler } from "@paperbits/common/routing";
 
 export class HostBindingHandler {
-    private readonly hostComponent: KnockoutObservable<any>;
+    private readonly hostComponent: ko.Observable<any>;
 
     constructor(
         private readonly globalEventHandler: GlobalEventHandler,

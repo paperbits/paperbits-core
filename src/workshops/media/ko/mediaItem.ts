@@ -9,14 +9,14 @@ export class MediaItem {
     public widgetOrder: IWidgetOrder;
     public element: HTMLElement;
 
-    public hasFocus: KnockoutObservable<boolean>;
-    public downloadUrl: KnockoutObservable<string>;
-    public thumbnailUrl: KnockoutObservable<string>;
-    public permalink: KnockoutObservable<string>;
-    public fileName: KnockoutObservable<string>;
-    public description: KnockoutObservable<string>;
-    public keywords: KnockoutObservable<string>;
-    public contentType: KnockoutObservable<string>;
+    public hasFocus: ko.Observable<boolean>;
+    public downloadUrl: ko.Observable<string>;
+    public thumbnailUrl: ko.Observable<string>;
+    public permalink: ko.Observable<string>;
+    public fileName: ko.Observable<string>;
+    public description: ko.Observable<string>;
+    public keywords: ko.Observable<string>;
+    public contentType: ko.Observable<string>;
     public widgetFactoryResult: IWidgetFactoryResult;
 
     constructor(mediaContract: MediaContract) {

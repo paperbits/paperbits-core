@@ -8,12 +8,12 @@ import { changeRateLimit } from "../../ko/consts";
     template: template
 })
 export class YoutubePlayerViewModel {
-    public videoSource: KnockoutObservable<string>;
-    public videoId: KnockoutObservable<string>;
-    public origin: KnockoutObservable<string>;
-    public controls: KnockoutObservable<boolean>;
-    public autoplay: KnockoutObservable<boolean>;
-    public loop: KnockoutObservable<boolean>;
+    public videoSource: ko.Observable<string>;
+    public videoId: ko.Observable<string>;
+    public origin: ko.Observable<string>;
+    public controls: ko.Observable<boolean>;
+    public autoplay: ko.Observable<boolean>;
+    public loop: ko.Observable<boolean>;
 
     constructor() {
         this.videoSource = ko.observable<string>();

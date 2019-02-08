@@ -8,14 +8,14 @@ import { WidgetViewModel } from "../../ko/widgetViewModel";
     template: template
 })
 export class RowViewModel implements WidgetViewModel {
-    public widgets: KnockoutObservableArray<WidgetViewModel>;
-    public css: KnockoutComputed<string>;
-    public alignSm: KnockoutObservable<string>;
-    public alignMd: KnockoutObservable<string>;
-    public alignLg: KnockoutObservable<string>;
-    public justifySm: KnockoutObservable<string>;
-    public justifyMd: KnockoutObservable<string>;
-    public justifyLg: KnockoutObservable<string>;
+    public widgets: ko.ObservableArray<WidgetViewModel>;
+    public css: ko.Computed<string>;
+    public alignSm: ko.Observable<string>;
+    public alignMd: ko.Observable<string>;
+    public alignLg: ko.Observable<string>;
+    public justifySm: ko.Observable<string>;
+    public justifyMd: ko.Observable<string>;
+    public justifyLg: ko.Observable<string>;
 
     constructor() {
         this.widgets = ko.observableArray<WidgetViewModel>();

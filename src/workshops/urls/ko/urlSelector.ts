@@ -10,11 +10,11 @@ import { Component, Event } from "@paperbits/common/ko/decorators";
     injectable: "urlSelector"
 })
 export class UrlSelector {
-    public readonly searchPattern: KnockoutObservable<string>;
-    public readonly urls: KnockoutObservableArray<UrlItem>;
-    public readonly uri: KnockoutObservable<string>;
-    public readonly working: KnockoutObservable<boolean>;
-    public readonly selectedUrl: KnockoutObservable<UrlItem>;
+    public readonly searchPattern: ko.Observable<string>;
+    public readonly urls: ko.ObservableArray<UrlItem>;
+    public readonly uri: ko.Observable<string>;
+    public readonly working: ko.Observable<boolean>;
+    public readonly selectedUrl: ko.Observable<UrlItem>;
 
     @Event()
     public onSelect: (url: UrlContract) => void;

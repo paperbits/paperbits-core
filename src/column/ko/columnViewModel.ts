@@ -8,33 +8,33 @@ import { Component } from "@paperbits/common/ko/decorators";
     injectable: "column"
 })
 export class ColumnViewModel {
-    public widgets: KnockoutObservableArray<Object>;
-    public css: KnockoutComputed<string>;
-    public sizeXs: KnockoutObservable<string>;
-    public sizeSm: KnockoutObservable<string>;
-    public sizeMd: KnockoutObservable<string>;
-    public sizeLg: KnockoutObservable<string>;
-    public sizeXl: KnockoutObservable<string>;
-    public alignmentXs: KnockoutObservable<string>;
-    public alignmentSm: KnockoutObservable<string>;
-    public alignmentMd: KnockoutObservable<string>;
-    public alignmentLg: KnockoutObservable<string>;
-    public alignmentXl: KnockoutObservable<string>;
+    public widgets: ko.ObservableArray<Object>;
+    public css: ko.Computed<string>;
+    public sizeXs: ko.Observable<string>;
+    public sizeSm: ko.Observable<string>;
+    public sizeMd: ko.Observable<string>;
+    public sizeLg: ko.Observable<string>;
+    public sizeXl: ko.Observable<string>;
+    public alignmentXs: ko.Observable<string>;
+    public alignmentSm: ko.Observable<string>;
+    public alignmentMd: ko.Observable<string>;
+    public alignmentLg: ko.Observable<string>;
+    public alignmentXl: ko.Observable<string>;
 
-    public offsetXs: KnockoutObservable<string>;
-    public offsetSm: KnockoutObservable<string>;
-    public offsetMd: KnockoutObservable<string>;
-    public offsetLg: KnockoutObservable<string>;
-    public offsetXl: KnockoutObservable<string>;
+    public offsetXs: ko.Observable<string>;
+    public offsetSm: ko.Observable<string>;
+    public offsetMd: ko.Observable<string>;
+    public offsetLg: ko.Observable<string>;
+    public offsetXl: ko.Observable<string>;
 
-    public orderXs: KnockoutObservable<number>;
-    public orderSm: KnockoutObservable<number>;
-    public orderMd: KnockoutObservable<number>;
-    public orderLg: KnockoutObservable<number>;
-    public orderXl: KnockoutObservable<number>;
-    public overflow: KnockoutComputed<Object>;
-    public overflowX: KnockoutObservable<string>;
-    public overflowY: KnockoutObservable<string>;
+    public orderXs: ko.Observable<number>;
+    public orderSm: ko.Observable<number>;
+    public orderMd: ko.Observable<number>;
+    public orderLg: ko.Observable<number>;
+    public orderXl: ko.Observable<number>;
+    public overflow: ko.Computed<Object>;
+    public overflowX: ko.Observable<string>;
+    public overflowY: ko.Observable<string>;
 
     constructor() {
         this.widgets = ko.observableArray<Object>();

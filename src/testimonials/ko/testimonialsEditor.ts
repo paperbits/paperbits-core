@@ -14,11 +14,11 @@ export class TestimonialsEditor implements IWidgetEditor {
     private model: TestimonialsModel;
     private applyChangesCallback: () => void;
 
-    public textContent: KnockoutObservable<string>;
-    public starsCount: KnockoutObservable<number>;
-    public allStarsCount: KnockoutObservable<number>;
-    public author: KnockoutObservable<string>;
-    public authorTitle: KnockoutObservable<string>;
+    public textContent: ko.Observable<string>;
+    public starsCount: ko.Observable<number>;
+    public allStarsCount: ko.Observable<number>;
+    public author: ko.Observable<string>;
+    public authorTitle: ko.Observable<string>;
 
     constructor() {
         this.setWidgetModel = this.setWidgetModel.bind(this);

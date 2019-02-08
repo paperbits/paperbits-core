@@ -8,9 +8,9 @@ import { Component } from "@paperbits/common/ko/decorators";
     template: template
 })
 export class Button {
-    public label: KnockoutObservable<string>;
-    public styles: KnockoutObservable<Object>;
-    public hyperlink: KnockoutObservable<HyperlinkModel>;
+    public label: ko.Observable<string>;
+    public styles: ko.Observable<Object>;
+    public hyperlink: ko.Observable<HyperlinkModel>;
 
     constructor() {
         this.label = ko.observable<string>("Button");

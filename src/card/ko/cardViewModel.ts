@@ -8,8 +8,8 @@ import { Component } from "@paperbits/common/ko/decorators";
     injectable: "card"
 })
 export class CardViewModel {
-    public widgets: KnockoutObservableArray<Object>;
-    public styles: KnockoutObservable<Object>;
+    public widgets: ko.ObservableArray<Object>;
+    public styles: ko.Observable<Object>;
 
     constructor() {
         this.widgets = ko.observableArray<Object>();

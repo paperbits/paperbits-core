@@ -8,10 +8,10 @@ import { Component } from "@paperbits/common/ko/decorators";
     template: template
 })
 export class TableOfContentsViewModel {
-    public title: KnockoutObservable<string>;
-    public maxHeading: KnockoutObservable<number>;
-    public nodes: KnockoutObservableArray<NavigationItemModel>;
-    public isEmpty: KnockoutComputed<boolean>;
+    public title: ko.Observable<string>;
+    public maxHeading: ko.Observable<number>;
+    public nodes: ko.ObservableArray<NavigationItemModel>;
+    public isEmpty: ko.Computed<boolean>;
 
     constructor() {
         this.title = ko.observable<string>();

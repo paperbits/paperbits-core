@@ -14,8 +14,8 @@ export class Workshops {
     private readonly viewManager: IViewManager;
     private readonly userService: IUserService;
 
-    public userPhotoUrl: KnockoutObservable<string>;
-    public resizing: KnockoutComputed<string>;
+    public userPhotoUrl: ko.Observable<string>;
+    public resizing: ko.Computed<string>;
 
     constructor(viewManager: IViewManager, userService: IUserService) {
         this.viewManager = viewManager;

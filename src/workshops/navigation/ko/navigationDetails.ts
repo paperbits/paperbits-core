@@ -11,8 +11,8 @@ import { Component, Event, OnMounted, Param } from "@paperbits/common/ko/decorat
     injectable: "navigationDetailsWorkshop"
 })
 export class NavigationDetailsWorkshop {
-    public readonly hyperlinkTitle: KnockoutComputed<string>;
-    public readonly hyperlink: KnockoutObservable<HyperlinkModel>;
+    public readonly hyperlinkTitle: ko.Computed<string>;
+    public readonly hyperlink: ko.Observable<HyperlinkModel>;
 
     @Event()
     public onDeleteCallback: (isRootItem: boolean) => void;

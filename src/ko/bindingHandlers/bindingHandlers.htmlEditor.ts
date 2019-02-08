@@ -8,7 +8,7 @@ export class HtmlEditorBindingHandler {
         ko.bindingHandlers["htmlEditor"] = {
             init(element: HTMLElement, valueAccessor: () => TextblockViewModel) {
                 const config = valueAccessor();
-                const stateObservable: KnockoutObservable<Object> = config.state;
+                const stateObservable: ko.Observable<Object> = config.state;
                 const htmlEditor: IHtmlEditor = ko.unwrap(config.htmlEditor);
 
                 const onEscapeKeyPressed = () => htmlEditor.detachFromElement();

@@ -11,7 +11,7 @@ import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 })
 export class GoogleTagManager {
     public static gtmDataLayerName = "dataLayer";
-    public gtmBootstrapper: KnockoutObservable<string>;
+    public gtmBootstrapper: ko.Observable<string>;
 
     constructor(private readonly settingsProvider: ISettingsProvider) {
         this.initialize = this.initialize.bind(this);

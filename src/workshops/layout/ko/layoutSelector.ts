@@ -12,12 +12,12 @@ import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorat
     injectable: "layoutSelector"
 })
 export class LayoutSelector implements IResourceSelector<LayoutContract> {
-    public readonly searchPattern: KnockoutObservable<string>;
-    public readonly layouts: KnockoutObservableArray<LayoutItem>;
-    public readonly working: KnockoutObservable<boolean>;
+    public readonly searchPattern: ko.Observable<string>;
+    public readonly layouts: ko.ObservableArray<LayoutItem>;
+    public readonly working: ko.Observable<boolean>;
 
     @Param()
-    public selectedLayout: KnockoutObservable<LayoutItem>;
+    public selectedLayout: ko.Observable<LayoutItem>;
 
     @Event()
     public onSelect: (layout: LayoutContract) => void;

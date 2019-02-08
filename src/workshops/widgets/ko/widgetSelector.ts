@@ -11,8 +11,8 @@ import { Component, Event, OnMounted } from "@paperbits/common/ko/decorators";
     injectable: "widgetSelector"
 })
 export class WidgetSelector {
-    public readonly widgets: KnockoutObservable<WidgetItem[]>;
-    public readonly working: KnockoutObservable<boolean>;
+    public readonly widgets: ko.Observable<WidgetItem[]>;
+    public readonly working: ko.Observable<boolean>;
 
     @Event()
     public onSelect: (widgetModel: WidgetModel) => void;

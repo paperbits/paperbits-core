@@ -22,9 +22,9 @@ export class TableOfContentsEditor implements IWidgetEditor {
     private tableOfContentsModel: TableOfContentsModel;
     private applyChangesCallback: (updatedModel?) => void;
 
-    public readonly navigationItemTitle: KnockoutObservable<string>;
-    public readonly headingOptions: KnockoutObservableArray<IHeadingOption>;
-    public selectedOption: KnockoutObservable<number>;
+    public readonly navigationItemTitle: ko.Observable<string>;
+    public readonly headingOptions: ko.ObservableArray<IHeadingOption>;
+    public selectedOption: ko.Observable<number>;
 
     constructor(private readonly tableOfContentsModelBinder: TableOfContentsModelBinder) {        
         this.onChange = this.onChange.bind(this);

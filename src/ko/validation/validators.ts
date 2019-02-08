@@ -17,7 +17,7 @@ export class KnockoutValidation {
             insertMessages: false
         }, true);
 
-        ko.extenders["onlyValid"] = function (target, option) {
+        ko.extenders["onlyValid"] = (target, option) => {
             const resultObservable: any = ko.observable(target());
 
             target.subscribe((newValue) => {

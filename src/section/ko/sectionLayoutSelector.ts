@@ -1,6 +1,6 @@
 import template from "./sectionLayoutSelector.html";
 import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
-import { BlockContract } from "@paperbits/common/blocks/BlockContract";
+import { BlockContract } from "@paperbits/common/blocks/blockContract";
 import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelector";
 import { Component, Event } from "@paperbits/common/ko/decorators";
 import { SectionModel } from "../sectionModel";

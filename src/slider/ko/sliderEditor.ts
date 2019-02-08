@@ -7,7 +7,7 @@ import { Component } from "@paperbits/common/ko/decorators";
 import { SliderModel, SlideModel } from "../sliderModel";
 
 export class SliderEditorSlide {
-    public thumbnail: KnockoutObservable<BackgroundModel>;
+    public thumbnail: ko.Observable<BackgroundModel>;
 
     constructor() {
         this.thumbnail = ko.observable();
@@ -24,22 +24,22 @@ export class SliderEditor implements IWidgetEditor {
     private activeSlideModel: SlideModel;
     private applyChangesCallback: () => void;
 
-    public readonly layout: KnockoutObservable<string>;
-    public readonly padding: KnockoutObservable<string>;
-    public readonly size: KnockoutObservable<string>;
-    public readonly backgroundSize: KnockoutObservable<string>;
-    public readonly backgroundPosition: KnockoutObservable<string>;
-    public readonly backgroundColorKey: KnockoutObservable<string>;
-    public readonly backgroundRepeat: KnockoutObservable<string>;
-    public readonly background: KnockoutObservable<BackgroundModel>;
-    public readonly thumbnail: KnockoutObservable<BackgroundModel>;
-    public readonly backgroundSourceType: KnockoutObservable<string>;
-    public readonly thumbnailUrl: KnockoutObservable<string>;
-    public readonly style: KnockoutObservable<string>;
+    public readonly layout: ko.Observable<string>;
+    public readonly padding: ko.Observable<string>;
+    public readonly size: ko.Observable<string>;
+    public readonly backgroundSize: ko.Observable<string>;
+    public readonly backgroundPosition: ko.Observable<string>;
+    public readonly backgroundColorKey: ko.Observable<string>;
+    public readonly backgroundRepeat: ko.Observable<string>;
+    public readonly background: ko.Observable<BackgroundModel>;
+    public readonly thumbnail: ko.Observable<BackgroundModel>;
+    public readonly backgroundSourceType: ko.Observable<string>;
+    public readonly thumbnailUrl: ko.Observable<string>;
+    public readonly style: ko.Observable<string>;
 
-    public readonly slides: KnockoutObservableArray<SliderEditorSlide>;
+    public readonly slides: ko.ObservableArray<SliderEditorSlide>;
 
-    public readonly activeSlideNumber: KnockoutObservable<number>;
+    public readonly activeSlideNumber: ko.Observable<number>;
 
 
     constructor() {

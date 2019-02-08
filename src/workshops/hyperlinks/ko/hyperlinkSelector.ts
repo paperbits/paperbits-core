@@ -10,10 +10,10 @@ import { Component, Event, Param, OnMounted } from "@paperbits/common/ko/decorat
     injectable: "hyperlinkSelector"
 })
 export class HyperlinkSelector {
-    public readonly hyperlinkProvider: KnockoutObservable<IHyperlinkProvider>;
+    public readonly hyperlinkProvider: ko.Observable<IHyperlinkProvider>;
 
     @Param()
-    public hyperlink: KnockoutObservable<HyperlinkModel>;
+    public hyperlink: ko.Observable<HyperlinkModel>;
 
     @Event()
     public onChange: (hyperlink: HyperlinkModel) => void;

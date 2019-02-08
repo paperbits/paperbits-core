@@ -11,7 +11,7 @@ import { ISettingsProvider } from "@paperbits/common/configuration";
 export class IntercomViewModel {
     private readonly settingsProvider: ISettingsProvider;
 
-    public intercomBootstrapper: KnockoutObservable<string>;
+    public intercomBootstrapper: ko.Observable<string>;
 
     constructor(settingsProvider: ISettingsProvider) {
         this.settingsProvider = settingsProvider;

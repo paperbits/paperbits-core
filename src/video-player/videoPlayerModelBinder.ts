@@ -1,7 +1,7 @@
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { IModelBinder } from "@paperbits/common/editing";
 import { VideoPlayerModel } from "./videoPlayerModel";
-import { VideoPlayerContract } from "./VideoPlayerContract";
+import { VideoPlayerContract } from "./videoPlayerContract";
 
 
 export class VideoPlayerModelBinder implements IModelBinder {

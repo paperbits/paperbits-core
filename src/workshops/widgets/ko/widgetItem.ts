@@ -6,7 +6,7 @@ export class WidgetItem {
     public displayName: string;
     public widgetOrder: IWidgetOrder;
     public element: HTMLElement;
-    public hasFocus: KnockoutObservable<boolean>;
+    public hasFocus: ko.Observable<boolean>;
 
     constructor() {
         this.hasFocus = ko.observable<boolean>();

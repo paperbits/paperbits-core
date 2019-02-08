@@ -15,9 +15,9 @@ export class VideoEditor implements IWidgetEditor {
     private video: VideoPlayerModel;
     private applyChangesCallback: () => void;
 
-    public sourceUrl: KnockoutObservable<string>;
-    public controls: KnockoutObservable<boolean>;
-    public autoplay: KnockoutObservable<boolean>;
+    public sourceUrl: ko.Observable<string>;
+    public controls: ko.Observable<boolean>;
+    public autoplay: ko.Observable<boolean>;
 
     public readonly mediaFilter: IMediaFilter;
 

@@ -11,13 +11,13 @@ import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorat
     injectable: "buttonEditor"
 })
 export class ButtonEditor {
-    public readonly label: KnockoutObservable<string>;
-    public readonly hyperlink: KnockoutObservable<HyperlinkModel>;
-    public readonly hyperlinkTitle: KnockoutObservable<string>;
-    public readonly appearanceStyles: KnockoutObservableArray<any>;
-    public readonly appearanceStyle: KnockoutObservable<any>;
-    public readonly sizeStyles: KnockoutObservableArray<any>;
-    public readonly sizeStyle: KnockoutObservable<any>;
+    public readonly label: ko.Observable<string>;
+    public readonly hyperlink: ko.Observable<HyperlinkModel>;
+    public readonly hyperlinkTitle: ko.Observable<string>;
+    public readonly appearanceStyles: ko.ObservableArray<any>;
+    public readonly appearanceStyle: ko.Observable<any>;
+    public readonly sizeStyles: ko.ObservableArray<any>;
+    public readonly sizeStyle: ko.Observable<any>;
 
     constructor(private readonly styleService: StyleService) {
         this.applyChanges = this.applyChanges.bind(this);

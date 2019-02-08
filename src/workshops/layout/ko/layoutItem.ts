@@ -5,10 +5,10 @@ export class LayoutItem {
     public contentKey?: string;
 
     public key: string;
-    public title: KnockoutObservable<string>;
-    public description: KnockoutObservable<string>;
-    public permalinkTemplate: KnockoutObservable<string>;
-    public hasFocus: KnockoutObservable<boolean>;
+    public title: ko.Observable<string>;
+    public description: ko.Observable<string>;
+    public permalinkTemplate: ko.Observable<string>;
+    public hasFocus: ko.Observable<boolean>;
 
     constructor(layout: LayoutContract) {
         this.contentKey = layout.contentKey;

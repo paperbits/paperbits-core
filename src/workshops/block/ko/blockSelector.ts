@@ -12,12 +12,12 @@ import { Component, Param, Event } from "@paperbits/common/ko/decorators";
     injectable: "blockSelector"
 })
 export class BlockSelector implements IResourceSelector<BlockContract> {
-    public readonly searchPattern: KnockoutObservable<string>;
-    public readonly blocks: KnockoutObservableArray<BlockItem>;
-    public readonly working: KnockoutObservable<boolean>;
+    public readonly searchPattern: ko.Observable<string>;
+    public readonly blocks: ko.ObservableArray<BlockItem>;
+    public readonly working: ko.Observable<boolean>;
 
     @Param()
-    public readonly selectedBlockItem: KnockoutObservable<BlockItem>;
+    public readonly selectedBlockItem: ko.Observable<BlockItem>;
 
     @Event()
     public readonly onSelect: (block: BlockContract) => void;

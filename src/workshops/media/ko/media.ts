@@ -19,10 +19,10 @@ import { IWidgetService } from "@paperbits/common/widgets";
 export class MediaWorkshop {
     private searchTimeout: any;
 
-    public searchPattern: KnockoutObservable<string>;
-    public mediaItems: KnockoutObservableArray<MediaItem>;
-    public selectedMediaItem: KnockoutObservable<MediaItem>;
-    public readonly working: KnockoutObservable<boolean>;
+    public searchPattern: ko.Observable<string>;
+    public mediaItems: ko.ObservableArray<MediaItem>;
+    public selectedMediaItem: ko.Observable<MediaItem>;
+    public readonly working: ko.Observable<boolean>;
 
     constructor(
         private readonly eventManager: IEventManager,

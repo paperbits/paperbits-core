@@ -32,7 +32,7 @@ export class BlogPostDetailsWorkshop {
     @OnMounted()
     public async onMounted(): Promise<void> {
         this.blogPostItem.title
-            .extend({ required: true })
+            .extend(<any>{ required: true })
             .subscribe(this.updateBlogPost);
 
         this.blogPostItem.description
@@ -42,7 +42,7 @@ export class BlogPostDetailsWorkshop {
             .subscribe(this.updateBlogPost);
 
         this.blogPostItem.permalink
-            .extend({ uniquePermalink: this.blogPostItem.permalink, required: true, onlyValid: true })
+            .extend(<any>{ uniquePermalink: this.blogPostItem.permalink, required: true, onlyValid: true })
             .subscribe(this.updatePermlaink);
 
         const blogPost = await this.blogService.getBlogPostByKey(this.blogPostItem.key);
@@ -52,7 +52,7 @@ export class BlogPostDetailsWorkshop {
     }
 
     private async updateBlogPost(): Promise<void> {
-        if (this.blogPostItem.title.isValid()) {
+        if ((<any>this.blogPostItem.title).isValid()) {
             await this.blogService.updateBlogPost(this.blogPostItem.toBlogPost());
         }
     }

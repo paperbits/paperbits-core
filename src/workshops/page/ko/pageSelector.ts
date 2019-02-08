@@ -11,12 +11,12 @@ import { Component, Param, Event } from "@paperbits/common/ko/decorators";
     injectable: "pageSelector"
 })
 export class PageSelector implements IResourceSelector<PageContract> {
-    public readonly searchPattern: KnockoutObservable<string>;
-    public readonly pages: KnockoutObservableArray<PageItem>;
-    public readonly working: KnockoutObservable<boolean>;
+    public readonly searchPattern: ko.Observable<string>;
+    public readonly pages: ko.ObservableArray<PageItem>;
+    public readonly working: ko.Observable<boolean>;
 
     @Param()
-    public selectedPage: KnockoutObservable<PageItem>;
+    public selectedPage: ko.Observable<PageItem>;
 
     @Event()
     public onSelect: (selection: PageContract) => void;

@@ -3,14 +3,14 @@ import { NavigationItemContract } from "@paperbits/common/navigation";
 
 export class NavigationItemViewModel {
     public key: string;
-    public label: KnockoutObservable<string>;
-    public targetKey: KnockoutObservable<string>;
+    public label: ko.Observable<string>;
+    public targetKey: ko.Observable<string>;
     public parent: NavigationItemViewModel;
-    public nodes: KnockoutObservableArray<NavigationItemViewModel>;
-    public collapsed: KnockoutObservable<boolean>;
-    public dragged: KnockoutObservable<boolean>;
-    public hasFocus: KnockoutObservable<boolean>;
-    public onUpdate: KnockoutSubscribable<void>;
+    public nodes: ko.ObservableArray<NavigationItemViewModel>;
+    public collapsed: ko.Observable<boolean>;
+    public dragged: ko.Observable<boolean>;
+    public hasFocus: ko.Observable<boolean>;
+    public onUpdate: ko.Subscribable<void>;
 
     constructor(navitem: NavigationItemContract) {
         this.moveNodeLeft = this.moveNodeLeft.bind(this);

@@ -17,7 +17,7 @@ ko.bindingHandlers["hyperlink"] = {
             });
         }
 
-        let initial = ko.unwrap(hyperlink);
+        const initial = ko.unwrap(hyperlink);
 
         if (initial) {
             attr({ href: initial.href, target: initial.target });
@@ -26,6 +26,6 @@ ko.bindingHandlers["hyperlink"] = {
             attr({ href: "#", target: "_blank" });
         }
 
-        ko.applyBindingsToNode(element, { attr: attr })
+        ko.applyBindingsToNode(element, { attr: attr }, null);
     }
 };

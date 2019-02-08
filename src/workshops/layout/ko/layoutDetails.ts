@@ -18,8 +18,8 @@ export class LayoutDetails {
     @Event()
     public readonly onDeleteCallback: () => void;
 
-    public isDefaultLayout: KnockoutComputed<boolean>;
-    public canDelete: KnockoutComputed<boolean>;
+    public isDefaultLayout: ko.Computed<boolean>;
+    public canDelete: ko.Computed<boolean>;
 
     constructor(
         private readonly layoutService: ILayoutService,
@@ -35,11 +35,11 @@ export class LayoutDetails {
     @OnMounted()
     public async onMounted(): Promise<void> {
         this.layoutItem.title
-            .extend({ required: true })
+            .extend(<any>{ required: true })
             .subscribe(this.updateLayout);
 
         this.layoutItem.permalinkTemplate
-            .extend({ uniqueLayoutUri: this.layoutItem.key })
+            .extend(<any>{ uniqueLayoutUri: this.layoutItem.key })
             .subscribe(this.updateLayout);
 
         this.layoutItem.description
@@ -59,7 +59,7 @@ export class LayoutDetails {
     }
 
     private async updateLayout(): Promise<void> {
-        if (this.layoutItem.title.isValid()) {
+        if ((<any>this.layoutItem.title).isValid()) {
             await this.layoutService.updateLayout(this.layoutItem.toLayout());
         }
     }

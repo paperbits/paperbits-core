@@ -14,7 +14,7 @@ import { Component } from "@paperbits/common/ko/decorators";
     injectable: "hyperlinkEditor"
 })
 export class HyperlinkEditor {
-    public readonly hyperlink: KnockoutObservable<HyperlinkModel>;
+    public readonly hyperlink: ko.Observable<HyperlinkModel>;
 
     constructor(
         private readonly htmlEditorProvider: IHtmlEditorProvider,

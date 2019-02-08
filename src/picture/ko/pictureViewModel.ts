@@ -10,14 +10,14 @@ import { HyperlinkModel } from "@paperbits/common/permalinks";
     template: template,
 })
 export class PictureViewModel {
-    public caption: KnockoutObservable<string>;
-    public action: KnockoutObservable<string>;
-    public layout: KnockoutObservable<string>;
-    public animation: KnockoutObservable<string>;
-    public background: KnockoutObservable<BackgroundModel>;
-    public hyperlink: KnockoutObservable<HyperlinkModel>;
-    public width: KnockoutObservable<number>;
-    public height: KnockoutObservable<number>;
+    public caption: ko.Observable<string>;
+    public action: ko.Observable<string>;
+    public layout: ko.Observable<string>;
+    public animation: ko.Observable<string>;
+    public background: ko.Observable<BackgroundModel>;
+    public hyperlink: ko.Observable<HyperlinkModel>;
+    public width: ko.Observable<number>;
+    public height: ko.Observable<number>;
 
     constructor() {
         this.caption = ko.observable<string>();

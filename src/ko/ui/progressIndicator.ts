@@ -1,10 +1,10 @@
 import * as ko from "knockout";
 
 export class ProgressIndicator {
-    public title: KnockoutObservable<string>;
-    public content: KnockoutObservable<string>;
-    public progress: KnockoutObservable<number>;
-    public complete: KnockoutObservable<boolean>;
+    public title: ko.Observable<string>;
+    public content: ko.Observable<string>;
+    public progress: ko.Observable<number>;
+    public complete: ko.Observable<boolean>;
 
     constructor(title: string, content: string, progress: number = 0) {
         this.title = ko.observable<string>(title);

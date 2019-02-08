@@ -3,11 +3,11 @@ import { UrlContract } from "@paperbits/common/urls/urlContract";
 
 export class UrlItem {
     public key: string;
-    public title: KnockoutObservable<string>;
-    public description: KnockoutObservable<string>;
-    public permalink: KnockoutObservable<string>;
-    public keywords: KnockoutObservable<string>;
-    public hasFocus: KnockoutObservable<boolean>;
+    public title: ko.Observable<string>;
+    public description: ko.Observable<string>;
+    public permalink: ko.Observable<string>;
+    public keywords: ko.Observable<string>;
+    public hasFocus: ko.Observable<boolean>;
 
     constructor(url: UrlContract) {
         this.key = url.key;

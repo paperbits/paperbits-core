@@ -16,10 +16,10 @@ import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 export class LayoutsWorkshop {
     private template: Contract;
 
-    public readonly searchPattern: KnockoutObservable<string>;
-    public readonly layouts: KnockoutObservableArray<LayoutItem>;
-    public readonly working: KnockoutObservable<boolean>;
-    public readonly selectedLayout: KnockoutObservable<LayoutItem>;
+    public readonly searchPattern: ko.Observable<string>;
+    public readonly layouts: ko.ObservableArray<LayoutItem>;
+    public readonly working: ko.Observable<boolean>;
+    public readonly selectedLayout: ko.Observable<LayoutItem>;
 
     constructor(
         private readonly layoutService: ILayoutService,

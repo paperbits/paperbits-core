@@ -13,7 +13,7 @@ import { Component } from "@paperbits/common/ko/decorators";
 export class TextblockEditor implements IWidgetEditor {
     private readonly eventManager: IEventManager;
 
-    public pluginNames: KnockoutObservableArray<string>;
+    public pluginNames: ko.ObservableArray<string>;
 
     constructor(eventManager: IEventManager) {
         this.eventManager = eventManager;

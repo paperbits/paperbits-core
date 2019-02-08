@@ -11,7 +11,7 @@ import { Component } from "@paperbits/common/ko/decorators";
 export class ViewportSelector {
     private readonly viewManager: IViewManager;
 
-    public viewport: KnockoutObservable<string>;
+    public viewport: ko.Observable<string>;
 
     constructor(viewManager: IViewManager) {
         this.viewManager = viewManager;

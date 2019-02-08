@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import { PageContract } from "@paperbits/common/pages/pageContract";
 
 export class AnchorItem {
-    public hasFocus: KnockoutObservable<boolean>;
+    public hasFocus: ko.Observable<boolean>;
     public title: string;
     public shortTitle: string;
 
@@ -14,11 +14,11 @@ export class AnchorItem {
 export class PageItem {
     public key: string;
     public contentKey?: string;
-    public permalink: KnockoutObservable<string>;
-    public title: KnockoutObservable<string>;
-    public description: KnockoutObservable<string>;
-    public keywords: KnockoutObservable<string>;
-    public hasFocus: KnockoutObservable<boolean>;
+    public permalink: ko.Observable<string>;
+    public title: ko.Observable<string>;
+    public description: ko.Observable<string>;
+    public keywords: ko.Observable<string>;
+    public hasFocus: ko.Observable<boolean>;
 
     public anchors: AnchorItem[];
 

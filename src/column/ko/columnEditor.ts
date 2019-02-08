@@ -13,12 +13,12 @@ import { ColumnModel } from "../columnModel";
 export class ColumnEditor implements IWidgetEditor {
     private column: ColumnModel;
     private applyChangesCallback: () => void;
-    private readonly verticalAlignment: KnockoutObservable<string>;
-    private readonly horizontalAlignment: KnockoutObservable<string>;
+    private readonly verticalAlignment: ko.Observable<string>;
+    private readonly horizontalAlignment: ko.Observable<string>;
 
-    public readonly alignment: KnockoutObservable<string>;
-    public readonly scrollOnOverlow: KnockoutObservable<boolean>;
-    public readonly order: KnockoutObservable<number>;
+    public readonly alignment: ko.Observable<string>;
+    public readonly scrollOnOverlow: ko.Observable<boolean>;
+    public readonly order: ko.Observable<number>;
 
     constructor(private readonly viewManager: IViewManager) {
         this.alignLeft.bind(this);

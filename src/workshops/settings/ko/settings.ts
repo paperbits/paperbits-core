@@ -18,20 +18,20 @@ export class SettingsWorkshop {
     private readonly viewManager: IViewManager;
 
     public readonly mediaFilter: IMediaFilter;
-    public readonly working: KnockoutObservable<boolean>;
+    public readonly working: ko.Observable<boolean>;
 
-    public title: KnockoutObservable<string>;
-    public description: KnockoutObservable<string>;
-    public keywords: KnockoutObservable<string>;
-    public hostname: KnockoutObservable<string>;
-    public author: KnockoutObservable<string>;
-    public gmapsApiKey: KnockoutObservable<string>;
-    public googleFontsApiKey: KnockoutObservable<string>;
-    public gtmContainerId: KnockoutObservable<string>;
-    public intercomAppId: KnockoutObservable<string>;
-    public faviconSourceKey: KnockoutObservable<string>;
-    public faviconFileName: KnockoutObservable<string>;
-    public favicon: KnockoutObservable<BackgroundModel>;
+    public title: ko.Observable<string>;
+    public description: ko.Observable<string>;
+    public keywords: ko.Observable<string>;
+    public hostname: ko.Observable<string>;
+    public author: ko.Observable<string>;
+    public gmapsApiKey: ko.Observable<string>;
+    public googleFontsApiKey: ko.Observable<string>;
+    public gtmContainerId: ko.Observable<string>;
+    public intercomAppId: ko.Observable<string>;
+    public faviconSourceKey: ko.Observable<string>;
+    public faviconFileName: ko.Observable<string>;
+    public favicon: ko.Observable<BackgroundModel>;
 
 
     constructor(mediaService: IMediaService, siteService: ISiteService, viewManager: IViewManager) {

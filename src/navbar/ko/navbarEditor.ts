@@ -12,8 +12,8 @@ import { NavbarModelBinder } from "../navbarModelBinder";
     injectable: "navbarEditor"
 })
 export class NavbarEditor {
-    public logoUrl: KnockoutObservable<string>;
-    public readonly navigationItemTitle: KnockoutObservable<string>;
+    public logoUrl: ko.Observable<string>;
+    public readonly navigationItemTitle: ko.Observable<string>;
 
     constructor(
         private readonly navbarModelBinder: NavbarModelBinder,

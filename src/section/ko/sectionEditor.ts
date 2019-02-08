@@ -17,12 +17,12 @@ const styleKeyStretch = "utils/block/stretch";
     injectable: "sectionEditor"
 })
 export class SectionEditor {
-    public readonly layout: KnockoutObservable<string>;
-    public readonly padding: KnockoutObservable<string>;
-    public readonly snap: KnockoutObservable<string>;
-    public readonly background: KnockoutObservable<BackgroundContract>;
-    public readonly typography: KnockoutObservable<TypographyContract>;
-    public readonly stretch: KnockoutObservable<boolean>;
+    public readonly layout: ko.Observable<string>;
+    public readonly padding: ko.Observable<string>;
+    public readonly snap: ko.Observable<string>;
+    public readonly background: ko.Observable<BackgroundContract>;
+    public readonly typography: ko.Observable<TypographyContract>;
+    public readonly stretch: ko.Observable<boolean>;
 
     constructor(private readonly styleService: StyleService) {
         this.initialize = this.initialize.bind(this);

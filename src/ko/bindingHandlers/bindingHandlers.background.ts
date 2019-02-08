@@ -89,7 +89,7 @@ export class BackgroundBindingHandler {
                     cssObservable(css.join(" "));
                 };
 
-                ko.applyBindingsToNode(element, { style: styleObservable, css: cssObservable });
+                ko.applyBindingsToNode(element, { style: styleObservable, css: cssObservable }, null);
 
                 if (ko.isObservable(configuration)) {
                     configuration.subscribe((newConfiguration) => {

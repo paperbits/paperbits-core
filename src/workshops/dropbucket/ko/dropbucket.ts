@@ -17,7 +17,7 @@ import { IWidgetService } from "@paperbits/common/widgets";
     injectable: "dropbucket"
 })
 export class DropBucket {
-    public droppedItems: KnockoutObservableArray<DropBucketItem>;
+    public droppedItems: ko.ObservableArray<DropBucketItem>;
 
     constructor(
         private readonly globalEventHandler: GlobalEventHandler,

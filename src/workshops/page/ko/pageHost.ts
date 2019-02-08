@@ -10,7 +10,7 @@ import { IRouteHandler } from "@paperbits/common/routing";
     injectable: "pageHost"
 })
 export class PageHost {
-    public layoutViewModel: KnockoutObservable<LayoutViewModel>;
+    public layoutViewModel: ko.Observable<LayoutViewModel>;
 
     constructor(
         private readonly layoutViewModelBinder: LayoutViewModelBinder,

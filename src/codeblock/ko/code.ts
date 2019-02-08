@@ -7,10 +7,10 @@ import { Component } from "@paperbits/common/ko/decorators";
     template: template
 })
 export class Code {
-    public lang: KnockoutObservable<string>;
-    public code: KnockoutObservable<string>;
-    public theme: KnockoutObservable<string>;
-    public isEditable: KnockoutObservable<boolean>;
+    public lang: ko.Observable<string>;
+    public code: ko.Observable<string>;
+    public theme: ko.Observable<string>;
+    public isEditable: ko.Observable<boolean>;
 
     constructor() {
         this.code = ko.observable<string>("let i = 0;");

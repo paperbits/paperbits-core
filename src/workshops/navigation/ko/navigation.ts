@@ -13,9 +13,9 @@ import { Component } from "@paperbits/common/ko/decorators";
     injectable: "navigationWorkshop"
 })
 export class NavigationWorkshop {
-    private selectedNavigationItem: KnockoutObservable<NavigationItemViewModel>;
+    private selectedNavigationItem: ko.Observable<NavigationItemViewModel>;
 
-    public navigationItemsTree: KnockoutObservable<NavigationTree>;
+    public navigationItemsTree: ko.Observable<NavigationTree>;
 
     constructor(
         private readonly navigationService: INavigationService,

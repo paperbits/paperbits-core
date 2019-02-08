@@ -85,7 +85,7 @@ ko.bindingHandlers["component"] = {
                     componentOnCreateHandler(componentViewModel, element);
                 }
             });
-        }, null, { disposeWhenNodeIsRemoved: element });
+        }, null, <any>{ disposeWhenNodeIsRemoved: element });
 
         return { controlsDescendantBindings: true };
     }

@@ -14,11 +14,11 @@ export class YoutubeEditor implements IWidgetEditor {
     private model: YoutubePlayerModel;
     private applyChangesCallback: () => void;
 
-    public videoId: KnockoutObservable<string>;
-    public origin: KnockoutObservable<string>;
-    public controls: KnockoutObservable<boolean>;
-    public autoplay: KnockoutObservable<boolean>;
-    public loop: KnockoutObservable<boolean>;
+    public videoId: ko.Observable<string>;
+    public origin: ko.Observable<string>;
+    public controls: ko.Observable<boolean>;
+    public autoplay: ko.Observable<boolean>;
+    public loop: ko.Observable<boolean>;
 
     constructor() {
         this.setWidgetModel = this.setWidgetModel.bind(this);

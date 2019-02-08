@@ -17,23 +17,23 @@ import { Breakpoints } from "@paperbits/common";
     injectable: "formattingTools"
 })
 export class FormattingTools {
-    public bold: KnockoutObservable<boolean>;
-    public italic: KnockoutObservable<boolean>;
-    public underlined: KnockoutObservable<boolean>;
-    public highlighted: KnockoutObservable<boolean>;
-    public pre: KnockoutObservable<boolean>;
-    public style: KnockoutObservable<string>;
-    public colored: KnockoutObservable<string>;
-    public alignment: KnockoutObservable<string>;
-    public justified: KnockoutObservable<boolean>;
-    public anchored: KnockoutObservable<boolean>;
-    public size: KnockoutObservable<string>;
-    public sized: KnockoutObservable<boolean>;
-    public olName: KnockoutObservable<string>;
-    public ol: KnockoutObservable<boolean>;
-    public ulName: KnockoutObservable<string>;
-    public ul: KnockoutObservable<boolean>;
-    public font: KnockoutObservable<string>;
+    public bold: ko.Observable<boolean>;
+    public italic: ko.Observable<boolean>;
+    public underlined: ko.Observable<boolean>;
+    public highlighted: ko.Observable<boolean>;
+    public pre: ko.Observable<boolean>;
+    public style: ko.Observable<string>;
+    public colored: ko.Observable<string>;
+    public alignment: ko.Observable<string>;
+    public justified: ko.Observable<boolean>;
+    public anchored: ko.Observable<boolean>;
+    public size: ko.Observable<string>;
+    public sized: ko.Observable<boolean>;
+    public olName: ko.Observable<string>;
+    public ol: ko.Observable<boolean>;
+    public ulName: ko.Observable<string>;
+    public ul: ko.Observable<boolean>;
+    public font: ko.Observable<string>;
 
     constructor(
         private readonly htmlEditorProvider: IHtmlEditorProvider,

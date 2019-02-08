@@ -16,10 +16,10 @@ import { LayoutViewModelBinder } from "../../../layout/ko";
 export class BlogWorkshop {
     private searchTimeout: any;
 
-    public readonly searchPattern: KnockoutObservable<string>;
-    public readonly blogPosts: KnockoutObservableArray<BlogPostItem>;
-    public readonly working: KnockoutObservable<boolean>;
-    public readonly selectedBlogPost: KnockoutObservable<BlogPostItem>;
+    public readonly searchPattern: ko.Observable<string>;
+    public readonly blogPosts: ko.ObservableArray<BlogPostItem>;
+    public readonly working: ko.Observable<boolean>;
+    public readonly selectedBlogPost: ko.Observable<BlogPostItem>;
 
     constructor(
         private readonly blogService: IBlogService,

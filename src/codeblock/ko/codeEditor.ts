@@ -10,17 +10,17 @@ export class CodeEditor implements IWidgetEditor {
     private javaLang: AceLanguage;
     private jsLang: AceLanguage;
     private curlLang: AceLanguage;
-    private code: KnockoutObservable<Code>;
+    private code: ko.Observable<Code>;
 
-    public languages: KnockoutObservableArray<AceLanguage>;
+    public languages: ko.ObservableArray<AceLanguage>;
     public languageMap: Array<AceLanguage>;
-    public themes: KnockoutObservableArray<string>;
+    public themes: ko.ObservableArray<string>;
 
-    public selectedTheme: KnockoutObservable<string>;
-    public selectedLanguage: KnockoutObservable<AceLanguage>;
+    public selectedTheme: ko.Observable<string>;
+    public selectedLanguage: ko.Observable<AceLanguage>;
 
-    public lang: KnockoutObservable<string>;
-    public text: KnockoutObservable<string>;
+    public lang: ko.Observable<string>;
+    public text: ko.Observable<string>;
 
     constructor() {
         this.objcLang = new AceLanguage("Objective C", "objectivec");

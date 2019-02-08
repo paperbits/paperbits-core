@@ -5,11 +5,11 @@ export class BlogPostItem {
     private contentKey?: string;
 
     public key: string;
-    public permalink: KnockoutObservable<string>;
-    public title: KnockoutObservable<string>;
-    public description: KnockoutObservable<string>;
-    public keywords: KnockoutObservable<string>;
-    public hasFocus: KnockoutObservable<boolean>;
+    public permalink: ko.Observable<string>;
+    public title: ko.Observable<string>;
+    public description: ko.Observable<string>;
+    public keywords: ko.Observable<string>;
+    public hasFocus: ko.Observable<boolean>;
 
     constructor(blogPost: BlogPostContract) {
         this.contentKey = blogPost.contentKey;

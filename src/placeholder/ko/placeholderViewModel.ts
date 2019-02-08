@@ -8,7 +8,7 @@ import { Component } from "@paperbits/common/ko/decorators";
     injectable: "placeholderWidget",
 })
 export class PlaceholderViewModel {
-    public title: KnockoutObservable<string>;
+    public title: ko.Observable<string>;
 
     constructor(title: string) {
         this.title = ko.observable<string>(title);

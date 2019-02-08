@@ -32,7 +32,7 @@ export class MediaDetailsWorkshop {
     @OnMounted()
     public async onMounted(): Promise<void> {
         this.mediaItem.fileName
-            .extend({ required: true, onlyValid: true })
+            .extend(<any>{ required: true, onlyValid: true })
             .subscribe(this.updateMedia);
 
         this.mediaItem.description
@@ -42,7 +42,7 @@ export class MediaDetailsWorkshop {
             .subscribe(this.updateMedia);
 
         this.mediaItem.permalink
-            .extend({ uniquePermalink: this.mediaItem.key, onlyValid: true })
+            .extend(<any>{ uniquePermalink: this.mediaItem.key, onlyValid: true })
             .subscribe(this.updateMedia);
 
         const mediaContract = await this.mediaService.getMediaByKey(this.mediaItem.key);

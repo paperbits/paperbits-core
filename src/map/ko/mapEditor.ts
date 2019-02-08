@@ -13,10 +13,10 @@ export class MapEditor implements IWidgetEditor {
     private map: MapModel;
     private applyChangesCallback: () => void;
 
-    public location: KnockoutObservable<string>;
-    public caption: KnockoutObservable<string>;
-    public zoomControl: KnockoutObservable<boolean>;
-    public layout: KnockoutObservable<string>;
+    public location: ko.Observable<string>;
+    public caption: ko.Observable<string>;
+    public zoomControl: ko.Observable<boolean>;
+    public layout: ko.Observable<string>;
 
     constructor() {
         this.onLocationUpdate = this.onLocationUpdate.bind(this);

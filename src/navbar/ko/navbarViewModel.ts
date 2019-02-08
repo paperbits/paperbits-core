@@ -8,8 +8,8 @@ import { NavbarItemViewModel } from "./navbarItemViewModel";
     template: template
 })
 export class NavbarViewModel {
-    public navigationRoot: KnockoutObservable<NavbarItemViewModel>;
-    public pictureSourceUrl: KnockoutObservable<string>;
+    public navigationRoot: ko.Observable<NavbarItemViewModel>;
+    public pictureSourceUrl: ko.Observable<string>;
 
     constructor() {
         this.navigationRoot = ko.observable<NavbarItemViewModel>();

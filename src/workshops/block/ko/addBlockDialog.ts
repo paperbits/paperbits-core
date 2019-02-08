@@ -12,8 +12,8 @@ import { SectionModel } from "../../../section/sectionModel";
     injectable: "addBlockDialog"
 })
 export class AddBlockDialog {
-    public readonly working: KnockoutObservable<boolean>;
-    public readonly name: KnockoutObservable<string>;
+    public readonly working: ko.Observable<boolean>;
+    public readonly name: ko.Observable<string>;
 
     @Param()
     public readonly sectionModel: SectionModel;
@@ -30,7 +30,7 @@ export class AddBlockDialog {
 
         this.working = ko.observable(false);
         this.name = ko.observable<string>();
-        this.name.extend({ required: true });
+        this.name.extend(<any>{ required: true });
     }
 
     public async addBlock(): Promise<void> {

@@ -9,9 +9,9 @@ import { Component } from "@paperbits/common/ko/decorators";
 })
 export class TextblockViewModel {
     public readonly htmlEditor: IHtmlEditor;
-    public readonly state: KnockoutObservable<Object>;
+    public readonly state: ko.Observable<Object>;
 
-    public readonly: KnockoutObservable<boolean>;
+    public readonly: ko.Observable<boolean>;
 
     constructor(htmlEditor: IHtmlEditor) {
         this.htmlEditor = htmlEditor;

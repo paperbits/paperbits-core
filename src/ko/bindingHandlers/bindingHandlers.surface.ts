@@ -66,7 +66,7 @@ ko.bindingHandlers["surface"] = {
                     localStorage["settings"] = JSON.stringify(settings);
                 }
             }
-        });
+        }, null);
 
         ko.applyBindingsToNode(element, {
             resizable: {
@@ -95,6 +95,6 @@ ko.bindingHandlers["surface"] = {
                     localStorage["settings"] = JSON.stringify(settings);
                 }
             }
-        });
+        }, null);
     }
 };

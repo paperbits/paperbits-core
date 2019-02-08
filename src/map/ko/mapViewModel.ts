@@ -8,12 +8,12 @@ import { MapService } from "../mapService";
     template: template
 })
 export class MapViewModel {
-    public googleMapsLoaded: KnockoutObservable<boolean>;
-    public location: KnockoutObservable<string>;
-    public caption: KnockoutObservable<string>;
-    public layout: KnockoutObservable<string>;
-    public animation: KnockoutObservable<string>;
-    public zoomControl: KnockoutObservable<string>;
+    public googleMapsLoaded: ko.Observable<boolean>;
+    public location: ko.Observable<string>;
+    public caption: ko.Observable<string>;
+    public layout: ko.Observable<string>;
+    public animation: ko.Observable<string>;
+    public zoomControl: ko.Observable<string>;
 
     constructor(private readonly mapService: MapService) {
         this.onMounted = this.onMounted.bind(this);

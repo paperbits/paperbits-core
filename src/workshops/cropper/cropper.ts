@@ -44,7 +44,7 @@ export class CropperBindingHandler {
     injectable: "pictureCropper"
 })
 export class PictureCropper {
-    public cropperInstance: KnockoutObservable<any>;
+    public cropperInstance: ko.Observable<any>;
 
     @Param()
     public readonly mediaItem: MediaItem;

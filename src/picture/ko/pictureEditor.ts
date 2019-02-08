@@ -17,14 +17,14 @@ export class PictureEditor implements IWidgetEditor {
     private pictureModel: PictureModel;
     private applyChangesCallback: () => void;
 
-    public readonly caption: KnockoutObservable<string>;
-    public readonly layout: KnockoutObservable<string>;
-    public readonly animation: KnockoutObservable<string>;
-    public readonly background: KnockoutObservable<BackgroundModel>;
-    public readonly hyperlink: KnockoutObservable<HyperlinkModel>;
-    public readonly hyperlinkTitle: KnockoutComputed<string>;
-    public readonly width: KnockoutObservable<number>;
-    public readonly height: KnockoutObservable<number>;
+    public readonly caption: ko.Observable<string>;
+    public readonly layout: ko.Observable<string>;
+    public readonly animation: ko.Observable<string>;
+    public readonly background: ko.Observable<BackgroundModel>;
+    public readonly hyperlink: ko.Observable<HyperlinkModel>;
+    public readonly hyperlinkTitle: ko.Computed<string>;
+    public readonly width: ko.Observable<number>;
+    public readonly height: ko.Observable<number>;
 
     constructor() {
         this.onHyperlinkChange = this.onHyperlinkChange.bind(this);

@@ -18,6 +18,6 @@ ko.bindingHandlers["infoMessageToggle"] = {
                 position: "top",
                 isOpen: ko.observable()
             }
-        });
+        }, null);
     }
 }

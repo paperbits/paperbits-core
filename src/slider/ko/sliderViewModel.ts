@@ -10,11 +10,11 @@ import { Component } from "@paperbits/common/ko/decorators";
 })
 export class SliderViewModel {
     public id: string;
-    public slides: KnockoutObservableArray<SlideViewModel>;
-    public slideSelectorStyle: KnockoutObservable<string>;
-    public activeSlideNumber: KnockoutObservable<number>;
-    public css: KnockoutObservable<string>;
-    public style: KnockoutObservable<string>;
+    public slides: ko.ObservableArray<SlideViewModel>;
+    public slideSelectorStyle: ko.Observable<string>;
+    public activeSlideNumber: ko.Observable<number>;
+    public css: ko.Observable<string>;
+    public style: ko.Observable<string>;
 
     constructor() {
         this.id = Utils.identifier();

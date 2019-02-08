@@ -6,10 +6,10 @@ import { NavigationItemViewModel } from "./navigationItemViewModel";
 export class NavigationTree {  // TODO: This should be refactored into ModelBinder
     private placeholderElement: HTMLElement;
 
-    public nodes: KnockoutObservableArray<NavigationItemViewModel>;
-    public selectedNode: KnockoutObservable<NavigationItemViewModel>;
-    public focusedNode: KnockoutObservable<NavigationItemViewModel>;
-    public onUpdate: KnockoutSubscribable<NavigationItemContract[]>;
+    public nodes: ko.ObservableArray<NavigationItemViewModel>;
+    public selectedNode: ko.Observable<NavigationItemViewModel>;
+    public focusedNode: ko.Observable<NavigationItemViewModel>;
+    public onUpdate: ko.Subscribable<NavigationItemContract[]>;
 
     constructor(items: NavigationItemContract[]) {
         this.onFocusChange = this.onFocusChange.bind(this);

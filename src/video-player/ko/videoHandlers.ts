@@ -2,7 +2,6 @@
 import * as MediaUtils from "@paperbits/common/media/mediaUtils";
 import { MediaContract, IMediaService } from "@paperbits/common/media";
 import { IContentDropHandler, IContentDescriptor, IDataTransfer, IWidgetOrder, IWidgetHandler, IWidgetFactoryResult } from "@paperbits/common/editing";
-import { VideoPlayerContract } from "../videoPlayerContract";
 import { VideoPlayerModel } from "../videoPlayerModel";
 
 export class VideoHandlers implements IWidgetHandler, IContentDropHandler {

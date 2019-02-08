@@ -8,10 +8,10 @@ import { WidgetViewModel } from "../../ko/widgetViewModel";
     template: template
 })
 export class PageViewModel implements WidgetViewModel {
-    public title: KnockoutObservable<string>;
-    public description: KnockoutObservable<string>;
-    public keywords: KnockoutObservable<string>;
-    public widgets: KnockoutObservableArray<Object>;
+    public title: ko.Observable<string>;
+    public description: ko.Observable<string>;
+    public keywords: ko.Observable<string>;
+    public widgets: ko.ObservableArray<Object>;
 
     constructor() {
         this.title = ko.observable<string>();

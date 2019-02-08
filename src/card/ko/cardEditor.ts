@@ -14,15 +14,15 @@ import { BackgroundContract, TypographyContract } from "@paperbits/styles/contra
     injectable: "cardEditor"
 })
 export class CardEditor {
-    private readonly verticalAlignment: KnockoutObservable<string>;
-    private readonly horizontalAlignment: KnockoutObservable<string>;
+    private readonly verticalAlignment: ko.Observable<string>;
+    private readonly horizontalAlignment: ko.Observable<string>;
 
-    public readonly alignment: KnockoutObservable<string>;
-    public readonly scrollOnOverlow: KnockoutObservable<boolean>;
-    public readonly background: KnockoutObservable<BackgroundContract>;
-    public readonly typography: KnockoutObservable<TypographyContract>;
-    public readonly appearanceStyles: KnockoutObservableArray<any>;
-    public readonly appearanceStyle: KnockoutObservable<any>;
+    public readonly alignment: ko.Observable<string>;
+    public readonly scrollOnOverlow: ko.Observable<boolean>;
+    public readonly background: ko.Observable<BackgroundContract>;
+    public readonly typography: ko.Observable<TypographyContract>;
+    public readonly appearanceStyles: ko.ObservableArray<any>;
+    public readonly appearanceStyle: ko.Observable<any>;
 
     constructor(
         private readonly viewManager: IViewManager,

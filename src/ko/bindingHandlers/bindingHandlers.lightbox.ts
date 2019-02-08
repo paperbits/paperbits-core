@@ -20,7 +20,7 @@ export class LightboxBindingHandler {
                     configuration.url.subscribe(setContentUrl);
                 }
 
-                ko.applyBindingsToNode(element, { click: showLightbox });
+                ko.applyBindingsToNode(element, { click: showLightbox }, null);
             }
         };
     }
