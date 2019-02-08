@@ -55,7 +55,7 @@ export class LayoutDetails {
 
         const uri = this.layoutItem.permalinkTemplate();
         
-        this.routeHandler.navigateTo(uri, { usePagePlaceholder: true });
+        this.routeHandler.navigateTo(uri, this.layoutItem.title(), { usePagePlaceholder: true });
     }
 
     private async updateLayout(): Promise<void> {

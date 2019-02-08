@@ -64,7 +64,6 @@ export class PagesWorkshop {
     public selectPage(pageItem: PageItem): void {
         this.selectedPage(pageItem);
        
-        this.viewManager.setTitle(null, pageItem.toContract());
         this.viewManager.openViewAsWorkshop("Page", "page-details-workshop", {
             pageItem: pageItem,
             onDeleteCallback: () => {

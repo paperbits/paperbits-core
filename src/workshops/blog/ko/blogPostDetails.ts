@@ -48,7 +48,7 @@ export class BlogPostDetailsWorkshop {
         const blogPost = await this.blogService.getBlogPostByKey(this.blogPostItem.key);
 
         this.blogPostItem.permalink(blogPost.permalink);
-        this.routeHandler.navigateTo(blogPost.permalink);
+        this.routeHandler.navigateTo(blogPost.permalink, blogPost.title);
     }
 
     private async updateBlogPost(): Promise<void> {
@@ -74,7 +74,7 @@ export class BlogPostDetailsWorkshop {
         this.viewManager.closeWorkshop("blog-post-details-workshop");
 
         if (this.onDeleteCallback) {
-            this.onDeleteCallback()
+            this.onDeleteCallback();
         }
 
         this.routeHandler.navigateTo("/");

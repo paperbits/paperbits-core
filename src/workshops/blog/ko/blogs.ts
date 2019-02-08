@@ -82,7 +82,7 @@ export class BlogWorkshop {
         this.blogPosts.push(postItem);
         this.selectBlogPost(postItem);
 
-        this.routeHandler.navigateTo(postUrl);
+        this.routeHandler.navigateTo(postUrl, post.title);
         this.working(false);
     }
 

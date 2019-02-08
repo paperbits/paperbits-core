@@ -54,7 +54,6 @@ export class PageDetailsWorkshop {
 
     private async updatePage(): Promise<void> {
         await this.pageService.updatePage(this.pageItem.toContract());
-        this.viewManager.setTitle(null, this.pageItem.toContract());
     }
 
     private async updatePermlaink(): Promise<void> {

@@ -139,7 +139,6 @@ export class SettingsWorkshop {
         };
 
         await this.siteService.setSiteSettings(config);
-        await this.viewManager.setTitle(config, null);
     }
 
     public onMediaSelected(media: MediaContract): void {

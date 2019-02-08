@@ -12,7 +12,6 @@ import { ProgressIndicator } from "../ui";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { ISiteService, SettingsContract } from "@paperbits/common/sites";
 import { IPageService, PageContract } from "@paperbits/common/pages";
-import { IContentItemService, ContentItemContract } from "@paperbits/common/contentItems";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { IWidgetEditor } from "@paperbits/common/widgets";
@@ -128,7 +127,6 @@ export class ViewManager implements IViewManager {
         eventManager.addEventListener("onEscape", this.closeEditors);
 
         this.loadFavIcon();
-        this.setTitle();
     }
 
     public setHost(component: IComponent): void {
@@ -157,62 +155,6 @@ export class ViewManager implements IViewManager {
                 MetaDataSetter.setFavIcon(iconFile.downloadUrl);
             }
         }
-    }
-
-    public async setTitle(settings?: SettingsContract, page?: PageContract): Promise<void> {
-        let siteTitle, pageTitle;
-
-        if (settings && settings.site) {
-            siteTitle = settings.site.title;
-        }
-        else {
-            const settings = await this.siteService.getSiteSettings();
-            if (settings && settings.site) {
-                siteTitle = settings.site.title;
-            }
-        }
-
-        if (!page) {
-            page = await this.getCurrentPage();
-        }
-
-        if (page) {
-            let pageType;
-            pageType = this.getContentType(page.key);
-
-            switch (pageType) {
-                case "page":
-                    pageTitle = page.title;
-                    break;
-                case "post":
-                    pageTitle = `Blog - ${page.title}`;
-                    break;
-                case "news":
-                    pageTitle = `News - ${page.title}`;
-                    break;
-                default:
-                    throw new Error("Unknown content type");
-            }
-
-            window.document.title = [siteTitle, pageTitle].join(" | ");
-        }
-    }
-
-    private getContentType(pageKey: string): string {
-        let pageType = "page";
-        if (pageKey.startsWith("posts")) {
-            pageType = "post";
-        }
-        if (pageKey.startsWith("news")) {
-            pageType = "news";
-        }
-        return pageType;
-    }
-
-    public async getCurrentPage(): Promise<PageContract> {
-        const currentUrl = this.routeHandler.getCurrentUrl();
-        this.currentPage = await this.pageService.getPageByPermalink(currentUrl);
-        return this.currentPage;
     }
 
     public getCurrentJourney(): string {

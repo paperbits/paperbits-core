@@ -67,7 +67,7 @@ export class HostBindingHandler {
                     }
                 });
 
-                ko.applyBindingsToNode(element, { css: css });
+                ko.applyBindingsToNode(element, { css: css }, null);
 
                 ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
                     document.removeEventListener("mousemove", onPointerMove);
@@ -122,12 +122,12 @@ export class HostBindingHandler {
 
             /* Intercepting push state of hosted window */
             const hostedWindowHistory = hostElement.contentDocument.defaultView.window.history;
-            const hostedWindoworiginalPushState = hostedWindowHistory.pushState;
+            const hostedWindowOriginalPushState = hostedWindowHistory.pushState;
 
             const routeHandler = this.routeHandler;
 
             const onRouteChange = () => {
-                hostedWindowHistory.pushState({ host: true }, null, routeHandler.getCurrentUrl());
+                hostedWindowHistory.pushState({ host: true }, "HOST2", routeHandler.getCurrentUrl());
             };
 
             routeHandler.addRouteChangeListener(onRouteChange);
@@ -135,6 +135,8 @@ export class HostBindingHandler {
             hostedWindowHistory.pushState(null, null, routeHandler.getCurrentUrl());
 
             hostedWindowHistory.pushState = (data: any, title: string, url: string) => {
+                hostedWindowOriginalPushState.call(hostedWindowHistory, data, title, url);
+
                 if (data && data.host) {
                     return;
                 }
@@ -148,13 +150,11 @@ export class HostBindingHandler {
         return hostElement;
     }
 
-    private documentViewModel;
-
     private async setRootElement(bodyElement: HTMLElement): Promise<void> {
-        ko.applyBindingsToNode(bodyElement, { component: this.hostComponent });
+        ko.applyBindingsToNode(bodyElement, { component: this.hostComponent }, null);
 
         const styleElement = document.createElement("style");
         bodyElement.ownerDocument.head.appendChild(styleElement);
-        ko.applyBindingsToNode(styleElement, { styleSheet: {} });
+        ko.applyBindingsToNode(styleElement, { styleSheet: {} }, null);
     }
 }
