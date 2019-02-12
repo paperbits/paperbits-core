@@ -1,4 +1,4 @@
-import { IContextualEditor, IView, IViewManager } from "@paperbits/common/ui";
+import { IContextCommandSet, IView, IViewManager } from "@paperbits/common/ui";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { WidgetContext } from "@paperbits/common/editing";
 import { SectionModel } from "./sectionModel";
@@ -28,8 +28,8 @@ export class SectionHandlers {
         dragSession.targetBinding.applyChanges();
     }
 
-    public getContextualEditor(context: WidgetContext): IContextualEditor {
-        const sectionContextualEditor: IContextualEditor = {
+    public getContextualEditor(context: WidgetContext): IContextCommandSet {
+        const sectionContextualEditor: IContextCommandSet = {
             color: "#2b87da",
             hoverCommand: {
                 position: context.half,

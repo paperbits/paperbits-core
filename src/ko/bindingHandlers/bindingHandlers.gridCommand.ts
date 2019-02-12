@@ -1,21 +1,21 @@
 import * as ko from "knockout";
-import { IContextualEditorCommand } from "@paperbits/common/ui/IContextualEditor";
+import { IContextCommand } from "@paperbits/common/ui/IContextCommandSet";
 
 ko.bindingHandlers["gridCommand"] = {
-    init(element: HTMLElement, valueAccessor: () => IContextualEditorCommand) {
-        let command = valueAccessor();
+    init(element: HTMLElement, valueAccessor: () => IContextCommand) {
+        const command = valueAccessor();
 
         if (!command) {
             return;
         }
 
-        let bindings = {
+        const bindings = {
             background: { color: command.color },
             attr: { title: command.tooltip }
-        }
+        };
 
         if (command.component) {
-            bindings["balloon"] = { target: '#sc-' + command.component.name, position: 'top' };
+            bindings["balloon"] = { target: "#sc-" + command.component.name, position: "top" };
         }
 
         if (command.callback) {

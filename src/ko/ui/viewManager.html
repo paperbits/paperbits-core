@@ -102,7 +102,7 @@
     <!-- /ko -->
 
     <!-- ko if: deleteCommand -->
-    <button class="btn-standalone" data-bind="click: deleteCommand.callback, background: { color: deleteCommand.color }, attr: { title: deleteCommand.tooltip }">
+    <button class="btn-standalone" data-bind="command: deleteCommand">
         <i class="paperbits-icon paperbits-trash-simple"></i>
     </button>
     <!-- /ko -->

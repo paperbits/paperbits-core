@@ -1,5 +1,5 @@
 import { DragSession } from "@paperbits/common/ui/draggables";
-import { IViewManager, IContextualEditor } from "@paperbits/common/ui";
+import { IViewManager, IContextCommandSet } from "@paperbits/common/ui";
 import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { WidgetModel } from "@paperbits/common/widgets";
 
@@ -23,8 +23,8 @@ export class LayoutHandlers implements IWidgetHandler {
         dragSession.targetBinding.applyChanges();
     }
 
-    public getContextualEditor(context: WidgetContext): IContextualEditor {
-        const columnContextualEditor: IContextualEditor = {
+    public getContextualEditor(context: WidgetContext): IContextCommandSet {
+        const columnContextualEditor: IContextCommandSet = {
             color: "#4c5866"
         };
 

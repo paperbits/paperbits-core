@@ -1,3 +1,4 @@
+import { Confirmation } from "./workshops/confirmation/ko/confirmation";
 import { LightboxBindingHandler } from "./ko/bindingHandlers/bindingHandlers.lightbox";
 import { GridBindingHandler } from "./ko/bindingHandlers/bindingHandlers.grid";
 import { DraggablesBindingHandler } from "./ko/bindingHandlers/bindingHandlers.draggables";
@@ -49,7 +50,7 @@ import { CropperBindingHandler } from "./workshops/cropper/cropper";
 import { GridEditor } from "./grid/ko";
 import { CardEditorModule } from "./card/ko/cardEditor.module";
 import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkResolver.design";
-
+import "./ko/bindingHandlers/bindingHandlers.command";
 
 export class CoreEditModule implements IInjectorModule {
     public register(injector: IInjector): void {
@@ -97,6 +98,7 @@ export class CoreEditModule implements IInjectorModule {
         injector.bind("hyperlinkSelector", HyperlinkSelector);
         injector.bind("widgetSelector", WidgetSelector);
         injector.bind("urlSelector",  UrlSelector);
+        injector.bind("confirmation", Confirmation);
         injector.bindSingleton("mediaPermalinkResolver", MediaPermalinkResolver);
         injector.bindModule(new TextblockEditorModule());
         injector.bindModule(new PictureEditorModule());

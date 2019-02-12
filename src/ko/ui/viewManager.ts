@@ -7,7 +7,7 @@ import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
 import { Bag } from "@paperbits/common";
 import { IMediaService } from "@paperbits/common/media";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
-import { IComponent, IView, IViewManager, ViewManagerMode, IHighlightConfig, IContextualEditor, ISplitterConfig } from "@paperbits/common/ui";
+import { IComponent, IView, IViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet, ISplitterConfig } from "@paperbits/common/ui";
 import { ProgressIndicator } from "../ui";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { ISiteService, SettingsContract } from "@paperbits/common/sites";
@@ -27,7 +27,7 @@ declare let uploadDialog: HTMLInputElement;
     injectable: "viewManager"
 })
 export class ViewManager implements IViewManager {
-    private contextualEditorsBag: Bag<IContextualEditor> = {};
+    private contextualEditorsBag: Bag<IContextCommandSet> = {};
     private currentPage: PageContract;
 
     public journey: ko.ObservableArray<IView>;
@@ -37,11 +37,11 @@ export class ViewManager implements IViewManager {
     public balloons: ko.ObservableArray<IComponent>;
     public primaryToolboxVisible: ko.Observable<boolean>;
     public widgetEditor: ko.Observable<IView>;
-    public contextualEditors: ko.ObservableArray<IContextualEditor>;
+    public contextualEditors: ko.ObservableArray<IContextCommandSet>;
     public highlightedElement: ko.Observable<IHighlightConfig>;
     public splitterElement: ko.Observable<ISplitterConfig>;
     public selectedElement: ko.Observable<IHighlightConfig>;
-    public selectedElementContextualEditor: ko.Observable<IContextualEditor>;
+    public selectedElementContextualEditor: ko.Observable<IContextCommandSet>;
     public viewport: ko.Observable<string>;
     public hostDocument: Document;
 
@@ -97,11 +97,11 @@ export class ViewManager implements IViewManager {
         });
         this.itemSelectorName = ko.observable<string>(null);
         this.widgetEditor = ko.observable<IView>();
-        this.contextualEditors = ko.observableArray<IContextualEditor>([]);
+        this.contextualEditors = ko.observableArray<IContextCommandSet>([]);
         this.highlightedElement = ko.observable<IHighlightConfig>();
         this.splitterElement = ko.observable<ISplitterConfig>();
         this.selectedElement = ko.observable<IHighlightConfig>();
-        this.selectedElementContextualEditor = ko.observable<IContextualEditor>();
+        this.selectedElementContextualEditor = ko.observable<IContextCommandSet>();
 
 
         this.viewport = ko.observable<string>("xl");
@@ -343,7 +343,7 @@ export class ViewManager implements IViewManager {
         this.unfoldWorkshop();
     }
 
-    public setContextualEditor(editorName: string, contextualEditor: IContextualEditor): void {
+    public setContextualEditor(editorName: string, contextualEditor: IContextCommandSet): void {
         this.contextualEditorsBag[editorName] = contextualEditor;
 
         const editors = Object.keys(this.contextualEditorsBag).map(key => this.contextualEditorsBag[key]);
@@ -387,7 +387,7 @@ export class ViewManager implements IViewManager {
         this.splitterElement(config);
     }
 
-    public setSelectedElement(config: IHighlightConfig, contextualEditor: IContextualEditor): void {
+    public setSelectedElement(config: IHighlightConfig, contextualEditor: IContextCommandSet): void {
         this.clearContextualEditors();
         this.closeWidgetEditor();
         this.selectedElement(null);

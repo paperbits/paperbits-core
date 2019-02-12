@@ -1,6 +1,6 @@
 import { SliderViewModel } from "./sliderViewModel";
 import { SlideViewModel } from "./slideViewModel";
-import { IContextualEditor, IViewManager } from "@paperbits/common/ui";
+import { IContextCommandSet, IViewManager } from "@paperbits/common/ui";
 import { GridHelper } from "@paperbits/common/editing";
 import { RowViewModelBinder } from "../../row/ko/rowViewModelBinder";
 import { SliderModel } from "../sliderModel";
@@ -90,10 +90,10 @@ export class SliderViewModelBinder {
                 this.eventManager.dispatchEvent("onContentUpdate");
             },
 
-            getContextualEditor: (widgetElement: HTMLElement, activeSliderHalf: string): IContextualEditor => {
+            getContextualEditor: (widgetElement: HTMLElement, activeSliderHalf: string): IContextCommandSet => {
                 const sliderModel = <SliderModel>GridHelper.getModel(widgetElement);
 
-                const sliderContextualEditor: IContextualEditor = {
+                const sliderContextualEditor: IContextCommandSet = {
                     color: "#607d8b",
                     hoverCommand: {
                         position: activeSliderHalf,

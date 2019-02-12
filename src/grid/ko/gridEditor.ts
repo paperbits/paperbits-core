@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import * as Utils from "@paperbits/common/utils";
-import { IViewManager, ViewManagerMode, IHighlightConfig, IContextualEditor } from "@paperbits/common/ui";
+import { IViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet as IContextCommandSet } from "@paperbits/common/ui";
 import { IWidgetBinding, GridHelper, WidgetContext } from "@paperbits/common/editing";
 import { Keys } from "@paperbits/common/keyboard";
 import { IWidgetService } from "@paperbits/common/widgets";
@@ -12,7 +12,7 @@ export class GridEditor {
     private scrollTimeout: any;
     private pointerX: number;
     private pointerY: number;
-    private selectedContextualEditor: IContextualEditor;
+    private selectedContextualEditor: IContextCommandSet;
     private actives: object;
     private ownerDocument: Document;
 
@@ -45,7 +45,7 @@ export class GridEditor {
         return true;
     }
 
-    private getContextualEditor(element: HTMLElement, half: string): IContextualEditor {
+    private getContextualEditor(element: HTMLElement, half: string): IContextCommandSet {
         const bindings = GridHelper.getParentWidgetBindings(element);
 
         const providers = bindings
@@ -77,7 +77,7 @@ export class GridEditor {
             providers: providers
         };
 
-        let contextualEditor: IContextualEditor;
+        let contextualEditor: IContextCommandSet;
 
         if (context.binding.handler) {
             const handler = this.widgetService.getWidgetHandler(context.binding.handler);
@@ -415,8 +415,8 @@ export class GridEditor {
         this.rerenderEditors(this.pointerX, this.pointerY, elements);
     }
 
-    private getWidgetContextualEditor(context: WidgetContext): IContextualEditor {
-        const widgetContextualEditor: IContextualEditor = {
+    private getWidgetContextualEditor(context: WidgetContext): IContextCommandSet {
+        const widgetContextualEditor: IContextCommandSet = {
             color: "#607d8b",
             hoverCommand: {
                 color: "#607d8b",
