@@ -10,8 +10,7 @@ import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { IComponent, IView, IViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet, ISplitterConfig } from "@paperbits/common/ui";
 import { ProgressIndicator } from "../ui";
 import { IRouteHandler } from "@paperbits/common/routing";
-import { ISiteService, SettingsContract } from "@paperbits/common/sites";
-import { IPageService, PageContract } from "@paperbits/common/pages";
+import { ISiteService } from "@paperbits/common/sites";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { IWidgetEditor } from "@paperbits/common/widgets";
@@ -28,8 +27,6 @@ declare let uploadDialog: HTMLInputElement;
 })
 export class ViewManager implements IViewManager {
     private contextualEditorsBag: Bag<IContextCommandSet> = {};
-    private currentPage: PageContract;
-
     public journey: ko.ObservableArray<IView>;
     public journeyName: ko.Computed<string>;
     public itemSelectorName: ko.Observable<string>;
@@ -57,14 +54,12 @@ export class ViewManager implements IViewManager {
         private readonly globalEventHandler: GlobalEventHandler,
         private readonly routeHandler: IRouteHandler,
         private readonly mediaService: IMediaService,
-        private readonly pageService: IPageService,
         private readonly siteService: ISiteService) {
 
         this.eventManager = eventManager;
         this.globalEventHandler = globalEventHandler;
         this.routeHandler = routeHandler;
         this.mediaService = mediaService;
-        this.pageService = pageService;
         this.siteService = siteService;
 
         // rebinding...
