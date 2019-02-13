@@ -10,7 +10,7 @@ import { changeRateLimit } from "../../ko/consts";
     template: template,
     injectable: "youtubeEditor"
 })
-export class YoutubeEditor implements IWidgetEditor {
+export class YoutubeEditor {
     private model: YoutubePlayerModel;
     private applyChangesCallback: () => void;
 
@@ -21,9 +21,6 @@ export class YoutubeEditor implements IWidgetEditor {
     public loop: ko.Observable<boolean>;
 
     constructor() {
-        this.setWidgetModel = this.setWidgetModel.bind(this);
-        this.onControlsUpdate = this.onControlsUpdate.bind(this);
-
         this.videoId = ko.observable<string>().extend(changeRateLimit);
         this.origin = ko.observable<string>().extend(changeRateLimit);
         this.controls = ko.observable<boolean>().extend(changeRateLimit);

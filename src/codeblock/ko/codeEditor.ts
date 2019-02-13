@@ -1,8 +1,7 @@
 ﻿import * as ko from "knockout";
-import { IWidgetEditor } from '@paperbits/common/widgets/IWidgetEditor';
 import { Code } from "./code";
 
-export class CodeEditor implements IWidgetEditor {
+export class CodeEditor {
     private htmlLang: AceLanguage;
     private objcLang: AceLanguage;
     private cppLangh: AceLanguage;
@@ -30,8 +29,6 @@ export class CodeEditor implements IWidgetEditor {
         this.jsLang = new AceLanguage("Java Script", "javascript");
         this.curlLang = new AceLanguage("Curl", "curl");
         this.htmlLang = new AceLanguage("HTML", "html");
-
-        this.setWidgetModel = this.setWidgetModel.bind(this);
 
         this.languages = ko.observableArray([
             this.curlLang,

@@ -1,4 +1,4 @@
-﻿import { MapViewModel } from './ko/mapViewModel';
+﻿import { MapModel } from "./mapModel";
 import { IContentDropHandler, IContentDescriptor, IDataTransfer, IWidgetOrder, IWidgetHandler } from "@paperbits/common/editing";
 import { MapContract } from "./mapContract";
 // import * as GoogleMapsLoader from "google-maps";
@@ -11,9 +11,13 @@ export class MapHandlers implements IWidgetHandler, IContentDropHandler {
             iconClass: "paperbits-m-location",
             requires: ["scripts"],
             createModel: async () => {
-                // return await this.mapModelBinder.contractToModel(config);
-                // return new MapViewModel();
-                return null;
+                const model = new MapModel();
+                model.caption = config.caption;
+                model.layout = config.layout;
+                model.location = config.location;
+                model.zoomControl = config.zoomControl;
+
+                return model;
             }
         };
 

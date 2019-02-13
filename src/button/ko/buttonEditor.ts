@@ -20,10 +20,6 @@ export class ButtonEditor {
     public readonly sizeStyle: ko.Observable<any>;
 
     constructor(private readonly styleService: StyleService) {
-        this.applyChanges = this.applyChanges.bind(this);
-        this.onHyperlinkChange = this.onHyperlinkChange.bind(this);
-        this.initialize = this.initialize.bind(this);
-
         this.label = ko.observable<string>();
         this.appearanceStyles = ko.observableArray<any>();
         this.appearanceStyle = ko.observable<any>();

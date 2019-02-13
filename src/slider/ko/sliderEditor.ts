@@ -19,7 +19,7 @@ export class SliderEditorSlide {
     template: template,
     injectable: "sliderEditor"
 })
-export class SliderEditor implements IWidgetEditor {
+export class SliderEditor {
     private sliderModel: SliderModel;
     private activeSlideModel: SlideModel;
     private applyChangesCallback: () => void;
@@ -36,19 +36,11 @@ export class SliderEditor implements IWidgetEditor {
     public readonly backgroundSourceType: ko.Observable<string>;
     public readonly thumbnailUrl: ko.Observable<string>;
     public readonly style: ko.Observable<string>;
-
     public readonly slides: ko.ObservableArray<SliderEditorSlide>;
-
     public readonly activeSlideNumber: ko.Observable<number>;
 
 
     constructor() {
-        this.setWidgetModel = this.setWidgetModel.bind(this);
-        this.onMediaSelected = this.onMediaSelected.bind(this);
-        this.onThumbnailSelected = this.onThumbnailSelected.bind(this);
-        this.clearBackground = this.clearBackground.bind(this);
-        this.selectSlide = this.selectSlide.bind(this);
-
         this.layout = ko.observable<string>();
         this.layout.subscribe(this.onChange.bind(this));
 

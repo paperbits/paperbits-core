@@ -1,9 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./tableOfContentsEditor.html";
-import { IViewManager } from "@paperbits/common/ui";
-import { IWidgetEditor } from "@paperbits/common/widgets";
 import { NavigationItemContract } from "@paperbits/common/navigation";
-import { Component } from "@paperbits/common/ko/decorators";
+import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { TableOfContentsModel } from "../tableOfContentsModel";
 import { TableOfContentsModelBinder } from "../tableOfContentsModelBinder";
 import { TableOfContentsContract } from "../tableOfContentsContract";
@@ -18,16 +16,13 @@ interface IHeadingOption {
     template: template,
     injectable: "tableOfContentsEditor"
 })
-export class TableOfContentsEditor implements IWidgetEditor {
-    private tableOfContentsModel: TableOfContentsModel;
-    private applyChangesCallback: (updatedModel?) => void;
-
+export class TableOfContentsEditor {
     public readonly navigationItemTitle: ko.Observable<string>;
     public readonly headingOptions: ko.ObservableArray<IHeadingOption>;
-    public selectedOption: ko.Observable<number>;
+    public readonly selectedOption: ko.Observable<number>;
 
-    constructor(private readonly tableOfContentsModelBinder: TableOfContentsModelBinder) {        
-        this.onChange = this.onChange.bind(this);
+    constructor(private readonly tableOfContentsModelBinder: TableOfContentsModelBinder) {
+        this.applyChanges = this.applyChanges.bind(this);
         this.selectedOption = ko.observable();
         this.headingOptions = ko.observableArray<IHeadingOption>([
             { label: "Heading 1", value: 1 },
@@ -37,39 +32,42 @@ export class TableOfContentsEditor implements IWidgetEditor {
             { label: "Heading 5", value: 5 },
             { label: "Heading 6", value: 6 }
         ]);
-        this.onNavigationItemChange = this.onNavigationItemChange.bind(this);
-        this.selectedOption.subscribe(this.onChange);
 
+        this.onNavigationItemChange = this.onNavigationItemChange.bind(this);
         this.navigationItemTitle = ko.observable<string>("Click to select navigation item...");
     }
 
-    public setWidgetModel(tableOfContents: TableOfContentsModel, applyChangesCallback?: (updatedModel?) => void): void {
-        this.selectedOption(tableOfContents && tableOfContents.maxHeading || 1);
-        if (tableOfContents && tableOfContents.title) {
-            this.navigationItemTitle(tableOfContents.title);            
+    @Param()
+    public model: TableOfContentsModel;
+
+    @Event()
+    public onChange: (model: TableOfContentsModel) => void;
+
+    @OnMounted()
+    public initialize(): void {
+        this.selectedOption(this.model.maxHeading || 1);
+
+        if (this.model.title) {
+            this.navigationItemTitle(this.model.title);
         }
-        this.tableOfContentsModel = tableOfContents;
-        this.applyChangesCallback = applyChangesCallback;
+
+        this.selectedOption.subscribe(this.applyChanges);
     }
 
     public async onNavigationItemChange(navigationItem: NavigationItemContract): Promise<void> {
         const contract: TableOfContentsContract = {
-            title: this.tableOfContentsModel.title,
+            title: this.model.title,
             navigationItemKey: navigationItem.key
         };
 
         const model = await this.tableOfContentsModelBinder.contractToModel(contract);
-        this.tableOfContentsModel = model;
+        this.model = model;
         this.navigationItemTitle(navigationItem.label);
-        this.onChange();
+        this.applyChanges();
     }
 
-    public onChange(): void {
-        if (!this.applyChangesCallback || !this.tableOfContentsModel) {
-            return;
-        }
-
-        this.tableOfContentsModel.maxHeading = this.selectedOption();
-        this.applyChangesCallback(this.tableOfContentsModel);
+    public applyChanges(): void {
+        this.model.maxHeading = this.selectedOption();
+        this.onChange(this.model);
     }
 }

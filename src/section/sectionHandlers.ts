@@ -10,7 +10,7 @@ export class SectionHandlers {
     constructor(
         private readonly viewManager: IViewManager,
         private readonly eventManager: IEventManager
-        ) { }
+    ) { }
 
     public onDragOver(dragSession: DragSession): boolean {
         return dragSession.type === "row";

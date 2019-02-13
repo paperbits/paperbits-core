@@ -75,7 +75,7 @@ export class WidgetBindingHandler {
                         if (!componentDefinition) {
                             throw new Error(`Unknown component "${componentName}".`);
                         }
-                        const root = cloneTemplateIntoElement(componentName, componentDefinition, element, !!(<any>componentDefinition).shadow);
+                        const root = cloneTemplateIntoElement(componentName, componentDefinition, element);
 
                         const childBindingContext = bindingContext["createChildContext"](componentViewModel, /* dataItemAlias */ undefined, ctx => {
                             ctx["$component"] = componentViewModel;
@@ -126,7 +126,7 @@ export class WidgetBindingHandler {
             return newNodesArray;
         };
 
-        function cloneTemplateIntoElement(componentName, componentDefinition, element, useShadow: boolean): HTMLElement {
+        function cloneTemplateIntoElement(componentName, componentDefinition, element): HTMLElement {
             const template = componentDefinition["template"];
 
             if (!template) {

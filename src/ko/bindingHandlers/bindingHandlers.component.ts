@@ -95,7 +95,7 @@ ko.virtualElements.allowedBindings["component"] = true;
 
 const makeArray = (arrayLikeObject) => {
     const result = [];
-    for (var i = 0, j = arrayLikeObject.length; i < j; i++) {
+    for (let i = 0, j = arrayLikeObject.length; i < j; i++) {
         result.push(arrayLikeObject[i]);
     }
     return result;

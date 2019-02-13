@@ -51,6 +51,7 @@ import { GridEditor } from "./grid/ko";
 import { CardEditorModule } from "./card/ko/cardEditor.module";
 import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkResolver.design";
 import "./ko/bindingHandlers/bindingHandlers.command";
+import { PageHost } from "./workshops/page/ko/pageHost";
 
 export class CoreEditModule implements IInjectorModule {
     public register(injector: IInjector): void {
@@ -99,6 +100,7 @@ export class CoreEditModule implements IInjectorModule {
         injector.bind("widgetSelector", WidgetSelector);
         injector.bind("urlSelector",  UrlSelector);
         injector.bind("confirmation", Confirmation);
+        injector.bind("pageHost", PageHost);
         injector.bindSingleton("mediaPermalinkResolver", MediaPermalinkResolver);
         injector.bindModule(new TextblockEditorModule());
         injector.bindModule(new PictureEditorModule());
@@ -126,7 +128,6 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindModule(new CardEditorModule());
         
         injector.bindToCollection("autostart", HostBindingHandler);
-        injector.bindToCollection("autostart", SavingHandler);
         injector.bindToCollection("autostart", DraggablesBindingHandler);
         injector.bindToCollection("autostart", GridBindingHandler);
         injector.bindToCollection("autostart", LightboxBindingHandler);

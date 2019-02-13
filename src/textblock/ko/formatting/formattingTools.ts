@@ -67,7 +67,13 @@ export class FormattingTools {
     }
 
     private updateFormattingState(): void {
-        const selectionState = this.htmlEditorProvider.getCurrentHtmlEditor().getSelectionState();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+        
+        const selectionState = htmlEditor.getSelectionState();
 
         this.bold(selectionState.bold);
         this.italic(selectionState.italic);

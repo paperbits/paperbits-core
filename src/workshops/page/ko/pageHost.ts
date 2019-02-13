@@ -1,32 +1,39 @@
 import * as ko from "knockout";
 import { LayoutViewModelBinder, LayoutViewModel } from "../../../layout/ko";
-import { Component, OnMounted, OnDestroyed } from "@paperbits/common/ko/decorators";
+import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { IRouteHandler } from "@paperbits/common/routing";
+import { IEventManager } from "@paperbits/common/events";
+import { IViewManager, ViewManagerMode } from "@paperbits/common/ui";
 
 
 @Component({
-    selector: "page-host",
+    selector: "content-host",
     template: "<!-- ko if: layoutViewModel --><!-- ko widget: layoutViewModel, grid: {} --><!-- /ko --><!-- /ko -->",
     injectable: "pageHost"
 })
 export class PageHost {
-    public layoutViewModel: ko.Observable<LayoutViewModel>;
+    public readonly layoutViewModel: ko.Observable<LayoutViewModel>;
 
     constructor(
         private readonly layoutViewModelBinder: LayoutViewModelBinder,
-        private readonly routeHandler: IRouteHandler
+        private readonly routeHandler: IRouteHandler,
+        private readonly eventManager: IEventManager,
+        private readonly viewManager: IViewManager
     ) {
-        this.initialize = this.initialize.bind(this);
-        this.dispose = this.dispose.bind(this);
-        this.onRouteChange = this.onRouteChange.bind(this);
-        
         this.layoutViewModel = ko.observable();
-        this.routeHandler.addRouteChangeListener(this.onRouteChange);
+        this.routeHandler.addRouteChangeListener(this.onRouteChange.bind(this));
+        this.eventManager.addEventListener("onDataPush", () => this.onDataPush());
     }
 
     @OnMounted()
     public async initialize(): Promise<void> {
         this.refreshContent();
+    }
+
+    private async onDataPush(): Promise<void> {
+        if (this.viewManager.mode === ViewManagerMode.selecting || this.viewManager.mode === ViewManagerMode.selected) {
+            await this.refreshContent();
+        }
     }
 
     private async refreshContent(): Promise<void> {

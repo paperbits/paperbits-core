@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
-import * as Utils from "@paperbits/common/utils";
-import { IView } from "@paperbits/common/ui/IView";
+import * as Objects from "@paperbits/common";
+import { IView } from "@paperbits/common/ui";
 import "@paperbits/common/extensions";
 
 ko.bindingHandlers["surface"] = {
@@ -60,8 +60,8 @@ ko.bindingHandlers["surface"] = {
                         settings = JSON.parse(settingsString);
                     }
 
-                    Utils.setValueAt(`${view.component.name}/top`, settings, Math.floor(rect.top));
-                    Utils.setValueAt(`${view.component.name}/left`, settings, Math.floor(rect.left));
+                    Objects.setValueAt(`${view.component.name}/top`, settings, Math.floor(rect.top));
+                    Objects.setValueAt(`${view.component.name}/left`, settings, Math.floor(rect.left));
 
                     localStorage["settings"] = JSON.stringify(settings);
                 }
@@ -85,11 +85,11 @@ ko.bindingHandlers["surface"] = {
                     }
 
                     if (view.resize.contains("horizontally")) {
-                        Utils.setValueAt(`${view.component.name}/width`, settings, element.clientWidth);
+                        Objects.setValueAt(`${view.component.name}/width`, settings, element.clientWidth);
                     }
 
                     if (view.resize.contains("vertically")) {
-                        Utils.setValueAt(`${view.component.name}/height`, settings, element.clientHeight);
+                        Objects.setValueAt(`${view.component.name}/height`, settings, element.clientHeight);
                     }
 
                     localStorage["settings"] = JSON.stringify(settings);

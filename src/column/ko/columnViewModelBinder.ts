@@ -135,7 +135,8 @@ export class ColumnViewModelBinder implements IViewModelBinder<ColumnModel, Colu
              * type: "inline"
              */
 
-            applyChanges: () => {
+            applyChanges: (changes) => {
+                Object.assign(model, changes);
                 this.modelToViewModel(model, columnViewModel);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }

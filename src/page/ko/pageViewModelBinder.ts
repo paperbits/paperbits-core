@@ -8,7 +8,6 @@ import { IPageService } from "@paperbits/common/pages";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { IEventManager } from "@paperbits/common/events";
 
-
 export class PageViewModelBinder implements IViewModelBinder<PageModel, PageViewModel> {
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,

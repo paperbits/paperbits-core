@@ -1,10 +1,12 @@
 import { Button } from "./buttonViewModel";
-import { IViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
+import { IViewModelBinder } from "@paperbits/common/widgets";
 import { ButtonModel } from "../buttonModel";
 import { IEventManager } from "@paperbits/common/events";
 
 export class ButtonViewModelBinder implements IViewModelBinder<ButtonModel, Button>  {
-    constructor(private readonly eventManager: IEventManager) { }
+    constructor(
+        private readonly eventManager: IEventManager
+    ) { }
 
     public modelToViewModel(model: ButtonModel, viewModel?: Button): Button {
         if (!viewModel) {
@@ -20,7 +22,8 @@ export class ButtonViewModelBinder implements IViewModelBinder<ButtonModel, Butt
             model: model,
             flow: "inline",
             editor: "paperbits-button-editor",
-            applyChanges: () => {
+            applyChanges: (changes) => {
+                Object.assign(model, changes);
                 this.modelToViewModel(model, viewModel);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }

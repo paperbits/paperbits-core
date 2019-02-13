@@ -1,6 +1,7 @@
 ﻿import * as _ from "lodash";
 import * as ko from "knockout";
 import * as Arrays from "@paperbits/common/arrays";
+import * as Objects from "@paperbits/common/objects";
 import template from "./viewManager.html";
 import "@paperbits/common/extensions";
 import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
@@ -10,10 +11,9 @@ import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { IComponent, IView, IViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet, ISplitterConfig } from "@paperbits/common/ui";
 import { ProgressIndicator } from "../ui";
 import { IRouteHandler } from "@paperbits/common/routing";
-import { ISiteService } from "@paperbits/common/sites";
+import { ISiteService, SettingsContract } from "@paperbits/common/sites";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
-import { IWidgetEditor } from "@paperbits/common/widgets";
 import { Component } from "@paperbits/common/ko/decorators";
 
 declare let uploadDialog: HTMLInputElement;
@@ -102,7 +102,7 @@ export class ViewManager implements IViewManager {
         this.viewport = ko.observable<string>("xl");
 
 
-        this.host = ko.observable<IComponent>({ name: "page-host" });
+        this.host = ko.observable<IComponent>({ name: "content-host" });
 
         this.shutter = ko.observable<boolean>(true);
         this.dragSession = ko.observable();
@@ -316,7 +316,7 @@ export class ViewManager implements IViewManager {
                     model: binding.model,
                     onChange: binding.applyChanges
                 },
-                oncreate: (editorViewModel: IWidgetEditor) => {
+                oncreate: (editorViewModel) => {
                     if (editorViewModel.setWidgetModel) {
                         editorViewModel.setWidgetModel(binding.model, binding.applyChanges);
                     }

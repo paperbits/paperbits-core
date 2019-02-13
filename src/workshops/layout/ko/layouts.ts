@@ -53,7 +53,7 @@ export class LayoutsWorkshop {
 
     public selectLayout(layoutItem: LayoutItem): void {
         this.selectedLayout(layoutItem);
-        this.viewManager.setHost({ name: "page-host" });
+        this.viewManager.setHost({ name: "content-host" });
         this.viewManager.openViewAsWorkshop("Layout", "layout-details-workshop", {
             layoutItem: layoutItem,
             onDeleteCallback: () => {

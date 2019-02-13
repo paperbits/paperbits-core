@@ -11,7 +11,7 @@ import { VideoPlayerModel } from "../videoPlayerModel";
     template: template,
     injectable: "videoPlayerEditor"
 })
-export class VideoEditor implements IWidgetEditor {
+export class VideoEditor {
     private video: VideoPlayerModel;
     private applyChangesCallback: () => void;
 

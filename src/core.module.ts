@@ -2,7 +2,6 @@ import { BackgroundBindingHandler } from "./ko/bindingHandlers/bindingHandlers.b
 import { WidgetBindingHandler } from "./ko/bindingHandlers/bindingHandlers.widget";
 import { DefaultRouteHandler } from "@paperbits/common/routing";
 import { SettingsProvider } from "@paperbits/common/configuration";
-import { PageHost } from "./workshops/page/ko/pageHost";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { ModelBinderSelector, WidgetService } from "@paperbits/common/widgets";
 import { PictureModule } from "./picture/ko/picture.module";
@@ -29,7 +28,6 @@ import { BackgroundModelBinder } from "@paperbits/common/widgets/background";
 import { IntercomService } from "./intercom/intercomService";
 import { KnockoutRegistrationLoaders } from "./ko/knockout.loaders";
 import { ViewModelBinderSelector } from "./ko/viewModelBinderSelector";
-import { SavingHandler, OfflineObjectStorage, AnchorMiddleware } from "@paperbits/common/persistence";
 import { PermalinkResolver } from "@paperbits/common/permalinks";
 import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkResolver";
 import { XmlHttpRequestClient } from "@paperbits/common/http";
@@ -64,8 +62,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("eventManager", DefaultEventManager);
         injector.bindSingleton("globalEventHandler", GlobalEventHandler);
         injector.bindSingleton("localCache", LocalCache);
-        
-        injector.bindSingleton("anchorMiddleware", AnchorMiddleware);
 
         /*** Services ***/
         injector.bindSingleton("contentItemService", ContentItemService);
@@ -87,7 +83,7 @@ export class CoreModule implements IInjectorModule {
         injector.bind("intercom", IntercomViewModel);
         injector.bindSingleton("intercomService", IntercomService);
         injector.bind("backgroundModelBinder", BackgroundModelBinder);
-        injector.bind("pageHost", PageHost);
+        
 
         injector.bindModule(new KnockoutRegistrationLoaders());
         injector.bindModule(new KoModule());

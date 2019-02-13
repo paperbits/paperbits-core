@@ -63,7 +63,7 @@ export class BlogWorkshop {
 
     public selectBlogPost(blogPostItem: BlogPostItem): void {
         this.selectedBlogPost(blogPostItem);
-        this.viewManager.setHost({ name: "page-host" });
+        this.viewManager.setHost({ name: "content-host" });
         this.viewManager.openViewAsWorkshop("Blog post", "blog-post-details-workshop", {
             blogPostItem: blogPostItem,
             onDeleteCallback: () => {

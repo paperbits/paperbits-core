@@ -8,8 +8,4 @@ export class TextblockModel {
     constructor(state: Object) {
         this.state = state;
     }
-
-    private onChange(): void {
-        this.state = this.htmlEditor.getState();
-    }
 }

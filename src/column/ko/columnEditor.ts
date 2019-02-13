@@ -1,8 +1,7 @@
 import * as ko from "knockout";
 import template from "./columnEditor.html";
 import { IViewManager } from "@paperbits/common/ui";
-import { IWidgetEditor } from "@paperbits/common/widgets/IWidgetEditor";
-import { Component } from "@paperbits/common/ko/decorators";
+import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { ColumnModel } from "../columnModel";
 
 @Component({
@@ -10,83 +9,87 @@ import { ColumnModel } from "../columnModel";
     template: template,
     injectable: "columnEditor"
 })
-export class ColumnEditor implements IWidgetEditor {
-    private column: ColumnModel;
-    private applyChangesCallback: () => void;
-    private readonly verticalAlignment: ko.Observable<string>;
-    private readonly horizontalAlignment: ko.Observable<string>;
-
+export class ColumnEditor {
+    public readonly verticalAlignment: ko.Observable<string>;
+    public readonly horizontalAlignment: ko.Observable<string>;
     public readonly alignment: ko.Observable<string>;
     public readonly scrollOnOverlow: ko.Observable<boolean>;
     public readonly order: ko.Observable<number>;
 
     constructor(private readonly viewManager: IViewManager) {
-        this.alignLeft.bind(this);
-        this.alignRight.bind(this);
-        this.alignCenter.bind(this);
-        this.alignTop.bind(this);
-        this.alignBottom.bind(this);
-        this.alignMiddle.bind(this);
-
-        this.viewManager = viewManager;
-        this.setWidgetModel = this.setWidgetModel.bind(this);
-
         this.alignment = ko.observable<string>();
-        this.alignment.subscribe(this.onChange.bind(this));
-
         this.verticalAlignment = ko.observable<string>();
         this.horizontalAlignment = ko.observable<string>();
-
         this.scrollOnOverlow = ko.observable<boolean>();
-        this.scrollOnOverlow.subscribe(this.onChange.bind(this));
-
         this.order = ko.observable<number>();
-        this.order.subscribe(this.onChange.bind(this));
+    }
+    
+    @Param()
+    public model: ColumnModel;
+
+    @Event()
+    public onChange: (model: ColumnModel) => void;
+
+    @OnMounted()
+    public initialize(): void {
+        const viewport = this.viewManager.getViewport();
+
+        const alignment = this.determineAlignment(viewport, this.model);
+        this.alignment(alignment);
+
+        this.scrollOnOverlow(this.model.overflowY === "scroll");
+
+        const directions = this.alignment().split(" ");
+        this.verticalAlignment(directions[0]);
+        this.horizontalAlignment(directions[1]);
+
+        const order = this.determineOrder(viewport, this.model);
+        this.order(order);
+
+        this.alignment.subscribe(this.applyChanges);
+        this.scrollOnOverlow.subscribe(this.applyChanges);
+        this.order.subscribe(this.applyChanges);
     }
 
     /**
      * Collecting changes from the editor UI and invoking callback method.
      */
-    private onChange(): void {
-        if (!this.applyChangesCallback) {
-            return;
-        }
-
+    private applyChanges(): void {
         const viewport = this.viewManager.getViewport();
 
         switch (viewport) {
             case "xl":
-                this.column.alignment.xl = this.alignment();
-                this.column.order.xl = this.order();
+                this.model.alignment.xl = this.alignment();
+                this.model.order.xl = this.order();
                 break;
 
             case "lg":
-                this.column.alignment.lg = this.alignment();
-                this.column.order.lg = this.order();
+                this.model.alignment.lg = this.alignment();
+                this.model.order.lg = this.order();
                 break;
 
             case "md":
-                this.column.alignment.md = this.alignment();
-                this.column.order.md = this.order();
+                this.model.alignment.md = this.alignment();
+                this.model.order.md = this.order();
                 break;
 
             case "sm":
-                this.column.alignment.sm = this.alignment();
-                this.column.order.sm = this.order();
+                this.model.alignment.sm = this.alignment();
+                this.model.order.sm = this.order();
                 break;
 
             case "xs":
-                this.column.alignment.xs = this.alignment();
-                this.column.order.xs = this.order();
+                this.model.alignment.xs = this.alignment();
+                this.model.order.xs = this.order();
                 break;
 
             default:
                 throw new Error("Unknown viewport");
         }
 
-        this.column.overflowX = this.column.overflowY = this.scrollOnOverlow() ? "scroll" : null;
+        this.model.overflowX = this.model.overflowY = this.scrollOnOverlow() ? "scroll" : null;
 
-        this.applyChangesCallback();
+        this.onChange(this.model);
     }
 
     public alignContent(alignment: string): void {
@@ -149,26 +152,6 @@ export class ColumnEditor implements IWidgetEditor {
             default:
                 throw new Error("Unknown viewport");
         }
-    }
-
-    public setWidgetModel(column: ColumnModel, applyChangesCallback?: () => void): void {
-        this.column = column;
-
-        const viewport = this.viewManager.getViewport();
-
-        const alignment = this.determineAlignment(viewport, column);
-        this.alignment(alignment);
-
-        this.scrollOnOverlow(column.overflowY === "scroll");
-
-        const directions = this.alignment().split(" ");
-        this.verticalAlignment(directions[0]);
-        this.horizontalAlignment(directions[1]);
-
-        const order = this.determineOrder(viewport, column);
-        this.order(order);
-
-        this.applyChangesCallback = applyChangesCallback;
     }
 
     public toggleHorizontal(): void {

@@ -10,7 +10,7 @@ import { changeRateLimit } from "../../ko/consts";
     template: template,
     injectable: "testimonialsEditor"
 })
-export class TestimonialsEditor implements IWidgetEditor {
+export class TestimonialsEditor {
     private model: TestimonialsModel;
     private applyChangesCallback: () => void;
 
@@ -21,9 +21,6 @@ export class TestimonialsEditor implements IWidgetEditor {
     public authorTitle: ko.Observable<string>;
 
     constructor() {
-        this.setWidgetModel = this.setWidgetModel.bind(this);
-        this.onControlsUpdate = this.onControlsUpdate.bind(this);
-
         this.textContent = ko.observable<string>().extend(changeRateLimit);
         this.starsCount = ko.observable<number>().extend(changeRateLimit);
         this.allStarsCount = ko.observable<number>().extend(changeRateLimit);

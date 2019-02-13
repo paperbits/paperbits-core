@@ -1,15 +1,13 @@
 import { TextblockModel } from "./textblockModel";
 import { TextblockViewModel } from "./ko/textblockViewModel";
 import { IViewModelBinder } from "@paperbits/common/widgets";
-import { IWidgetBinding } from "@paperbits/common/editing";
 import { IEventManager } from "@paperbits/common/events";
 
 export class TextblockViewModelBinder implements IViewModelBinder<TextblockModel, TextblockViewModel> {
-    private readonly htmlEditorFactory;
-
-    constructor(htmlEditorFactory, private readonly eventManager: IEventManager) {
-        this.htmlEditorFactory = htmlEditorFactory;
-    }
+    constructor(
+        private readonly htmlEditorFactory,
+        private readonly eventManager: IEventManager
+    ) { }
 
     public modelToViewModel(model: TextblockModel, viewModel?: TextblockViewModel): TextblockViewModel {
         if (!viewModel) {
@@ -27,7 +25,7 @@ export class TextblockViewModelBinder implements IViewModelBinder<TextblockModel
             flow: "block",
             editor: "html-editor",
             editorResize: "horizontally",
-            applyChanges: () => {
+            applyChanges: (changes) => {
                 this.modelToViewModel(model, viewModel);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }

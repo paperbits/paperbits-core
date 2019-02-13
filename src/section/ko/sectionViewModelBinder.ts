@@ -42,7 +42,8 @@ export class SectionViewModelBinder implements IViewModelBinder<SectionModel, Se
             flow: "block",
             editor: "layout-section-editor",
             handler: SectionHandlers,
-            applyChanges: () => {
+            applyChanges: (changes) => {
+                Object.assign(model, changes);
                 this.modelToViewModel(model, viewModel);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
