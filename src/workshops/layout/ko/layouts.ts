@@ -14,7 +14,7 @@ import { Component, OnMounted } from "@paperbits/common/ko/decorators";
     injectable: "layoutsWorkshop"
 })
 export class LayoutsWorkshop {
-    private template: Contract;
+    private searchTimeout: any;
 
     public readonly searchPattern: ko.Observable<string>;
     public readonly layouts: ko.ObservableArray<LayoutItem>;
@@ -41,14 +41,25 @@ export class LayoutsWorkshop {
     }
 
     @OnMounted()
-    public async searchLayouts(searchPattern: string = ""): Promise<void> {
+    public async initialize(): Promise<void> {
+        this.searchPattern.subscribe(this.searchLayouts);
+        this.searchLayouts();
+    }
+
+    public async launchSearch(searchPattern: string = ""): Promise<void> {
         this.working(true);
+        this.layouts([]);
 
         const layouts = await this.layoutService.search(searchPattern);
         const layoutItems = layouts.map(layout => new LayoutItem(layout));
 
         this.layouts(layoutItems);
         this.working(false);
+    }
+
+    public async searchLayouts(searchPattern: string = ""): Promise<void> {
+        clearTimeout(this.searchTimeout);
+        this.searchTimeout = setTimeout(() => this.launchSearch(searchPattern), 600);
     }
 
     public selectLayout(layoutItem: LayoutItem): void {

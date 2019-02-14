@@ -4,9 +4,8 @@ import { IPageService } from "@paperbits/common/pages";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
 import { Keys } from "@paperbits/common/keyboard";
-import { Component } from "@paperbits/common/ko/decorators";
+import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { PageItem } from "./pageItem";
-import { LayoutViewModelBinder } from "../../../layout/ko";
 
 
 @Component({
@@ -27,43 +26,37 @@ export class PagesWorkshop {
         private readonly routeHandler: IRouteHandler,
         private readonly viewManager: IViewManager
     ) {
-        // rebinding...
-        this.searchPages = this.searchPages.bind(this);
-        this.addPage = this.addPage.bind(this);
-        this.selectPage = this.selectPage.bind(this);
-        this.onKeyDown = this.onKeyDown.bind(this);
-
-        // setting up...
         this.pages = ko.observableArray<PageItem>();
         this.selectedPage = ko.observable<PageItem>();
         this.searchPattern = ko.observable<string>("");
-        this.searchPattern.subscribe(this.searchPages);
         this.working = ko.observable(true);
+    }
 
+    @OnMounted()
+    public async initialize(): Promise<void> {
+        this.searchPattern.subscribe(this.searchPages);
         this.searchPages();
     }
 
     private async launchSearch(searchPattern: string = ""): Promise<void> {
+        this.working(true);
+        this.pages([]);
+
         const pages = await this.pageService.search(searchPattern);
         const pageItems = pages.map(page => new PageItem(page));
 
         this.pages(pageItems);
+        this.working(false);
     }
 
     public async searchPages(searchPattern: string = ""): Promise<void> {
-        this.working(true);
-        this.pages([]);
         clearTimeout(this.searchTimeout);
-
-        this.searchTimeout = setTimeout(async () => {
-            await this.launchSearch(searchPattern);
-            this.working(false);
-        }, 600);
+        this.searchTimeout = setTimeout(() => this.launchSearch(searchPattern), 600);
     }
 
     public selectPage(pageItem: PageItem): void {
         this.selectedPage(pageItem);
-       
+
         this.viewManager.openViewAsWorkshop("Page", "page-details-workshop", {
             pageItem: pageItem,
             onDeleteCallback: () => {
@@ -103,5 +96,3 @@ export class PagesWorkshop {
         return true;
     }
 }
-
-
