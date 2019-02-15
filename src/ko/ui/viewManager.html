@@ -3,32 +3,16 @@
 
 <div class="viewport" data-bind="host: { viewport: viewport, host: host }"></div>
 
-
-
-<div class="indicators" data-bind="foreach: progressIndicators">
-    <!--ko if: complete()-->
-    <div class="indicator">
-        <div class="indicator-success">
-            <i class="paperbits-icon paperbits-check-2"></i>
+<div class="toasts" data-bind="foreach: toasts">
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-indicator">
+            <i data-bind="css: state"></i>
         </div>
-        <div class="indicator-content">
-            <b data-bind="text: title"> </b>
-            <p data-bind="text: content"></p>
-        </div>
-
-    </div>
-    <!--/ko-->
-    <!--ko if: !complete()-->
-    <div class="indicator">
-        <div class="indicator-progress">
-            <spinner></spinner>
-        </div>
-        <div class="indicator-content">
-            <b data-bind="text: title"></b>
-            <p data-bind="text: content"></p>
+        <div class="toast-container">
+            <div class="toast-header" data-bind="text: title"></div>
+            <div class="toast-body" data-bind="text: content"></div>
         </div>
     </div>
-    <!--/ko-->
 </div>
 
 <!-- ko with: widgetEditor() -->
@@ -47,7 +31,8 @@
 
 <!-- ko foreach: { data: contextualEditors, as: 'contextualEditor' } -->
 <!-- ko if: contextualEditor.hoverCommand -->
-<button class="fixed btn-standalone" data-bind="stickTo: { target: contextualEditor.element, position: contextualEditor.hoverCommand.position }, balloon: { component: contextualEditor.hoverCommand.component, onOpen: $component.onHoverCommandActivate, onClose: $component.onHoverCommandDeactivate }, background: { color: contextualEditor.hoverCommand.color }, attr: { title: contextualEditor.hoverCommand.tooltip }">
+<button class="fixed btn-standalone"
+    data-bind="stickTo: { target: contextualEditor.element, position: contextualEditor.hoverCommand.position }, balloon: { component: contextualEditor.hoverCommand.component, onOpen: $component.onHoverCommandActivate, onClose: $component.onHoverCommandDeactivate }, background: { color: contextualEditor.hoverCommand.color }, attr: { title: contextualEditor.hoverCommand.tooltip }">
     <i class="paperbits-icon paperbits-simple-add"></i>
 </button>
 <!-- /ko -->
@@ -56,16 +41,20 @@
 <!-- ko if: highlightedElement -->
 <div class="layout-editor-selection" data-bind="highlight: highlightedElement">
     <svg alignment="top left">
-        <path d="M2,2 L16,2 L16,16 L14,16 L14,4 L2,4 Z" stroke="rgba(255,255,255,.5)" stroke-width="1" data-bind="attr: { fill: highlightedElement().color }" />
+        <path d="M2,2 L16,2 L16,16 L14,16 L14,4 L2,4 Z" stroke="rgba(255,255,255,.5)" stroke-width="1"
+            data-bind="attr: { fill: highlightedElement().color }" />
     </svg>
     <svg alignment="top right">
-        <path d="M2,2 L16,2 L16,16 L14,16 L14,4 L2,4 Z" stroke="rgba(255,255,255,.5)" stroke-width="1" data-bind="attr: { fill: highlightedElement().color }" />
+        <path d="M2,2 L16,2 L16,16 L14,16 L14,4 L2,4 Z" stroke="rgba(255,255,255,.5)" stroke-width="1"
+            data-bind="attr: { fill: highlightedElement().color }" />
     </svg>
     <svg alignment="bottom left">
-        <path d="M2,2 L16,2 L16,16 L14,16 L14,4 L2,4 Z" stroke="rgba(255,255,255,.5)" stroke-width="1" data-bind="attr: { fill: highlightedElement().color }" />
+        <path d="M2,2 L16,2 L16,16 L14,16 L14,4 L2,4 Z" stroke="rgba(255,255,255,.5)" stroke-width="1"
+            data-bind="attr: { fill: highlightedElement().color }" />
     </svg>
     <svg alignment="bottom right">
-        <path d="M2,2 L16,2 L16,16 L14,16 L14,4 L2,4 Z" stroke="rgba(255,255,255,.5)" stroke-width="1" data-bind="attr: { fill: highlightedElement().color }" />
+        <path d="M2,2 L16,2 L16,16 L14,16 L14,4 L2,4 Z" stroke="rgba(255,255,255,.5)" stroke-width="1"
+            data-bind="attr: { fill: highlightedElement().color }" />
     </svg>
 </div>
 <!-- /ko -->
@@ -77,16 +66,20 @@
 <!-- ko if: selectedElement -->
 <div class="layout-editor-selection" data-bind="highlight: selectedElement">
     <svg alignment="top left">
-        <path d="M2,2 L16,2 L16,16 L14,16 L14,4 L2,4 Z" stroke="rgba(255,255,255,.5)" stroke-width="1" data-bind="attr: { fill: selectedElement().color }" />
+        <path d="M2,2 L16,2 L16,16 L14,16 L14,4 L2,4 Z" stroke="rgba(255,255,255,.5)" stroke-width="1"
+            data-bind="attr: { fill: selectedElement().color }" />
     </svg>
     <svg alignment="top right">
-        <path d="M2,2 L16,2 L16,16 L14,16 L14,4 L2,4 Z" stroke="rgba(255,255,255,.5)" stroke-width="1" data-bind="attr: { fill: selectedElement().color }" />
+        <path d="M2,2 L16,2 L16,16 L14,16 L14,4 L2,4 Z" stroke="rgba(255,255,255,.5)" stroke-width="1"
+            data-bind="attr: { fill: selectedElement().color }" />
     </svg>
     <svg alignment="bottom left">
-        <path d="M2,2 L16,2 L16,16 L14,16 L14,4 L2,4 Z" stroke="rgba(255,255,255,.5)" stroke-width="1" data-bind="attr: { fill: selectedElement().color }" />
+        <path d="M2,2 L16,2 L16,16 L14,16 L14,4 L2,4 Z" stroke="rgba(255,255,255,.5)" stroke-width="1"
+            data-bind="attr: { fill: selectedElement().color }" />
     </svg>
     <svg alignment="bottom right">
-        <path d="M2,2 L16,2 L16,16 L14,16 L14,4 L2,4 Z" stroke="rgba(255,255,255,.5)" stroke-width="1" data-bind="attr: { fill: selectedElement().color }" />
+        <path d="M2,2 L16,2 L16,16 L14,16 L14,4 L2,4 Z" stroke="rgba(255,255,255,.5)" stroke-width="1"
+            data-bind="attr: { fill: selectedElement().color }" />
     </svg>
 </div>
 

@@ -1,3 +1,4 @@
+import { Hinter } from "@paperbits/common/tutorials/hinter";
 import { Confirmation } from "./workshops/confirmation/ko/confirmation";
 import { LightboxBindingHandler } from "./ko/bindingHandlers/bindingHandlers.lightbox";
 import { GridBindingHandler } from "./ko/bindingHandlers/bindingHandlers.grid";
@@ -40,7 +41,6 @@ import { BlogHyperlinkProvider } from "@paperbits/common/blogs/blogHyperlinkProv
 import { UrlHyperlinkProvider } from "@paperbits/common/urls/urlHyperlinkProvider";
 import { MediaHyperlinkProvider } from "@paperbits/common/media";
 import { DragManager } from "@paperbits/common/ui/draggables";
-import { SavingHandler } from "@paperbits/common/persistence/savingHandler";
 import { UnhandledErrorHandler } from "@paperbits/common/errors";
 import { PlaceholderViewModel } from "./placeholder/ko/placeholderViewModel";
 import { SearchResultsEditorModule } from "./search-results/ko/searchResultsEditor.module";
@@ -131,5 +131,6 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindToCollection("autostart", DraggablesBindingHandler);
         injector.bindToCollection("autostart", GridBindingHandler);
         injector.bindToCollection("autostart", LightboxBindingHandler);
+        injector.bindToCollection("autostart", Hinter);
     }
 }

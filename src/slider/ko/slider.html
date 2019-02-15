@@ -1,6 +1,6 @@
 <section class="carousel" data-ride="carousel" data-bind="css: css, attr: { id: $component.id }">
     <!-- ko if: style() == "style1" -->
-    <ol class="carousel-indicators carousel-indicators-thumbnails">
+    <ol class="carousel-toasts carousel-toasts-thumbnails">
         <!-- ko foreach: { data: slides, as: 'slide'  } -->
         <li data-bind="attr: { 'data-slide-to': $index(), 'data-target': '#' + $component.id }, css: { 'active': $index() == $component.activeSlideNumber() }, background: thumbnail"></li>
         <!-- /ko -->
@@ -8,7 +8,7 @@
     <!-- /ko -->
 
     <!-- ko if: style() == "style2" -->
-    <ol class="carousel-indicators">
+    <ol class="carousel-toasts">
         <!-- ko foreach: { data: slides, as: 'slide'  } -->
         <li data-bind="attr: { 'data-slide-to': $index(), 'data-target': '#' + $component.id }, css: { 'active': $index() == $component.activeSlideNumber() }">
         <!-- /ko -->

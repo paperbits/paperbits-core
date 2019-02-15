@@ -238,13 +238,13 @@ export class DropBucket {
                     .downloadFile(uploadable)
                     .sequence(blob => this.mediaService.createMedia(name, blob));
 
-                this.viewManager.addPromiseProgressIndicator(uploadPromise, "Media library", `Uploading ${uploadable}...`);
+                this.viewManager.notifyProgress(uploadPromise, "Media library", `Uploading ${uploadable}...`);
             }
             else {
                 // TODO: Restore
                 const content = await Utils.readFileAsByteArray(uploadable);
                 uploadPromise = this.mediaService.createMedia(uploadable.name, content, uploadable.type);
-                this.viewManager.addPromiseProgressIndicator(uploadPromise, "Media library", `Uploading ${uploadable.name}...`);
+                this.viewManager.notifyProgress(uploadPromise, "Media library", `Uploading ${uploadable.name}...`);
             }
 
             const onMediaUploadedCallback = dropbucketItem.widgetFactoryResult.onMediaUploadedCallback;

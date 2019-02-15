@@ -118,7 +118,7 @@ export class MediaWorkshop {
             const content = await Utils.readFileAsByteArray(file);
             const uploadPromise = this.mediaService.createMedia(file.name, content, file.type);
 
-            this.viewManager.addPromiseProgressIndicator(uploadPromise, "Media library", `Uploading ${file.name}...`);
+            this.viewManager.notifyProgress(uploadPromise, "Media library", `Uploading ${file.name}...`);
             uploadPromises.push(uploadPromise);
         }
 

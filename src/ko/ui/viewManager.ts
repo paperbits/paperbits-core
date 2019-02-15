@@ -9,7 +9,7 @@ import { Bag } from "@paperbits/common";
 import { IMediaService } from "@paperbits/common/media";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { IComponent, IView, IViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet, ISplitterConfig } from "@paperbits/common/ui";
-import { ProgressIndicator } from "../ui";
+import { Toast } from "../ui";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { ISiteService, SettingsContract } from "@paperbits/common/sites";
 import { DragSession } from "@paperbits/common/ui/draggables";
@@ -30,7 +30,7 @@ export class ViewManager implements IViewManager {
     public journey: ko.ObservableArray<IView>;
     public journeyName: ko.Computed<string>;
     public itemSelectorName: ko.Observable<string>;
-    public progressIndicators: ko.ObservableArray<ProgressIndicator>;
+    public toasts: ko.ObservableArray<Toast>;
     public balloons: ko.ObservableArray<IComponent>;
     public primaryToolboxVisible: ko.Observable<boolean>;
     public widgetEditor: ko.Observable<IView>;
@@ -62,25 +62,9 @@ export class ViewManager implements IViewManager {
         this.mediaService = mediaService;
         this.siteService = siteService;
 
-        // rebinding...
-        this.addProgressIndicator = this.addProgressIndicator.bind(this);
-        this.addPromiseProgressIndicator = this.addPromiseProgressIndicator.bind(this);
-        this.openViewAsWorkshop = this.openViewAsWorkshop.bind(this);
-        this.openViewAsPopup = this.openViewAsPopup.bind(this);
-        this.scheduleIndicatorRemoval = this.scheduleIndicatorRemoval.bind(this);
-        this.updateJourneyComponent = this.updateJourneyComponent.bind(this);
-        this.clearJourney = this.clearJourney.bind(this);
-        this.foldEverything = this.foldEverything.bind(this);
-        this.unfoldEverything = this.unfoldEverything.bind(this);
-        this.closeWidgetEditor = this.closeWidgetEditor.bind(this);
-        this.closeEditors = this.closeEditors.bind(this);
-        this.onDragEnd = this.onDragEnd.bind(this);
-        this.onHoverCommandActivate = this.onHoverCommandActivate.bind(this);
-        this.onHoverCommandDeactivate = this.onHoverCommandDeactivate.bind(this);
-
         // setting up...
         this.mode = ViewManagerMode.selecting;
-        this.progressIndicators = ko.observableArray<ProgressIndicator>();
+        this.toasts = ko.observableArray<Toast>();
         this.balloons = ko.observableArray<IComponent>();
         this.journey = ko.observableArray<IView>();
         this.journeyName = ko.pureComputed<string>(() => {
@@ -97,10 +81,7 @@ export class ViewManager implements IViewManager {
         this.splitterElement = ko.observable<ISplitterConfig>();
         this.selectedElement = ko.observable<IHighlightConfig>();
         this.selectedElementContextualEditor = ko.observable<IContextCommandSet>();
-
-
         this.viewport = ko.observable<string>("xl");
-
 
         this.host = ko.observable<IComponent>({ name: "content-host" });
 
@@ -109,17 +90,16 @@ export class ViewManager implements IViewManager {
 
         this.primaryToolboxVisible = ko.observable<boolean>(true);
 
-        this.globalEventHandler.addDragEnterListener(this.foldEverything);
-        this.globalEventHandler.addDragDropListener(this.onDragEnd);
-        this.globalEventHandler.addDragEndListener(this.onDragEnd);
-        this.globalEventHandler.addDragLeaveScreenListener(this.unfoldEverything);
-
-        this.eventManager.addEventListener("virtualDragEnd", this.onDragEnd);
+        this.globalEventHandler.addDragEnterListener(this.foldEverything.bind(this));
+        this.globalEventHandler.addDragDropListener(this.onDragEnd.bind(this));
+        this.globalEventHandler.addDragEndListener(this.onDragEnd.bind(this));
+        this.globalEventHandler.addDragLeaveScreenListener(this.unfoldEverything.bind(this));
+        this.eventManager.addEventListener("virtualDragEnd", this.onDragEnd.bind(this));
 
         this.routeHandler.addRouteChangeListener(this.onRouteChange.bind(this));
         globalEventHandler.appendDocument(document);
 
-        eventManager.addEventListener("onEscape", this.closeEditors);
+        eventManager.addEventListener("onEscape", this.closeEditors.bind(this));
 
         this.loadFavIcon();
     }
@@ -156,34 +136,46 @@ export class ViewManager implements IViewManager {
         return this.journeyName();
     }
 
-    public addProgressIndicator(title: string, content: string): ProgressIndicator {
-        const indicator = new ProgressIndicator(title, content);
-        this.progressIndicators.push(indicator);
+    public addToast(title: string, content: string): Toast {
+        const toast = new Toast(title, content);
+        this.toasts.push(toast);
 
-        return indicator;
+        return toast;
     }
 
     public notifySuccess(title: string, content: string): void {
-        const indicator = new ProgressIndicator(title, content, 100);
-        this.progressIndicators.push(indicator);
-        this.scheduleIndicatorRemoval(indicator);
+        const toast = new Toast(title, content, "success");
+        this.toasts.push(toast);
+        this.scheduleToastRemoval(toast);
     }
 
-    public addPromiseProgressIndicator<T>(promise: Promise<T>, title: string, content: string): void {
-        const indicator = new ProgressIndicator(title, content);
+    public notifyInfo(title: string, content: string): void {
+        const toast = new Toast(title, content, "info");
+        this.toasts.push(toast);
+        this.scheduleToastRemoval(toast);
+    }
 
-        this.progressIndicators.push(indicator);
+    public notifyError(title: string, content: string): void {
+        const toast = new Toast(title, content, "error");
+        this.toasts.push(toast);
+        this.scheduleToastRemoval(toast);
+    }
+
+    public notifyProgress(promise: Promise<any>, title: string, content: string): void {
+        const toast = new Toast(title, content);
+
+        this.toasts.push(toast);
 
         if (promise["progress"]) {
-            promise["progress"](indicator.progress);
+            promise["progress"](toast.progress);
         }
 
         promise.then(() => {
-            indicator.complete(true);
+            toast.complete(true);
         });
 
         promise.then(() => {
-            this.scheduleIndicatorRemoval(indicator);
+            this.scheduleToastRemoval(toast);
         });
     }
 
@@ -266,12 +258,12 @@ export class ViewManager implements IViewManager {
         this.mode = ViewManagerMode.selecting;
     }
 
-    public scheduleIndicatorRemoval(indicator: ProgressIndicator): void {
-        indicator.progress(100);
+    public scheduleToastRemoval(toast: Toast): void {
+        toast.progress(100);
 
         setTimeout(() => {
-            this.progressIndicators(_.without(this.progressIndicators(), indicator));
-        }, 4000);
+            this.toasts(_.without(this.toasts(), toast));
+        }, 8000);
     }
 
     public openUploadDialog(): Promise<File[]> {

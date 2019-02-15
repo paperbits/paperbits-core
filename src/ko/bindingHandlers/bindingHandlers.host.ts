@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
-import { GlobalEventHandler } from "@paperbits/common/events";
+import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { IViewManager, ViewManagerMode } from "@paperbits/common/ui";
 import { IRouteHandler } from "@paperbits/common/routing";
 
@@ -8,6 +8,7 @@ export class HostBindingHandler {
     private readonly hostComponent: ko.Observable<any>;
 
     constructor(
+        private readonly eventManager: IEventManager,
         private readonly globalEventHandler: GlobalEventHandler,
         private readonly viewManager: IViewManager,
         private readonly routeHandler: IRouteHandler
@@ -108,6 +109,9 @@ export class HostBindingHandler {
 
             if (event.ctrlKey) { // Preventing click on links if Ctrl key is not pressed.
                 this.routeHandler.navigateTo(htmlLinkElement.href);
+            }
+            else {
+                this.eventManager.dispatchEvent("DesignTimeNavigationHint");
             }
         };
 

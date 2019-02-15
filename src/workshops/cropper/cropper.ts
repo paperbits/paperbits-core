@@ -138,7 +138,7 @@ export class PictureCropper {
             const cropper = this.cropperInstance();
             cropper.replace(updatedItem.downloadUrl);
         });
-        await this.viewManager.addPromiseProgressIndicator(uploadPromise, "Media library", `Updating ${this.mediaItem.fileName()}...`);
+        await this.viewManager.notifyProgress(uploadPromise, "Media library", `Updating ${this.mediaItem.fileName()}...`);
     }
 
     public clear(): void {
