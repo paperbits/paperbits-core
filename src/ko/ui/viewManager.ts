@@ -117,7 +117,7 @@ export class ViewManager implements IViewManager {
 
     private onRouteChange(): void {
         this.clearContextualEditors();
-        this.closeWidgetEditor();
+        this.closeView();
     }
 
     public async loadFavIcon(): Promise<void> {
@@ -283,10 +283,10 @@ export class ViewManager implements IViewManager {
             return;
         }
 
-        view.component.params.onClose = () => this.closeWidgetEditor();
+        view.component.params.onClose = () => this.closeView();
 
         this.clearContextualEditors();
-        this.closeWidgetEditor();
+        this.closeView();
         this.widgetEditor(view);
         this.mode = ViewManagerMode.configure;
     }
@@ -296,7 +296,7 @@ export class ViewManager implements IViewManager {
     }
 
     public closeEditors(): void {
-        this.closeWidgetEditor();
+        this.closeView();
         this.clearJourney();
     }
 
@@ -321,7 +321,7 @@ export class ViewManager implements IViewManager {
         this.openViewAsPopup(view);
     }
 
-    public closeWidgetEditor(): void {
+    public closeView(): void {
         this.widgetEditor(null);
         this.eventManager.dispatchEvent("onWidgetEditorClose");
         this.clearContextualEditors();
@@ -376,7 +376,7 @@ export class ViewManager implements IViewManager {
 
     public setSelectedElement(config: IHighlightConfig, contextualEditor: IContextCommandSet): void {
         this.clearContextualEditors();
-        this.closeWidgetEditor();
+        this.closeView();
         this.selectedElement(null);
         this.selectedElement(config);
         this.selectedElementContextualEditor(contextualEditor);
@@ -421,7 +421,7 @@ export class ViewManager implements IViewManager {
 
     public beginDrag(session: DragSession): void {
         this.clearContextualEditors();
-        this.closeWidgetEditor();
+        this.closeView();
         this.dragSession(session);
         this.foldEverything();
     }
