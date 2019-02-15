@@ -259,8 +259,6 @@ export class ViewManager implements IViewManager {
     }
 
     public scheduleToastRemoval(toast: Toast): void {
-        toast.progress(100);
-
         setTimeout(() => {
             this.toasts(_.without(this.toasts(), toast));
         }, 8000);
