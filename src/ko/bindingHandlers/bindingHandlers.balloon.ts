@@ -8,6 +8,7 @@ export interface BalloonOptions {
     element?: HTMLElement;
     selector?: string;
     component?: IComponent;
+    onCreated?: (handle) => void;
     isOpen: any;
     onOpen?: () => void;
     onClose?: () => void;
@@ -92,7 +93,7 @@ export class BalloonBindingHandler {
                     if (options.onOpen) {
                         options.onOpen();
                     }
-                }
+                };
 
                 const close = (): void => {
                     if (!balloonElement) {
@@ -106,7 +107,7 @@ export class BalloonBindingHandler {
                     if (options.onClose) {
                         options.onClose();
                     }
-                }
+                };
 
                 const toggle = (): void => {
                     if (balloonIsOpen) {
@@ -115,6 +116,16 @@ export class BalloonBindingHandler {
                     else {
                         open();
                     }
+                };
+
+                const ballonHandle = {
+                    open: open,
+                    close: close,
+                    toggle: toggle
+                };
+
+                if (options.onCreated) {
+                    options.onCreated(ballonHandle);
                 }
 
                 const closest = (node: Node, predicate: (node: Node) => boolean): Node => {
@@ -124,7 +135,7 @@ export class BalloonBindingHandler {
                         }
                     }
                     while (node = node && node.parentNode);
-                }
+                };
 
                 const onPointerDown = async (event: MouseEvent): Promise<void> => {
                     if (!toggleElement) {
@@ -145,7 +156,7 @@ export class BalloonBindingHandler {
                     if (!balloon) {
                         close();
                     }
-                }
+                };
 
                 const onKeyDown = async (event: KeyboardEvent): Promise<void> => {
                     switch (event.keyCode) {
@@ -162,12 +173,12 @@ export class BalloonBindingHandler {
                             }
                             break;
                     }
-                }
+                };
 
                 const onClick = (event: MouseEvent): void => {
                     event.preventDefault();
                     event.stopImmediatePropagation();
-                }
+                };
 
                 const onScroll = async (event: MouseEvent): Promise<void> => {
                     if (!balloonElement) {
@@ -175,7 +186,7 @@ export class BalloonBindingHandler {
                     }
 
                     requestAnimationFrame(updatePosition);
-                }
+                };
 
                 toggleElement.addEventListener("keydown", onKeyDown);
                 toggleElement.addEventListener("click", onClick);

@@ -25,6 +25,7 @@ import "./bindingHandlers/bindingHandlers.container";
 import "./bindingHandlers/bindingHandlers.overflow";
 import "./bindingHandlers/bindingHandlers.stickTo";
 import "./bindingHandlers/bindingHandlers.scrollable";
+import "./bindingHandlers/bindingHandlers.confirm";
 
 export class KoModule implements IInjectorModule {
     public register(injector: IInjector): void {

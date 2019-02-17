@@ -48,7 +48,7 @@
             Download
         </button>
 
-        <button class="btn" data-bind="click: deleteMedia">
+        <button class="btn" data-bind="confirm: { message: 'Are you sure you want to delete this media?', onConfirm: deleteMedia }">
             <i class="paperbits-icon paperbits-simple-remove"></i>
             Delete
         </button>
