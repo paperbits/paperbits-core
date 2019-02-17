@@ -4,6 +4,7 @@ import { BlockContract } from "@paperbits/common/blocks/blockContract";
 import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelector";
 import { Component, Event } from "@paperbits/common/ko/decorators";
 import { SectionModel } from "../sectionModel";
+import { BlockService } from "@paperbits/common/blocks";
 
 @Component({
     selector: "section-layout-selector",
@@ -14,7 +15,10 @@ export class SectionLayoutSelector implements IResourceSelector<SectionModel> {
     @Event()
     public onSelect: (sectionModel: SectionModel) => void;
 
-    constructor(private readonly modelBinderSelector: ModelBinderSelector) {
+    constructor(
+        private readonly modelBinderSelector: ModelBinderSelector,
+        private readonly blockService: BlockService
+    ) {
         this.selectSectionLayout = this.selectSectionLayout.bind(this);
         this.onBlockSelected = this.onBlockSelected.bind(this);
     }
@@ -29,8 +33,9 @@ export class SectionLayoutSelector implements IResourceSelector<SectionModel> {
     }
 
     public async onBlockSelected(block: BlockContract): Promise<void> {
-        const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(block.content.type);
-        const model = await modelBinder.contractToModel(block.content);
+        const template = await this.blockService.getBlockContent(block.key);
+        const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(template.type);
+        const model = await modelBinder.contractToModel(template);
 
         if (this.onSelect) {
             this.onSelect(model);

@@ -5,7 +5,7 @@ import { Contract } from "@paperbits/common/contract";
 
 export class BlockItem {
     public key: string;
-    public content: Contract;
+    public contentKey: string;
 
     public hasFocus: ko.Observable<boolean>;
     public title: ko.Observable<string>;
@@ -13,7 +13,7 @@ export class BlockItem {
 
     constructor(block: BlockContract) {
         this.key = block.key;
-        this.content = block.content;
+        this.contentKey = block.contentKey;
         this.title = ko.observable<string>(block.title);
         this.description = ko.observable<string>(block.description);
         this.hasFocus = ko.observable<boolean>();
@@ -24,7 +24,7 @@ export class BlockItem {
             key: this.key,
             title: this.title(),
             description: this.description(),
-            content: this.content
-        }
+            contentKey: this.contentKey
+        };
     }
 }
