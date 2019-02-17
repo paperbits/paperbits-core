@@ -1,8 +1,6 @@
 ﻿import * as ko from "knockout";
 import template from "./videoEditor.html";
-import { IWidgetEditor } from "@paperbits/common/widgets";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
-import { IMediaFilter } from "@paperbits/common/media";
 import { Component } from "@paperbits/common/ko/decorators";
 import { VideoPlayerModel } from "../videoPlayerModel";
 
@@ -19,7 +17,7 @@ export class VideoEditor {
     public controls: ko.Observable<boolean>;
     public autoplay: ko.Observable<boolean>;
 
-    public readonly mediaFilter: IMediaFilter;
+    public readonly mimeType: string;
 
     constructor() {
         this.onSourceUrlUpdate = this.onSourceUrlUpdate.bind(this);
@@ -36,11 +34,7 @@ export class VideoEditor {
         this.autoplay = ko.observable<boolean>(false);
         this.autoplay.subscribe(this.onAutoplayUpdate);
 
-        this.mediaFilter = {
-            propertyNames: ["mimeType"],
-            propertyValue: "video/mp4",
-            startSearch: true
-        };
+        this.mimeType = "video/mp4";
     }
 
     private onControlsUpdate(controls: boolean): void {

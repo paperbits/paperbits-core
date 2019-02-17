@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import template from "./mediaSelector.html";
 import * as Utils from "@paperbits/common/utils";
 import { MediaItem } from "./mediaItem";
-import { IMediaService, IMediaFilter, MediaContract } from "@paperbits/common/media";
+import { IMediaService, MediaContract } from "@paperbits/common/media";
 import { IViewManager } from "@paperbits/common/ui";
 import { IEventManager } from "@paperbits/common/events";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
@@ -22,11 +22,11 @@ export class MediaSelector {
     public selectedMedia: ko.Observable<MediaItem>;
 
     @Param()
-    public mediaFilter: IMediaFilter;
+    public mimeType: string;
 
     @Event()
     public onSelect: (media: MediaContract) => void;
-  
+
     constructor(
         private readonly eventManager: IEventManager,
         private readonly mediaService: IMediaService,
@@ -54,15 +54,7 @@ export class MediaSelector {
     public async searchMedia(searchPattern: string = ""): Promise<void> {
         this.working(true);
 
-        let mediaFiles;
-
-        if (this.mediaFilter) {
-            mediaFiles = await this.mediaService.searchByProperties(this.mediaFilter.propertyNames, this.mediaFilter.propertyValue, this.mediaFilter.startSearch);
-        }
-        else {
-            mediaFiles = await this.mediaService.search(searchPattern);
-        }
-
+        const mediaFiles = await this.mediaService.search(searchPattern, this.mimeType);
         const mediaItems = mediaFiles.map(media => new MediaItem(media));
         this.mediaItems(mediaItems);
         this.working(false);

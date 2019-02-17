@@ -3,7 +3,7 @@ import template from "./settings.html";
 import { Component } from "@paperbits/common/ko/decorators";
 import { IViewManager } from "@paperbits/common/ui";
 import { ISiteService, SettingsContract } from "@paperbits/common/sites";
-import { IMediaService, IMediaFilter, MediaContract } from "@paperbits/common/media";
+import { IMediaService, MediaContract } from "@paperbits/common/media";
 import { MetaDataSetter } from "@paperbits/common/meta";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 
@@ -17,7 +17,7 @@ export class SettingsWorkshop {
     private readonly siteService: ISiteService;
     private readonly viewManager: IViewManager;
 
-    public readonly mediaFilter: IMediaFilter;
+    public readonly mimeType: string;
     public readonly working: ko.Observable<boolean>;
 
     public title: ko.Observable<string>;
@@ -40,17 +40,9 @@ export class SettingsWorkshop {
         this.siteService = siteService;
         this.viewManager = viewManager;
 
-        // rebinding...     
-        this.onMediaSelected = this.onMediaSelected.bind(this);
-        this.onSettingChange = this.onSettingChange.bind(this);
-
         // setting up...
         this.working = ko.observable<boolean>();
-        this.mediaFilter = {
-            propertyNames: ["mimeType"],
-            propertyValue: MetaDataSetter.iconContentType,
-            startSearch: true
-        };
+        this.mimeType = MetaDataSetter.iconContentType;
 
         this.title = ko.observable<string>();
         this.description = ko.observable<string>();
