@@ -171,7 +171,7 @@ export class ViewManager implements IViewManager {
         }
 
         promise.then(() => {
-            toast.complete(true);
+            toast.progress(100);
         });
 
         promise.then(() => {
