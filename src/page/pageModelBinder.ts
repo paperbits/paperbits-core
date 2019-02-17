@@ -50,17 +50,22 @@ export class PageModelBinder implements IModelBinder {
             pageModel.title = pageContract.title;
             pageModel.description = pageContract.description;
             pageModel.keywords = pageContract.keywords;
-    
+
             const pageContent = await this.pageService.getPageContent(pageContract.key);
-    
-            const modelPromises = pageContent.nodes.map(async (config) => {
-                const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(config.type);
-                return await modelBinder.contractToModel(config);
-            });
-    
-            const models = await Promise.all<WidgetModel>(modelPromises);
-            pageModel.widgets = models;
-    
+
+            if (pageContent) {
+                const modelPromises = pageContent.nodes.map(async (config) => {
+                    const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(config.type);
+                    return await modelBinder.contractToModel(config);
+                });
+
+                const models = await Promise.all<WidgetModel>(modelPromises);
+                pageModel.widgets = models;
+            }
+            else {
+                console.warn(`Page content with key ${pageContract.contentKey} not found.`);
+            }
+
             return pageModel;
         }
 

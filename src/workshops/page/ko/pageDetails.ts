@@ -45,11 +45,9 @@ export class PageDetailsWorkshop {
             .extend(<any>{ uniquePermalink: this.pageItem.permalink, required: true, onlyValid: true })
             .subscribe(this.updatePermlaink);
 
-        const permalink = await this.pageService.getPageByKey(this.pageItem.key);
 
-        this.pageItem.permalink(permalink.permalink);
         this.viewManager.setHost({ name: "content-host" });
-        this.routeHandler.navigateTo(permalink.permalink);
+        this.routeHandler.navigateTo(this.pageItem.permalink());
     }
 
     private async updatePage(): Promise<void> {
