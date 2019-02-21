@@ -67,6 +67,7 @@ export class ColumnModelBinder implements IModelBinder {
 
         contract.size = model.size;
         contract.alignment = model.alignment;
+        contract.offset = model.offset;
         contract.order = model.order;
         contract.overflowX = model.overflowX;
         contract.overflowY = model.overflowY;
