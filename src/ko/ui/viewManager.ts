@@ -443,4 +443,12 @@ export class ViewManager implements IViewManager {
     public getHostDocument(): Document {
         return this.hostDocument;
     }
+
+    public undo(): void {
+        this.eventManager.dispatchEvent("onUndo");
+    }
+
+    public redo(): void {
+        this.eventManager.dispatchEvent("onRedo");
+    }
 }
