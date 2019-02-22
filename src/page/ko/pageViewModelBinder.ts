@@ -34,7 +34,7 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
                 contentContract.nodes.push(modelBinder.modelToContract(section));
             });
 
-            await this.pageService.updatePageContent(page.key, pageContent);
+            await this.pageService.updatePageContent(page.key, contentContract);
         };
 
         const scheduleUpdate = async (): Promise<void> => {
