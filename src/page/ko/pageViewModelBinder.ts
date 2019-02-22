@@ -34,8 +34,6 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
                 contentContract.nodes.push(modelBinder.modelToContract(section));
             });
 
-            Object.assign(pageContent, contentContract);
-
             await this.pageService.updatePageContent(page.key, pageContent);
         };
 
