@@ -1,7 +1,6 @@
 import * as ko from "knockout";
 import template from "./testimonials.html";
 import { Component } from "@paperbits/common/ko/decorators";
-import { changeRateLimit } from "../../ko/consts";
 
 @Component({
     selector: "testimonials",
@@ -15,10 +14,10 @@ export class TestimonialsViewModel {
     public authorTitle: ko.Observable<string>;
 
     constructor() {
-        this.textContent = ko.observable<string>().extend(changeRateLimit);
-        this.allStarsCount = ko.observable<number>().extend(changeRateLimit);
-        this.starsCount = ko.observable<number>().extend(changeRateLimit);
-        this.author = ko.observable<string>().extend(changeRateLimit);
-        this.authorTitle = ko.observable<string>().extend(changeRateLimit);
+        this.textContent = ko.observable<string>();
+        this.allStarsCount = ko.observable<number>();
+        this.starsCount = ko.observable<number>();
+        this.author = ko.observable<string>();
+        this.authorTitle = ko.observable<string>();
     }
 }
