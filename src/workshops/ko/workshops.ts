@@ -68,7 +68,7 @@ export class Workshops {
     }
 
     public openStyles(): void {
-        this.viewManager.setHost({ name: "living-style-guide" });
+        this.viewManager.setHost({ name: "style-guide" });
     }
 
     public openProfile(): void {
