@@ -61,6 +61,7 @@ export class CoreEditModule implements IInjectorModule {
 
         injector.bindCollection("dropHandlers");
         injector.bindCollection("workshopSections");
+        injector.resolve("workshopSections");
         injector.bindSingleton("viewManager", ViewManager);
         injector.bind("pageHyperlinkProvider", PageHyperlinkProvider);
         injector.bind("blogHyperlinkProvider", BlogHyperlinkProvider);
