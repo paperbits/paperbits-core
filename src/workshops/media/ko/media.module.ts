@@ -3,6 +3,7 @@ import { MediaWorkshop } from "./media";
 import { MediaDetailsWorkshop } from "./mediaDetails";
 import { MediaSelector } from "./mediaSelector";
 import { PictureCropper } from "../../cropper/cropper";
+import { MediaWorkshopSection } from "./mediaSection";
 
 export class MediaWorkshopModule implements IInjectorModule {
     public register(injector: IInjector): void {
@@ -10,5 +11,6 @@ export class MediaWorkshopModule implements IInjectorModule {
         injector.bind("mediaDetailsWorkshop", MediaDetailsWorkshop);
         injector.bind("mediaSelector", MediaSelector);
         injector.bind("pictureCropper",  PictureCropper);
+        injector.bindToCollection("workshopSections", MediaWorkshopSection);
     }
 }

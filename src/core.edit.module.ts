@@ -21,9 +21,9 @@ import { BlogWorkshopModule } from "./workshops/blog/ko/blog.module";
 import { SliderEditorModule } from "./slider/ko/sliderEditor.module";
 import { LayoutWorkshopModule } from "./workshops/layout/ko/layout.module";
 import { PageWorkshopModule } from "./workshops/page/ko/page.module";
-import { SettingsWorkshop } from "./workshops/settings/ko/settings";
 import { MediaWorkshopModule } from "./workshops/media/ko/media.module";
 import { NavigationWorkshopModule } from "./workshops/navigation/ko/navigation.module";
+import { SettingsWorkshopModule } from "./workshops/settings/ko/settings.module";
 import { Workshops } from "./workshops/ko/workshops";
 import { TextblockEditorModule } from "./textblock/ko/textblockEditor.module";
 import { DropbucketModule } from "./workshops/dropbucket/ko/dropbucket.module";
@@ -50,14 +50,17 @@ import { CropperBindingHandler } from "./workshops/cropper/cropper";
 import { GridEditor } from "./grid/ko";
 import { CardEditorModule } from "./card/ko/cardEditor.module";
 import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkResolver.design";
+
 import "./ko/bindingHandlers/bindingHandlers.command";
 import { PageHost } from "./workshops/page/ko/pageHost";
+
 
 export class CoreEditModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bindModule(new CoreModule());
 
         injector.bindCollection("dropHandlers");
+        injector.bindCollection("workshopSections");
         injector.bindSingleton("viewManager", ViewManager);
         injector.bind("pageHyperlinkProvider", PageHyperlinkProvider);
         injector.bind("blogHyperlinkProvider", BlogHyperlinkProvider);
@@ -95,10 +98,9 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindSingleton("mediaHandler", MediaHandlers);
         injector.bind("workshops", Workshops);
         injector.bind("viewportSelector", ViewportSelector);
-        injector.bind("settingsWorkshop", SettingsWorkshop);
         injector.bind("hyperlinkSelector", HyperlinkSelector);
         injector.bind("widgetSelector", WidgetSelector);
-        injector.bind("urlSelector",  UrlSelector);
+        injector.bind("urlSelector", UrlSelector);
         injector.bind("confirmation", Confirmation);
         injector.bind("pageHost", PageHost);
         injector.bindSingleton("mediaPermalinkResolver", MediaPermalinkResolver);
@@ -113,12 +115,13 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindModule(new NavbarEditorModule());
         injector.bindModule(new SearchResultsEditorModule());
         injector.bindModule(new DropbucketModule());
-        injector.bindModule(new LayoutWorkshopModule());
         injector.bindModule(new PageWorkshopModule());
         injector.bindModule(new BlogWorkshopModule());
-        injector.bindModule(new BlockWorkshopModule());
         injector.bindModule(new MediaWorkshopModule());
+        injector.bindModule(new LayoutWorkshopModule());
+        injector.bindModule(new BlockWorkshopModule());
         injector.bindModule(new NavigationWorkshopModule());
+        injector.bindModule(new SettingsWorkshopModule());
         injector.bindModule(new ColumnEditorModule());
         injector.bindModule(new RowEditorModule());
         injector.bindModule(new SectionEditorModule());
@@ -126,7 +129,7 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindModule(new PageEditorModule());
         injector.bindModule(new SliderEditorModule());
         injector.bindModule(new CardEditorModule());
-        
+
         injector.bindToCollection("autostart", HostBindingHandler);
         injector.bindToCollection("autostart", DraggablesBindingHandler);
         injector.bindToCollection("autostart", GridBindingHandler);
