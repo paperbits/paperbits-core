@@ -134,10 +134,7 @@ export class GridEditor {
 
         const elements = this.getUnderlyingElements();
         const roots = GridHelper.getComponentRoots(elements);
-
-        const element = roots.find(element => {
-            return GridHelper.getWidgetBinding(element) !== null;
-        });
+        const element = roots.find(element => GridHelper.getWidgetBinding(element) !== null);
 
         if (!element) {
             this.viewManager.closeView();
@@ -156,6 +153,9 @@ export class GridEditor {
         }
 
         if ((!windgetIsInContent && !layoutEditing)) {
+            event.preventDefault();
+            event.stopPropagation();
+            // TODO: Show message "This is part of "Default" layout. Do you want to open the layout for editing?"
             return;
         }
 
@@ -166,7 +166,6 @@ export class GridEditor {
         }
 
         if (widgetBinding.readonly) {
-            // TODO: Show message "This is part of "Default" layout. Do you want to open the layout for editing?"
             return;
         }
 
