@@ -140,6 +140,7 @@ export class GridEditor {
         });
 
         if (!element) {
+            this.viewManager.closeView();
             return;
         }
 
@@ -165,6 +166,7 @@ export class GridEditor {
         }
 
         if (widgetBinding.readonly) {
+            // TODO: Show message "This is part of "Default" layout. Do you want to open the layout for editing?"
             return;
         }
 
