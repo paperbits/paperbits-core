@@ -1,14 +1,13 @@
 ﻿import * as _ from "lodash";
 import * as ko from "knockout";
 import * as Arrays from "@paperbits/common/arrays";
-import * as Objects from "@paperbits/common/objects";
 import template from "./viewManager.html";
 import "@paperbits/common/extensions";
 import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
 import { Bag } from "@paperbits/common";
 import { IMediaService } from "@paperbits/common/media";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
-import { IComponent, IView, IViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet, ISplitterConfig } from "@paperbits/common/ui";
+import { IComponent, IView, IViewManager, ICommand, ViewManagerMode, IHighlightConfig, IContextCommandSet, ISplitterConfig } from "@paperbits/common/ui";
 import { Toast } from "../ui";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { ISiteService, SettingsContract } from "@paperbits/common/sites";
@@ -149,8 +148,8 @@ export class ViewManager implements IViewManager {
         this.scheduleToastRemoval(toast);
     }
 
-    public notifyInfo(title: string, content: string): void {
-        const toast = new Toast(title, content, "info");
+    public notifyInfo(title: string, content: string, commands?: ICommand[]): void {
+        const toast = new Toast(title, content, "info", null, commands);
         this.toasts.push(toast);
         this.scheduleToastRemoval(toast);
     }

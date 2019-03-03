@@ -5,6 +5,7 @@ import { IWidgetBinding, GridHelper, WidgetContext } from "@paperbits/common/edi
 import { Keys } from "@paperbits/common/keyboard";
 import { IWidgetService } from "@paperbits/common/widgets";
 import { IRouteHandler } from "@paperbits/common/routing";
+import { IEventManager } from "@paperbits/common/events";
 
 export class GridEditor {
     private activeHighlightedElement: HTMLElement;
@@ -20,7 +21,8 @@ export class GridEditor {
     constructor(
         private readonly viewManager: IViewManager,
         private readonly widgetService: IWidgetService,
-        private readonly routeHandler: IRouteHandler
+        private readonly routeHandler: IRouteHandler,
+        private readonly eventManager: IEventManager
     ) {
         this.rerenderEditors = this.rerenderEditors.bind(this);
         this.onPointerDown = this.onPointerDown.bind(this);
@@ -155,7 +157,9 @@ export class GridEditor {
         if ((!windgetIsInContent && !layoutEditing)) {
             event.preventDefault();
             event.stopPropagation();
-            // TODO: Show message "This is part of "Default" layout. Do you want to open the layout for editing?"
+
+            this.eventManager.dispatchEvent("InactiveLayoutHint");
+            
             return;
         }
 
