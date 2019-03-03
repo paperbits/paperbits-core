@@ -148,6 +148,7 @@ export class GridEditor {
         }
 
         const bindings = GridHelper.getParentWidgetBindings(element);
+
         const windgetIsInContent = bindings.some(x => x.name === "page" || x.name === "email-layout");
 
         let layoutEditing = false;
@@ -158,7 +159,7 @@ export class GridEditor {
             layoutEditing = metadata["usePagePlaceholder"];
         }
 
-        if ((!windgetIsInContent && !layoutEditing)) {
+        if ((!windgetIsInContent && !layoutEditing && this.viewManager.getHost().name === "content-host")) {
             event.preventDefault();
             event.stopPropagation();
 

@@ -114,6 +114,14 @@ export class ViewManager implements IViewManager {
         this.host(component);
     }
 
+    public getHost(): IComponent {
+        return this.host();
+    }
+
+    public getHostDocument(): Document {
+        return this.hostDocument;
+    }
+
     private onRouteChange(): void {
         this.clearContextualEditors();
         this.closeView();
@@ -437,10 +445,6 @@ export class ViewManager implements IViewManager {
 
     public removeBalloon(component: IComponent): void {
         this.balloons.remove(component);
-    }
-
-    public getHostDocument(): Document {
-        return this.hostDocument;
     }
 
     public undo(): void {
