@@ -118,6 +118,10 @@ export class GridEditor {
     }
 
     private onPointerDown(event: MouseEvent): void {
+        if (event.ctrlKey) {
+            return;
+        }
+
         if (this.viewManager.mode === ViewManagerMode.pause) {
             event.preventDefault();
             event.stopPropagation();
@@ -159,7 +163,7 @@ export class GridEditor {
             event.stopPropagation();
 
             this.eventManager.dispatchEvent("InactiveLayoutHint");
-            
+
             return;
         }
 
