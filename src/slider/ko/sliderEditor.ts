@@ -1,9 +1,8 @@
 import * as ko from "knockout";
 import template from "./sliderEditor.html";
-import { IWidgetEditor } from '@paperbits/common/widgets/IWidgetEditor';
 import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { BackgroundModel } from "@paperbits/common/widgets/background/backgroundModel";
-import { Component } from "@paperbits/common/ko/decorators";
+import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { SliderModel, SlideModel } from "../sliderModel";
 
 export class SliderEditorSlide {
@@ -20,7 +19,6 @@ export class SliderEditorSlide {
     injectable: "sliderEditor"
 })
 export class SliderEditor {
-    private sliderModel: SliderModel;
     private activeSlideModel: SlideModel;
     private applyChangesCallback: () => void;
 
@@ -39,52 +37,57 @@ export class SliderEditor {
     public readonly slides: ko.ObservableArray<SliderEditorSlide>;
     public readonly activeSlideNumber: ko.Observable<number>;
 
-
     constructor() {
         this.layout = ko.observable<string>();
-        this.layout.subscribe(this.onChange.bind(this));
-
         this.padding = ko.observable<string>();
-        this.padding.subscribe(this.onChange.bind(this));
-
         this.size = ko.observable<string>();
-        this.size.subscribe(this.onChange.bind(this));
-
         this.style = ko.observable<string>();
-        this.style.subscribe(this.onChange.bind(this));
-
         this.backgroundSize = ko.observable<string>();
-        this.backgroundSize.subscribe(this.onChange.bind(this));
-
         this.backgroundPosition = ko.observable<string>();
-        this.backgroundPosition.subscribe(this.onChange.bind(this));
-
         this.backgroundColorKey = ko.observable<string>();
-        this.backgroundColorKey.subscribe(this.onChange.bind(this));
-
         this.backgroundRepeat = ko.observable<string>();
-        this.backgroundRepeat.subscribe(this.onChange.bind(this));
-
         this.background = ko.observable<BackgroundModel>();
         this.thumbnail = ko.observable<BackgroundModel>();
-
         this.backgroundSourceType = ko.observable<string>();
-
         this.activeSlideNumber = ko.observable<number>();
         this.slides = ko.observableArray<SliderEditorSlide>();
+    }
+
+    @Param()
+    public model: SliderModel;
+
+    @Event()
+    public onChange: (model: SlideModel) => void;
+
+    @OnMounted()
+    public initialize(): void {
+        this.setActiveSlide(this.model.slides[this.model.activeSlideNumber]);
+        this.size(this.model.size);
+        this.style(this.model.style);
+
+        this.rebuildSlides();
+
+        this.layout.subscribe(this.applyChanges.bind(this));
+        this.padding.subscribe(this.applyChanges.bind(this));
+        this.size.subscribe(this.applyChanges.bind(this));
+        this.style.subscribe(this.applyChanges.bind(this));
+        this.backgroundSize.subscribe(this.applyChanges.bind(this));
+        this.backgroundPosition.subscribe(this.applyChanges.bind(this));
+        this.backgroundColorKey.subscribe(this.applyChanges.bind(this));
+        this.backgroundRepeat.subscribe(this.applyChanges.bind(this));
     }
 
     /**
      * Collecting changes from the editor UI and invoking callback method.
      */
-    private onChange(): void {
+    private applyChanges(): void {
         if (!this.applyChangesCallback) {
             return;
         }
         this.activeSlideModel.layout = this.layout();
         this.activeSlideModel.padding = this.padding();
-        this.sliderModel.size = this.size();
-        this.sliderModel.style = this.style();
+        this.model.size = this.size();
+        this.model.style = this.style();
 
         this.activeSlideModel.background.colorKey = this.backgroundColorKey();
         this.activeSlideModel.background.size = this.backgroundSize();
@@ -112,7 +115,7 @@ export class SliderEditor {
         this.activeSlideModel.thumbnail.sourceKey = media.key;
         this.activeSlideModel.thumbnail.sourceUrl = media.downloadUrl;
 
-        const sliderEditorSlide = this.slides()[this.sliderModel.activeSlideNumber];
+        const sliderEditorSlide = this.slides()[this.model.activeSlideNumber];
 
         sliderEditorSlide.thumbnail.valueHasMutated();
 
@@ -140,26 +143,14 @@ export class SliderEditor {
         this.applyChangesCallback();
     }
 
-    public setWidgetModel(sliderModel: SliderModel, applyChangesCallback?: () => void): void {
-        this.sliderModel = sliderModel;
-
-        this.setActiveSlide(sliderModel.slides[sliderModel.activeSlideNumber]);
-        this.size(this.sliderModel.size);
-        this.style(this.sliderModel.style);
-
-        this.rebuildSlides();
-
-        this.applyChangesCallback = applyChangesCallback;
-    }
-
     private rebuildSlides(): void {
-        const slideViewModels = this.sliderModel.slides.map((slide) => {
+        const slideViewModels = this.model.slides.map((slide) => {
             const slideViewModel = new SliderEditorSlide();
             slideViewModel.thumbnail(slide.thumbnail);
             return slideViewModel;
         });
         this.slides(slideViewModels);
-        this.activeSlideNumber(this.sliderModel.activeSlideNumber);
+        this.activeSlideNumber(this.model.activeSlideNumber);
     }
 
     private setActiveSlide(slideModel: SlideModel): void {
@@ -176,10 +167,10 @@ export class SliderEditor {
     }
 
     public selectSlide(sliderEditorSlide: SliderEditorSlide): void {
-        let slideNumber = this.slides.indexOf(sliderEditorSlide);
-        let slideModel = this.sliderModel.slides[slideNumber];
+        const slideNumber = this.slides.indexOf(sliderEditorSlide);
+        const slideModel = this.model.slides[slideNumber];
 
-        this.sliderModel.activeSlideNumber = slideNumber;
+        this.model.activeSlideNumber = slideNumber;
         this.setActiveSlide(slideModel);
         this.activeSlideNumber(slideNumber);
         this.applyChangesCallback();
@@ -190,17 +181,17 @@ export class SliderEditor {
     }
 
     public addSlide(): void {
-        let slide = new SlideModel();
-        this.sliderModel.slides.push(slide);
+        const slide = new SlideModel();
+        this.model.slides.push(slide);
         this.applyChangesCallback();
         this.rebuildSlides();
     }
 
     public deleteSlide(): void {
-        let slideNumber = this.activeSlideNumber()
-        let slideModel = this.sliderModel.slides[slideNumber];
+        const slideNumber = this.activeSlideNumber();
+        const slideModel = this.model.slides[slideNumber];
 
-        this.sliderModel.removeSlide(slideModel);
+        this.model.removeSlide(slideModel);
 
         this.applyChangesCallback();
         this.rebuildSlides();
