@@ -1,2 +1,2 @@
-import { createDocument } from "./knockout-rendring";
+import { createDocument } from "./knockout-rendering";
 createDocument();
