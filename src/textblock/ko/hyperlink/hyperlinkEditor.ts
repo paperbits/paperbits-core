@@ -1,10 +1,8 @@
 ﻿import * as ko from "knockout";
 import template from "./hyperlinkEditor.html";
-import { IContentItemService } from "@paperbits/common/contentItems";
 import { IHtmlEditorProvider } from "@paperbits/common/editing/htmlEditorProvider";
 import { IEventManager } from "@paperbits/common/events";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
-import { HyperlinkContract } from "@paperbits/common/editing";
 import { PermalinkResolver } from "@paperbits/common/permalinks/permalinkResolver";
 import { Component } from "@paperbits/common/ko/decorators";
 

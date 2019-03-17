@@ -1,5 +1,4 @@
-﻿import { IWidgetOrder } from "@paperbits/common/editing";
-import { IWidgetHandler } from "@paperbits/common/editing";
+﻿import { IWidgetOrder, IWidgetHandler } from "@paperbits/common/editing";
 import { Contract } from "@paperbits/common/contract";
 import { SliderModelBinder } from "./sliderModelBinder";
 
@@ -25,7 +24,6 @@ export class SliderHandlers implements IWidgetHandler {
 
     private async getWidgetOrderByConfig(): Promise<IWidgetOrder> {
         const config: Contract = {
-            object: "block",
             type: "slider",
             label: "Slider",
             style: "default"

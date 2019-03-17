@@ -7,8 +7,8 @@ export class TestimonialsModelBinder implements IModelBinder {
         this.contractToModel = this.contractToModel.bind(this);
     }
 
-    public canHandleWidgetType(widgetType: string): boolean {
-        return widgetType === "testimonials";
+    public canHandleContract(contract: Contract): boolean {
+        return contract.type === "testimonials";
     }
 
     public canHandleModel(model): boolean {
@@ -28,7 +28,6 @@ export class TestimonialsModelBinder implements IModelBinder {
     public modelToContract(model: TestimonialsModel): Contract {
         const contract: Contract = {
             type: "testimonials",
-            object: "block",
             textContent : model.textContent,
             starsCount : model.starsCount, 
             allStarsCount : model.allStarsCount, 

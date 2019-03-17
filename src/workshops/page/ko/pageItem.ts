@@ -1,10 +1,12 @@
 import * as ko from "knockout";
 import { PageContract } from "@paperbits/common/pages/pageContract";
+import { HyperlinkModel } from "@paperbits/common/permalinks";
 
 export class AnchorItem {
     public hasFocus: ko.Observable<boolean>;
     public title: string;
     public shortTitle: string;
+    public elementId: string;
 
     constructor() {
         this.hasFocus = ko.observable<boolean>(false);
@@ -20,7 +22,8 @@ export class PageItem {
     public keywords: ko.Observable<string>;
     public hasFocus: ko.Observable<boolean>;
 
-    public anchors: AnchorItem[];
+    public anchors: ko.ObservableArray<AnchorItem>;
+    public selectedAnchor?: AnchorItem;
 
     constructor(page: PageContract) {
         this.contentKey = page.contentKey;
@@ -30,6 +33,20 @@ export class PageItem {
         this.keywords = ko.observable<string>(page.keywords);
         this.permalink = ko.observable<string>(page.permalink);
         this.hasFocus = ko.observable<boolean>(false);
+        this.anchors = ko.observableArray<AnchorItem>();
+    }
+
+    public getHyperlink(): HyperlinkModel {
+        const hyperlinkModel = new HyperlinkModel();
+        hyperlinkModel.title = this.title();
+        hyperlinkModel.target = "_blank";
+        hyperlinkModel.targetKey = this.key;
+        hyperlinkModel.href = this.permalink();
+        hyperlinkModel.type = "page";
+        if (this.selectedAnchor) {
+            hyperlinkModel.anchor = this.selectedAnchor.elementId;
+        }
+        return hyperlinkModel;
     }
 
     public toContract(): PageContract {

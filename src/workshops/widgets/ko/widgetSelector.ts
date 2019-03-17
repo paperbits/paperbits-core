@@ -43,7 +43,7 @@ export class WidgetSelector {
         const provided = this.onRequest();
 
         widgetOrders
-            .filter(x => !x.requires || x.requires.every(y => provided.contains(y)))
+            .filter(x => !x.requires || x.requires.every(y => provided.includes(y)))
             .forEach((widgetOrder) => {
                 const widgetItem = new WidgetItem();
 

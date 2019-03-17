@@ -10,8 +10,8 @@ export class SearchResultsModelBinder implements IModelBinder {
         this.contractToModel = this.contractToModel.bind(this);
     }
 
-    public canHandleWidgetType(widgetType: string): boolean {
-        return widgetType === "search-results";
+    public canHandleContract(contract: Contract): boolean {
+        return contract.type === "search-results";
     }
 
     public canHandleModel(model: Object): boolean {
@@ -24,7 +24,6 @@ export class SearchResultsModelBinder implements IModelBinder {
 
     public modelToContract(searchResultModel: SearchResultsModel): Contract {
         const searchResultConfig: SearchResultsContract = {
-            object: "block",
             type: "search-results"
         };
 

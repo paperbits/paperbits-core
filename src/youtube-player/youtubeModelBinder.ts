@@ -1,14 +1,15 @@
 import { YoutubePlayerContract } from "./youtubePlayerContract";
 import { YoutubePlayerModel } from "./youtubePlayerModel";
 import { IModelBinder } from "@paperbits/common/editing";
+import { Contract } from "@paperbits/common";
 
 export class YoutubeModelBinder implements IModelBinder {
     constructor() {
         this.contractToModel = this.contractToModel.bind(this);
     }
 
-    public canHandleWidgetType(widgetType: string): boolean {
-        return widgetType === "youtube-player";
+    public canHandleContract(contract: Contract): boolean {
+        return contract.type === "youtube-player";
     }
 
     public canHandleModel(model): boolean {
@@ -29,7 +30,6 @@ export class YoutubeModelBinder implements IModelBinder {
 
     public modelToContract(youtubeModel: YoutubePlayerModel): YoutubePlayerContract {
         const youtubeConfig: YoutubePlayerContract = {
-            object: "block",
             type: "youtube-player",
             videoId: youtubeModel.videoId,
             origin: youtubeModel.origin,

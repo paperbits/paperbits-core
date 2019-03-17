@@ -26,7 +26,6 @@ export class MapHandlers implements IWidgetHandler, IContentDropHandler {
 
     private async  getWidgetOrderByConfig(location: string, caption: string): Promise<IWidgetOrder> {
         const config: MapContract = {
-            object: "block",
             type: "map",
             location: location,
             caption: caption

@@ -2,6 +2,7 @@ import { IRouteHandler } from "@paperbits/common/routing";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { LayoutModel } from "./layoutModel";
 import { ILayoutService, LayoutContract } from "@paperbits/common/layouts";
+import { Contract } from "@paperbits/common";
 
 export class LayoutModelBinder {
     constructor(
@@ -13,8 +14,8 @@ export class LayoutModelBinder {
         this.contractToModel = this.contractToModel.bind(this);
     }
 
-    public canHandleWidgetType(widgetType: string): boolean {
-        return widgetType === "layout";
+    public canHandleContract(contract: Contract): boolean {
+        return contract.type === "layout";
     }
 
     public canHandleModel(model): boolean {
@@ -28,17 +29,17 @@ export class LayoutModelBinder {
         return await this.contractToModel(layoutNode);
     }
 
-    public async contractToModel(layoutContract: LayoutContract): Promise<LayoutModel> {
+    public async contractToModel(contract: LayoutContract): Promise<LayoutModel> {
         const layoutModel = new LayoutModel();
-        layoutModel.title = layoutContract.title;
-        layoutModel.description = layoutContract.description;
-        layoutModel.permalinkTemplate = layoutContract.permalinkTemplate;
+        layoutModel.title = contract.title;
+        layoutModel.description = contract.description;
+        layoutModel.permalinkTemplate = contract.permalinkTemplate;
 
-        const layoutContent = await this.layoutService.getLayoutContent(layoutContract.key);
+        const layoutContent = await this.layoutService.getLayoutContent(contract.key);
 
-        const modelPromises = layoutContent.nodes.map(async (config) => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(config.type);
-            return await modelBinder.contractToModel(config);
+        const modelPromises = layoutContent.nodes.map(async (contract: Contract) => {
+            const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
+            return await modelBinder.contractToModel(contract);
         });
 
         const widgetModels = await Promise.all<any>(modelPromises);
@@ -47,21 +48,20 @@ export class LayoutModelBinder {
         return layoutModel;
     }
 
-    public modelToContract(layoutModel: LayoutModel): LayoutContract {
-        const layoutConfig: LayoutContract = {
-            title: layoutModel.title,
-            description: layoutModel.description,
-            permalinkTemplate: layoutModel.permalinkTemplate,
-            object: "block",
+    public modelToContract(model: LayoutModel): LayoutContract {
+        const contract: LayoutContract = {
+            title: model.title,
+            description: model.description,
+            permalinkTemplate: model.permalinkTemplate,
             type: "layout",
             nodes: []
         };
 
-        layoutModel.widgets.forEach(model => {
+        model.widgets.forEach(model => {
             const modelBinder = this.modelBinderSelector.getModelBinderByModel(model);
-            layoutConfig.nodes.push(modelBinder.modelToContract(model));
+            contract.nodes.push(modelBinder.modelToContract(model));
         });
 
-        return layoutConfig;
+        return contract;
     }
 }

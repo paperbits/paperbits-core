@@ -3,6 +3,7 @@ import { PictureContract } from "./pictureContract";
 import { IModelBinder } from "@paperbits/common/editing";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
+import { Contract } from "@paperbits/common";
 
 export class PictureModelBinder implements IModelBinder {
     constructor(
@@ -10,8 +11,8 @@ export class PictureModelBinder implements IModelBinder {
         private readonly mediaPermalinkResolver: IPermalinkResolver
     ) { }
 
-    public canHandleWidgetType(widgetType: string): boolean {
-        return widgetType === "picture";
+    public canHandleContract(contract: Contract): boolean {
+        return contract.type === "picture";
     }
 
     public canHandleModel(model): boolean {
@@ -51,7 +52,6 @@ export class PictureModelBinder implements IModelBinder {
 
     public modelToContract(pictureModel: PictureModel): PictureContract {
         const pictureContract: PictureContract = {
-            object: "block",
             type: "picture",
             caption: pictureModel.caption,
             animation: pictureModel.animation,
@@ -65,14 +65,9 @@ export class PictureModelBinder implements IModelBinder {
         }
 
         if (pictureModel.hyperlink) {
-            pictureContract.targetKey = pictureModel.hyperlink.targetKey;
-        }
-
-        if (pictureModel.hyperlink) {
             pictureContract.hyperlink = {
                 target: pictureModel.hyperlink.target,
-                targetKey: pictureModel.hyperlink.targetKey,
-                href: pictureModel.hyperlink.href
+                targetKey: pictureModel.hyperlink.targetKey
             };
         }
 

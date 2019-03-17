@@ -15,8 +15,8 @@ export class BlogModelBinder implements IModelBinder {
         this.contractToModel = this.contractToModel.bind(this);
     }
 
-    public canHandleWidgetType(widgetType: string): boolean {
-        return widgetType === "blog";
+    public canHandleContract(contract: Contract): boolean {
+        return contract.type === "blog";
     }
 
     public canHandleModel(model: Object): boolean {
@@ -35,9 +35,9 @@ export class BlogModelBinder implements IModelBinder {
         blogPostModel.keywords = blogPostContract.keywords;
 
         const blogPostContent = await this.blogService.getBlogPostContent(blogPostContract.key);
-        const modelPromises = blogPostContent.nodes.map(async (config) => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(config.type);
-            return await modelBinder.contractToModel(config);
+        const modelPromises = blogPostContent.nodes.map(async (contract) => {
+            const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
+            return await modelBinder.contractToModel(contract);
         });
         const models = await Promise.all<any>(modelPromises);
         blogPostModel.widgets = models;
@@ -47,7 +47,6 @@ export class BlogModelBinder implements IModelBinder {
 
     public modelToContract(blogModel: BlogPostModel): Contract {
         const blogConfig: Contract = {
-            object: "block",
             type: "blog",
             nodes: []
         };

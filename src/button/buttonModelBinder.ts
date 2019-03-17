@@ -10,8 +10,8 @@ export class ButtonModelBinder implements IModelBinder {
         this.permalinkResolver = permalinkResolver;
     }
 
-    public canHandleWidgetType(widgetType: string): boolean {
-        return widgetType === "button";
+    public canHandleContract(contract: Contract): boolean {
+        return contract.type === "button";
     }
 
     public canHandleModel(model): boolean {
@@ -32,7 +32,6 @@ export class ButtonModelBinder implements IModelBinder {
 
     public modelToContract(buttonModel: ButtonModel): Contract {
         const buttonConfig: Contract = {
-            object: "block",
             type: "button",
             label: buttonModel.label,
             styles: buttonModel.styles
@@ -41,8 +40,7 @@ export class ButtonModelBinder implements IModelBinder {
         if (buttonModel.hyperlink) {
             buttonConfig.hyperlink = {
                 target: buttonModel.hyperlink.target,
-                targetKey: buttonModel.hyperlink.targetKey,
-                href: buttonModel.hyperlink.href
+                targetKey: buttonModel.hyperlink.targetKey
             };
         }
 

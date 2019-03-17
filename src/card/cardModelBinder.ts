@@ -10,8 +10,8 @@ export class CardModelBinder implements IModelBinder {
         this.contractToModel = this.contractToModel.bind(this);
     }
 
-    public canHandleWidgetType(widgetType: string): boolean {
-        return widgetType === "card";
+    public canHandleContract(contract: Contract): boolean {
+        return contract.type === "card";
     }
 
     public canHandleModel(model: Object): boolean {
@@ -35,9 +35,9 @@ export class CardModelBinder implements IModelBinder {
             contract.nodes = [];
         }
 
-        const modelPromises = contract.nodes.map(async (node) => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(node.type);
-            return modelBinder.contractToModel(node);
+        const modelPromises = contract.nodes.map(async (contract: Contract) => {
+            const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
+            return modelBinder.contractToModel(contract);
         });
 
         model.widgets = await Promise.all<any>(modelPromises);
@@ -48,7 +48,6 @@ export class CardModelBinder implements IModelBinder {
     public modelToContract(model: CardModel): Contract {
         const contract: CardContract = {
             type: "card",
-            object: "block",
             styles: model.styles,
             nodes: []
         };

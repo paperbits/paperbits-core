@@ -43,8 +43,8 @@ export class NavbarModelBinder implements IModelBinder {
         return navbarModel;
     }
 
-    public canHandleWidgetType(widgetType: string): boolean {
-        return widgetType === "navbar";
+    public canHandleContract(contract: Contract): boolean {
+        return contract.type === "navbar";
     }
 
     public canHandleModel(model): boolean {
@@ -92,7 +92,6 @@ export class NavbarModelBinder implements IModelBinder {
 
     public modelToContract(navbarModel: NavbarModel): Contract {
         const navbarContract: NavbarContract = {
-            object: "block",
             type: "navbar",
             rootKey: navbarModel.rootKey,
             sourceKey: navbarModel.pictureSourceKey

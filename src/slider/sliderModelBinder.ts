@@ -17,8 +17,8 @@ export class SliderModelBinder implements IModelBinder {
         this.permalinkResolver = permalinkResolver;
     }
 
-    public canHandleWidgetType(widgetType: string): boolean {
-        return widgetType === "slider";
+    public canHandleContract(contract: Contract): boolean {
+        return contract.type === "slider";
     }
 
     public canHandleModel(model): boolean {
@@ -26,14 +26,14 @@ export class SliderModelBinder implements IModelBinder {
     }
 
     public async contractToModel(sliderContract: Contract): Promise<SliderModel> {
-        let sliderModel = new SliderModel();
+        const sliderModel = new SliderModel();
 
         if (sliderContract.nodes) {
-            let modelPromises = sliderContract.nodes.map(async slideContract => {
-                let slideModel = new SlideModel();
+            const modelPromises = sliderContract.nodes.map(async slideContract => {
+                const slideModel = new SlideModel();
 
                 if (slideContract.nodes) {
-                    let rowModelPromises = slideContract.nodes.map(this.rowModelBinder.contractToModel);
+                    const rowModelPromises = slideContract.nodes.map(this.rowModelBinder.contractToModel);
                     slideModel.rows = await Promise.all<RowModel>(rowModelPromises);
                 }
 
@@ -53,7 +53,7 @@ export class SliderModelBinder implements IModelBinder {
                 return slideModel;
             });
 
-            let slideModels = await Promise.all<any>(modelPromises);
+            const slideModels = await Promise.all<any>(modelPromises);
             sliderModel.slides = slideModels;
             sliderModel.size = sliderContract.size;
             sliderModel.style = sliderContract.style || "style1";
@@ -63,15 +63,13 @@ export class SliderModelBinder implements IModelBinder {
     }
 
     public modelToContract(sliderModel: SliderModel): Contract {
-        let sliderContract: Contract = {
+        const sliderContract: Contract = {
             type: "slider",
-            object: "block",
             size: sliderModel.size,
             style: sliderModel.style,
             nodes: sliderModel.slides.map(slideModel => {
-                let slideContract: Contract = {
+                const slideContract: Contract = {
                     type: "slide",
-                    object: "block",
                     nodes: [],
                     layout: slideModel.layout,
                     padding: slideModel.padding
@@ -80,7 +78,7 @@ export class SliderModelBinder implements IModelBinder {
                 if (slideModel.thumbnail && slideModel.thumbnail.sourceKey) {
                     slideContract.thumbnail = {
                         sourceKey: slideModel.thumbnail.sourceKey
-                    }
+                    };
                 }
 
                 if (slideModel.background) {
@@ -88,13 +86,13 @@ export class SliderModelBinder implements IModelBinder {
                         color: slideModel.background.colorKey,
                         size: slideModel.background.size,
                         position: slideModel.background.position
-                    }
+                    };
 
                     if (slideModel.background.sourceType === "picture") {
                         slideContract.background.picture = {
                             sourcePermalinkKey: slideModel.background.sourceKey,
                             repeat: slideModel.background.repeat
-                        }
+                        };
                     }
                 }
 
@@ -104,7 +102,7 @@ export class SliderModelBinder implements IModelBinder {
 
                 return slideContract;
             })
-        }
+        };
 
         return sliderContract;
     }

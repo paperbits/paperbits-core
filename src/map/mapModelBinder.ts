@@ -1,10 +1,11 @@
 import { MapModel } from "./mapModel";
 import { MapContract } from "./mapContract";
 import { IModelBinder } from "@paperbits/common/editing";
+import { Contract } from "@paperbits/common";
 
 export class MapModelBinder implements IModelBinder {
-    public canHandleWidgetType(widgetType: string): boolean {
-        return widgetType === "map";
+    public canHandleContract(contract: Contract): boolean {
+        return contract.type === "map";
     }
 
     public canHandleModel(model: Object): boolean {
@@ -12,7 +13,7 @@ export class MapModelBinder implements IModelBinder {
     }
 
     public async contractToModel(mapNode: MapContract): Promise<MapModel> {
-        let model = new MapModel();
+        const model = new MapModel();
         model.caption = mapNode.caption;
         model.layout = mapNode.layout;
         model.location = mapNode.location;
@@ -21,16 +22,15 @@ export class MapModelBinder implements IModelBinder {
         return model;
     }
 
-    public modelToContract(mapModel: MapModel): MapContract {
-        let mapConfig: MapContract = {
-            object: "block",
+    public modelToContract(model: MapModel): MapContract {
+        const contract: MapContract = {
             type: "map",
-            caption: mapModel.caption,
-            layout: mapModel.layout,
-            location: mapModel.location,
-            zoomControl: mapModel.zoomControl
-        }
+            caption: model.caption,
+            layout: model.layout,
+            location: model.location,
+            zoomControl: model.zoomControl
+        };
 
-        return mapConfig;
+        return contract;
     }
 }

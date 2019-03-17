@@ -2,10 +2,11 @@ import { SectionContract } from "./sectionContract";
 import { SectionModel } from "./sectionModel";
 import { IModelBinder } from "@paperbits/common/editing";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
+import { Contract } from "@paperbits/common";
 
 export class SectionModelBinder implements IModelBinder {
-    public canHandleWidgetType(widgetType: string): boolean {
-        return widgetType === "layout-section";
+    public canHandleContract(contract: Contract): boolean {
+        return contract.type === "layout-section";
     }
 
     public canHandleModel(model: Object): boolean {
@@ -22,9 +23,9 @@ export class SectionModelBinder implements IModelBinder {
         model.padding = contract.padding;
         model.styles = contract.styles;
 
-        const modelPromises = contract.nodes.map(async (node) => {
-            const modelBinder: IModelBinder = this.modelBinderSelector.getModelBinderByNodeType(node.type);
-            return await modelBinder.contractToModel(node);
+        const modelPromises = contract.nodes.map(async (contract: Contract) => {
+            const modelBinder: IModelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
+            return await modelBinder.contractToModel(contract);
         });
 
         model.widgets = await Promise.all<any>(modelPromises);
@@ -35,7 +36,6 @@ export class SectionModelBinder implements IModelBinder {
     public modelToContract(sectionModel: SectionModel): SectionContract {
         const sectionContract: SectionContract = {
             type: "layout-section",
-            object: "block",
             nodes: [],
             layout: sectionModel.container,
             padding: sectionModel.padding,

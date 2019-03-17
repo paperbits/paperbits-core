@@ -1,8 +1,8 @@
 ﻿import * as ko from "knockout";
 import template from "./textblockEditor.html";
 import { IEventManager } from "@paperbits/common/events";
-import { TextblockViewModel } from "./textblockViewModel";
-import { Component } from "@paperbits/common/ko/decorators";
+import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
+import { TextblockModel } from "..";
 
 @Component({
     selector: "html-editor",
@@ -18,7 +18,14 @@ export class TextblockEditor {
         this.pluginNames.push("hyperlink-editor");
     }
 
-    public setWidgetModel(model: TextblockViewModel): void {
-        this.eventManager.dispatchEvent("enableHtmlEditor", model.htmlEditor);
+    @Param()
+    public model: TextblockModel;
+
+    @Event()
+    public onChange: (model: TextblockModel) => void;
+
+    @OnMounted()
+    public initialize(): void {
+        this.eventManager.dispatchEvent("enableHtmlEditor", this.model.htmlEditor);
     }
 }

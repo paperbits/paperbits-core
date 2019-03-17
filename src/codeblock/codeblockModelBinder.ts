@@ -1,11 +1,10 @@
-//import { Code } from "../widgets/codeblock/code";
 import { CodeModel } from "./codeModel";
 import { IModelBinder } from "@paperbits/common/editing";
 import { Contract } from "@paperbits/common";
 
 export class CodeblockModelBinder implements IModelBinder {
-    public canHandleWidgetType(widgetType: string): boolean {
-        return widgetType === "codeblock";
+    public canHandleContract(contract: Contract): boolean {
+        return contract.type === "codeblock";
     }
 
     public canHandleModel(model): boolean {
@@ -13,20 +12,18 @@ export class CodeblockModelBinder implements IModelBinder {
     }
 
     public async contractToModel(node: Contract): Promise<CodeModel> {
-        let codeModel = new CodeModel();
-        return codeModel;
+        return new CodeModel();
     }
 
     public modelToContract(codeModel: CodeModel): Contract {
-        let codeConfig: Contract = {
-            object: "block",
+        const contract: Contract = {
             type: "codeblock",
             language: codeModel.lang,
             code: codeModel.code,
             theme: codeModel.theme,
             isEditable: codeModel.isEditable
-        }
+        };
 
-        return codeConfig;
+        return contract;
     }
 }

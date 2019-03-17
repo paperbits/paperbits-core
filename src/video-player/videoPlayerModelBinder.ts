@@ -2,13 +2,14 @@ import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { IModelBinder } from "@paperbits/common/editing";
 import { VideoPlayerModel } from "./videoPlayerModel";
 import { VideoPlayerContract } from "./videoPlayerContract";
+import { Contract } from "@paperbits/common";
 
 
 export class VideoPlayerModelBinder implements IModelBinder {
     constructor(private readonly mediaPermalinkResolver: IPermalinkResolver) { }
 
-    public canHandleWidgetType(widgetType: string): boolean {
-        return widgetType === "video-player";
+    public canHandleContract(contract: Contract): boolean {
+        return contract.type === "video-player";
     }
 
     public canHandleModel(model): boolean {
@@ -40,7 +41,6 @@ export class VideoPlayerModelBinder implements IModelBinder {
 
     public modelToContract(videoPlayerModel: VideoPlayerModel): VideoPlayerContract {
         const videoConfig: VideoPlayerContract = {
-            object: "block",
             type: "video-player",
             sourceKey: videoPlayerModel.sourceKey,
             controls: videoPlayerModel.controls,

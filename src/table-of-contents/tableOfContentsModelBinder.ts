@@ -6,13 +6,8 @@ import { IRouteHandler } from "@paperbits/common/routing";
 import { IContentItemService } from "@paperbits/common/contentItems";
 import { TableOfContentsContract } from "./tableOfContentsContract";
 import { Contract } from "@paperbits/common";
-import * as Utils from "@paperbits/common/utils";
-
-interface ITextNode {
-    content: { text: string; type: string; }[];
-    type: string;
-}
-
+import { AnchorUtils } from "../text/anchorUtils";
+import { BlockContract } from "../text/contracts";
 
 export class TableOfContentsModelBinder implements IModelBinder {
     constructor(
@@ -24,19 +19,19 @@ export class TableOfContentsModelBinder implements IModelBinder {
         this.contractToModel = this.contractToModel.bind(this);
     }
 
-    public canHandleWidgetType(widgetType: string): boolean {
-        return widgetType === "table-of-contents";
+    public canHandleContract(contract: Contract): boolean {
+        return contract.type === "table-of-contents";
     }
 
     public canHandleModel(model: Object): boolean {
         return model instanceof TableOfContentsModel;
     }
 
-    private processAnchorItems(items: ITextNode[]): NavigationItemModel[] {
+    private processAnchorItems(items: BlockContract[]): NavigationItemModel[] {
         return items.map((item) => {
             const itemModel = new NavigationItemModel();
             itemModel.label = item.content[0].text;
-            itemModel.url = `#${Utils.slugify(itemModel.label)}`;
+            itemModel.url = `#${item.attrs.id}`;
             return itemModel;
         });
     }
@@ -56,26 +51,7 @@ export class TableOfContentsModelBinder implements IModelBinder {
     
                     if (contentItem.key && contentItem.key.startsWith("pages/")) {
                         const pageContent = await this.pageService.getPageContent(contentItem.key);
-                        const children = this.findNodesRecursively(pageContent,
-                            node => node["type"] && node["type"].startsWith("heading"),
-                            (node) => {
-                                if (node instanceof Array) {
-                                    return true;
-                                }
-                                if (!node["type"]) {
-                                    return false;
-                                }
-    
-                                const nodeType: string = node["type"];
-    
-                                if (nodeType === "layout-section" || nodeType === "layout-row" || nodeType === "layout-column" || nodeType === "text" ||
-                                    (nodeType.startsWith("heading") && maxHeading >= +nodeType.slice(-1))) {
-                                    return true;
-                                }
-    
-                                return false;
-                            }
-                        );
+                        const children = AnchorUtils.getHeadingNodes(pageContent, maxHeading);
     
                         if (children.length > 0) {
                             navbarItemModel.nodes = this.processAnchorItems(children);
@@ -86,27 +62,6 @@ export class TableOfContentsModelBinder implements IModelBinder {
         }
 
         return navbarItemModel;
-    }
-
-    private findNodesRecursively(source: object, searchPredicate: (x: object) => boolean, filterPredicate: (x: object) => boolean): ITextNode[] {
-        const result = [];
-
-        if (searchPredicate(source)) {
-            result.push(source);
-        }
-
-        const keys = Object.keys(source); // This includes array keys
-
-        keys.forEach(key => {
-            const child = source[key];
-
-            if (child instanceof Object && filterPredicate(child)) {
-                const childResult = this.findNodesRecursively(child, searchPredicate, filterPredicate);
-                result.push.apply(result, childResult);
-            }
-        });
-
-        return result;
     }
 
     public async contractToModel(contract: TableOfContentsContract): Promise<TableOfContentsModel> {
@@ -139,15 +94,14 @@ export class TableOfContentsModelBinder implements IModelBinder {
         return tableOfContentsModel;
     }
 
-    public modelToContract(tableOfContentsModel: TableOfContentsModel): Contract {
-        const tableOfContentsConfig: TableOfContentsContract = {
-            object: "block",
+    public modelToContract(model: TableOfContentsModel): Contract {
+        const contract: TableOfContentsContract = {
             type: "table-of-contents",
-            title: tableOfContentsModel.title,
-            maxHeading: tableOfContentsModel.maxHeading,
-            navigationItemKey: tableOfContentsModel.navigationItemKey
+            title: model.title,
+            maxHeading: model.maxHeading,
+            navigationItemKey: model.navigationItemKey
         };
 
-        return tableOfContentsConfig;
+        return contract;
     }
 }

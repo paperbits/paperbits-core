@@ -8,8 +8,8 @@ export class RowModelBinder {
         this.contractToModel = this.contractToModel.bind(this);
     }
 
-    public canHandleWidgetType(widgetType: string): boolean {
-        return widgetType === "layout-row";
+    public canHandleContract(contract: Contract): boolean {
+        return contract.type === "layout-row";
     }
 
     public canHandleModel(model: Object): boolean {
@@ -47,9 +47,9 @@ export class RowModelBinder {
             contract.nodes = [];
         }
 
-        const modelPromises = contract.nodes.map(async (node) => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(node.type);
-            return await modelBinder.contractToModel(node);
+        const modelPromises = contract.nodes.map(async (contract: Contract) => {
+            const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
+            return await modelBinder.contractToModel(contract);
         });
 
         rowModel.widgets = await Promise.all<any>(modelPromises);
@@ -60,7 +60,6 @@ export class RowModelBinder {
     public modelToContract(rowModel: RowModel): Contract {
         const rowConfig: RowContract = {
             type: "layout-row",
-            object: "block",
             nodes: []
         };
 

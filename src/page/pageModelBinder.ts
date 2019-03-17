@@ -17,8 +17,8 @@ export class PageModelBinder implements IModelBinder {
         this.contractToModel = this.contractToModel.bind(this);
     }
 
-    public canHandleWidgetType(widgetType: string): boolean {
-        return widgetType === "page";
+    public canHandleContract(contract: Contract): boolean {
+        return contract.type === "page";
     }
 
     public canHandleModel(model: WidgetModel): boolean {
@@ -54,9 +54,9 @@ export class PageModelBinder implements IModelBinder {
             const pageContent = await this.pageService.getPageContent(pageContract.key);
 
             if (pageContent) {
-                const modelPromises = pageContent.nodes.map(async (config) => {
-                    const modelBinder = this.modelBinderSelector.getModelBinderByNodeType(config.type);
-                    return await modelBinder.contractToModel(config);
+                const modelPromises = pageContent.nodes.map(async (contract: Contract) => {
+                    const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
+                    return await modelBinder.contractToModel(contract);
                 });
 
                 const models = await Promise.all<WidgetModel>(modelPromises);
@@ -80,7 +80,6 @@ export class PageModelBinder implements IModelBinder {
 
     public modelToContract(pageModel: PageModel): Contract {
         const pageContract: Contract = {
-            object: "block",
             type: "page"
         };
 
