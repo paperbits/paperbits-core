@@ -13,7 +13,7 @@ import { IRouteHandler } from "@paperbits/common/routing";
 import { ISiteService, SettingsContract } from "@paperbits/common/sites";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
-import { Component } from "@paperbits/common/ko/decorators";
+import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 
 declare let uploadDialog: HTMLInputElement;
 
@@ -99,7 +99,10 @@ export class ViewManager implements IViewManager {
         globalEventHandler.appendDocument(document);
 
         eventManager.addEventListener("onEscape", this.closeEditors.bind(this));
+    }
 
+    @OnMounted()
+    public async initialize(): Promise<void> {
         this.loadFavIcon();
     }
 
@@ -108,9 +111,7 @@ export class ViewManager implements IViewManager {
             return;
         }
 
-        // this.closeEditors();
         this.clearContextualEditors();
-
         this.host(component);
     }
 
