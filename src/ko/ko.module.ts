@@ -1,10 +1,5 @@
 import * as ko from "knockout";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { GridBindingHandler } from "./bindingHandlers/bindingHandlers.grid";
-import { LightboxBindingHandler } from "./bindingHandlers/bindingHandlers.lightbox";
-import { DraggablesBindingHandler } from "./bindingHandlers/bindingHandlers.draggables";
-import { WidgetBindingHandler } from "./bindingHandlers/bindingHandlers.widget";
-import { BackgroundBindingHandler } from "./bindingHandlers/bindingHandlers.background";
 
 import "./knockout.editors";
 import "./bindingHandlers/bindingHandlers.codeEditor";
@@ -26,6 +21,7 @@ import "./bindingHandlers/bindingHandlers.overflow";
 import "./bindingHandlers/bindingHandlers.stickTo";
 import "./bindingHandlers/bindingHandlers.scrollable";
 import "./bindingHandlers/bindingHandlers.confirm";
+import "./bindingExtenders/bindingExtenders.max";
 
 export class KoModule implements IInjectorModule {
     public register(injector: IInjector): void {
