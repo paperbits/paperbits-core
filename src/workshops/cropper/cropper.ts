@@ -12,7 +12,8 @@ export class CropperBindingHandler {
         ko.bindingHandlers["cropper"] = {
             init: (imageElement: HTMLImageElement, valueAccessor) => {
                 const observable = valueAccessor();
-                const cropperInstance = new Cropper.default(imageElement, {
+
+                const cropperInstance = new (<any>Cropper)(imageElement, {
                     // aspectRatio: 1,
                     viewMode: 1,
                     responsive: true,
@@ -119,12 +120,12 @@ export class PictureCropper {
 
     public crop(): void {
         const cropper = this.cropperInstance();
-        const canvas = <HTMLCanvasElement> cropper.getCroppedCanvas();
-        
+        const canvas = <HTMLCanvasElement>cropper.getCroppedCanvas();
+
         canvas.toBlob(async (blob) => {
             const reader = new FileReader();
             reader.addEventListener("loadend", async () => {
-                const arrayBuffer = <ArrayBuffer> reader.result;
+                const arrayBuffer = <ArrayBuffer>reader.result;
                 await this.updateMediaContent(new Uint8Array(arrayBuffer));
             });
             reader.readAsArrayBuffer(blob);
