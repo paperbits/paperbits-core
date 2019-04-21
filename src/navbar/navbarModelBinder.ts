@@ -29,11 +29,13 @@ export class NavbarModelBinder implements IModelBinder {
         }
 
         navbarModel.rootKey = contract.rootKey;
-        navbarModel.pictureSourceKey = contract.sourceKey;
+        navbarModel.pictureSourceKey = contract.pictureSourceKey;
 
-        if (contract.sourceKey) {
-            navbarModel.pictureSourceKey = contract.sourceKey;
-            navbarModel.pictureSourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(contract.sourceKey);
+        if (contract.pictureSourceKey) {
+            navbarModel.pictureSourceKey = contract.pictureSourceKey;
+            navbarModel.pictureSourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(contract.pictureSourceKey);
+            navbarModel.pictureWidth = contract.pictureWidth;
+            navbarModel.pictureHeight = contract.pictureHeight;
 
             if (!navbarModel.pictureSourceUrl) {
                 console.warn(`Unable to set navbar branding. Media with source key ${contract.sourceKey} not found.`);
@@ -94,7 +96,7 @@ export class NavbarModelBinder implements IModelBinder {
         const navbarContract: NavbarContract = {
             type: "navbar",
             rootKey: navbarModel.rootKey,
-            sourceKey: navbarModel.pictureSourceKey
+            pictureSourceKey: navbarModel.pictureSourceKey
         };
 
         return navbarContract;

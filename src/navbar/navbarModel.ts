@@ -6,4 +6,6 @@ export class NavbarModel {
     public isActive: boolean;
     public pictureSourceKey: string;
     public pictureSourceUrl: string;
+    public pictureWidth: string | number;
+    public pictureHeight: string | number;
 }

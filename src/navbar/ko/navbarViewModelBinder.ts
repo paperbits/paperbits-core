@@ -43,6 +43,8 @@ export class NavbarViewModelBinder implements IViewModelBinder<NavbarModel, Navb
         }
         
         viewModel.pictureSourceUrl(navbarModel.pictureSourceUrl);
+        viewModel.pictureWidth(navbarModel.pictureWidth);
+        viewModel.pictureHeight(navbarModel.pictureHeight);
 
         viewModel["widgetBinding"] = {
             displayName: "Navigation bar",

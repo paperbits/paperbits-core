@@ -12,8 +12,10 @@ import { NavbarModelBinder } from "../navbarModelBinder";
     injectable: "navbarEditor"
 })
 export class NavbarEditor {
-    public logoUrl: ko.Observable<string>;
+    public readonly pictureUrl: ko.Observable<string>;
     public readonly navigationItemTitle: ko.Observable<string>;
+    public readonly width: ko.Observable<number>;
+    public readonly height: ko.Observable<number>;
 
     constructor(
         private readonly navbarModelBinder: NavbarModelBinder,
@@ -22,7 +24,9 @@ export class NavbarEditor {
         this.initialize = this.initialize.bind(this);
         this.onMediaSelected = this.onMediaSelected.bind(this);
         this.onNavigationItemChange = this.onNavigationItemChange.bind(this);
-        this.logoUrl = ko.observable<string>();
+        this.pictureUrl = ko.observable<string>();
+        this.width = ko.observable<number>();
+        this.height = ko.observable<number>();
 
         this.navigationItemTitle = ko.observable<string>("Click to select navigation item...");
     }
@@ -39,21 +43,30 @@ export class NavbarEditor {
             const media = await this.mediaService.getMediaByKey(this.model.pictureSourceKey);
 
             if (media) {
-                this.logoUrl(`url(${media.downloadUrl})`);
+                this.pictureUrl(`url(${media.downloadUrl})`);
             }
         }
+
+        this.width.subscribe(this.applyChanges);
+        this.height.subscribe(this.applyChanges);
+    }
+
+    private applyChanges(): void {
+        this.model.pictureWidth = this.width();
+        this.model.pictureHeight = this.height();
+        this.onChange(this.model);
     }
 
     public onMediaSelected(media: MediaContract): void {
         if (media) {
             this.model.pictureSourceKey = media.key;
             this.model.pictureSourceUrl = media.downloadUrl;
-            this.logoUrl(`url(${media.downloadUrl})`);
+            this.pictureUrl(`url(${media.downloadUrl})`);
         }
         else {
             this.model.pictureSourceKey = undefined;
             this.model.pictureSourceUrl = undefined;
-            this.logoUrl(undefined);
+            this.pictureUrl(undefined);
         }
 
         this.onChange(this.model);
