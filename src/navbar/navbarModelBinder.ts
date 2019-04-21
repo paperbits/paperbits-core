@@ -96,7 +96,9 @@ export class NavbarModelBinder implements IModelBinder {
         const navbarContract: NavbarContract = {
             type: "navbar",
             rootKey: navbarModel.rootKey,
-            pictureSourceKey: navbarModel.pictureSourceKey
+            pictureSourceKey: navbarModel.pictureSourceKey,
+            pictureWidth: navbarModel.pictureWidth,
+            pictureHeight: navbarModel.pictureHeight
         };
 
         return navbarContract;

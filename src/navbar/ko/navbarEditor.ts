@@ -14,8 +14,8 @@ import { NavbarModelBinder } from "../navbarModelBinder";
 export class NavbarEditor {
     public readonly pictureUrl: ko.Observable<string>;
     public readonly navigationItemTitle: ko.Observable<string>;
-    public readonly width: ko.Observable<number>;
-    public readonly height: ko.Observable<number>;
+    public readonly pictureWidth: ko.Observable<string | number>;
+    public readonly pictureHeight: ko.Observable<string | number>;
 
     constructor(
         private readonly navbarModelBinder: NavbarModelBinder,
@@ -25,8 +25,8 @@ export class NavbarEditor {
         this.onMediaSelected = this.onMediaSelected.bind(this);
         this.onNavigationItemChange = this.onNavigationItemChange.bind(this);
         this.pictureUrl = ko.observable<string>();
-        this.width = ko.observable<number>();
-        this.height = ko.observable<number>();
+        this.pictureWidth = ko.observable<string | number>();
+        this.pictureHeight = ko.observable<string | number>();
 
         this.navigationItemTitle = ko.observable<string>("Click to select navigation item...");
     }
@@ -44,16 +44,18 @@ export class NavbarEditor {
 
             if (media) {
                 this.pictureUrl(`url(${media.downloadUrl})`);
+                this.pictureWidth(this.model.pictureWidth);
+                this.pictureHeight(this.model.pictureHeight);
             }
         }
 
-        this.width.subscribe(this.applyChanges);
-        this.height.subscribe(this.applyChanges);
+        this.pictureWidth.subscribe(this.applyChanges);
+        this.pictureHeight.subscribe(this.applyChanges);
     }
 
     private applyChanges(): void {
-        this.model.pictureWidth = this.width();
-        this.model.pictureHeight = this.height();
+        this.model.pictureWidth = this.pictureWidth();
+        this.model.pictureHeight = this.pictureHeight();
         this.onChange(this.model);
     }
 
