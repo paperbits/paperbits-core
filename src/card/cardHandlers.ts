@@ -22,6 +22,7 @@ export class CardHandlers implements IWidgetHandler {
             dragSession.targetBinding.model.widgets.splice(dragSession.insertIndex, 0, dragSession.sourceModel);
         }
         dragSession.targetBinding.applyChanges();
+        dragSession.sourceParentBinding.applyChanges();
     }
 
     public getContextualEditor(context: WidgetContext): IContextCommandSet {

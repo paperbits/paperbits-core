@@ -66,25 +66,23 @@ export class GridBindingHandler {
                 sourceElement: sourceElement,
                 sourceModel: sourceModel,
                 sourceBinding: sourceBinding,
-                parentModel: parentModel,
-                parentBinding: parentBinding
+                sourceParentModel: parentModel,
+                sourceParentBinding: parentBinding
             });
             return sourceElement;
         };
 
         const onDragEnd = () => {
             const dragSession = viewManager.getDragSession();
-            const parentBinding = dragSession.parentBinding;
+            const parentBinding = dragSession.sourceParentBinding;
             const acceptorElement = dragSession.targetElement;
             const acceptorBinding = dragSession.targetBinding;
 
             if (acceptorElement) {
-                const parentModel = <any>dragSession.parentModel;
+                const parentModel = <any>dragSession.sourceParentModel;
                 const model = dragSession.sourceModel;
                 parentModel.widgets.remove(model); // TODO: Replace "sections" with "children".
             }
-
-            parentBinding.applyChanges();
 
             if (acceptorBinding && acceptorBinding.handler) {
                 const widgetHandler = widgetService.getWidgetHandler(acceptorBinding.handler);
@@ -124,8 +122,8 @@ export class GridBindingHandler {
                 sourceElement: sourceElement,
                 sourceModel: sourceModel,
                 sourceBinding: sourceBinding,
-                parentModel: parentModel,
-                parentBinding: parentBinding
+                sourceParentModel: parentModel,
+                sourceParentBinding: parentBinding
             });
 
             return sourceElement;
@@ -133,18 +131,16 @@ export class GridBindingHandler {
 
         const onDragEnd = () => {
             const dragSession = viewManager.getDragSession();
-            const parentBinding = dragSession.parentBinding;
+            const parentBinding = dragSession.sourceParentBinding;
             const acceptorElement = dragSession.targetElement;
             const acceptorBinding = dragSession.targetBinding;
 
             if (acceptorElement) {
-                const parentModel = <any>dragSession.parentModel;
+                const parentModel = <any>dragSession.sourceParentModel;
                 const model = <any>dragSession.sourceModel;
 
                 parentModel.widgets.remove(model);
             }
-
-            parentBinding.applyChanges();
 
             if (acceptorBinding && acceptorBinding.handler) {
                 const widgetHandler = widgetService.getWidgetHandler(acceptorBinding.handler);
@@ -184,8 +180,8 @@ export class GridBindingHandler {
                 sourceElement: sourceElement,
                 sourceModel: sourceModel,
                 sourceBinding: sourceBinding,
-                parentModel: parentModel,
-                parentBinding: parentBinding
+                sourceParentModel: parentModel,
+                sourceParentBinding: parentBinding
             });
 
             return sourceElement;
@@ -193,18 +189,16 @@ export class GridBindingHandler {
 
         const onDragEnd = () => {
             const dragSession = viewManager.getDragSession();
-            const parentBinding = dragSession.parentBinding;
+            const parentBinding = dragSession.sourceParentBinding;
             const acceptorElement = dragSession.targetElement;
             const acceptorBinding = dragSession.targetBinding;
 
             if (acceptorElement) {
-                const parentModel = <any>dragSession.parentModel;
+                const parentModel = <any>dragSession.sourceParentModel;
                 const model = <any>dragSession.sourceModel;
 
                 parentModel.widgets.remove(model);
             }
-
-            parentBinding.applyChanges();
 
             if (acceptorBinding && acceptorBinding.handler) {
                 const widgetHandler = widgetService.getWidgetHandler(acceptorBinding.handler);
@@ -232,8 +226,8 @@ export class GridBindingHandler {
             const placeholderHeight = sourceElement.clientHeight - 1 + "px";
             const sourceBinding = GridHelper.getWidgetBinding(sourceElement);
             const sourceModel = GridHelper.getModel(sourceElement);
-            const parentBinding = GridHelper.getParentWidgetBinding(sourceElement);
-            const parentModel = parentBinding.model;
+            const sourceParentBinding = GridHelper.getParentWidgetBinding(sourceElement);
+            const sourceParentModel = sourceParentBinding.model;
 
             const placeholderElement = sourceElement.ownerDocument.createElement("div");
             placeholderElement.style.height = placeholderHeight;
@@ -245,26 +239,23 @@ export class GridBindingHandler {
                 sourceElement: sourceElement,
                 sourceModel: sourceModel,
                 sourceBinding: sourceBinding,
-                parentModel: parentModel,
-                parentBinding: parentBinding,
+                sourceParentModel: sourceParentModel,
+                sourceParentBinding: sourceParentBinding,
             });
             return sourceElement;
         };
 
         const onDragEnd = () => {
             const dragSession = viewManager.getDragSession();
-            const parentBinding = dragSession.parentBinding;
             const acceptorElement = dragSession.targetElement;
             const acceptorBinding = dragSession.targetBinding;
 
             if (acceptorElement) {
-                const parentModel = <any>dragSession.parentModel;
+                const parentModel = <any>dragSession.sourceParentModel;
                 const model = dragSession.sourceModel;
 
                 parentModel.widgets.remove(model); // replace widgets with "children"
             }
-
-            parentBinding.applyChanges();
 
             if (acceptorBinding && acceptorBinding.handler) {
                 const widgetHandler = widgetService.getWidgetHandler(acceptorBinding.handler);

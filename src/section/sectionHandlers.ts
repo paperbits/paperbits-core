@@ -26,6 +26,7 @@ export class SectionHandlers {
                 throw new Error(`Unknown type: ${dragSession.type}`);
         }
         dragSession.targetBinding.applyChanges();
+        dragSession.sourceParentBinding.applyChanges();
     }
 
     public getContextualEditor(context: WidgetContext): IContextCommandSet {

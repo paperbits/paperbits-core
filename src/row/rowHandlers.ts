@@ -26,6 +26,7 @@ export class RowHandlers implements IWidgetHandler {
                 break;
         }
         dragSession.targetBinding.applyChanges();
+        dragSession.sourceParentBinding.applyChanges();
     }
 
     public getContextualEditor(context: WidgetContext): IContextCommandSet {

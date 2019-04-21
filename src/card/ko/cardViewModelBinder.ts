@@ -71,20 +71,23 @@ export class CardViewModelBinder implements IViewModelBinder<CardModel, CardView
 
         cardViewModel.styles(styles);
 
-        const binding: IWidgetBinding = {
-            name: "card",
-            displayName: "Card",
-            flow: "inline",
-            model: model,
-            editor: "card-editor",
-            handler: CardHandlers,
-            applyChanges: () => {
-                this.modelToViewModel(model, cardViewModel);
-                this.eventManager.dispatchEvent("onContentUpdate");
-            }
-        };
+        if (!cardViewModel["widgetBinding"]) {
+            const binding: IWidgetBinding = {
+                name: "card",
+                displayName: "Card",
+                flow: "inline",
+                model: model,
+                editor: "card-editor",
+                handler: CardHandlers,
+                applyChanges: (changes) => {
+                    Object.assign(model, changes);
+                    this.modelToViewModel(model, cardViewModel);
+                    // this.eventManager.dispatchEvent("onContentUpdate");
+                }
+            };
 
-        cardViewModel["widgetBinding"] = binding;
+            cardViewModel["widgetBinding"] = binding;
+        }
 
         return cardViewModel;
     }
