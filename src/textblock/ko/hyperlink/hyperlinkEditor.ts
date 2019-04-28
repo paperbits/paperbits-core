@@ -32,13 +32,13 @@ export class HyperlinkEditor {
     }
 
     public async onHyperlinkChange(hyperlink: HyperlinkModel): Promise<void> {
-        if (!hyperlink) {
-            this.htmlEditorProvider.getCurrentHtmlEditor().removeHyperlink();
-            return;
-        }
-
         const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
-        htmlEditor.setHyperlink(hyperlink);
+
+        if (!hyperlink) {
+            htmlEditor.removeHyperlink();
+        } else {
+            htmlEditor.setHyperlink(hyperlink);
+        }        
     }
 
     private async onSelectionChange(): Promise<void> {
@@ -46,7 +46,8 @@ export class HyperlinkEditor {
         let hyperlink = htmlEditor.getHyperlink();
 
         if (hyperlink) {
-            hyperlink = await this.permalinkResolver.getHyperlinkByTargetKey(hyperlink.targetKey);
+            const newLink = await this.permalinkResolver.getHyperlinkByTargetKey(hyperlink.targetKey);
+            hyperlink = {...hyperlink, ...newLink};
         }
 
         this.hyperlink(hyperlink);

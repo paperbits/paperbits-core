@@ -3,7 +3,7 @@ import template from "./pageSelector.html";
 import { IResourceSelector } from "@paperbits/common/ui";
 import { PageItem, AnchorItem } from "./pageItem";
 import { IPageService } from "@paperbits/common/pages";
-import { Component, Param, Event } from "@paperbits/common/ko/decorators";
+import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { AnchorUtils } from "../../../text/anchorUtils";
 
@@ -24,6 +24,7 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
     public onSelect: (selection: HyperlinkModel) => void;
 
     constructor(private readonly pageService: IPageService) {
+        this.onMounted = this.onMounted.bind(this);
         this.selectPage = this.selectPage.bind(this);
         this.selectAnchor = this.selectAnchor.bind(this);
 
@@ -42,6 +43,15 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
 
         this.searchPages();
     }
+    
+    @OnMounted()
+    public onMounted(): void {
+        setTimeout(() => {            
+            if (this.selectedPage()) {
+                console.log("selected page", this.selectedPage());
+            }
+        }, 300);
+    }
 
     public async searchPages(searchPattern: string = ""): Promise<void> {
         this.working(true);
@@ -53,7 +63,7 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
         this.working(false);
     }
 
-    public async selectPage(page: PageItem, anchorKey?: string): Promise<void> {
+    public async selectPage(page: PageItem): Promise<void> {
         if (!page.hasFocus()) {
             return;
         }
@@ -79,13 +89,21 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
     private async getAnchors(pageItem: PageItem) {
         const pageContent = await this.pageService.getPageContent(pageItem.key);
         const children = AnchorUtils.getHeadingNodes(pageContent);
+        let selectedAnchor: AnchorItem;
 
         const anchors = children.map(item => {
             const anchor = new AnchorItem();
             anchor.shortTitle = item.content[0].text;
             anchor.elementId = item.attrs.id;
+            if (pageItem.selectedAnchor && pageItem.selectedAnchor.elementId === anchor.elementId) {
+                selectedAnchor = anchor;
+            }
             return anchor;
         });
         pageItem.anchors(anchors);
+        if (selectedAnchor) {
+            selectedAnchor.hasFocus(true);
+            this.selectAnchor(selectedAnchor);
+        }
     }
 }

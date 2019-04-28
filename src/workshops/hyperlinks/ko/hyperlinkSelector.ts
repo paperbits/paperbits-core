@@ -3,6 +3,8 @@ import template from "./hyperlinkSelector.html";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { IHyperlinkProvider } from "@paperbits/common/ui";
 import { Component, Event, Param, OnMounted } from "@paperbits/common/ko/decorators";
+import { PageSelector, PageItem, AnchorItem } from "../../page/ko";
+import { IPageService } from "@paperbits/common/pages";
 
 @Component({
     selector: "hyperlink-selector",
@@ -10,16 +12,22 @@ import { Component, Event, Param, OnMounted } from "@paperbits/common/ko/decorat
     injectable: "hyperlinkSelector"
 })
 export class HyperlinkSelector {
+    private isValueSelected: boolean;
     public readonly hyperlinkProvider: ko.Observable<IHyperlinkProvider>;
 
     @Param()
     public hyperlink: ko.Observable<HyperlinkModel>;
 
+    @Param()
+    public targetObject: ko.Observable<any>;
+
     @Event()
     public onChange: (hyperlink: HyperlinkModel) => void;
 
     constructor(
-        private readonly resourcePickers: IHyperlinkProvider[]
+        private readonly resourcePickers: IHyperlinkProvider[],
+        private readonly pageService: IPageService,
+        private readonly pageSelector: PageSelector
     ) {
         // rebinding...
         this.onMounted = this.onMounted.bind(this);
@@ -53,10 +61,22 @@ export class HyperlinkSelector {
         }
     }
 
+    public setProvider(provider: IHyperlinkProvider) {
+        this.hyperlinkProvider(provider);
+    }
+
+    public getCurrentSelection() {
+        const link = this.hyperlink();
+        return `${link.type}: ${link.title} ${link.anchorName ? "(" + link.anchorName + ")" : ""}`;
+    }
+
+    public clearProvider() {
+        this.hyperlinkProvider(null);
+    }
+
     private async updateHyperlinkState(hyperlink: HyperlinkModel): Promise<void> {
         if (!hyperlink) {
             this.hyperlinkProvider(null);
-            this.hyperlink(null);
             return;
         }
 
@@ -68,6 +88,16 @@ export class HyperlinkSelector {
 
         if (!hyperlinkProvider) {
             hyperlinkProvider = this.resourcePickers[this.resourcePickers.length - 1];
+        } else {
+            if (!this.isValueSelected && hyperlinkProvider.componentName === "page-selector" && hyperlink.type === "page") {
+                const pageContract = await this.pageService.getPageByKey(hyperlink.targetKey);
+                const page = new PageItem(pageContract);
+                page.selectedAnchor = new AnchorItem();
+                page.selectedAnchor.elementId = hyperlink.anchor;
+                this.pageSelector.selectedPage(page);
+                await this.pageSelector.selectPage(page);
+                this.isValueSelected = true;
+            }
         }
 
         this.hyperlink(hyperlink);

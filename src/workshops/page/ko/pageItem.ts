@@ -45,6 +45,7 @@ export class PageItem {
         hyperlinkModel.type = "page";
         if (this.selectedAnchor) {
             hyperlinkModel.anchor = this.selectedAnchor.elementId;
+            hyperlinkModel.anchorName = this.selectedAnchor.shortTitle;
         }
         return hyperlinkModel;
     }

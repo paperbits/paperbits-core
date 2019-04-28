@@ -4,12 +4,9 @@ import * as Utils from "@paperbits/common/utils";
 import template from "./formattingTools.html";
 import { IEventManager } from "@paperbits/common/events";
 import { IHtmlEditorProvider, HtmlEditorEvents, alignmentStyleKeys } from "@paperbits/common/editing";
-import { IPageService } from "@paperbits/common/pages";
-import { IRouteHandler } from "@paperbits/common/routing";
-import { Component, OnDestroyed } from "@paperbits/common/ko/decorators";
+import { Component } from "@paperbits/common/ko/decorators";
 import { FontContract, ColorContract } from "@paperbits/styles/contracts";
 import { IViewManager } from "@paperbits/common/ui";
-import { Breakpoints } from "@paperbits/common";
 
 @Component({
     selector: "formatting",
@@ -23,7 +20,8 @@ export class FormattingTools {
     public highlighted: ko.Observable<boolean>;
     public pre: ko.Observable<boolean>;
     public style: ko.Observable<string>;
-    public colored: ko.Observable<string>;
+    public colored: ko.Observable<boolean>;
+    public selectedColorKey: ko.Observable<string>;
     public alignment: ko.Observable<string>;
     public justified: ko.Observable<boolean>;
     public anchored: ko.Observable<boolean>;
@@ -38,8 +36,6 @@ export class FormattingTools {
     constructor(
         private readonly htmlEditorProvider: IHtmlEditorProvider,
         private readonly eventManager: IEventManager,
-        private readonly pageService: IPageService,
-        private readonly routeHandler: IRouteHandler,
         private readonly viewManager: IViewManager
     ) {
         this.updateFormattingState = this.updateFormattingState.bind(this);
@@ -48,7 +44,8 @@ export class FormattingTools {
         this.onColorSelected = this.onColorSelected.bind(this);
 
         this.style = ko.observable<string>();
-        this.colored = ko.observable<string>();
+        this.colored = ko.observable<boolean>();
+        this.selectedColorKey = ko.observable<string>();
         this.font = ko.observable<string>();
         this.sized = ko.observable<boolean>();
         this.ol = ko.observable<boolean>();
@@ -79,6 +76,8 @@ export class FormattingTools {
         this.italic(selectionState.italic);
         this.underlined(selectionState.underlined);
         this.highlighted(selectionState.highlighted);
+        this.colored(!!selectionState.colorKey);
+        this.selectedColorKey(selectionState.colorKey);
         this.ul(selectionState.bulletedList);
         this.ol(selectionState.orderedList);
 
@@ -156,12 +155,10 @@ export class FormattingTools {
 
     public toggleBold(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleBold();
-        this.updateFormattingState();
     }
 
     public toggleItalic(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleItalic();
-        this.updateFormattingState();
     }
 
     // public setStyle(intention: Intention): void {
@@ -176,32 +173,26 @@ export class FormattingTools {
 
     public toggleParagraph(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleParagraph();
-        this.updateFormattingState();
     }
 
     public toggleUnderlined(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleUnderlined();
-        this.updateFormattingState();
     }
 
     public toggleHighlighted(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleHighlighted();
-        this.updateFormattingState();
     }
 
     public toggleSize(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleSize();
-        this.updateFormattingState();
     }
 
     public toggleOrderedList(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleOrderedList();
-        this.updateFormattingState();
     }
 
     public toggleUnorderedList(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleUnorderedList();
-        this.updateFormattingState();
     }
 
     public incIndent() {
@@ -211,8 +202,6 @@ export class FormattingTools {
     }
     public decIndent() {
         this.htmlEditorProvider.getCurrentHtmlEditor().decreaseIndent();
-
-        this.updateFormattingState();
     }
 
     public async toggleAnchor(): Promise<void> {
@@ -263,42 +252,34 @@ export class FormattingTools {
 
     public toggleH1(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleH1();
-        this.updateFormattingState();
     }
 
     public toggleH2(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleH2();
-        this.updateFormattingState();
     }
 
     public toggleH3(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleH3();
-        this.updateFormattingState();
     }
 
     public toggleH4(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleH4();
-        this.updateFormattingState();
     }
 
     public toggleH5(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleH5();
-        this.updateFormattingState();
     }
 
     public toggleH6(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleH6();
-        this.updateFormattingState();
     }
 
     public toggleQuote(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleQuote();
-        this.updateFormattingState();
     }
 
     public toggleFormatted(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleFormatted();
-        this.updateFormattingState();
     }
 
     public toggleAlignLeft(): void {
@@ -319,7 +300,6 @@ export class FormattingTools {
 
     public resetToNormal(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleParagraph();
-        this.updateFormattingState();
     }
 
     public onFontSelected(font: FontContract): void {
@@ -333,8 +313,6 @@ export class FormattingTools {
         else {
             this.htmlEditorProvider.getCurrentHtmlEditor().removeColor();
         }
-
-        this.updateFormattingState();
     }
 
     public dispose(): void {

@@ -48,6 +48,7 @@ export class InlineModelBinder {
                         
                         if (anchor) {
                             markModel.attrs.anchor = anchor;
+                            markModel.attrs.anchorName = mark.attrs["anchorName"];
                         }
                     }
                 }
@@ -90,6 +91,8 @@ export class InlineModelBinder {
                     const model = <HyperlinkModel>mark.attrs;
 
                     contract.attrs = {
+                        anchor: model.anchor,
+                        anchorName: model.anchorName,
                         target: model.target,
                         targetKey: model.targetKey
                     };
