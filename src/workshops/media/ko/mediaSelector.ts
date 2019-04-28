@@ -60,14 +60,18 @@ export class MediaSelector {
         this.working(false);
     }
 
-    public async selectMedia(media: MediaItem): Promise<void> {
+    public selectMedia(media: MediaItem): void {
         this.selectedMedia(media);
-        this.onSelect(media.toMedia());
+        if (this.onSelect) {
+            this.onSelect(media.toMedia());
+        }
     }
 
-    public async selectNone(): Promise<void> {
+    public selectNone(): void {
         this.selectedMedia(undefined);
-        this.onSelect(undefined);
+        if (this.onSelect) {
+            this.onSelect(null);
+        }
     }
 
     public onMediaUploaded(): void {

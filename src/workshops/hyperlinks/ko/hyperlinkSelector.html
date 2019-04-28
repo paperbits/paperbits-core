@@ -1,66 +1,58 @@
-<!-- <fieldset class="flex-item flex-item-grow" data-bind="scrollable: {}"> -->
-    <div class="editor">
-        <label class="form-label">
-            <h1>Hyperlink</h1>
-            <button class="btn btn-info" type="button" data-bind="infoMessageToggle: 'Manage hyperlink'"></button>
-        </label>
-        <div>
-            <div class="tabs">
-                <div class="tab" data-bind="css: { 'tab-is-active': !hyperlinkProvider() }" title="Not selected">
-                    <a href="#" data-bind="click: clearProvider">
-                        <i class="paperbits-icon paperbits-ban"></i>
-                    </a>
-                </div>
-                <!--ko foreach: { data: resourcePickers, as: 'resourcePicker' } -->
-                <!--ko if: resourcePicker.componentName !== 'blog-selector' -->
-                <div class="tab" data-bind="css: { 'tab-is-active': $parent.hyperlinkProvider() && resourcePicker.componentName === $parent.hyperlinkProvider().componentName }, attr: { 'title': resourcePicker.name}">
-                    <a href="#" data-bind="click: $parent.setProvider">
-                        <!--ko if: resourcePicker.componentName === 'page-selector' -->
-                        <i class="paperbits-icon paperbits-single-content-03"></i>
-                        <!--/ko-->
-                        <!--ko if: resourcePicker.componentName === 'blog-selector' -->
-                        <i class="paperbits-icon paperbits-single-content-03"></i>
-                        <!--/ko-->
-                        <!--ko if: resourcePicker.componentName === 'media-selector' -->
-                        <i class="paperbits-icon paperbits-image-2"></i>
-                        <!--/ko-->
-                        <!--ko if: resourcePicker.componentName === 'url-selector' -->
-                        <i class="paperbits-icon paperbits-link-69-2"></i>
-                        <!--/ko-->
-                    </a>
-                </div>
-                <!--/ko-->
-                <!--/ko-->
+<div class="editor">
+    <h1>Hyperlink</h1>
+        <div class="tabs">
+            <div class="tab" data-bind="css: { 'tab-is-active': !hyperlinkProvider() }" title="Not selected">
+                <a href="#" data-bind="click: clearProvider">
+                    <i class="paperbits-icon paperbits-ban"></i>
+                </a>
             </div>
-            
-            <!--ko if: !hyperlinkProvider() -->
-            <div class="flex-container flex-container-column">
-                <div class="flex-item" style="padding-top: 10px;">
-                    <b>(Not selected)</b>
-
-                    <hr />
-                </div>
+            <!--ko foreach: { data: resourcePickers, as: 'resourcePicker' } -->
+            <!--ko if: resourcePicker.componentName !== 'blog-selector' -->
+            <div class="tab"
+                data-bind="css: { 'tab-is-active': $parent.hyperlinkProvider() && resourcePicker.componentName === $parent.hyperlinkProvider().componentName }, attr: { 'title': resourcePicker.name}">
+                <a href="#" data-bind="click: $parent.setProvider">
+                    <!--ko if: resourcePicker.componentName === 'page-selector' -->
+                    <i class="paperbits-icon paperbits-single-content-03"></i>
+                    <!--/ko-->
+                    <!--ko if: resourcePicker.componentName === 'blog-selector' -->
+                    <i class="paperbits-icon paperbits-single-content-03"></i>
+                    <!--/ko-->
+                    <!--ko if: resourcePicker.componentName === 'media-selector' -->
+                    <i class="paperbits-icon paperbits-image-2"></i>
+                    <!--/ko-->
+                    <!--ko if: resourcePicker.componentName === 'url-selector' -->
+                    <i class="paperbits-icon paperbits-link-69-2"></i>
+                    <!--/ko-->
+                </a>
             </div>
             <!--/ko-->
-
-            <!-- ko with: hyperlinkProvider -->
-            <div class="flex-container flex-container-column">
-                <div class="flex-item" style="padding-top: 10px;">
-                    <!--ko with: $component.hyperlink -->
-                    <span data-bind="text: $component.getCurrentSelection()"></span>
-                    <!--/ko-->
-
-                    <!--ko ifnot: $component.hyperlink -->
-                    <b>(Not selected)</b>
-                    <!--/ko-->
-
-                    <hr />
-                </div>
-                <div class="flex-item flex-item-grow" data-bind="resourcePicker: { resourcePicker: $component.hyperlinkProvider, onSelect: $component.onHyperlinkSelected, hyperlink: $component.hyperlink }">
-                </div>
-            </div>
             <!--/ko-->
         </div>
 
-    </div>
-<!-- </fieldset> -->
+        <!--ko if: !hyperlinkProvider() -->
+        <div class="flex-container flex-container-column">
+            <div class="flex-item" style="padding-top: 10px;">
+                <b>(Not selected)</b>
+            </div>
+        </div>
+        <!--/ko-->
+
+        <!-- ko with: hyperlinkProvider -->
+        <div class="flex-container flex-container-column">
+            <div class="flex-item" style="padding-top: 10px;">
+                <!--ko with: $component.hyperlink -->
+                <span data-bind="text: $component.getCurrentSelection()"></span>
+                <!--/ko-->
+
+                <!--ko ifnot: $component.hyperlink -->
+                <b>(Not selected)</b>
+                <!--/ko-->
+
+                <hr />
+            </div>
+            <div class="flex-item flex-item-grow"
+                data-bind="resourcePicker: { resourcePicker: $component.hyperlinkProvider, onSelect: $component.onHyperlinkSelected, hyperlink: $component.hyperlink }">
+            </div>
+        </div>
+        <!--/ko-->
+</div>
