@@ -87,7 +87,7 @@ export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
             title: widgetDisplayName,
             description: media.description,
             getWidgetOrder: async () => {
-                return await this.getWidgetOrderByConfig(media.downloadUrl, media.fileName);
+                return await this.getWidgetOrderByConfig(media.downloadUrl, media.filename);
             }
         };
     }
@@ -118,6 +118,6 @@ export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
     }
 
     public static isMediaFile(media: MediaContract): boolean {
-        return (media.mimeType && media.mimeType.indexOf("image") !== -1) || (media.fileName && this.imageFileExtensions.some(e => media.fileName.endsWith(e)));
+        return (media.mimeType && media.mimeType.indexOf("image") !== -1) || (media.filename && this.imageFileExtensions.some(e => media.filename.endsWith(e)));
     }
 }

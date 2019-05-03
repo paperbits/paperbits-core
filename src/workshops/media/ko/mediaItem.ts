@@ -22,7 +22,7 @@ export class MediaItem {
     constructor(mediaContract: MediaContract) {
         this.key = mediaContract.key;
         this.blobKey = mediaContract.blobKey;
-        this.fileName = ko.observable<string>(mediaContract.fileName);
+        this.fileName = ko.observable<string>(mediaContract.filename);
         this.description = ko.observable<string>(mediaContract.description);
         this.keywords = ko.observable<string>(mediaContract.keywords);
         this.permalink = ko.observable<string>(mediaContract.permalink);
@@ -51,7 +51,7 @@ export class MediaItem {
         return {
             key: this.key,
             blobKey: this.blobKey,
-            fileName: this.fileName(),
+            filename: this.fileName(),
             description: this.description(),
             keywords: this.keywords(),
             mimeType: this.contentType(),

@@ -54,7 +54,7 @@ export class VideoHandlers implements IWidgetHandler, IContentDropHandler {
     }
 
     public getContentDescriptorFromMedia(media: MediaContract): IContentDescriptor {
-        if (!this.matches(media.fileName)) {
+        if (!this.matches(media.filename)) {
             return null;
         }
 
