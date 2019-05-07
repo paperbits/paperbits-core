@@ -7,6 +7,7 @@ import { IRouteHandler } from "@paperbits/common/routing";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { Contract } from "@paperbits/common/contract";
 
+
 export class NavbarModelBinder implements IModelBinder {
     constructor(
         private readonly mediaPermalinkResolver: IPermalinkResolver,
@@ -49,7 +50,7 @@ export class NavbarModelBinder implements IModelBinder {
         return contract.type === "navbar";
     }
 
-    public canHandleModel(model): boolean {
+    public canHandleModel(model: Object): boolean {
         return model instanceof NavbarModel;
     }
 
