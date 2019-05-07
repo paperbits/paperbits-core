@@ -1,4 +1,5 @@
 ﻿import { Contract } from "@paperbits/common/contract";
+import { HyperlinkContract } from "@paperbits/common/editing";
 
 export interface PictureContract extends Contract {
     /**
@@ -22,11 +23,17 @@ export interface PictureContract extends Contract {
     animation?: string;
 
     /**
-     * Key of a permalink used to assign hyperlink.
+     * Hyperlink attached to the picture.
      */
-    targetKey?: string;
+    hyperlink?: HyperlinkContract
 
+    /**
+     * Picture width.
+     */
     width?: number;
 
+    /**
+     * Picture height.
+     */
     height?: number;
 }

@@ -93,7 +93,7 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
 
         const anchors = children.map(item => {
             const anchor = new AnchorItem();
-            anchor.shortTitle = item.content[0].text;
+            anchor.shortTitle = item.nodes[0].text;
             anchor.elementId = item.attrs.id;
             if (pageItem.selectedAnchor && pageItem.selectedAnchor.elementId === anchor.elementId) {
                 selectedAnchor = anchor;

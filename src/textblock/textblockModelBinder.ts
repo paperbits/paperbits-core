@@ -1,4 +1,4 @@
-import { BlockModel } from "../text/models";
+import { BlockModel } from "@paperbits/common/text/models";
 import { IModelBinder } from "@paperbits/common/editing";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { Contract } from "@paperbits/common";

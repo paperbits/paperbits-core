@@ -19,7 +19,6 @@ import { BlogModule } from "./blog/blog.module";
 import { ColumnModule } from "./column/ko/column.module";
 import { SectionModule } from "./section/ko/section.module";
 import { RowModule } from "./row/ko/row.module";
-import { SliderModule } from "./slider/ko/slider.module";
 import { SearchResultsModule } from "./search-results/ko/searchResults.module";
 import { GoogleTagManager } from "./gtm/ko/gtm";
 import { IntercomViewModel } from "./intercom/ko/intercomViewModel";
@@ -102,7 +101,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new VideoPlayerModule());
         injector.bindModule(new YoutubePlayerModule());
         injector.bindModule(new TestimonialsModule());
-        injector.bindModule(new SliderModule());
         injector.bindModule(new SearchResultsModule());
         injector.bindModule(new CardModule());
 

@@ -18,7 +18,6 @@ import { SectionEditorModule } from "./section/ko/sectionEditor.module";
 import { RowEditorModule } from "./row/ko/rowEditor.module";
 import { BlockWorkshopModule } from "./workshops/block/ko/block.module";
 import { BlogWorkshopModule } from "./workshops/blog/ko/blog.module";
-import { SliderEditorModule } from "./slider/ko/sliderEditor.module";
 import { LayoutWorkshopModule } from "./workshops/layout/ko/layout.module";
 import { PageWorkshopModule } from "./workshops/page/ko/page.module";
 import { MediaWorkshopModule } from "./workshops/media/ko/media.module";
@@ -128,7 +127,6 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindModule(new SectionEditorModule());
         injector.bindModule(new LayoutEditorModule());
         injector.bindModule(new PageEditorModule());
-        injector.bindModule(new SliderEditorModule());
         injector.bindModule(new CardEditorModule());
 
         injector.bindToCollection("autostart", HostBindingHandler);

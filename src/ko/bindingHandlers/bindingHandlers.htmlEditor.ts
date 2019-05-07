@@ -1,14 +1,16 @@
 ﻿import * as ko from "knockout";
 import { IHtmlEditor } from "@paperbits/common/editing/IHtmlEditor";
 import { IEventManager } from "@paperbits/common/events";
+import { BlockModel } from "@paperbits/common/text/models";
 import { TextblockViewModel } from "../../textblock/ko/textblockViewModel";
+
 
 export class HtmlEditorBindingHandler {
     constructor(eventManager: IEventManager) {
         ko.bindingHandlers["htmlEditor"] = {
             init(element: HTMLElement, valueAccessor: () => TextblockViewModel) {
                 const config = valueAccessor();
-                const stateObservable: ko.Observable<Object> = config.state;
+                const stateObservable: ko.Observable<BlockModel[]> = config.state;
                 const htmlEditor: IHtmlEditor = ko.unwrap(config.htmlEditor);
 
                 const onEscapeKeyPressed = () => htmlEditor.detachFromElement();

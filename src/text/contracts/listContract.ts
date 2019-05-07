@@ -8,5 +8,5 @@ export interface ListContract extends BlockContract {
     /**
      * Collection of list items.
      */
-    content: ListItemContract[];
+    nodes: ListItemContract[];
 }

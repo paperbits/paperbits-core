@@ -38,7 +38,7 @@ export class NavbarModelBinder implements IModelBinder {
             navbarModel.pictureHeight = contract.pictureHeight;
 
             if (!navbarModel.pictureSourceUrl) {
-                console.warn(`Unable to set navbar branding. Media with source key ${contract.sourceKey} not found.`);
+                console.warn(`Unable to set navbar branding. Media with source key ${contract.pictureSourceKey} not found.`);
             }
         }
 

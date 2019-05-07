@@ -56,6 +56,7 @@ export class TableOfContentsEditor {
 
     public async onNavigationItemChange(navigationItem: NavigationItemContract): Promise<void> {
         const contract: TableOfContentsContract = {
+            type: "table-of-contents",
             title: this.model.title,
             navigationItemKey: navigationItem.key
         };

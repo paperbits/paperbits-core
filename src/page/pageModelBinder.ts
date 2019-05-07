@@ -33,7 +33,7 @@ export class PageModelBinder implements IModelBinder {
             pageModel.title = pageContract.title;
             pageModel.description = pageContract.description;
             pageModel.keywords = pageContract.keywords;
-            pageModel.widgets = [<any>new PlaceholderModel(pageContract, "Content")];
+            pageModel.widgets = [<any>new PlaceholderModel("Content")];
 
             return pageModel;
         }
@@ -73,7 +73,7 @@ export class PageModelBinder implements IModelBinder {
         pageModel.title = "";
         pageModel.description = "";
         pageModel.keywords = "";
-        pageModel.widgets = [<any>new PlaceholderModel(pageContract, "No pages")];
+        pageModel.widgets = [<any>new PlaceholderModel("No pages")];
 
         return pageModel;
     }

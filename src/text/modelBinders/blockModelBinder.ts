@@ -2,7 +2,7 @@ import * as Utils from "@paperbits/common/utils";
 import { Contract } from "@paperbits/common";
 import { IStyleCompiler } from "@paperbits/common/styles";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
-import { BlockModel } from "../models/blockModel";
+import { BlockModel } from "@paperbits/common/text/models/blockModel";
 import { BlockContract } from "../contracts/blockContract";
 
 export class BlockModelBinder {
@@ -28,7 +28,7 @@ export class BlockModelBinder {
         if (contract.attrs) {
             if (contract.attrs.styles) {
                 model.attrs = { styles: contract.attrs.styles };
-                const className = await this.styleCompiler.getClassNamesByStyleConfigAsync(<any>contract.attrs.styles);
+                const className = await this.styleCompiler.getClassNamesByStyleConfigAsync(contract.attrs.styles);
                 if (className) {
                     model.attrs.className = className;
                 }
@@ -44,13 +44,13 @@ export class BlockModelBinder {
             model.attrs.id = Utils.identifier();
         }
 
-        if (contract.content && contract.content.length > 0) {
-            const modelPromises = contract.content.map(async (contract: Contract) => {
+        if (contract.nodes && contract.nodes.length > 0) {
+            const modelPromises = contract.nodes.map(async (contract: Contract) => {
                 const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
                 return await modelBinder.contractToModel(contract);
             });
 
-            model.content = await Promise.all<any>(modelPromises);
+            model.nodes = await Promise.all<any>(modelPromises);
         }
 
         return model;
@@ -71,12 +71,12 @@ export class BlockModelBinder {
             }
         }
 
-        if (model.content && model.content.length > 0) {
-            contract.content = [];
+        if (model.nodes && model.nodes.length > 0) {
+            contract.nodes = [];
             
-            model.content.forEach(contentItem => {
+            model.nodes.forEach(contentItem => {
                 const modelBinder = this.modelBinderSelector.getModelBinderByModel(contentItem);
-                contract.content.push(<any>modelBinder.modelToContract(contentItem));
+                contract.nodes.push(<any>modelBinder.modelToContract(contentItem));
             });
         }
         return contract;

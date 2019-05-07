@@ -26,7 +26,7 @@ export class TestimonialsModelBinder implements IModelBinder {
     }
 
     public modelToContract(model: TestimonialsModel): Contract {
-        const contract: Contract = {
+        const contract: TestimonialsContract = {
             type: "testimonials",
             textContent : model.textContent,
             starsCount : model.starsCount, 

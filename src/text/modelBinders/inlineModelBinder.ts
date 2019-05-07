@@ -2,8 +2,9 @@ import { Contract } from "@paperbits/common";
 import { IPermalinkResolver, HyperlinkModel } from "@paperbits/common/permalinks";
 import { IPageService } from "@paperbits/common/pages";
 import { IStyleCompiler } from "@paperbits/common/styles";
+import { InlineModel, MarkModel, ColorModel } from "@paperbits/common/text/models";
 import { InlineContract, MarkContract } from "../contracts";
-import { InlineModel, MarkModel, ColorModel } from "../models";
+
 
 
 export class InlineModelBinder {

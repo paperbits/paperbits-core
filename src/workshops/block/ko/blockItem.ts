@@ -1,6 +1,5 @@
 ﻿import * as ko from "knockout";
-import { BlockContract } from "@paperbits/common/blocks/blockContract";
-import { Contract } from "@paperbits/common/contract";
+import { BlockContract } from "@paperbits/common/blocks";
 
 
 export class BlockItem {
@@ -22,6 +21,7 @@ export class BlockItem {
     public toBlock(): BlockContract {
         return {
             key: this.key,
+            type: "block",
             title: this.title(),
             description: this.description(),
             contentKey: this.contentKey

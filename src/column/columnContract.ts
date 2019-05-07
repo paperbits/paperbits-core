@@ -6,4 +6,5 @@ export interface ColumnContract extends Contract {
     offset?: Breakpoints;
     overflowX?: string;
     overflowY?: string;
+    order?: Breakpoints;
 }

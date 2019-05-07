@@ -15,5 +15,5 @@ export interface BlockContract extends Contract {
     /**
      * Child nodes.
      */
-    content?: InlineContract[];
+    nodes?: InlineContract[];
 }

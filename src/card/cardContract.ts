@@ -4,4 +4,5 @@ export interface CardContract extends Contract {
     alignment?: Breakpoints;
     overflowX?: string;
     overflowY?: string;
+    styles: any;
 }

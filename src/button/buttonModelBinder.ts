@@ -2,6 +2,7 @@ import { IModelBinder } from "@paperbits/common/editing";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { ButtonModel } from "./buttonModel";
 import { Contract } from "@paperbits/common";
+import { ButtonContract } from "./buttonContract";
 
 export class ButtonModelBinder implements IModelBinder {
     private readonly permalinkResolver: IPermalinkResolver;
@@ -18,7 +19,7 @@ export class ButtonModelBinder implements IModelBinder {
         return model instanceof ButtonModel;
     }
 
-    public async contractToModel(buttonContract: Contract): Promise<ButtonModel> {
+    public async contractToModel(buttonContract: ButtonContract): Promise<ButtonModel> {
         const model = new ButtonModel();
         model.label = buttonContract.label;
         model.styles = buttonContract.styles || { appearance: "components/button/default" };
@@ -31,7 +32,7 @@ export class ButtonModelBinder implements IModelBinder {
     }
 
     public modelToContract(buttonModel: ButtonModel): Contract {
-        const buttonConfig: Contract = {
+        const buttonConfig: ButtonContract = {
             type: "button",
             label: buttonModel.label,
             styles: buttonModel.styles

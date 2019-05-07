@@ -25,6 +25,7 @@ export class PageViewModelBinder implements IViewModelBinder<PageModel, PageView
             const page = await this.pageService.getPageByPermalink(url);
 
             const contentContract = {
+                type: "page",
                 nodes: []
             };
 

@@ -77,7 +77,7 @@ export class MapHandlers implements IWidgetHandler, IContentDropHandler {
                     }
                 }
 
-                return location ? { location: location, object: "map" } : null;
+                return location ? { location: location, type: "map" } : null;
             }
         }
 

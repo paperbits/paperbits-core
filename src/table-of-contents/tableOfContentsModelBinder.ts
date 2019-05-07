@@ -30,7 +30,7 @@ export class TableOfContentsModelBinder implements IModelBinder {
     private processAnchorItems(items: BlockContract[]): NavigationItemModel[] {
         return items.map((item) => {
             const itemModel = new NavigationItemModel();
-            itemModel.label = item.content[0].text;
+            itemModel.label = item.nodes[0].text;
             itemModel.url = `#${item.attrs.id}`;
             return itemModel;
         });

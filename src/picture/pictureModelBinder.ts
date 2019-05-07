@@ -38,9 +38,9 @@ export class PictureModelBinder implements IModelBinder {
             }
         }
 
-        if (pictureContract.targetKey) {
+        if (pictureContract.hyperlink) {
             try {
-                pictureModel.hyperlink = await this.permalinkResolver.getHyperlinkByTargetKey(pictureContract.targetKey);
+                pictureModel.hyperlink = await this.permalinkResolver.getHyperlinkByTargetKey(pictureContract.hyperlink.targetKey);
             }
             catch (error) {
                 console.log(error);
