@@ -29,13 +29,6 @@ export class HyperlinkSelector {
         private readonly pageService: IPageService,
         private readonly pageSelector: PageSelector
     ) {
-        // rebinding...
-        this.onMounted = this.onMounted.bind(this);
-        this.updateHyperlinkState = this.updateHyperlinkState.bind(this);
-        this.onHyperlinkSelected = this.onHyperlinkSelected.bind(this);
-        this.onResourcePickerChange = this.onResourcePickerChange.bind(this);
-
-        // setting up...
         this.hyperlink = ko.observable<HyperlinkModel>();
         this.hyperlinkProvider = ko.observable<IHyperlinkProvider>(null);
     }
@@ -61,16 +54,16 @@ export class HyperlinkSelector {
         }
     }
 
-    public setProvider(provider: IHyperlinkProvider) {
+    public setProvider(provider: IHyperlinkProvider): void {
         this.hyperlinkProvider(provider);
     }
 
-    public getCurrentSelection() {
-        const link = this.hyperlink();
-        return `${link.type}: ${link.title} ${link.anchorName ? "(" + link.anchorName + ")" : ""}`;
+    public getCurrentSelection(): string {
+        const hyperlink = this.hyperlink();
+        return `${ this.hyperlinkProvider().name}: ${hyperlink.title} ${hyperlink.anchorName ? "(" + hyperlink.anchorName + ")" : ""}`;
     }
 
-    public clearProvider() {
+    public clearProvider(): void {
         this.hyperlinkProvider(null);
     }
 
@@ -89,7 +82,7 @@ export class HyperlinkSelector {
         if (!hyperlinkProvider) {
             hyperlinkProvider = this.resourcePickers[this.resourcePickers.length - 1];
         } else {
-            if (!this.isValueSelected && hyperlinkProvider.componentName === "page-selector" && hyperlink.type === "page") {
+            if (!this.isValueSelected && hyperlinkProvider.componentName === "page-selector") {
                 const pageContract = await this.pageService.getPageByKey(hyperlink.targetKey);
                 const page = new PageItem(pageContract);
                 page.selectedAnchor = new AnchorItem();

@@ -42,7 +42,7 @@ export class PageItem {
         hyperlinkModel.target = "_blank";
         hyperlinkModel.targetKey = this.key;
         hyperlinkModel.href = this.permalink();
-        hyperlinkModel.type = "page";
+        
         if (this.selectedAnchor) {
             hyperlinkModel.anchor = this.selectedAnchor.elementId;
             hyperlinkModel.anchorName = this.selectedAnchor.shortTitle;
