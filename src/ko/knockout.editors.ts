@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 
 ko.components.register("spinner", {
-    template: `<div class="spinner"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`,
+    template: `<div class="dot"></div><div class="dot"></div><div class="dot"></div>`,
     viewModel: () => null
 });

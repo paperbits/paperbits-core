@@ -146,17 +146,21 @@ export class SettingsWorkshop {
 
     private async setFaviconUri(sourceKey: string) {
         if (sourceKey) {
-            const mediaContract = await this.mediaService.getMediaByKey(sourceKey);
-
-            if (mediaContract) {
-                this.faviconFileName(mediaContract.downloadUrl);
-                this.viewManager.loadFavIcon();
-
-                const faviconModel = new BackgroundModel();
-                faviconModel.sourceUrl = mediaContract.downloadUrl;
-
-                this.favicon(faviconModel);
-            }
+            return;
         }
+
+        const mediaContract = await this.mediaService.getMediaByKey(sourceKey);
+
+        if (!mediaContract) {
+            console.warn(`Unable to fetch favicon by key ${sourceKey}`);
+        }
+
+        this.faviconFileName(mediaContract.downloadUrl);
+        this.viewManager.loadFavIcon(mediaContract.downloadUrl);
+
+        const faviconModel = new BackgroundModel();
+        faviconModel.sourceUrl = mediaContract.downloadUrl;
+
+        this.favicon(faviconModel);
     }
 }

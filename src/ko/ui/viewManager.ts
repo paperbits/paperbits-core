@@ -13,10 +13,9 @@ import { IRouteHandler } from "@paperbits/common/routing";
 import { ISiteService, SettingsContract } from "@paperbits/common/sites";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
-import { Component, OnMounted } from "@paperbits/common/ko/decorators";
+import { Component, OnMounted, RuntimeComponent } from "@paperbits/common/ko/decorators";
 
 declare let uploadDialog: HTMLInputElement;
-
 
 
 @Component({
@@ -26,6 +25,7 @@ declare let uploadDialog: HTMLInputElement;
 })
 export class ViewManager implements IViewManager {
     private contextualEditorsBag: Bag<IContextCommandSet> = {};
+
     public journey: ko.ObservableArray<IView>;
     public journeyName: ko.Computed<string>;
     public itemSelectorName: ko.Observable<string>;
@@ -40,12 +40,9 @@ export class ViewManager implements IViewManager {
     public selectedElementContextualEditor: ko.Observable<IContextCommandSet>;
     public viewport: ko.Observable<string>;
     public hostDocument: Document;
-
     public host: ko.Observable<IComponent>;
-
     public shutter: ko.Observable<boolean>;
     public dragSession: ko.Observable<DragSession>;
-
     public mode: ViewManagerMode;
 
     constructor(
@@ -54,12 +51,6 @@ export class ViewManager implements IViewManager {
         private readonly routeHandler: IRouteHandler,
         private readonly mediaService: IMediaService,
         private readonly siteService: ISiteService) {
-
-        this.eventManager = eventManager;
-        this.globalEventHandler = globalEventHandler;
-        this.routeHandler = routeHandler;
-        this.mediaService = mediaService;
-        this.siteService = siteService;
 
         // setting up...
         this.mode = ViewManagerMode.selecting;
@@ -81,13 +72,10 @@ export class ViewManager implements IViewManager {
         this.selectedElement = ko.observable<IHighlightConfig>();
         this.selectedElementContextualEditor = ko.observable<IContextCommandSet>();
         this.viewport = ko.observable<string>("xl");
-
-        this.host = ko.observable<IComponent>({ name: "content-host" });
-
+        this.host = ko.observable<IComponent>();
         this.shutter = ko.observable<boolean>(true);
         this.dragSession = ko.observable();
-
-        this.primaryToolboxVisible = ko.observable<boolean>(true);
+        this.primaryToolboxVisible = ko.observable<boolean>(false);
 
         this.globalEventHandler.addDragEnterListener(this.foldEverything.bind(this));
         this.globalEventHandler.addDragDropListener(this.onDragEnd.bind(this));
@@ -103,7 +91,27 @@ export class ViewManager implements IViewManager {
 
     @OnMounted()
     public async initialize(): Promise<void> {
-        this.loadFavIcon();
+        const settings = await this.siteService.getSiteSettings();
+
+        if (!settings) {
+            console.warn(`Unable to initialize designer.`);
+            this.host({ name: "setup-dialog" });
+            return;
+        }
+
+        if (settings.site.faviconSourceKey) {
+            const mediaContract = await this.mediaService.getMediaByKey(settings.site.faviconSourceKey);
+
+            if (!mediaContract) {
+                console.warn(`Unable to fetch favicon by key ${settings.site.faviconSourceKey}`);
+            }
+
+            await this.loadFavIcon(settings.site.faviconSourceKey);
+        }
+
+        this.eventManager.dispatchEvent("onStyleChange");
+        this.host({ name: "content-host" });
+        this.primaryToolboxVisible(true);
     }
 
     public setHost(component: IComponent): void {
@@ -128,16 +136,12 @@ export class ViewManager implements IViewManager {
         this.closeView();
     }
 
-    public async loadFavIcon(): Promise<void> {
-        const settings = await this.siteService.getSiteSettings();
-
-        if (settings && settings.site.faviconSourceKey) {
-            const iconFile = await this.mediaService.getMediaByKey(settings.site.faviconSourceKey);
-
-            if (iconFile && iconFile.downloadUrl) {
-                MetaDataSetter.setFavIcon(iconFile.downloadUrl);
-            }
+    public async loadFavIcon(faviconUrl: string): Promise<void> {
+        if (!faviconUrl) {
+            return;
         }
+
+        MetaDataSetter.setFavIcon(faviconUrl);
     }
 
     public getCurrentJourney(): string {
