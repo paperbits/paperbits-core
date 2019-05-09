@@ -1,7 +1,9 @@
 <workshops></workshops>
 <dropbucket></dropbucket>
 
+<!-- ko if: host -->
 <div class="viewport" data-bind="host: { viewport: viewport, host: host }"></div>
+<!-- /ko -->
 
 <div class="toasts" data-bind="foreach: toasts">
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
