@@ -5,6 +5,7 @@ import { BlockStyleSelector } from "./formatting/blockStyleSelector";
 import { FormattingTools } from "./formatting/formattingTools";
 import { HyperlinkEditor } from "./hyperlink/hyperlinkEditor";
 import { TextblockEditor } from "./textblockEditor";
+import { TextStyleSelector } from "./formatting/textStyleSelector";
 
 export class TextblockEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {
@@ -13,5 +14,6 @@ export class TextblockEditorModule implements IInjectorModule {
         injector.bind("hyperlinkEditor", HyperlinkEditor);
         injector.bind("textblockEditor", TextblockEditor);
         injector.bind("blockStyleSelector", BlockStyleSelector);
+        injector.bind("textStyleSelector", TextStyleSelector);
     }
 }
