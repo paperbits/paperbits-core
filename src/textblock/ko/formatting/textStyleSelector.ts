@@ -4,6 +4,7 @@ import { IHtmlEditorProvider } from "@paperbits/common/editing";
 import { Component } from "@paperbits/common/ko/decorators";
 import { StyleService } from "@paperbits/styles";
 import { IViewManager } from "@paperbits/common/ui/IViewManager";
+import * as _ from "lodash";
 
 @Component({
     selector: "text-style-selector",
@@ -24,13 +25,12 @@ export class TextStyleSelector {
     
     private async loadTextStyles() {
         const textStyles = await this.styleService.getVariations("globals", "body");
-        this.textStyles(textStyles);
+        this.textStyles(_.sortBy(textStyles, ["displayName"]));
     }
 
     public setTextStyle(item): void {
-        const textStyles = this.textStyles();
         let selectedKey = item.key;
-        if (item.key === textStyles[0].key) {
+        if (selectedKey.split("/").pop() === "default") {
             selectedKey = undefined;
         }
         this.htmlEditorProvider.getCurrentHtmlEditor().setTextStyle(selectedKey, this.viewManager.getViewport());
