@@ -1,4 +1,3 @@
-
 import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
 import template from "./formattingTools.html";
@@ -7,6 +6,7 @@ import { IHtmlEditorProvider, HtmlEditorEvents, alignmentStyleKeys } from "@pape
 import { Component } from "@paperbits/common/ko/decorators";
 import { FontContract, ColorContract } from "@paperbits/styles/contracts";
 import { IViewManager } from "@paperbits/common/ui";
+import { StyleService } from "@paperbits/styles/styleService";
 
 @Component({
     selector: "formatting",
@@ -14,12 +14,15 @@ import { IViewManager } from "@paperbits/common/ui";
     injectable: "formattingTools"
 })
 export class FormattingTools {
+    private textStyles: {}[];
+
     public bold: ko.Observable<boolean>;
     public italic: ko.Observable<boolean>;
     public underlined: ko.Observable<boolean>;
     public highlighted: ko.Observable<boolean>;
     public pre: ko.Observable<boolean>;
     public style: ko.Observable<string>;
+    public appearance: ko.Observable<string>;
     public colored: ko.Observable<boolean>;
     public selectedColorKey: ko.Observable<string>;
     public alignment: ko.Observable<string>;
@@ -36,7 +39,8 @@ export class FormattingTools {
     constructor(
         private readonly htmlEditorProvider: IHtmlEditorProvider,
         private readonly eventManager: IEventManager,
-        private readonly viewManager: IViewManager
+        private readonly viewManager: IViewManager,
+        private readonly styleService: StyleService
     ) {
         this.updateFormattingState = this.updateFormattingState.bind(this);
         this.toggleUnorderedList = this.toggleUnorderedList.bind(this);
@@ -44,6 +48,7 @@ export class FormattingTools {
         this.onColorSelected = this.onColorSelected.bind(this);
 
         this.style = ko.observable<string>();
+        this.appearance = ko.observable<string>();
         this.colored = ko.observable<boolean>();
         this.selectedColorKey = ko.observable<string>();
         this.font = ko.observable<string>();
@@ -61,6 +66,11 @@ export class FormattingTools {
         this.anchored = ko.observable<boolean>();
 
         eventManager.addEventListener(HtmlEditorEvents.onSelectionChange, this.updateFormattingState);
+        this.loadTextStyles();
+    }
+
+    private async loadTextStyles() {
+        this.textStyles = await this.styleService.getVariations("globals", "body");
     }
 
     private updateFormattingState(): void {
@@ -104,8 +114,22 @@ export class FormattingTools {
                     console.warn(`Unknown alignment style key: ${alignmentStyleKey}`);
             }
         }
-
         this.alignment(alignment);
+
+        let appearance = this.textStyles[0]["displayName"];
+        
+        if (selectionState.appearance) {
+            // const breakpoint = Utils.getClosestBreakpoint(selectionState.appearance, this.viewManager.getViewport());
+            // const styleKey = selectionState.appearance[breakpoint];
+            const styleKey = selectionState.appearance;
+
+            const textStyle = this.textStyles.find(item => item["key"] === styleKey);
+            appearance = textStyle && textStyle["displayName"];
+        }
+
+        this.appearance(appearance);
+
+        
 
         this.anchored(!!selectionState.anchorKey);
 

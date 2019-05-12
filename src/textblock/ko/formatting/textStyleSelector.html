@@ -1,0 +1,7 @@
+<div class="editor">
+    <div id="blockStyleSelector" class="tools-paragraphstyle">
+        <!--ko foreach: { data: textStyles, as: 'textStyle' } -->
+        <a href="#" class="tools-paragraph-style tools-paragraph-style-normal" data-bind="text: textStyle.displayName, click: $parent.setTextStyle"></a>
+        <!--/ko-->
+    </div>
+</div>
