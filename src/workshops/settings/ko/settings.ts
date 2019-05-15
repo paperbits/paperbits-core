@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import template from "./settings.html";
-import { Component } from "@paperbits/common/ko/decorators";
+import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { IViewManager } from "@paperbits/common/ui";
 import { ISiteService, SettingsContract } from "@paperbits/common/sites";
 import { IMediaService, MediaContract } from "@paperbits/common/media";
@@ -56,11 +56,10 @@ export class SettingsWorkshop {
         this.faviconSourceKey = ko.observable<string>();
         this.faviconFileName = ko.observable<string>();
         this.favicon = ko.observable<BackgroundModel>();
-
-        this.loadSettings();
     }
 
-    private async loadSettings(): Promise<void> {
+    @OnMounted()
+    public async initialize(): Promise<void> {
         this.working(true);
 
         const settings = await this.siteService.getSiteSettings();
@@ -144,8 +143,8 @@ export class SettingsWorkshop {
         }
     }
 
-    private async setFaviconUri(sourceKey: string) {
-        if (sourceKey) {
+    private async setFaviconUri(sourceKey: string): Promise<void> {
+        if (!sourceKey) {
             return;
         }
 

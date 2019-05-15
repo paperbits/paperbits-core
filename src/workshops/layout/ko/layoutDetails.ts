@@ -53,9 +53,9 @@ export class LayoutDetails {
             return true; // !this.isDefaultLayout();
         });
 
-        const uri = this.layoutItem.permalinkTemplate();
+        const permalinkTemplate = this.layoutItem.permalinkTemplate();
         
-        this.routeHandler.navigateTo(uri, this.layoutItem.title(), { usePagePlaceholder: true });
+        this.routeHandler.navigateTo(permalinkTemplate, this.layoutItem.title(), { usePagePlaceholder: true });
     }
 
     private async updateLayout(): Promise<void> {
