@@ -60,8 +60,8 @@ ko.bindingHandlers["surface"] = {
                         settings = JSON.parse(settingsString);
                     }
 
-                    Objects.setValueAt(`${view.component.name}/top`, settings, Math.floor(rect.top));
-                    Objects.setValueAt(`${view.component.name}/left`, settings, Math.floor(rect.left));
+                    Objects.setValueWithCompensation(`${view.component.name}/top`, settings, Math.floor(rect.top));
+                    Objects.setValueWithCompensation(`${view.component.name}/left`, settings, Math.floor(rect.left));
 
                     localStorage["settings"] = JSON.stringify(settings);
                 }
@@ -85,11 +85,11 @@ ko.bindingHandlers["surface"] = {
                     }
 
                     if (view.resize.contains("horizontally")) {
-                        Objects.setValueAt(`${view.component.name}/width`, settings, element.clientWidth);
+                        Objects.setValueWithCompensation(`${view.component.name}/width`, settings, element.clientWidth);
                     }
 
                     if (view.resize.contains("vertically")) {
-                        Objects.setValueAt(`${view.component.name}/height`, settings, element.clientHeight);
+                        Objects.setValueWithCompensation(`${view.component.name}/height`, settings, element.clientHeight);
                     }
 
                     localStorage["settings"] = JSON.stringify(settings);

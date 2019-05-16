@@ -49,6 +49,8 @@ import { CropperBindingHandler } from "./workshops/cropper/cropper";
 import { GridEditor } from "./grid/ko";
 import { CardEditorModule } from "./card/ko/cardEditor.module";
 import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkResolver.design";
+import { GridEditorModule } from "./grid-layout-section/ko/gridEditor.module";
+import { GridCellEditorModule } from "./grid-cell/ko/gridCellEditor.module";
 
 import "./ko/bindingHandlers/bindingHandlers.command";
 import { PageHost } from "./workshops/page/ko/pageHost";
@@ -68,6 +70,9 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bind("mediaHyperlinkProvider", MediaHyperlinkProvider);
         injector.bind("urlHyperlinkProvider", UrlHyperlinkProvider);
         injector.bind("gridEditor", GridEditor);
+
+        // injector.bind("grid", Grid);
+
         injector.bindToCollection("autostart", KnockoutValidation);
         injector.bindToCollection("autostart", ResizableBindingHandler);
         injector.bindToCollection("autostart", CropperBindingHandler);
@@ -122,6 +127,8 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new ColumnEditorModule());
         injector.bindModule(new RowEditorModule());
         injector.bindModule(new SectionEditorModule());
+        injector.bindModule(new GridEditorModule());
+        injector.bindModule(new GridCellEditorModule());
         injector.bindModule(new LayoutEditorModule());
         injector.bindModule(new PageEditorModule());
         injector.bindModule(new CardEditorModule());

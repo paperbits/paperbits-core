@@ -445,6 +445,8 @@ export class ViewManager implements IViewManager {
 
     public onDragEnd(): void {
         this.unfoldEverything();
+        this.highlightedElement(null);
+        this.selectedElement(null);
     }
 
     public addBalloon(component: IComponent): void {

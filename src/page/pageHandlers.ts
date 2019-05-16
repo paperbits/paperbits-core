@@ -33,7 +33,7 @@ export class PageHandlers implements IWidgetHandler {
                 position: context.half,
                 tooltip: "Add section",
                 component: {
-                    name: "section-layout-selector",
+                    name: "grid-layout-selector",
                     params: {
                         onSelect: (newWidgetModel: any) => {
                             console.log("Page handler added section");
@@ -59,7 +59,7 @@ export class PageHandlers implements IWidgetHandler {
                 position: "center",
                 tooltip: "Add section",
                 component: {
-                    name: "section-layout-selector",
+                    name: "grid-layout-selector",
                     params: {
                         onSelect: (model: WidgetModel) => {
                             context.model.widgets.push(model);

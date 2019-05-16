@@ -1,0 +1,16 @@
+<div class="editor row-layout-selector">
+    <div class="flex-container flex-container-row">
+        <h1>
+            Add section
+        </h1>
+        <hr />
+
+        <!-- ko foreach: { data: $component.snippets, as: 'snippet' } -->
+        <div class="snippet-grid" data-bind="click: $component.selectLayout, styled: snippet.styles">
+            <!-- ko foreach: { data: snippet.widgets, as: 'widget' } -->
+            <div class="snippet-grid-cell" data-bind="styled: widget.styles, attr: { role: widget.role }"></div>
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+    </div>
+</div>

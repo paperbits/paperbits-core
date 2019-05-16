@@ -1,6 +1,7 @@
 
 import * as ko from "knockout";
 import * as Utils from "@paperbits/common";
+import * as Objects from "@paperbits/common/objects";
 import template from "./sectionEditor.html";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { SectionModel } from "../sectionModel";
@@ -117,32 +118,27 @@ export class SectionEditor {
     }
 
     public onBackgroundUpdate(background: BackgroundContract): void {
-        let instanceKey;
+        Objects.setStructure("styles/instance/background", this.model);
+        this.model["styles"]["instance"]["background"] = background;
 
-        if (this.model.styles && this.model.styles["instance"]) {
-            instanceKey = this.model.styles["instance"];
-        }
-        else {
-            instanceKey = `instances/section-${Utils.identifier()}`;
-            this.model.styles = { instance: instanceKey };
-        }
-
-        this.styleService.setInstanceStyle(instanceKey, { background: background });
         this.applyChanges();
     }
 
     public onTypographyUpdate(typography: TypographyContract): void {
-        let instanceKey;
+        Objects.setStructure("styles/instance/typography", this.model);
+        this.model["styles"]["instance"]["typography"] = typography;
 
-        if (this.model.styles && this.model.styles["instance"]) {
-            instanceKey = this.model.styles["instance"];
-        }
-        else {
-            instanceKey = `instances/section-${Utils.identifier()}`;
-            this.model.styles = { instance: instanceKey };
-        }
-
-        this.styleService.setInstanceStyle(instanceKey, { typography: typography });
         this.applyChanges();
     }
+
+    
+    // public onBackgroundUpdate(background: BackgroundContract): void {
+    //     Objects.setValue("styles/instance/background", this.model, Objects.clone(background));
+    //     this.applyChanges();
+    // }
+
+    // public onTypographyUpdate(typography: TypographyContract): void {
+    //     Objects.setValue("styles/instance/typography", this.model, typography);
+    //     this.applyChanges();
+    // }
 }

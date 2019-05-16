@@ -42,6 +42,8 @@ import { NavigationService } from "@paperbits/common/navigation";
 import { SiteService } from "@paperbits/common/sites";
 import { UrlService } from "@paperbits/common/urls";
 import { CardModule } from "./card/ko/card.module";
+import { GridModule } from "./grid-layout-section/ko/grid.module";
+import { GridCellModule } from "./grid-cell/ko/gridCell.module";
 
 
 /**
@@ -95,6 +97,8 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new RowModule());
         injector.bindModule(new TextblockModule());
         injector.bindModule(new SectionModule());
+        injector.bindModule(new GridModule());
+        injector.bindModule(new GridCellModule());
         injector.bindModule(new NavbarModule());
         injector.bindModule(new ButtonModule());
         injector.bindModule(new MapModule());

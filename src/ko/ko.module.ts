@@ -21,6 +21,7 @@ import "./bindingHandlers/bindingHandlers.overflow";
 import "./bindingHandlers/bindingHandlers.stickTo";
 import "./bindingHandlers/bindingHandlers.scrollable";
 import "./bindingHandlers/bindingHandlers.confirm";
+import "./bindingHandlers/bindingHandlers.gridCell";
 import "./bindingExtenders/bindingExtenders.max";
 
 export class KoModule implements IInjectorModule {

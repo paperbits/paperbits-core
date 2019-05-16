@@ -37,7 +37,7 @@ export class SectionHandlers {
                 tooltip: "Add section",
                 color: "#2b87da",
                 component: {
-                    name: "section-layout-selector",
+                    name: "grid-layout-selector",
                     params: {
                         onSelect: (section: SectionModel) => {
                             const sectionHalf = context.half;
@@ -100,7 +100,7 @@ export class SectionHandlers {
                 tooltip: "Add row",
                 color: "#29c4a9",
                 component: {
-                    name: "row-layout-selector",
+                    name: "grid-layout-selector",
                     params: {
                         onSelect: (newRowModel: RowModel) => {
                             const sectionModel = context.model;

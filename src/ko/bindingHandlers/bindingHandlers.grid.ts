@@ -74,7 +74,6 @@ export class GridBindingHandler {
 
         const onDragEnd = () => {
             const dragSession = viewManager.getDragSession();
-            const parentBinding = dragSession.sourceParentBinding;
             const acceptorElement = dragSession.targetElement;
             const acceptorBinding = dragSession.targetBinding;
 
@@ -218,6 +217,8 @@ export class GridBindingHandler {
     }
 
     public static attachWidgetDragEvents(sourceElement: HTMLElement, viewManager: IViewManager, eventManager: IEventManager, widgetService: IWidgetService): void {
+        let placeholderElement: HTMLElement ;
+
         const onDragStart = (): HTMLElement => {
             if (viewManager.mode === ViewManagerMode.configure) {
                 return;
@@ -229,7 +230,7 @@ export class GridBindingHandler {
             const sourceParentBinding = GridHelper.getParentWidgetBinding(sourceElement);
             const sourceParentModel = sourceParentBinding.model;
 
-            const placeholderElement = sourceElement.ownerDocument.createElement("div");
+            placeholderElement = sourceElement.ownerDocument.createElement("div");
             placeholderElement.style.height = placeholderHeight;
             placeholderElement.style.width = placeholderWidth;
             placeholderElement.classList.add("dragged-origin");
@@ -261,6 +262,8 @@ export class GridBindingHandler {
                 const widgetHandler = widgetService.getWidgetHandler(acceptorBinding.handler);
                 widgetHandler.onDragDrop(dragSession);
             }
+
+            placeholderElement.remove();
 
             eventManager.dispatchEvent("virtualDragEnd");
         };

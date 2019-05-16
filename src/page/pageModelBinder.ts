@@ -53,7 +53,7 @@ export class PageModelBinder implements IModelBinder {
 
             const pageContent = await this.pageService.getPageContent(pageContract.key);
 
-            if (pageContent) {
+            if (pageContent && pageContent.nodes) {
                 const modelPromises = pageContent.nodes.map(async (contract: Contract) => {
                     const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
                     return await modelBinder.contractToModel(contract);

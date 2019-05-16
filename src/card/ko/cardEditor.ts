@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 import * as Utils from "@paperbits/common";
+import * as Objects from "@paperbits/common/objects";
 import template from "./cardEditor.html";
 import { IViewManager } from "@paperbits/common/ui";
 import { IWidgetEditor } from "@paperbits/common/widgets";
@@ -242,32 +243,16 @@ export class CardEditor {
     }
 
     public onBackgroundUpdate(background: BackgroundContract): void {
-        let instanceKey;
+        Objects.setStructure("styles/instance/background", this.model);
+        this.model["styles"]["instance"]["background"] = background;
 
-        if (this.model.styles && this.model.styles["instance"]) {
-            instanceKey = this.model.styles["instance"];
-        }
-        else {
-            instanceKey = `instances/card-${Utils.identifier()}`;
-            this.model.styles.instance = instanceKey;
-        }
-
-        this.styleService.setInstanceStyle(instanceKey, { background: background });
         this.applyChanges();
     }
 
     public onTypographyUpdate(typography: TypographyContract): void {
-        let instanceKey;
+        Objects.setStructure("styles/instance/typography", this.model);
+        this.model["styles"]["instance"]["typography"] = typography;
 
-        if (this.model.styles && this.model.styles["instance"]) {
-            instanceKey = this.model.styles["instance"];
-        }
-        else {
-            instanceKey = `instances/card-${Utils.identifier()}`;
-            this.model.styles.instance = instanceKey;
-        }
-
-        this.styleService.setInstanceStyle(instanceKey, { typography: typography });
         this.applyChanges();
     }
 }

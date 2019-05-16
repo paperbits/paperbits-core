@@ -46,7 +46,7 @@ export class ResizableBindingHandler {
                 }
 
                 let resizing = false;
-                let initialOffsetX, initialOffsetY, initialWidth, initialHeight, initialEdge;
+                let initialOffsetX, initialOffsetY, initialWidth, initialHeight, initialEdge, initialLeft, initialRight, initialTop, initialBottom;
 
                 const style = window.getComputedStyle(element);
                 const minWidth = style.minWidth;
@@ -57,21 +57,54 @@ export class ResizableBindingHandler {
                         return;
                     }
 
-                    const rect = element.getBoundingClientRect();
-
                     event.preventDefault();
                     event.stopImmediatePropagation();
-
                     eventManager.addEventListener("onPointerMove", onPointerMove);
                     eventManager.addEventListener("onPointerUp", onPointerUp);
 
                     resizing = true;
 
+                    const elementRect = element.getBoundingClientRect();
+
                     initialEdge = edge;
                     initialOffsetX = event.clientX;
                     initialOffsetY = event.clientY;
-                    initialWidth = rect.width;
-                    initialHeight = rect.height;
+                    initialWidth = elementRect.width;
+                    initialHeight = elementRect.height;
+                    initialLeft = elementRect.left;
+                    initialRight = elementRect.right;
+                    initialTop = elementRect.top;
+                    initialBottom = elementRect.bottom;
+
+                    const bodyWidth = element.ownerDocument.body.clientWidth;
+                    const bodyHeight = element.ownerDocument.body.clientHeight;
+
+                    element.style.right = bodyWidth - initialRight + "px";
+                    element.style.left = initialLeft + "px";
+                    element.style.bottom = bodyHeight - initialBottom + "px";
+                    element.style.top = initialTop + "px";
+
+                    switch (initialEdge) {
+                        case "left":
+                            element.style.left = "unset";
+                            break;
+
+                        case "right":
+                            element.style.right = "unset";
+                            break;
+
+                        case "top":
+                            element.style.top = "unset";
+                            break;
+
+                        case "bottom":
+                            element.style.bottom = "unset";
+                            break;
+                    }
+
+                    element.style.width = initialWidth + "px";
+                    element.style.height = initialHeight + "px";
+                    element.style.position = "fixed";
                 };
 
                 const onPointerUp = (event: MouseEvent): void => {
@@ -89,48 +122,61 @@ export class ResizableBindingHandler {
                         return;
                     }
 
-                    let width, height, left, top;
+                    let width, height;
 
                     switch (initialEdge) {
                         case "left":
-                            left = event.clientX + "px";
                             width = (initialWidth + (initialOffsetX - event.clientX)) + "px";
+
+                            if (isNumber(minWidth) && width < minWidth) {
+                                width = minWidth;
+                            }
+                            else {
+                                element.style.left = "unset";
+                                element.style.width = width;
+                                element.classList.add("resized-horizontally");
+                            }
                             break;
 
                         case "right":
                             width = (initialWidth + event.clientX - initialOffsetX) + "px";
+                            if (isNumber(minWidth) && width < minWidth) {
+                                width = minWidth;
+                            }
+                            else {
+                                element.style.right = "unset";
+                                element.style.width = width;
+                                element.classList.add("resized-horizontally");
+                            }
                             break;
 
                         case "top":
-                            top = event.clientY + "px";
                             height = (initialHeight + (initialOffsetY - event.clientY)) + "px";
+
+                            if (isNumber(minHeight) && height < minHeight) {
+                                height = minHeight;
+                            }
+                            else {
+                                element.style.top = "unset";
+                                element.style.height = height;
+                                element.classList.add("resized-vertically");
+                            }
                             break;
 
                         case "bottom":
                             height = (initialHeight + event.clientY - initialOffsetY) + "px";
+                            if (isNumber(minHeight) && height < minHeight) {
+                                height = minHeight;
+                            }
+                            else {
+                                element.style.bottom = "unset";
+                                element.style.height = height;
+                                element.classList.add("resized-vertically");
+                            }
                             break;
-                    }
 
-                    if (initialEdge === "left" || initialEdge === "right") {
-                        if (isNumber(minWidth) && width < minWidth) {
-                            width = minWidth;
-                        }
-                        else {
-                            element.style.left = left;
-                            element.style.width = width;
-                            element.classList.add("resized-horizontally");
-                        }
-                    }
-
-                    if (initialEdge === "top" || initialEdge === "bottom") {
-                        if (isNumber(minHeight) && height < minHeight) {
-                            height = minHeight;
-                        }
-                        else {
-                            element.style.top = top;
-                            element.style.height = height;
-                            element.classList.add("resized-vertically");
-                        }
+                        default:
+                            throw new Error(`Unexpected resizing initial edge: "${initialEdge}".`);
                     }
 
                     eventManager.dispatchEvent("onEditorResize");

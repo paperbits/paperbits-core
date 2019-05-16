@@ -8,6 +8,7 @@ import { IEventManager } from "@paperbits/common/events";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { ILayoutService } from "@paperbits/common/layouts";
+import { PlaceholderViewModel } from "../../placeholder/ko";
 
 
 export class LayoutViewModelBinder {
@@ -18,7 +19,7 @@ export class LayoutViewModelBinder {
         private readonly routeHandler: IRouteHandler,
         private readonly modelBinderSelector: ModelBinderSelector,
         private readonly layoutModelBinder: LayoutModelBinder
-    ) { 
+    ) {
         this.getLayoutViewModel = this.getLayoutViewModel.bind(this);
     }
 
@@ -78,7 +79,7 @@ export class LayoutViewModelBinder {
             viewModel = new LayoutViewModel();
         }
 
-        const sectionViewModels = model.widgets
+        const viewModels = model.widgets
             .map(widgetModel => {
                 const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
 
@@ -90,8 +91,12 @@ export class LayoutViewModelBinder {
             })
             .filter(x => x !== null);
 
+        // if (viewModels.length === 0) {
+        //     viewModels.push(<any>new PlaceholderViewModel("Layout"));
+        // }
+
         viewModel.permalinkTemplate(model.permalinkTemplate);
-        viewModel.widgets(sectionViewModels);
+        viewModel.widgets(viewModels);
 
         if (!viewModel["widgetBinding"]) {
             this.createBinding(model, viewModel);
