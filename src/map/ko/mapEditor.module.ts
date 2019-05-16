@@ -7,6 +7,6 @@ export class MapEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("mapEditor", MapEditor);
         injector.bindToCollection<IWidgetHandler>("widgetHandlers", MapHandlers, "mapHandler");
-         injector.bindToCollection<IContentDropHandler>("dropHandlers", MapHandlers, "mapHandler");
+        injector.bindToCollection<IContentDropHandler>("dropHandlers", MapHandlers, "mapHandler");
     }
 }

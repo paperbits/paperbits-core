@@ -1,0 +1,13 @@
+<div class="toolbox-btn">
+    <a href="#" data-bind="balloon: { component: 'viewport-selector', position: 'top' }" title="Viewport selection">
+        <i class="paperbits-icon paperbits-mirror-2"></i>
+    </a>
+</div>
+<!-- ko foreach: { data: buttons, as: 'button' } -->
+<li class="toolbox-btn"
+    data-bind="css: { 'toolbox-btn-is-active': $component.viewManager.journeyName() == button.title }">
+    <a href="#" role="button" data-bind="attr: { title: button.title },  click: button.onActivate">
+        <i data-bind="css: button.iconClass"></i>
+    </a>
+</li>
+<!-- /ko -->

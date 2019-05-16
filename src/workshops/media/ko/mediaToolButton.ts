@@ -1,8 +1,8 @@
-import { IWorkshopSection, IViewManager } from "@paperbits/common/ui";
+import { IToolButton, IViewManager } from "@paperbits/common/ui";
 
-export class MediaWorkshopSection implements IWorkshopSection {
-    public iconClass = "paperbits-icon paperbits-image-2";
-    public title = "Media";
+export class MediaToolButton implements IToolButton {
+    public iconClass: string = "paperbits-icon paperbits-image-2";
+    public title: string = "Media";
 
     constructor(private readonly viewManager: IViewManager) { }
 

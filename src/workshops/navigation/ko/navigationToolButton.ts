@@ -1,8 +1,8 @@
-import { IWorkshopSection, IViewManager } from "@paperbits/common/ui";
+import { IToolButton, IViewManager } from "@paperbits/common/ui";
 
-export class NavigationWorkshopSection implements IWorkshopSection {
-    public iconClass = "paperbits-icon paperbits-menu-34";
-    public title = "Navigation";
+export class NavigationToolButton implements IToolButton {
+    public iconClass: string = "paperbits-icon paperbits-menu-34";
+    public title: string = "Navigation";
 
     constructor(private readonly viewManager: IViewManager) { }
 

@@ -1,8 +1,8 @@
-import { IWorkshopSection, IViewManager } from "@paperbits/common/ui";
+import { IToolButton, IViewManager } from "@paperbits/common/ui";
 
-export class SettingsWorkshopSection implements IWorkshopSection {
-    public iconClass = "paperbits-icon paperbits-preferences-circle";
-    public title = "Settings";
+export class SettingsToolButton implements IToolButton {
+    public iconClass: string = "paperbits-icon paperbits-preferences-circle";
+    public title: string = "Settings";
 
     constructor(private readonly viewManager: IViewManager) { }
 

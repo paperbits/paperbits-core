@@ -117,23 +117,7 @@
 
 <!-- /ko -->
 
-<div class="toolbox toolbox-position-left-bottom" data-bind="visible: primaryToolboxVisible">
-    <div class="toolbox-btn">
-        <a href="#" data-bind="balloon: { component: 'viewport-selector', position: 'top' }" title="Viewport selection">
-            <i class="paperbits-icon paperbits-mirror-2"></i>
-        </a>
-    </div>
-    <div class="toolbox-btn">
-        <a href="#" data-bind="click: undo" title="Undo">
-            <i class="paperbits-icon paperbits-undo-25"></i>
-        </a>
-    </div>
-    <div class="toolbox-btn">
-        <a href="#" data-bind="click: redo" title="Redo">
-            <i class="paperbits-icon paperbits-redo-26"></i>
-        </a>
-    </div>
-</div>
+<tray class="toolbox toolbox-position-left-bottom" data-bind="visible: primaryToolboxVisible"></tray>
 
 <input id="uploadDialog" type="file" multiple="multiple" aria-hidden="true" class="d-none" />
 

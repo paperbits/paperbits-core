@@ -1,6 +1,6 @@
 import { BackgroundBindingHandler } from "./ko/bindingHandlers/bindingHandlers.background";
 import { WidgetBindingHandler } from "./ko/bindingHandlers/bindingHandlers.widget";
-import { DefaultRouteHandler } from "@paperbits/common/routing";
+import { DefaultRouteHandler, DefaultRouteGuard } from "@paperbits/common/routing";
 import { SettingsProvider } from "@paperbits/common/configuration";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { ModelBinderSelector, WidgetService } from "@paperbits/common/widgets";
@@ -43,12 +43,15 @@ import { SiteService } from "@paperbits/common/sites";
 import { UrlService } from "@paperbits/common/urls";
 import { CardModule } from "./card/ko/card.module";
 
+
 /**
  * Module registering core components.
  */
 export class CoreModule implements IInjectorModule {
     public register(injector: IInjector): void {
+
         injector.bindCollection("autostart");
+        injector.bindCollection("routeGuards");
         injector.bindCollection("widgetHandlers");
         injector.bindCollection("modelBinders");
         injector.bindCollection("viewModelBinders");
@@ -82,7 +85,6 @@ export class CoreModule implements IInjectorModule {
         injector.bind("intercom", IntercomViewModel);
         injector.bindSingleton("intercomService", IntercomService);
         injector.bind("backgroundModelBinder", BackgroundModelBinder);
-        
 
         injector.bindModule(new KnockoutRegistrationLoaders());
         injector.bindModule(new KoModule());
@@ -104,6 +106,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new SearchResultsModule());
         injector.bindModule(new CardModule());
 
+        injector.bindToCollection("routeGuards", DefaultRouteGuard);
         injector.bindToCollection("autostart", WidgetBindingHandler);
         injector.bindToCollection("autostart", BackgroundBindingHandler);
     }

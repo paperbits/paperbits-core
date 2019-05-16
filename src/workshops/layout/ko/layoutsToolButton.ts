@@ -1,6 +1,6 @@
-import { IWorkshopSection, IViewManager } from "@paperbits/common/ui";
+import { IToolButton, IViewManager } from "@paperbits/common/ui";
 
-export class LayoutsWorkshopSection implements IWorkshopSection {
+export class LayoutsToolButton implements IToolButton {
     public iconClass = "paperbits-icon paperbits-layout-11";
     public title = "Layouts";
 

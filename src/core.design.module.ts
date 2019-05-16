@@ -52,16 +52,17 @@ import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkRe
 
 import "./ko/bindingHandlers/bindingHandlers.command";
 import { PageHost } from "./workshops/page/ko/pageHost";
+import { Tray } from "./workshops/tray/tray";
 
 
-export class CoreEditModule implements IInjectorModule {
+export class CoreDesignModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bindModule(new CoreModule());
-
         injector.bindCollection("dropHandlers");
         injector.bindCollection("workshopSections");
-        injector.resolve("workshopSections");
+        injector.bindCollection("trayCommands");
         injector.bindSingleton("viewManager", ViewManager);
+        injector.bindSingleton("tray", Tray);
         injector.bind("pageHyperlinkProvider", PageHyperlinkProvider);
         injector.bind("blogHyperlinkProvider", BlogHyperlinkProvider);
         injector.bind("mediaHyperlinkProvider", MediaHyperlinkProvider);
@@ -73,7 +74,6 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindToCollection("autostart", BalloonBindingHandler);
         injector.bindToCollection("autostart", UnhandledErrorHandler);
         injector.bind("tooltip", Tooltip);
-
         injector.bindFactory<IHyperlinkProvider[]>("resourcePickers", (ctx: IInjector) => {
             const pageReourcePicker = ctx.resolve<IHyperlinkProvider>("pageHyperlinkProvider");
             const blogReourcePicker = ctx.resolve<IHyperlinkProvider>("blogHyperlinkProvider");
@@ -88,12 +88,9 @@ export class CoreEditModule implements IInjectorModule {
             ];
         });
 
-        /*** UI ***/
         injector.bindSingleton("dragManager", DragManager);
         injector.bindSingleton("lightbox", LityLightbox);
         injector.bind("placeholderWidget", PlaceholderViewModel);
-
-        /*** Editors ***/
         injector.bindSingleton("htmlEditorProvider", HtmlEditorProvider);
         injector.bindSingleton("mediaHandler", MediaHandlers);
         injector.bind("workshops", Workshops);
@@ -128,11 +125,13 @@ export class CoreEditModule implements IInjectorModule {
         injector.bindModule(new LayoutEditorModule());
         injector.bindModule(new PageEditorModule());
         injector.bindModule(new CardEditorModule());
-
         injector.bindToCollection("autostart", HostBindingHandler);
         injector.bindToCollection("autostart", DraggablesBindingHandler);
         injector.bindToCollection("autostart", GridBindingHandler);
         injector.bindToCollection("autostart", LightboxBindingHandler);
         injector.bindToCollection("autostart", Hinter);
+
+        injector.resolve("workshopSections"); // TODO: Find out why this collection fails to resolve without this push.
+        injector.resolve("trayCommands");
     }
 }

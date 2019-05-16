@@ -2,7 +2,7 @@ import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { BlogWorkshop } from "./blogs";
 import { BlogPostDetailsWorkshop } from "./blogPostDetails";
 import { BlogSelector } from "./blogSelector";
-import { BlogWorkshopSection } from "./blogSection";
+import { BlogWorkshopToolButton } from "./blogToolButton";
 
 export class BlogWorkshopModule implements IInjectorModule {
     public register(injector: IInjector): void {        

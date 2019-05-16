@@ -7,6 +7,6 @@ export class VideoPlayerEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("videoPlayerEditor", VideoEditor);
         injector.bindToCollection<IWidgetHandler>("widgetHandlers", VideoHandlers, "videoHandler");
-         injector.bindToCollection<IContentDropHandler>("dropHandlers", VideoHandlers, "videoHandler");
+        injector.bindToCollection<IContentDropHandler>("dropHandlers", VideoHandlers, "videoHandler");
     }
 }

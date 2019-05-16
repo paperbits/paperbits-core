@@ -7,6 +7,6 @@ export class PictureEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("pictureEditor", PictureEditor);
         injector.bindToCollection<IWidgetHandler>("widgetHandlers", PictureHandlers, "pictureWidgetHandler");
-         injector.bindToCollection<IContentDropHandler>("dropHandlers",  PictureHandlers, "pictureDropHandler");
+        injector.bindToCollection<IContentDropHandler>("dropHandlers",  PictureHandlers, "pictureDropHandler");
     }
 }

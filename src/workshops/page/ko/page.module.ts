@@ -1,4 +1,4 @@
-import { PagesWorkshopSection } from "./pagesSection";
+import { PagesToolButton } from "./pagesToolButton";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { PagesWorkshop } from "./pages";
 import { PageDetailsWorkshop } from "./pageDetails";
@@ -9,6 +9,6 @@ export class PageWorkshopModule implements IInjectorModule {
         injector.bind("pagesWorkshop", PagesWorkshop);
         injector.bind("pageDetailsWorkshop", PageDetailsWorkshop);
         injector.bind("pageSelector", PageSelector);
-        injector.bindToCollection("workshopSections", PagesWorkshopSection);
+        injector.bindToCollection("workshopSections", PagesToolButton);
     }
 }

@@ -7,10 +7,9 @@ import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
 import { Bag } from "@paperbits/common";
 import { IMediaService } from "@paperbits/common/media";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
-import { IComponent, IView, IViewManager, ICommand, ViewManagerMode, IHighlightConfig, IContextCommandSet, ISplitterConfig } from "@paperbits/common/ui";
-import { Toast } from "../ui";
+import { IComponent, IView, IViewManager, ICommand, ViewManagerMode, IHighlightConfig, IContextCommandSet, ISplitterConfig, Toast } from "@paperbits/common/ui";
 import { IRouteHandler } from "@paperbits/common/routing";
-import { ISiteService, SettingsContract } from "@paperbits/common/sites";
+import { ISiteService } from "@paperbits/common/sites";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { Component, OnMounted, RuntimeComponent } from "@paperbits/common/ko/decorators";
@@ -148,11 +147,15 @@ export class ViewManager implements IViewManager {
         return this.journeyName();
     }
 
-    public addToast(title: string, content: string): Toast {
-        const toast = new Toast(title, content);
+    public addToast(title: string, content: string, commands?: ICommand[]): Toast {
+        const toast = new Toast(title, content, "info", null, commands);
         this.toasts.push(toast);
 
         return toast;
+    }
+
+    public removeToast(toast: Toast): void {
+        this.toasts.splice(this.toasts().indexOf(toast), 1);
     }
 
     public notifySuccess(title: string, content: string): void {
@@ -450,13 +453,5 @@ export class ViewManager implements IViewManager {
 
     public removeBalloon(component: IComponent): void {
         this.balloons.remove(component);
-    }
-
-    public undo(): void {
-        this.eventManager.dispatchEvent("onUndo");
-    }
-
-    public redo(): void {
-        this.eventManager.dispatchEvent("onRedo");
     }
 }

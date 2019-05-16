@@ -1,5 +1,4 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { IWidgetHandler } from "@paperbits/common/editing";
 import { ButtonEditor } from "./buttonEditor";
 import { ButtonHandlers } from "../buttonHandlers";
 
