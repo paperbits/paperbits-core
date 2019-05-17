@@ -33,14 +33,22 @@ export class GridCellEditor {
     public initialize(): void {
         // const viewport = this.viewManager.getViewport();
 
-        // const alignment = this.determineAlignment(viewport, this.model);
-        // this.alignment(alignment);
+        const overflowStyle = <any>Objects.getObjectAt("styles/instance/grid-cell/xs/overflow", this.model);
 
-        // // this.scrollOnOverlow(this.model.overflowY === "scroll");
+        if (overflowStyle && overflowStyle.vertical) {
+            this.scrollOnOverlow(true);
+        }
+        else {
+            this.scrollOnOverlow(false);
+        }
 
-        // const directions = this.alignment().split(" ");
-        // this.verticalAlignment(directions[0]);
-        // this.horizontalAlignment(directions[1]);
+        const alignmentStyle = <any>Objects.getObjectAt(`styles/instance/grid-cell/xs/alignment`, this.model);
+
+        if (alignmentStyle) {
+            this.verticalAlignment(alignmentStyle.vertical);
+            this.horizontalAlignment(alignmentStyle.horizontal);
+        }
+
         this.alignment.subscribe(this.applyChanges);
         this.scrollOnOverlow.subscribe(this.applyChanges);
     }
@@ -56,7 +64,7 @@ export class GridCellEditor {
             horizontal: this.horizontalAlignment()
         };
 
-        Objects.setValue("styles/instance/grid-cell/xs/alignment", this.model, alignmentStyle);
+        Objects.setValue(`styles/instance/grid-cell/xs/alignment`, this.model, alignmentStyle);
 
         const overflowStyle = {
             vertical: this.scrollOnOverlow() ? "auto" : undefined,
