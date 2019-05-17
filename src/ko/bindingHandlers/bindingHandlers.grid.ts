@@ -13,7 +13,7 @@ export class GridBindingHandler {
         gridEditor: GridEditor,
     ) {
         ko.bindingHandlers["grid"] = {
-            init(gridElement: HTMLElement) {
+            init(gridElement: HTMLElement): void {
                 gridEditor.attach(gridElement.ownerDocument);
             }
         };
@@ -21,25 +21,25 @@ export class GridBindingHandler {
         ko.virtualElements.allowedBindings["grid"] = true;
 
         ko.bindingHandlers["layoutsection"] = {
-            init(sourceElement: HTMLElement) {
+            init(sourceElement: HTMLElement): void {
                 GridBindingHandler.attachSectionDragEvents(sourceElement, viewManager, eventManager, widgetService);
             }
         };
 
         ko.bindingHandlers["layoutrow"] = {
-            init(element: HTMLElement) {
+            init(element: HTMLElement): void {
                 GridBindingHandler.attachRowDragEvents(element, viewManager, eventManager, widgetService);
             }
         };
 
         ko.bindingHandlers["layoutcolumn"] = {
-            init(element: HTMLElement) {
+            init(element: HTMLElement): void {
                 GridBindingHandler.attachColumnDragEvents(element, viewManager, eventManager, widgetService);
             }
         };
 
         ko.bindingHandlers["layoutwidget"] = {
-            init(element: HTMLElement) {
+            init(element: HTMLElement): void {
                 GridBindingHandler.attachWidgetDragEvents(element, viewManager, eventManager, widgetService);
             }
         };
@@ -48,6 +48,8 @@ export class GridBindingHandler {
     }
 
     public static attachSectionDragEvents(sourceElement: HTMLElement, viewManager: IViewManager, eventManager: IEventManager, widgetService: IWidgetService): void {
+        let placeholderElement: HTMLElement;
+
         const onDragStart = (): HTMLElement => {
             const placeholderWidth = sourceElement.clientWidth - 1 + "px";
             const placeholderHeight = sourceElement.clientHeight - 1 + "px";
@@ -56,7 +58,7 @@ export class GridBindingHandler {
             const parentBinding = GridHelper.getParentWidgetBinding(sourceElement);
             const parentModel = parentBinding.model;
 
-            const placeholderElement = sourceElement.ownerDocument.createElement("div");
+            placeholderElement = sourceElement.ownerDocument.createElement("div");
             placeholderElement.style.height = placeholderHeight;
             placeholderElement.style.width = placeholderWidth;
             placeholderElement.classList.add("dragged-origin");
@@ -88,6 +90,7 @@ export class GridBindingHandler {
                 widgetHandler.onDragDrop(dragSession);
             }
 
+            placeholderElement.remove();
             eventManager.dispatchEvent("virtualDragEnd");
         };
 
@@ -101,6 +104,8 @@ export class GridBindingHandler {
     }
 
     public static attachRowDragEvents(sourceElement: HTMLElement, viewManager: IViewManager, eventManager: IEventManager, widgetService: IWidgetService): void {
+        let placeholderElement: HTMLElement;
+
         const onDragStart = (): HTMLElement => {
             const placeholderWidth = sourceElement.clientWidth - 1 + "px";
             const placeholderHeight = sourceElement.clientHeight - 1 + "px";
@@ -109,7 +114,7 @@ export class GridBindingHandler {
             const parentBinding = GridHelper.getParentWidgetBinding(sourceElement);
             const parentModel = parentBinding.model;
 
-            const placeholderElement = sourceElement.ownerDocument.createElement("div");
+            placeholderElement = sourceElement.ownerDocument.createElement("div");
             placeholderElement.style.height = placeholderHeight;
             placeholderElement.style.width = placeholderWidth;
             placeholderElement.classList.add("dragged-origin");
@@ -146,6 +151,7 @@ export class GridBindingHandler {
                 widgetHandler.onDragDrop(dragSession);
             }
 
+            placeholderElement.remove();
             eventManager.dispatchEvent("virtualDragEnd");
         };
 
@@ -159,6 +165,8 @@ export class GridBindingHandler {
     }
 
     public static attachColumnDragEvents(sourceElement: HTMLElement, viewManager: IViewManager, eventManager: IEventManager, widgetService: IWidgetService): void {
+        let placeholderElement: HTMLElement;
+
         const onDragStart = (): HTMLElement => {
             const placeholderWidth = sourceElement.clientWidth - 1 + "px";
             const placeholderHeight = sourceElement.clientHeight - 1 + "px";
@@ -167,7 +175,7 @@ export class GridBindingHandler {
             const parentBinding = GridHelper.getParentWidgetBinding(sourceElement);
             const parentModel = parentBinding.model;
 
-            const placeholderElement = sourceElement.ownerDocument.createElement("div");
+            placeholderElement = sourceElement.ownerDocument.createElement("div");
             placeholderElement.style.height = placeholderHeight;
             placeholderElement.style.width = placeholderWidth;
             placeholderElement.classList.add("dragged-origin");
@@ -188,7 +196,6 @@ export class GridBindingHandler {
 
         const onDragEnd = () => {
             const dragSession = viewManager.getDragSession();
-            const parentBinding = dragSession.sourceParentBinding;
             const acceptorElement = dragSession.targetElement;
             const acceptorBinding = dragSession.targetBinding;
 
@@ -204,6 +211,7 @@ export class GridBindingHandler {
                 widgetHandler.onDragDrop(dragSession);
             }
 
+            placeholderElement.remove();
             eventManager.dispatchEvent("virtualDragEnd");
         };
 
@@ -217,7 +225,7 @@ export class GridBindingHandler {
     }
 
     public static attachWidgetDragEvents(sourceElement: HTMLElement, viewManager: IViewManager, eventManager: IEventManager, widgetService: IWidgetService): void {
-        let placeholderElement: HTMLElement ;
+        let placeholderElement: HTMLElement;
 
         const onDragStart = (): HTMLElement => {
             if (viewManager.mode === ViewManagerMode.configure) {
