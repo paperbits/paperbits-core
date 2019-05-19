@@ -1,12 +1,12 @@
-import { IViewModelBinder } from "@paperbits/common/widgets";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { TableOfContentsViewModel } from "./tableOfContentsViewModel";
 import { TableOfContentsModel } from "../tableOfContentsModel";
 import { IEventManager } from "@paperbits/common/events";
 
-export class TableOfContentsViewModelBinder implements IViewModelBinder<TableOfContentsModel, TableOfContentsViewModel> {
+export class TableOfContentsViewModelBinder implements ViewModelBinder<TableOfContentsModel, TableOfContentsViewModel> {
     constructor(private readonly eventManager: IEventManager) { }
 
-    public modelToViewModel(model: TableOfContentsModel, viewModel?: TableOfContentsViewModel): TableOfContentsViewModel {
+    public async modelToViewModel(model: TableOfContentsModel, viewModel?: TableOfContentsViewModel): Promise<TableOfContentsViewModel> {
         if (!viewModel) {
             viewModel = new TableOfContentsViewModel();
         }

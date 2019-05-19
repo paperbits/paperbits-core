@@ -1,13 +1,13 @@
 import { NavbarViewModel } from "./navbarViewModel";
 import { NavbarItemViewModel } from "./navbarItemViewModel";
-import { IViewModelBinder } from "@paperbits/common/widgets";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { IEventManager } from "@paperbits/common/events";
 import { NavigationItemContract, NavigationItemModel, NavigationEvents } from "@paperbits/common/navigation";
 import { NavbarModel } from "../navbarModel";
 import { NavbarModelBinder } from "../navbarModelBinder";
 
 
-export class NavbarViewModelBinder implements IViewModelBinder<NavbarModel, NavbarViewModel> {
+export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, NavbarViewModel> {
     constructor(
         private readonly eventManager: IEventManager,
         private readonly navbarModelBinder: NavbarModelBinder
@@ -32,7 +32,7 @@ export class NavbarViewModelBinder implements IViewModelBinder<NavbarModel, Navb
         return navbarItemViewModel;
     }
 
-    public modelToViewModel(navbarModel: NavbarModel, viewModel?: NavbarViewModel): NavbarViewModel {
+    public async modelToViewModel(navbarModel: NavbarModel, viewModel?: NavbarViewModel): Promise<NavbarViewModel> {
         if (!viewModel) {
             viewModel = new NavbarViewModel();
         }

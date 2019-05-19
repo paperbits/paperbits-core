@@ -1,4 +1,4 @@
-import { Contract } from "@paperbits/common";
+import { Contract, Bag } from "@paperbits/common";
 import { IStyleCompiler } from "@paperbits/common/styles";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { ListModel } from "@paperbits/common/text/models/listModel";
@@ -20,7 +20,7 @@ export class ListModelBinder {
         return this.listTypes.includes(model.type);
     }
 
-    public async contractToModel(contract: ListContract): Promise<ListModel> {
+    public async contractToModel(contract: ListContract, bindingContext?: Bag<any>): Promise<ListModel> {
         const model = new ListModel(contract.type);
 
         if (contract.attrs) {
@@ -44,7 +44,7 @@ export class ListModelBinder {
         if (contract.nodes && contract.nodes.length > 0) {
             const modelPromises = contract.nodes.map(async (contract: Contract) => {
                 const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-                return await modelBinder.contractToModel(contract);
+                return await modelBinder.contractToModel(contract, bindingContext);
             });
 
             model.nodes = await Promise.all<any>(modelPromises);

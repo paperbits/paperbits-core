@@ -2,12 +2,11 @@ import { IRouteHandler } from "@paperbits/common/routing";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { LayoutModel } from "./layoutModel";
 import { ILayoutService, LayoutContract } from "@paperbits/common/layouts";
-import { Contract } from "@paperbits/common";
+import { Contract, Bag } from "@paperbits/common";
 
 export class LayoutModelBinder {
     constructor(
         private readonly layoutService: ILayoutService,
-        private readonly routeHandler: IRouteHandler,
         private readonly modelBinderSelector: ModelBinderSelector
     ) {
         // rebinding...
@@ -18,18 +17,18 @@ export class LayoutModelBinder {
         return contract.type === "layout";
     }
 
-    public canHandleModel(model): boolean {
+    public canHandleModel(model: any): boolean {
         return model instanceof LayoutModel;
     }
 
-    public async getLayoutModel(): Promise<LayoutModel> {
-        const url = this.routeHandler.getPath();
-        const layoutNode = await this.layoutService.getLayoutByRoute(url);
+    // public async getLayoutModel(): Promise<LayoutModel> {
+    //     const url = this.routeHandler.getPath();
+    //     const layoutNode = await this.layoutService.getLayoutByRoute(url);
 
-        return await this.contractToModel(layoutNode);
-    }
+    //     return await this.contractToModel(layoutNode, bindingContext);
+    // }
 
-    public async contractToModel(contract: LayoutContract): Promise<LayoutModel> {
+    public async contractToModel(contract: LayoutContract, bindingContext?: Bag<any>): Promise<LayoutModel> {
         const layoutModel = new LayoutModel();
         layoutModel.title = contract.title;
         layoutModel.description = contract.description;
@@ -39,7 +38,7 @@ export class LayoutModelBinder {
 
         const modelPromises = layoutContent.nodes.map(async (contract: Contract) => {
             const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-            return await modelBinder.contractToModel(contract);
+            return await modelBinder.contractToModel(contract, bindingContext);
         });
 
         const widgetModels = await Promise.all<any>(modelPromises);

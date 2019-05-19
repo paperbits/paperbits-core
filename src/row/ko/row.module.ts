@@ -1,5 +1,5 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { IViewModelBinder } from "@paperbits/common/widgets";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { RowViewModel } from "./rowViewModel";
 import { RowModelBinder } from "../rowModelBinder";
 import { RowViewModelBinder } from "./rowViewModelBinder";

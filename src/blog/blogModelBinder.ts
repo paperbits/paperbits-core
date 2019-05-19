@@ -2,7 +2,7 @@ import { IModelBinder } from "@paperbits/common/editing";
 import { IBlogService, BlogPostContract  } from "@paperbits/common/blogs";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { BlogPostModel } from "./blogPostModel";
-import { Contract } from "@paperbits/common";
+import { Contract, Bag } from "@paperbits/common";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 
 export class BlogModelBinder implements IModelBinder {
@@ -23,7 +23,7 @@ export class BlogModelBinder implements IModelBinder {
         return model instanceof BlogPostModel;
     }
 
-    public async contractToModel(blogPostContract: BlogPostContract): Promise<BlogPostModel> {
+    public async contractToModel(blogPostContract: BlogPostContract, bindingContext?: Bag<any>): Promise<BlogPostModel> {
         if (!blogPostContract.key) {
             const currentUrl = this.routeHandler.getPath();
             blogPostContract = await this.blogService.getBlogPostByPermalink(currentUrl);
@@ -37,7 +37,7 @@ export class BlogModelBinder implements IModelBinder {
         const blogPostContent = await this.blogService.getBlogPostContent(blogPostContract.key);
         const modelPromises = blogPostContent.nodes.map(async (contract) => {
             const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-            return await modelBinder.contractToModel(contract);
+            return await modelBinder.contractToModel(contract, bindingContext);
         });
         const models = await Promise.all<any>(modelPromises);
         blogPostModel.widgets = models;

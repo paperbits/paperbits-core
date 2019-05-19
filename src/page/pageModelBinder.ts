@@ -1,5 +1,5 @@
 import { PageModel } from "./pageModel";
-import { Contract } from "@paperbits/common";
+import { Contract, Bag } from "@paperbits/common";
 import { IModelBinder } from "@paperbits/common/editing";
 import { IPageService, PageContract } from "@paperbits/common/pages";
 import { IRouteHandler } from "@paperbits/common/routing";
@@ -10,7 +10,6 @@ import { PlaceholderModel } from "@paperbits/common/widgets/placeholder";
 export class PageModelBinder implements IModelBinder {
     constructor(
         private readonly pageService: IPageService,
-        private readonly routeHandler: IRouteHandler,
         private readonly modelBinderSelector: ModelBinderSelector
     ) {
         // rebinding...
@@ -25,10 +24,8 @@ export class PageModelBinder implements IModelBinder {
         return model instanceof PageModel;
     }
 
-    public async contractToModel(pageContract: PageContract): Promise<any> {
-        const metadata = this.routeHandler.getCurrentUrlMetadata();
-
-        if (metadata && metadata["usePagePlaceholder"]) {
+    public async contractToModel(pageContract: PageContract, bindingContext?: Bag<any>): Promise<any> {
+        if (bindingContext && bindingContext["usePagePlaceholder"]) {
             const pageModel = new PageModel();
             pageModel.title = pageContract.title;
             pageModel.description = pageContract.description;
@@ -38,8 +35,7 @@ export class PageModelBinder implements IModelBinder {
             return pageModel;
         }
 
-        const currentUrl = this.routeHandler.getPath();
-        pageContract = await this.pageService.getPageByPermalink(currentUrl);
+        pageContract = await this.pageService.getPageByPermalink(bindingContext.navigationPath);
 
         if (!pageContract) {
             pageContract = await this.pageService.getPageByPermalink("/404");
@@ -56,7 +52,7 @@ export class PageModelBinder implements IModelBinder {
             if (pageContent && pageContent.nodes) {
                 const modelPromises = pageContent.nodes.map(async (contract: Contract) => {
                     const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-                    return await modelBinder.contractToModel(contract);
+                    return await modelBinder.contractToModel(contract, bindingContext);
                 });
 
                 const models = await Promise.all<WidgetModel>(modelPromises);

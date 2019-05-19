@@ -1,12 +1,12 @@
 import { YoutubePlayerViewModel } from "./youtubePlayerViewModel";
-import { IViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
+import { ViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
 import { YoutubePlayerModel } from "../youtubePlayerModel";
 import { IEventManager } from "@paperbits/common/events";
 
-export class YoutubePlayerViewModelBinder implements IViewModelBinder<YoutubePlayerModel, YoutubePlayerViewModel> {
+export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlayerModel, YoutubePlayerViewModel> {
     constructor(private readonly eventManager: IEventManager) { }
 
-    public modelToViewModel(model: YoutubePlayerModel, viewModel?: YoutubePlayerViewModel): YoutubePlayerViewModel {
+    public async modelToViewModel(model: YoutubePlayerModel, viewModel?: YoutubePlayerViewModel): Promise<YoutubePlayerViewModel> {
         if (!viewModel) {
             viewModel = new YoutubePlayerViewModel();
         }

@@ -1,15 +1,15 @@
 import { TextblockModel } from "./textblockModel";
 import { TextblockViewModel } from "./ko/textblockViewModel";
-import { IViewModelBinder } from "@paperbits/common/widgets";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { IEventManager } from "@paperbits/common/events";
 
-export class TextblockViewModelBinder implements IViewModelBinder<TextblockModel, TextblockViewModel> {
+export class TextblockViewModelBinder implements ViewModelBinder<TextblockModel, TextblockViewModel> {
     constructor(
         private readonly htmlEditorFactory,
         private readonly eventManager: IEventManager
     ) { }
 
-    public modelToViewModel(model: TextblockModel, viewModel?: TextblockViewModel): TextblockViewModel {
+    public async modelToViewModel(model: TextblockModel, viewModel?: TextblockViewModel): Promise<TextblockViewModel> {
         if (!viewModel) {
             viewModel = new TextblockViewModel(this.htmlEditorFactory.createHtmlEditor());
         }

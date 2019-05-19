@@ -1,12 +1,12 @@
 import { PictureViewModel } from "./pictureViewModel";
-import { IViewModelBinder } from "@paperbits/common/widgets";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { PictureModel } from "../pictureModel";
 import { IEventManager } from "@paperbits/common/events";
 
-export class PictureViewModelBinder implements IViewModelBinder<PictureModel, PictureViewModel> {
+export class PictureViewModelBinder implements ViewModelBinder<PictureModel, PictureViewModel> {
     constructor(private readonly eventManager: IEventManager) { }
 
-    public modelToViewModel(model: PictureModel, viewModel?: PictureViewModel): PictureViewModel {
+    public async modelToViewModel(model: PictureModel, viewModel?: PictureViewModel): Promise<PictureViewModel> {
         if (!viewModel) {
             viewModel = new PictureViewModel();
         }

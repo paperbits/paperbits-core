@@ -9,7 +9,7 @@ export class MapViewModelBinder {
         private readonly eventManager: IEventManager
     ) { }
 
-    public modelToViewModel(model: MapModel, viewModel?: MapViewModel): MapViewModel {
+    public async modelToViewModel(model: MapModel, viewModel?: MapViewModel): Promise<MapViewModel> {
         if (!viewModel) {
             viewModel = new MapViewModel(this.mapService);
         }

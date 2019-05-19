@@ -1,31 +1,34 @@
 import { GridViewModel } from "./gridViewModel";
-import { IViewModelBinder } from "@paperbits/common/widgets";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { GridModel } from "../gridModel";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { GridHandlers } from "../gridHandlers";
 import { IEventManager } from "@paperbits/common/events";
+import { IStyleCompiler } from "@paperbits/common/styles";
 
 
-export class GridViewModelBinder implements IViewModelBinder<GridModel, GridViewModel> {
+export class GridViewModelBinder implements ViewModelBinder<GridModel, GridViewModel> {
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
-        private readonly eventManager: IEventManager
+        private readonly eventManager: IEventManager,
+        private readonly styleCompiler: IStyleCompiler
     ) { }
 
-    public modelToViewModel(model: GridModel, viewModel?: GridViewModel): GridViewModel {
+    public async modelToViewModel(model: GridModel, viewModel?: GridViewModel): Promise<GridViewModel> {
         if (!viewModel) {
             viewModel = new GridViewModel();
         }
 
-        const viewModels = model.widgets
-            .map(widgetModel => {
-                const viewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-                const viewModel = viewModelBinder.modelToViewModel(widgetModel);
+        const viewModels = [];
 
-                return viewModel;
-            });
+        for (const widgetModel of model.widgets) {
+            const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
+            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel);
+
+            viewModels.push(widgetViewModel);
+        }
 
         if (viewModels.length === 0) {
             viewModels.push(<any>new PlaceholderViewModel("Grid"));
@@ -33,7 +36,10 @@ export class GridViewModelBinder implements IViewModelBinder<GridModel, GridView
 
         viewModel.widgets(viewModels);
         viewModel.container(model.container);
-        viewModel.styles(model.styles);
+
+        if (model.styles) {
+            viewModel.styles(await this.styleCompiler.getClassNamesByStyleConfigAsync2(model.styles));
+        }
 
         const binding: IWidgetBinding = {
             name: "gridLayoutGrid",

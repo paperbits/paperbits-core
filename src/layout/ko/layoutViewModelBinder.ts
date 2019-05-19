@@ -5,30 +5,27 @@ import { LayoutHandlers } from "../layoutHandlers";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { IEventManager } from "@paperbits/common/events";
-import { IRouteHandler } from "@paperbits/common/routing";
-import { ModelBinderSelector } from "@paperbits/common/widgets";
+import { ModelBinderSelector, ViewModelBinder } from "@paperbits/common/widgets";
 import { ILayoutService } from "@paperbits/common/layouts";
-import { PlaceholderViewModel } from "../../placeholder/ko";
+import { Bag } from "@paperbits/common";
 
 
-export class LayoutViewModelBinder {
+export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, LayoutViewModel> {
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly eventManager: IEventManager,
         private readonly layoutService: ILayoutService,
-        private readonly routeHandler: IRouteHandler,
         private readonly modelBinderSelector: ModelBinderSelector,
         private readonly layoutModelBinder: LayoutModelBinder
     ) {
         this.getLayoutViewModel = this.getLayoutViewModel.bind(this);
     }
 
-    public createBinding(model: LayoutModel, viewModel: LayoutViewModel): void {
+    public createBinding(model: LayoutModel, viewModel: LayoutViewModel, bindingContext?: Bag<any>): void {
         let savingTimeout;
 
         const updateContent = async (): Promise<void> => {
-            const url = this.routeHandler.getPath();
-            const layout = await this.layoutService.getLayoutByRoute(url);
+            const layout = await this.layoutService.getLayoutByRoute(bindingContext.navigationPath);
             const layoutContent = await this.layoutService.getLayoutContent(layout.key);
 
             const contentContract = {
@@ -60,9 +57,7 @@ export class LayoutViewModelBinder {
                 this.eventManager.dispatchEvent("onContentUpdate");
             },
             onCreate: () => {
-                const metadata = this.routeHandler.getCurrentUrlMetadata();
-
-                if (!metadata || !metadata["usePagePlaceholder"]) {
+                if (!bindingContext || !bindingContext["usePagePlaceholder"]) {
                     return;
                 }
 
@@ -74,32 +69,25 @@ export class LayoutViewModelBinder {
         viewModel["widgetBinding"] = binding;
     }
 
-    public modelToViewModel(model: LayoutModel, viewModel?: LayoutViewModel): LayoutViewModel {
+    public async modelToViewModel(model: LayoutModel, viewModel?: LayoutViewModel, bindingContext?: Bag<any>): Promise<LayoutViewModel> {
         if (!viewModel) {
             viewModel = new LayoutViewModel();
         }
 
-        const viewModels = model.widgets
-            .map(widgetModel => {
-                const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
+        const viewModels = [];
 
-                if (!widgetViewModelBinder) {
-                    return null;
-                }
+        for (const widgetModel of model.widgets) {
+            const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
+            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
 
-                return widgetViewModelBinder.modelToViewModel(widgetModel);
-            })
-            .filter(x => x !== null);
-
-        // if (viewModels.length === 0) {
-        //     viewModels.push(<any>new PlaceholderViewModel("Layout"));
-        // }
+            viewModels.push(widgetViewModel);
+        }
 
         viewModel.permalinkTemplate(model.permalinkTemplate);
         viewModel.widgets(viewModels);
 
         if (!viewModel["widgetBinding"]) {
-            this.createBinding(model, viewModel);
+            this.createBinding(model, viewModel, bindingContext);
         }
 
         return viewModel;
@@ -109,11 +97,11 @@ export class LayoutViewModelBinder {
         return model instanceof LayoutModel;
     }
 
-    public async getLayoutViewModel(): Promise<any> {
-        const url = this.routeHandler.getPath();
-        const layoutContract = await this.layoutService.getLayoutByRoute(url);
-        const layoutModel = await this.layoutModelBinder.contractToModel(layoutContract);
-        const layoutViewModel = this.modelToViewModel(layoutModel);
+    public async getLayoutViewModel(path: string, usePagePlaceholder: boolean = false): Promise<any> {
+        const bindingContext = { navigationPath: path, usePagePlaceholder: usePagePlaceholder };
+        const layoutContract = await this.layoutService.getLayoutByRoute(path);
+        const layoutModel = await this.layoutModelBinder.contractToModel(layoutContract, bindingContext);
+        const layoutViewModel = this.modelToViewModel(layoutModel, null, bindingContext);
 
         return layoutViewModel;
     }

@@ -37,7 +37,10 @@ export class PageHost {
     }
 
     private async refreshContent(): Promise<void> {
-        const layoutViewModel = await this.layoutViewModelBinder.getLayoutViewModel();
+        const path = this.routeHandler.getPath();
+        const metadata = this.routeHandler.getCurrentUrlMetadata();
+        const usePagePlaceholder = metadata ? metadata["usePagePlaceholder"] : false;
+        const layoutViewModel = await this.layoutViewModelBinder.getLayoutViewModel(path, usePagePlaceholder);
         this.layoutViewModel(layoutViewModel);
     }
 

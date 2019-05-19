@@ -6,6 +6,8 @@ import { Component, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { GridModelBinder } from "../../grid-layout-section";
 import { presets } from "./gridPresets";
 import { SectionModel } from "../../section";
+import { IStyleCompiler } from "@paperbits/common/styles";
+import { GridViewModelBinder } from ".";
 
 @Component({
     selector: "grid-layout-selector",
@@ -18,7 +20,11 @@ export class GridLayoutSelector implements IResourceSelector<any> {
     @Event()
     public onSelect: (rowModel: any) => void;
 
-    constructor(private readonly gridModelBinder: GridModelBinder) {
+    constructor(
+        private readonly gridModelBinder: GridModelBinder,
+        private readonly gridViewModelBinder: GridViewModelBinder,
+        private readonly styleCompiler: IStyleCompiler
+    ) {
         this.selectLayout = this.selectLayout.bind(this);
         this.snippets = ko.observableArray();
     }
@@ -29,28 +35,16 @@ export class GridLayoutSelector implements IResourceSelector<any> {
 
         for (const preset of presets) {
             const model = await this.gridModelBinder.contractToModel(<any>preset);
-            snippets.push(model);
+            const viewModel = await this.gridViewModelBinder.modelToViewModel(model);
+
+            snippets.push(viewModel);
         }
         this.snippets(snippets);
     }
 
-    public selectLayout(model: GridModel): void {
-
+    public selectLayout(viewModel: any): void {
         const sectionModel = new SectionModel();
-
-        sectionModel.widgets = [model];
-
-        // const rowModel = new RowModel();
-
-        // columnSizeCfgs.forEach(span => {
-        //     const column = new ColumnModel();
-        //     column.span.md = span.md;
-        //     column.span.sm = span.sm;
-        //     column.span.md = span.md;
-        //     column.span.lg = span.lg;
-        //     column.span.xl = span.xl;
-        //     rowModel.widgets.push(column);
-        // });
+        sectionModel.widgets = [viewModel["widgetBinding"].model]; // TODO: Refactor!
 
         if (this.onSelect) {
             this.onSelect(sectionModel);

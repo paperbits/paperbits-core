@@ -1,31 +1,34 @@
 import { SectionViewModel } from "./sectionViewModel";
-import { IViewModelBinder } from "@paperbits/common/widgets";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { SectionModel } from "../sectionModel";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { SectionHandlers } from "../sectionHandlers";
 import { IEventManager } from "@paperbits/common/events";
+import { IStyleCompiler } from "@paperbits/common/styles";
 
 
-export class SectionViewModelBinder implements IViewModelBinder<SectionModel, SectionViewModel> {
+export class SectionViewModelBinder implements ViewModelBinder<SectionModel, SectionViewModel> {
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
-        private readonly eventManager: IEventManager
+        private readonly eventManager: IEventManager,
+        private readonly styleCompiler: IStyleCompiler
     ) { }
 
-    public modelToViewModel(model: SectionModel, viewModel?: SectionViewModel): SectionViewModel {
+    public async modelToViewModel(model: SectionModel, viewModel?: SectionViewModel): Promise<SectionViewModel> {
         if (!viewModel) {
             viewModel = new SectionViewModel();
         }
 
-        const viewModels = model.widgets
-            .map(widgetModel => {
-                const viewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-                const viewModel = viewModelBinder.modelToViewModel(widgetModel);
+        const viewModels = [];
 
-                return viewModel;
-            });
+        for (const widgetModel of model.widgets) {
+            const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
+            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel);
+
+            viewModels.push(widgetViewModel);
+        }
 
         if (viewModels.length === 0) {
             viewModels.push(<any>new PlaceholderViewModel("Section"));
@@ -33,7 +36,10 @@ export class SectionViewModelBinder implements IViewModelBinder<SectionModel, Se
 
         viewModel.widgets(viewModels);
         viewModel.container(model.container);
-        viewModel.styles(model.styles);
+
+        if (model.styles) {
+            viewModel.styles(await this.styleCompiler.getClassNamesByStyleConfigAsync2(model.styles));
+        }
 
         const binding: IWidgetBinding = {
             name: "section",

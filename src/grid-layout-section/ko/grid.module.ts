@@ -7,6 +7,6 @@ export class GridModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("gridViewModel", GridViewModel);
         injector.bindToCollection("modelBinders", GridModelBinder, "gridModelBinder");
-        injector.bindToCollection("viewModelBinders", GridViewModelBinder);
+        injector.bindToCollection("viewModelBinders", GridViewModelBinder, "gridViewModelBinder");
     }
 }

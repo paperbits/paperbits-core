@@ -10,7 +10,7 @@ import { Component } from "@paperbits/common/ko/decorators";
 export class GridCellViewModel {
     public widgets: ko.ObservableArray<Object>;
     public css: ko.Computed<string>;
-
+    public role: ko.Observable<string>;
     public span: ko.Observable<any>;
     public position: ko.Observable<any>;
     public styles: ko.Observable<any>;
@@ -41,6 +41,7 @@ export class GridCellViewModel {
         this.span = ko.observable<any>();
         this.position = ko.observable<any>();
         this.styles = ko.observable<any>();
+        this.role = ko.observable<string>();
 
         this.alignmentXs = ko.observable<string>();
         this.alignmentSm = ko.observable<string>();

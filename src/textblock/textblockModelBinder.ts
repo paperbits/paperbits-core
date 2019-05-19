@@ -1,19 +1,19 @@
 import { BlockModel } from "@paperbits/common/text/models";
 import { IModelBinder } from "@paperbits/common/editing";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
-import { Contract } from "@paperbits/common";
+import { Contract, Bag } from "@paperbits/common";
 import { TextblockModel } from "./textblockModel";
 
 export class TextblockModelBinder implements IModelBinder {
     constructor(private readonly modelBinderSelector: ModelBinderSelector) { }
 
-    public async contractToModel(contract: Contract): Promise<TextblockModel> {
+    public async contractToModel(contract: Contract, bindingContext?: Bag<any>): Promise<TextblockModel> {
         let content: BlockModel[] = [];
 
         if (contract.nodes && contract.nodes.length > 0) {
             const modelPromises = contract.nodes.map(async (contract: Contract) => {
                 const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-                return await modelBinder.contractToModel(contract);
+                return await modelBinder.contractToModel(contract, bindingContext);
             });
 
             content = await Promise.all<BlockModel>(modelPromises);

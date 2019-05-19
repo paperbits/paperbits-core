@@ -1,77 +1,45 @@
-import * as Utils from "@paperbits/common/utils";
 import { CardViewModel } from "./cardViewModel";
-import { IViewModelBinder } from "@paperbits/common/widgets";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { CardModel } from "../cardModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { CardHandlers } from "../cardHandlers";
 import { IEventManager } from "@paperbits/common/events";
+import { IStyleCompiler } from "@paperbits/common/styles";
 
-export class CardViewModelBinder implements IViewModelBinder<CardModel, CardViewModel> {
+export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewModel> {
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
-        private readonly eventManager: IEventManager
+        private readonly eventManager: IEventManager,
+        private readonly styleCompiler: IStyleCompiler
     ) { }
 
-    private toTitleCase(str: string): string {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-
-    private getAlignmentClass(styles: Object, alignmentString: string, targetBreakpoint: string): void {
-        if (!alignmentString) {
-            return;
+    public async modelToViewModel(model: CardModel, viewModel?: CardViewModel): Promise<CardViewModel> {
+        if (!viewModel) {
+            viewModel = new CardViewModel();
         }
 
-        const alignment = alignmentString.split(" ");
-        const vertical = alignment[0];
-        const horizontal = alignment[1];
+        const widgetViewModels = [];
 
-        const x = styles["alignX"] || {};
-        const y = styles["alignY"] || {};
+        for (const widgetModel of model.widgets) {
+            const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
+            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel);
 
-        x[targetBreakpoint] = `utils/content/alignHorizontally${this.toTitleCase(horizontal)}`;
-        y[targetBreakpoint] = `utils/content/alignVertically${this.toTitleCase(vertical)}`;
-
-        styles["alignX"] = x;
-        styles["alignY"] = y;
-    }
-
-    public modelToViewModel(model: CardModel, cardViewModel?: CardViewModel): CardViewModel {
-        if (!cardViewModel) {
-            cardViewModel = new CardViewModel();
+            widgetViewModels.push(widgetViewModel);
         }
-
-        const widgetViewModels = model.widgets
-            .map(widgetModel => {
-                const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-                const widgetViewModel = widgetViewModelBinder.modelToViewModel(widgetModel);
-
-                return widgetViewModel;
-            });
 
         if (widgetViewModels.length === 0) {
             widgetViewModels.push(new PlaceholderViewModel("Card"));
         }
 
-        const styles = {};
-
-        Object.assign(styles, model.styles);
-
-        cardViewModel.widgets(widgetViewModels);
-
-        if (model.alignment) {
-            model.alignment = Utils.optimizeBreakpoints(model.alignment);
-            this.getAlignmentClass(styles, model.alignment.xs, "xs");
-            this.getAlignmentClass(styles, model.alignment.sm, "sm");
-            this.getAlignmentClass(styles, model.alignment.md, "md");
-            this.getAlignmentClass(styles, model.alignment.lg, "lg");
-            this.getAlignmentClass(styles, model.alignment.xl, "xl");
+        if (model.styles) {
+            viewModel.styles(await this.styleCompiler.getClassNamesByStyleConfigAsync2(model.styles));
         }
 
-        cardViewModel.styles(styles);
+        viewModel.widgets(widgetViewModels);
 
-        if (!cardViewModel["widgetBinding"]) {
+        if (!viewModel["widgetBinding"]) {
             const binding: IWidgetBinding = {
                 name: "card",
                 displayName: "Card",
@@ -81,15 +49,15 @@ export class CardViewModelBinder implements IViewModelBinder<CardModel, CardView
                 handler: CardHandlers,
                 applyChanges: (changes) => {
                     Object.assign(model, changes);
-                    this.modelToViewModel(model, cardViewModel);
-                    // this.eventManager.dispatchEvent("onContentUpdate");
+                    this.modelToViewModel(model, viewModel);
+                    this.eventManager.dispatchEvent("onContentUpdate");
                 }
             };
 
-            cardViewModel["widgetBinding"] = binding;
+            viewModel["widgetBinding"] = binding;
         }
 
-        return cardViewModel;
+        return viewModel;
     }
 
     public canHandleModel(model: CardModel): boolean {

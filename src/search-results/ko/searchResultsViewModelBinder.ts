@@ -1,13 +1,13 @@
-import { IViewModelBinder } from "@paperbits/common/widgets";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { SearchResultsViewModel } from "./searchResultsViewModel";
 import { SearchResultsModel } from "../searchResultsModel";
 import { IEventManager } from "@paperbits/common/events";
 
 
-export class SearchResultsViewModelBinder implements IViewModelBinder<SearchResultsModel, SearchResultsViewModel> {
+export class SearchResultsViewModelBinder implements ViewModelBinder<SearchResultsModel, SearchResultsViewModel> {
     constructor(private readonly eventManager: IEventManager) { }
 
-    public modelToViewModel(model: SearchResultsModel, viewModel?: SearchResultsViewModel): SearchResultsViewModel {
+    public async modelToViewModel(model: SearchResultsModel, viewModel?: SearchResultsViewModel): Promise<SearchResultsViewModel> {
         if (!viewModel) {
             viewModel = new SearchResultsViewModel();
         }

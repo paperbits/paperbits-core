@@ -1,5 +1,5 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { IViewModelBinder } from "@paperbits/common/widgets";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { TableOfContentsModelBinder } from "../tableOfContentsModelBinder";
 import { TableOfContentsViewModelBinder } from "./tableOfContentsViewModelBinder";
 import { IModelBinder } from "@paperbits/common/editing";

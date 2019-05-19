@@ -3,7 +3,7 @@ import { CardModel } from "./cardModel";
 import { CardContract } from "./cardContract";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { IModelBinder } from "@paperbits/common/editing";
-import { Contract } from "@paperbits/common";
+import { Contract, Bag } from "@paperbits/common";
 
 export class CardModelBinder implements IModelBinder {
     constructor(private readonly modelBinderSelector: ModelBinderSelector) {
@@ -18,7 +18,7 @@ export class CardModelBinder implements IModelBinder {
         return model instanceof CardModel;
     }
 
-    public async contractToModel(contract: CardContract): Promise<CardModel> {
+    public async contractToModel(contract: CardContract, bindingContext?: Bag<any>): Promise<CardModel> {
         const model = new CardModel();
 
         if (contract.alignment) {
@@ -30,14 +30,13 @@ export class CardModelBinder implements IModelBinder {
         model.overflowY = contract.overflowY;
         model.styles = contract.styles;
 
-
         if (!contract.nodes) {
             contract.nodes = [];
         }
 
         const modelPromises = contract.nodes.map(async (contract: Contract) => {
             const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-            return modelBinder.contractToModel(contract);
+            return modelBinder.contractToModel(contract, bindingContext);
         });
 
         model.widgets = await Promise.all<any>(modelPromises);

@@ -1,6 +1,6 @@
 import * as Utils from "@paperbits/common/utils";
 import { ColumnViewModel } from "./columnViewModel";
-import { IViewModelBinder } from "@paperbits/common/widgets";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { ColumnModel } from "../columnModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
@@ -8,7 +8,7 @@ import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel"
 import { ColumnHandlers } from "../columnHandlers";
 import { IEventManager } from "@paperbits/common/events";
 
-export class ColumnViewModelBinder implements IViewModelBinder<ColumnModel, ColumnViewModel> {
+export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, ColumnViewModel> {
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly eventManager: IEventManager
@@ -37,27 +37,28 @@ export class ColumnViewModelBinder implements IViewModelBinder<ColumnModel, Colu
         styles["alignY"] = y;
     }
 
-    public modelToViewModel(model: ColumnModel, columnViewModel?: ColumnViewModel): ColumnViewModel {
+    public async modelToViewModel(model: ColumnModel, columnViewModel?: ColumnViewModel): Promise<ColumnViewModel> {
         if (!columnViewModel) {
             columnViewModel = new ColumnViewModel();
         }
 
-        const widgetViewModels = model.widgets
-            .map(widgetModel => {
-                const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-                const widgetViewModel = widgetViewModelBinder.modelToViewModel(widgetModel);
+        const viewModels = [];
 
-                return widgetViewModel;
-            });
+        for (const widgetModel of model.widgets) {
+            const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
+            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel);
 
-        if (widgetViewModels.length === 0) {
-            widgetViewModels.push(new PlaceholderViewModel("Column"));
+            viewModels.push(widgetViewModel);
+        }
+
+        if (viewModels.length === 0) {
+            viewModels.push(new PlaceholderViewModel("Column"));
         }
 
         const styles = {};
 
 
-        columnViewModel.widgets(widgetViewModels);
+        columnViewModel.widgets(viewModels);
 
         if (model.size) {
             model.size = Utils.optimizeBreakpoints(model.size);

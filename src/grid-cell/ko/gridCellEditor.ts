@@ -31,9 +31,9 @@ export class GridCellEditor {
 
     @OnMounted()
     public initialize(): void {
-        // const viewport = this.viewManager.getViewport();
+        const viewport = this.viewManager.getViewport();
 
-        const overflowStyle = <any>Objects.getObjectAt("styles/instance/grid-cell/xs/overflow", this.model);
+        const overflowStyle = <any>Objects.getObjectAt(`styles/instance/grid-cell/${viewport}/overflow`, this.model);
 
         if (overflowStyle && overflowStyle.vertical) {
             this.scrollOnOverlow(true);
@@ -42,7 +42,7 @@ export class GridCellEditor {
             this.scrollOnOverlow(false);
         }
 
-        const alignmentStyle = <any>Objects.getObjectAt(`styles/instance/grid-cell/xs/alignment`, this.model);
+        const alignmentStyle = <any>Objects.getObjectAt(`styles/instance/grid-cell/${viewport}/alignment`, this.model);
 
         if (alignmentStyle) {
             this.verticalAlignment(alignmentStyle.vertical);
@@ -64,14 +64,14 @@ export class GridCellEditor {
             horizontal: this.horizontalAlignment()
         };
 
-        Objects.setValue(`styles/instance/grid-cell/xs/alignment`, this.model, alignmentStyle);
+        Objects.setValue(`styles/instance/grid-cell/${viewport}/alignment`, this.model, alignmentStyle);
 
         const overflowStyle = {
             vertical: this.scrollOnOverlow() ? "auto" : undefined,
             horizontal: this.scrollOnOverlow() ? "auto" : undefined
         };
 
-        Objects.setValue("styles/instance/grid-cell/xs/overflow", this.model, overflowStyle);
+        Objects.setValue(`styles/instance/grid-cell/${viewport}/overflow`, this.model, overflowStyle);
 
         this.onChange(this.model);
     }
@@ -83,33 +83,6 @@ export class GridCellEditor {
     private align(): void {
         this.alignment(`${this.verticalAlignment()} ${this.horizontalAlignment()}`);
     }
-
-    // public determineAlignment(viewport: string, model: GridCellModel): string {
-    //     switch (viewport) {
-    //         case "xl":
-    //             return model.alignment.xl || this.determineAlignment("lg", model);
-    //             break;
-
-    //         case "lg":
-    //             return model.alignment.lg || this.determineAlignment("md", model);
-    //             break;
-
-    //         case "md":
-    //             return model.alignment.md || this.determineAlignment("sm", model);
-    //             break;
-
-    //         case "sm":
-    //             return model.alignment.sm || this.determineAlignment("xs", model);
-    //             break;
-
-    //         case "xs":
-    //             return model.alignment.xs || "start start";
-    //             break;
-
-    //         default:
-    //             throw new Error("Unknown viewport");
-    //     }
-    // }
 
     public toggleHorizontal(): void {
         switch (this.horizontalAlignment()) {

@@ -1,5 +1,5 @@
 import * as Utils from "@paperbits/common/utils";
-import { Contract } from "@paperbits/common";
+import { Contract, Bag } from "@paperbits/common";
 import { IStyleCompiler } from "@paperbits/common/styles";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { BlockModel } from "@paperbits/common/text/models/blockModel";
@@ -22,7 +22,7 @@ export class BlockModelBinder {
         return this.blockTypes.includes(model["type"]); // TODO: Replace with instanceOf
     }
 
-    public async contractToModel(contract: BlockContract): Promise<BlockModel> {
+    public async contractToModel(contract: BlockContract, bindingContext?: Bag<any>): Promise<BlockModel> {
         const model = new BlockModel(contract.type);
 
         if (contract.attrs) {
@@ -47,7 +47,7 @@ export class BlockModelBinder {
         if (contract.nodes && contract.nodes.length > 0) {
             const modelPromises = contract.nodes.map(async (contract: Contract) => {
                 const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-                return await modelBinder.contractToModel(contract);
+                return await modelBinder.contractToModel(contract, bindingContext);
             });
 
             model.nodes = await Promise.all<any>(modelPromises);

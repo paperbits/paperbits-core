@@ -1,21 +1,27 @@
 import { Button } from "./buttonViewModel";
-import { IViewModelBinder } from "@paperbits/common/widgets";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { ButtonModel } from "../buttonModel";
 import { IEventManager } from "@paperbits/common/events";
+import { IStyleCompiler } from "@paperbits/common/styles";
 
-export class ButtonViewModelBinder implements IViewModelBinder<ButtonModel, Button>  {
+
+export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Button>  {
     constructor(
-        private readonly eventManager: IEventManager
+        private readonly eventManager: IEventManager,
+        private readonly styleCompiler: IStyleCompiler
     ) { }
 
-    public modelToViewModel(model: ButtonModel, viewModel?: Button): Button {
+    public async modelToViewModel(model: ButtonModel, viewModel?: Button): Promise<Button> {
         if (!viewModel) {
             viewModel = new Button();
         }
 
         viewModel.label(model.label);
         viewModel.hyperlink(model.hyperlink);
-        viewModel.styles(model.styles);
+
+        if (model.styles) {
+            viewModel.styles(await this.styleCompiler.getClassNamesByStyleConfigAsync2(model.styles));
+        }
 
         viewModel["widgetBinding"] = {
             displayName: "Button",

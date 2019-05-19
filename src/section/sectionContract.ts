@@ -1,7 +1,7 @@
 import { Contract } from "@paperbits/common";
 
 export interface SectionContract extends Contract {
-    styles?: object;
+    styles?: any;
 
     /**
      *  Layout types: container, full width.

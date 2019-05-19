@@ -3,12 +3,13 @@ import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { ButtonModel } from "./buttonModel";
 import { Contract } from "@paperbits/common";
 import { ButtonContract } from "./buttonContract";
+import { IStyleCompiler } from "@paperbits/common/styles";
 
 export class ButtonModelBinder implements IModelBinder {
-    private readonly permalinkResolver: IPermalinkResolver;
-
-    constructor(permalinkResolver: IPermalinkResolver) {
-        this.permalinkResolver = permalinkResolver;
+    constructor(
+        private readonly permalinkResolver: IPermalinkResolver,
+        private readonly styleCompiler: IStyleCompiler
+    ) {
     }
 
     public canHandleContract(contract: Contract): boolean {
@@ -19,13 +20,17 @@ export class ButtonModelBinder implements IModelBinder {
         return model instanceof ButtonModel;
     }
 
-    public async contractToModel(buttonContract: ButtonContract): Promise<ButtonModel> {
+    public async contractToModel(contract: ButtonContract): Promise<ButtonModel> {
         const model = new ButtonModel();
-        model.label = buttonContract.label;
-        model.styles = buttonContract.styles || { appearance: "components/button/default" };
+        model.label = contract.label;
+        model.styles = contract.styles || { appearance: "components/button/default" };
 
-        if (buttonContract.hyperlink) {
-            model.hyperlink = await this.permalinkResolver.getHyperlinkFromConfig(buttonContract.hyperlink);
+        if (model.styles) {
+            model.styleModel = await this.styleCompiler.getClassNamesByStyleConfigAsync2(model.styles);
+        }
+
+        if (contract.hyperlink) {
+            model.hyperlink = await this.permalinkResolver.getHyperlinkFromConfig(contract.hyperlink);
         }
 
         return model;

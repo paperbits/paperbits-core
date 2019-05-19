@@ -2,7 +2,8 @@ import { SectionContract } from "./sectionContract";
 import { SectionModel } from "./sectionModel";
 import { IModelBinder } from "@paperbits/common/editing";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
-import { Contract } from "@paperbits/common";
+import { Contract, Bag } from "@paperbits/common";
+import { IStyleCompiler } from "@paperbits/common/styles";
 
 export class SectionModelBinder implements IModelBinder {
     public canHandleContract(contract: Contract): boolean {
@@ -13,9 +14,11 @@ export class SectionModelBinder implements IModelBinder {
         return model instanceof SectionModel;
     }
 
-    constructor(private readonly modelBinderSelector: ModelBinderSelector) { }
+    constructor(
+        private readonly modelBinderSelector: ModelBinderSelector
+    ) { }
 
-    public async contractToModel(contract: SectionContract): Promise<SectionModel> {
+    public async contractToModel(contract: SectionContract, bindingContext?: Bag<any>): Promise<SectionModel> {
         const model = new SectionModel();
 
         contract.nodes = contract.nodes || [];
@@ -25,7 +28,7 @@ export class SectionModelBinder implements IModelBinder {
 
         const modelPromises = contract.nodes.map(async (contract: Contract) => {
             const modelBinder: IModelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-            return await modelBinder.contractToModel(contract);
+            return await modelBinder.contractToModel(contract, bindingContext);
         });
 
         model.widgets = await Promise.all<any>(modelPromises);

@@ -1,61 +1,45 @@
 import * as Utils from "@paperbits/common/utils";
 import { GridCellViewModel } from "./gridCellViewModel";
-import { IViewModelBinder } from "@paperbits/common/widgets";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { GridCellModel } from "../gridCellModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { GridCellHandlers } from "../gridCellHandlers";
 import { IEventManager } from "@paperbits/common/events";
+import { IStyleCompiler } from "@paperbits/common/styles";
 
-export class GridCellViewModelBinder implements IViewModelBinder<GridCellModel, GridCellViewModel> {
+export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, GridCellViewModel> {
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
-        private readonly eventManager: IEventManager
+        private readonly eventManager: IEventManager,
+        private readonly styleCompiler: IStyleCompiler
     ) { }
 
-    private toTitleCase(str: string): string {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-
-    private getAlignmentClass(styles: Object, alignmentString: string, targetBreakpoint: string): void {
-        if (!alignmentString) {
-            return;
+    public async modelToViewModel(model: GridCellModel, viewModel?: GridCellViewModel): Promise<GridCellViewModel> {
+        if (!viewModel) {
+            viewModel = new GridCellViewModel();
         }
 
-        const alignment = alignmentString.split(" ");
-        const vertical = alignment[0];
-        const horizontal = alignment[1];
+        const widgetViewModels = [];
 
-        const x = styles["alignX"] || {};
-        const y = styles["alignY"] || {};
+        for (const widgetModel of model.widgets) {
+            const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
+            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel);
 
-        x[targetBreakpoint] = `utils/content/alignHorizontally${this.toTitleCase(horizontal)}`;
-        y[targetBreakpoint] = `utils/content/alignVertically${this.toTitleCase(vertical)}`;
-
-        styles["alignX"] = x;
-        styles["alignY"] = y;
-    }
-
-    public modelToViewModel(model: GridCellModel, gridCellViewModel?: GridCellViewModel): GridCellViewModel {
-        if (!gridCellViewModel) {
-            gridCellViewModel = new GridCellViewModel();
+            widgetViewModels.push(widgetViewModel);
         }
-
-        const widgetViewModels = model.widgets
-            .map(widgetModel => {
-                const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-                const widgetViewModel = widgetViewModelBinder.modelToViewModel(widgetModel);
-
-                return widgetViewModel;
-            });
 
         if (widgetViewModels.length === 0) {
             widgetViewModels.push(new PlaceholderViewModel(model.role));
         }
 
-        gridCellViewModel.styles(model.styles);
-        gridCellViewModel.widgets(widgetViewModels);
+        if (model.styles) {
+            viewModel.styles(await this.styleCompiler.getClassNamesByStyleConfigAsync2(model.styles));
+        }
+
+        viewModel.role(model.role);
+        viewModel.widgets(widgetViewModels);
 
         const displayName = model.role.charAt(0).toUpperCase() + model.role.slice(1);
 
@@ -66,23 +50,16 @@ export class GridCellViewModelBinder implements IViewModelBinder<GridCellModel, 
             model: model,
             editor: "grid-cell-editor",
             handler: GridCellHandlers,
-
-            /**
-             * editor: LayoutGridCellEditor,
-             * contextMenu: GridCellContextMenu,
-             * type: "inline"
-             */
-
             applyChanges: (changes) => {
                 Object.assign(model, changes);
-                this.modelToViewModel(model, gridCellViewModel);
+                this.modelToViewModel(model, viewModel);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         };
 
-        gridCellViewModel["widgetBinding"] = binding;
+        viewModel["widgetBinding"] = binding;
 
-        return gridCellViewModel;
+        return viewModel;
     }
 
     public canHandleModel(model: GridCellModel): boolean {

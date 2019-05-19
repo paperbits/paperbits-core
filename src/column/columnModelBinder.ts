@@ -3,7 +3,7 @@ import { ColumnModel } from "./columnModel";
 import { ColumnContract } from "./columnContract";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { IModelBinder } from "@paperbits/common/editing";
-import { Contract } from "@paperbits/common";
+import { Contract, Bag } from "@paperbits/common";
 
 export class ColumnModelBinder implements IModelBinder {
     constructor(private readonly modelBinderSelector: ModelBinderSelector) {
@@ -18,7 +18,7 @@ export class ColumnModelBinder implements IModelBinder {
         return model instanceof ColumnModel;
     }
 
-    public async contractToModel(contract: ColumnContract): Promise<ColumnModel> {
+    public async contractToModel(contract: ColumnContract, bindingContext?: Bag<any>): Promise<ColumnModel> {
         const columnModel = new ColumnModel();
 
         if (contract.size) {
@@ -50,7 +50,7 @@ export class ColumnModelBinder implements IModelBinder {
 
         const modelPromises = contract.nodes.map(async (contract: Contract) => {
             const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-            return modelBinder.contractToModel(contract);
+            return modelBinder.contractToModel(contract, bindingContext);
         });
 
         columnModel.widgets = await Promise.all<any>(modelPromises);

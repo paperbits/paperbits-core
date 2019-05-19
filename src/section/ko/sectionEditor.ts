@@ -51,7 +51,7 @@ export class SectionEditor {
 
         if (this.model.styles) {
             if (this.model.styles["instance"]) {
-                const sectionStyles = await this.styleService.getStyleByKey(this.model.styles["instance"]);
+                const sectionStyles = this.model.styles["instance"];
 
                 if (sectionStyles) {
                     this.background(sectionStyles.background);
@@ -90,7 +90,6 @@ export class SectionEditor {
      * Collecting changes from the editor UI and invoking callback method.
      */
     private applyChanges(): void {
-        this.model.styles = this.model.styles || {};
         this.model.container = this.layout();
         this.model.padding = this.padding();
 
@@ -114,6 +113,10 @@ export class SectionEditor {
                 delete this.model.styles["snap"];
         }
 
+        if (this.model["styles"]["instance"] && !this.model["styles"]["instance"]["key"]) {
+            this.model["styles"]["instance"]["key"] = Utils.randomClassName();
+        }
+
         this.onChange(this.model);
     }
 
@@ -130,15 +133,4 @@ export class SectionEditor {
 
         this.applyChanges();
     }
-
-    
-    // public onBackgroundUpdate(background: BackgroundContract): void {
-    //     Objects.setValue("styles/instance/background", this.model, Objects.clone(background));
-    //     this.applyChanges();
-    // }
-
-    // public onTypographyUpdate(typography: TypographyContract): void {
-    //     Objects.setValue("styles/instance/typography", this.model, typography);
-    //     this.applyChanges();
-    // }
 }

@@ -2,7 +2,7 @@ import { GridContract } from "@paperbits/styles/contracts/gridContract";
 import { GridModel } from "./gridModel";
 import { IModelBinder } from "@paperbits/common/editing";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
-import { Contract } from "@paperbits/common";
+import { Contract, Bag } from "@paperbits/common";
 
 export class GridModelBinder implements IModelBinder {
     public canHandleContract(contract: Contract): boolean {
@@ -15,7 +15,7 @@ export class GridModelBinder implements IModelBinder {
 
     constructor(private readonly modelBinderSelector: ModelBinderSelector) { }
 
-    public async contractToModel(contract: any): Promise<GridModel> {
+    public async contractToModel(contract: any, bindingContext?: Bag<any>): Promise<GridModel> {
         const model = new GridModel();
 
         contract.nodes = contract.nodes || [];
@@ -25,7 +25,7 @@ export class GridModelBinder implements IModelBinder {
 
         const modelPromises = contract.nodes.map(async (contract: Contract) => {
             const modelBinder: IModelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-            return await modelBinder.contractToModel(contract);
+            return await modelBinder.contractToModel(contract, bindingContext);
         });
 
         model.widgets = await Promise.all<any>(modelPromises);

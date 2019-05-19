@@ -1,5 +1,5 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { IViewModelBinder } from "@paperbits/common/widgets";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { CardViewModel } from "./cardViewModel";
 import { CardModelBinder } from "../cardModelBinder";
 import { CardViewModelBinder } from "./cardViewModelBinder";
