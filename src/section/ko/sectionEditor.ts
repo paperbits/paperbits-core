@@ -92,6 +92,7 @@ export class SectionEditor {
     private applyChanges(): void {
         this.model.container = this.layout();
         this.model.padding = this.padding();
+        this.model.styles = this.model.styles || {};
 
         if (this.stretch()) {
             this.model.styles["size"] = { xs: styleKeyStretch };
