@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import { LayoutViewModelBinder, LayoutViewModel } from "../../../layout/ko";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
-import { IRouteHandler } from "@paperbits/common/routing";
+import { IRouteHandler, Route } from "@paperbits/common/routing";
 import { IEventManager } from "@paperbits/common/events";
 import { IViewManager, ViewManagerMode } from "@paperbits/common/ui";
 
@@ -30,6 +30,9 @@ export class PageHost {
         this.refreshContent();
     }
 
+    /**
+     * This event occurs when data gets pushed to the storage. For example, "Undo" command restores the previous state.
+     */
     private async onDataPush(): Promise<void> {
         if (this.viewManager.mode === ViewManagerMode.selecting || this.viewManager.mode === ViewManagerMode.selected) {
             await this.refreshContent();
@@ -44,8 +47,10 @@ export class PageHost {
         this.layoutViewModel(layoutViewModel);
     }
 
-    private async onRouteChange(): Promise<void> {
-        await this.refreshContent();
+    private async onRouteChange(route: Route): Promise<void> {
+        if (route.path !== route.previousPath) {
+            await this.refreshContent();
+        }
     }
 
     public dispose(): void {

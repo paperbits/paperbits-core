@@ -75,7 +75,6 @@ export class PagesWorkshop {
         this.pages.push(pageItem);
         this.selectPage(pageItem);
 
-        this.routeHandler.navigateTo(pageUrl);
         this.working(false);
     }
 

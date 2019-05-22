@@ -1,6 +1,5 @@
 ﻿import * as ko from "knockout";
 import template from "./layouts.html";
-import { Contract } from "@paperbits/common/contract";
 import { IRouteHandler } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
 import { ILayoutService } from "@paperbits/common/layouts";
