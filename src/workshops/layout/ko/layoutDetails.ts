@@ -26,10 +26,6 @@ export class LayoutDetails {
         private readonly routeHandler: IRouteHandler,
         private readonly viewManager: IViewManager
     ) {
-        // rebinding...
-        this.onMounted = this.onMounted.bind(this);
-        this.deleteLayout = this.deleteLayout.bind(this);
-        this.updateLayout = this.updateLayout.bind(this);
     }
 
     @OnMounted()
