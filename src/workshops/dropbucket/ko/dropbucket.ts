@@ -5,7 +5,6 @@ import { IViewManager } from "@paperbits/common/ui";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { IMediaService, MediaContract } from "@paperbits/common/media";
 import { IContentDropHandler, IContentDescriptor, IDataTransfer } from "@paperbits/common/editing";
-import { ProgressPromise } from "@paperbits/common";
 import { DropBucketItem } from "./dropbucketItem";
 import { Component } from "@paperbits/common/ko/decorators";
 import { IWidgetService } from "@paperbits/common/widgets";
@@ -229,15 +228,11 @@ export class DropBucket {
         this.droppedItems.remove(dropbucketItem);
 
         uploadables.forEach(async uploadable => {
-            let uploadPromise: ProgressPromise<MediaContract>;
+            let uploadPromise: Promise<MediaContract>;
 
             if (typeof uploadable === "string") {
                 const name = uploadable.split("/").pop().split("?")[0];
-
-                uploadPromise = Utils
-                    .downloadFile(uploadable)
-                    .sequence(blob => this.mediaService.createMedia(name, blob));
-
+                uploadPromise = Utils.downloadFile(uploadable).then(blob => this.mediaService.createMedia(name, blob));
                 this.viewManager.notifyProgress(uploadPromise, "Media library", `Uploading ${uploadable}...`);
             }
             else {
