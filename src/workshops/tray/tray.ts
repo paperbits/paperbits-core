@@ -12,7 +12,7 @@ import { IToolButton, IViewManager } from "@paperbits/common/ui";
 export class Tray {
     public buttons: ko.ObservableArray<IToolButton>;
 
-    constructor(private readonly trayCommands: IToolButton[], private readonly viewManager: IViewManager) {
+    constructor(private readonly trayCommands: IToolButton[]) {
         this.buttons = ko.observableArray<IToolButton>(trayCommands);
     }
 
