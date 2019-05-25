@@ -2016,5 +2016,49 @@ export const presets: any = [
             }
 
         ]
+    },
+
+    {
+        type: "grid",
+        styles: {
+            instance: {
+                grid: {
+                    rows: [
+                        "auto"
+                    ],
+                    rowGap: "0",
+                    cols: [
+                        "1fr"
+                    ],
+                    colGap: "0"
+                }
+            }
+        },
+        nodes: [
+            {
+                type: "grid-cell",
+                role: "article",
+                styles: {
+                    instance: {
+                        "grid-cell": {
+                            xs: {
+                                position: {
+                                    col: 1,
+                                    row: 1
+                                },
+                                span: {
+                                    cols: 1,
+                                    rows: 1
+                                },
+                                alignment: {
+                                    vertical: "center",
+                                    horizontal: "center"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        ]
     }
 ];
