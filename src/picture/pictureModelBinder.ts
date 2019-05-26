@@ -19,35 +19,36 @@ export class PictureModelBinder implements IModelBinder {
         return model instanceof PictureModel;
     }
 
-    public async contractToModel(pictureContract: PictureContract): Promise<PictureModel> {
-        const pictureModel = new PictureModel();
-        pictureModel.caption = pictureContract.caption;
-        pictureModel.layout = pictureContract.layout;
-        pictureModel.animation = pictureContract.animation ? pictureContract.animation : "none";
-        pictureModel.width = pictureContract.width;
-        pictureModel.height = pictureContract.height;
+    public async contractToModel(contract: PictureContract): Promise<PictureModel> {
+        const model = new PictureModel();
+        model.caption = contract.caption;
+        model.layout = contract.layout;
+        model.animation = contract.animation ? contract.animation : "none";
+        model.width = contract.width;
+        model.height = contract.height;
+        model.styles = contract.styles || { appearance: "components/picture/default" };
 
-        if (pictureContract.sourceKey) {
+        if (contract.sourceKey) {
             const background = new BackgroundModel();
-            background.sourceKey = pictureContract.sourceKey;
-            background.sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(pictureContract.sourceKey);
-            pictureModel.background = background;
+            background.sourceKey = contract.sourceKey;
+            background.sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(contract.sourceKey);
+            model.background = background;
 
             if (!background.sourceUrl) {
-                console.warn(`Unable to set picture. Media with source key ${pictureContract.sourceKey} not found.`);
+                console.warn(`Unable to set picture. Media with source key ${contract.sourceKey} not found.`);
             }
         }
 
-        if (pictureContract.hyperlink) {
+        if (contract.hyperlink) {
             try {
-                pictureModel.hyperlink = await this.permalinkResolver.getHyperlinkByTargetKey(pictureContract.hyperlink.targetKey);
+                model.hyperlink = await this.permalinkResolver.getHyperlinkByTargetKey(contract.hyperlink.targetKey);
             }
             catch (error) {
                 console.log(error);
             }
         }
 
-        return pictureModel;
+        return model;
     }
 
     public modelToContract(pictureModel: PictureModel): PictureContract {
@@ -57,7 +58,8 @@ export class PictureModelBinder implements IModelBinder {
             animation: pictureModel.animation,
             layout: pictureModel.layout,
             width: pictureModel.width,
-            height: pictureModel.height
+            height: pictureModel.height,
+            styles: pictureModel.styles
         };
 
         if (pictureModel.background) {

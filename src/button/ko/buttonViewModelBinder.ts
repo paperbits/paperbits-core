@@ -4,7 +4,6 @@ import { ButtonModel } from "../buttonModel";
 import { IEventManager } from "@paperbits/common/events";
 import { IStyleCompiler } from "@paperbits/common/styles";
 
-
 export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Button>  {
     constructor(
         private readonly eventManager: IEventManager,

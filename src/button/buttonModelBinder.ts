@@ -7,8 +7,7 @@ import { IStyleCompiler } from "@paperbits/common/styles";
 
 export class ButtonModelBinder implements IModelBinder {
     constructor(
-        private readonly permalinkResolver: IPermalinkResolver,
-        private readonly styleCompiler: IStyleCompiler
+        private readonly permalinkResolver: IPermalinkResolver
     ) {
     }
 
@@ -24,10 +23,6 @@ export class ButtonModelBinder implements IModelBinder {
         const model = new ButtonModel();
         model.label = contract.label;
         model.styles = contract.styles || { appearance: "components/button/default" };
-
-        if (model.styles) {
-            model.styleModel = await this.styleCompiler.getClassNamesByStyleConfigAsync2(model.styles);
-        }
 
         if (contract.hyperlink) {
             model.hyperlink = await this.permalinkResolver.getHyperlinkFromConfig(contract.hyperlink);

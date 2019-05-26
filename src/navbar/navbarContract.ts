@@ -5,4 +5,5 @@ export interface NavbarContract extends Contract {
     pictureSourceKey?: string;
     pictureWidth?: string | number;
     pictureHeight?: string | number;
+    styles?: any;
 }

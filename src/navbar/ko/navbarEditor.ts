@@ -5,6 +5,7 @@ import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorat
 import { NavbarModel } from "../navbarModel";
 import { NavigationItemContract } from "@paperbits/common/navigation";
 import { NavbarModelBinder } from "../navbarModelBinder";
+import { StyleService } from "@paperbits/styles/styleService";
 
 @Component({
     selector: "navbar-editor",
@@ -16,10 +17,13 @@ export class NavbarEditor {
     public readonly navigationItemTitle: ko.Observable<string>;
     public readonly pictureWidth: ko.Observable<string | number>;
     public readonly pictureHeight: ko.Observable<string | number>;
+    public readonly appearanceStyles: ko.ObservableArray<any>;
+    public readonly appearanceStyle: ko.Observable<any>;
 
     constructor(
         private readonly navbarModelBinder: NavbarModelBinder,
-        private readonly mediaService: MediaService
+        private readonly mediaService: MediaService,
+        private readonly styleService: StyleService
     ) {
         this.initialize = this.initialize.bind(this);
         this.onMediaSelected = this.onMediaSelected.bind(this);
@@ -27,6 +31,8 @@ export class NavbarEditor {
         this.pictureUrl = ko.observable<string>();
         this.pictureWidth = ko.observable<string | number>();
         this.pictureHeight = ko.observable<string | number>();
+        this.appearanceStyles = ko.observableArray<any>();
+        this.appearanceStyle = ko.observable<any>();
 
         this.navigationItemTitle = ko.observable<string>("Click to select navigation item...");
     }
@@ -39,6 +45,14 @@ export class NavbarEditor {
 
     @OnMounted()
     public async initialize(): Promise<void> {
+        const variations = await this.styleService.getComponentVariations("navbar");
+
+        this.appearanceStyles(variations.filter(x => x.category === "appearance"));
+
+        if (this.model.styles) {
+            this.appearanceStyle(this.model.styles.appearance);
+        }
+
         if (this.model.pictureSourceKey) {
             const media = await this.mediaService.getMediaByKey(this.model.pictureSourceKey);
 
@@ -51,11 +65,15 @@ export class NavbarEditor {
 
         this.pictureWidth.subscribe(this.applyChanges);
         this.pictureHeight.subscribe(this.applyChanges);
+        this.appearanceStyle.subscribe(this.applyChanges);
     }
 
     private applyChanges(): void {
         this.model.pictureWidth = this.pictureWidth();
         this.model.pictureHeight = this.pictureHeight();
+        this.model.styles = {
+            appearance: this.appearanceStyle()
+        };
         this.onChange(this.model);
     }
 

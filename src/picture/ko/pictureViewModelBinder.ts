@@ -2,9 +2,12 @@ import { PictureViewModel } from "./pictureViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { PictureModel } from "../pictureModel";
 import { IEventManager } from "@paperbits/common/events";
+import { IStyleCompiler } from "@paperbits/common/styles/IStyleCompiler";
 
 export class PictureViewModelBinder implements ViewModelBinder<PictureModel, PictureViewModel> {
-    constructor(private readonly eventManager: IEventManager) { }
+    constructor(
+        private readonly eventManager: IEventManager,
+        private readonly styleCompiler: IStyleCompiler) { }
 
     public async modelToViewModel(model: PictureModel, viewModel?: PictureViewModel): Promise<PictureViewModel> {
         if (!viewModel) {
@@ -18,6 +21,10 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
         viewModel.hyperlink(model.hyperlink);
         viewModel.width(model.width);
         viewModel.height(model.height);
+
+        if (model.styles) {
+            viewModel.styles(await this.styleCompiler.getClassNamesByStyleConfigAsync2(model.styles));
+        }
 
         viewModel["widgetBinding"] = {
             displayName: "Picture",

@@ -11,12 +11,14 @@ export class NavbarViewModel {
     public navigationRoot: ko.Observable<NavbarItemViewModel>;
     public pictureSourceUrl: ko.Observable<string>;
     public pictureWidth: ko.Observable<string | number>;
-    public pictureHeight: ko.Observable<string | number>;
+    public pictureHeight: ko.Observable<string | number>;    
+    public styles: ko.Observable<Object>;
 
     constructor() {
         this.navigationRoot = ko.observable<NavbarItemViewModel>();
         this.pictureSourceUrl = ko.observable<string>();
         this.pictureWidth = ko.observable<string | number>();
-        this.pictureHeight = ko.observable<string | number>();
+        this.pictureHeight = ko.observable<string | number>();        
+        this.styles = ko.observable<Object>();
     }
 }

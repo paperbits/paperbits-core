@@ -1,12 +1,10 @@
 <picture>
     <!-- ko if: hyperlink -->
-    <a class="picture noframe" data-bind="hyperlink: hyperlink">
-        <img class="content" data-bind="background: background, attr: { alt: caption }, size: { width: width, height: height }" />
+    <a data-bind="hyperlink: hyperlink">
+        <img class="content" data-bind="background: background, styled: styles, attr: { alt: caption }, size: { width: width, height: height }" />
     </a>
     <!-- /ko -->
     <!-- ko ifnot: hyperlink -->
-    <div class="picture noframe">
-        <img class="content" data-bind="background: background, attr: { alt: caption }, size: { width: width, height: height }" />
-    </div>
+    <img class="content" data-bind="background: background, styled: styles, attr: { alt: caption }, size: { width: width, height: height }" />
     <!-- /ko -->
 </picture>
