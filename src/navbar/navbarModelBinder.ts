@@ -43,6 +43,8 @@ export class NavbarModelBinder implements IModelBinder {
             }
         }
 
+        navbarModel.styles = contract.styles || { appearance: "components/navbar/default" };
+
         return navbarModel;
     }
 
@@ -99,7 +101,8 @@ export class NavbarModelBinder implements IModelBinder {
             rootKey: navbarModel.rootKey,
             pictureSourceKey: navbarModel.pictureSourceKey,
             pictureWidth: navbarModel.pictureWidth,
-            pictureHeight: navbarModel.pictureHeight
+            pictureHeight: navbarModel.pictureHeight,
+            styles: navbarModel.styles
         };
 
         return navbarContract;

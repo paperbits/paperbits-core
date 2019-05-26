@@ -18,6 +18,7 @@ export class PictureViewModel {
     public hyperlink: ko.Observable<HyperlinkModel>;
     public width: ko.Observable<number>;
     public height: ko.Observable<number>;
+    public styles: ko.Observable<Object>;
 
     constructor() {
         this.caption = ko.observable<string>();
@@ -27,5 +28,6 @@ export class PictureViewModel {
         this.hyperlink = ko.observable<HyperlinkModel>();
         this.width = ko.observable<number>();
         this.height = ko.observable<number>();
+        this.styles = ko.observable<Object>();
     }
 }

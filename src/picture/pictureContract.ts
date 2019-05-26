@@ -36,4 +36,6 @@ export interface PictureContract extends Contract {
      * Picture height.
      */
     height?: number;
+
+    styles?: any;
 }

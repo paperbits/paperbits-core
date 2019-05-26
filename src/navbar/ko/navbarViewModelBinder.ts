@@ -5,12 +5,14 @@ import { IEventManager } from "@paperbits/common/events";
 import { NavigationItemContract, NavigationItemModel, NavigationEvents } from "@paperbits/common/navigation";
 import { NavbarModel } from "../navbarModel";
 import { NavbarModelBinder } from "../navbarModelBinder";
+import { IStyleCompiler } from "@paperbits/common/styles/IStyleCompiler";
 
 
 export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, NavbarViewModel> {
     constructor(
         private readonly eventManager: IEventManager,
-        private readonly navbarModelBinder: NavbarModelBinder
+        private readonly navbarModelBinder: NavbarModelBinder,
+        private readonly styleCompiler: IStyleCompiler
     ) { }
 
     private navbarItemModelToNavbarItemViewModel(navbarItemModel: NavigationItemModel): NavbarItemViewModel {
@@ -32,27 +34,31 @@ export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, Navba
         return navbarItemViewModel;
     }
 
-    public async modelToViewModel(navbarModel: NavbarModel, viewModel?: NavbarViewModel): Promise<NavbarViewModel> {
+    public async modelToViewModel(model: NavbarModel, viewModel?: NavbarViewModel): Promise<NavbarViewModel> {
         if (!viewModel) {
             viewModel = new NavbarViewModel();
         }
 
-        if (navbarModel.root) {
-            const navigationRoot = this.navbarItemModelToNavbarItemViewModel(navbarModel.root);
+        if (model.root) {
+            const navigationRoot = this.navbarItemModelToNavbarItemViewModel(model.root);
             viewModel.navigationRoot(navigationRoot);
         }
         
-        viewModel.pictureSourceUrl(navbarModel.pictureSourceUrl);
-        viewModel.pictureWidth(navbarModel.pictureWidth);
-        viewModel.pictureHeight(navbarModel.pictureHeight);
+        viewModel.pictureSourceUrl(model.pictureSourceUrl);
+        viewModel.pictureWidth(model.pictureWidth);
+        viewModel.pictureHeight(model.pictureHeight);
+
+        if (model.styles) {
+            viewModel.styles(await this.styleCompiler.getClassNamesByStyleConfigAsync2(model.styles));
+        }
 
         viewModel["widgetBinding"] = {
             displayName: "Navigation bar",
 
-            model: navbarModel,
+            model: model,
             editor: "navbar-editor",
             applyChanges: () => {
-                this.modelToViewModel(navbarModel, viewModel);
+                this.modelToViewModel(model, viewModel);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         };
@@ -60,7 +66,7 @@ export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, Navba
         this.eventManager.addEventListener(NavigationEvents.onNavigationItemUpdate, async (updatedRootContract: NavigationItemContract) => {
             // TODO: Think about how to unsubscribe from this event.
 
-            if (updatedRootContract.key === navbarModel.rootKey) {
+            if (updatedRootContract.key === model.rootKey) {
                 const updatedRootModel = await this.navbarModelBinder.navigationItemToNavbarItemModel(updatedRootContract);
                 viewModel.navigationRoot(this.navbarItemModelToNavbarItemViewModel(updatedRootModel));
             }
