@@ -155,8 +155,8 @@ export class GridEditor {
 
         const metadata = this.routeHandler.getCurrentUrlMetadata();
 
-        if (metadata && metadata["usePagePlaceholder"]) {
-            layoutEditing = metadata["usePagePlaceholder"];
+        if (metadata && metadata["routeKind"]) {
+            layoutEditing = metadata["routeKind"] === "layout";
         }
 
         if ((!windgetIsInContent && !layoutEditing && this.viewManager.getHost().name === "content-host")) {
@@ -482,8 +482,8 @@ export class GridEditor {
 
         const metadata = this.routeHandler.getCurrentUrlMetadata();
 
-        if (metadata && metadata["usePagePlaceholder"]) {
-            layoutEditing = metadata["usePagePlaceholder"];
+        if (metadata && metadata["routeKind"]) {
+            layoutEditing = metadata["routeKind"] === "layout";
         }
 
         let current = null;

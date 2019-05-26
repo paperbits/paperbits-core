@@ -48,7 +48,7 @@ export class PageViewModelBinder implements ViewModelBinder<PageModel, PageViewM
             provides: ["static", "scripts", "keyboard"],
             applyChanges: () => this.modelToViewModel(model, viewModel),
             onCreate: () => {
-                if (bindingContext && bindingContext["usePagePlaceholder"]) {
+                if (bindingContext && bindingContext["routeKind"]) {
                     return;
                 }
 

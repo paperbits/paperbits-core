@@ -40,17 +40,18 @@ export class PageHost {
     }
 
     private async refreshContent(): Promise<void> {
-        const path = this.routeHandler.getPath();
-        const metadata = this.routeHandler.getCurrentUrlMetadata();
-        const usePagePlaceholder = metadata ? metadata["usePagePlaceholder"] : false;
-        const layoutViewModel = await this.layoutViewModelBinder.getLayoutViewModel(path, usePagePlaceholder);
+        const route = this.routeHandler.getCurrentRoute();
+        const routeKind =  route.metadata["routeKind"];
+        const layoutViewModel = await this.layoutViewModelBinder.getLayoutViewModel(route.path, routeKind);
         this.layoutViewModel(layoutViewModel);
     }
 
     private async onRouteChange(route: Route): Promise<void> {
-        if (route.path !== route.previousPath) {
-            await this.refreshContent();
+        if (route.previous && route.previous.path === route.path && route.previous.metadata["routeKind"] === route.metadata["routeKind"]) {
+            return;
         }
+
+        await this.refreshContent();
     }
 
     public dispose(): void {

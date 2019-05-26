@@ -57,7 +57,7 @@ export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, Layou
                 this.eventManager.dispatchEvent("onContentUpdate");
             },
             onCreate: () => {
-                if (!bindingContext || !bindingContext["usePagePlaceholder"]) {
+                if (!bindingContext || !bindingContext["routeKind"] || bindingContext["routeKind"] !== "layout") {
                     return;
                 }
 
@@ -97,8 +97,8 @@ export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, Layou
         return model instanceof LayoutModel;
     }
 
-    public async getLayoutViewModel(path: string, usePagePlaceholder: boolean = false): Promise<any> {
-        const bindingContext = { navigationPath: path, usePagePlaceholder: usePagePlaceholder };
+    public async getLayoutViewModel(path: string, routeKind: string): Promise<any> {
+        const bindingContext = { navigationPath: path, routeKind: routeKind };
         const layoutContract = await this.layoutService.getLayoutByRoute(path);
         const layoutModel = await this.layoutModelBinder.contractToModel(layoutContract, bindingContext);
         const layoutViewModel = this.modelToViewModel(layoutModel, null, bindingContext);

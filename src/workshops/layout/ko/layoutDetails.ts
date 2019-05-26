@@ -51,7 +51,7 @@ export class LayoutDetails {
 
         const permalinkTemplate = this.layoutItem.permalinkTemplate();
         
-        this.routeHandler.navigateTo(permalinkTemplate, this.layoutItem.title(), { usePagePlaceholder: true });
+        this.routeHandler.navigateTo(permalinkTemplate, this.layoutItem.title(), { routeKind: "layout" });
     }
 
     private async updateLayout(): Promise<void> {

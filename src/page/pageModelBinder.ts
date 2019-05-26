@@ -25,7 +25,7 @@ export class PageModelBinder implements IModelBinder {
     }
 
     public async contractToModel(pageContract: PageContract, bindingContext?: Bag<any>): Promise<any> {
-        if (bindingContext && bindingContext["usePagePlaceholder"]) {
+        if (bindingContext && bindingContext["routeKind"] === "layout") {
             const pageModel = new PageModel();
             pageModel.title = pageContract.title;
             pageModel.description = pageContract.description;
