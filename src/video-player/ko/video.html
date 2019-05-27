@@ -1,4 +1,4 @@
-<div class="video-player">
+<div class="video-player" data-bind="styled: styles">
     <!-- ko if: sourceUrl -->
     <video data-bind="attr: { controls: controls, autoplay: autoplay }">
         <source data-bind="attr: { src: sourceUrl }" />
