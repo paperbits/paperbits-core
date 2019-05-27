@@ -10,10 +10,12 @@ export class VideoPlayerViewModel {
     public sourceUrl: ko.Observable<string>;
     public controls: ko.Observable<boolean>;
     public autoplay: ko.Observable<boolean>;
+    public styles: ko.Observable<Object>;
 
     constructor() {
         this.sourceUrl = ko.observable<string>();
         this.controls = ko.observable<boolean>();
         this.autoplay = ko.observable<boolean>();
+        this.styles = ko.observable<Object>();
     }
 }

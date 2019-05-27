@@ -1,8 +1,9 @@
 ﻿import * as ko from "knockout";
 import template from "./videoEditor.html";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
-import { Component } from "@paperbits/common/ko/decorators";
+import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { VideoPlayerModel } from "../videoPlayerModel";
+import { StyleService } from "@paperbits/styles/styleService";
 
 @Component({
     selector: "video-player-editor",
@@ -10,66 +11,74 @@ import { VideoPlayerModel } from "../videoPlayerModel";
     injectable: "videoPlayerEditor"
 })
 export class VideoEditor {
-    private video: VideoPlayerModel;
-    private applyChangesCallback: () => void;
-
     public sourceUrl: ko.Observable<string>;
     public controls: ko.Observable<boolean>;
     public autoplay: ko.Observable<boolean>;
+    public readonly appearanceStyles: ko.ObservableArray<any>;
+    public readonly appearanceStyle: ko.Observable<any>;
 
     public readonly mimeType: string;
 
-    constructor() {
-        this.onSourceUrlUpdate = this.onSourceUrlUpdate.bind(this);
-        this.onControlsUpdate = this.onControlsUpdate.bind(this);
-        this.onAutoplayUpdate = this.onAutoplayUpdate.bind(this);
-        this.onMediaSelected = this.onMediaSelected.bind(this);
-
+    constructor(
+        private readonly styleService: StyleService
+    ) {
         this.sourceUrl = ko.observable<string>();
-        this.sourceUrl.subscribe(this.onSourceUrlUpdate);
-
         this.controls = ko.observable<boolean>(true);
-        this.controls.subscribe(this.onControlsUpdate);
-
         this.autoplay = ko.observable<boolean>(false);
-        this.autoplay.subscribe(this.onAutoplayUpdate);
+
+        this.appearanceStyles = ko.observableArray<any>();
+        this.appearanceStyle = ko.observable<any>();
 
         this.mimeType = "video/mp4";
     }
+    
+    @Param()
+    public model: VideoPlayerModel;
 
-    private onControlsUpdate(controls: boolean): void {
-        this.video.controls = controls;
-        this.applyChangesCallback();
+    @Event()
+    public onChange: (model: VideoPlayerModel) => void;
+
+    @OnMounted()
+    public async initialize(): Promise<void> {
+        this.sourceUrl(this.model.sourceUrl);
+        this.controls(this.model.controls);
+        this.autoplay(this.model.autoplay);
+
+        const variations = await this.styleService.getComponentVariations("videoPlayer");
+
+        this.appearanceStyles(variations.filter(x => x.category === "appearance"));
+
+        if (this.model.styles) {
+            this.appearanceStyle(this.model.styles.appearance);
+        }
+
+        this.sourceUrl.subscribe(this.applyChanges);
+        this.controls.subscribe(this.applyChanges);
+        this.autoplay.subscribe(this.applyChanges);
+        this.appearanceStyle.subscribe(this.applyChanges);
     }
 
-    private onAutoplayUpdate(autoplay: boolean): void {
-        this.video.autoplay = autoplay;
-        this.applyChangesCallback();
-    }
+    public applyChanges(): void {
+        this.model.sourceUrl = this.sourceUrl();
+        this.model.controls = this.controls();
+        this.model.autoplay = this.autoplay();
+        this.model.styles = {
+            appearance: this.appearanceStyle()
+        };
 
-    private onSourceUrlUpdate(sourceUrl: string): void {
-        this.video.sourceUrl = sourceUrl;
-        this.applyChangesCallback();
-    }
-
-    public setWidgetModel(video: VideoPlayerModel, applyChangesCallback?: () => void): void {
-        this.video = video;
-        this.applyChangesCallback = applyChangesCallback;
-        this.sourceUrl(video.sourceUrl);
-        this.controls(video.controls);
-        this.autoplay(video.autoplay);
+        this.onChange(this.model);
     }
 
     public onMediaSelected(media: MediaContract): void {
         if (media) {
-            this.video.sourceUrl = media.downloadUrl;
-            this.video.sourceKey = media.key;
+            this.model.sourceUrl = media.downloadUrl;
+            this.model.sourceKey = media.key;
         } else {
-            this.video.sourceUrl = undefined;
-            this.video.sourceKey = undefined;
+            this.model.sourceUrl = undefined;
+            this.model.sourceKey = undefined;
         }
-        this.sourceUrl(this.video.sourceUrl);
+        this.sourceUrl(this.model.sourceUrl);
 
-        this.applyChangesCallback();
+        this.applyChanges();
     }
 }

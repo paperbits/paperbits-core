@@ -14,4 +14,6 @@ export interface VideoPlayerContract extends Contract {
     controls?: boolean;
     
     autoplay?: boolean;
+    
+    styles?: any;
 }
