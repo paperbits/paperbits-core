@@ -42,8 +42,6 @@ export class MediaSelector {
         this.searchPattern = ko.observable<string>();
         this.searchPattern.subscribe(this.searchMedia);
         this.working = ko.observable(true);
-
-        this.searchMedia();
     }
 
     @OnMounted()
