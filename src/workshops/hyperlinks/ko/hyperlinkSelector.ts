@@ -13,7 +13,9 @@ import { IPageService } from "@paperbits/common/pages";
 })
 export class HyperlinkSelector {
     private isValueSelected: boolean;
+
     public readonly hyperlinkProvider: ko.Observable<IHyperlinkProvider>;
+    public readonly selection: ko.Computed<string>;
 
     @Param()
     public hyperlink: ko.Observable<HyperlinkModel>;
@@ -31,6 +33,13 @@ export class HyperlinkSelector {
     ) {
         this.hyperlink = ko.observable<HyperlinkModel>();
         this.hyperlinkProvider = ko.observable<IHyperlinkProvider>(null);
+        this.selection = ko.pureComputed(() => {
+            const hyperlink = this.hyperlink();
+
+            return hyperlink
+                ? `${hyperlink.title} ${hyperlink.anchorName ? "(" + hyperlink.anchorName + ")" : ""}`
+                : "Not selected";
+        });
     }
 
     @OnMounted()
@@ -60,7 +69,7 @@ export class HyperlinkSelector {
 
     public getCurrentSelection(): string {
         const hyperlink = this.hyperlink();
-        return `${ this.hyperlinkProvider().name}: ${hyperlink.title} ${hyperlink.anchorName ? "(" + hyperlink.anchorName + ")" : ""}`;
+        return `${this.hyperlinkProvider().name}: ${hyperlink.title} ${hyperlink.anchorName ? "(" + hyperlink.anchorName + ")" : ""}`;
     }
 
     public clearProvider(): void {

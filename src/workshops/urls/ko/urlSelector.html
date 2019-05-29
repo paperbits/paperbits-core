@@ -3,8 +3,14 @@
 <!--/ko-->
 
 <div class="flex-container flex-container-column list-container">
+    <ul class="flex-item flex-item-grow list" data-bind="foreach: urls, scrollable: {}">
+        <li class="list-item" data-bind="css: { selected: hasFocus }, click: $component.selectUrl, hasFocus: hasFocus, event: { keydown: $component.keydown }, attr: { title: title }">
+            <i class="paperbits-icon paperbits-link-69-2"></i>
+            <span class="list-item-label" data-bind="text: title"></span>
+        </li>
+    </ul>
+    
     <div class="form">
-        <label class="form-label">External URL</label>
         <div class="input-group">
             <input type="text" class="form-control" data-bind="textInput: $component.uri" placeholder="e.g. https://paperbits.io" maxlength="256"
                 spellcheck="false" />
@@ -13,11 +19,4 @@
             <i class="paperbits-icon paperbits-simple-add"></i> Add
         </button>
     </div>
-
-    <ul class="flex-item flex-item-grow list" data-bind="foreach: urls, scrollable: {}">
-        <li class="list-item" data-bind="css: { selected: hasFocus }, click: $component.selectUrl, hasFocus: hasFocus, event: { keydown: $component.keydown }, attr: { title: title }">
-            <i class="paperbits-icon paperbits-link-69-2"></i>
-            <span class="list-item-label" data-bind="text: title"></span>
-        </li>
-    </ul>
 </div>

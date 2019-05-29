@@ -7,6 +7,7 @@ import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { GridHandlers } from "../gridHandlers";
 import { IEventManager } from "@paperbits/common/events";
 import { IStyleCompiler } from "@paperbits/common/styles";
+import { Bag } from "@paperbits/common";
 
 
 export class GridViewModelBinder implements ViewModelBinder<GridModel, GridViewModel> {
@@ -16,7 +17,7 @@ export class GridViewModelBinder implements ViewModelBinder<GridModel, GridViewM
         private readonly styleCompiler: IStyleCompiler
     ) { }
 
-    public async modelToViewModel(model: GridModel, viewModel?: GridViewModel): Promise<GridViewModel> {
+    public async modelToViewModel(model: GridModel, viewModel?: GridViewModel, bindingContext?: Bag<any>): Promise<GridViewModel> {
         if (!viewModel) {
             viewModel = new GridViewModel();
         }
@@ -25,7 +26,7 @@ export class GridViewModelBinder implements ViewModelBinder<GridModel, GridViewM
 
         for (const widgetModel of model.widgets) {
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel);
+            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
 
             viewModels.push(widgetViewModel);
         }

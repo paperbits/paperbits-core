@@ -37,7 +37,7 @@ export class AnchorUtils {
 
                 const nodeType: string = node["type"];
 
-                if (nodeType === "layout-section" || nodeType === "layout-row" || nodeType === "layout-column" || nodeType === "text-block" ||
+                if (["layout-section", "layout-row", "layout-column", "text-block", "grid", "grid-cell"].includes(nodeType) ||
                     (nodeType.startsWith("heading") && (!maxHeading || maxHeading >= +nodeType.slice(-1)))) {
                     return true;
                 }

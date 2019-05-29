@@ -1,14 +1,28 @@
 <div class="flex-container flex-container-column fit">
+    <!-- ko if: !working() && navigationItemsTree() && navigationItemsTree().nodes().length === 0 -->
+    <p class="flex-item flex-item-grow text-center">It seems that you don't have navigation items yet. Would you like to
+        <a href="#" class="btn-link" data-bind="click: addNavigationItem">create one</a>?
+    </p>
+    <!-- /ko -->
+
+    <!--ko if: $component.working()-->
+    <spinner></spinner>
+    <!--/ko-->
+
     <div class="flex-item flex-item-grow list" data-bind="with: navigationItemsTree(), scrollable: {}">
         <div class="list-item-children" data-bind="foreach: nodes">
-            <div tabindex="0" class="list-item" data-bind="css: { selected: hasFocus }, dragtarget: { accept: canAccept, ondropbefore: insertBefore, ondropafter: insertAfter, flow: 'vertical', onacceptbefore: $component.navigationItemsTree().onAcceptNodeBefore, onacceptafter: $component.navigationItemsTree().onAcceptNodeAfter }">
+            <div tabindex="0" class="list-item"
+                data-bind="css: { selected: hasFocus }, dragtarget: { accept: canAccept, ondropbefore: insertBefore, ondropafter: insertAfter, flow: 'vertical', onacceptbefore: $component.navigationItemsTree().onAcceptNodeBefore, onacceptafter: $component.navigationItemsTree().onAcceptNodeAfter }">
                 <!-- ko if: nodes().length > 0 -->
                 <a href="#" class="list-item-collapse" data-bind="click: toggleCollapsed">
-                    <i class="paperbits-icon paperbits-circle-delete" data-bind="css: { 'paperbits-circle-add': collapsed() }"></i>
+                    <i class="paperbits-icon paperbits-circle-delete"
+                        data-bind="css: { 'paperbits-circle-add': collapsed() }"></i>
                 </a>
                 <!-- /ko -->
 
-                <div class="list-item-label" data-bind="text: label, hasFocus: hasFocus, click: function(){ $data.hasFocus(true); $component.selectNavigationItem($data); }">-</div>
+                <div class="list-item-label"
+                    data-bind="text: label, hasFocus: hasFocus, click: function(){ $data.hasFocus(true); $component.selectNavigationItem($data); }">
+                    -</div>
 
                 <!-- ko if: nodes().length > 0 && !collapsed() -->
                 <div class="list-item-children" data-bind="foreach: nodes">

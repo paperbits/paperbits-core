@@ -7,6 +7,7 @@ import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { SectionHandlers } from "../sectionHandlers";
 import { IEventManager } from "@paperbits/common/events";
 import { IStyleCompiler } from "@paperbits/common/styles";
+import { Bag } from "@paperbits/common";
 
 
 export class SectionViewModelBinder implements ViewModelBinder<SectionModel, SectionViewModel> {
@@ -16,7 +17,7 @@ export class SectionViewModelBinder implements ViewModelBinder<SectionModel, Sec
         private readonly styleCompiler: IStyleCompiler
     ) { }
 
-    public async modelToViewModel(model: SectionModel, viewModel?: SectionViewModel): Promise<SectionViewModel> {
+    public async modelToViewModel(model: SectionModel, viewModel?: SectionViewModel, bindingContext?: Bag<any>): Promise<SectionViewModel> {
         if (!viewModel) {
             viewModel = new SectionViewModel();
         }
@@ -25,7 +26,7 @@ export class SectionViewModelBinder implements ViewModelBinder<SectionModel, Sec
 
         for (const widgetModel of model.widgets) {
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel);
+            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
 
             viewModels.push(widgetViewModel);
         }
