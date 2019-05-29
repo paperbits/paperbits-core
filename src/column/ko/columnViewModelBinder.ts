@@ -7,6 +7,7 @@ import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { ColumnHandlers } from "../columnHandlers";
 import { IEventManager } from "@paperbits/common/events";
+import { Bag } from "@paperbits/common";
 
 export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, ColumnViewModel> {
     constructor(
@@ -37,7 +38,7 @@ export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, Colum
         styles["alignY"] = y;
     }
 
-    public async modelToViewModel(model: ColumnModel, columnViewModel?: ColumnViewModel): Promise<ColumnViewModel> {
+    public async modelToViewModel(model: ColumnModel, columnViewModel?: ColumnViewModel, bindingContext?: Bag<any>): Promise<ColumnViewModel> {
         if (!columnViewModel) {
             columnViewModel = new ColumnViewModel();
         }
@@ -46,7 +47,7 @@ export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, Colum
 
         for (const widgetModel of model.widgets) {
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel);
+            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
 
             viewModels.push(widgetViewModel);
         }

@@ -6,6 +6,7 @@ import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { RowHandlers } from "../rowHandlers";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { IEventManager } from "@paperbits/common/events";
+import { Bag } from "@paperbits/common";
 
 export class RowViewModelBinder implements ViewModelBinder<RowModel, RowViewModel> {
     constructor(
@@ -13,7 +14,7 @@ export class RowViewModelBinder implements ViewModelBinder<RowModel, RowViewMode
         private readonly eventManager: IEventManager
     ) { }
 
-    public async modelToViewModel(model: RowModel, viewModel?: RowViewModel): Promise<RowViewModel> {
+    public async modelToViewModel(model: RowModel, viewModel?: RowViewModel, bindingContext?: Bag<any>): Promise<RowViewModel> {
         if (!viewModel) {
             viewModel = new RowViewModel();
         }
@@ -22,7 +23,7 @@ export class RowViewModelBinder implements ViewModelBinder<RowModel, RowViewMode
 
         for (const widgetModel of model.widgets) {
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel);
+            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
 
             viewModels.push(widgetViewModel);
         }

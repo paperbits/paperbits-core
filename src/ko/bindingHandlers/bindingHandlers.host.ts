@@ -2,7 +2,7 @@
 import * as Utils from "@paperbits/common/utils";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { IViewManager, ViewManagerMode } from "@paperbits/common/ui";
-import { IRouteHandler } from "@paperbits/common/routing";
+import { IRouteHandler, Route } from "@paperbits/common/routing";
 
 export class HostBindingHandler {
     private readonly hostComponent: ko.Observable<any>;
@@ -130,22 +130,23 @@ export class HostBindingHandler {
 
             const routeHandler = this.routeHandler;
 
-            const onRouteChange = () => {
-                hostedWindowHistory.pushState({ host: true }, null, routeHandler.getCurrentUrl());
+            const onRouteChange = (route: Route) => {
+                route.metadata.originatedByHost = true;
+                hostedWindowHistory.pushState(route, route.title, route.url);
             };
 
             routeHandler.addRouteChangeListener(onRouteChange);
 
             hostedWindowHistory.pushState(null, null, routeHandler.getCurrentUrl());
 
-            hostedWindowHistory.pushState = (data: any, title: string, url: string) => {
-                hostedWindowOriginalPushState.call(hostedWindowHistory, data, title, url);
+            hostedWindowHistory.pushState = (route: Route, title: string, url: string) => {
+                hostedWindowOriginalPushState.call(hostedWindowHistory, route, title, url);
 
-                if (data && data.host) {
+                if (route && route.metadata.originatedByHost) {
                     return;
                 }
 
-                window.history.pushState(null, null, url);
+                window.history.pushState(route, route.title, route.url);
             };
         };
 

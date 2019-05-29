@@ -7,6 +7,7 @@ import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel"
 import { CardHandlers } from "../cardHandlers";
 import { IEventManager } from "@paperbits/common/events";
 import { IStyleCompiler } from "@paperbits/common/styles";
+import { Bag } from "@paperbits/common";
 
 export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewModel> {
     constructor(
@@ -15,7 +16,7 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
         private readonly styleCompiler: IStyleCompiler
     ) { }
 
-    public async modelToViewModel(model: CardModel, viewModel?: CardViewModel): Promise<CardViewModel> {
+    public async modelToViewModel(model: CardModel, viewModel?: CardViewModel, bindingContext?: Bag<any>): Promise<CardViewModel> {
         if (!viewModel) {
             viewModel = new CardViewModel();
         }
@@ -24,7 +25,7 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
 
         for (const widgetModel of model.widgets) {
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel);
+            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
 
             widgetViewModels.push(widgetViewModel);
         }
