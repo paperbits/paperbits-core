@@ -151,7 +151,8 @@ export class SettingsWorkshop {
         const mediaContract = await this.mediaService.getMediaByKey(sourceKey);
 
         if (!mediaContract) {
-            console.warn(`Unable to fetch favicon by key ${sourceKey}`);
+            console.warn(`Unable to fetch favicon by key ${sourceKey}.`);
+            return;
         }
 
         this.faviconFileName(mediaContract.downloadUrl);
