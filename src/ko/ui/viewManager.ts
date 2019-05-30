@@ -320,11 +320,6 @@ export class ViewManager implements IViewManager {
                 params: {
                     model: binding.model,
                     onChange: binding.applyChanges
-                },
-                oncreate: (editorViewModel) => {
-                    if (editorViewModel.setWidgetModel) {
-                        editorViewModel.setWidgetModel(binding.model, binding.applyChanges);
-                    }
                 }
             },
             heading: binding.displayName,

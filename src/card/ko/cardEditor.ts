@@ -1,5 +1,4 @@
 import * as ko from "knockout";
-import * as Utils from "@paperbits/common";
 import * as Objects from "@paperbits/common/objects";
 import template from "./cardEditor.html";
 import { IViewManager } from "@paperbits/common/ui";
