@@ -119,33 +119,38 @@ export class HostBindingHandler {
             this.globalEventHandler.appendDocument(hostElement.contentDocument);
             this.setRootElement(hostElement.contentDocument.body);
 
-            hostElement.contentDocument.addEventListener("click", onClick, true);
+            /* TODO: Move these events to grid designer code */
+            hostElement.contentDocument.addEventListener("click", onClick, true); 
             hostElement.contentDocument.addEventListener("mousedown", onPointerDown, true);
 
             this.viewManager["hostDocument"] = hostElement.contentDocument;
 
-            /* Intercepting push state of hosted window */
+            /* intercepting push state of the hosted iframe window */
             const hostedWindowHistory = hostElement.contentDocument.defaultView.window.history;
             const hostedWindowOriginalPushState = hostedWindowHistory.pushState;
-
-            const routeHandler = this.routeHandler;
 
             const onRouteChange = (route: Route) => {
                 route.metadata.originatedByHost = true;
                 hostedWindowHistory.pushState(route, route.title, route.url);
             };
 
-            routeHandler.addRouteChangeListener(onRouteChange);
+            /* adding listener to designer's route handler */
+            this.routeHandler.addRouteChangeListener(onRouteChange);
 
-            hostedWindowHistory.pushState(null, null, routeHandler.getCurrentUrl());
+            /* pushing initial route to route handler of the hosted iframe window */
+            const initialRoute = this.routeHandler.getCurrentRoute();
+            hostedWindowHistory.pushState(initialRoute, initialRoute.title, location.href);
 
+            /* overriding pushState method of the hosted iframe window */
             hostedWindowHistory.pushState = (route: Route, title: string, url: string) => {
                 hostedWindowOriginalPushState.call(hostedWindowHistory, route, title, url);
 
+                /* if event originated in the designer, skip pushing the state to avoid circular calls */
                 if (route && route.metadata.originatedByHost) {
                     return;
                 }
 
+                /* synching the state with designer's window */
                 window.history.pushState(route, route.title, route.url);
             };
         };
