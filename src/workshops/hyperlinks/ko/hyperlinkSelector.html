@@ -16,7 +16,7 @@
             </a>
         </div>
 
-        <!--ko foreach: { data: resourcePickers, as: 'resourcePicker' } -->
+        <!--ko foreach: { data: hyperlinkProviders, as: 'resourcePicker' } -->
         <!--ko if: resourcePicker.componentName !== 'blog-selector' -->
         <div class="tab"
             data-bind="css: { 'tab-is-active': $parent.hyperlinkProvider() && resourcePicker.componentName === $parent.hyperlinkProvider().componentName }, attr: { 'title': resourcePicker.name}">

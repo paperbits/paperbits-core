@@ -3,12 +3,14 @@ import { BlogWorkshop } from "./blogs";
 import { BlogPostDetailsWorkshop } from "./blogPostDetails";
 import { BlogSelector } from "./blogSelector";
 import { BlogWorkshopToolButton } from "./blogToolButton";
+import { BlogHyperlinkProvider } from "@paperbits/common/blogs";
 
-export class BlogWorkshopModule implements IInjectorModule {
-    public register(injector: IInjector): void {        
+export class BlogDesignModule implements IInjectorModule {
+    public register(injector: IInjector): void {
         injector.bind("blogWorkshop", BlogWorkshop);
         injector.bind("blogPostDetailsWorkshop", BlogPostDetailsWorkshop);
         injector.bind("blogSelector", BlogSelector);
+        injector.bindToCollection("hyperlinkProviders", BlogHyperlinkProvider);
         // injector.bindToCollection("workshopSections", BlogWorkshopSection);
     }
 }

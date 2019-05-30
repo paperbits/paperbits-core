@@ -3,10 +3,9 @@ import * as Utils from "@paperbits/common";
 import * as Objects from "@paperbits/common/objects";
 import template from "./cardEditor.html";
 import { IViewManager } from "@paperbits/common/ui";
-import { IWidgetEditor } from "@paperbits/common/widgets";
+import { WidgetEditor } from "@paperbits/common/widgets";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { CardModel } from "../cardModel";
-import { StyleService, } from "@paperbits/styles";
 import { BackgroundContract, TypographyContract } from "@paperbits/styles/contracts";
 
 @Component({
@@ -14,7 +13,7 @@ import { BackgroundContract, TypographyContract } from "@paperbits/styles/contra
     template: template,
     injectable: "cardEditor"
 })
-export class CardEditor {
+export class CardEditor implements WidgetEditor<CardModel> {
     private readonly verticalAlignment: ko.Observable<string>;
     private readonly horizontalAlignment: ko.Observable<string>;
 

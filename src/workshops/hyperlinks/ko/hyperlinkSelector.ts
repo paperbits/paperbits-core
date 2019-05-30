@@ -27,7 +27,7 @@ export class HyperlinkSelector {
     public onChange: (hyperlink: HyperlinkModel) => void;
 
     constructor(
-        private readonly resourcePickers: IHyperlinkProvider[],
+        private readonly hyperlinkProviders: IHyperlinkProvider[],
         private readonly pageService: IPageService,
         private readonly pageSelector: PageSelector
     ) {
@@ -85,11 +85,11 @@ export class HyperlinkSelector {
         let hyperlinkProvider: IHyperlinkProvider;
 
         if (hyperlink.targetKey) {
-            hyperlinkProvider = this.resourcePickers.find(x => x.canHandleHyperlink(hyperlink.targetKey));
+            hyperlinkProvider = this.hyperlinkProviders.find(x => x.canHandleHyperlink(hyperlink.targetKey));
         }
 
         if (!hyperlinkProvider) {
-            hyperlinkProvider = this.resourcePickers[this.resourcePickers.length - 1];
+            hyperlinkProvider = this.hyperlinkProviders[this.hyperlinkProviders.length - 1];
         } else {
             if (!this.isValueSelected && hyperlinkProvider.componentName === "page-selector") {
                 const pageContract = await this.pageService.getPageByKey(hyperlink.targetKey);

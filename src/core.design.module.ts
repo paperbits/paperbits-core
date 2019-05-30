@@ -17,9 +17,9 @@ import { ColumnEditorModule } from "./column/ko/columnEditor.module";
 import { SectionEditorModule } from "./section/ko/sectionEditor.module";
 import { RowEditorModule } from "./row/ko/rowEditor.module";
 import { BlockWorkshopModule } from "./workshops/block/ko/block.module";
-import { BlogWorkshopModule } from "./workshops/blog/ko/blog.module";
+import { BlogDesignModule } from "./workshops/blog/ko/blog.design.module";
 import { LayoutWorkshopModule } from "./workshops/layout/ko/layout.module";
-import { PageWorkshopModule } from "./workshops/page/ko/page.module";
+import { PageDesignModule } from "./workshops/page/ko/page.design.module";
 import { MediaWorkshopModule } from "./workshops/media/ko/media.module";
 import { NavigationWorkshopModule } from "./workshops/navigation/ko/navigation.module";
 import { SettingsWorkshopModule } from "./workshops/settings/ko/settings.module";
@@ -63,6 +63,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindCollection("dropHandlers");
         injector.bindCollection("workshopSections");
         injector.bindCollection("trayCommands");
+        injector.bindCollection("hyperlinkProviders");
         injector.bindSingleton("viewManager", ViewManager);
         injector.bindSingleton("tray", Tray);
         injector.bind("pageHyperlinkProvider", PageHyperlinkProvider);
@@ -76,20 +77,6 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindToCollection("autostart", BalloonBindingHandler);
         injector.bindToCollection("autostart", UnhandledErrorHandler);
         injector.bind("tooltip", Tooltip);
-        injector.bindFactory<IHyperlinkProvider[]>("resourcePickers", (ctx: IInjector) => {
-            const pageReourcePicker = ctx.resolve<IHyperlinkProvider>("pageHyperlinkProvider");
-            const blogReourcePicker = ctx.resolve<IHyperlinkProvider>("blogHyperlinkProvider");
-            const mediaReourcePicker = ctx.resolve<IHyperlinkProvider>("mediaHyperlinkProvider");
-            const urlHyperlinkProvider = ctx.resolve<IHyperlinkProvider>("urlHyperlinkProvider");
-
-            return [
-                pageReourcePicker,
-                blogReourcePicker,
-                mediaReourcePicker,
-                urlHyperlinkProvider
-            ];
-        });
-
         injector.bindSingleton("dragManager", DragManager);
         injector.bindSingleton("lightbox", LityLightbox);
         injector.bind("placeholderWidget", PlaceholderViewModel);
@@ -106,15 +93,14 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new TextblockEditorModule());
         injector.bindModule(new PictureEditorModule());
         injector.bindModule(new ButtonEditorModule());
-
         injector.bindModule(new VideoPlayerEditorModule());
         injector.bindModule(new YoutubePlayerEditorModule());
         injector.bindModule(new TestimonialsEditorModule());
         injector.bindModule(new TableOfContentsEditorModule());
         injector.bindModule(new NavbarEditorModule());
         injector.bindModule(new DropbucketModule());
-        injector.bindModule(new PageWorkshopModule());
-        injector.bindModule(new BlogWorkshopModule());
+        injector.bindModule(new PageDesignModule());
+        injector.bindModule(new BlogDesignModule());
         injector.bindModule(new MediaWorkshopModule());
         injector.bindModule(new LayoutWorkshopModule());
         injector.bindModule(new BlockWorkshopModule());
@@ -132,13 +118,15 @@ export class CoreDesignModule implements IInjectorModule {
         // injector.bindModule(new MapEditorModule());
         // injector.bindModule(new SearchResultsEditorModule());
 
+        injector.bindToCollection("hyperlinkProviders", UrlHyperlinkProvider);
         injector.bindToCollection("autostart", HostBindingHandler);
         injector.bindToCollection("autostart", DraggablesBindingHandler);
         injector.bindToCollection("autostart", GridBindingHandler);
         injector.bindToCollection("autostart", LightboxBindingHandler);
         injector.bindToCollection("autostart", Hinter);
-
-        injector.resolve("workshopSections"); // TODO: Find out why this collection fails to resolve without this push.
-        injector.resolve("trayCommands");
+        
+        injector.resolve("trayCommands"); // TODO: Find out why this collection fails to resolve without this push.
+        injector.resolve("hyperlinkProviders");
+        injector.resolve("workshopSections"); 
     }
 }

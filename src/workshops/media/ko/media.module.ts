@@ -4,6 +4,7 @@ import { MediaDetailsWorkshop } from "./mediaDetails";
 import { MediaSelector } from "./mediaSelector";
 import { PictureCropper } from "../../cropper/cropper";
 import { MediaToolButton } from "./mediaToolButton";
+import { MediaHyperlinkProvider } from "@paperbits/common/media";
 
 export class MediaWorkshopModule implements IInjectorModule {
     public register(injector: IInjector): void {
@@ -11,6 +12,7 @@ export class MediaWorkshopModule implements IInjectorModule {
         injector.bind("mediaDetailsWorkshop", MediaDetailsWorkshop);
         injector.bind("mediaSelector", MediaSelector);
         injector.bind("pictureCropper",  PictureCropper);
+        injector.bindToCollection("hyperlinkProviders", MediaHyperlinkProvider);
         injector.bindToCollection("workshopSections", MediaToolButton);
     }
 }

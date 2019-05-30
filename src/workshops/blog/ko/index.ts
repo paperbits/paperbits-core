@@ -1,4 +1,4 @@
-export * from "./blog.module";
+export * from "./blog.design.module";
 export * from "./blogPostDetails";
 export * from "./blogPostItem";
 export * from "./blogs";
