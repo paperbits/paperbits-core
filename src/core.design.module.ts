@@ -70,9 +70,6 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bind("mediaHyperlinkProvider", MediaHyperlinkProvider);
         injector.bind("urlHyperlinkProvider", UrlHyperlinkProvider);
         injector.bind("gridEditor", GridEditor);
-
-        // injector.bind("grid", Grid);
-
         injector.bindToCollection("autostart", KnockoutValidation);
         injector.bindToCollection("autostart", ResizableBindingHandler);
         injector.bindToCollection("autostart", CropperBindingHandler);
@@ -109,13 +106,12 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new TextblockEditorModule());
         injector.bindModule(new PictureEditorModule());
         injector.bindModule(new ButtonEditorModule());
-        injector.bindModule(new MapEditorModule());
+
         injector.bindModule(new VideoPlayerEditorModule());
         injector.bindModule(new YoutubePlayerEditorModule());
         injector.bindModule(new TestimonialsEditorModule());
         injector.bindModule(new TableOfContentsEditorModule());
         injector.bindModule(new NavbarEditorModule());
-        injector.bindModule(new SearchResultsEditorModule());
         injector.bindModule(new DropbucketModule());
         injector.bindModule(new PageWorkshopModule());
         injector.bindModule(new BlogWorkshopModule());
@@ -132,6 +128,10 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new LayoutEditorModule());
         injector.bindModule(new PageEditorModule());
         injector.bindModule(new CardEditorModule());
+
+        // injector.bindModule(new MapEditorModule());
+        // injector.bindModule(new SearchResultsEditorModule());
+
         injector.bindToCollection("autostart", HostBindingHandler);
         injector.bindToCollection("autostart", DraggablesBindingHandler);
         injector.bindToCollection("autostart", GridBindingHandler);

@@ -101,7 +101,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new GridCellModule());
         injector.bindModule(new NavbarModule());
         injector.bindModule(new ButtonModule());
-        injector.bindModule(new MapModule());
+        // injector.bindModule(new MapModule());
         injector.bindModule(new TableOfContentsModule());
         injector.bindModule(new PictureModule());
         injector.bindModule(new VideoPlayerModule());
