@@ -79,31 +79,32 @@ export class ResizableBindingHandler {
                     const bodyWidth = element.ownerDocument.body.clientWidth;
                     const bodyHeight = element.ownerDocument.body.clientHeight;
 
-                    element.style.right = bodyWidth - initialRight + "px";
-                    element.style.left = initialLeft + "px";
-                    element.style.bottom = bodyHeight - initialBottom + "px";
-                    element.style.top = initialTop + "px";
-
                     switch (initialEdge) {
                         case "left":
                             element.style.left = "unset";
+                            element.style.right = bodyWidth - initialRight + "px";
+                            element.style.width = initialWidth + "px";
                             break;
 
                         case "right":
                             element.style.right = "unset";
+                            element.style.left = initialLeft + "px";
+                            element.style.width = initialWidth + "px";
                             break;
 
                         case "top":
                             element.style.top = "unset";
+                            element.style.bottom = bodyHeight - initialBottom + "px";
+                            element.style.height = initialHeight + "px";
                             break;
 
                         case "bottom":
                             element.style.bottom = "unset";
+                            element.style.top = initialTop + "px";
+                            element.style.height = initialHeight + "px";
                             break;
                     }
-
-                    element.style.width = initialWidth + "px";
-                    element.style.height = initialHeight + "px";
+                  
                     element.style.position = "fixed";
                 };
 

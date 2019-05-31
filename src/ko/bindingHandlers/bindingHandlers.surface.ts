@@ -44,6 +44,7 @@ ko.bindingHandlers["surface"] = {
             dragsource: {
                 sticky: false,
                 payload: "surface",
+                inertia: true,
                 preventDragging: (clickedElement: HTMLElement) => {
                     return clickedElement.closest("a, .form, .btn, .toolbox-btn, .toolbox-dropdown .cropbox") !== null;
                 },
