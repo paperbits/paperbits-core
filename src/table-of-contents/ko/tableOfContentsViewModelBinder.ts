@@ -17,7 +17,6 @@ export class TableOfContentsViewModelBinder implements ViewModelBinder<TableOfCo
 
         viewModel["widgetBinding"] = {
             displayName: "Table of contents",
-
             model: model,
             editor: "table-of-contents-editor",
             applyChanges: async (updatedModel: TableOfContentsModel) => {

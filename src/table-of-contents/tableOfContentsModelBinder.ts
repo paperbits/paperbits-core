@@ -2,10 +2,9 @@ import { TableOfContentsModel } from "./tableOfContentsModel";
 import { INavigationService, NavigationItemContract, NavigationItemModel } from "@paperbits/common/navigation";
 import { IPageService } from "@paperbits/common/pages";
 import { IModelBinder } from "@paperbits/common/editing";
-import { IRouteHandler } from "@paperbits/common/routing";
 import { IContentItemService } from "@paperbits/common/contentItems";
 import { TableOfContentsContract } from "./tableOfContentsContract";
-import { Contract } from "@paperbits/common";
+import { Contract, Bag } from "@paperbits/common";
 import { AnchorUtils } from "../text/anchorUtils";
 import { BlockContract } from "../text/contracts";
 
@@ -13,11 +12,8 @@ export class TableOfContentsModelBinder implements IModelBinder {
     constructor(
         private readonly contentItemService: IContentItemService,
         private readonly navigationService: INavigationService,
-        private readonly pageService: IPageService,
-        private readonly routeHandler: IRouteHandler
-    ) {
-        this.contractToModel = this.contractToModel.bind(this);
-    }
+        private readonly pageService: IPageService
+    ) { }
 
     public canHandleContract(contract: Contract): boolean {
         return contract.type === "table-of-contents";
@@ -48,11 +44,11 @@ export class TableOfContentsModelBinder implements IModelBinder {
 
                 if (contentItem.permalink === currentPageUrl) {
                     navbarItemModel.isActive = true;
-    
+
                     if (contentItem.key && contentItem.key.startsWith("pages/")) {
                         const pageContent = await this.pageService.getPageContent(contentItem.key);
                         const children = AnchorUtils.getHeadingNodes(pageContent, maxHeading);
-    
+
                         if (children.length > 0) {
                             navbarItemModel.nodes = this.processAnchorItems(children);
                         }
@@ -64,7 +60,7 @@ export class TableOfContentsModelBinder implements IModelBinder {
         return navbarItemModel;
     }
 
-    public async contractToModel(contract: TableOfContentsContract): Promise<TableOfContentsModel> {
+    public async contractToModel(contract: TableOfContentsContract, bindingContext?: Bag<any>): Promise<TableOfContentsModel> {
         if (!contract) {
             throw new Error(`Parameter "contract" not specified.`);
         }
@@ -75,18 +71,18 @@ export class TableOfContentsModelBinder implements IModelBinder {
         tableOfContentsModel.maxHeading = contract.maxHeading || 1;
         tableOfContentsModel.items = [];
 
-        const currentPageUrl = this.routeHandler.getPath();
+        const currentPageUrl = bindingContext.navigationPath;
 
         if (contract.navigationItemKey) {
             const assignedNavigationItem = await this.navigationService.getNavigationItem(contract.navigationItemKey);
             tableOfContentsModel.title = tableOfContentsModel.title || assignedNavigationItem.label;
+
             if (assignedNavigationItem && assignedNavigationItem.navigationItems) { // has child nav items
                 const promises = assignedNavigationItem.navigationItems.map(async navigationItem => {
                     return await this.processNavigationItem(navigationItem, currentPageUrl, tableOfContentsModel.maxHeading);
                 });
 
                 const results = await Promise.all(promises);
-
                 tableOfContentsModel.items = results;
             }
         }
