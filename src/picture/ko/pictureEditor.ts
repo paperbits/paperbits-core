@@ -25,9 +25,7 @@ export class PictureEditor {
     public readonly appearanceStyles: ko.ObservableArray<any>;
     public readonly appearanceStyle: ko.Observable<any>;
 
-    constructor(
-        private readonly styleService: StyleService
-    ) {
+    constructor(private readonly styleService: StyleService) {
         this.caption = ko.observable<string>();
         this.layout = ko.observable<string>();
         this.hyperlink = ko.observable<HyperlinkModel>();

@@ -3,9 +3,11 @@ import * as Objects from "@paperbits/common/objects";
 import template from "./cardEditor.html";
 import { IViewManager } from "@paperbits/common/ui";
 import { WidgetEditor } from "@paperbits/common/widgets";
+import { StyleService } from "@paperbits/styles";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { CardModel } from "../cardModel";
 import { BackgroundContract, TypographyContract } from "@paperbits/styles/contracts";
+
 
 @Component({
     selector: "card-editor",
@@ -23,11 +25,16 @@ export class CardEditor implements WidgetEditor<CardModel> {
     public readonly appearanceStyles: ko.ObservableArray<any>;
     public readonly appearanceStyle: ko.Observable<any>;
 
-    constructor(private readonly viewManager: IViewManager) {
+    constructor(
+        private readonly viewManager: IViewManager,
+        private readonly styleService: StyleService
+    ) {
         this.alignment = ko.observable<string>();
         this.verticalAlignment = ko.observable<string>();
         this.horizontalAlignment = ko.observable<string>();
         this.scrollOnOverlow = ko.observable<boolean>();
+        this.appearanceStyles = ko.observableArray<any>();
+        this.appearanceStyle = ko.observable<any>();
     }
 
     @Param()
@@ -37,7 +44,7 @@ export class CardEditor implements WidgetEditor<CardModel> {
     public onChange: (model: CardModel) => void;
 
     @OnMounted()
-    public initialize(): void {
+    public async initialize(): Promise<void> {
         const viewport = this.viewManager.getViewport();
 
         const overflowStyle = <any>Objects.getObjectAt(`styles/instance/container/${viewport}/overflow`, this.model);
@@ -58,6 +65,16 @@ export class CardEditor implements WidgetEditor<CardModel> {
 
         this.alignment.subscribe(this.applyChanges);
         this.scrollOnOverlow.subscribe(this.applyChanges);
+
+        const variations = await this.styleService.getComponentVariations("card");
+
+        this.appearanceStyles(variations.filter(x => x.category === "appearance"));
+
+        if (this.model.styles) {
+            this.appearanceStyle(this.model.styles.appearance);
+        }
+
+        this.appearanceStyle.subscribe(this.applyChanges);
     }
 
     /**
@@ -79,6 +96,7 @@ export class CardEditor implements WidgetEditor<CardModel> {
         };
 
         Objects.setValue("styles/instance/container/xs/overflow", this.model, overflowStyle);
+        Objects.setValue("styles/appearance", this.model,  this.appearanceStyle());
 
         this.onChange(this.model);
     }
