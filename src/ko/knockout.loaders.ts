@@ -23,10 +23,10 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
 
                         const parameterDescriptions = Reflect.getMetadata("params", instance.constructor);
 
-                        if (parameterDescriptions) {
+                        if (parameterDescriptions && params) {
                             parameterDescriptions.forEach(parameterName => {
                                 const instanceValue = instance[parameterName];
-                                const paramerterValue = params[parameterName];
+                                const paramerterValue = params[parameterName] || params[parameterName.toLowerCase()];
 
                                 if (ko.isObservable(instanceValue)) {
                                     if (ko.isObservable(paramerterValue)) {
@@ -102,6 +102,20 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                 const callbackWrapper: (result: KnockoutComponentTypes.Definition) => void = (resultWrapper: KnockoutComponentTypes.Definition) => {
 
                     const createViewModelWrapper: (params: any, options: { element: Node; }) => any = (params: any, options: { element: Node; }) => {
+                        const attrs:NamedNodeMap = options.element["attributes"];
+                        if (attrs && attrs.length > 0) {
+                            const runtimeParams = {};
+                            for (let i = 0; i < attrs.length; i++) {
+                                const attr: Attr = attrs[i];
+                                if(attr.name.startsWith("runtime-")) {
+                                    const paramName = attr.name.split("-")[1];
+                                    runtimeParams[paramName] = attr.value;
+                                }
+                            }
+                            if(Object.keys(runtimeParams).length > 0) {
+                                params = Object.assign(runtimeParams, params);
+                            }
+                        }
                         if (config.preprocess) {
                             config.preprocess(options.element, params);
                         }
