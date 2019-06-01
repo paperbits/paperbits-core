@@ -3,7 +3,7 @@ import * as Utils from "@paperbits/common/utils";
 import template from "./formattingTools.html";
 import { IEventManager } from "@paperbits/common/events";
 import { IHtmlEditorProvider, HtmlEditorEvents, alignmentStyleKeys } from "@paperbits/common/editing";
-import { Component } from "@paperbits/common/ko/decorators";
+import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { FontContract, ColorContract } from "@paperbits/styles/contracts";
 import { IViewManager } from "@paperbits/common/ui";
 import { StyleService } from "@paperbits/styles/styleService";
@@ -65,11 +65,17 @@ export class FormattingTools {
         this.alignment = ko.observable<string>();
         this.anchored = ko.observable<boolean>();
 
-        eventManager.addEventListener(HtmlEditorEvents.onSelectionChange, this.updateFormattingState);
-        this.loadTextStyles();
+        
     }
 
-    private async loadTextStyles() {
+    @OnMounted()
+    public async init(): Promise<void> {
+        await this.loadTextStyles();
+        this.updateFormattingState();
+        this.eventManager.addEventListener(HtmlEditorEvents.onSelectionChange, this.updateFormattingState);
+    }
+
+    private async loadTextStyles(): Promise<void> {
         this.textStyles = await this.styleService.getVariations("globals", "body");
     }
 
@@ -115,19 +121,20 @@ export class FormattingTools {
             }
         }
         this.alignment(alignment);
+        if (this.textStyles) {
+            let appearance = this.textStyles[0]["displayName"];
+            
+            if (selectionState.appearance) {
+                // const breakpoint = Utils.getClosestBreakpoint(selectionState.appearance, this.viewManager.getViewport());
+                // const styleKey = selectionState.appearance[breakpoint];
+                const styleKey = selectionState.appearance;
 
-        let appearance = this.textStyles[0]["displayName"];
-        
-        if (selectionState.appearance) {
-            // const breakpoint = Utils.getClosestBreakpoint(selectionState.appearance, this.viewManager.getViewport());
-            // const styleKey = selectionState.appearance[breakpoint];
-            const styleKey = selectionState.appearance;
+                const textStyle = this.textStyles.find(item => item["key"] === styleKey);
+                appearance = textStyle && textStyle["displayName"];
+            }
 
-            const textStyle = this.textStyles.find(item => item["key"] === styleKey);
-            appearance = textStyle && textStyle["displayName"];
+            this.appearance(appearance);
         }
-
-        this.appearance(appearance);
 
         
 
@@ -219,12 +226,12 @@ export class FormattingTools {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleUnorderedList();
     }
 
-    public incIndent() {
+    public incIndent(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().increaseIndent();
 
         this.updateFormattingState();
     }
-    public decIndent() {
+    public decIndent(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().decreaseIndent();
     }
 

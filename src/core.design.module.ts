@@ -128,5 +128,6 @@ export class CoreDesignModule implements IInjectorModule {
         injector.resolve("trayCommands"); // TODO: Find out why this collection fails to resolve without this push.
         injector.resolve("hyperlinkProviders");
         injector.resolve("workshopSections"); 
+        injector.resolve("htmlEditorProvider"); 
     }
 }
