@@ -1,13 +1,24 @@
 <div class="editor">
     <h1>Hyperlink</h1>
     <hr />
-
-    <!-- ko if: hyperlink -->
-    <div class="form-group">
-        <b data-bind="text: hyperlink().title"></b><br/>
-        <span  data-bind="text: hyperlink().href"></span>
+    <div class="hlink-container">
+        <span class="link-label" data-bind="attr: { title: getCurrentSelection() }"><b  data-bind="text: getCurrentSelection()"></b></span>
     </div>
-    <!-- /ko -->
+
+    <div class="form-group">
+        <label for="targetValue" class="form-label">
+            Target
+            <button class="btn btn-info" type="button" data-bind="infoMessageToggle: 'The target attribute specifies where to open the linked document.'"></button>
+        </label>
+        <!--ko if: hyperlink -->
+        <select id="targetValue" class="form-control" data-bind="options: targets, value: target, optionsText: 'name', optionsValue: 'value', enable: !!hyperlink(), event:{ change: targetChanged}"></select>
+        <!--/ko-->
+        <!--ko ifnot: hyperlink -->
+        <div>Not available.</div>
+        <!--/ko-->
+    </div>
+
+    
 
     <div class="tabs">
         <div class="tab" data-bind="css: { 'tab-is-active': !hyperlinkProvider() }" title="Clear hyperlink">

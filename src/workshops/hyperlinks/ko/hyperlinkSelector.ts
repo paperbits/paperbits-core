@@ -15,16 +15,20 @@ export class HyperlinkSelector {
     private isValueSelected: boolean;
 
     public readonly hyperlinkProvider: ko.Observable<IHyperlinkProvider>;
-    public readonly selection: ko.Computed<string>;
+    public readonly targets: ko.ObservableArray<{ name: string, value: string }>;
+    public readonly target: ko.Observable<string>;
 
     @Param()
     public hyperlink: ko.Observable<HyperlinkModel>;
 
-    @Param()
-    public targetObject: ko.Observable<any>;
-
     @Event()
     public onChange: (hyperlink: HyperlinkModel) => void;
+
+    private targetsValues: { name: string, value: string }[] = [
+        { name: "the same frame", value: "_self" },
+        { name: "new window or tab", value: "_blank" },
+        { name: "the parent frame", value: "_parent" }
+    ];
 
     constructor(
         private readonly hyperlinkProviders: IHyperlinkProvider[],
@@ -33,17 +37,13 @@ export class HyperlinkSelector {
     ) {
         this.hyperlink = ko.observable<HyperlinkModel>();
         this.hyperlinkProvider = ko.observable<IHyperlinkProvider>(null);
-        this.selection = ko.pureComputed(() => {
-            const hyperlink = this.hyperlink();
-
-            return hyperlink
-                ? `${hyperlink.title} ${hyperlink.anchorName ? "(" + hyperlink.anchorName + ")" : ""}`
-                : "Not selected";
-        });
+        this.targets = ko.observableArray<{ name: string, value: string }>(this.targetsValues);
+        this.target = ko.observable<string>();
     }
 
     @OnMounted()
     public onMounted(): void {
+        this.setTarget(this.hyperlink());
         this.updateHyperlinkState(this.hyperlink());
         this.hyperlinkProvider.subscribe(this.onResourcePickerChange);
     }
@@ -57,6 +57,17 @@ export class HyperlinkSelector {
 
     public onHyperlinkSelected(hyperlink: HyperlinkModel): void {
         this.hyperlink(hyperlink);
+        hyperlink.target = this.target();
+
+        if (this.onChange) {
+            this.onChange(hyperlink);
+        }
+    }
+
+    public targetChanged(): void {
+        const hyperlink = this.hyperlink();
+        hyperlink.target = this.target();
+        this.hyperlink(hyperlink);
 
         if (this.onChange) {
             this.onChange(hyperlink);
@@ -65,10 +76,15 @@ export class HyperlinkSelector {
 
     public setProvider(provider: IHyperlinkProvider): void {
         this.hyperlinkProvider(provider);
+        this.hyperlink(null);
+        this.target(this.targetsValues[0].value);
     }
 
     public getCurrentSelection(): string {
         const hyperlink = this.hyperlink();
+        if (!this.hyperlinkProvider() || !hyperlink) {
+            return "Not selected";
+        }
         return `${this.hyperlinkProvider().name}: ${hyperlink.title} ${hyperlink.anchorName ? "(" + hyperlink.anchorName + ")" : ""}`;
     }
 
@@ -79,6 +95,7 @@ export class HyperlinkSelector {
     private async updateHyperlinkState(hyperlink: HyperlinkModel): Promise<void> {
         if (!hyperlink) {
             this.hyperlinkProvider(null);
+            this.target(this.targetsValues[0].value);
             return;
         }
 
@@ -103,6 +120,11 @@ export class HyperlinkSelector {
         }
 
         this.hyperlink(hyperlink);
+        this.setTarget(hyperlink);
         this.hyperlinkProvider(hyperlinkProvider);
+    }
+
+    private setTarget(hyperlink: HyperlinkModel): void {
+        this.target((hyperlink && hyperlink.target && this.targetsValues.find(t => t.value === hyperlink.target).value) || this.targetsValues[0].value);
     }
 }

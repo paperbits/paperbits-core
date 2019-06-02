@@ -52,6 +52,7 @@ export class InlineModelBinder {
                             markModel.attrs.anchorName = mark.attrs["anchorName"];
                         }
                     }
+                    markModel.attrs["target"] = mark.attrs["target"];
                 }
                 else {
                     if (mark.type === "color") {

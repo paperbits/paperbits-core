@@ -4,13 +4,13 @@
 
 <div class="flex-container flex-container-column list-container">
     <ul class="flex-item flex-item-grow list" data-bind="foreach: pages, scrollable: {}">
-        <li tabindex="0" class="list-item" data-bind="css: { selected: hasFocus }, click: $component.selectPage, hasFocus: hasFocus, event: { keydown: $component.onKeyDown }">
+        <li tabindex="0" class="list-item" data-bind="css: { selected: hasFocus }, click: $component.selectPage, hasFocus: hasFocus, event: { keydown: $component.onKeyDown }, attr: { title: title }">
             <i class="paperbits-icon paperbits-single-content-03"></i>
             <span class="list-item-label" data-bind="text: title"></span>
 
             <!--ko if: anchors() && anchors().length > 0 -->
             <ul class="list-item-children" data-bind="foreach: anchors">
-                <li tabindex="0" class="list-item" data-bind="css: { selected: hasFocus }, click: $component.selectAnchor, hasFocus: hasFocus, event: { keydown: $component.onKeyDown }">
+                <li tabindex="0" class="list-item" data-bind="css: { selected: hasFocus }, click: $component.selectAnchor, hasFocus: hasFocus, event: { keydown: $component.onKeyDown }, attr: { title: shortTitle }">
                     <i class="paperbits-icon paperbits-anchor"></i>
                     <span class="list-item-label" data-bind="text: shortTitle"></span>
                 </li>

@@ -51,6 +51,11 @@ export class UrlSelector {
     }
 
     public async selectUrl(urlItem: UrlItem, anchorKey?: string): Promise<void> {
+        const uri = this.selectedUrl();
+        if (uri) {
+            uri.hasFocus(false);
+        }
+        urlItem.hasFocus(true);
         this.selectedUrl(urlItem);
 
         if (this.onSelect) {
@@ -62,6 +67,15 @@ export class UrlSelector {
         const newUri = this.uri();
         await this.urlService.createUrl(newUri, newUri);
 
+        this.uri("https://");
+        await this.searchUrls();
+    }
+
+    public async deleteUrl(): Promise<void> {
+        const uri = this.selectedUrl();
+        if (uri) {
+            await this.urlService.deleteUrl(uri.toUrl());
+        }
         this.uri("https://");
         await this.searchUrls();
     }
