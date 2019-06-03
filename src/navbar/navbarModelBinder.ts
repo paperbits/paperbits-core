@@ -8,7 +8,7 @@ import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { Contract } from "@paperbits/common/contract";
 
 
-export class NavbarModelBinder implements IModelBinder {
+export class NavbarModelBinder implements IModelBinder<NavbarModel> {
     constructor(
         private readonly mediaPermalinkResolver: IPermalinkResolver,
         private readonly navigationService: INavigationService,
@@ -61,9 +61,9 @@ export class NavbarModelBinder implements IModelBinder {
             throw new Error(`Parameter "contract" not specified.`);
         }
 
-        const navbarItem = new NavigationItemModel();
+        const navigationItem = new NavigationItemModel();
 
-        navbarItem.label = contract.label;
+        navigationItem.label = contract.label;
 
         if (contract.navigationItems) {
             const tasks = [];
@@ -75,24 +75,22 @@ export class NavbarModelBinder implements IModelBinder {
             const results = await Promise.all(tasks);
 
             results.forEach(child => {
-                navbarItem.nodes.push(child);
+                navigationItem.nodes.push(child);
             });
         }
         else if (contract.targetKey) {
             const contentItem = await this.contentItemService.getContentItemByKey(contract.targetKey);
 
             if (contentItem) {
-                navbarItem.url = contentItem.permalink;
+                navigationItem.url = contentItem.permalink;
             }
-
         }
         else {
-            console.warn(`No permalink key for item:`);
-            console.warn(contract);
+            console.warn(`Navigation item "${navigationItem.label}" has no permalink assigned to it.`);
         }
-        navbarItem.isActive = navbarItem.url === this.routeHandler.getPath();
+        navigationItem.isActive = navigationItem.url === this.routeHandler.getPath();
 
-        return navbarItem;
+        return navigationItem;
     }
 
     public modelToContract(navbarModel: NavbarModel): Contract {

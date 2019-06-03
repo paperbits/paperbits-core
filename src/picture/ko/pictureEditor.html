@@ -2,34 +2,21 @@
     <div class="form-group form-group-collapsible">
         <label class="form-label">
             <a href="#" class="form-group-toggle" data-bind="collapse: '#sourceCollapse'"></a>
-            <b>Source</b>
+            <b>Main</b>
         </label>
         <div id="sourceCollapse" class="collapse form-group-collapse">
             <div class="dropzone">
-                <a href="#" class="dropzone-showbox" data-bind="balloon: { component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected } } }">
+                <a href="#" class="dropzone-showbox"
+                    data-bind="balloon: { component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected } } }">
                     <div class="fit" data-bind="background: background"></div>
                 </a>
             </div>
-        </div>
-    </div>
 
-    <div class="form-group form-group-collapsible">
-        <label class="form-label">
-            <a href="#" class="form-group-toggle" data-bind="collapse: '#miscellaneousCollapse'"></a>
-            <b>Miscellaneous</b>
-        </label>
-        <div id="miscellaneousCollapse" class="collapse form-group-collapse">
-            <div class="form-group">
-                <label for="appearanceStyle" class="form-label">
-                    Appearance
-                    <button class="btn btn-info" type="button" data-bind="infoMessageToggle: 'Predefined appearance from style guide.'"></button>
-                </label>
-                <select id="appearanceStyle" class="form-control" data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
-            </div>
             <div class="form-group">
                 <label class="form-label">
                     Caption
-                    <button class="btn btn-info" type="button" data-bind="infoMessageToggle: 'An alternate text for an image'"></button>
+                    <button class="btn btn-info" type="button"
+                        data-bind="infoMessageToggle: 'An alternate text for an image'"></button>
                 </label>
                 <input type="text" class="form-control" data-bind="textInput: caption" maxlength="256" />
             </div>
@@ -37,25 +24,53 @@
             <div class="form-group">
                 <label class="form-label">
                     Link to
-                    <button class="btn btn-info" type="button" data-bind="infoMessageToggle: 'An item that will be navigated on click action.'"></button>
+                    <button class="btn btn-info" type="button"
+                        data-bind="infoMessageToggle: 'An item that will be navigated on click action.'"></button>
                 </label>
                 <div class="input-group">
-                    <a href="#" class="form-control" data-bind="text: hyperlinkTitle, balloon: { component: { name: 'hyperlink-selector', params: { hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange } } }">
+                    <a href="#" class="form-control"
+                        data-bind="text: hyperlinkTitle, balloon: { component: { name: 'hyperlink-selector', params: { hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange } } }">
                     </a>
                     <div class="input-group-addon">
                         <i class="paperbits-icon paperbits-link-69-2"></i>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" data-bind="collapse: '#sizeCollapse'"></a>
+            <b>Size</b>
+        </label>
+        <div id="sizeCollapse" class="collapse form-group-collapse">
             <div class="form-group">
                 <label class="form-label">Width</label>
-                <input type="number" class="form-control" data-bind="textInput: width" />
+                <input type="number" class="form-control" placeholder="(Not set)" data-bind="textInput: width" />
             </div>
 
             <div class="form-group">
                 <label class="form-label">Height</label>
-                <input type="number" class="form-control" data-bind="textInput: height" />
+                <input type="number" class="form-control" placeholder="(Not set)" data-bind="textInput: height" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" data-bind="collapse: '#miscellaneousCollapse'"></a>
+            <b>Styling</b>
+        </label>
+        <div id="miscellaneousCollapse" class="collapse form-group-collapse">
+            <div class="form-group">
+                <label for="appearanceStyle" class="form-label">
+                    Appearance
+                    <button class="btn btn-info" type="button"
+                        data-bind="infoMessageToggle: 'Predefined appearance from style guide.'"></button>
+                </label>
+                <select id="appearanceStyle" class="form-control"
+                    data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
             </div>
         </div>
     </div>

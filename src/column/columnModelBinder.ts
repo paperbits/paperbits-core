@@ -5,7 +5,7 @@ import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { IModelBinder } from "@paperbits/common/editing";
 import { Contract, Bag } from "@paperbits/common";
 
-export class ColumnModelBinder implements IModelBinder {
+export class ColumnModelBinder implements IModelBinder<ColumnModel> {
     constructor(private readonly modelBinderSelector: ModelBinderSelector) {
         this.contractToModel = this.contractToModel.bind(this);
     }

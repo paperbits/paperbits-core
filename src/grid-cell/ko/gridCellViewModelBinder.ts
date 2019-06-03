@@ -44,9 +44,10 @@ export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, G
 
         const displayName = model.role.charAt(0).toUpperCase() + model.role.slice(1);
 
-        const binding: IWidgetBinding = {
+        const binding: IWidgetBinding<GridCellModel> = {
             name: "grid-cell",
             displayName: displayName,
+            readonly: bindingContext ? bindingContext.readonly : false,
             flow: "inline",
             model: model,
             editor: "grid-cell-editor",

@@ -4,7 +4,7 @@ import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { Contract, Bag } from "@paperbits/common";
 import { TextblockModel } from "./textblockModel";
 
-export class TextblockModelBinder implements IModelBinder {
+export class TextblockModelBinder implements IModelBinder<TextblockModel> {
     constructor(private readonly modelBinderSelector: ModelBinderSelector) { }
 
     public async contractToModel(contract: Contract, bindingContext?: Bag<any>): Promise<TextblockModel> {
@@ -12,7 +12,7 @@ export class TextblockModelBinder implements IModelBinder {
 
         if (contract.nodes && contract.nodes.length > 0) {
             const modelPromises = contract.nodes.map(async (contract: Contract) => {
-                const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
+                const modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(contract);
                 return await modelBinder.contractToModel(contract, bindingContext);
             });
 

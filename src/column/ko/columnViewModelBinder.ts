@@ -122,10 +122,10 @@ export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, Colum
         // columnViewModel.styles(styles); TODO: Enable when all CSS switched to styling system
 
 
-        const binding: IWidgetBinding = {
+        const binding: IWidgetBinding<ColumnModel> = {
             name: "column",
             displayName: "Column",
-
+            readonly: bindingContext ? bindingContext.readonly : false,
             flow: "inline",
             model: model,
             editor: "layout-column-editor",

@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./pictureEditor.html";
 import { MediaContract } from "@paperbits/common/media";
-import { HyperlinkModel } from "@paperbits/common/permalinks";
+import { HyperlinkModel, IPermalinkResolver } from "@paperbits/common/permalinks";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 import { PictureModel } from "../pictureModel";
@@ -25,7 +25,10 @@ export class PictureEditor {
     public readonly appearanceStyles: ko.ObservableArray<any>;
     public readonly appearanceStyle: ko.Observable<any>;
 
-    constructor(private readonly styleService: StyleService) {
+    constructor(
+        private readonly styleService: StyleService,
+        private readonly mediaPermalinkResolver: IPermalinkResolver,
+    ) {
         this.caption = ko.observable<string>();
         this.layout = ko.observable<string>();
         this.hyperlink = ko.observable<HyperlinkModel>();
@@ -46,10 +49,12 @@ export class PictureEditor {
 
     @OnMounted()
     public async initialize(): Promise<void> {
-        this.background(this.model.background);
+        const background = new BackgroundModel();
+        background.sourceKey = this.model.sourceKey;
+        background.sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(this.model.sourceKey);
+        this.background(background);
+
         this.caption(this.model.caption);
-        this.layout(this.model.layout);
-        this.animation(this.model.animation);
         this.hyperlink(this.model.hyperlink);
         this.width(this.model.width);
         this.height(this.model.height);
@@ -73,10 +78,8 @@ export class PictureEditor {
 
     public applyChanges(): void {
         this.model.caption = this.caption();
-        this.model.layout = this.layout();
         this.model.hyperlink = this.hyperlink();
-        this.model.animation = this.animation();
-        this.model.background = this.background();
+        this.model.sourceKey = this.background().sourceKey;
         this.model.width = this.width();
         this.model.height = this.height();
         this.model.styles = {

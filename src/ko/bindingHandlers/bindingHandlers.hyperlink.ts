@@ -2,9 +2,9 @@
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 
 ko.bindingHandlers["hyperlink"] = {
-    init(element: HTMLElement, valueAccessor) {
-        let hyperlink: HyperlinkModel = valueAccessor();
-        let attr = ko.observable();
+    init(element: HTMLElement, valueAccessor: () => HyperlinkModel): void {
+        const hyperlink: HyperlinkModel = valueAccessor();
+        const attr = ko.observable();
 
         if (ko.isObservable(hyperlink)) {
             hyperlink.subscribe(newHyperlink => {

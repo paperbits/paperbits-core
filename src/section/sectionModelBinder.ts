@@ -3,9 +3,9 @@ import { SectionModel } from "./sectionModel";
 import { IModelBinder } from "@paperbits/common/editing";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { Contract, Bag } from "@paperbits/common";
-import { IStyleCompiler } from "@paperbits/common/styles";
 
-export class SectionModelBinder implements IModelBinder {
+
+export class SectionModelBinder implements IModelBinder<SectionModel> {
     public canHandleContract(contract: Contract): boolean {
         return contract.type === "layout-section";
     }
@@ -27,7 +27,7 @@ export class SectionModelBinder implements IModelBinder {
         model.styles = contract.styles;
 
         const modelPromises = contract.nodes.map(async (contract: Contract) => {
-            const modelBinder: IModelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
+            const modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(contract);
             return await modelBinder.contractToModel(contract, bindingContext);
         });
 

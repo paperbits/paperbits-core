@@ -2,11 +2,12 @@ import { YoutubePlayerViewModel } from "./youtubePlayerViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
 import { YoutubePlayerModel } from "../youtubePlayerModel";
 import { IEventManager } from "@paperbits/common/events";
+import { Bag } from "@paperbits/common";
 
 export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlayerModel, YoutubePlayerViewModel> {
     constructor(private readonly eventManager: IEventManager) { }
 
-    public async modelToViewModel(model: YoutubePlayerModel, viewModel?: YoutubePlayerViewModel): Promise<YoutubePlayerViewModel> {
+    public async modelToViewModel(model: YoutubePlayerModel, viewModel?: YoutubePlayerViewModel, bindingContext?: Bag<any>): Promise<YoutubePlayerViewModel> {
         if (!viewModel) {
             viewModel = new YoutubePlayerViewModel();
         }
@@ -19,6 +20,7 @@ export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlay
 
         viewModel["widgetBinding"] = {
             displayName: "Youtube player",
+            readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             editor: "youtube-editor",
             applyChanges: () => {

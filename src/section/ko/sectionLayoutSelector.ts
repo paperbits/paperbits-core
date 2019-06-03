@@ -34,7 +34,7 @@ export class SectionLayoutSelector implements IResourceSelector<SectionModel> {
 
     public async onBlockSelected(block: BlockContract): Promise<void> {
         const contract = await this.blockService.getBlockContent(block.key);
-        const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
+        const modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(contract);
         const model = await modelBinder.contractToModel(contract);
 
         if (this.onSelect) {

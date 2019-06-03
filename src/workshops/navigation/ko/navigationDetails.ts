@@ -58,7 +58,10 @@ export class NavigationDetailsWorkshop {
 
     public onHyperlinkChange(hyperlink: HyperlinkModel): void {
         this.hyperlink(hyperlink);
-        this.navigationItem.targetKey(hyperlink.targetKey);
+
+        const targetKey = hyperlink ? hyperlink.targetKey : null;
+        
+        this.navigationItem.targetKey(targetKey);
     }
 
     public deleteNavigationItem(): void {

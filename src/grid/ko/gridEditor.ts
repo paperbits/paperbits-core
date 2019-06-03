@@ -33,7 +33,7 @@ export class GridEditor {
         this.actives = {};
     }
 
-    private isModelBeingEdited(binding: IWidgetBinding): boolean {
+    private isModelBeingEdited(binding: IWidgetBinding<any>): boolean {
         const session = this.viewManager.getOpenView();
 
         if (!session) {
@@ -101,7 +101,7 @@ export class GridEditor {
         return contextualEditor;
     }
 
-    private isModelSelected(binding: IWidgetBinding): boolean {
+    private isModelSelected(binding: IWidgetBinding<any>): boolean {
         const selectedElement = this.viewManager.getSelectedElement();
 
         if (!selectedElement) {
@@ -478,29 +478,17 @@ export class GridEditor {
         let highlightColor: string;
         const tobeDeleted = Object.keys(this.actives);
 
-        let layoutEditing = false;
-
-        const metadata = this.routeHandler.getCurrentUrlMetadata();
-
-        if (metadata && metadata["routeKind"]) {
-            layoutEditing = metadata["routeKind"] === "layout";
-        }
-
         let current = null;
 
         for (let i = elements.length - 1; i >= 0; i--) {
             const element = elements[i];
             const widgetBinding = GridHelper.getWidgetBinding(element);
 
-            if (!widgetBinding || widgetBinding.readonly || widgetBinding === current) {
+            if (!widgetBinding) {
                 continue;
             }
 
-            /* Filters */
-            const bindings = GridHelper.getParentWidgetBindings(element);
-            const windgetIsInContent = bindings.some(x => x.name === "page" || x.name === "email-layout");
-
-            if ((!windgetIsInContent && !layoutEditing)) {
+            if (!widgetBinding || widgetBinding.readonly || widgetBinding === current) {
                 continue;
             }
 

@@ -5,19 +5,15 @@
         <span class="link-label" data-bind="attr: { title: getCurrentSelection() }"><b  data-bind="text: getCurrentSelection()"></b></span>
     </div>
 
+     <!--ko if: hyperlink -->
     <div class="form-group">
         <label for="targetValue" class="form-label">
-            Target
-            <button class="btn btn-info" type="button" data-bind="infoMessageToggle: 'The target attribute specifies where to open the linked document.'"></button>
+            Open in
+            <button class="btn btn-info" type="button" data-bind="infoMessageToggle: 'Specifies how to open the link.'"></button>
         </label>
-        <!--ko if: hyperlink -->
         <select id="targetValue" class="form-control" data-bind="options: targets, value: target, optionsText: 'name', optionsValue: 'value', enable: !!hyperlink(), event:{ change: targetChanged}"></select>
-        <!--/ko-->
-        <!--ko ifnot: hyperlink -->
-        <div>Not available.</div>
-        <!--/ko-->
     </div>
-
+    <!--/ko-->
     
 
     <div class="tabs">

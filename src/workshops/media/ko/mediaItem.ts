@@ -17,7 +17,7 @@ export class MediaItem {
     public description: ko.Observable<string>;
     public keywords: ko.Observable<string>;
     public contentType: ko.Observable<string>;
-    public widgetFactoryResult: IWidgetFactoryResult;
+    public widgetFactoryResult: IWidgetFactoryResult<any>;
 
     constructor(mediaContract: MediaContract) {
         this.key = mediaContract.key;

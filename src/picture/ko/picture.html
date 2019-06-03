@@ -1,10 +1,10 @@
 <picture>
     <!-- ko if: hyperlink -->
     <a data-bind="hyperlink: hyperlink">
-        <img class="content" data-bind="background: background, styled: styles, attr: { alt: caption }, size: { width: width, height: height }" />
+        <img class="content" data-bind="styled: styles, attr: { src: sourceUrl, alt: caption }, size: { width: width, height: height }" />
     </a>
     <!-- /ko -->
     <!-- ko ifnot: hyperlink -->
-    <img class="content" data-bind="background: background, styled: styles, attr: { alt: caption }, size: { width: width, height: height }" />
+    <img class="content" data-bind="styled: styles, attr: { src: sourceUrl, alt: caption }, size: { width: width, height: height }" />
     <!-- /ko -->
 </picture>

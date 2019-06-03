@@ -6,6 +6,7 @@ import { NavigationItemContract, NavigationItemModel, NavigationEvents } from "@
 import { NavbarModel } from "../navbarModel";
 import { NavbarModelBinder } from "../navbarModelBinder";
 import { IStyleCompiler } from "@paperbits/common/styles/IStyleCompiler";
+import { Bag } from "@paperbits/common";
 
 
 export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, NavbarViewModel> {
@@ -34,16 +35,26 @@ export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, Navba
         return navbarItemViewModel;
     }
 
-    public async modelToViewModel(model: NavbarModel, viewModel?: NavbarViewModel): Promise<NavbarViewModel> {
+
+    public async modelToViewModel(model: NavbarModel, viewModel?: NavbarViewModel, bindingContext?: Bag<any>): Promise<NavbarViewModel> {
+        let onUpdate;
+
         if (!viewModel) {
             viewModel = new NavbarViewModel();
+
+            onUpdate = async (updatedRootContract: NavigationItemContract): Promise<void> => {
+                if (updatedRootContract.key === model.rootKey) {
+                    const updatedRootModel = await this.navbarModelBinder.navigationItemToNavbarItemModel(updatedRootContract);
+                    viewModel.navigationRoot(this.navbarItemModelToNavbarItemViewModel(updatedRootModel));
+                }
+            };
         }
 
         if (model.root) {
             const navigationRoot = this.navbarItemModelToNavbarItemViewModel(model.root);
             viewModel.navigationRoot(navigationRoot);
         }
-        
+
         viewModel.pictureSourceUrl(model.pictureSourceUrl);
         viewModel.pictureWidth(model.pictureWidth);
         viewModel.pictureHeight(model.pictureHeight);
@@ -54,23 +65,20 @@ export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, Navba
 
         viewModel["widgetBinding"] = {
             displayName: "Navigation bar",
-
+            readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             editor: "navbar-editor",
             applyChanges: () => {
-                this.modelToViewModel(model, viewModel);
+                this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
+            },
+            onCreate: () => {
+                this.eventManager.addEventListener(NavigationEvents.onNavigationItemUpdate, onUpdate);
+            },
+            onDispose: () => {
+                this.eventManager.removeEventListener(NavigationEvents.onNavigationItemUpdate, onUpdate);
             }
         };
-
-        this.eventManager.addEventListener(NavigationEvents.onNavigationItemUpdate, async (updatedRootContract: NavigationItemContract) => {
-            // TODO: Think about how to unsubscribe from this event.
-
-            if (updatedRootContract.key === model.rootKey) {
-                const updatedRootModel = await this.navbarModelBinder.navigationItemToNavbarItemModel(updatedRootContract);
-                viewModel.navigationRoot(this.navbarItemModelToNavbarItemViewModel(updatedRootModel));
-            }
-        });
 
         return viewModel;
     }

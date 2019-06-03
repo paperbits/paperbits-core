@@ -3,21 +3,34 @@ import { ViewModelBinder } from "@paperbits/common/widgets";
 import { PictureModel } from "../pictureModel";
 import { IEventManager } from "@paperbits/common/events";
 import { IStyleCompiler } from "@paperbits/common/styles/IStyleCompiler";
+import { Bag } from "@paperbits/common";
+import { IPermalinkResolver } from "@paperbits/common/permalinks";
+import { IWidgetBinding } from "@paperbits/common/editing";
 
 export class PictureViewModelBinder implements ViewModelBinder<PictureModel, PictureViewModel> {
     constructor(
         private readonly eventManager: IEventManager,
-        private readonly styleCompiler: IStyleCompiler) { }
+        private readonly styleCompiler: IStyleCompiler,
+        private readonly mediaPermalinkResolver: IPermalinkResolver,
+    ) { }
 
-    public async modelToViewModel(model: PictureModel, viewModel?: PictureViewModel): Promise<PictureViewModel> {
+    public async modelToViewModel(model: PictureModel, viewModel?: PictureViewModel, bindingContext?: Bag<any>): Promise<PictureViewModel> {
         if (!viewModel) {
             viewModel = new PictureViewModel();
         }
 
+        let sourceUrl = null;
+
+        if (model.sourceKey) {
+            sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(model.sourceKey);
+
+            if (!sourceUrl) {
+                console.warn(`Unable to set picture. Media with source key ${model.sourceKey} not found.`);
+            }
+        }
+
+        viewModel.sourceUrl(sourceUrl);
         viewModel.caption(model.caption);
-        viewModel.layout(model.layout || "noframe");
-        viewModel.animation(model.animation);
-        viewModel.background(model.background);
         viewModel.hyperlink(model.hyperlink);
         viewModel.width(model.width);
         viewModel.height(model.height);
@@ -26,8 +39,9 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
             viewModel.styles(await this.styleCompiler.getClassNamesByStyleConfigAsync2(model.styles));
         }
 
-        viewModel["widgetBinding"] = {
+        const binding: IWidgetBinding<PictureModel> = {
             displayName: "Picture",
+            readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             editor: "paperbits-picture-editor",
             applyChanges: (changes) => {
@@ -36,6 +50,8 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         };
+
+        viewModel["widgetBinding"] = binding;
 
         return viewModel;
     }

@@ -2,6 +2,7 @@ import { MapViewModel } from "./mapViewModel";
 import { MapService } from "../mapService";
 import { MapModel } from "../mapModel";
 import { IEventManager } from "@paperbits/common/events";
+import { Bag } from "@paperbits/common";
 
 export class MapViewModelBinder {
     constructor(
@@ -9,7 +10,7 @@ export class MapViewModelBinder {
         private readonly eventManager: IEventManager
     ) { }
 
-    public async modelToViewModel(model: MapModel, viewModel?: MapViewModel): Promise<MapViewModel> {
+    public async modelToViewModel(model: MapModel, viewModel?: MapViewModel, bindingContext?: Bag<any>): Promise<MapViewModel> {
         if (!viewModel) {
             viewModel = new MapViewModel(this.mapService);
         }
@@ -21,11 +22,11 @@ export class MapViewModelBinder {
 
         viewModel["widgetBinding"] = {
             displayName: "Map",
-            
+            readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             editor: "paperbits-map-editor",
             applyChanges: () => {
-                this.modelToViewModel(model, viewModel);
+                this.modelToViewModel(model, viewModel,);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         }

@@ -313,7 +313,7 @@ export class ViewManager implements IViewManager {
         this.clearJourney();
     }
 
-    public openWidgetEditor(binding: IWidgetBinding): void {
+    public openWidgetEditor(binding: IWidgetBinding<any>): void {
         const view: IView = {
             component: {
                 name: binding.editor,

@@ -63,13 +63,12 @@ export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
                 backgroundModel.position = "center center";
 
                 const pictureModel = new PictureModel();
-                pictureModel.background = backgroundModel;
+                pictureModel.sourceKey = "";
                 pictureModel.caption = caption;
-                pictureModel.layout = defaultLayout;
 
                 return pictureModel;
             }
-        }
+        };
 
         return widgetOrder;
     }

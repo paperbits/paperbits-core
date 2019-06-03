@@ -4,6 +4,7 @@ import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { VideoPlayerModel } from "../videoPlayerModel";
 import { StyleService } from "@paperbits/styles/styleService";
+import { IPermalinkResolver } from "@paperbits/common/permalinks";
 
 @Component({
     selector: "video-player-editor",
@@ -11,27 +12,26 @@ import { StyleService } from "@paperbits/styles/styleService";
     injectable: "videoPlayerEditor"
 })
 export class VideoEditor {
-    public sourceUrl: ko.Observable<string>;
-    public controls: ko.Observable<boolean>;
-    public autoplay: ko.Observable<boolean>;
+    public readonly sourceUrl: ko.Observable<string>;
+    public readonly controls: ko.Observable<boolean>;
+    public readonly autoplay: ko.Observable<boolean>;
     public readonly appearanceStyles: ko.ObservableArray<any>;
     public readonly appearanceStyle: ko.Observable<any>;
-
     public readonly mimeType: string;
 
     constructor(
-        private readonly styleService: StyleService
+        private readonly styleService: StyleService,
+        private readonly mediaPermalinkResolver: IPermalinkResolver
     ) {
         this.sourceUrl = ko.observable<string>();
         this.controls = ko.observable<boolean>(true);
         this.autoplay = ko.observable<boolean>(false);
-
         this.appearanceStyles = ko.observableArray<any>();
         this.appearanceStyle = ko.observable<any>();
 
         this.mimeType = "video/mp4";
     }
-    
+
     @Param()
     public model: VideoPlayerModel;
 
@@ -40,7 +40,13 @@ export class VideoEditor {
 
     @OnMounted()
     public async initialize(): Promise<void> {
-        this.sourceUrl(this.model.sourceUrl);
+        let sourceUrl;
+
+        if (this.model.sourceKey) {
+            sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(this.model.sourceKey);
+        }
+
+        this.sourceUrl(sourceUrl);
         this.controls(this.model.controls);
         this.autoplay(this.model.autoplay);
 
@@ -52,14 +58,12 @@ export class VideoEditor {
             this.appearanceStyle(this.model.styles.appearance);
         }
 
-        this.sourceUrl.subscribe(this.applyChanges);
         this.controls.subscribe(this.applyChanges);
         this.autoplay.subscribe(this.applyChanges);
         this.appearanceStyle.subscribe(this.applyChanges);
     }
 
     public applyChanges(): void {
-        this.model.sourceUrl = this.sourceUrl();
         this.model.controls = this.controls();
         this.model.autoplay = this.autoplay();
         this.model.styles = {
@@ -71,14 +75,14 @@ export class VideoEditor {
 
     public onMediaSelected(media: MediaContract): void {
         if (media) {
-            this.model.sourceUrl = media.downloadUrl;
             this.model.sourceKey = media.key;
-        } else {
-            this.model.sourceUrl = undefined;
+            this.sourceUrl(media.downloadUrl);
+        } 
+        else {
             this.model.sourceKey = undefined;
+            this.sourceUrl(null);
         }
-        this.sourceUrl(this.model.sourceUrl);
 
-        this.applyChanges();
+        this.onChange(this.model);
     }
 }

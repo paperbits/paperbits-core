@@ -8,7 +8,7 @@ import { Contract, Bag } from "@paperbits/common";
 import { AnchorUtils } from "../text/anchorUtils";
 import { BlockContract } from "../text/contracts";
 
-export class TableOfContentsModelBinder implements IModelBinder {
+export class TableOfContentsModelBinder implements IModelBinder<TableOfContentsModel> {
     constructor(
         private readonly contentItemService: IContentItemService,
         private readonly navigationService: INavigationService,

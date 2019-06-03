@@ -30,9 +30,11 @@ export class TextStyleSelector {
 
     public setTextStyle(style: any): void {
         let selectedKey = style.key;
+
         if (selectedKey.split("/").pop() === "default") {
             selectedKey = undefined;
         }
+        
         this.htmlEditorProvider.getCurrentHtmlEditor().setTextStyle(selectedKey, this.viewManager.getViewport());
     }
 }

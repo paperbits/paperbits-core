@@ -25,9 +25,8 @@ export class HyperlinkSelector {
     public onChange: (hyperlink: HyperlinkModel) => void;
 
     private targetsValues: { name: string, value: string }[] = [
-        { name: "the same frame", value: "_self" },
-        { name: "new window or tab", value: "_blank" },
-        { name: "the parent frame", value: "_parent" }
+        { name: "Current window", value: "_self" },
+        { name: "New window", value: "_blank" }
     ];
 
     constructor(

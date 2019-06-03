@@ -2,12 +2,11 @@ import { PageModel } from "./pageModel";
 import { Contract, Bag } from "@paperbits/common";
 import { IModelBinder } from "@paperbits/common/editing";
 import { IPageService, PageContract } from "@paperbits/common/pages";
-import { IRouteHandler } from "@paperbits/common/routing";
 import { ModelBinderSelector, WidgetModel } from "@paperbits/common/widgets";
 import { PlaceholderModel } from "@paperbits/common/widgets/placeholder";
 
 
-export class PageModelBinder implements IModelBinder {
+export class PageModelBinder implements IModelBinder<PageModel> {
     constructor(
         private readonly pageService: IPageService,
         private readonly modelBinderSelector: ModelBinderSelector

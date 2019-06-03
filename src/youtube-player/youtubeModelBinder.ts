@@ -3,7 +3,7 @@ import { YoutubePlayerModel } from "./youtubePlayerModel";
 import { IModelBinder } from "@paperbits/common/editing";
 import { Contract } from "@paperbits/common";
 
-export class YoutubeModelBinder implements IModelBinder {
+export class YoutubeModelBinder implements IModelBinder<YoutubePlayerModel> {
     constructor() {
         this.contractToModel = this.contractToModel.bind(this);
     }

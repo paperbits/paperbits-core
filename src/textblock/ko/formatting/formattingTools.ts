@@ -64,8 +64,6 @@ export class FormattingTools {
         this.pre = ko.observable<boolean>();
         this.alignment = ko.observable<string>();
         this.anchored = ko.observable<boolean>();
-
-        
     }
 
     @OnMounted()

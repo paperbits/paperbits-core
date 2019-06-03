@@ -22,8 +22,7 @@ export class GridLayoutSelector implements IResourceSelector<any> {
 
     constructor(
         private readonly gridModelBinder: GridModelBinder,
-        private readonly gridViewModelBinder: GridViewModelBinder,
-        private readonly styleCompiler: IStyleCompiler
+        private readonly gridViewModelBinder: GridViewModelBinder
     ) {
         this.selectLayout = this.selectLayout.bind(this);
         this.snippets = ko.observableArray();

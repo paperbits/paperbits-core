@@ -2,7 +2,7 @@ import { IModelBinder } from "@paperbits/common/editing/IModelBinder";
 import { Contract } from "@paperbits/common/contract";
 import { TestimonialsModel, TestimonialsContract } from ".";
 
-export class TestimonialsModelBinder implements IModelBinder {
+export class TestimonialsModelBinder implements IModelBinder<TestimonialsModel> {
     constructor() {
         this.contractToModel = this.contractToModel.bind(this);
     }
@@ -11,7 +11,7 @@ export class TestimonialsModelBinder implements IModelBinder {
         return contract.type === "testimonials";
     }
 
-    public canHandleModel(model): boolean {
+    public canHandleModel(model: Object): boolean {
         return model instanceof TestimonialsModel;
     }
 

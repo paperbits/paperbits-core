@@ -3,9 +3,9 @@ import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { ButtonModel } from "./buttonModel";
 import { Contract } from "@paperbits/common";
 import { ButtonContract } from "./buttonContract";
-import { IStyleCompiler } from "@paperbits/common/styles";
 
-export class ButtonModelBinder implements IModelBinder {
+
+export class ButtonModelBinder implements IModelBinder<ButtonModel>  {
     constructor(
         private readonly permalinkResolver: IPermalinkResolver
     ) {
@@ -15,7 +15,7 @@ export class ButtonModelBinder implements IModelBinder {
         return contract.type === "button";
     }
 
-    public canHandleModel(model): boolean {
+    public canHandleModel(model: Object): boolean {
         return model instanceof ButtonModel;
     }
 

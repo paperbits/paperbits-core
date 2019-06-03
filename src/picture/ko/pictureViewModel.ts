@@ -10,21 +10,16 @@ import { HyperlinkModel } from "@paperbits/common/permalinks";
     template: template,
 })
 export class PictureViewModel {
+    public sourceUrl: ko.Observable<string>;
     public caption: ko.Observable<string>;
-    public action: ko.Observable<string>;
-    public layout: ko.Observable<string>;
-    public animation: ko.Observable<string>;
-    public background: ko.Observable<BackgroundModel>;
     public hyperlink: ko.Observable<HyperlinkModel>;
     public width: ko.Observable<number>;
     public height: ko.Observable<number>;
     public styles: ko.Observable<Object>;
 
     constructor() {
+        this.sourceUrl = ko.observable<string>();
         this.caption = ko.observable<string>();
-        this.layout = ko.observable<string>();
-        this.animation = ko.observable<string>();
-        this.background = ko.observable<BackgroundModel>();
         this.hyperlink = ko.observable<HyperlinkModel>();
         this.width = ko.observable<number>();
         this.height = ko.observable<number>();

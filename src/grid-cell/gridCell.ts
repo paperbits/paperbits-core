@@ -4,7 +4,7 @@ import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { IModelBinder } from "@paperbits/common/editing";
 import { Contract, Bag } from "@paperbits/common";
 
-export class GridCellModelBinder implements IModelBinder {
+export class GridCellModelBinder implements IModelBinder<GridCellModel> {
     constructor(private readonly modelBinderSelector: ModelBinderSelector) { }
 
     public canHandleContract(contract: Contract): boolean {

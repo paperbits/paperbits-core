@@ -41,9 +41,10 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
         viewModel.widgets(widgetViewModels);
 
         if (!viewModel["widgetBinding"]) {
-            const binding: IWidgetBinding = {
+            const binding: IWidgetBinding<CardModel> = {
                 name: "card",
                 displayName: "Card",
+                readonly: bindingContext ? bindingContext.readonly : false,
                 flow: "inline",
                 model: model,
                 editor: "card-editor",

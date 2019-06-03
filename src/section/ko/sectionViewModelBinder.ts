@@ -42,9 +42,10 @@ export class SectionViewModelBinder implements ViewModelBinder<SectionModel, Sec
             viewModel.styles(await this.styleCompiler.getClassNamesByStyleConfigAsync2(model.styles));
         }
 
-        const binding: IWidgetBinding = {
+        const binding: IWidgetBinding<SectionModel> = {
             name: "section",
             displayName: "Section",
+            readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             flow: "block",
             editor: "layout-section-editor",

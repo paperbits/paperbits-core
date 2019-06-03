@@ -5,7 +5,7 @@ import { BlogPostModel } from "./blogPostModel";
 import { Contract, Bag } from "@paperbits/common";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 
-export class BlogModelBinder implements IModelBinder {
+export class BlogModelBinder implements IModelBinder<BlogPostModel> {
     constructor(
         private readonly blogService: IBlogService,
         private readonly modelBinderSelector: ModelBinderSelector,

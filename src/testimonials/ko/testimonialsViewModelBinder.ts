@@ -2,11 +2,12 @@ import { TestimonialsViewModel } from "./testimonialsViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
 import { TestimonialsModel } from "../testimonialsModel";
 import { IEventManager } from "@paperbits/common/events";
+import { Bag } from "@paperbits/common";
 
 export class TestimonialsViewModelBinder implements ViewModelBinder<TestimonialsModel, TestimonialsViewModel>  {
     constructor(private readonly eventManager: IEventManager) { }
 
-    public async modelToViewModel(model: TestimonialsModel, viewModel?: TestimonialsViewModel): Promise<TestimonialsViewModel> {
+    public async modelToViewModel(model: TestimonialsModel, viewModel?: TestimonialsViewModel, bindingContext?: Bag<any>): Promise<TestimonialsViewModel> {
         if (!viewModel) {
             viewModel = new TestimonialsViewModel();
         }
@@ -19,6 +20,7 @@ export class TestimonialsViewModelBinder implements ViewModelBinder<Testimonials
 
         viewModel["widgetBinding"] = {
             displayName: "Testimonials",
+            readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             editor: "testimonials-editor",
             applyChanges: () => {

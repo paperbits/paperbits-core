@@ -42,9 +42,10 @@ export class GridViewModelBinder implements ViewModelBinder<GridModel, GridViewM
             viewModel.styles(await this.styleCompiler.getClassNamesByStyleConfigAsync2(model.styles));
         }
 
-        const binding: IWidgetBinding = {
+        const binding: IWidgetBinding<GridModel> = {
             name: "gridLayoutGrid",
             displayName: "Grid",
+            readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             flow: "block",
             editor: "grid-layout-grid-editor",

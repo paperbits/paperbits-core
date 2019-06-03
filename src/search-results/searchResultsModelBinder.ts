@@ -4,7 +4,7 @@ import { SearchResultsModel } from "./searchResultsModel";
 import { SearchResultsContract } from "./searchResultsContract";
 
 
-export class SearchResultsModelBinder implements IModelBinder {
+export class SearchResultsModelBinder implements IModelBinder<SearchResultsModel> {
     constructor(
     ) {
         this.contractToModel = this.contractToModel.bind(this);

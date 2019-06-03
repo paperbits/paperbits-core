@@ -1,3 +1,4 @@
+import * as Objects from "@paperbits/common/objects";
 import { LayoutViewModel } from "./layoutViewModel";
 import { LayoutModel } from "../layoutModel";
 import { LayoutModelBinder } from "../layoutModelBinder";
@@ -21,7 +22,7 @@ export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, Layou
         this.getLayoutViewModel = this.getLayoutViewModel.bind(this);
     }
 
-    public createBinding(model: LayoutModel, viewModel: LayoutViewModel, bindingContext?: Bag<any>): void {
+    public createBinding(model: LayoutModel, viewModel: LayoutViewModel, bindingContext: Bag<any>): void {
         let savingTimeout;
 
         const updateContent = async (): Promise<void> => {
@@ -47,9 +48,11 @@ export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, Layou
             savingTimeout = setTimeout(updateContent, 600);
         };
 
-        const binding: IWidgetBinding = {
+        const binding: IWidgetBinding<LayoutModel> = {
             name: "layout",
+            displayName: "Layout",
             model: model,
+            readonly: bindingContext ? bindingContext.readonly : false,
             handler: LayoutHandlers,
             provides: ["static", "scripts", "keyboard"],
             applyChanges: () => {
@@ -57,7 +60,7 @@ export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, Layou
                 this.eventManager.dispatchEvent("onContentUpdate");
             },
             onCreate: () => {
-                if (!bindingContext || !bindingContext["routeKind"] || bindingContext["routeKind"] !== "layout") {
+                if (bindingContext.readonly) {
                     return;
                 }
 
@@ -74,11 +77,18 @@ export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, Layou
             viewModel = new LayoutViewModel();
         }
 
+        let childBindingContext: Bag<any> = {};
+
+        if (bindingContext) {
+            childBindingContext = <Bag<any>>Objects.clone(bindingContext || {});
+            childBindingContext.readonly = !bindingContext["routeKind"] || bindingContext["routeKind"] !== "layout";
+        }
+
         const viewModels = [];
 
         for (const widgetModel of model.widgets) {
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, childBindingContext);
 
             viewModels.push(widgetViewModel);
         }
