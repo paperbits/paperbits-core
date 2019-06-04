@@ -1984,15 +1984,29 @@ export const presets: any = [
         styles: {
             instance: {
                 grid: {
-                    rows: [
-                        "auto"
-                    ],
-                    rowGap: "0",
-                    cols: [
-                        "3fr",
-                        "1fr"
-                    ],
-                    colGap: "0"
+                    md: {
+                        rows: [
+                            "auto"
+                        ],
+                        rowGap: "0",
+                        cols: [
+                            "3fr",
+                            "1fr"
+                        ],
+                        colGap: "0"
+                    },
+
+                    xs: {
+                        rows: [
+                            "auto",
+                            "auto"
+                        ],
+                        rowGap: "0",
+                        cols: [
+                            "1fr"
+                        ],
+                        colGap: "0"
+                    }
                 }
             }
         },
@@ -2003,9 +2017,23 @@ export const presets: any = [
                 styles: {
                     instance: {
                         "grid-cell": {
-                            xs: {
+                            md: {
                                 position: {
                                     col: 2,
+                                    row: 1
+                                },
+                                span: {
+                                    cols: 1,
+                                    rows: 1
+                                },
+                                alignment: {
+                                    vertical: "center",
+                                    horizontal: "center"
+                                }
+                            },
+                            xs: {
+                                position: {
+                                    col: 1,
                                     row: 1
                                 },
                                 span: {
@@ -2027,10 +2055,24 @@ export const presets: any = [
                 styles: {
                     instance: {
                         "grid-cell": {
-                            xs: {
+                            md: {
                                 position: {
                                     col: 1,
                                     row: 1
+                                },
+                                span: {
+                                    cols: 1,
+                                    rows: 1
+                                },
+                                alignment: {
+                                    vertical: "center",
+                                    horizontal: "center"
+                                }
+                            },
+                            xs: {
+                                position: {
+                                    col: 1,
+                                    row: 2
                                 },
                                 span: {
                                     cols: 1,
@@ -2053,15 +2095,28 @@ export const presets: any = [
         styles: {
             instance: {
                 grid: {
-                    rows: [
-                        "auto"
-                    ],
-                    rowGap: "0",
-                    cols: [
-                        "1fr",
-                        "3fr"
-                    ],
-                    colGap: "0"
+                    md: {
+                        rows: [
+                            "auto"
+                        ],
+                        rowGap: "0",
+                        cols: [
+                            "1fr",
+                            "3fr"
+                        ],
+                        colGap: "0"
+                    },
+                    xs: {
+                        rows: [
+                            "auto",
+                            "auto"
+                        ],
+                        rowGap: "0",
+                        cols: [
+                            "1fr"
+                        ],
+                        colGap: "0"
+                    }
                 }
             }
         },
@@ -2072,6 +2127,20 @@ export const presets: any = [
                 styles: {
                     instance: {
                         "grid-cell": {
+                            md: {
+                                position: {
+                                    col: 1,
+                                    row: 1
+                                },
+                                span: {
+                                    cols: 1,
+                                    rows: 1
+                                },
+                                alignment: {
+                                    vertical: "center",
+                                    horizontal: "center"
+                                }
+                            },
                             xs: {
                                 position: {
                                     col: 1,
@@ -2096,10 +2165,24 @@ export const presets: any = [
                 styles: {
                     instance: {
                         "grid-cell": {
-                            xs: {
+                            md: {
                                 position: {
                                     col: 2,
                                     row: 1
+                                },
+                                span: {
+                                    cols: 1,
+                                    rows: 1
+                                },
+                                alignment: {
+                                    vertical: "center",
+                                    horizontal: "center"
+                                }
+                            },
+                            xs: {
+                                position: {
+                                    col: 1,
+                                    row: 2
                                 },
                                 span: {
                                     cols: 1,
