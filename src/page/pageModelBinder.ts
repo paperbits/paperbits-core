@@ -74,10 +74,10 @@ export class PageModelBinder implements IModelBinder<PageModel> {
     }
 
     public modelToContract(pageModel: PageModel): Contract {
-        const pageContract: Contract = {
+        const contract: Contract = {
             type: "page"
         };
 
-        return pageContract;
+        return contract;
     }
 }

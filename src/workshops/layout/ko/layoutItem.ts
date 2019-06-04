@@ -22,7 +22,6 @@ export class LayoutItem {
 
     public toLayout(): LayoutContract {
         return {
-            type: "layout",
             key: this.key,
             title: this.title(),
             description: this.description(),

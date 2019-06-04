@@ -1,4 +1,3 @@
-import { IRouteHandler } from "@paperbits/common/routing";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { LayoutModel } from "./layoutModel";
 import { ILayoutService, LayoutContract } from "@paperbits/common/layouts";
@@ -21,13 +20,6 @@ export class LayoutModelBinder {
         return model instanceof LayoutModel;
     }
 
-    // public async getLayoutModel(): Promise<LayoutModel> {
-    //     const url = this.routeHandler.getPath();
-    //     const layoutNode = await this.layoutService.getLayoutByRoute(url);
-
-    //     return await this.contractToModel(layoutNode, bindingContext);
-    // }
-
     public async contractToModel(contract: LayoutContract, bindingContext?: Bag<any>): Promise<LayoutModel> {
         const layoutModel = new LayoutModel();
         layoutModel.title = contract.title;
@@ -47,19 +39,10 @@ export class LayoutModelBinder {
         return layoutModel;
     }
 
-    public modelToContract(model: LayoutModel): LayoutContract {
-        const contract: LayoutContract = {
-            title: model.title,
-            description: model.description,
-            permalinkTemplate: model.permalinkTemplate,
+    public modelToContract(model: LayoutModel): Contract {
+        const contract: Contract = {
             type: "layout",
-            nodes: []
         };
-
-        model.widgets.forEach(model => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByModel(model);
-            contract.nodes.push(modelBinder.modelToContract(model));
-        });
 
         return contract;
     }
