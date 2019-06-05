@@ -3,7 +3,7 @@ import { NavbarContract } from "./navbarContract";
 import { IModelBinder } from "@paperbits/common/editing";
 import { IContentItemService } from "@paperbits/common/contentItems";
 import { INavigationService, NavigationItemContract, NavigationItemModel } from "@paperbits/common/navigation";
-import { IRouteHandler } from "@paperbits/common/routing";
+import { RouteHandler } from "@paperbits/common/routing";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { Contract } from "@paperbits/common/contract";
 
@@ -13,7 +13,7 @@ export class NavbarModelBinder implements IModelBinder<NavbarModel> {
         private readonly mediaPermalinkResolver: IPermalinkResolver,
         private readonly navigationService: INavigationService,
         private readonly contentItemService: IContentItemService,
-        private readonly routeHandler: IRouteHandler
+        private readonly routeHandler: RouteHandler
     ) { }
 
     public async contractToModel(contract: NavbarContract): Promise<NavbarModel> {

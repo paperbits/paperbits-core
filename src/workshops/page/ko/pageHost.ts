@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import { LayoutViewModelBinder, LayoutViewModel } from "../../../layout/ko";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
-import { IRouteHandler, Route } from "@paperbits/common/routing";
+import { RouteHandler, Route } from "@paperbits/common/routing";
 import { IEventManager } from "@paperbits/common/events";
 import { IViewManager, ViewManagerMode } from "@paperbits/common/ui";
 
@@ -16,7 +16,7 @@ export class PageHost {
 
     constructor(
         private readonly layoutViewModelBinder: LayoutViewModelBinder,
-        private readonly routeHandler: IRouteHandler,
+        private readonly routeHandler: RouteHandler,
         private readonly eventManager: IEventManager,
         private readonly viewManager: IViewManager
     ) {

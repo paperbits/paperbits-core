@@ -1,6 +1,6 @@
 ﻿import template from "./pageDetails.html";
 import { IPageService } from "@paperbits/common/pages";
-import { IRouteHandler } from "@paperbits/common/routing";
+import { RouteHandler } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { PageItem } from "./pageItem";
@@ -19,7 +19,7 @@ export class PageDetailsWorkshop {
 
     constructor(
         private readonly pageService: IPageService,
-        private readonly routeHandler: IRouteHandler,
+        private readonly routeHandler: RouteHandler,
         private readonly viewManager: IViewManager,
     ) {
         // rebinding...

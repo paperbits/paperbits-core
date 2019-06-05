@@ -1,6 +1,6 @@
 import { IModelBinder } from "@paperbits/common/editing";
 import { IBlogService, BlogPostContract  } from "@paperbits/common/blogs";
-import { IRouteHandler } from "@paperbits/common/routing";
+import { RouteHandler } from "@paperbits/common/routing";
 import { BlogPostModel } from "./blogPostModel";
 import { Contract, Bag } from "@paperbits/common";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
@@ -9,7 +9,7 @@ export class BlogModelBinder implements IModelBinder<BlogPostModel> {
     constructor(
         private readonly blogService: IBlogService,
         private readonly modelBinderSelector: ModelBinderSelector,
-        private readonly routeHandler: IRouteHandler
+        private readonly routeHandler: RouteHandler
     ) {
         // rebinding...
         this.contractToModel = this.contractToModel.bind(this);

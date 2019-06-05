@@ -2,7 +2,7 @@
 import * as Utils from "@paperbits/common/utils";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { IViewManager, ViewManagerMode } from "@paperbits/common/ui";
-import { IRouteHandler, Route } from "@paperbits/common/routing";
+import { RouteHandler, Route } from "@paperbits/common/routing";
 
 export class HostBindingHandler {
     private readonly hostComponent: ko.Observable<any>;
@@ -11,7 +11,7 @@ export class HostBindingHandler {
         private readonly eventManager: IEventManager,
         private readonly globalEventHandler: GlobalEventHandler,
         private readonly viewManager: IViewManager,
-        private readonly routeHandler: IRouteHandler
+        private readonly routeHandler: RouteHandler
     ) {
         this.hostComponent = ko.observable();
 

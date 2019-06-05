@@ -8,7 +8,7 @@ import { Bag } from "@paperbits/common";
 import { IMediaService } from "@paperbits/common/media";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { IComponent, IView, IViewManager, ICommand, ViewManagerMode, IHighlightConfig, IContextCommandSet, ISplitterConfig, Toast } from "@paperbits/common/ui";
-import { IRouteHandler } from "@paperbits/common/routing";
+import { RouteHandler } from "@paperbits/common/routing";
 import { ISiteService } from "@paperbits/common/sites";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
@@ -47,7 +47,7 @@ export class ViewManager implements IViewManager {
     constructor(
         private readonly eventManager: IEventManager,
         private readonly globalEventHandler: GlobalEventHandler,
-        private readonly routeHandler: IRouteHandler,
+        private readonly routeHandler: RouteHandler,
         private readonly mediaService: IMediaService,
         private readonly siteService: ISiteService) {
 

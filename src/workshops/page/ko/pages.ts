@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./pages.html";
 import { IPageService } from "@paperbits/common/pages";
-import { IRouteHandler } from "@paperbits/common/routing";
+import { RouteHandler } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
 import { Keys } from "@paperbits/common/keyboard";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
@@ -23,7 +23,7 @@ export class PagesWorkshop {
 
     constructor(
         private readonly pageService: IPageService,
-        private readonly routeHandler: IRouteHandler,
+        private readonly routeHandler: RouteHandler,
         private readonly viewManager: IViewManager
     ) {
         this.pages = ko.observableArray<PageItem>();

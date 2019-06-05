@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import template from "./layoutDetails.html";
-import { IRouteHandler } from "@paperbits/common/routing";
+import { RouteHandler } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
 import { ILayoutService } from "@paperbits/common/layouts/";
 import { LayoutItem } from "./layoutItem";
@@ -23,7 +23,7 @@ export class LayoutDetails {
 
     constructor(
         private readonly layoutService: ILayoutService,
-        private readonly routeHandler: IRouteHandler,
+        private readonly routeHandler: RouteHandler,
         private readonly viewManager: IViewManager
     ) {
     }
