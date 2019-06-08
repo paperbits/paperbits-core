@@ -22,7 +22,6 @@ export class PageDetailsWorkshop {
         private readonly routeHandler: RouteHandler,
         private readonly viewManager: IViewManager,
     ) {
-        // rebinding...
         this.onMounted = this.onMounted.bind(this);
         this.deletePage = this.deletePage.bind(this);
         this.updatePage = this.updatePage.bind(this);
@@ -45,7 +44,6 @@ export class PageDetailsWorkshop {
             .extend(<any>{ uniquePermalink: this.pageItem.permalink, required: true, onlyValid: true })
             .subscribe(this.updatePermlaink);
 
-
         this.viewManager.setHost({ name: "content-host" });
         this.routeHandler.navigateTo(this.pageItem.permalink());
     }
@@ -64,7 +62,6 @@ export class PageDetailsWorkshop {
     }
 
     public async deletePage(): Promise<void> {
-        // TODO: Show confirmation dialog according to mockup
         await this.pageService.deletePage(this.pageItem.toContract());
 
         this.viewManager.notifySuccess("Pages", `Page "${this.pageItem.title()}" was deleted.`);

@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./blogs.html";
 import { IBlogService } from "@paperbits/common/blogs/IBlogService";
-import { IRouteHandler } from "@paperbits/common/routing/IRouteHandler";
+import { RouteHandler } from "@paperbits/common/routing/RouteHandler";
 import { IViewManager } from "@paperbits/common/ui";
 import { Keys } from "@paperbits/common/keyboard";
 import { Component } from "@paperbits/common/ko/decorators";
@@ -23,7 +23,7 @@ export class BlogWorkshop {
 
     constructor(
         private readonly blogService: IBlogService,
-        private readonly routeHandler: IRouteHandler,
+        private readonly routeHandler: RouteHandler,
         private readonly viewManager: IViewManager,
         private readonly layoutViewModelBinder: LayoutViewModelBinder
     ) {
