@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import { LayoutViewModelBinder, LayoutViewModel } from "../../../layout/ko";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
-import { RouteHandler, Route } from "@paperbits/common/routing";
+import { Router, Route } from "@paperbits/common/routing";
 import { IEventManager } from "@paperbits/common/events";
 import { IViewManager, ViewManagerMode } from "@paperbits/common/ui";
 
@@ -16,12 +16,12 @@ export class PageHost {
 
     constructor(
         private readonly layoutViewModelBinder: LayoutViewModelBinder,
-        private readonly routeHandler: RouteHandler,
+        private readonly router: Router,
         private readonly eventManager: IEventManager,
         private readonly viewManager: IViewManager
     ) {
         this.layoutViewModel = ko.observable();
-        this.routeHandler.addRouteChangeListener(this.onRouteChange.bind(this));
+        this.router.addRouteChangeListener(this.onRouteChange.bind(this));
         this.eventManager.addEventListener("onDataPush", () => this.onDataPush());
     }
 
@@ -40,7 +40,7 @@ export class PageHost {
     }
 
     private async refreshContent(): Promise<void> {
-        const route = this.routeHandler.getCurrentRoute();
+        const route = this.router.getCurrentRoute();
         const routeKind =  route.metadata["routeKind"];
         const layoutViewModel = await this.layoutViewModelBinder.getLayoutViewModel(route.path, routeKind);
         this.layoutViewModel(layoutViewModel);
@@ -55,6 +55,6 @@ export class PageHost {
     }
 
     public dispose(): void {
-        this.routeHandler.removeRouteChangeListener(this.onRouteChange);
+        this.router.removeRouteChangeListener(this.onRouteChange);
     }
 }

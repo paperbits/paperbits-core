@@ -16,25 +16,25 @@ import { StyleService } from "@paperbits/styles/styleService";
 export class FormattingTools {
     private textStyles: {}[];
 
-    public bold: ko.Observable<boolean>;
-    public italic: ko.Observable<boolean>;
-    public underlined: ko.Observable<boolean>;
-    public highlighted: ko.Observable<boolean>;
-    public pre: ko.Observable<boolean>;
-    public style: ko.Observable<string>;
-    public appearance: ko.Observable<string>;
-    public colored: ko.Observable<boolean>;
-    public selectedColorKey: ko.Observable<string>;
-    public alignment: ko.Observable<string>;
-    public justified: ko.Observable<boolean>;
-    public anchored: ko.Observable<boolean>;
-    public size: ko.Observable<string>;
-    public sized: ko.Observable<boolean>;
-    public olName: ko.Observable<string>;
-    public ol: ko.Observable<boolean>;
-    public ulName: ko.Observable<string>;
-    public ul: ko.Observable<boolean>;
-    public font: ko.Observable<string>;
+    public readonly bold: ko.Observable<boolean>;
+    public readonly italic: ko.Observable<boolean>;
+    public readonly underlined: ko.Observable<boolean>;
+    public readonly highlighted: ko.Observable<boolean>;
+    public readonly pre: ko.Observable<boolean>;
+    public readonly style: ko.Observable<string>;
+    public readonly appearance: ko.Observable<string>;
+    public readonly colored: ko.Observable<boolean>;
+    public readonly selectedColorKey: ko.Observable<string>;
+    public readonly alignment: ko.Observable<string>;
+    public readonly justified: ko.Observable<boolean>;
+    public readonly anchored: ko.Observable<boolean>;
+    public readonly size: ko.Observable<string>;
+    public readonly sized: ko.Observable<boolean>;
+    public readonly olName: ko.Observable<string>;
+    public readonly ol: ko.Observable<boolean>;
+    public readonly ulName: ko.Observable<string>;
+    public readonly ul: ko.Observable<boolean>;
+    public readonly font: ko.Observable<string>;
 
     constructor(
         private readonly htmlEditorProvider: IHtmlEditorProvider,
@@ -42,11 +42,6 @@ export class FormattingTools {
         private readonly viewManager: IViewManager,
         private readonly styleService: StyleService
     ) {
-        this.updateFormattingState = this.updateFormattingState.bind(this);
-        this.toggleUnorderedList = this.toggleUnorderedList.bind(this);
-        this.onFontSelected = this.onFontSelected.bind(this);
-        this.onColorSelected = this.onColorSelected.bind(this);
-
         this.style = ko.observable<string>();
         this.appearance = ko.observable<string>();
         this.colored = ko.observable<boolean>();
@@ -233,52 +228,6 @@ export class FormattingTools {
         this.htmlEditorProvider.getCurrentHtmlEditor().decreaseIndent();
     }
 
-    public async toggleAnchor(): Promise<void> {
-        // const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
-        // const selectionState = htmlEditor.getSelectionState(this.viewManager.getViewport());
-        // const anchorKey = selectionState.anchorKey;
-        // const currentUrl = this.routeHandler.getPath();
-        // const permalink = await this.permalinkService.getPermalinkByUrl(currentUrl);
-        // const pageContract = await this.pageService.getPageByKey(permalink.targetKey);
-
-        // if (!anchorKey) {
-        //     const anchorId = Utils.slugify(htmlEditor.getSelectionText());
-        //     const anchorPermalink = await this.permalinkService.createPermalink(`${anchorId}`, null, permalink.key);
-
-        //     htmlEditor.setAnchor(anchorId, anchorPermalink.key);
-
-        //     // TODO: Probably we should show dialog and allow users to enter anchor title.
-        //     const anchorTitle = htmlEditor.getSelectionText();
-        //     const anchors = pageContract.anchors || {};
-        //     anchors[anchorPermalink.key.replaceAll("/", "|")] = anchorTitle;
-        //     pageContract.anchors = anchors;
-
-        //     await this.pageService.updatePage(pageContract);
-        // }
-        // else {
-        //     this.htmlEditorProvider.getCurrentHtmlEditor().removeAnchor();
-        //     await this.permalinkService.deletePermalinkByKey(anchorKey);
-
-        //     if (pageContract.anchors) {
-        //         pageContract.anchors[anchorKey.replaceAll("/", "|")] = null;
-        //         await this.pageService.updatePage(pageContract);
-        //     }
-        // }
-
-        // this.updateFormattingState();
-
-        /*
-            1. Create permalink and get its key;
-            2. Add the key to "anchors" collection of a page;
-            3. Invoke toggleCategory:
-            
-            this.htmlEditorProvider.getCurrentHtmlEditor().toggleCategory("anchorKey", "permalinks/abcdefgh", "block")
-
-            Why we were talking about middlewares?
-            - i.e. I deleted whole section along with H1 > show warning;
-        */
-    }
-
     public toggleH1(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleH1();
     }
@@ -329,10 +278,6 @@ export class FormattingTools {
 
     public resetToNormal(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleParagraph();
-    }
-
-    public onFontSelected(font: FontContract): void {
-        console.warn("Not implemented");
     }
 
     public onColorSelected(color: ColorContract): void {

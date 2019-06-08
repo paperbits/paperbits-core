@@ -2,7 +2,7 @@
 import * as Utils from "@paperbits/common/utils";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { IViewManager, ViewManagerMode } from "@paperbits/common/ui";
-import { RouteHandler, Route } from "@paperbits/common/routing";
+import { Router, Route } from "@paperbits/common/routing";
 
 export class HostBindingHandler {
     private readonly hostComponent: ko.Observable<any>;
@@ -11,7 +11,7 @@ export class HostBindingHandler {
         private readonly eventManager: IEventManager,
         private readonly globalEventHandler: GlobalEventHandler,
         private readonly viewManager: IViewManager,
-        private readonly routeHandler: RouteHandler
+        private readonly router: Router
     ) {
         this.hostComponent = ko.observable();
 
@@ -87,7 +87,7 @@ export class HostBindingHandler {
 
     private createIFrame(): HTMLIFrameElement {
         const hostElement = document.createElement("iframe");
-        hostElement.src = "/page.html";
+        hostElement.src = "/page.html?designtime=true";
         hostElement.classList.add("host");
 
         const onClick = (event: MouseEvent): void => {
@@ -108,11 +108,18 @@ export class HostBindingHandler {
             }
 
             if (event.ctrlKey) { // Preventing click on links if Ctrl key is not pressed.
-                this.routeHandler.navigateTo(htmlLinkElement.href);
+                this.router.navigateTo(htmlLinkElement.href);
             }
             else {
                 this.eventManager.dispatchEvent("DesignTimeNavigationHint");
             }
+        };
+
+        let hostedWindowHistory;
+
+        const onRouteChange = (route: Route) => {
+            route.metadata.originatedByHost = true;
+            hostedWindowHistory.pushState(route, route.title, route.url);
         };
 
         const onLoad = (): void => {
@@ -120,25 +127,20 @@ export class HostBindingHandler {
             this.setRootElement(hostElement.contentDocument.body);
 
             /* TODO: Move these events to grid designer code */
-            hostElement.contentDocument.addEventListener("click", onClick, true); 
+            hostElement.contentDocument.addEventListener("click", onClick, true);
             hostElement.contentDocument.addEventListener("mousedown", onPointerDown, true);
 
             this.viewManager["hostDocument"] = hostElement.contentDocument;
 
             /* intercepting push state of the hosted iframe window */
-            const hostedWindowHistory = hostElement.contentDocument.defaultView.window.history;
+            hostedWindowHistory = hostElement.contentDocument.defaultView.window.history;
             const hostedWindowOriginalPushState = hostedWindowHistory.pushState;
 
-            const onRouteChange = (route: Route) => {
-                route.metadata.originatedByHost = true;
-                hostedWindowHistory.pushState(route, route.title, route.url);
-            };
-
             /* adding listener to designer's route handler */
-            this.routeHandler.addRouteChangeListener(onRouteChange);
+            this.router.addRouteChangeListener(onRouteChange);
 
             /* pushing initial route to route handler of the hosted iframe window */
-            const initialRoute = this.routeHandler.getCurrentRoute();
+            const initialRoute = this.router.getCurrentRoute();
             hostedWindowHistory.pushState(initialRoute, initialRoute.title, location.href);
 
             /* overriding pushState method of the hosted iframe window */
@@ -155,7 +157,13 @@ export class HostBindingHandler {
             };
         };
 
+        const onUnload = (): void => {
+            /* removing listener when iframe gets unloaded */
+            this.router.removeRouteChangeListener(onRouteChange);
+        };
+
         hostElement.addEventListener("load", onLoad, false);
+        hostElement.addEventListener("beforeunload", onUnload, false);
 
         return hostElement;
     }

@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import template from "./layouts.html";
-import { RouteHandler } from "@paperbits/common/routing";
+import { Router } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
 import { ILayoutService } from "@paperbits/common/layouts";
 import { Keys } from "@paperbits/common/keyboard";
@@ -22,7 +22,7 @@ export class LayoutsWorkshop {
 
     constructor(
         private readonly layoutService: ILayoutService,
-        private readonly routeHandler: RouteHandler,
+        private readonly router: Router,
         private readonly viewManager: IViewManager
     ) {
         // rebinding...
@@ -92,7 +92,7 @@ export class LayoutsWorkshop {
         await this.layoutService.deleteLayout(this.selectedLayout().toLayout());
         await this.searchLayouts();
 
-        this.routeHandler.navigateTo("/");
+        this.router.navigateTo("/");
     }
 
     public onKeyDown(item: LayoutItem, event: KeyboardEvent): void {

@@ -1,6 +1,6 @@
 ﻿import template from "./blogPostDetails.html";
 import { IBlogService } from "@paperbits/common/blogs/IBlogService";
-import { RouteHandler } from "@paperbits/common/routing/RouteHandler";
+import { Router } from "@paperbits/common/routing/Router";
 import { IViewManager } from "@paperbits/common/ui";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { BlogPostItem } from "./blogPostItem";
@@ -19,7 +19,7 @@ export class BlogPostDetailsWorkshop {
 
     constructor(
         private readonly blogService: IBlogService,
-        private readonly routeHandler: RouteHandler,
+        private readonly router: Router,
         private readonly viewManager: IViewManager
     ) {
         // rebinding...
@@ -48,7 +48,7 @@ export class BlogPostDetailsWorkshop {
         const blogPost = await this.blogService.getBlogPostByKey(this.blogPostItem.key);
 
         this.blogPostItem.permalink(blogPost.permalink);
-        this.routeHandler.navigateTo(blogPost.permalink, blogPost.title);
+        this.router.navigateTo(blogPost.permalink, blogPost.title);
     }
 
     private async updateBlogPost(): Promise<void> {
@@ -59,9 +59,9 @@ export class BlogPostDetailsWorkshop {
 
     private async updatePermlaink(): Promise<void> {
         const permalink = this.blogPostItem.permalink();
-        this.routeHandler.notifyListeners = false;
-        // this.routeHandler.navigateTo(permalink);
-        this.routeHandler.notifyListeners = true;
+        this.router.notifyListeners = false;
+        // this.router.navigateTo(permalink);
+        this.router.notifyListeners = true;
 
         this.updateBlogPost();
     }
@@ -77,6 +77,6 @@ export class BlogPostDetailsWorkshop {
             this.onDeleteCallback();
         }
 
-        this.routeHandler.navigateTo("/");
+        this.router.navigateTo("/");
     }
 }

@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./blogs.html";
 import { IBlogService } from "@paperbits/common/blogs/IBlogService";
-import { RouteHandler } from "@paperbits/common/routing/RouteHandler";
+import { Router } from "@paperbits/common/routing/Router";
 import { IViewManager } from "@paperbits/common/ui";
 import { Keys } from "@paperbits/common/keyboard";
 import { Component } from "@paperbits/common/ko/decorators";
@@ -23,7 +23,7 @@ export class BlogWorkshop {
 
     constructor(
         private readonly blogService: IBlogService,
-        private readonly routeHandler: RouteHandler,
+        private readonly router: Router,
         private readonly viewManager: IViewManager,
         private readonly layoutViewModelBinder: LayoutViewModelBinder
     ) {
@@ -82,7 +82,7 @@ export class BlogWorkshop {
         this.blogPosts.push(postItem);
         this.selectBlogPost(postItem);
 
-        this.routeHandler.navigateTo(postUrl, post.title);
+        this.router.navigateTo(postUrl, post.title);
         this.working(false);
     }
 
@@ -90,7 +90,7 @@ export class BlogWorkshop {
         // TODO: Show confirmation dialog according to mockup
         await this.blogService.deleteBlogPost(this.selectedBlogPost().toBlogPost());
 
-        this.routeHandler.navigateTo("/");
+        this.router.navigateTo("/");
     }
 
     public keydown(item: BlogPostItem, event: KeyboardEvent): void {

@@ -4,7 +4,7 @@ import { IViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet as 
 import { IWidgetBinding, GridHelper, WidgetContext } from "@paperbits/common/editing";
 import { Keys } from "@paperbits/common/keyboard";
 import { IWidgetService } from "@paperbits/common/widgets";
-import { RouteHandler } from "@paperbits/common/routing";
+import { Router } from "@paperbits/common/routing";
 import { IEventManager } from "@paperbits/common/events";
 
 export class GridEditor {
@@ -21,7 +21,7 @@ export class GridEditor {
     constructor(
         private readonly viewManager: IViewManager,
         private readonly widgetService: IWidgetService,
-        private readonly routeHandler: RouteHandler,
+        private readonly router: Router,
         private readonly eventManager: IEventManager
     ) {
         this.rerenderEditors = this.rerenderEditors.bind(this);
@@ -153,7 +153,7 @@ export class GridEditor {
 
         let layoutEditing = false;
 
-        const metadata = this.routeHandler.getCurrentUrlMetadata();
+        const metadata = this.router.getCurrentUrlMetadata();
 
         if (metadata && metadata["routeKind"]) {
             layoutEditing = metadata["routeKind"] === "layout";

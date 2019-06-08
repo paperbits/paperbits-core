@@ -1,6 +1,6 @@
 ﻿import template from "./pageDetails.html";
 import { IPageService } from "@paperbits/common/pages";
-import { RouteHandler } from "@paperbits/common/routing";
+import { Router } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { PageItem } from "./pageItem";
@@ -19,7 +19,7 @@ export class PageDetailsWorkshop {
 
     constructor(
         private readonly pageService: IPageService,
-        private readonly routeHandler: RouteHandler,
+        private readonly router: Router,
         private readonly viewManager: IViewManager,
     ) {
         this.onMounted = this.onMounted.bind(this);
@@ -45,7 +45,7 @@ export class PageDetailsWorkshop {
             .subscribe(this.updatePermlaink);
 
         this.viewManager.setHost({ name: "content-host" });
-        this.routeHandler.navigateTo(this.pageItem.permalink());
+        this.router.navigateTo(this.pageItem.permalink());
     }
 
     private async updatePage(): Promise<void> {
@@ -54,9 +54,9 @@ export class PageDetailsWorkshop {
 
     private async updatePermlaink(): Promise<void> {
         const permalink = this.pageItem.permalink();
-        this.routeHandler.notifyListeners = false;
-        this.routeHandler.navigateTo(permalink);
-        this.routeHandler.notifyListeners = true;
+        this.router.notifyListeners = false;
+        this.router.navigateTo(permalink);
+        this.router.notifyListeners = true;
 
         this.updatePage();
     }
@@ -71,6 +71,6 @@ export class PageDetailsWorkshop {
             this.onDeleteCallback();
         }
 
-        this.routeHandler.navigateTo("/");
+        this.router.navigateTo("/");
     }
 }

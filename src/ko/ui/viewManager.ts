@@ -8,7 +8,7 @@ import { Bag } from "@paperbits/common";
 import { IMediaService } from "@paperbits/common/media";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { IComponent, IView, IViewManager, ICommand, ViewManagerMode, IHighlightConfig, IContextCommandSet, ISplitterConfig, Toast } from "@paperbits/common/ui";
-import { RouteHandler } from "@paperbits/common/routing";
+import { Router } from "@paperbits/common/routing";
 import { ISiteService } from "@paperbits/common/sites";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
@@ -47,7 +47,7 @@ export class ViewManager implements IViewManager {
     constructor(
         private readonly eventManager: IEventManager,
         private readonly globalEventHandler: GlobalEventHandler,
-        private readonly routeHandler: RouteHandler,
+        private readonly router: Router,
         private readonly mediaService: IMediaService,
         private readonly siteService: ISiteService) {
 
@@ -82,7 +82,7 @@ export class ViewManager implements IViewManager {
         this.globalEventHandler.addDragLeaveScreenListener(this.unfoldEverything.bind(this));
         this.eventManager.addEventListener("virtualDragEnd", this.onDragEnd.bind(this));
 
-        this.routeHandler.addRouteChangeListener(this.onRouteChange.bind(this));
+        this.router.addRouteChangeListener(this.onRouteChange.bind(this));
         globalEventHandler.appendDocument(document);
 
         eventManager.addEventListener("onEscape", this.closeEditors.bind(this));

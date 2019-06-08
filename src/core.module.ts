@@ -1,6 +1,7 @@
+import { HistoryRouteHandler } from "@paperbits/common/routing/historyRouteHandler";
 import { BackgroundBindingHandler } from "./ko/bindingHandlers/bindingHandlers.background";
 import { WidgetBindingHandler } from "./ko/bindingHandlers/bindingHandlers.widget";
-import { DefaultRouteHandler, DefaultRouteGuard } from "@paperbits/common/routing";
+import { DefaultRouter, DefaultRouteGuard } from "@paperbits/common/routing";
 import { SettingsProvider } from "@paperbits/common/configuration";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { ModelBinderSelector, WidgetService } from "@paperbits/common/widgets";
@@ -61,7 +62,7 @@ export class CoreModule implements IInjectorModule {
 
         /*** Core ***/
         injector.bindSingleton("settingsProvider", SettingsProvider);
-        injector.bindSingleton("routeHandler", DefaultRouteHandler);
+        injector.bindSingleton("router", DefaultRouter);
         injector.bindSingleton("httpClient", XmlHttpRequestClient);
         injector.bindSingleton("eventManager", DefaultEventManager);
         injector.bindSingleton("globalEventHandler", GlobalEventHandler);
@@ -112,6 +113,6 @@ export class CoreModule implements IInjectorModule {
 
         injector.bindToCollection("routeGuards", DefaultRouteGuard);
         injector.bindToCollection("autostart", WidgetBindingHandler);
-        injector.bindToCollection("autostart", BackgroundBindingHandler);
+        injector.bindToCollection("autostart", BackgroundBindingHandler);        
     }
 }

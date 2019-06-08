@@ -10,7 +10,6 @@ import { PictureEditorModule } from "./picture/ko/pictureEditor.module";
 import { YoutubePlayerEditorModule } from "./youtube-player/ko/youtubePlayerEditor.module";
 import { NavbarEditorModule } from "./navbar/ko/navbarEditor.module";
 import { TableOfContentsEditorModule } from "./table-of-contents/ko/tableOfContentsEditor.module";
-import { MapEditorModule } from "./map/ko/mapEditor.module";
 import { ButtonEditorModule } from "./button/ko/buttonEditor.module";
 import { TestimonialsEditorModule } from "./testimonials/ko/testimonialsEditor.module";
 import { ColumnEditorModule } from "./column/ko/columnEditor.module";
@@ -29,12 +28,13 @@ import { DropbucketModule } from "./workshops/dropbucket/ko/dropbucket.module";
 import { ViewportSelector } from "./workshops/viewports/ko/viewport-selector";
 import { HostBindingHandler, BalloonBindingHandler, ResizableBindingHandler } from "./ko/bindingHandlers";
 import { MediaHandlers, HtmlEditorProvider } from "@paperbits/common/editing";
-import { IHyperlinkProvider, LityLightbox } from "@paperbits/common/ui";
+import { LityLightbox } from "@paperbits/common/ui";
 import { HyperlinkSelector } from "./workshops/hyperlinks/ko/hyperlinkSelector";
 import { WidgetSelector } from "./workshops/widgets/ko/widgetSelector";
 import { UrlSelector } from "./workshops/urls/ko/urlSelector";
 import { PageEditorModule } from "./page/ko/pageEditor.module";
 import { LayoutEditorModule } from "./layout/ko/layoutEditor.module";
+import { HistoryRouteHandler } from "@paperbits/common/routing";
 import { PageHyperlinkProvider } from "@paperbits/common/pages";
 import { BlogHyperlinkProvider } from "@paperbits/common/blogs/blogHyperlinkProvider";
 import { UrlHyperlinkProvider } from "@paperbits/common/urls/urlHyperlinkProvider";
@@ -42,7 +42,6 @@ import { MediaHyperlinkProvider } from "@paperbits/common/media";
 import { DragManager } from "@paperbits/common/ui/draggables";
 import { UnhandledErrorHandler } from "@paperbits/common/errors";
 import { PlaceholderViewModel } from "./placeholder/ko/placeholderViewModel";
-import { SearchResultsEditorModule } from "./search-results/ko/searchResultsEditor.module";
 import { ViewManager, Tooltip } from "./ko/ui";
 import { KnockoutValidation } from "./ko/validation/validators";
 import { CropperBindingHandler } from "./workshops/cropper/cropper";
@@ -51,7 +50,6 @@ import { CardEditorModule } from "./card/ko/cardEditor.module";
 import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkResolver.design";
 import { GridEditorModule } from "./grid-layout-section/ko/gridEditor.module";
 import { GridCellEditorModule } from "./grid-cell/ko/gridCellEditor.module";
-
 import "./ko/bindingHandlers/bindingHandlers.command";
 import { PageHost } from "./workshops/page/ko/pageHost";
 import { Tray } from "./workshops/tray/tray";
@@ -114,15 +112,12 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new LayoutEditorModule());
         injector.bindModule(new PageEditorModule());
         injector.bindModule(new CardEditorModule());
-
-        // injector.bindModule(new MapEditorModule());
-        // injector.bindModule(new SearchResultsEditorModule());
-
         injector.bindToCollection("hyperlinkProviders", UrlHyperlinkProvider);
         injector.bindToCollection("autostart", HostBindingHandler);
         injector.bindToCollection("autostart", DraggablesBindingHandler);
         injector.bindToCollection("autostart", GridBindingHandler);
         injector.bindToCollection("autostart", LightboxBindingHandler);
+        injector.bindToCollection("autostart", HistoryRouteHandler);
         injector.bindToCollection("autostart", Hinter);
         
         injector.resolve("trayCommands"); // TODO: Find out why this collection fails to resolve without this push.

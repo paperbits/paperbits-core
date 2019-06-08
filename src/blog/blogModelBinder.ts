@@ -1,6 +1,6 @@
 import { IModelBinder } from "@paperbits/common/editing";
 import { IBlogService, BlogPostContract  } from "@paperbits/common/blogs";
-import { RouteHandler } from "@paperbits/common/routing";
+import { Router } from "@paperbits/common/routing";
 import { BlogPostModel } from "./blogPostModel";
 import { Contract, Bag } from "@paperbits/common";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
@@ -9,7 +9,7 @@ export class BlogModelBinder implements IModelBinder<BlogPostModel> {
     constructor(
         private readonly blogService: IBlogService,
         private readonly modelBinderSelector: ModelBinderSelector,
-        private readonly routeHandler: RouteHandler
+        private readonly router: Router
     ) {
         // rebinding...
         this.contractToModel = this.contractToModel.bind(this);
@@ -25,7 +25,7 @@ export class BlogModelBinder implements IModelBinder<BlogPostModel> {
 
     public async contractToModel(blogPostContract: BlogPostContract, bindingContext?: Bag<any>): Promise<BlogPostModel> {
         if (!blogPostContract.key) {
-            const currentUrl = this.routeHandler.getPath();
+            const currentUrl = this.router.getPath();
             blogPostContract = await this.blogService.getBlogPostByPermalink(currentUrl);
         }
 
@@ -59,7 +59,7 @@ export class BlogModelBinder implements IModelBinder<BlogPostModel> {
     }
 
     public async updateContent(blogModel: BlogPostModel): Promise<void> {
-        const url = this.routeHandler.getPath();
+        const url = this.router.getPath();
         const post = await this.blogService.getBlogPostByPermalink(url);
         const content = await this.blogService.getBlogPostContent(post.key);
         const config = this.modelToContract(blogModel);
