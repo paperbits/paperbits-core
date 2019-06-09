@@ -24,21 +24,28 @@ export class AnchorUtils {
         return result;
     }
 
-    public static getHeadingNodes(pageContent: Contract, maxHeading?: number): BlockContract[] {
+    public static getHeadingNodes(pageContent: Contract, minHeading: number = 1, maxHeading: number = 1): BlockContract[] {
         const children = AnchorUtils.findNodesRecursively(pageContent,
             node => node["type"] && node["type"].startsWith("heading"),
             (node) => {
                 if (node instanceof Array) {
                     return true;
                 }
+
                 if (!node["type"]) {
                     return false;
                 }
 
                 const nodeType: string = node["type"];
 
-                if (["layout-section", "layout-row", "layout-column", "text-block", "grid", "grid-cell"].includes(nodeType) ||
-                    (nodeType.startsWith("heading") && (!maxHeading || maxHeading >= +nodeType.slice(-1)))) {
+                if (nodeType.startsWith("heading")) {
+                    const headingLevel = parseInt(nodeType.slice(-1));
+
+                    if (headingLevel >= minHeading && headingLevel <= maxHeading) {
+                        return true;
+                    }
+                }
+                else if (["layout-section", "layout-row", "layout-column", "text-block", "grid", "grid-cell"].includes(nodeType)) {
                     return true;
                 }
 

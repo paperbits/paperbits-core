@@ -18,13 +18,14 @@ interface IHeadingOption {
 })
 export class TableOfContentsEditor {
     public readonly navigationItemTitle: ko.Observable<string>;
-    public readonly headingOptions: ko.ObservableArray<IHeadingOption>;
-    public readonly selectedOption: ko.Observable<number>;
+    public readonly headingLevelOptions: ko.ObservableArray<IHeadingOption>;
+    public readonly minHeadingLevel: ko.Observable<number>;
+    public readonly maxHeadingLevel: ko.Observable<number>;
 
     constructor(private readonly tableOfContentsModelBinder: TableOfContentsModelBinder) {
-        this.applyChanges = this.applyChanges.bind(this);
-        this.selectedOption = ko.observable();
-        this.headingOptions = ko.observableArray<IHeadingOption>([
+        this.minHeadingLevel = ko.observable();
+        this.maxHeadingLevel = ko.observable();
+        this.headingLevelOptions = ko.observableArray<IHeadingOption>([
             { label: "Heading 1", value: 1 },
             { label: "Heading 2", value: 2 },
             { label: "Heading 3", value: 3 },
@@ -45,19 +46,20 @@ export class TableOfContentsEditor {
 
     @OnMounted()
     public initialize(): void {
-        this.selectedOption(this.model.maxHeading || 1);
+        this.minHeadingLevel(this.model.minHeading || 1);
+        this.maxHeadingLevel(this.model.maxHeading || 1);
 
         if (this.model.title) {
             this.navigationItemTitle(this.model.title);
         }
 
-        this.selectedOption.subscribe(this.applyChanges);
+        this.minHeadingLevel.subscribe(this.applyChanges);
+        this.maxHeadingLevel.subscribe(this.applyChanges);
     }
 
     public async onNavigationItemChange(navigationItem: NavigationItemContract): Promise<void> {
         const contract: TableOfContentsContract = {
             type: "table-of-contents",
-            title: this.model.title,
             navigationItemKey: navigationItem.key
         };
 
@@ -68,7 +70,8 @@ export class TableOfContentsEditor {
     }
 
     public applyChanges(): void {
-        this.model.maxHeading = this.selectedOption();
+        this.model.minHeading = this.minHeadingLevel();
+        this.model.maxHeading = this.maxHeadingLevel();
         this.onChange(this.model);
     }
 }

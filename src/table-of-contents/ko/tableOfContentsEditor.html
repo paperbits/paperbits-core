@@ -2,15 +2,23 @@
     <div class="form-group">
         <div class="form-group">
             <label class="form-label">Root navigation item</label>
-            <a href="#" class="form-control" data-bind="balloon: { component: { name: 'navigation-item-selector', params: { onSelect: $component.onNavigationItemChange } } }">
+            <a href="#" class="form-control"
+                data-bind="balloon: { component: { name: 'navigation-item-selector', params: { onSelect: $component.onNavigationItemChange } } }">
                 <i class="paperbits-icon paperbits-menu-34 pull-right"></i>
                 <span data-bind="text: navigationItemTitle"></span>
             </a>
         </div>
 
         <div class="form-group">
+            <label class="form-label">Min heading level</label>
+            <select class="form-control"
+                data-bind="options: headingLevelOptions, value: minHeadingLevel, optionsText: 'label', optionsValue: 'value'"></select>
+        </div>
+
+        <div class="form-group">
             <label class="form-label">Max heading level</label>
-            <select class="form-control" data-bind="options: headingOptions, value: selectedOption, optionsText: 'label', optionsValue: 'value'"></select>
+            <select class="form-control"
+                data-bind="options: headingLevelOptions, value: maxHeadingLevel, optionsText: 'label', optionsValue: 'value'"></select>
         </div>
     </div>
 </fieldset>

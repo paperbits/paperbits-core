@@ -32,7 +32,7 @@ export class TableOfContentsModelBinder implements IModelBinder<TableOfContentsM
         });
     }
 
-    private async processNavigationItem(navigationItem: NavigationItemContract, currentPageUrl: string, maxHeading?: number): Promise<NavigationItemModel> {
+    private async processNavigationItem(navigationItem: NavigationItemContract, currentPageUrl: string,  minHeading: number, maxHeading?: number): Promise<NavigationItemModel> {
         const navbarItemModel = new NavigationItemModel();
         navbarItemModel.label = navigationItem.label;
 
@@ -47,7 +47,7 @@ export class TableOfContentsModelBinder implements IModelBinder<TableOfContentsM
 
                     if (contentItem.key && contentItem.key.startsWith("pages/")) {
                         const pageContent = await this.pageService.getPageContent(contentItem.key);
-                        const children = AnchorUtils.getHeadingNodes(pageContent, maxHeading);
+                        const children = AnchorUtils.getHeadingNodes(pageContent, minHeading, maxHeading);
 
                         if (children.length > 0) {
                             navbarItemModel.nodes = this.processAnchorItems(children);
@@ -66,8 +66,8 @@ export class TableOfContentsModelBinder implements IModelBinder<TableOfContentsM
         }
 
         const tableOfContentsModel = new TableOfContentsModel();
-        tableOfContentsModel.title = contract.title;
         tableOfContentsModel.navigationItemKey = contract.navigationItemKey;
+        tableOfContentsModel.minHeading = contract.minHeading || 1;
         tableOfContentsModel.maxHeading = contract.maxHeading || 1;
         tableOfContentsModel.items = [];
 
@@ -79,7 +79,7 @@ export class TableOfContentsModelBinder implements IModelBinder<TableOfContentsM
 
             if (assignedNavigationItem && assignedNavigationItem.navigationItems) { // has child nav items
                 const promises = assignedNavigationItem.navigationItems.map(async navigationItem => {
-                    return await this.processNavigationItem(navigationItem, currentPageUrl, tableOfContentsModel.maxHeading);
+                    return await this.processNavigationItem(navigationItem, currentPageUrl, tableOfContentsModel.minHeading, tableOfContentsModel.maxHeading);
                 });
 
                 const results = await Promise.all(promises);
@@ -93,7 +93,7 @@ export class TableOfContentsModelBinder implements IModelBinder<TableOfContentsM
     public modelToContract(model: TableOfContentsModel): Contract {
         const contract: TableOfContentsContract = {
             type: "table-of-contents",
-            title: model.title,
+            minHeading: model.minHeading,
             maxHeading: model.maxHeading,
             navigationItemKey: model.navigationItemKey
         };
