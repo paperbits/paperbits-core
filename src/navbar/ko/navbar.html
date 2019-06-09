@@ -20,8 +20,8 @@
             </li>
             <!--/ko-->
             <!--ko ifnot: nodes().length > 0 -->
-            <li class="nav-item" data-bind="css: { active: isActive() }">
-                <a class="nav-link" data-bind="text: label, attr: { href: url }"></a>
+            <li class="nav-item">
+                <a class="nav-link" data-bind="text: label, attr: { href: url }, css: { 'nav-link-active': isActive }"></a>
             </li>
             <!--/ko-->
         </ul>
