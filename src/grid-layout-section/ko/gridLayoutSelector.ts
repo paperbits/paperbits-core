@@ -1,4 +1,5 @@
 import * as ko from "knockout";
+import * as Utils from "@paperbits/common";
 import { GridModel } from "../../grid-layout-section/gridModel";
 import template from "./gridLayoutSelector.html";
 import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
@@ -31,7 +32,7 @@ export class GridLayoutSelector implements IResourceSelector<any> {
     public async initaialize(): Promise<void> {
         const snippets = [];
 
-        for (const preset of presets) {
+        for (const preset of <any>Utils.clone(presets)) {
             const model = await this.gridModelBinder.contractToModel(<any>preset);
             const viewModel = await this.gridViewModelBinder.modelToViewModel(model);
 
@@ -44,7 +45,14 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         const sectionModel = new SectionModel();
         sectionModel.widgets = [viewModel["widgetBinding"].model]; // TODO: Refactor!
 
-        const styles = sectionModel.widgets[0]["styles"]["instance"];
+        const gridModel = sectionModel.widgets[0];
+
+        const styles = gridModel["styles"]["instance"];
+
+        // styles["grid"]["md"]["colGap"] = "30px";
+        // styles["grid"]["md"]["rowGap"] = "30px";
+        // styles["grid"]["xs"]["colGap"] = "10px";
+        // styles["grid"]["xs"]["rowGap"] = "10px";
 
         styles["size"] = {
             sm: {
@@ -81,6 +89,23 @@ export class GridLayoutSelector implements IResourceSelector<any> {
                 bottom: 25
             }
         };
+
+        gridModel.widgets.forEach(x => {
+            x["styles"]["instance"]["padding"] = {
+                xs: {
+                    top: 5,
+                    left: 5,
+                    right: 5,
+                    bottom: 5
+                },
+                md: {
+                    top: 15,
+                    left: 15,
+                    right: 15,
+                    bottom: 15
+                }
+            };
+        });
 
         if (this.onSelect) {
             this.onSelect(sectionModel);

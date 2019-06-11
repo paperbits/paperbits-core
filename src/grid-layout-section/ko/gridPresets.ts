@@ -1334,14 +1334,16 @@ export const presets: any = [
         styles: {
             instance: {
                 grid: {
-                    rows: [
-                        "auto",
-                        "auto"
-                    ],
-                    cols: [
-                        "1fr",
-                        "1fr"
-                    ]
+                    xs: {
+                        rows: [
+                            "auto",
+                            "auto"
+                        ],
+                        cols: [
+                            "1fr",
+                            "1fr"
+                        ]
+                    }
                 }
             }
         },
@@ -2685,12 +2687,14 @@ export const presets: any = [
         styles: {
             instance: {
                 grid: {
-                    rows: [
-                        "auto"
-                    ],
-                    cols: [
-                        "1fr"
-                    ],
+                    xs: {
+                        rows: [
+                            "auto"
+                        ],
+                        cols: [
+                            "1fr"
+                        ]
+                    }
                 }
             }
         },
