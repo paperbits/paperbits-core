@@ -171,17 +171,18 @@ export class SectionEditor {
         Objects.cleanupObject(sizeStyles);
         Objects.setValue(`instance/size/${viewport}`, gridStyles, sizeStyles);
 
-        // Uncomment when box editor gets support for "auto".
+        const marginStyles = {
+            top: this.marginTop(),
+            bottom: this.marginBottom(),
+            left: "auto",
+            right: "auto"
+            // Uncomment when box editor gets support for "auto".
+            // marginLeft: this.marginLeft(),
+            // marginRight: this.marginRight()
+        };
 
-        // const marginStyles = {
-        //     marginTop: this.marginTop(),
-        //     marginLeft: this.marginLeft(),
-        //     marginRight: this.marginRight(),
-        //     marginBottom: this.marginBottom()
-        // };
-
-        // Objects.cleanupObject(marginStyles);
-        // Objects.setValue(`instance/margin/${viewport}`, gridStyles, marginStyles);
+        Objects.cleanupObject(marginStyles);
+        Objects.setValue(`instance/margin/${viewport}`, gridStyles, marginStyles);
 
         this.onChange(this.model);
     }

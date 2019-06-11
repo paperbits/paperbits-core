@@ -46,13 +46,6 @@ export class GridLayoutSelector implements IResourceSelector<any> {
 
         const styles = sectionModel.widgets[0]["styles"]["instance"];
 
-        styles["margin"] = {
-            top: "25px",
-            left: "auto",
-            right: "auto",
-            bottom: "25px"
-        };
-
         styles["size"] = {
             sm: {
                 maxWidth: 540
@@ -65,6 +58,27 @@ export class GridLayoutSelector implements IResourceSelector<any> {
             },
             xl: {
                 maxWidth: 1140
+            }
+        };
+
+        styles["margin"] = {
+            md: {
+                top: 15,
+                left: "auto",
+                right: "auto",
+                bottom: 15
+            },
+            lg: {
+                top: 20,
+                left: "auto",
+                right: "auto",
+                bottom: 20
+            },
+            xl: {
+                top: 25,
+                left: "auto",
+                right: "auto",
+                bottom: 25
             }
         };
 
