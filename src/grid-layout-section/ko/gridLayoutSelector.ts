@@ -46,13 +46,7 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         sectionModel.widgets = [viewModel["widgetBinding"].model]; // TODO: Refactor!
 
         const gridModel = sectionModel.widgets[0];
-
         const styles = gridModel["styles"]["instance"];
-
-        // styles["grid"]["md"]["colGap"] = "30px";
-        // styles["grid"]["md"]["rowGap"] = "30px";
-        // styles["grid"]["xs"]["colGap"] = "10px";
-        // styles["grid"]["xs"]["rowGap"] = "10px";
 
         styles["size"] = {
             sm: {
@@ -70,22 +64,18 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         };
 
         styles["margin"] = {
+            xs: {
+                top: 10,
+                left: "auto",
+                right: "auto",
+                bottom: 10
+            },
             md: {
                 top: 15,
-                left: "auto",
-                right: "auto",
                 bottom: 15
-            },
-            lg: {
-                top: 20,
-                left: "auto",
-                right: "auto",
-                bottom: 20
             },
             xl: {
                 top: 25,
-                left: "auto",
-                right: "auto",
                 bottom: 25
             }
         };

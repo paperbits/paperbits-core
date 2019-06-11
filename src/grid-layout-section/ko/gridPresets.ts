@@ -603,127 +603,12 @@ export const presets: any = [
                         cols: [
                             "1fr",
                             "1fr"
-                        ],
-
+                        ]
                     }
                 }
             }
         },
         nodes: [
-            {
-                type: "grid-cell",
-                role: "aside",
-                styles: {
-                    instance: {
-                        "grid-cell": {
-                            md: {
-                                position: {
-                                    col: 3,
-                                    row: 1
-                                },
-                                span: {
-                                    cols: 1,
-                                    rows: 2
-                                },
-                                alignment: {
-                                    vertical: "center",
-                                    horizontal: "center"
-                                }
-                            },
-                            xs: {
-                                position: {
-                                    col: 1,
-                                    row: 3
-                                },
-                                span: {
-                                    cols: 2,
-                                    rows: 1
-                                },
-                                alignment: {
-                                    vertical: "center",
-                                    horizontal: "center"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            {
-                type: "grid-cell",
-                role: "footer",
-                styles: {
-                    instance: {
-                        "grid-cell": {
-                            md: {
-                                position: {
-                                    col: 1,
-                                    row: 2
-                                },
-                                span: {
-                                    cols: 1,
-                                    rows: 1
-                                },
-                                alignment: {
-                                    vertical: "center",
-                                    horizontal: "center"
-                                }
-                            },
-                            xs: {
-                                position: {
-                                    col: 1,
-                                    row: 2
-                                },
-                                span: {
-                                    cols: 1,
-                                    rows: 1
-                                },
-                                alignment: {
-                                    vertical: "center",
-                                    horizontal: "center"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            {
-                type: "grid-cell",
-                role: "footer",
-                styles: {
-                    instance: {
-                        "grid-cell": {
-                            md: {
-                                position: {
-                                    col: 2,
-                                    row: 2
-                                },
-                                span: {
-                                    cols: 1,
-                                    rows: 1
-                                },
-                                alignment: {
-                                    vertical: "center",
-                                    horizontal: "center"
-                                }
-                            },
-                            xs: {
-                                position: {
-                                    col: 2,
-                                    row: 2
-                                },
-                                span: {
-                                    cols: 1,
-                                    rows: 1
-                                },
-                                alignment: {
-                                    vertical: "center",
-                                    horizontal: "center"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
             {
                 type: "grid-cell",
                 role: "article",
@@ -747,21 +632,116 @@ export const presets: any = [
                             xs: {
                                 position: {
                                     col: 1,
+                                    row: 2
+                                },
+                                span: {
+                                    cols: 2,
+                                    rows: 1
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                type: "grid-cell",
+                role: "aside",
+                styles: {
+                    instance: {
+                        "grid-cell": {
+                            md: {
+                                position: {
+                                    col: 3,
+                                    row: 1
+                                },
+                                span: {
+                                    cols: 1,
+                                    rows: 2
+                                }
+                            },
+                            xs: {
+                                position: {
+                                    col: 1,
                                     row: 1
                                 },
                                 span: {
                                     cols: 2,
+                                    rows: 1
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                type: "grid-cell",
+                role: "footer",
+                styles: {
+                    instance: {
+                        "grid-cell": {
+                            md: {
+                                position: {
+                                    col: 1,
+                                    row: 2
+                                },
+                                span: {
+                                    cols: 1,
                                     rows: 1
                                 },
                                 alignment: {
                                     vertical: "center",
                                     horizontal: "center"
                                 }
+                            },
+                            xs: {
+                                position: {
+                                    col: 1,
+                                    row: 3
+                                },
+                                span: {
+                                    cols: 1,
+                                    rows: 1
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                type: "grid-cell",
+                role: "footer",
+                styles: {
+                    instance: {
+                        "grid-cell": {
+                            md: {
+                                position: {
+                                    col: 2,
+                                    row: 2
+                                },
+                                span: {
+                                    cols: 1,
+                                    rows: 1
+                                },
+                                alignment: {
+                                    vertical: "center",
+                                    horizontal: "center"
+                                }
+                            },
+                            xs: {
+                                position: {
+                                    col: 2,
+                                    row: 3
+                                },
+                                span: {
+                                    cols: 1,
+                                    rows: 1
+                                }
                             }
                         }
                     }
                 }
             }
+            
 
         ]
     },
