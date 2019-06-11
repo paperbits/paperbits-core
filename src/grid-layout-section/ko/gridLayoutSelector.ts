@@ -6,7 +6,6 @@ import { Component, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { GridModelBinder } from "../../grid-layout-section";
 import { presets } from "./gridPresets";
 import { SectionModel } from "../../section";
-import { IStyleCompiler } from "@paperbits/common/styles";
 import { GridViewModelBinder } from ".";
 
 @Component({
@@ -44,6 +43,30 @@ export class GridLayoutSelector implements IResourceSelector<any> {
     public selectLayout(viewModel: any): void {
         const sectionModel = new SectionModel();
         sectionModel.widgets = [viewModel["widgetBinding"].model]; // TODO: Refactor!
+
+        const styles = sectionModel.widgets[0]["styles"]["instance"];
+
+        styles["margin"] = {
+            top: "25px",
+            left: "auto",
+            right: "auto",
+            bottom: "25px"
+        };
+
+        styles["size"] = {
+            sm: {
+                maxWidth: 540
+            },
+            md: {
+                maxWidth: 720
+            },
+            lg: {
+                maxWidth: 960
+            },
+            xl: {
+                maxWidth: 1140
+            }
+        };
 
         if (this.onSelect) {
             this.onSelect(sectionModel);

@@ -9,13 +9,12 @@ export const presets: any = [
                             "auto",
                             "1fr"
                         ],
-                        rowGap: "0",
+
                         cols: [
                             "1fr",
                             "1fr",
                             "1fr"
-                        ],
-                        colGap: "0"
+                        ]
                     },
 
                     xs: {
@@ -24,12 +23,11 @@ export const presets: any = [
                             "auto",
                             "1fr"
                         ],
-                        rowGap: "0",
+
                         cols: [
                             "1fr",
                             "1fr"
-                        ],
-                        colGap: "0"
+                        ]
                     }
                 }
             }
@@ -200,13 +198,13 @@ export const presets: any = [
                             "auto",
                             "1fr"
                         ],
-                        rowGap: "0",
+
                         cols: [
                             "33.1fr",
                             "33.1fr",
                             "33.1fr"
                         ],
-                        colGap: "0"
+
                     },
                     xs: {
                         rows: [
@@ -214,12 +212,12 @@ export const presets: any = [
                             "auto",
                             "1fr"
                         ],
-                        rowGap: "0",
+
                         cols: [
                             "1fr",
                             "1fr"
                         ],
-                        colGap: "0"
+
                     }
                 }
             }
@@ -395,13 +393,13 @@ export const presets: any = [
                             "1fr",
                             "auto"
                         ],
-                        rowGap: "0",
+
                         cols: [
                             "1fr",
                             "1fr",
                             "1fr"
                         ],
-                        colGap: "0"
+
                     },
 
                     xs: {
@@ -410,12 +408,12 @@ export const presets: any = [
                             "1fr",
                             "auto"
                         ],
-                        rowGap: "0",
+
                         cols: [
                             "1fr",
                             "1fr"
                         ],
-                        colGap: "0"
+
                     }
                 }
             }
@@ -586,13 +584,13 @@ export const presets: any = [
                             "1fr",
                             "auto"
                         ],
-                        rowGap: "0",
+
                         cols: [
                             "1fr",
                             "1fr",
                             "1fr"
                         ],
-                        colGap: "0"
+
                     },
 
                     xs: {
@@ -601,12 +599,12 @@ export const presets: any = [
                             "1fr",
                             "auto"
                         ],
-                        rowGap: "0",
+
                         cols: [
                             "1fr",
                             "1fr"
                         ],
-                        colGap: "0"
+
                     }
                 }
             }
@@ -777,13 +775,13 @@ export const presets: any = [
                         "auto",
                         "1fr"
                     ],
-                    rowGap: "0",
+
                     cols: [
                         "1fr",
                         "1fr",
                         "1fr"
                     ],
-                    colGap: "0"
+
                 }
             }
         },
@@ -896,13 +894,13 @@ export const presets: any = [
                         "auto",
                         "auto"
                     ],
-                    rowGap: "0",
+
                     cols: [
                         "1fr",
                         "1fr",
                         "1fr"
                     ],
-                    colGap: "0"
+
                 }
             }
         },
@@ -1015,12 +1013,12 @@ export const presets: any = [
                         "1fr",
                         "auto"
                     ],
-                    rowGap: "0",
+
                     cols: [
                         "1fr",
                         "1fr"
                     ],
-                    colGap: "0"
+
                 }
             }
         },
@@ -1110,12 +1108,12 @@ export const presets: any = [
                         "auto",
                         "1fr"
                     ],
-                    rowGap: "0",
+
                     cols: [
                         "1fr",
                         "1fr"
                     ],
-                    colGap: "0"
+
                 }
             }
         },
@@ -1205,12 +1203,12 @@ export const presets: any = [
                         "auto",
                         "auto"
                     ],
-                    rowGap: "0",
+
                     cols: [
                         "1fr",
                         "1fr"
                     ],
-                    colGap: "0"
+
                 }
             }
         },
@@ -1275,13 +1273,13 @@ export const presets: any = [
                         "auto",
                         "1fr"
                     ],
-                    rowGap: "0",
+
                     cols: [
                         "1fr",
                         "1fr",
                         "1fr"
                     ],
-                    colGap: "0"
+
                 }
             }
         },
@@ -1374,13 +1372,13 @@ export const presets: any = [
                         "auto",
                         "1fr"
                     ],
-                    rowGap: "0",
+
                     cols: [
                         "1fr",
                         "1fr",
                         "1fr"
                     ],
-                    colGap: "0"
+
                 }
             }
         },
@@ -1470,12 +1468,12 @@ export const presets: any = [
                             "auto",
                             "auto"
                         ],
-                        rowGap: "0",
+
                         cols: [
                             "1fr",
                             "1fr"
                         ],
-                        colGap: "0"
+
                     },
                     xs: {
                         rows: [
@@ -1484,11 +1482,11 @@ export const presets: any = [
                             "auto",
                             "auto"
                         ],
-                        rowGap: "0",
+
                         cols: [
                             "1fr"
                         ],
-                        colGap: "0"
+
                     }
                 }
             }
@@ -1657,13 +1655,13 @@ export const presets: any = [
                     rows: [
                         "auto"
                     ],
-                    rowGap: "0",
+
                     cols: [
                         "1fr",
                         "1fr",
                         "1fr"
                     ],
-                    colGap: "0"
+
                 }
             }
         },
@@ -1752,13 +1750,13 @@ export const presets: any = [
                     rows: [
                         "auto"
                     ],
-                    rowGap: "0",
+
                     cols: [
                         "3fr",
                         "6fr",
                         "3fr"
                     ],
-                    colGap: "0"
+
                 }
             }
         },
@@ -1848,12 +1846,12 @@ export const presets: any = [
                     rows: [
                         "auto"
                     ],
-                    rowGap: "0",
+
                     cols: [
                         "4fr",
                         "8fr"
                     ],
-                    colGap: "0"
+
                 }
             }
         },
@@ -1918,12 +1916,12 @@ export const presets: any = [
                     rows: [
                         "auto"
                     ],
-                    rowGap: "0",
+
                     cols: [
                         "8fr",
                         "4fr"
                     ],
-                    colGap: "0"
+
                 }
             }
         },
@@ -1988,12 +1986,12 @@ export const presets: any = [
                         rows: [
                             "auto"
                         ],
-                        rowGap: "0",
+
                         cols: [
                             "3fr",
                             "1fr"
                         ],
-                        colGap: "0"
+
                     },
 
                     xs: {
@@ -2001,11 +1999,11 @@ export const presets: any = [
                             "auto",
                             "auto"
                         ],
-                        rowGap: "0",
+
                         cols: [
                             "1fr"
                         ],
-                        colGap: "0"
+
                     }
                 }
             }
@@ -2099,23 +2097,23 @@ export const presets: any = [
                         rows: [
                             "auto"
                         ],
-                        rowGap: "0",
+
                         cols: [
                             "1fr",
                             "3fr"
                         ],
-                        colGap: "0"
+
                     },
                     xs: {
                         rows: [
                             "auto",
                             "auto"
                         ],
-                        rowGap: "0",
+
                         cols: [
                             "1fr"
                         ],
-                        colGap: "0"
+
                     }
                 }
             }
@@ -2208,14 +2206,14 @@ export const presets: any = [
                     rows: [
                         "auto"
                     ],
-                    rowGap: "0",
+
                     cols: [
                         "1fr",
                         "1fr",
                         "1fr",
                         "1fr"
                     ],
-                    colGap: "0"
+
                 }
             }
         },
@@ -2328,11 +2326,11 @@ export const presets: any = [
                     rows: [
                         "auto"
                     ],
-                    rowGap: "0",
+
                     cols: [
                         "1fr"
                     ],
-                    colGap: "0"
+
                 }
             }
         },

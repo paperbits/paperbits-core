@@ -22,8 +22,6 @@ export class SectionModelBinder implements IModelBinder<SectionModel> {
         const model = new SectionModel();
 
         contract.nodes = contract.nodes || [];
-        model.container = contract.layout;
-        model.padding = contract.padding;
         model.styles = contract.styles;
 
         const modelPromises = contract.nodes.map(async (contract: Contract) => {
@@ -39,10 +37,8 @@ export class SectionModelBinder implements IModelBinder<SectionModel> {
     public modelToContract(sectionModel: SectionModel): SectionContract {
         const sectionContract: SectionContract = {
             type: "layout-section",
-            nodes: [],
-            layout: sectionModel.container,
-            padding: sectionModel.padding,
-            styles: sectionModel.styles
+            styles: sectionModel.styles,
+            nodes: []
         };
 
         sectionModel.widgets.forEach(widgetModel => {

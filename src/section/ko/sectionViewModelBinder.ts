@@ -36,7 +36,6 @@ export class SectionViewModelBinder implements ViewModelBinder<SectionModel, Sec
         }
 
         viewModel.widgets(viewModels);
-        viewModel.container(model.container);
 
         if (model.styles) {
             viewModel.styles(await this.styleCompiler.getClassNamesByStyleConfigAsync2(model.styles));

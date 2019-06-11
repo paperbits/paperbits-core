@@ -1,6 +1,59 @@
 <fieldset class="form flex-item flex-item-grow" data-bind="scrollable: {}">
     <background params="{ background: $component.background, onUpdate: onBackgroundUpdate }"></background>
-    <typography params="{ typography: $component.typography, onUpdate: onTypographyUpdate }"></typography>
+
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" data-bind="collapse: '#sizeCollapse'"></a>
+            <b>Container size</b>
+        </label>
+        <div id="sizeCollapse" class="collapse form-group-collapse">
+            <div class="form-group">
+                <label class="form-label">Min width (pixels)</label>
+                <input type="number" class="form-control" placeholder="(Not set)" data-bind="textInput: minWidth" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Max width (pixels)</label>
+                <input type="number" class="form-control" placeholder="(Not set)" data-bind="textInput: maxWidth" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Min height (pixels)</label>
+                <input type="number" class="form-control" placeholder="(Not set)" data-bind="textInput: minHeight" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Max height (pixels)</label>
+                <input type="number" class="form-control" placeholder="(Not set)" data-bind="textInput: maxHeight" />
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" data-bind="collapse: '#sizeCollapse'"></a>
+            <b>Container margin</b>
+        </label>
+        <div id="sizeCollapse" class="collapse form-group-collapse">
+            <div class="form-group">
+                <label class="form-label">Top</label>
+                <input type="number" class="form-control" placeholder="(Not set)"
+                    data-bind="textInput: marginTop" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Left</label>
+                <input type="number" class="form-control" placeholder="(Not set)"
+                    data-bind="textInput: marginLeft" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Right</label>
+                <input type="number" class="form-control" placeholder="(Not set)"
+                    data-bind="textInput: marginRight" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Bottom</label>
+                <input type="number" class="form-control" placeholder="(Not set)"
+                    data-bind="textInput: marginBottom" />
+            </div>
+        </div>
+    </div> -->
 
     <div class="form-group form-group-collapsible">
         <label class="form-label">
@@ -8,9 +61,10 @@
             <b>Miscellaneous</b>
         </label>
         <div id="miscellaneousCollapse" class="collapse form-group-collapse">
-            <label class="form-label">
+            <!-- <label class="form-label">
                 Snap to
-                <button class="btn btn-info" type="button" data-bind="infoMessageToggle: 'Make the element stick to the edge (top or bottom) of the screen when its containing element crosses that edge.'"></button>
+                <button class="btn btn-info" type="button"
+                    data-bind="infoMessageToggle: 'Make the element stick to the edge (top or bottom) of the screen when its containing element crosses that edge.'"></button>
             </label>
             <div class="form-group">
                 <label class="form-label">
@@ -22,45 +76,16 @@
                 <label class="form-label">
                     <input name="snapping" type="radio" value="bottom" data-bind="checked: snap" />Bottom
                 </label>
-            </div>
+            </div> -->
 
             <label class="form-label">
                 Height
-                <button class="btn btn-info" type="button" data-bind="infoMessageToggle: 'Manage section height'"></button>
+                <button class="btn btn-info" type="button"
+                    data-bind="infoMessageToggle: 'Manage section height'"></button>
             </label>
             <div class="form-group">
                 <label class="form-label">
                     <input name="stretch" type="checkbox" data-bind="checked: stretch" />Stretch
-                </label>
-            </div>
-
-            <label class="form-label">
-                Gutter
-                <button class="btn btn-info" type="button" data-bind="infoMessageToggle: 'Manage section container width'"></button>
-            </label>
-            <div class="form-group">
-                <label class="form-label">
-                    <input name="layout" type="radio" value="none" data-bind="checked: layout" />None
-                </label>
-                <label class="form-label">
-                    <input name="layout" type="radio" value="container" data-bind="checked: layout" />Normal
-                </label>
-                <label class="form-label">
-                    <input name="layout" type="radio" value="container-thinner" data-bind="checked: layout" />Large
-                </label>
-            </div>
-
-            <label class="form-label">
-                Padding
-                <button class="btn btn-info" type="button" data-bind="infoMessageToggle: 'Manage space around a container\'s content, inside of any defined borders'"></button>
-            </label>
-            <div class="form-group">
-                <label class="form-label">
-                    <input name="padding" type="radio" value="with-padding" data-bind="checked: padding" />With padding
-                </label>
-                <label class="form-label">
-                    <input name="padding" type="radio" value="without-padding" data-bind="checked: padding" />Without
-                    padding
                 </label>
             </div>
         </div>
