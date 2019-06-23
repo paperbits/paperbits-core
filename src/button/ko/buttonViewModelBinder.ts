@@ -19,7 +19,7 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
         viewModel.hyperlink(model.hyperlink);
 
         if (model.styles) {
-            viewModel.styles(await this.styleCompiler.getClassNamesByStyleConfigAsync2(model.styles));
+            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles));
         }
 
         viewModel["widgetBinding"] = {

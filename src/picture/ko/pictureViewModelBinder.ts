@@ -36,7 +36,7 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
         viewModel.height(model.height);
 
         if (model.styles) {
-            viewModel.styles(await this.styleCompiler.getClassNamesByStyleConfigAsync2(model.styles));
+            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles));
         }
 
         const binding: IWidgetBinding<PictureModel> = {

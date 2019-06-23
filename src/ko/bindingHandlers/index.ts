@@ -15,7 +15,6 @@ export * from "./bindingHandlers.host";
 export * from "./bindingHandlers.htmlEditor";
 export * from "./bindingHandlers.hyperlink";
 export * from "./bindingHandlers.lightbox";
-export * from "./bindingHandlers.overflow";
 export * from "./bindingHandlers.resizable";
 export * from "./bindingHandlers.resourcePicker";
 export * from "./bindingHandlers.scrollable";

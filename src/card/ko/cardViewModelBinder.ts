@@ -35,7 +35,7 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
         }
 
         if (model.styles) {
-            viewModel.styles(await this.styleCompiler.getClassNamesByStyleConfigAsync2(model.styles));
+            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles));
         }
 
         viewModel.widgets(widgetViewModels);

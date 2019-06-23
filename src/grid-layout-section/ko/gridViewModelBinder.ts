@@ -39,7 +39,7 @@ export class GridViewModelBinder implements ViewModelBinder<GridModel, GridViewM
         viewModel.container(model.container);
 
         if (model.styles) {
-            viewModel.styles(await this.styleCompiler.getClassNamesByStyleConfigAsync2(model.styles));
+            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles));
         }
 
         const binding: IWidgetBinding<GridModel> = {
