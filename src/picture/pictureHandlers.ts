@@ -23,6 +23,7 @@ export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
         const widgetOrder: IWidgetOrder = {
             name: "picture",
             displayName: widgetDisplayName,
+            category: "Media",
             iconClass: "paperbits-image-2",
             // createWidget: (): IWidgetFactoryResult => {
             //     const backgroundModel = new BackgroundModel();

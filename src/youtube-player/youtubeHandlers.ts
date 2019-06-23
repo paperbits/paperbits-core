@@ -8,6 +8,7 @@ export class YoutubeHandlers implements IWidgetHandler, IContentDropHandler {
         const widgetOrder: IWidgetOrder = {
             name: "youtube-player",
             displayName: "Youtube player",
+            category: "Media",
             iconClass: "paperbits-player-48",
             requires: ["scripts"],
             createModel: async () => {

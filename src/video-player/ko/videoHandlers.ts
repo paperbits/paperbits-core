@@ -35,6 +35,7 @@ export class VideoHandlers implements IWidgetHandler, IContentDropHandler {
         const widgetOrder: IWidgetOrder = {
             name: "video-player",
             displayName: "Video player",
+            category: "Media",
             iconClass: "paperbits-action-74",
             requires: ["scripts"],
             createModel: async () => {

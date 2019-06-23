@@ -7,12 +7,18 @@
         Add widget
     </h1>
     <hr/>
-    <div class="flex-container flex-container-column list-container">
-        <ul class="list" data-bind="foreach: widgets, scrollable: {}">
+    <div class="flex-container flex-container-column list-container" data-bind="scrollable: {}">
+        <!-- ko foreach: { data: categories, as: 'category'  } -->
+        <!--ko if: category.name -->
+        <h2 class="category-name" data-bind="text: category.name"></h2>
+        <hr/>
+        <!--/ko-->
+        <ul class="list" data-bind="foreach: category.items">
             <li tabindex="0" class="list-item list-item-large" data-bind="hasFocus: hasFocus, click: $component.selectWidget">
                 <i class="paperbits-icon" data-bind="css: css"></i>
                 <span data-bind="text: displayName"></span>
             </li>
         </ul>
+        <!--/ko-->
     </div>
 </div>

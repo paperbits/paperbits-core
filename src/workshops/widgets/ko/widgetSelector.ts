@@ -4,14 +4,13 @@ import { WidgetItem } from "./widgetItem";
 import { IWidgetService, WidgetModel } from "@paperbits/common/widgets";
 import { Component, Event, OnMounted } from "@paperbits/common/ko/decorators";
 
-
 @Component({
     selector: "widget-selector",
     template: template,
     injectable: "widgetSelector"
 })
 export class WidgetSelector {
-    public readonly widgets: ko.Observable<WidgetItem[]>;
+    public readonly categories: ko.Observable<{name: string, items: WidgetItem[]}[]>;
     public readonly working: ko.Observable<boolean>;
 
     @Event()
@@ -27,7 +26,7 @@ export class WidgetSelector {
 
         // setting up...
         this.working = ko.observable(true);
-        this.widgets = ko.observable<WidgetItem[]>();
+        this.categories = ko.observable<{name: string, items: WidgetItem[]}[]>();
     }
 
     @OnMounted()
@@ -49,12 +48,21 @@ export class WidgetSelector {
 
                 widgetItem.css = `${widgetOrder.iconClass}`;
                 widgetItem.displayName = widgetOrder.displayName;
+                widgetItem.category = widgetOrder.category || "";
                 widgetItem.widgetOrder = widgetOrder;
 
                 items.push(widgetItem);
             });
+        const groupsObj = items.reduce((result, item) => {
+            (result[item["category"]] = result[item["category"]] || []).push(item);
+            return result;
+          }, {});
 
-        this.widgets(items);
+        const groups = Object.keys(groupsObj).map(category => {
+            return {name: category, items: groupsObj[category]};
+        });
+        
+        this.categories(groups);
         this.working(false);
     }
 
