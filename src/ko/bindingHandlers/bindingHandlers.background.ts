@@ -39,7 +39,7 @@ export class BackgroundBindingHandler {
                     const css = [];
 
                     if (backgroundModel.colorKey) {
-                        const color = await styleService.getColorByKey(backgroundModel.colorKey);
+                        const color = await styleService.getStyleByKey(backgroundModel.colorKey);
                         if (color) {
                             Object.assign(style, { "background-color": color.value });
                         }
