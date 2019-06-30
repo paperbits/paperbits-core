@@ -6,7 +6,7 @@ import { WidgetEditor } from "@paperbits/common/widgets";
 import { StyleService } from "@paperbits/styles";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { CardModel } from "../cardModel";
-import { BackgroundContract, TypographyContract } from "@paperbits/styles/contracts";
+import { BackgroundStylePluginConfig, TypographyStylePluginConfig } from "@paperbits/styles/contracts";
 
 
 @Component({
@@ -20,8 +20,8 @@ export class CardEditor implements WidgetEditor<CardModel> {
 
     public readonly alignment: ko.Observable<string>;
     public readonly scrollOnOverlow: ko.Observable<boolean>;
-    public readonly background: ko.Observable<BackgroundContract>;
-    public readonly typography: ko.Observable<TypographyContract>;
+    public readonly background: ko.Observable<BackgroundStylePluginConfig>;
+    public readonly typography: ko.Observable<TypographyStylePluginConfig>;
     public readonly appearanceStyles: ko.ObservableArray<any>;
     public readonly appearanceStyle: ko.Observable<any>;
 

@@ -6,7 +6,7 @@ import template from "./sectionEditor.html";
 import { IViewManager } from "@paperbits/common/ui";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { SectionModel } from "../sectionModel";
-import { BackgroundContract, TypographyContract } from "@paperbits/styles/contracts";
+import { BackgroundStylePluginConfig, TypographyStylePluginConfig } from "@paperbits/styles/contracts";
 import { GridModel } from "../../grid-layout-section";
 
 
@@ -21,8 +21,8 @@ const styleKeyStretch = "utils/block/stretch";
 })
 export class SectionEditor {
     public readonly snap: ko.Observable<string>;
-    public readonly background: ko.Observable<BackgroundContract>;
-    public readonly typography: ko.Observable<TypographyContract>;
+    public readonly background: ko.Observable<BackgroundStylePluginConfig>;
+    public readonly typography: ko.Observable<TypographyStylePluginConfig>;
     public readonly stretch: ko.Observable<boolean>;
 
     public readonly minWidth: ko.Observable<string>;
@@ -41,8 +41,8 @@ export class SectionEditor {
         this.onTypographyUpdate = this.onTypographyUpdate.bind(this);
         this.snap = ko.observable<string>("none");
         this.stretch = ko.observable<boolean>(false);
-        this.background = ko.observable<BackgroundContract>();
-        this.typography = ko.observable<TypographyContract>();
+        this.background = ko.observable<BackgroundStylePluginConfig>();
+        this.typography = ko.observable<TypographyStylePluginConfig>();
         this.minWidth = ko.observable<string>();
         this.maxWidth = ko.observable<string>();
         this.minHeight = ko.observable<string>();
@@ -187,14 +187,14 @@ export class SectionEditor {
         this.onChange(this.model);
     }
 
-    public onBackgroundUpdate(background: BackgroundContract): void {
+    public onBackgroundUpdate(background: BackgroundStylePluginConfig): void {
         Objects.setStructure("styles/instance/background", this.model);
         this.model["styles"]["instance"]["background"] = background;
 
         this.applyChanges();
     }
 
-    public onTypographyUpdate(typography: TypographyContract): void {
+    public onTypographyUpdate(typography: TypographyStylePluginConfig): void {
         Objects.setStructure("styles/instance/typography", this.model);
         this.model["styles"]["instance"]["typography"] = typography;
 

@@ -1,4 +1,4 @@
-import { GridContract } from "@paperbits/styles/contracts/gridContract";
+import { GridContract } from "@paperbits/core/grid/gridContract";
 import { GridModel } from "./gridModel";
 import { IModelBinder } from "@paperbits/common/editing";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
@@ -15,12 +15,10 @@ export class GridModelBinder implements IModelBinder<GridModel> {
 
     constructor(private readonly modelBinderSelector: ModelBinderSelector) { }
 
-    public async contractToModel(contract: any, bindingContext?: Bag<any>): Promise<GridModel> {
+    public async contractToModel(contract: GridContract, bindingContext?: Bag<any>): Promise<GridModel> {
         const model = new GridModel();
 
         contract.nodes = contract.nodes || [];
-        model.container = contract.layout;
-        model.padding = contract.padding;
         model.styles = contract.styles;
 
         const modelPromises = contract.nodes.map(async (contract: Contract) => {
@@ -34,11 +32,9 @@ export class GridModelBinder implements IModelBinder<GridModel> {
     }
 
     public modelToContract(model: GridModel): any {
-        const contract: any = {
+        const contract: GridContract = {
             type: "grid",
             nodes: [],
-            layout: model.container,
-            padding: model.padding,
             styles: model.styles
         };
 
