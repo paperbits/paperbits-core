@@ -1,29 +1,29 @@
 <div class="flex-container flex-container-column fit">
     <fieldset class="flex-item flex-item-grow form" data-bind="scrollable: {}">
         <div class="form-group">
-            <label class="form-label">Title</label>
+            <label for="title" class="form-label">Title</label>
             <div class="input-group">
-                <input type="text" class="form-control" data-bind="textInput: pageItem.title, validationElement: pageItem.title" placeholder="e.g. About"
+                <input type="text" id="title" class="form-control" data-bind="textInput: pageItem.title, validationElement: pageItem.title" placeholder="e.g. About"
                     maxlength="256" />
                 <button class="btn btn-danger input-group-btn" type="button" data-bind="validationMessageToggle: pageItem.title">!</button>
             </div>
         </div>
         <div class="form-group">
-            <label class="form-label">Permalink</label>
+            <label for="permalink" class="form-label">Permalink</label>
             <div class="input-group">
-                <input type="text" class="form-control" data-bind="textInput: pageItem.permalink, validationElement: pageItem.permalink"
+                <input type="text" id="permalink" class="form-control" data-bind="textInput: pageItem.permalink, validationElement: pageItem.permalink"
                     placeholder="e.g. /about" maxlength="2000" spellcheck="false" />
                 <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: pageItem.permalink" type="button">!</button>
             </div>
         </div>
         <div class="form-group">
-            <label class="form-label">Description</label>
-            <textarea class="form-control" data-bind="textInput: pageItem.description" maxlength="256"></textarea>
+            <label for="description" class="form-label">Description</label>
+            <textarea id="description" class="form-control" data-bind="textInput: pageItem.description" maxlength="256"></textarea>
         </div>
         <div class="form-group">
-            <label class="form-label">Keywords</label>
+            <label for="keywords" class="form-label">Keywords</label>
             <div class="input-group">
-                <input type="text" class="form-control" data-bind="textInput: pageItem.keywords" placeholder="e.g. about" maxlength="256"
+                <input type="text" id="keywords" class="form-control" data-bind="textInput: pageItem.keywords" placeholder="e.g. about" maxlength="256"
                 />
             </div>
         </div>

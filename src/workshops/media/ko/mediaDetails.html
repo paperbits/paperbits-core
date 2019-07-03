@@ -1,11 +1,11 @@
 <div class="flex-container flex-container-column fit">
     <fieldset class="flex-item flex-item-grow form" data-bind="scrollable: {}">
         <div class="form-group">
-            <label class="form-label">
+            <label for="fileName" class="form-label">
                 Name
             </label>
             <div class="input-group">
-                <input type="text" class="form-control" data-bind="textInput: mediaItem.fileName, validationElement: mediaItem.fileName"
+                <input type="text" id="fileName" class="form-control" data-bind="textInput: mediaItem.fileName, validationElement: mediaItem.fileName"
                     placeholder="i.e. Orders" maxlength="256" />
                 <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: mediaItem.fileName"
                     type="button">!</button>
@@ -13,27 +13,28 @@
         </div>
 
         <div class="form-group">
-            <label class="form-label">
+            <label for="permalink" class="form-label">
                 Permalink
             </label>
             <div class="input-group">
-                <input type="text" class="form-control" data-bind="textInput: mediaItem.permalink, validationElement: mediaItem.permalink"
+                <input type="text" id="permalink" class="form-control" data-bind="textInput: mediaItem.permalink, validationElement: mediaItem.permalink"
                     placeholder="http://www.site.com/" maxlength="2000" spellcheck="false" />
                 <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: mediaItem.permalink" type="button">!</button>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="form-label">
+            <label for="description" class="form-label">
                 Description
             </label>
-            <textarea class="form-control" data-bind="textInput: mediaItem.description" maxlength="256"></textarea>
+            <textarea id="description" class="form-control" data-bind="textInput: mediaItem.description" maxlength="256"></textarea>
         </div>
 
         <div class="form-group">
-            <label class="form-label">
-                Keywords</label>
-            <input type="text" class="form-control" data-bind="textInput: mediaItem.keywords" maxlength="256" />
+            <label for="keywords" class="form-label">
+                Keywords
+            </label>
+            <input type="text" id="keywords" class="form-control" data-bind="textInput: mediaItem.keywords" maxlength="256" />
         </div>
     </fieldset>
 

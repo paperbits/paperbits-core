@@ -8,20 +8,20 @@
         </label>
         <div id="sizeCollapse" class="collapse form-group-collapse">
             <div class="form-group">
-                <label class="form-label">Min width (px)</label>
-                <input type="number" class="form-control" placeholder="(Not set)" data-bind="textInput: minWidth" />
+                <label for="minWidth" class="form-label">Min width (px)</label>
+                <input type="number" id="minWidth" class="form-control" placeholder="(Not set)" data-bind="textInput: minWidth" />
             </div>
             <div class="form-group">
-                <label class="form-label">Max width (px)</label>
-                <input type="number" class="form-control" placeholder="(Not set)" data-bind="textInput: maxWidth" />
+                <label for="maxWidth" class="form-label">Max width (px)</label>
+                <input type="number" id="maxWidth" class="form-control" placeholder="(Not set)" data-bind="textInput: maxWidth" />
             </div>
             <div class="form-group">
-                <label class="form-label">Min height (px)</label>
-                <input type="number" class="form-control" placeholder="(Not set)" data-bind="textInput: minHeight" />
+                <label for="minHeight" class="form-label">Min height (px)</label>
+                <input type="number" id="minHeight" class="form-control" placeholder="(Not set)" data-bind="textInput: minHeight" />
             </div>
             <div class="form-group">
-                <label class="form-label">Max height (px)</label>
-                <input type="number" class="form-control" placeholder="(Not set)" data-bind="textInput: maxHeight" />
+                <label for="maxHeight" class="form-label">Max height (px)</label>
+                <input type="number" id="maxHeight" class="form-control" placeholder="(Not set)" data-bind="textInput: maxHeight" />
             </div>
         </div>
     </div>
@@ -33,8 +33,8 @@
         </label>
         <div id="sizeCollapse" class="collapse form-group-collapse">
             <div class="form-group">
-                <label class="form-label">Top (px)</label>
-                <input type="number" class="form-control" placeholder="(Not set)"
+                <label for="marginTop" class="form-label">Top (px)</label>
+                <input type="number" id="marginTop" class="form-control" placeholder="(Not set)"
                     data-bind="textInput: marginTop" />
             </div>
             <!-- <div class="form-group">
@@ -48,8 +48,8 @@
                     data-bind="textInput: marginRight" />
             </div> -->
             <div class="form-group">
-                <label class="form-label">Bottom (px)</label>
-                <input type="number" class="form-control" placeholder="(Not set)"
+                <label for="marginBottom" class="form-label">Bottom (px)</label>
+                <input type="number" id="marginBottom" class="form-control" placeholder="(Not set)"
                     data-bind="textInput: marginBottom" />
             </div>
         </div>
@@ -84,8 +84,8 @@
                     data-bind="infoMessageToggle: 'Manage section height'"></button>
             </label>
             <div class="form-group">
-                <label class="form-label">
-                    <input name="stretch" type="checkbox" data-bind="checked: stretch" />Stretch
+                <label for="stretch" class="form-label">
+                    <input type="checkbox" id="stretch" name="stretch" data-bind="checked: stretch" />Stretch
                 </label>
             </div>
         </div>

@@ -1,9 +1,9 @@
 <div class="flex-container flex-container-column fit">
     <fieldset class="flex-item flex-item-grow form" data-bind="scrollable: {}">
         <div class="form-group">
-            <label class="form-label">Title</label>
+            <label for="title" class="form-label">Title</label>
             <div class="input-group">
-                <input type="text" class="form-control"
+                <input type="text" id="title" class="form-control"
                     data-bind="textInput: layoutItem.title, validationElement: layoutItem.title"
                     placeholder="i.e. Orders" maxlength="256" />
                 <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: layoutItem.title"
@@ -12,13 +12,13 @@
         </div>
 
         <div class="form-group">
-            <label class="form-label">
-                URL template
+            <label for="permalinkTemplate" class="form-label">
+                Permalink template
                 <button class="btn btn-info" type="button"
-                    data-bind="infoMessageToggle: '<p>URI template determines which layout is applied to a page with certain URL. Examples:</p><p><b>/blogs</b> - exact URL</p><p><b>/blogs/{blogId}</b> - variable segment</p><p><b>/blogs/*</b> - anything afterwards</p>'"></button>
+                    data-bind="infoMessageToggle: '<p>Permalink template determines which layout is applied to a page. Examples:</p><p><b>/blogs</b> - exact URL</p><p><b>/blogs/{blogId}</b> - variable segment</p><p><b>/blogs/*</b> - anything afterwards</p>'"></button>
             </label>
             <div class="input-group">
-                <input type="text" class="form-control"
+                <input type="text" id="permalinkTemplate" class="form-control"
                     data-bind="textInput: layoutItem.permalinkTemplate, validationElement: layoutItem.permalinkTemplate"
                     placeholder="/" maxlength="2000" />
                 <button class="btn btn-danger input-group-btn"
@@ -27,8 +27,8 @@
         </div>
 
         <div class="form-group">
-            <label class="form-label"> Description </label>
-            <textarea class="form-control" data-bind="textInput: layoutItem.description"></textarea>
+            <label for="description" class="form-label">Description</label>
+            <textarea id="description" class="form-control" data-bind="textInput: layoutItem.description"></textarea>
         </div>
     </fieldset>
 

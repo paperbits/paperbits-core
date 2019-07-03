@@ -7,32 +7,32 @@
 
         <div id="alignmentCollapse" class="collapse form-group-collapse">
             <div class="form-group">
-                <label>Horizontal</label>
-                <a href="#" class="toolbox-btn"
+                <b>Horizontal</b>
+                <a href="#" class="toolbox-btn" aria-label="Align left"
                     data-bind="click: alignLeft, css: { 'toolbox-btn-is-active': horizontalAlignment() === 'start' }">
                     <i class="paperbits-icon paperbits-align-left"></i>
                 </a>
-                <a href="#" class="toolbox-btn"
+                <a href="#" class="toolbox-btn" aria-label="Align center (horizontally)"
                     data-bind="click: alignCenter, css: { 'toolbox-btn-is-active': horizontalAlignment() === 'center' || horizontalAlignment() === 'around' || horizontalAlignment() === 'between' }">
                     <i class="paperbits-icon paperbits-align-center-horizontal"></i>
                 </a>
-                <a href="#" class="toolbox-btn"
+                <a href="#" class="toolbox-btn" aria-label="Align right"
                     data-bind="click: alignRight, css: { 'toolbox-btn-is-active': horizontalAlignment() === 'end' }">
                     <i class="paperbits-icon paperbits-align-right"></i>
                 </a>
             </div>
 
             <div class="form-group">
-                <label>Vertical</label>
-                <a href="#" class="toolbox-btn"
+                <b>Vertical</b>
+                <a href="#" class="toolbox-btn" aria-label="Align top"
                     data-bind="click: alignTop, css: { 'toolbox-btn-is-active': verticalAlignment() === 'start' }">
                     <i class="paperbits-icon paperbits-align-top"></i>
                 </a>
-                <a href="#" class="toolbox-btn toolbox-btn-is-active"
+                <a href="#" class="toolbox-btn toolbox-btn-is-active" aria-label="Align center"
                     data-bind="click: alignMiddle, css: { 'toolbox-btn-is-active': verticalAlignment() === 'center' || verticalAlignment() === 'around' || verticalAlignment() === 'between' }">
                     <i class="paperbits-icon paperbits-align-center-vertical"></i>
                 </a>
-                <a href="#" class="toolbox-btn"
+                <a href="#" class="toolbox-btn" aria-label="Align bottom (vertically)"
                     data-bind="click: alignBottom, css: { 'toolbox-btn-is-active': verticalAlignment() === 'end' }">
                     <i class="paperbits-icon paperbits-align-bottom"></i>
                 </a>
