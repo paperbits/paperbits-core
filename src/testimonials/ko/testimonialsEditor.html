@@ -6,35 +6,35 @@
         </label>
         <div id="propertiesCollapse" class="collapse form-group-collapse">
             <div class="form-group">
-                <label class="form-label">Message text</label>
+                <label for="textContent" class="form-label">Message text</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" data-bind="textInput: textContent" maxlength="3000" />
+                    <input type="text" id="textContent" class="form-control" data-bind="textInput: textContent" maxlength="3000" />
                 </div>
             </div>
             <div class="form-group">
-                <label class="form-label">All stars (max 10)</label>
+                <label for="starsMaximum" class="form-label">All stars (max 10)</label>
                 <div class="input-group">
-                    <input type="number" class="form-control" data-bind="textInput: starsMaximum" min="0" max="10" />
+                    <input type="number" id="starsMaximum" class="form-control" data-bind="textInput: starsMaximum" min="0" max="10" />
                 </div>
             </div>
             <div class="form-group">
-                <label class="form-label">Stars selected</label>
+                <label for="starsCount" class="form-label">Stars selected</label>
                 <div class="input-group">
-                    <input type="number" class="form-control" data-bind="textInput: starsCount" min="0" max="10" />
+                    <input type="number" id="starsCount" class="form-control" data-bind="textInput: starsCount" min="0" max="10" />
                 </div>
             </div>
             <div class="form-group">
-                <label class="form-label">Author name</label>
+                <label for="author" class="form-label">Author name</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" data-bind="textInput: author" maxlength="500"
-                        placeholder="John Doe" />
+                    <input type="text" id="author" class="form-control" data-bind="textInput: author" maxlength="500"
+                        placeholder="e.g. John Doe" />
                 </div>
             </div>
             <div class="form-group">
-                <label class="form-label">Author title</label>
+                <label for="authorTitle" class="form-label">Author title</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" data-bind="textInput: authorTitle" maxlength="1000"
-                        placeholder="CEO at Company" />
+                    <input type="text" id="authorTitle" class="form-control" data-bind="textInput: authorTitle" maxlength="1000"
+                        placeholder="e.g. CEO at Company" />
                 </div>
             </div>
         </div>

@@ -1,11 +1,11 @@
 ﻿<fieldset class="form">
-    <label class="form-label">Location</label>
-    <input type="text" class="form-control" placeholder="e.g. 400 Broad St, Seattle, WA 98109" data-bind="textInput: location"
+    <label for="location" class="form-label">Location</label>
+    <input type="text" id="location" class="form-control" placeholder="e.g. 400 Broad St, Seattle, WA 98109" data-bind="textInput: location"
     />
 
-    <label class="form-label">Pin caption</label>
-    <input type="text" class="form-control" placeholder="e.g. Space Needle" data-bind="textInput: caption" maxlength="256" />
+    <label for="caption" class="form-label">Pin caption</label>
+    <input type="text" id="caption" class="form-control" placeholder="e.g. Space Needle" data-bind="textInput: caption" maxlength="256" />
 
-    <label class="form-label">Enable zoom control</label>
-    <input type="checkbox" data-bind="checked: zoomControl" />
+    <label id="zoomControl" class="form-label">Enable zoom control</label>
+    <input type="checkbox" id="zoomControl" data-bind="checked: zoomControl" />
 </fieldset>

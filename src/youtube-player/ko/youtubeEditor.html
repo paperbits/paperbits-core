@@ -5,9 +5,9 @@
             <b>Source</b>
         </label>
         <div id="sourceCollapse" class="collapse form-group-collapse">
-            <label class="form-label">Video ID</label>
+            <label for="videoId" class="form-label">Video ID</label>
             <div class="input-group">
-                <input type="text" class="form-control" data-bind="textInput: videoId" maxlength="500" />
+                <input type="text" id="videoId" class="form-control" data-bind="textInput: videoId" maxlength="500" />
             </div>
         </div>
     </div>
@@ -17,9 +17,9 @@
             <b>Security</b>
         </label>
         <div id="securityCollapse" class="collapse form-group-collapse">
-            <label class="form-label">Origin URL</label>
+            <label for="origin" class="form-label">Origin URL</label>
             <div class="input-group">
-                <input type="url" class="form-control" data-bind="textInput: origin" placeholder="http://example.com" maxlength="2000" />
+                <input type="url" id="origin" class="form-control" data-bind="textInput: origin" placeholder="http://example.com" maxlength="2000" />
             </div>
         </div>
     </div>
@@ -30,14 +30,14 @@
             <b>Miscellaneous</b>
         </label>
         <div id="miscellaneousCollapse" class="collapse form-group-collapse">
-            <label class="form-label">
-                <input type="checkbox" data-bind="checked: controls" />Controls</span>
+            <label for="controls" class="form-label">
+                <input type="checkbox" id="controls" data-bind="checked: controls" />Controls</span>
             </label>
-            <label class="form-label">
-                <input type="checkbox" data-bind="checked: autoplay" />Autoplay</span>
+            <label for="autoplay" class="form-label">
+                <input type="checkbox" id="autoplay" data-bind="checked: autoplay" />Autoplay</span>
             </label>
-            <label class="form-label">
-                <input type="checkbox" data-bind="checked: loop" />Loop</span>
+            <label for="loop" class="form-label">
+                <input type="checkbox" id="loop" data-bind="checked: loop" />Loop</span>
             </label>
         </div>
     </div>

@@ -13,12 +13,11 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label">
+                <label for="caption" class="form-label">
                     Caption
-                    <button class="btn btn-info" type="button"
-                        data-bind="infoMessageToggle: 'An alternate text for an image'"></button>
+                    <button class="btn btn-info" type="button" data-bind="infoMessageToggle: 'An alternate text for an image'"></button>
                 </label>
-                <input type="text" class="form-control" data-bind="textInput: caption" maxlength="256" />
+                <input type="text" id="caption" class="form-control" data-bind="textInput: caption" maxlength="256" />
             </div>
 
             <div class="form-group">
@@ -46,13 +45,13 @@
         </label>
         <div id="sizeCollapse" class="collapse form-group-collapse">
             <div class="form-group">
-                <label class="form-label">Width</label>
-                <input type="number" class="form-control" placeholder="(Not set)" data-bind="textInput: width" />
+                <label for="width" class="form-label">Width</label>
+                <input type="number" id="width" class="form-control" placeholder="(Not set)" data-bind="textInput: width" />
             </div>
 
             <div class="form-group">
-                <label class="form-label">Height</label>
-                <input type="number" class="form-control" placeholder="(Not set)" data-bind="textInput: height" />
+                <label for="height" class="form-label">Height</label>
+                <input type="number" id="height" class="form-control" placeholder="(Not set)" data-bind="textInput: height" />
             </div>
         </div>
     </div>
