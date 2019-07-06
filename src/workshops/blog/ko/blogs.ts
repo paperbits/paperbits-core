@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./blogs.html";
 import { IBlogService } from "@paperbits/common/blogs/IBlogService";
-import { Router } from "@paperbits/common/routing/Router";
+import { Router } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
 import { Keys } from "@paperbits/common/keyboard";
 import { Component } from "@paperbits/common/ko/decorators";

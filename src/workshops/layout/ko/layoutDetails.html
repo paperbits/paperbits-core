@@ -19,7 +19,7 @@
             </label>
             <div class="input-group">
                 <input type="text" id="permalinkTemplate" class="form-control"
-                    data-bind="textInput: layoutItem.permalinkTemplate, validationElement: layoutItem.permalinkTemplate"
+                    data-bind="textInput: layoutItem.permalinkTemplate, validationElement: layoutItem.permalinkTemplate, disable: isDefaultLayout"
                     placeholder="/" maxlength="2000" />
                 <button class="btn btn-danger input-group-btn"
                     data-bind="validationMessageToggle: layoutItem.permalinkTemplate" type="button">!</button>

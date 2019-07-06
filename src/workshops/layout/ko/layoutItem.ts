@@ -17,6 +17,7 @@ export class LayoutItem {
         this.title = ko.observable<string>(layout.title);
         this.description = ko.observable<string>(layout.description);
         this.permalinkTemplate = ko.observable<string>(layout.permalinkTemplate);
+
         this.hasFocus = ko.observable<boolean>(false);
     }
 

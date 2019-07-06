@@ -40,12 +40,13 @@ export class PageDetailsWorkshop {
         this.pageItem.keywords
             .subscribe(this.updatePage);
 
-        this.pageItem.permalink
-            .extend(<any>{ uniquePermalink: this.pageItem.permalink, required: true, onlyValid: true })
-            .subscribe(this.updatePermlaink);
+        const validPermalink = this.pageItem.permalink
+            .extend(<any>{ required: true, uniquePermalink: this.pageItem.permalink, onlyValid: true });
+
+        validPermalink.subscribe(this.updatePermlaink);
 
         this.viewManager.setHost({ name: "content-host" });
-        this.router.navigateTo(this.pageItem.permalink());
+        await this.router.navigateTo(validPermalink());
     }
 
     private async updatePage(): Promise<void> {
@@ -55,7 +56,7 @@ export class PageDetailsWorkshop {
     private async updatePermlaink(): Promise<void> {
         const permalink = this.pageItem.permalink();
         this.router.notifyListeners = false;
-        this.router.navigateTo(permalink);
+        await this.router.navigateTo(permalink);
         this.router.notifyListeners = true;
 
         this.updatePage();

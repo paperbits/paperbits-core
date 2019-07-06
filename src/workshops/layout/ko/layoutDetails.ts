@@ -25,39 +25,37 @@ export class LayoutDetails {
         private readonly layoutService: ILayoutService,
         private readonly router: Router,
         private readonly viewManager: IViewManager
-    ) {
-    }
+    ) { }
 
     @OnMounted()
     public async onMounted(): Promise<void> {
         this.layoutItem.title
-            .extend(<any>{ required: true })
+            .extend(<any>{ required: true, onlyValid: true })
             .subscribe(this.updateLayout);
 
-        this.layoutItem.permalinkTemplate
-            .extend(<any>{ uniqueLayoutUri: this.layoutItem.key })
-            .subscribe(this.updateLayout);
+        const validPermalinkTemplate = this.layoutItem.permalinkTemplate
+            .extend(<any>{ uniqueLayoutUri: this.layoutItem.key, required: true, onlyValid: true });
+
+        validPermalinkTemplate.subscribe(this.updateLayout);
 
         this.layoutItem.description
             .subscribe(this.updateLayout);
 
         this.isDefaultLayout = ko.pureComputed(() => {
-            return this.layoutItem.permalinkTemplate() === "/";
+            return validPermalinkTemplate() === "/";
         });
 
-        this.canDelete = ko.pureComputed(() => {
-            return true; // !this.isDefaultLayout();
+        this.canDelete = ko.computed(() => {
+            return !this.isDefaultLayout();
         });
 
-        const permalinkTemplate = this.layoutItem.permalinkTemplate();
-        
-        this.router.navigateTo(permalinkTemplate, this.layoutItem.title(), { routeKind: "layout" });
+        const permalinkTemplate = validPermalinkTemplate();
+
+        await this.router.navigateTo(permalinkTemplate, this.layoutItem.title(), { routeKind: "layout" });
     }
 
     private async updateLayout(): Promise<void> {
-        if ((<any>this.layoutItem.title).isValid()) {
-            await this.layoutService.updateLayout(this.layoutItem.toLayout());
-        }
+        await this.layoutService.updateLayout(this.layoutItem.toLayout());
     }
 
     public async deleteLayout(): Promise<void> {
@@ -71,6 +69,6 @@ export class LayoutDetails {
             this.onDeleteCallback();
         }
 
-        this.router.navigateTo("/");
+       await this.router.navigateTo("/");
     }
 }

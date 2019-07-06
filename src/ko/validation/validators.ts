@@ -44,7 +44,7 @@ export class KnockoutValidation {
             async: true,
             validator: async (permalinkUri: string, contentItemKey: string, callback: (isInUse: boolean) => void) => {
                 if (!permalinkUri) {
-                    return;
+                    return false;
                 }
 
                 const page = await this.contentItemService.getContentItemByPermalink(permalinkUri);
@@ -57,8 +57,9 @@ export class KnockoutValidation {
 
         validation.rules["uniqueLayoutUri"] = {
             async: true,
-            validator: async (permalinkTemplate, layoutKey, callback) => {
+            validator: async (permalinkTemplate, layoutKey, callback: (isInUse: boolean) => void) => {
                 if (!permalinkTemplate) {
+                    callback(false);
                     return;
                 }
 
@@ -67,7 +68,7 @@ export class KnockoutValidation {
 
                 callback(!conflict);
             },
-            message: "This URI template is already in use."
+            message: "This permalink template is already in use."
         };
 
         validation.registerExtenders();
