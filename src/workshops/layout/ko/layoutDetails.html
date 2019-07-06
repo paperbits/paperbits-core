@@ -32,12 +32,13 @@
         </div>
     </fieldset>
 
+    <!-- ko if: canDelete -->
     <div class="flex-item btn-group">
-        <!--ko if: canDelete -->
-        <button class="btn" data-bind="confirm: { message: 'Are you sure you want to delete this layout?', onConfirm: deleteLayout }">
+        <button class="btn"
+            data-bind="confirm: { message: 'Are you sure you want to delete this layout?', onConfirm: deleteLayout }">
             <i class="paperbits-icon paperbits-simple-remove"></i>
             Delete layout
         </button>
-        <!--/ko-->
     </div>
+    <!-- /ko -->
 </div>

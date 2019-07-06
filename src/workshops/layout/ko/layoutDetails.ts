@@ -12,12 +12,6 @@ import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorat
     injectable: "layoutDetails"
 })
 export class LayoutDetails {
-    @Param()
-    public readonly layoutItem: LayoutItem;
-
-    @Event()
-    public readonly onDeleteCallback: () => void;
-
     public isDefaultLayout: ko.Computed<boolean>;
     public canDelete: ko.Computed<boolean>;
 
@@ -26,6 +20,12 @@ export class LayoutDetails {
         private readonly router: Router,
         private readonly viewManager: IViewManager
     ) { }
+
+    @Param()
+    public readonly layoutItem: LayoutItem;
+
+    @Event()
+    public readonly onDeleteCallback: () => void;
 
     @OnMounted()
     public async onMounted(): Promise<void> {
@@ -69,6 +69,6 @@ export class LayoutDetails {
             this.onDeleteCallback();
         }
 
-       await this.router.navigateTo("/");
+        await this.router.navigateTo("/");
     }
 }

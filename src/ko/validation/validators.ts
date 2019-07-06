@@ -1,14 +1,14 @@
 
 import * as ko from "knockout";
 import * as validation from "knockout.validation";
-import { IContentItemService } from "@paperbits/common/contentItems";
 import { ILayoutService } from "@paperbits/common/layouts/ILayoutService";
+import { IPageService } from "@paperbits/common/pages";
 
 const errorClassName = "is-invalid";
 
 export class KnockoutValidation {
     constructor(
-        private readonly contentItemService: IContentItemService,
+        private readonly pageService: IPageService,
         private readonly layoutService: ILayoutService
     ) {
         validation.init({
@@ -47,7 +47,7 @@ export class KnockoutValidation {
                     return false;
                 }
 
-                const page = await this.contentItemService.getContentItemByPermalink(permalinkUri);
+                const page = await this.pageService.getPageByPermalink(permalinkUri);
                 const conflict = page && page.key !== contentItemKey;
 
                 callback(!conflict);

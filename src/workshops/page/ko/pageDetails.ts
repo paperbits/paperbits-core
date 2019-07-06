@@ -1,4 +1,5 @@
-﻿import template from "./pageDetails.html";
+﻿import * as ko from "knockout";
+import template from "./pageDetails.html";
 import { IPageService } from "@paperbits/common/pages";
 import { Router } from "@paperbits/common/routing";
 import { IViewManager } from "@paperbits/common/ui";
@@ -11,11 +12,8 @@ import { PageItem } from "./pageItem";
     injectable: "pageDetailsWorkshop"
 })
 export class PageDetailsWorkshop {
-    @Param()
-    public pageItem: PageItem;
-
-    @Event()
-    private readonly onDeleteCallback: () => void;
+    public isHomePage: ko.Computed<boolean>;
+    public canDelete: ko.Computed<boolean>;
 
     constructor(
         private readonly pageService: IPageService,
@@ -27,6 +25,12 @@ export class PageDetailsWorkshop {
         this.updatePage = this.updatePage.bind(this);
         this.updatePermlaink = this.updatePermlaink.bind(this);
     }
+
+    @Param()
+    public pageItem: PageItem;
+
+    @Event()
+    private readonly onDeleteCallback: () => void;
 
     @OnMounted()
     public async onMounted(): Promise<void> {
@@ -41,9 +45,17 @@ export class PageDetailsWorkshop {
             .subscribe(this.updatePage);
 
         const validPermalink = this.pageItem.permalink
-            .extend(<any>{ required: true, uniquePermalink: this.pageItem.permalink, onlyValid: true });
+            .extend(<any>{ required: true, uniquePermalink: this.pageItem.key, onlyValid: true });
 
         validPermalink.subscribe(this.updatePermlaink);
+
+        this.isHomePage = ko.pureComputed(() => {
+            return validPermalink() === "/";
+        });
+
+        this.canDelete = ko.computed(() => {
+            return !this.isHomePage();
+        });
 
         this.viewManager.setHost({ name: "content-host" });
         await this.router.navigateTo(validPermalink());
