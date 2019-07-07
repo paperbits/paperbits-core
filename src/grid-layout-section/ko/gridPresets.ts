@@ -2512,6 +2512,229 @@ export const presets: any = [
                         rows: [
                             "auto"
                         ],
+
+                        cols: [
+                            "1fr",
+                            "1fr"
+                        ],
+
+                    },
+
+                    xs: {
+                        rows: [
+                            "auto",
+                            "auto"
+                        ],
+
+                        cols: [
+                            "1fr"
+                        ],
+
+                    }
+                }
+            }
+        },
+        nodes: [
+            {
+                type: "grid-cell",
+                role: "aside",
+                styles: {
+                    instance: {
+                        "grid-cell": {
+                            md: {
+                                position: {
+                                    col: 2,
+                                    row: 1
+                                },
+                                span: {
+                                    cols: 1,
+                                    rows: 1
+                                },
+                                alignment: {
+                                    vertical: "center",
+                                    horizontal: "center"
+                                }
+                            },
+                            xs: {
+                                position: {
+                                    col: 1,
+                                    row: 1
+                                },
+                                span: {
+                                    cols: 1,
+                                    rows: 1
+                                },
+                                alignment: {
+                                    vertical: "center",
+                                    horizontal: "center"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                type: "grid-cell",
+                role: "article",
+                styles: {
+                    instance: {
+                        "grid-cell": {
+                            md: {
+                                position: {
+                                    col: 1,
+                                    row: 1
+                                },
+                                span: {
+                                    cols: 1,
+                                    rows: 1
+                                },
+                                alignment: {
+                                    vertical: "center",
+                                    horizontal: "center"
+                                }
+                            },
+                            xs: {
+                                position: {
+                                    col: 1,
+                                    row: 2
+                                },
+                                span: {
+                                    cols: 1,
+                                    rows: 1
+                                },
+                                alignment: {
+                                    vertical: "center",
+                                    horizontal: "center"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        ]
+    },
+
+    {
+        type: "grid",
+        styles: {
+            instance: {
+                grid: {
+                    md: {
+                        rows: [
+                            "auto"
+                        ],
+
+                        cols: [
+                            "1fr",
+                            "1fr"
+                        ],
+
+                    },
+                    xs: {
+                        rows: [
+                            "auto",
+                            "auto"
+                        ],
+
+                        cols: [
+                            "1fr"
+                        ],
+
+                    }
+                }
+            }
+        },
+        nodes: [
+            {
+                type: "grid-cell",
+                role: "aside",
+                styles: {
+                    instance: {
+                        "grid-cell": {
+                            md: {
+                                position: {
+                                    col: 1,
+                                    row: 1
+                                },
+                                span: {
+                                    cols: 1,
+                                    rows: 1
+                                },
+                                alignment: {
+                                    vertical: "center",
+                                    horizontal: "center"
+                                }
+                            },
+                            xs: {
+                                position: {
+                                    col: 1,
+                                    row: 1
+                                },
+                                span: {
+                                    cols: 1,
+                                    rows: 1
+                                },
+                                alignment: {
+                                    vertical: "center",
+                                    horizontal: "center"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                type: "grid-cell",
+                role: "article",
+                styles: {
+                    instance: {
+                        "grid-cell": {
+                            md: {
+                                position: {
+                                    col: 2,
+                                    row: 1
+                                },
+                                span: {
+                                    cols: 1,
+                                    rows: 1
+                                },
+                                alignment: {
+                                    vertical: "center",
+                                    horizontal: "center"
+                                }
+                            },
+                            xs: {
+                                position: {
+                                    col: 1,
+                                    row: 2
+                                },
+                                span: {
+                                    cols: 1,
+                                    rows: 1
+                                },
+                                alignment: {
+                                    vertical: "center",
+                                    horizontal: "center"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        ]
+    },
+
+
+
+    {
+        type: "grid",
+        styles: {
+            instance: {
+                grid: {
+                    md: {
+                        rows: [
+                            "auto"
+                        ],
                         cols: [
                             "1fr",
                             "1fr",
