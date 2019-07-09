@@ -1,15 +1,15 @@
 <div class="toolbox toolbox-position-left workshops-container flex-container flex-container-row"
     data-bind="visible: viewManager.primaryToolboxVisible, resizable: resizing">
-    <ul class="flex-item toolbox-btn-group toolbox-btn-group-vertical">
+    <ul role="tablist" class="flex-item toolbox-btn-group toolbox-btn-group-vertical">
         <!-- ko foreach: { data: sections, as: 'section' } -->
-        <li class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': $component.viewManager.journeyName() == section.title }">
-            <a href="#" role="button" data-bind="attr: { title: section.title },  click: section.onActivate">
+        <li role="presentation" class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': $component.viewManager.journeyName() == section.title }">
+            <a href="#" role="tab" data-bind="attr: { title: section.title, 'aria-label': section.title }, click: section.onActivate">
                 <i data-bind="css: section.iconClass"></i>
             </a>
         </li>
         <!-- /ko -->
-        <li class="toolbox-btn pull-down">
-            <a href="#" title="Account" role="button">
+        <li role="presentation" class="toolbox-btn pull-down">
+            <a href="#" title="Account" aria-label="Account" role="button">
                 <div class="photo" data-bind="style: { 'background-image': 'url('+userPhotoUrl()+')' }">
                 </div>
             </a>
@@ -17,7 +17,7 @@
     </ul>
 
     <!-- ko if: viewManager.journey().length > 0 -->
-    <div class="flex-container flex-item flex-item-grow workshop" data-bind="foreach: viewManager.journey()">
+    <div role="tabpanel" class="flex-container flex-item flex-item-grow workshop" data-bind="foreach: viewManager.journey()">
         <div class="flex-item flex-container flex-container-column workshop-journey-step">
             <h1>
                 <span data-bind="text: heading"></span>
