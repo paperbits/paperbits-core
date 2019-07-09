@@ -56,8 +56,8 @@ export class CoreModule implements IInjectorModule {
         injector.bindCollection("autostart");
         injector.bindCollection("routeGuards");
         injector.bindCollection("widgetHandlers");
-        injector.bindCollection("modelBinders");
-        injector.bindCollection("viewModelBinders");
+        injector.bindCollectionLazily("modelBinders");
+        injector.bindCollectionLazily("viewModelBinders");
         
 
         /*** Core ***/

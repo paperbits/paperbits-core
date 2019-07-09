@@ -59,7 +59,7 @@ export class CoreDesignModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bindModule(new CoreModule());
         injector.bindCollection("dropHandlers");
-        injector.bindCollection("workshopSections");
+        injector.bindCollectionLazily("workshopSections");
         injector.bindCollection("trayCommands");
         injector.bindCollection("hyperlinkProviders");
         injector.bindSingleton("viewManager", ViewManager);
