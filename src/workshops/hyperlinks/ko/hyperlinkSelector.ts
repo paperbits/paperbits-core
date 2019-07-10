@@ -106,16 +106,19 @@ export class HyperlinkSelector {
 
         if (!hyperlinkProvider) {
             hyperlinkProvider = this.hyperlinkProviders[this.hyperlinkProviders.length - 1];
-        } else {
-            if (!this.isValueSelected && hyperlinkProvider.componentName === "page-selector") {
-                const pageContract = await this.pageService.getPageByKey(hyperlink.targetKey);
-                const page = new PageItem(pageContract);
-                page.selectedAnchor = new AnchorItem();
-                page.selectedAnchor.elementId = hyperlink.anchor;
-                this.pageSelector.selectedPage(page);
-                await this.pageSelector.selectPage(page);
-                this.isValueSelected = true;
-            }
+        }
+        else if (this.isValueSelected && hyperlinkProvider.componentName === "page-selector") {
+            const pageContract = await this.pageService.getPageByKey(hyperlink.targetKey);
+            const page = new PageItem(pageContract);
+
+            page.selectedAnchor = new AnchorItem();
+            page.selectedAnchor.elementId = hyperlink.anchor;
+
+            this.pageSelector.selectedPage(page);
+
+            await this.pageSelector.selectPage(page);
+
+            this.isValueSelected = true;
         }
 
         this.hyperlink(hyperlink);
@@ -124,6 +127,6 @@ export class HyperlinkSelector {
     }
 
     private setTarget(hyperlink: HyperlinkModel): void {
-        this.target((hyperlink && hyperlink.target && this.targetsValues.find(t => t.value === hyperlink.target).value) || this.targetsValues[0].value);
+        this.target(hyperlink.target || "_self");
     }
 }

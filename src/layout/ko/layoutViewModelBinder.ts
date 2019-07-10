@@ -18,9 +18,7 @@ export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, Layou
         private readonly layoutService: ILayoutService,
         private readonly modelBinderSelector: ModelBinderSelector,
         private readonly layoutModelBinder: LayoutModelBinder
-    ) {
-        this.getLayoutViewModel = this.getLayoutViewModel.bind(this);
-    }
+    ) { }
 
     public createBinding(model: LayoutModel, viewModel: LayoutViewModel, bindingContext: Bag<any>): void {
         let savingTimeout;
