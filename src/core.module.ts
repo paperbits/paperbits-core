@@ -52,10 +52,9 @@ import { GridCellModule } from "./grid-cell/ko/gridCell.module";
  */
 export class CoreModule implements IInjectorModule {
     public register(injector: IInjector): void {
-
         injector.bindCollection("autostart");
-        injector.bindCollection("routeGuards");
-        injector.bindCollection("widgetHandlers");
+        injector.bindCollectionLazily("widgetHandlers");
+        injector.bindCollectionLazily("routeGuards");
         injector.bindCollectionLazily("modelBinders");
         injector.bindCollectionLazily("viewModelBinders");
         
