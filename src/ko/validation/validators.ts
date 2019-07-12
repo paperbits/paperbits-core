@@ -63,7 +63,7 @@ export class KnockoutValidation {
                     return;
                 }
 
-                const layout = await this.layoutService.getLayoutByUriTemplate(permalinkTemplate);
+                const layout = await this.layoutService.getLayoutByPermalinkTemplate(permalinkTemplate);
                 const conflict = layout && layout.key !== layoutKey;
 
                 callback(!conflict);
