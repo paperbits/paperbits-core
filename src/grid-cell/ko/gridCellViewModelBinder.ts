@@ -36,7 +36,8 @@ export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, G
         }
 
         if (model.styles) {
-            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles));
+            const styleModel = await this.styleCompiler.getStyleModelAsync(model.styles);
+            viewModel.styles(styleModel);
         }
 
         viewModel.role(model.role);
