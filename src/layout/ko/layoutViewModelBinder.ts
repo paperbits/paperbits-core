@@ -24,7 +24,7 @@ export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, Layou
         let savingTimeout;
 
         const updateContent = async (): Promise<void> => {
-            const layout = await this.layoutService.getLayoutByRoute(bindingContext.navigationPath);
+            const layout = await this.layoutService.getLayoutByPermalink(bindingContext.navigationPath);
             const layoutContent = await this.layoutService.getLayoutContent(layout.key);
 
             const contentContract = {
@@ -107,7 +107,7 @@ export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, Layou
 
     public async getLayoutViewModel(path: string, routeKind: string): Promise<any> {
         const bindingContext = { navigationPath: path, routeKind: routeKind };
-        const layoutContract = await this.layoutService.getLayoutByRoute(path);
+        const layoutContract = await this.layoutService.getLayoutByPermalink(path);
         const layoutModel = await this.layoutModelBinder.contractToModel(layoutContract, bindingContext);
         const layoutViewModel = this.modelToViewModel(layoutModel, null, bindingContext);
 
