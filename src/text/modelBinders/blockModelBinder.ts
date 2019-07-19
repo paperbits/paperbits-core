@@ -25,6 +25,20 @@ export class BlockModelBinder {
     public async contractToModel(contract: BlockContract, bindingContext?: Bag<any>): Promise<BlockModel> {
         const model = new BlockModel(contract.type);
 
+        if (contract.attrs) {
+            if (contract.attrs.styles) {
+                model.attrs = { styles: contract.attrs.styles };
+                const className = await this.styleCompiler.getClassNamesByStyleConfigAsync(contract.attrs.styles);
+                if (className) {
+                    model.attrs.className = className;
+                }
+            }
+            if (contract.attrs.id) {
+                model.attrs = model.attrs || {};
+                model.attrs.id = contract.attrs.id ;
+            }
+        }
+
         if (contract.type.startsWith("heading") && contract.type.length === 8 && (!contract.attrs || !contract.attrs.id)) {
             model.attrs = model.attrs || {};
             model.attrs.id = Utils.identifier();
