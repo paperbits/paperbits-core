@@ -23,24 +23,6 @@ export class ListModelBinder {
     public async contractToModel(contract: ListContract, bindingContext?: Bag<any>): Promise<ListModel> {
         const model = new ListModel(contract.type);
 
-        if (contract.attrs) {
-            model.attrs = {};
-
-            if (contract.attrs.styles) {
-                model.attrs.styles = contract.attrs.styles;
-
-                const className = await this.styleCompiler.getClassNamesByStyleConfigAsync(contract.attrs.styles);
-
-                if (className) {
-                    model.attrs.className = className;
-                }
-            }
-
-            if (contract.attrs.order) {
-                model.attrs.order = contract.attrs.order;
-            }
-        }
-
         if (contract.nodes && contract.nodes.length > 0) {
             const modelPromises = contract.nodes.map(async (contract: Contract) => {
                 const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
@@ -58,18 +40,6 @@ export class ListModelBinder {
             nodes: [],
             type: model.type
         };
-
-        if (model.attrs) {
-            contract.attrs = {};
-
-            if (model.attrs.styles) {
-                contract.attrs.styles = model.attrs.styles;
-            }
-
-            if (model.attrs.order) {
-                model.attrs.order = model.attrs.order;
-            }
-        }
 
         if (model.nodes && model.nodes.length > 0) {
             model.nodes.forEach(contentItem => {
