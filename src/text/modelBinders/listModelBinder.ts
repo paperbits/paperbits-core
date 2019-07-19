@@ -36,9 +36,9 @@ export class ListModelBinder {
                 }
             }
 
-            if (contract.attrs.order) {
-                model.attrs.order = contract.attrs.order;
-            }
+            // if (contract.attrs.order) {
+            //     model.attrs.order = contract.attrs.order;
+            // }
         }
 
         if (contract.nodes && contract.nodes.length > 0) {
@@ -59,17 +59,17 @@ export class ListModelBinder {
             type: model.type
         };
 
-        if (model.attrs) {
-            contract.attrs = {};
+        // if (model.attrs) {
+        //     contract.attrs = {};
 
-            if (model.attrs.styles) {
-                contract.attrs.styles = model.attrs.styles;
-            }
+        //     if (model.attrs.styles) {
+        //         contract.attrs.styles = model.attrs.styles;
+        //     }
 
-            if (model.attrs.order) {
-                model.attrs.order = model.attrs.order;
-            }
-        }
+        //     if (model.attrs.order) {
+        //         model.attrs.order = model.attrs.order;
+        //     }
+        // }
 
         if (model.nodes && model.nodes.length > 0) {
             model.nodes.forEach(contentItem => {
