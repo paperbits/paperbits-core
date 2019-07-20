@@ -66,17 +66,22 @@ export class AssetPublisher implements IPublisher {
     private listAllFilesInDirectory(dir: string): string[] {
         const results = [];
 
-        fs.readdirSync(dir).forEach((file) => {
-            file = dir + "/" + file;
-            const stat = fs.statSync(file);
+        try {
+            fs.readdirSync(dir).forEach((file) => {
+                file = dir + "/" + file;
+                const stat = fs.statSync(file);
 
-            if (stat && stat.isDirectory()) {
-                results.push(...this.listAllFilesInDirectory(file));
-            } else {
-                results.push(file);
-            }
+                if (stat && stat.isDirectory()) {
+                    results.push(...this.listAllFilesInDirectory(file));
+                } else {
+                    results.push(file);
+                }
 
-        });
+            });
+        }
+        catch (error) {
+            console.error(`Unable to list files :${error}`);
+        }
 
         return results;
     }
