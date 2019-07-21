@@ -7,11 +7,11 @@ export class MapService {
     ) { }
 
     public async loadGoogleMaps(): Promise<void> {
-        const config = await this.settingsProvider.getSetting(Settings.Config.GMaps);
+        const config = await this.settingsProvider.getSetting(Settings.Config.GoogleMaps);
 
         await this.load(config["apiKey"]);
 
-        this.settingsProvider.onSettingChange(Settings.Config.GMaps, config => {
+        this.settingsProvider.onSettingChange(Settings.Config.GoogleMaps, config => {
             // GoogleMapsLoader.release(() => { this.load(config["apiKey"]); });
         });
     }

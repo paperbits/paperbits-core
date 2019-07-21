@@ -22,10 +22,8 @@ import { SectionModule } from "./section/ko/section.module";
 import { RowModule } from "./row/ko/row.module";
 import { SearchResultsModule } from "./search-results/ko/searchResults.module";
 import { GoogleTagManager } from "./gtm/ko/gtm";
-import { IntercomViewModel } from "./intercom/ko/intercomViewModel";
 import { TextblockModule } from "./textblock/ko/textblock.module";
 import { BackgroundModelBinder } from "@paperbits/common/widgets/background";
-import { IntercomService } from "./intercom/intercomService";
 import { KnockoutRegistrationLoaders } from "./ko/knockout.loaders";
 import { ViewModelBinderSelector } from "./ko/viewModelBinderSelector";
 import { PermalinkResolver } from "@paperbits/common/permalinks";
@@ -84,8 +82,6 @@ export class CoreModule implements IInjectorModule {
         injector.bind("modelBinderSelector", ModelBinderSelector);
         injector.bind("viewModelBinderSelector", ViewModelBinderSelector);
         injector.bind("gtm", GoogleTagManager);
-        injector.bind("intercom", IntercomViewModel);
-        injector.bindSingleton("intercomService", IntercomService);
         injector.bind("backgroundModelBinder", BackgroundModelBinder);
 
         injector.bindModule(new KnockoutRegistrationLoaders());

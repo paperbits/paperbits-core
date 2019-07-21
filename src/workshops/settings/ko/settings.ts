@@ -77,8 +77,8 @@ export class SettingsWorkshop {
                 if (settings.integration.googleMaps) {
                     this.gmapsApiKey(settings.integration.googleMaps.apiKey);
                 }
-                if (settings.integration.gtm) {
-                    this.gtmContainerId(settings.integration.gtm.containerId);
+                if (settings.integration.googleTagManager) {
+                    this.gtmContainerId(settings.integration.googleTagManager.containerId);
                 }
                 if (settings.integration.intercom) {
                     this.intercomAppId(settings.integration.intercom.appId);
@@ -116,7 +116,7 @@ export class SettingsWorkshop {
                 intercom: {
                     appId: this.intercomAppId()
                 },
-                gtm: {
+                googleTagManager: {
                     containerId: this.gtmContainerId(),
                     dataLayerName: this.gtmContainerId()
                 },
