@@ -16,7 +16,7 @@ export class SitemapBuilder {
         const dateTimeISO = now.toISOString();
         const urls = this.permalinks.map(permalink =>
             `<url><loc>${this.baseUrl}${permalink}</loc><lastmod>${dateTimeISO}</lastmod><changefreq>daily</changefreq></url>`
-        ).join();
+        ).join("");
 
         return `<?xml version="1.0" encoding="utf-8"?><urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="https://www.w3.org/1999/xhtml">${urls}</urlset>`;
     }
