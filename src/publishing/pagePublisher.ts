@@ -16,7 +16,9 @@ export class PagePublisher implements IPublisher {
     }
 
     public async renderPage(page: HtmlPage): Promise<string> {
-        const htmlContent = await this.htmlPagePublisher.createHtml(page);
+        console.log(`Publishing page ${page.title}...`);
+
+        const htmlContent = await this.htmlPagePublisher.renderHtml(page);
         return "<!DOCTYPE html>" + htmlContent;
     }
 
@@ -68,6 +70,7 @@ export class PagePublisher implements IPublisher {
 
         const sitemap = sitemapBuilder.buildSitemap();
         const contentBytes = Utils.stringToUnit8Array(sitemap);
+        
         await this.outputBlobStorage.uploadBlob("sitemap.xml", contentBytes, "text/xml");
     }
 }
