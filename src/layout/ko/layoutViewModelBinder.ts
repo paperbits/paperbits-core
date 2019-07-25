@@ -42,6 +42,10 @@ export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, Layou
         };
 
         const scheduleUpdate = async (): Promise<void> => {
+            if (bindingContext["routeKind"] !== "layout") {
+                return;
+            }
+
             clearTimeout(savingTimeout);
             savingTimeout = setTimeout(updateContent, 600);
         };
@@ -58,10 +62,6 @@ export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, Layou
                 this.eventManager.dispatchEvent("onContentUpdate");
             },
             onCreate: () => {
-                if (bindingContext.readonly) {
-                    return;
-                }
-
                 this.eventManager.addEventListener("onContentUpdate", scheduleUpdate);
             },
             onDispose: () => this.eventManager.removeEventListener("onContentUpdate", scheduleUpdate)

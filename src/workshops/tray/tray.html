@@ -5,8 +5,8 @@
 </div>
 <!-- ko foreach: { data: buttons, as: 'button' } -->
 <li class="toolbox-btn">
-    <a href="#" role="button" data-bind="attr: { title: button.title },  click: button.onActivate">
+    <button class="toolbox-btn" data-bind="attr: { title: button.title }, click: button.onActivate, disable: button.disabled">
         <i data-bind="css: button.iconClass"></i>
-    </a>
+    </button>
 </li>
 <!-- /ko -->
