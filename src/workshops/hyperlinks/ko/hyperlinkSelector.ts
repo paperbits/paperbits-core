@@ -6,6 +6,9 @@ import { Component, Event, Param, OnMounted } from "@paperbits/common/ko/decorat
 import { PageSelector, PageItem, AnchorItem } from "../../page/ko";
 import { IPageService } from "@paperbits/common/pages";
 
+const defaultTarget = "_self";
+
+
 @Component({
     selector: "hyperlink-selector",
     template: template,
@@ -15,7 +18,6 @@ export class HyperlinkSelector {
     private isValueSelected: boolean;
 
     public readonly hyperlinkProvider: ko.Observable<IHyperlinkProvider>;
-    public readonly targets: ko.ObservableArray<{ name: string, value: string }>;
     public readonly target: ko.Observable<string>;
 
     @Param()
@@ -24,11 +26,6 @@ export class HyperlinkSelector {
     @Event()
     public onChange: (hyperlink: HyperlinkModel) => void;
 
-    private targetsValues: { name: string, value: string }[] = [
-        { name: "Current window", value: "_self" },
-        { name: "New window", value: "_blank" }
-    ];
-
     constructor(
         private readonly hyperlinkProviders: IHyperlinkProvider[],
         private readonly pageService: IPageService,
@@ -36,15 +33,14 @@ export class HyperlinkSelector {
     ) {
         this.hyperlink = ko.observable<HyperlinkModel>();
         this.hyperlinkProvider = ko.observable<IHyperlinkProvider>(null);
-        this.targets = ko.observableArray<{ name: string, value: string }>(this.targetsValues);
-        this.target = ko.observable<string>();
+        this.target = ko.observable<string>(defaultTarget);
     }
 
     @OnMounted()
     public onMounted(): void {
-        this.setTarget(this.hyperlink());
         this.updateHyperlinkState(this.hyperlink());
         this.hyperlinkProvider.subscribe(this.onResourcePickerChange);
+        this.target.subscribe(this.targetChanged);
     }
 
     private onResourcePickerChange(resourcePicker: IHyperlinkProvider): void {
@@ -73,17 +69,21 @@ export class HyperlinkSelector {
         }
     }
 
-    public setProvider(provider: IHyperlinkProvider): void {
+    public selectProvider(provider: IHyperlinkProvider): void {
         this.hyperlinkProvider(provider);
-        this.hyperlink(null);
-        this.target(this.targetsValues[0].value);
+
+        if (!provider) {
+            this.hyperlink(null);
+        }
     }
 
     public getCurrentSelection(): string {
         const hyperlink = this.hyperlink();
+
         if (!this.hyperlinkProvider() || !hyperlink) {
             return "Not selected";
         }
+
         return `${this.hyperlinkProvider().name}: ${hyperlink.title} ${hyperlink.anchorName ? "(" + hyperlink.anchorName + ")" : ""}`;
     }
 
@@ -94,7 +94,6 @@ export class HyperlinkSelector {
     private async updateHyperlinkState(hyperlink: HyperlinkModel): Promise<void> {
         if (!hyperlink) {
             this.hyperlinkProvider(null);
-            this.target(this.targetsValues[0].value);
             return;
         }
 
@@ -122,11 +121,7 @@ export class HyperlinkSelector {
         }
 
         this.hyperlink(hyperlink);
-        this.setTarget(hyperlink);
+        this.target(hyperlink.target || defaultTarget);
         this.hyperlinkProvider(hyperlinkProvider);
-    }
-
-    private setTarget(hyperlink: HyperlinkModel): void {
-        this.target(hyperlink.target || "_self");
     }
 }

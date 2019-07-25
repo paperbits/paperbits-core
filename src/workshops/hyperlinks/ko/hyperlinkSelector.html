@@ -2,19 +2,27 @@
     <h1>Hyperlink</h1>
     <hr />
     <div class="hlink-container">
-        <span class="link-label" data-bind="attr: { title: getCurrentSelection() }"><b  data-bind="text: getCurrentSelection()"></b></span>
+        <span class="link-label" data-bind="attr: { title: getCurrentSelection() }">
+            <b data-bind="text: getCurrentSelection()"></b>
+        </span>
     </div>
 
-     <!--ko if: hyperlink -->
+    <!--ko if: hyperlink -->
     <div class="form-group">
         <label for="targetValue" class="form-label">
             Open in
-            <button class="btn btn-info" type="button" data-bind="infoMessageToggle: 'Specifies how to open the link.'"></button>
+            <button class="btn btn-info" type="button"
+                data-bind="infoMessageToggle: 'Specifies how to open the link.'"></button>
         </label>
-        <select id="targetValue" class="form-control" data-bind="options: targets, value: target, optionsText: 'name', optionsValue: 'value', enable: !!hyperlink(), event:{ change: targetChanged}"></select>
+        <label class="form-label">
+            <input type="radio" name="target" value="_self" data-bind="checked: target" /> Same window
+        </label>
+        <label class="form-label">
+            <input type="radio" name="target" value="_blank" data-bind="checked: target" /> New window
+        </label>
     </div>
     <!--/ko-->
-    
+
 
     <div class="tabs">
         <div class="tab" data-bind="css: { 'tab-is-active': !hyperlinkProvider() }" title="Clear hyperlink">
@@ -27,7 +35,7 @@
         <!--ko if: resourcePicker.componentName !== 'blog-selector' -->
         <div class="tab"
             data-bind="css: { 'tab-is-active': $parent.hyperlinkProvider() && resourcePicker.componentName === $parent.hyperlinkProvider().componentName }, attr: { 'title': resourcePicker.name}">
-            <a href="#" data-bind="click: $parent.setProvider">
+            <a href="#" data-bind="click: $parent.selectProvider">
                 <!-- ko if: resourcePicker.componentName === 'page-selector' -->
                 <i class="paperbits-icon paperbits-single-content-03"></i>
                 <!-- /ko -->

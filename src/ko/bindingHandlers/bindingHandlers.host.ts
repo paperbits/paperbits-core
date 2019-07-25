@@ -86,9 +86,10 @@ export class HostBindingHandler {
     }
 
     private createIFrame(): HTMLIFrameElement {
-        const hostElement = document.createElement("iframe");
+        const hostElement: HTMLIFrameElement = document.createElement("iframe");
         hostElement.src = "/page.html?designtime=true";
         hostElement.classList.add("host");
+        hostElement.title = "Website";
 
         const onClick = (event: MouseEvent): void => {
             event.preventDefault(); // prevent default event handling for all controls
