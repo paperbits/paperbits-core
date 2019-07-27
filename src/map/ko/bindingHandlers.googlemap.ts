@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 
 ko.bindingHandlers["googlemap"] = {
-    init(element: Element, valueAccessor) {
+    init(element: Element, valueAccessor: () => any): void {
         const configuration = valueAccessor();
 
         const geocoder = new google.maps.Geocoder();
@@ -43,7 +43,7 @@ ko.bindingHandlers["googlemap"] = {
                     map.setCenter(results[0].geometry.location);
                 }
             });
-        }
+        };
 
         const infowindow = new google.maps.InfoWindow();
         const setCaption = (caption: string) => {

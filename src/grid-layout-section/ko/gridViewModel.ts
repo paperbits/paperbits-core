@@ -2,6 +2,7 @@ import * as ko from "knockout";
 import template from "./grid.html";
 import { Component } from "@paperbits/common/ko/decorators";
 import { WidgetViewModel } from "../../ko/widgetViewModel";
+import { StyleModel } from "@paperbits/common/styles";
 
 @Component({
     selector: "grid-layout-section",
@@ -9,15 +10,13 @@ import { WidgetViewModel } from "../../ko/widgetViewModel";
     injectable: "gridViewModel"
 })
 export class GridViewModel implements WidgetViewModel {
-    public cells: ko.ObservableArray<any>;
     public widgets: ko.ObservableArray<WidgetViewModel>;
     public container: ko.Observable<string>;
-    public styles: ko.Observable<Object>;
+    public styles: ko.Observable<StyleModel>;
 
     constructor() {
         this.widgets = ko.observableArray<WidgetViewModel>();
         this.container = ko.observable<string>();
-        this.styles = ko.observable<Object>();
-        this.cells = ko.observableArray([]);
+        this.styles = ko.observable<StyleModel>();
     }
 }

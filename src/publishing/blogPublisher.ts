@@ -8,7 +8,6 @@ import { SettingsContract, ISiteService } from "@paperbits/common/sites";
 import { IMediaService, MediaContract } from "@paperbits/common/media";
 import { MetaDataSetter } from "@paperbits/common/meta";
 import { LayoutViewModelBinder } from "../layout/ko";
-import { createDocument } from "../ko/knockout-rendering";
 import { ISettingsProvider } from "@paperbits/common/configuration";
 
 export class BlogPublisher implements IPublisher {
@@ -26,7 +25,7 @@ export class BlogPublisher implements IPublisher {
 
     private async renderBlogPost(post: BlogPostContract, settings: SettingsContract, iconFile: MediaContract): Promise<{ name, bytes }> {
         console.log(`Publishing blog post ${post.title}...`);
-        const templateDocument = createDocument(template);
+        const templateDocument = null; // createDocument(template);
 
         let resourceUri: string;
         let htmlContent: string;

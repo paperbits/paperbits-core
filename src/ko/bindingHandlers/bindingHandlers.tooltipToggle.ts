@@ -1,11 +1,11 @@
 import * as ko from "knockout";
 
-ko.bindingHandlers["infoMessageToggle"] = {
+ko.bindingHandlers["tooltipToggle"] = {
     init: (triggerElement: HTMLElement, valueAccessor, allBindings) => {
         const tooltipText = valueAccessor();
 
         if (!tooltipText) {
-            console.warn("No infoMessageToggle value for element: " + triggerElement.nodeType);
+            console.warn("No tooltipToggle value for element: " + triggerElement.nodeType);
             return;
         }
 

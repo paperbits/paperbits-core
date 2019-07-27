@@ -23,5 +23,5 @@ export * from "./bindingHandlers.splitter";
 export * from "./bindingHandlers.stickTo";
 export * from "./bindingHandlers.surface";
 export * from "./bindingHandlers.validationMessageToggle";
-export * from "./bindingHandlers.infoMessageToggle";
+export * from "./bindingHandlers.tooltipToggle";
 export * from "./bindingHandlers.widget";

@@ -1,7 +1,7 @@
 <fieldset class="form" data-bind="scrollable: {}">
     <div class="form-group form-group-collapsible">
         <label class="form-label">
-            <a href="#" class="form-group-toggle" data-bind="collapse: '#sourceCollapse'"></a>
+            <a href="#" class="form-group-toggle" data-bind="collapse: '#sourceCollapse'" aria-label="Toggle 'main' section"></a>
             <b>Main</b>
         </label>
         <div id="sourceCollapse" class="collapse form-group-collapse">
@@ -15,7 +15,8 @@
             <div class="form-group">
                 <label for="caption" class="form-label">
                     Caption
-                    <button class="btn btn-info" type="button" data-bind="infoMessageToggle: 'An alternate text for an image'"></button>
+                    <button class="btn btn-info" type="button" aria-label="Error" aria-haspopup="true" aria-hidden="true"
+                        data-bind="tooltipToggle: 'An alternate text for an image'"></button>
                 </label>
                 <input type="text" id="caption" class="form-control" data-bind="textInput: caption" maxlength="256" />
             </div>
@@ -24,7 +25,7 @@
                 <label class="form-label">
                     Link to
                     <button class="btn btn-info" type="button"
-                        data-bind="infoMessageToggle: 'An item that will be navigated on click action.'"></button>
+                        data-bind="tooltipToggle: 'An item that will be navigated on click action.'"></button>
                 </label>
                 <div class="input-group">
                     <a href="#" class="form-control"
@@ -40,25 +41,27 @@
 
     <div class="form-group form-group-collapsible">
         <label class="form-label">
-            <a href="#" class="form-group-toggle" data-bind="collapse: '#sizeCollapse'"></a>
+            <a href="#" class="form-group-toggle" data-bind="collapse: '#sizeCollapse'" aria-label="Toggle 'size' section"></a>
             <b>Size</b>
         </label>
         <div id="sizeCollapse" class="collapse form-group-collapse">
             <div class="form-group">
                 <label for="width" class="form-label">Width</label>
-                <input type="number" id="width" class="form-control" placeholder="(Not set)" data-bind="textInput: width" />
+                <input type="number" id="width" class="form-control" placeholder="(Not set)"
+                    data-bind="textInput: width" />
             </div>
 
             <div class="form-group">
                 <label for="height" class="form-label">Height</label>
-                <input type="number" id="height" class="form-control" placeholder="(Not set)" data-bind="textInput: height" />
+                <input type="number" id="height" class="form-control" placeholder="(Not set)"
+                    data-bind="textInput: height" />
             </div>
         </div>
     </div>
 
     <div class="form-group form-group-collapsible">
         <label class="form-label">
-            <a href="#" class="form-group-toggle" data-bind="collapse: '#miscellaneousCollapse'"></a>
+            <a href="#" class="form-group-toggle" data-bind="collapse: '#miscellaneousCollapse'" aria-label="Toggle 'Styling' section"></a>
             <b>Styling</b>
         </label>
         <div id="miscellaneousCollapse" class="collapse form-group-collapse">
@@ -66,7 +69,7 @@
                 <label for="appearanceStyle" class="form-label">
                     Appearance
                     <button class="btn btn-info" type="button"
-                        data-bind="infoMessageToggle: 'Predefined appearance from style guide.'"></button>
+                        data-bind="tooltipToggle: 'Predefined appearance from style guide.'"></button>
                 </label>
                 <select id="appearanceStyle" class="form-control"
                     data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
