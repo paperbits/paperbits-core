@@ -2,7 +2,7 @@
 import template from "./pages.html";
 import { IPageService } from "@paperbits/common/pages";
 import { Router } from "@paperbits/common/routing";
-import { IViewManager } from "@paperbits/common/ui";
+import { IViewManager, IView } from "@paperbits/common/ui";
 import { Keys } from "@paperbits/common/keyboard";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { PageItem } from "./pageItem";
@@ -57,12 +57,20 @@ export class PagesWorkshop {
     public selectPage(pageItem: PageItem): void {
         this.selectedPage(pageItem);
 
-        this.viewManager.openViewAsWorkshop("Page", "page-details-workshop", {
-            pageItem: pageItem,
-            onDeleteCallback: () => {
-                this.searchPages();
+        const view: IView = {
+            heading: "Page",
+            component: {
+                name: "page-details-workshop",
+                params: {
+                    pageItem: pageItem,
+                    onDeleteCallback: () => {
+                        this.searchPages();
+                    }
+                }
             }
-        });
+        };
+
+        this.viewManager.openViewAsWorkshop(view);
     }
 
     public async addPage(): Promise<void> {

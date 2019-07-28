@@ -1,13 +1,20 @@
-import { IToolButton, IViewManager } from "@paperbits/common/ui";
+import { IToolButton, IViewManager, IView } from "@paperbits/common/ui";
 
 export class NavigationToolButton implements IToolButton {
-    public iconClass: string = "paperbits-icon paperbits-menu-34";
-    public title: string = "Navigation";
+    public readonly iconClass: string = "paperbits-icon paperbits-menu-34";
+    public readonly title: string = "Navigation";
 
     constructor(private readonly viewManager: IViewManager) { }
 
     public onActivate(): void {
         this.viewManager.clearJourney();
-        this.viewManager.openViewAsWorkshop(this.title, "navigation"); // TODO: Specify IComponent rather than just name.
+
+        const view: IView = {
+            heading: this.title,
+            helpText: "Add or edit navigation menus.",
+            component: { name: "navigation" }
+        };
+
+        this.viewManager.openViewAsWorkshop(view);
     }
 }

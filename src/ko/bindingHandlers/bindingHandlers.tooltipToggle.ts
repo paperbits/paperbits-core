@@ -5,7 +5,7 @@ ko.bindingHandlers["tooltipToggle"] = {
         const tooltipText = valueAccessor();
 
         if (!tooltipText) {
-            console.warn("No tooltipToggle value for element: " + triggerElement.nodeType);
+            console.warn("No tooltip text specified for element: " + triggerElement.nodeType);
             return;
         }
 
@@ -20,4 +20,4 @@ ko.bindingHandlers["tooltipToggle"] = {
             }
         }, null);
     }
-}
+};

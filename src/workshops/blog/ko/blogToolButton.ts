@@ -1,4 +1,4 @@
-import { IToolButton, IViewManager } from "@paperbits/common/ui";
+import { IToolButton, IViewManager, IView } from "@paperbits/common/ui";
 
 export class BlogWorkshopToolButton implements IToolButton {
     public iconClass: string = "paperbits-icon paperbits-chat-45-2";
@@ -8,6 +8,12 @@ export class BlogWorkshopToolButton implements IToolButton {
 
     public onActivate(): void {
         this.viewManager.clearJourney();
-        this.viewManager.openViewAsWorkshop(this.title, "blogs"); // TODO: Specify IComponent rather than just name.
+
+        const view: IView = {
+            heading: this.title,
+            component: { name: "page-details-workshop" }
+        };
+
+        this.viewManager.openViewAsWorkshop(view);
     }
 }

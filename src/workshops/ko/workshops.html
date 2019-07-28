@@ -2,8 +2,10 @@
     data-bind="visible: viewManager.primaryToolboxVisible, resizable: resizing">
     <ul role="tablist" class="flex-item toolbox-btn-group toolbox-btn-group-vertical">
         <!-- ko foreach: { data: sections, as: 'section' } -->
-        <li role="presentation" class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': $component.viewManager.journeyName() == section.title }">
-            <a href="#" role="tab" data-bind="attr: { title: section.title, 'aria-label': section.title }, click: section.onActivate">
+        <li role="presentation" class="toolbox-btn"
+            data-bind="css: { 'toolbox-btn-is-active': $component.viewManager.journeyName() == section.title }">
+            <a href="#" role="tab"
+                data-bind="attr: { title: section.title, 'aria-label': section.title }, click: section.onActivate">
                 <i data-bind="css: section.iconClass"></i>
             </a>
         </li>
@@ -17,10 +19,16 @@
     </ul>
 
     <!-- ko if: viewManager.journey().length > 0 -->
-    <div role="tabpanel" class="flex-container flex-item flex-item-grow workshop" data-bind="foreach: viewManager.journey()">
+    <div role="tabpanel" class="flex-container flex-item flex-item-grow workshop"
+        data-bind="foreach: viewManager.journey()">
         <div class="flex-item flex-container flex-container-column workshop-journey-step">
             <h1>
                 <span data-bind="text: heading"></span>
+                <!-- ko if: $data.helpText -->
+                <button class="btn-help" data-bind="tooltipToggle: $data.helpText">
+                    <i class="paperbits-icon paperbits-c-question"></i>
+                </button>
+                <!--/ko -->
                 <a href="#" class="btn pull-right" data-bind="click: $component.closeWorkshop">✖</a>
             </h1>
             <hr />

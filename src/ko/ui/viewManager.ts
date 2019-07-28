@@ -3,7 +3,6 @@ import * as ko from "knockout";
 import * as Arrays from "@paperbits/common/arrays";
 import template from "./viewManager.html";
 import "@paperbits/common/extensions";
-import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
 import { Bag } from "@paperbits/common";
 import { IMediaService } from "@paperbits/common/media";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
@@ -48,8 +47,8 @@ export class ViewManager implements IViewManager {
         private readonly eventManager: IEventManager,
         private readonly globalEventHandler: GlobalEventHandler,
         private readonly router: Router,
-        private readonly mediaService: IMediaService,
-        private readonly siteService: ISiteService) {
+        private readonly siteService: ISiteService
+    ) {
 
         // setting up...
         this.mode = ViewManagerMode.selecting;
@@ -90,27 +89,21 @@ export class ViewManager implements IViewManager {
 
     @OnMounted()
     public async initialize(): Promise<void> {
-        const settings = await this.siteService.getSiteSettings();
+        try {
+            const settings = await this.siteService.getSiteSettings();
 
-        if (!settings) {
-            console.warn(`Unable to initialize designer.`);
-            this.host({ name: "setup-dialog" });
-            return;
-        }
-
-        if (settings.site.faviconSourceKey) {
-            const mediaContract = await this.mediaService.getMediaByKey(settings.site.faviconSourceKey);
-
-            if (!mediaContract) {
-                console.warn(`Unable to fetch favicon by key ${settings.site.faviconSourceKey}`);
+            if (!settings) {
+                this.host({ name: "setup-dialog" });
+                return;
             }
 
-            await this.loadFavIcon(settings.site.faviconSourceKey);
+            this.eventManager.dispatchEvent("onStyleChange");
+            this.host({ name: "content-host" });
+            this.primaryToolboxVisible(true);
         }
-
-        this.eventManager.dispatchEvent("onStyleChange");
-        this.host({ name: "content-host" });
-        this.primaryToolboxVisible(true);
+        catch (error) {
+            this.notifyError(`Unable to initialize designer.`, error);
+        }
     }
 
     public setHost(component: IComponent): void {
@@ -133,14 +126,6 @@ export class ViewManager implements IViewManager {
     private onRouteChange(): void {
         this.clearContextualEditors();
         this.closeView();
-    }
-
-    public async loadFavIcon(faviconUrl: string): Promise<void> {
-        if (!faviconUrl) {
-            return;
-        }
-
-        MetaDataSetter.setFavIcon(faviconUrl);
     }
 
     public getCurrentJourney(): string {
@@ -202,6 +187,7 @@ export class ViewManager implements IViewManager {
         if (existingComponent) {
             journey = journey.splice(0, journey.indexOf(existingComponent));
         }
+        
         journey.push(view);
 
         this.journey(journey);
@@ -232,22 +218,10 @@ export class ViewManager implements IViewManager {
         this.mode = ViewManagerMode.selecting;
     }
 
-    public openViewAsWorkshop(heading: string, componentName: string, parameters?: any): IView {
+    public openViewAsWorkshop(view: IView): void {
         this.clearContextualEditors();
-
-        const session: IView = {
-            heading: heading,
-            component: {
-                name: componentName,
-                params: parameters
-            }
-        };
-
-        this.updateJourneyComponent(session);
-
+        this.updateJourneyComponent(view);
         this.mode = ViewManagerMode.configure;
-
-        return session;
     }
 
     /**

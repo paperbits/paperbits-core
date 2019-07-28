@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./navigation.html";
 import { INavigationService } from "@paperbits/common/navigation/INavigationService";
-import { IViewManager } from "@paperbits/common/ui";
+import { IViewManager, IView } from "@paperbits/common/ui";
 import { NavigationItemContract } from "@paperbits/common/navigation/navigationItemContract";
 import { NavigationTree } from "./navigationTree";
 import { NavigationItemViewModel } from "./navigationItemViewModel";
@@ -58,16 +58,24 @@ export class NavigationWorkshop {
     public async selectNavigationItem(navigationItem: NavigationItemViewModel): Promise<void> {
         this.selectedNavigationItem(navigationItem);
 
-        this.viewManager.openViewAsWorkshop("Navigation item", "navigation-details-workshop", {
-            navigationItem: navigationItem,
-            onDeleteCallback: (isRootItem: boolean) => {
-                if (isRootItem) {
-                    this.navigationItemsTree().removeRootNode(navigationItem);
-                    this.viewManager.notifySuccess("Navigation", `Navigation item "${navigationItem.label()}" was deleted.`);
-                    this.viewManager.closeWorkshop("navigation-details-workshop");
+        const view: IView = {
+            heading: "Navigation item",
+            component: {
+                name: "navigation-details-workshop",
+                params: {
+                    navigationItem: navigationItem,
+                    onDeleteCallback: (isRootItem: boolean) => {
+                        if (isRootItem) {
+                            this.navigationItemsTree().removeRootNode(navigationItem);
+                            this.viewManager.notifySuccess("Navigation", `Navigation item "${navigationItem.label()}" was deleted.`);
+                            this.viewManager.closeWorkshop("navigation-details-workshop");
+                        }
+                        this.searchNavigationItems();
+                    }
                 }
-                this.searchNavigationItems();
             }
-        });
+        };
+
+        this.viewManager.openViewAsWorkshop(view);
     }
 }

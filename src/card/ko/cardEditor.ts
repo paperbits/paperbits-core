@@ -1,12 +1,14 @@
 import * as ko from "knockout";
 import * as Objects from "@paperbits/common/objects";
+import * as Utils from "@paperbits/common/utils";
 import template from "./cardEditor.html";
 import { IViewManager } from "@paperbits/common/ui";
 import { WidgetEditor } from "@paperbits/common/widgets";
 import { StyleService } from "@paperbits/styles";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { CardModel } from "../cardModel";
-import { BackgroundStylePluginConfig, TypographyStylePluginConfig } from "@paperbits/styles/contracts";
+import { BackgroundStylePluginConfig, TypographyStylePluginConfig, ContainerStylePluginConfig } from "@paperbits/styles/contracts";
+import { IEventManager } from "@paperbits/common/events";
 
 
 @Component({
@@ -15,26 +17,22 @@ import { BackgroundStylePluginConfig, TypographyStylePluginConfig } from "@paper
     injectable: "cardEditor"
 })
 export class CardEditor implements WidgetEditor<CardModel> {
-    private readonly verticalAlignment: ko.Observable<string>;
-    private readonly horizontalAlignment: ko.Observable<string>;
-
-    public readonly alignment: ko.Observable<string>;
-    public readonly scrollOnOverlow: ko.Observable<boolean>;
     public readonly background: ko.Observable<BackgroundStylePluginConfig>;
     public readonly typography: ko.Observable<TypographyStylePluginConfig>;
     public readonly appearanceStyles: ko.ObservableArray<any>;
     public readonly appearanceStyle: ko.Observable<any>;
+    public readonly containerConfig: ko.Observable<ContainerStylePluginConfig>;
 
     constructor(
         private readonly viewManager: IViewManager,
-        private readonly styleService: StyleService
+        private readonly styleService: StyleService,
+        private readonly eventManager: IEventManager
     ) {
-        this.alignment = ko.observable<string>();
-        this.verticalAlignment = ko.observable<string>();
-        this.horizontalAlignment = ko.observable<string>();
-        this.scrollOnOverlow = ko.observable<boolean>();
         this.appearanceStyles = ko.observableArray<any>();
         this.appearanceStyle = ko.observable<any>();
+        this.containerConfig = ko.observable<ContainerStylePluginConfig>();
+
+        this.eventManager.addEventListener("onViewportChange", this.updateObservables.bind(this));
     }
 
     @Param()
@@ -45,137 +43,50 @@ export class CardEditor implements WidgetEditor<CardModel> {
 
     @OnMounted()
     public async initialize(): Promise<void> {
-        const viewport = this.viewManager.getViewport();
-
-        const overflowStyle = <any>Objects.getObjectAt(`styles/instance/container/${viewport}/overflow`, this.model);
-
-        if (overflowStyle && overflowStyle.vertical) {
-            this.scrollOnOverlow(true);
-        }
-        else {
-            this.scrollOnOverlow(false);
-        }
-
-        const alignmentStyle = <any>Objects.getObjectAt(`styles/instance/container/${viewport}/alignment`, this.model);
-
-        if (alignmentStyle) {
-            this.verticalAlignment(alignmentStyle.vertical);
-            this.horizontalAlignment(alignmentStyle.horizontal);
-        }
-
-        this.alignment.subscribe(this.applyChanges);
-        this.scrollOnOverlow.subscribe(this.applyChanges);
-
         const variations = await this.styleService.getComponentVariations("card");
 
         this.appearanceStyles(variations.filter(x => x.category === "appearance"));
+        this.updateObservables();
 
-        if (this.model.styles) {
-            this.appearanceStyle(this.model.styles.appearance);
-        }
-
-        this.appearanceStyle.subscribe(this.applyChanges);
+        this.appearanceStyle.subscribe(this.onAppearanceChange);
     }
 
-    /**
-     * Collecting changes from the editor UI and invoking callback method.
-     */
-    private applyChanges(): void {
+    private updateObservables(): void {
+        if (!this.model.styles) {
+            return;
+        }
+
+        const containerStyleConfig = <any>Objects.getObjectAt(`styles/instance/container`, this.model);
+
+        if (containerStyleConfig) {
+            const viewport = this.viewManager.getViewport();
+            const breakpoint = Utils.getClosestBreakpoint(containerStyleConfig, viewport);
+            const styleConfig = containerStyleConfig[breakpoint];
+
+            if (styleConfig) {
+                const containerConfig: ContainerStylePluginConfig = {
+                    alignment: styleConfig.alignment,
+                    overflow: styleConfig.overflow
+                };
+
+                this.containerConfig(containerConfig);
+            }
+        }
+
+        this.appearanceStyle(this.model.styles.appearance);
+    }
+
+    public onContainerChange(config: ContainerStylePluginConfig): void {
         const viewport = this.viewManager.getViewport();
-
-        const alignmentStyle = {
-            vertical: this.verticalAlignment(),
-            horizontal: this.horizontalAlignment()
-        };
-
-        Objects.setValue(`styles/instance/container/xs/alignment`, this.model, alignmentStyle);
-
-        const overflowStyle = {
-            vertical: this.scrollOnOverlow() ? "auto" : undefined,
-            horizontal: this.scrollOnOverlow() ? "auto" : undefined
-        };
-
-        Objects.setValue("styles/instance/container/xs/overflow", this.model, overflowStyle);
-        Objects.setValue("styles/appearance", this.model,  this.appearanceStyle());
+        Objects.setValue(`styles/instance/container/${viewport}/alignment`, this.model, config.alignment);
+        Objects.setValue(`styles/instance/container/${viewport}/overflow`, this.model, config.overflow);
 
         this.onChange(this.model);
     }
 
-    public alignContent(alignment: string): void {
-        this.alignment(alignment);
-    }
+    public onAppearanceChange(): void {
+        Objects.setValue("styles/appearance", this.model, this.appearanceStyle());
 
-    private align(): void {
-        this.alignment(`${this.verticalAlignment()} ${this.horizontalAlignment()}`);
-    }
-
-    public toggleHorizontal(): void {
-        switch (this.horizontalAlignment()) {
-            case "center":
-                this.horizontalAlignment("around");
-                break;
-            case "around":
-                this.horizontalAlignment("between");
-                break;
-            case "between":
-                this.horizontalAlignment("center");
-                break;
-        }
-    }
-
-    public toggleVertical(): void {
-        switch (this.verticalAlignment()) {
-            case "center":
-                this.verticalAlignment("around");
-                break;
-            case "around":
-                this.verticalAlignment("between");
-                break;
-            case "between":
-                this.verticalAlignment("center");
-                break;
-        }
-    }
-
-    public alignLeft(): void {
-        this.horizontalAlignment("start");
-        this.align();
-    }
-
-    public alignRight(): void {
-        this.horizontalAlignment("end");
-        this.align();
-    }
-
-    public alignCenter(): void {
-        if (this.horizontalAlignment() === "center" || this.horizontalAlignment() === "around" || this.horizontalAlignment() === "between") {
-            this.toggleHorizontal();
-        }
-        else {
-            this.horizontalAlignment("center");
-        }
-
-        this.align();
-    }
-
-    public alignTop(): void {
-        this.verticalAlignment("start");
-        this.align();
-    }
-
-    public alignBottom(): void {
-        this.verticalAlignment("end");
-        this.align();
-    }
-
-    public alignMiddle(): void {
-        if (this.verticalAlignment() === "center" || this.verticalAlignment() === "around" || this.verticalAlignment() === "between") {
-            this.toggleVertical();
-        }
-        else {
-            this.verticalAlignment("center");
-        }
-
-        this.align();
+        this.onChange(this.model);
     }
 }

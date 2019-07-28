@@ -40,10 +40,13 @@ export class PageHost {
     }
 
     private async refreshContent(): Promise<void> {
+        this.viewManager.setShutter();
         const route = this.router.getCurrentRoute();
-        const routeKind =  route.metadata["routeKind"];
+        const routeKind = route.metadata["routeKind"];
         const layoutViewModel = await this.layoutViewModelBinder.getLayoutViewModel(route.path, routeKind);
+       
         this.layoutViewModel(layoutViewModel);
+        this.viewManager.removeShutter();
     }
 
     private async onRouteChange(route: Route): Promise<void> {

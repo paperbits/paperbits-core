@@ -6,7 +6,6 @@ import { IPublisher } from "@paperbits/common/publishing";
 import { IBlobStorage } from "@paperbits/common/persistence";
 import { SettingsContract, ISiteService } from "@paperbits/common/sites";
 import { IMediaService, MediaContract } from "@paperbits/common/media";
-import { MetaDataSetter } from "@paperbits/common/meta";
 import { LayoutViewModelBinder } from "../layout/ko";
 import { ISettingsProvider } from "@paperbits/common/configuration";
 
@@ -16,8 +15,7 @@ export class BlogPublisher implements IPublisher {
         private readonly siteService: ISiteService,
         private readonly outputBlobStorage: IBlobStorage,
         private readonly layoutViewModelBinder: LayoutViewModelBinder,
-        private readonly mediaService: IMediaService,
-        private readonly settingsProvider: ISettingsProvider
+        private readonly mediaService: IMediaService
     ) {
         this.publish = this.publish.bind(this);
         this.renderBlogPost = this.renderBlogPost.bind(this);
@@ -35,7 +33,6 @@ export class BlogPublisher implements IPublisher {
             ko.applyBindingsToNode(templateDocument.body, { widget: layoutViewModel }, null);
 
             setTimeout(() => {
-                this.setSiteSettings(templateDocument, settings, iconFile, post);
                 htmlContent = "<!DOCTYPE html>" + templateDocument.documentElement.outerHTML;
                 resolve();
             }, 500);
@@ -79,27 +76,5 @@ export class BlogPublisher implements IPublisher {
         }
 
         await Promise.all(results);
-    }
-
-    public setSiteSettings(templateDocument: Document, settings: SettingsContract, iconFile: MediaContract, post: BlogPostContract): void {
-        if (settings && post) {
-            if (settings.site.faviconSourceKey) {
-                if (iconFile && iconFile.downloadUrl) {
-                    MetaDataSetter.setFavIcon(iconFile.downloadUrl);
-                }
-            }
-
-            templateDocument.title = `${post.title} | Blog | ${settings.site.title}`;
-
-            if (settings.site.description) {
-                MetaDataSetter.setDescription(post.description || settings.site.description);
-            }
-            if (settings.site.keywords) {
-                MetaDataSetter.setKeywords(post.keywords);
-            }
-            if (settings.site.author) {
-                MetaDataSetter.setAuthor(settings.site.author);
-            }
-        }
     }
 }

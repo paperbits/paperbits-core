@@ -3,6 +3,9 @@ import * as Utils from "@paperbits/common/utils";
 import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { IViewManager, ViewManagerMode } from "@paperbits/common/ui";
 import { Router, Route } from "@paperbits/common/routing";
+import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
+import { SiteService } from "@paperbits/common/sites";
+import { IMediaService } from "@paperbits/common/media";
 
 export class HostBindingHandler {
     private readonly hostComponent: ko.Observable<any>;
@@ -11,7 +14,9 @@ export class HostBindingHandler {
         private readonly eventManager: IEventManager,
         private readonly globalEventHandler: GlobalEventHandler,
         private readonly viewManager: IViewManager,
-        private readonly router: Router
+        private readonly router: Router,
+        private readonly siteService: SiteService,
+        private readonly mediaService: IMediaService
     ) {
         this.hostComponent = ko.observable();
 
@@ -123,7 +128,7 @@ export class HostBindingHandler {
             hostedWindowHistory.pushState(route, route.title, route.url);
         };
 
-        const onLoad = (): void => {
+        const onLoad = async (): Promise<void> => {
             this.globalEventHandler.appendDocument(hostElement.contentDocument);
             this.setRootElement(hostElement.contentDocument.body);
 
@@ -156,6 +161,24 @@ export class HostBindingHandler {
                 /* synching the state with designer's window */
                 window.history.pushState(route, route.title, route.url);
             };
+
+            const settings = await this.siteService.getSiteSettings();
+
+            if (!settings || !settings.site.faviconSourceKey) {
+                return;
+            }
+            
+            const mediaContract = await this.mediaService.getMediaByKey(settings.site.faviconSourceKey);
+
+            if (!mediaContract) {
+                console.warn(`Unable to fetch favicon by key ${settings.site.faviconSourceKey}`);
+            }
+
+            if (!mediaContract.permalink) {
+                return;
+            }
+
+            MetaDataSetter.setFavIcon(mediaContract.permalink);
         };
 
         const onUnload = (): void => {
@@ -165,6 +188,8 @@ export class HostBindingHandler {
 
         hostElement.addEventListener("load", onLoad, false);
         hostElement.addEventListener("beforeunload", onUnload, false);
+
+
 
         return hostElement;
     }

@@ -2,7 +2,7 @@
 import template from "./media.html";
 import * as Utils from "@paperbits/common/utils";
 import { IMediaService } from "@paperbits/common/media";
-import { IViewManager } from "@paperbits/common/ui";
+import { IViewManager, IView } from "@paperbits/common/ui";
 import { IContentDropHandler, IContentDescriptor } from "@paperbits/common/editing";
 import { MediaItem } from "./mediaItem";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
@@ -129,14 +129,22 @@ export class MediaWorkshop {
 
     public selectMedia(mediaItem: MediaItem): void {
         mediaItem.hasFocus(true);
-
         this.selectedMediaItem(mediaItem);
-        this.viewManager.openViewAsWorkshop("Media file", "media-details-workshop", {
-            mediaItem: mediaItem,
-            onDeleteCallback: () => {
-                this.searchMedia();
+
+        const view: IView = {
+            heading: "Media file",
+            component: {
+                name: "media-details-workshop",
+                params: {
+                    mediaItem: mediaItem,
+                    onDeleteCallback: () => {
+                        this.searchMedia();
+                    }
+                }
             }
-        });
+        };
+
+        this.viewManager.openViewAsWorkshop(view);
     }
 
     public async deleteSelectedMedia(): Promise<void> {

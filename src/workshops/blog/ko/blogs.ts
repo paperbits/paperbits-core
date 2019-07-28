@@ -2,7 +2,7 @@
 import template from "./blogs.html";
 import { IBlogService } from "@paperbits/common/blogs/IBlogService";
 import { Router } from "@paperbits/common/routing";
-import { IViewManager } from "@paperbits/common/ui";
+import { IViewManager, IView } from "@paperbits/common/ui";
 import { Keys } from "@paperbits/common/keyboard";
 import { Component } from "@paperbits/common/ko/decorators";
 import { BlogPostItem } from "./blogPostItem";
@@ -64,12 +64,21 @@ export class BlogWorkshop {
     public selectBlogPost(blogPostItem: BlogPostItem): void {
         this.selectedBlogPost(blogPostItem);
         this.viewManager.setHost({ name: "content-host" });
-        this.viewManager.openViewAsWorkshop("Blog post", "blog-post-details-workshop", {
-            blogPostItem: blogPostItem,
-            onDeleteCallback: () => {
-                this.searchBlogPosts();
+        
+        const view: IView = {
+            heading: "Blog post",
+            component: {
+                name: "blog-post-details-workshop",
+                params: {
+                    pageItem: blogPostItem,
+                    onDeleteCallback: () => {
+                        this.searchBlogPosts();
+                    }
+                }
             }
-        });
+        };
+
+        this.viewManager.openViewAsWorkshop(view);
     }
 
     public async addBlogPost(): Promise<void> {

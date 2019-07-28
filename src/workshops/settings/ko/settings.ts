@@ -1,10 +1,9 @@
 ﻿import * as ko from "knockout";
 import template from "./settings.html";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
-import { IViewManager } from "@paperbits/common/ui";
 import { ISiteService, SettingsContract } from "@paperbits/common/sites";
 import { IMediaService, MediaContract } from "@paperbits/common/media";
-import { MetaDataSetter } from "@paperbits/common/meta";
+import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 
 @Component({
@@ -13,37 +12,26 @@ import { BackgroundModel } from "@paperbits/common/widgets/background";
     injectable: "settingsWorkshop"
 })
 export class SettingsWorkshop {
-    private readonly mediaService: IMediaService;
-    private readonly siteService: ISiteService;
-    private readonly viewManager: IViewManager;
-
-    public readonly mimeType: string;
     public readonly working: ko.Observable<boolean>;
+    public readonly title: ko.Observable<string>;
+    public readonly description: ko.Observable<string>;
+    public readonly keywords: ko.Observable<string>;
+    public readonly hostname: ko.Observable<string>;
+    public readonly author: ko.Observable<string>;
+    public readonly gmapsApiKey: ko.Observable<string>;
+    public readonly googleFontsApiKey: ko.Observable<string>;
+    public readonly gtmContainerId: ko.Observable<string>;
+    public readonly intercomAppId: ko.Observable<string>;
+    public readonly faviconSourceKey: ko.Observable<string>;
+    public readonly faviconFileName: ko.Observable<string>;
+    public readonly favicon: ko.Observable<BackgroundModel>;
 
-    public title: ko.Observable<string>;
-    public description: ko.Observable<string>;
-    public keywords: ko.Observable<string>;
-    public hostname: ko.Observable<string>;
-    public author: ko.Observable<string>;
-    public gmapsApiKey: ko.Observable<string>;
-    public googleFontsApiKey: ko.Observable<string>;
-    public gtmContainerId: ko.Observable<string>;
-    public intercomAppId: ko.Observable<string>;
-    public faviconSourceKey: ko.Observable<string>;
-    public faviconFileName: ko.Observable<string>;
-    public favicon: ko.Observable<BackgroundModel>;
 
-
-    constructor(mediaService: IMediaService, siteService: ISiteService, viewManager: IViewManager) {
-        // initialization...
-        this.mediaService = mediaService;
-        this.siteService = siteService;
-        this.viewManager = viewManager;
-
-        // setting up...
+    constructor(
+        private readonly mediaService: IMediaService,
+        private readonly siteService: ISiteService
+    ) {
         this.working = ko.observable<boolean>();
-        this.mimeType = MetaDataSetter.iconContentType;
-
         this.title = ko.observable<string>();
         this.description = ko.observable<string>();
         this.keywords = ko.observable<string>();
@@ -156,7 +144,7 @@ export class SettingsWorkshop {
         }
 
         this.faviconFileName(mediaContract.downloadUrl);
-        this.viewManager.loadFavIcon(mediaContract.downloadUrl);
+        MetaDataSetter.setFavIcon(mediaContract.downloadUrl);
 
         const faviconModel = new BackgroundModel();
         faviconModel.sourceUrl = mediaContract.downloadUrl;

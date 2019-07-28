@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./layouts.html";
 import { Router } from "@paperbits/common/routing";
-import { IViewManager } from "@paperbits/common/ui";
+import { IViewManager, IView } from "@paperbits/common/ui";
 import { ILayoutService } from "@paperbits/common/layouts";
 import { Keys } from "@paperbits/common/keyboard";
 import { LayoutItem } from "./layoutItem";
@@ -64,12 +64,21 @@ export class LayoutsWorkshop {
     public selectLayout(layoutItem: LayoutItem): void {
         this.selectedLayout(layoutItem);
         this.viewManager.setHost({ name: "content-host" });
-        this.viewManager.openViewAsWorkshop("Layout", "layout-details-workshop", {
-            layoutItem: layoutItem,
-            onDeleteCallback: () => {
-                this.searchLayouts();
+
+        const view: IView = {
+            heading: "Layout",
+            component: {
+                name: "layout-details-workshop",
+                params: {
+                    layoutItem: layoutItem,
+                    onDeleteCallback: () => {
+                        this.searchLayouts();
+                    }
+                }
             }
-        });
+        };
+
+        this.viewManager.openViewAsWorkshop(view);
     }
 
     public async addLayout(): Promise<void> {

@@ -1,49 +1,10 @@
 <fieldset class="form flex-item flex-item-grow" data-bind="scrollable: {}">
-    <div class="form-group form-group-collapsible">
-        <label class="form-label">
-            <a href="#" class="form-group-toggle" data-bind="collapse: '#alignmentCollapse'"></a>
-            <b>Content alignment</b>
-        </label>
-
-        <div id="alignmentCollapse" class="collapse form-group-collapse">
-            <div class="form-group">
-                <b>Horizontal</b>
-                <a href="#" class="toolbox-btn" aria-label="Align left"
-                    data-bind="click: alignLeft, css: { 'toolbox-btn-is-active': horizontalAlignment() === 'start' }">
-                    <i class="paperbits-icon paperbits-align-left"></i>
-                </a>
-                <a href="#" class="toolbox-btn" aria-label="Align center (horizontally)"
-                    data-bind="click: alignCenter, css: { 'toolbox-btn-is-active': horizontalAlignment() === 'center' || horizontalAlignment() === 'around' || horizontalAlignment() === 'between' }">
-                    <i class="paperbits-icon paperbits-align-center-horizontal"></i>
-                </a>
-                <a href="#" class="toolbox-btn" aria-label="Align right"
-                    data-bind="click: alignRight, css: { 'toolbox-btn-is-active': horizontalAlignment() === 'end' }">
-                    <i class="paperbits-icon paperbits-align-right"></i>
-                </a>
-            </div>
-
-            <div class="form-group">
-                <b>Vertical</b>
-                <a href="#" class="toolbox-btn" aria-label="Align top"
-                    data-bind="click: alignTop, css: { 'toolbox-btn-is-active': verticalAlignment() === 'start' }">
-                    <i class="paperbits-icon paperbits-align-top"></i>
-                </a>
-                <a href="#" class="toolbox-btn toolbox-btn-is-active" aria-label="Align center"
-                    data-bind="click: alignMiddle, css: { 'toolbox-btn-is-active': verticalAlignment() === 'center' || verticalAlignment() === 'around' || verticalAlignment() === 'between' }">
-                    <i class="paperbits-icon paperbits-align-center-vertical"></i>
-                </a>
-                <a href="#" class="toolbox-btn" aria-label="Align bottom (vertically)"
-                    data-bind="click: alignBottom, css: { 'toolbox-btn-is-active': verticalAlignment() === 'end' }">
-                    <i class="paperbits-icon paperbits-align-bottom"></i>
-                </a>
-            </div>
-        </div>
-    </div>
+    <container params="{ config: containerConfig, onUpdate: onContainerChange }"></container>
 
     <div class="form-group form-group-collapsible">
         <label class="form-label">
             <a href="#" class="form-group-toggle" data-bind="collapse: '#miscellaneousCollapse'"></a>
-            <b>Miscellaneous</b>
+            <b>Styling</b>
         </label>
         <div id="miscellaneousCollapse" class="collapse form-group-collapse">
             <div class="form-group">
@@ -58,18 +19,4 @@
         </div>
     </div>
 
-    <div class="form-group form-group-collapsible">
-        <label class="form-label">
-            <a href="#" class="form-group-toggle" data-bind="collapse: '#contentFlowCollapse'"></a>
-            <b>Content flow</b>
-            <button class="btn btn-info" type="button"
-                data-bind="tooltipToggle: 'Manage scrolling settings for container'"></button>
-        </label>
-        <div id="contentFlowCollapse" class="collapse form-group-collapse">
-            <label class="form-label">
-                <input name="scrollOnOverlow" type="checkbox" data-bind="checked: scrollOnOverlow" />Scroll on
-                overflow
-            </label>
-        </div>
-    </div>
 </fieldset>
