@@ -167,14 +167,10 @@ export class HostBindingHandler {
             if (!settings || !settings.site.faviconSourceKey) {
                 return;
             }
-            
+
             const mediaContract = await this.mediaService.getMediaByKey(settings.site.faviconSourceKey);
 
-            if (!mediaContract) {
-                console.warn(`Unable to fetch favicon by key ${settings.site.faviconSourceKey}`);
-            }
-
-            if (!mediaContract.permalink) {
+            if (!mediaContract || !mediaContract.permalink) {
                 return;
             }
 
