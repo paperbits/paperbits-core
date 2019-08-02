@@ -4,7 +4,7 @@ import { IInjector, IInjectorModule } from "@paperbits/common/injection";
 export class KnockoutRegistrationLoaders implements IInjectorModule {
     public register(injector: IInjector): void {
         const injectableComponentLoader = {
-            loadViewModel(name, config, callback) {
+            loadViewModel(name: string, config: any, callback): void {
                 if (config.injectable) {
                     const viewModelConstructor = (params) => {
                         const resolvedInjectable: any = injector.resolve(config.injectable);
@@ -24,28 +24,43 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                         const parameterDescriptions = Reflect.getMetadata("params", instance.constructor);
 
                         if (parameterDescriptions && params) {
-                            parameterDescriptions.forEach(parameterName => {
-                                const instanceValue = instance[parameterName];
-                                const paramerterValue = params[parameterName] || params[parameterName.toLowerCase()];
+                            /* Attempt to convert params string to object, otherwise it doesn't 
+                             * make sense to iterate properties */
 
-                                if (ko.isObservable(instanceValue)) {
-                                    if (ko.isObservable(paramerterValue)) {
-                                        // Assigning initial value
-                                        instanceValue(paramerterValue());
+                            if (typeof params === "string") {
+                                try {
+                                    params = eval(`(${params})`);
+                                }
+                                catch (error) {
+                                    // Do nothing
+                                }
+                            }
 
-                                        // Subscribing for all future changes
-                                        paramerterValue.subscribe((value) => {
-                                            instanceValue(value);
-                                        });
+                            if (typeof params === "object") {
+                                parameterDescriptions.forEach(parameterName => {
+                                    const instanceValue = instance[parameterName];
+
+                                    const paramerterValue = params[parameterName] || params[parameterName.toLowerCase()];
+
+                                    if (ko.isObservable(instanceValue)) {
+                                        if (ko.isObservable(paramerterValue)) {
+                                            // Assigning initial value
+                                            instanceValue(paramerterValue());
+
+                                            // Subscribing for all future changes
+                                            paramerterValue.subscribe((value) => {
+                                                instanceValue(value);
+                                            });
+                                        }
+                                        else {
+                                            instanceValue(paramerterValue);
+                                        }
                                     }
                                     else {
-                                        instanceValue(paramerterValue);
+                                        instance[parameterName] = ko.unwrap(paramerterValue);
                                     }
-                                }
-                                else {
-                                    instance[parameterName] = ko.unwrap(paramerterValue);
-                                }
-                            });
+                                });
+                            }
                         }
 
                         const eventDescriptions = Reflect.getMetadata("events", instance.constructor);
@@ -91,28 +106,29 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                 }
             },
 
-            loadTemplate(name: string, templateHtml: any, callback: (result: Node[]) => void) {
+            loadTemplate(name: string, templateHtml: any, callback: (result: Node[]) => void): void {
                 const parseHtmlFragment = <any>ko.utils.parseHtmlFragment;
                 const nodes = parseHtmlFragment(templateHtml, document);
 
                 (<any>ko.components.defaultLoader).loadTemplate(name, nodes, callback);
             },
 
-            loadComponent(componentName: string, config: any, callback: (definition: KnockoutComponentTypes.Definition) => void) {
+            loadComponent(componentName: string, config: any, callback: (definition: KnockoutComponentTypes.Definition) => void): void {
                 const callbackWrapper: (result: KnockoutComponentTypes.Definition) => void = (resultWrapper: KnockoutComponentTypes.Definition) => {
 
                     const createViewModelWrapper: (params: any, options: { element: Node; }) => any = (params: any, options: { element: Node; }) => {
-                        const attrs:NamedNodeMap = options.element["attributes"];
+                        const attrs: NamedNodeMap = options.element["attributes"];
                         if (attrs && attrs.length > 0) {
                             const runtimeParams = {};
+
                             for (let i = 0; i < attrs.length; i++) {
                                 const attr: Attr = attrs[i];
-                                if(attr.name.startsWith("runtime-")) {
+                                if (attr.name.startsWith("runtime-")) {
                                     const paramName = attr.name.split("-")[1];
                                     runtimeParams[paramName] = attr.value;
                                 }
                             }
-                            if(Object.keys(runtimeParams).length > 0) {
+                            if (Object.keys(runtimeParams).length > 0) {
                                 params = Object.assign(runtimeParams, params);
                             }
                         }
