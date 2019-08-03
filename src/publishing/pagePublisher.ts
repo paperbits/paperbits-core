@@ -4,6 +4,7 @@ import { IBlobStorage } from "@paperbits/common/persistence";
 import { IPageService, PageContract } from "@paperbits/common/pages";
 import { ISiteService } from "@paperbits/common/sites";
 import { SitemapBuilder } from "./sitemapBuilder";
+import { Logger } from "@paperbits/common/logging";
 
 
 export class PagePublisher implements IPublisher {
@@ -11,12 +12,12 @@ export class PagePublisher implements IPublisher {
         private readonly pageService: IPageService,
         private readonly siteService: ISiteService,
         private readonly outputBlobStorage: IBlobStorage,
-        private readonly htmlPagePublisher: HtmlPagePublisher
-    ) {
-    }
+        private readonly htmlPagePublisher: HtmlPagePublisher,
+        private readonly logger: Logger
+    ) { }
 
     public async renderPage(page: HtmlPage): Promise<string> {
-        console.log(`Publishing page ${page.title}...`);
+        this.logger.traceEvent(`Publishing page ${page.title}...`);
 
         const htmlContent = await this.htmlPagePublisher.renderHtml(page);
         return "<!DOCTYPE html>" + htmlContent;
@@ -70,7 +71,7 @@ export class PagePublisher implements IPublisher {
 
         const sitemap = sitemapBuilder.buildSitemap();
         const contentBytes = Utils.stringToUnit8Array(sitemap);
-        
+
         await this.outputBlobStorage.uploadBlob("sitemap.xml", contentBytes, "text/xml");
     }
 }

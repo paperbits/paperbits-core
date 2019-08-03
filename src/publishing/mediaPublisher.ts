@@ -2,6 +2,7 @@ import { HttpClient } from "@paperbits/common/http";
 import { IPublisher } from "@paperbits/common/publishing";
 import { IBlobStorage } from "@paperbits/common/persistence";
 import { IMediaService, MediaContract } from "@paperbits/common/media";
+import { Logger } from "@paperbits/common/logging";
 
 
 export class MediaPublisher implements IPublisher {
@@ -9,12 +10,9 @@ export class MediaPublisher implements IPublisher {
         private readonly mediaService: IMediaService,
         private readonly blobStorage: IBlobStorage,
         private readonly outputBlobStorage: IBlobStorage,
-        private readonly httpClient: HttpClient
-    ) {
-        this.publish = this.publish.bind(this);
-        this.renderMediaFile = this.renderMediaFile.bind(this);
-        this.renderMedia = this.renderMedia.bind(this);
-    }
+        private readonly httpClient: HttpClient,
+        private readonly logger: Logger
+    ) { }
 
     private async renderMediaFile(mediaFile: MediaContract): Promise<void> {
         try {
@@ -33,7 +31,7 @@ export class MediaPublisher implements IPublisher {
             }
         }
         catch (error) {
-            console.warn(error);
+            this.logger.traceError(error, "MediaPublisher");
         }
     }
 
@@ -41,7 +39,7 @@ export class MediaPublisher implements IPublisher {
         const mediaPromises = new Array<Promise<void>>();
 
         mediaFiles.forEach(mediaFile => {
-            console.log(`Publishing media ${mediaFile.fileName}...`);
+            this.logger.traceEvent(`Publishing media ${mediaFile.fileName}...`);
             mediaPromises.push(this.renderMediaFile(mediaFile));
         });
 
