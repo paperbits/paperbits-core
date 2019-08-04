@@ -23,55 +23,60 @@ export class PagePublisher implements IPublisher {
         return "<!DOCTYPE html>" + htmlContent;
     }
 
-    public async publish(): Promise<void> {
-        const pages = await this.pageService.search("");
-        const results = [];
-        const settings = await this.siteService.getSiteSettings();
-        const sitemapBuilder = new SitemapBuilder(settings.site.hostname);
-
-        const renderAndUpload = async (page: PageContract): Promise<void> => {
-            const htmlPage: HtmlPage = {
-                title: [page.title, settings.site.title].join(" - "),
+    private async renderAndUpload(settings: any, page: PageContract): Promise<void> {
+        const htmlPage: HtmlPage = {
+            title: [page.title, settings.site.title].join(" - "),
+            description: page.description || settings.site.description,
+            keywords: page.keywords || settings.site.keywords,
+            permalink: page.permalink,
+            author: settings.site.author,
+            openGraph: {
+                type: page.permalink === "/" ? "website" : "article",
+                title: page.title,
                 description: page.description || settings.site.description,
-                keywords: page.keywords || settings.site.keywords,
-                permalink: page.permalink,
-                author: settings.site.author,
-                openGraph: {
-                    type: page.permalink === "/" ? "website" : "article",
-                    title: page.title,
-                    description: page.description || settings.site.description,
-                    url: page.permalink,
-                    siteName: settings.site.title
-                    // image: { ... }
-                }
-            };
-
-            const htmlContent = await this.renderPage(htmlPage);
-
-            let permalink = page.permalink;
-
-            const regex = /\/[\w]+\.html$/gm;
-            const isHtmlFile = regex.test(permalink);
-
-            if (!isHtmlFile) {
-                /* if filename has no *.html extension we publish it to a dedicated folder with index.html */
-                permalink = `${permalink}/index.html`;
+                url: page.permalink,
+                siteName: settings.site.title
+                // image: { ... }
             }
-
-            const contentBytes = Utils.stringToUnit8Array(htmlContent);
-            await this.outputBlobStorage.uploadBlob(permalink, contentBytes, "text/html");
         };
 
-        for (const page of pages) {
-            results.push(renderAndUpload(page));
-            sitemapBuilder.appendPermalink(page.permalink);
+        const htmlContent = await this.renderPage(htmlPage);
+
+        let permalink = page.permalink;
+
+        const regex = /\/[\w]+\.html$/gm;
+        const isHtmlFile = regex.test(permalink);
+
+        if (!isHtmlFile) {
+            /* if filename has no *.html extension we publish it to a dedicated folder with index.html */
+            permalink = `${permalink}/index.html`;
         }
 
-        await Promise.all(results);
+        const contentBytes = Utils.stringToUnit8Array(htmlContent);
+        await this.outputBlobStorage.uploadBlob(permalink, contentBytes, "text/html");
+    }
 
-        const sitemap = sitemapBuilder.buildSitemap();
-        const contentBytes = Utils.stringToUnit8Array(sitemap);
+    public async publish(): Promise<void> {
+        try {
+            const pages = await this.pageService.search("");
+            const results = [];
+            const settings = await this.siteService.getSiteSettings();
+            const sitemapBuilder = new SitemapBuilder(settings.site.hostname);
 
-        await this.outputBlobStorage.uploadBlob("sitemap.xml", contentBytes, "text/xml");
+            for (const page of pages) {
+                results.push(this.renderAndUpload(settings, page));
+                sitemapBuilder.appendPermalink(page.permalink);
+            }
+
+            await Promise.all(results);
+
+            const sitemap = sitemapBuilder.buildSitemap();
+            const contentBytes = Utils.stringToUnit8Array(sitemap);
+
+            await this.outputBlobStorage.uploadBlob("sitemap.xml", contentBytes, "text/xml");
+        }
+        catch (error) {
+            this.logger.traceError(error, "Page publisher");
+        }
     }
 }
