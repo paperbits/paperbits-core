@@ -12,6 +12,7 @@ import "./bindingHandlers/bindingHandlers.hyperlink";
 import "./bindingHandlers/bindingHandlers.surface";
 import "./bindingHandlers/bindingHandlers.gridCommand";
 import "./bindingHandlers/bindingHandlers.align";
+import "./bindingHandlers/bindingHandlers.focus";
 import "./bindingHandlers/bindingHandlers.size";
 import "./bindingHandlers/bindingHandlers.validationMessageToggle";
 import "./bindingHandlers/bindingHandlers.tooltipToggle";
