@@ -28,13 +28,13 @@
     <spinner></spinner>
     <!--/ko-->
 
-    <ul class="flex-item flex-item-grow list" data-bind="foreach: layouts, scrollable: {}">
-        <li class="list-item"
+    <div class="flex-item flex-item-grow list" data-bind="foreach: layouts, scrollable: {}">
+        <div class="list-item"
             data-bind="css: { selected: hasFocus }, click: $parent.selectLayout, hasFocus: hasFocus, event: { keydown: $component.onKeyDown }">
             <i class="paperbits-icon paperbits-layout-11"></i>
             <span data-bind="text: title"></span>
-        </li>
-    </ul>
+        </div>
+    </div>
 
     <div class="flex-item btn-group">
         <button class="btn" data-bind="click: addLayout">

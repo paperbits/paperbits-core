@@ -3,10 +3,10 @@
 <!--/ko-->
 
 <div class="flex-container flex-container-column list-container">
-    <ul class="flex-item flex-item-grow list" data-bind="foreach: posts, scrollable: {}">
-        <li tabindex="0" class="list-item" data-bind="css: { selected: hasFocus }, click: $component.selectPost, hasFocus: hasFocus, event: { keydown: $component.keydown }">
+    <div class="flex-item flex-item-grow list" data-bind="foreach: posts, scrollable: {}">
+        <div tabindex="0" class="list-item" data-bind="css: { selected: hasFocus }, click: $component.selectPost, hasFocus: hasFocus, event: { keydown: $component.keydown }">
             <i class="paperbits-icon paperbits-chat-45-2"></i>
             <span data-bind="text: title"></span>
-        </li>
-    </ul>
+        </div>
+    </div>
 </div>

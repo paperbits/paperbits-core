@@ -3,12 +3,12 @@
 <!--/ko-->
 
 <div class="flex-container flex-container-column list-container">
-    <ul class="flex-item flex-item-grow list" data-bind="foreach: urls, scrollable: {}">
-        <li class="list-item" data-bind="css: { selected: hasFocus }, click: $component.selectUrl, event: { keydown: $component.keydown }, attr: { title: title }">
+    <div class="flex-item flex-item-grow list" data-bind="foreach: urls, scrollable: {}">
+        <div class="list-item" data-bind="css: { selected: hasFocus }, click: $component.selectUrl, event: { keydown: $component.keydown }, attr: { title: title }">
             <i class="paperbits-icon paperbits-link-69-2"></i>
             <span class="list-item-label" data-bind="text: title"></span>
-        </li>
-    </ul>
+        </div>
+    </div>
     
     <div class="form">
         <div class="input-group">

@@ -24,13 +24,13 @@
     <spinner></spinner>
     <!--/ko-->
 
-    <ul class="flex-item flex-item-grow list" data-bind="foreach: pages, scrollable: {}">
-        <li tabindex="0" class="list-item"
+    <div class="flex-item flex-item-grow list" data-bind="foreach: pages, scrollable: {}">
+        <div tabindex="0" class="list-item"
             data-bind="css: { selected: hasFocus }, click: $component.selectPage, hasFocus: hasFocus, event: { keydown: $component.onKeyDown }">
             <i class="paperbits-icon paperbits-single-content-03"></i>
             <span data-bind="text: title"></span>
-        </li>
-    </ul>
+        </div>
+    </div>
 
     <div class="flex-item btn-group">
         <button class="btn" data-bind="click: addPage">
