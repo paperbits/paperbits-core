@@ -3,7 +3,7 @@
         <div class="form-group">
             <label for="title" class="form-label">Title</label>
             <div class="input-group">
-                <input type="text" id="title" class="form-control" data-bind="textInput: blogPostItem.title, validationElement: blogPostItem.title"
+                <input type="text" id="title" class="form-control" data-bind="textInput: blogPostItem.title, validationElement: blogPostItem.title, focus: 'auto'"
                     placeholder="e.g. Getting started" maxlength="256" />
                 <button class="btn btn-danger input-group-btn" type="button" data-bind="validationMessageToggle: blogPostItem.title">!</button>
             </div>
