@@ -28,7 +28,7 @@ export class BalloonBindingHandler {
                 let componentConfig: IComponent;
 
                 if (typeof options.component === "string") {
-                    componentConfig = { name: options.component }
+                    componentConfig = { name: options.component };
                 }
                 else {
                     componentConfig = options.component;
