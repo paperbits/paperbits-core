@@ -14,7 +14,7 @@
             <div tabindex="0" class="list-item"
                 data-bind="css: { selected: hasFocus }, dragtarget: { accept: canAccept, ondropbefore: insertBefore, ondropafter: insertAfter, flow: 'vertical', onacceptbefore: $component.navigationItemsTree().onAcceptNodeBefore, onacceptafter: $component.navigationItemsTree().onAcceptNodeAfter }">
                 <!-- ko if: nodes().length > 0 -->
-                <a href="#" class="list-item-collapse" data-bind="click: toggleCollapsed">
+                <a href="#" role="button" class="list-item-collapse" data-bind="click: toggleCollapsed">
                     <i class="paperbits-icon paperbits-circle-delete"
                         data-bind="css: { 'paperbits-circle-add': collapsed() }"></i>
                 </a>

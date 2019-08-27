@@ -3,13 +3,11 @@ import * as MediaUtils from "@paperbits/common/media/mediaUtils";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { IWidgetOrder, IWidgetFactoryResult } from "@paperbits/common/editing";
 
+
 export class MediaItem {
     public key: string;
     public blobKey: string;
     public widgetOrder: IWidgetOrder;
-    public element: HTMLElement;
-
-    public hasFocus: ko.Observable<boolean>;
     public downloadUrl: ko.Observable<string>;
     public thumbnailUrl: ko.Observable<string>;
     public permalink: ko.Observable<string>;
@@ -27,7 +25,6 @@ export class MediaItem {
         this.keywords = ko.observable<string>(mediaContract.keywords);
         this.permalink = ko.observable<string>(mediaContract.permalink);
         this.contentType = ko.observable<string>(mediaContract.mimeType);
-        this.hasFocus = ko.observable<boolean>();
         this.thumbnailUrl = ko.observable<string>();
         this.downloadUrl = ko.observable<string>(mediaContract.downloadUrl);
 

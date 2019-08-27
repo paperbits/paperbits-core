@@ -1,8 +1,9 @@
 <div class="flex-container flex-container-column fit">
     <fieldset class="flex-item form">
         <div class="form-group">
-            <input class="form-control" type="search" data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: 'auto'"
-                placeholder="Search pages..." aria-label="Search pages" />
+            <input class="form-control" type="search"
+                data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: 'auto'" placeholder="Search pages..."
+                aria-label="Search pages" />
         </div>
     </fieldset>
 
@@ -24,12 +25,12 @@
     <spinner></spinner>
     <!--/ko-->
 
-    <div class="flex-item flex-item-grow list" data-bind="foreach: pages, scrollable: {}">
-        <div tabindex="0" class="list-item"
-            data-bind="css: { selected: hasFocus }, click: $component.selectPage, hasFocus: hasFocus, event: { keydown: $component.onKeyDown }">
+    <div class="flex-item flex-item-grow list" role="list" data-bind="foreach: { data: pages, as: 'page' }, scrollable: {}">
+        <a href="#" role="listitem" class="list-item"
+            data-bind="css: { selected: page === $component.selectedPage() }, click: $component.selectPage, event: { keydown: $component.onKeyDown }">
             <i class="paperbits-icon paperbits-single-content-03"></i>
-            <span data-bind="text: title"></span>
-        </div>
+            <span data-bind="text: page.title"></span>
+        </a>
     </div>
 
     <div class="flex-item btn-group">

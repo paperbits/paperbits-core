@@ -37,7 +37,6 @@ export class MediaWorkshop {
         this.onMediaUploaded = this.onMediaUploaded.bind(this);
         this.onDragStart = this.onDragStart.bind(this);
         this.onDragEnd = this.onDragEnd.bind(this);
-        this.selectMedia = this.selectMedia.bind(this);
 
         // setting up...
         this.working = ko.observable(true);
@@ -128,7 +127,6 @@ export class MediaWorkshop {
     }
 
     public selectMedia(mediaItem: MediaItem): void {
-        mediaItem.hasFocus(true);
         this.selectedMediaItem(mediaItem);
 
         const view: IView = {

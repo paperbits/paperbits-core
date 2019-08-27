@@ -1,8 +1,9 @@
 <div class="flex-container flex-container-column fit">
     <fieldset class="flex-item form">
         <div class="form-group">
-            <input class="form-control" type="search" data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: 'auto'"
-                placeholder="Search media..." aria-label="Search media" />
+            <input class="form-control" type="search"
+                data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: 'auto'" placeholder="Search media..."
+                aria-label="Search media" />
         </div>
     </fieldset>
 
@@ -24,13 +25,14 @@
     <spinner></spinner>
     <!-- /ko -->
 
-    <div class="flex-item flex-item-grow list" data-bind="foreach: { data: mediaItems, as: 'media' }, scrollable: {}">
-        <div tabindex="0" class="list-item list-item-image"
-            data-bind="css: { selected: media.hasFocus }, dragsource: { sticky: true, payload: $data, ondragstart: $parent.onDragStart, ondragend: $parent.onDragEnd }">
-            <div class="thumbnail" href="#"
-                data-bind="click: $component.selectMedia, hasFocus: media.hasFocus, style: { 'background-image': 'url('+media.thumbnailUrl()+')' }, attr: { title: media.fileName() }, event: { keydown: $component.onKeyDown }">
-            </div>
-        </div>
+    <div class="flex-item flex-item-grow list" role="list"
+        data-bind="foreach: { data: mediaItems, as: 'media' }, scrollable: {}">
+        <a href="#" role="listitem" class="list-item list-item-image"
+            data-bind="click: $component.selectMedia, css: { selected: media == $component.selectedMediaItem() }, dragsource: { sticky: true, payload: $data, ondragstart: $parent.onDragStart, ondragend: $parent.onDragEnd }">
+            <span class="thumbnail"
+                data-bind="style: { 'background-image': 'url('+media.thumbnailUrl()+')' }, attr: { title: media.fileName() }, event: { keydown: $component.onKeyDown }">
+            </span>
+        </a>
     </div>
 
     <div class="flex-item btn-group">

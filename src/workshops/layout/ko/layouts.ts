@@ -104,9 +104,17 @@ export class LayoutsWorkshop {
         this.router.navigateTo("/");
     }
 
-    public onKeyDown(item: LayoutItem, event: KeyboardEvent): void {
-        if (event.keyCode === Keys.Delete) {
-            this.deleteSelectedLayout();
+    public onKeyDown(item: LayoutItem, event: KeyboardEvent): boolean {
+        switch (event.keyCode) {
+            case Keys.Delete:
+                    this.deleteSelectedLayout();
+                break;
+
+            case Keys.Enter:
+            case Keys.Space:
+                this.selectLayout(item);
         }
+
+        return true;
     }
 }
