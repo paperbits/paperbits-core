@@ -23,19 +23,18 @@
     </div>
     <!--/ko-->
 
-
     <div class="tabs" role="tablist">
-        <div class="tab" role="tab" title="Clear hyperlink" data-bind="css: { 'tab-is-active': !hyperlinkProvider() }">
-            <a href="#" data-bind="click: clearProvider">
+        <div class="tab"  data-bind="css: { 'tab-is-active': !hyperlinkProvider() }, attr: { 'aria-selected': !hyperlinkProvider() }">
+            <a href="#" data-bind="click: clearProvider" title="Clear hyperlink" role="tab" aria-label="Clear hyperlink">
                 <i class="paperbits-icon paperbits-ban"></i>
             </a>
         </div>
 
         <!--ko foreach: { data: hyperlinkProviders, as: 'hyperlinkProvider' } -->
         <!--ko if: hyperlinkProvider.componentName !== 'blog-selector' -->
-        <div class="tab" role="tab"
-            data-bind="css: { 'tab-is-active': $parent.hyperlinkProvider() && hyperlinkProvider.componentName === $parent.hyperlinkProvider().componentName }, attr: { 'title': hyperlinkProvider.name}">
-            <a href="#" data-bind="click: $parent.selectProvider">
+        <div class="tab" 
+            data-bind="css: { 'tab-is-active': $parent.hyperlinkProvider() && hyperlinkProvider.componentName === $parent.hyperlinkProvider().componentName }, attr: { 'title': hyperlinkProvider.name, 'aria-selected': $parent.hyperlinkProvider() && hyperlinkProvider.componentName === $parent.hyperlinkProvider().componentName }">
+            <a href="#" role="tab" data-bind="click: $parent.selectProvider, attr: { 'aria-label': hyperlinkProvider.name, 'aria-controls': hyperlinkProvider.componentName }">
                 <i data-bind="css: hyperlinkProvider.iconClass"></i>
             </a>
         </div>
@@ -45,8 +44,8 @@
 
     <!-- ko with: hyperlinkProvider -->
     <div class="flex-container flex-container-column">
-        <div class="flex-item flex-item-grow"
-            data-bind="hyperlinkProvider: { hyperlinkProvider: $component.hyperlinkProvider, onSelect: $component.onHyperlinkSelected, hyperlink: $component.hyperlink }">
+        <div class="flex-item flex-item-grow" role="tabpanel"
+            data-bind="resourcePicker: { resourcePicker: $component.hyperlinkProvider, onSelect: $component.onHyperlinkSelected, hyperlink: $component.hyperlink }, attr: { id: componentName, 'aria-label': name }">
         </div>
     </div>
     <!--/ko-->
