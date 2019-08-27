@@ -5,16 +5,32 @@ ko.bindingHandlers["collapse"] = {
     init: (triggerElement: HTMLElement, valueAccessor) => {
         // timeout to let other bindings to bind id for collapsable container
 
+        const expanded: boolean = true;
+
         setTimeout(() => {
             const targetSelector = ko.unwrap(valueAccessor());
             const targetElement = document.querySelector(targetSelector);
-            const visibleObservable = ko.observable(true);
+            const visibleObservable = ko.observable(expanded);
+
+            triggerElement.setAttribute("role", "button");
+            triggerElement.setAttribute("aria-label", "Toggle section");
+            triggerElement.setAttribute("aria-expanded", expanded.toString());
+
+            targetElement.setAttribute("role", "region");
+            targetElement.setAttribute("aria-hidden", (!expanded).toString());
+
+            const toggle = () => {
+                const newValue = !visibleObservable();
+                visibleObservable(newValue);
+                triggerElement.setAttribute("aria-expanded", newValue.toString());
+                targetElement.setAttribute("aria-hidden", (!newValue).toString());
+            };
 
             const onPointerDown = (event: MouseEvent) => {
                 if (event.button !== 0) {
                     return;
                 }
-                visibleObservable(!visibleObservable());
+                toggle();
             };
 
             const onClick = (event: MouseEvent) => {
@@ -27,7 +43,7 @@ ko.bindingHandlers["collapse"] = {
                 event.stopImmediatePropagation();
 
                 if (event.keyCode === Keys.Enter || event.keyCode === Keys.Space) {
-                    visibleObservable(!visibleObservable());
+                    toggle();
                 }
             };
 
