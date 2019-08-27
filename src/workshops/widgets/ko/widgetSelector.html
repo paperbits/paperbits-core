@@ -13,12 +13,12 @@
         <h2 class="text-center" data-bind="text: category.name"></h2>
         <hr/>
         <!--/ko-->
-        <ul class="list" data-bind="foreach: category.items">
-            <li tabindex="0" class="list-item list-item-large" data-bind="hasFocus: hasFocus, click: $component.selectWidget">
+        <div class="list" data-bind="foreach: category.items">
+            <div tabindex="0" class="list-item list-item-large" data-bind="hasFocus: hasFocus, click: $component.selectWidget">
                 <i class="paperbits-icon" data-bind="css: css"></i>
                 <span data-bind="text: displayName"></span>
-            </li>
-        </ul>
+            </div>
+        </div>
         <!--/ko-->
     </div>
 </div>

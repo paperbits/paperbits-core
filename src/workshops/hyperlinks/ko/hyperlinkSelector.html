@@ -24,30 +24,19 @@
     <!--/ko-->
 
 
-    <div class="tabs">
-        <div class="tab" data-bind="css: { 'tab-is-active': !hyperlinkProvider() }" title="Clear hyperlink">
+    <div class="tabs" role="tablist">
+        <div class="tab" role="tab" title="Clear hyperlink" data-bind="css: { 'tab-is-active': !hyperlinkProvider() }">
             <a href="#" data-bind="click: clearProvider">
                 <i class="paperbits-icon paperbits-ban"></i>
             </a>
         </div>
 
-        <!--ko foreach: { data: hyperlinkProviders, as: 'resourcePicker' } -->
-        <!--ko if: resourcePicker.componentName !== 'blog-selector' -->
-        <div class="tab"
-            data-bind="css: { 'tab-is-active': $parent.hyperlinkProvider() && resourcePicker.componentName === $parent.hyperlinkProvider().componentName }, attr: { 'title': resourcePicker.name}">
+        <!--ko foreach: { data: hyperlinkProviders, as: 'hyperlinkProvider' } -->
+        <!--ko if: hyperlinkProvider.componentName !== 'blog-selector' -->
+        <div class="tab" role="tab"
+            data-bind="css: { 'tab-is-active': $parent.hyperlinkProvider() && hyperlinkProvider.componentName === $parent.hyperlinkProvider().componentName }, attr: { 'title': hyperlinkProvider.name}">
             <a href="#" data-bind="click: $parent.selectProvider">
-                <!-- ko if: resourcePicker.componentName === 'page-selector' -->
-                <i class="paperbits-icon paperbits-single-content-03"></i>
-                <!-- /ko -->
-                <!-- ko if: resourcePicker.componentName === 'blog-selector' -->
-                <i class="paperbits-icon paperbits-single-content-03"></i>
-                <!-- /ko -->
-                <!-- ko if: resourcePicker.componentName === 'media-selector' -->
-                <i class="paperbits-icon paperbits-image-2"></i>
-                <!-- /ko -->
-                <!-- ko if: resourcePicker.componentName === 'url-selector' -->
-                <i class="paperbits-icon paperbits-link-69-2"></i>
-                <!-- /ko -->
+                <i data-bind="css: hyperlinkProvider.iconClass"></i>
             </a>
         </div>
         <!--/ko-->
@@ -57,7 +46,7 @@
     <!-- ko with: hyperlinkProvider -->
     <div class="flex-container flex-container-column">
         <div class="flex-item flex-item-grow"
-            data-bind="resourcePicker: { resourcePicker: $component.hyperlinkProvider, onSelect: $component.onHyperlinkSelected, hyperlink: $component.hyperlink }">
+            data-bind="hyperlinkProvider: { hyperlinkProvider: $component.hyperlinkProvider, onSelect: $component.onHyperlinkSelected, hyperlink: $component.hyperlink }">
         </div>
     </div>
     <!--/ko-->
