@@ -9,6 +9,10 @@ ko.bindingHandlers["tooltipToggle"] = {
             return;
         }
 
+        triggerElement.setAttribute("role", "tooltip");
+        triggerElement.setAttribute("aria-label", tooltipText);
+        triggerElement.setAttribute("aria-live", "polite");
+
         ko.applyBindingsToNode(triggerElement, {
             balloon: {
                 component: {
