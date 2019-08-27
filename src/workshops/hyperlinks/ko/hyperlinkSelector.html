@@ -24,8 +24,8 @@
     <!--/ko-->
 
     <div class="tabs" role="tablist">
-        <div class="tab"  data-bind="css: { 'tab-is-active': !hyperlinkProvider() }, attr: { 'aria-selected': !hyperlinkProvider() }">
-            <a href="#" data-bind="click: clearProvider" title="Clear hyperlink" role="tab" aria-label="Clear hyperlink">
+        <div class="tab" data-bind="css: { 'tab-is-active': !hyperlinkProvider() }, attr: { 'aria-selected': !hyperlinkProvider() }">
+            <a href="#" data-bind="click: clearProvider, focus: 'auto'" title="Clear hyperlink" role="tab" aria-label="Clear hyperlink">
                 <i class="paperbits-icon paperbits-ban"></i>
             </a>
         </div>
