@@ -2,7 +2,7 @@
 <!--ko if: working()-->
 <spinner></spinner>
 <!--/ko-->
-<ul class="list" data-bind="foreach: layouts, scrollable: {}">
+<ul class="list" data-bind="foreach: layouts, scrollable: true">
     <li class="list-item" data-bind="css: { selected: hasFocus }">
         <a href="#" class="list-item-label" data-bind="click: $component.selectLayout, text: title, hasFocus: hasFocus, event: { keydown: $component.keydown }"></a>
     </li>

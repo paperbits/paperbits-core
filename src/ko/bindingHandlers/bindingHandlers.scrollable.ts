@@ -4,13 +4,15 @@ import PerfectScrollbar from "perfect-scrollbar";
 ko.bindingHandlers["scrollable"] = {
     init: (element: HTMLElement, valueAccessor) => {
         const config = ko.unwrap(valueAccessor());
+
+        const configType = typeof config;
         let scrollbar = new PerfectScrollbar(element);
 
-        element.addEventListener("ps-y-reach-end", () => {
-            if (config.onEndReach) {
+        if (configType === "object" && config.onEndReach) {
+            element.addEventListener("ps-y-reach-end", () => {
                 config.onEndReach();
-            }
-        });
+            });
+        }
 
         const checkElementSize = (): void => {
             requestAnimationFrame(() => {

@@ -2,7 +2,7 @@
     <fieldset class="flex-item form">
         <div class="form-group">
             <input class="form-control" type="search"
-                data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: 'auto'" placeholder="Search pages..."
+                data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: true" placeholder="Search pages..."
                 aria-label="Search pages" />
         </div>
     </fieldset>
@@ -25,7 +25,7 @@
     <spinner></spinner>
     <!--/ko-->
 
-    <div class="flex-item flex-item-grow list" role="list" data-bind="foreach: { data: pages, as: 'page' }, scrollable: {}">
+    <div class="flex-item flex-item-grow list" role="list" data-bind="foreach: { data: pages, as: 'page' }, scrollable: true">
         <a href="#" role="listitem" class="list-item"
             data-bind="css: { selected: page === $component.selectedPage() }, click: $component.selectPage, event: { keydown: $component.onKeyDown }">
             <i class="paperbits-icon paperbits-single-content-03"></i>

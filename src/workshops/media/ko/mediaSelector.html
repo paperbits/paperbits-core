@@ -12,7 +12,7 @@
 
     <div class="flex-container flex-container-column list-container">
         <div class="flex-item flex-item-grow list"
-            data-bind="foreach: { data: mediaItems, as: 'media' }, scrollable: {}">
+            data-bind="foreach: { data: mediaItems, as: 'media' }, scrollable: true">
 
             <div class="list-item list-item-image"
                 data-bind="css: { selected: media.hasFocus }, dragsource: { sticky: true, payload: $data, ondragstart: $component.onDragStart, ondragend: $component.onDragEnd }">

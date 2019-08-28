@@ -1,7 +1,7 @@
 <div class="flex-container flex-container-column fit">
     <fieldset class="flex-item form">
         <div class="form-group">
-            <input class="form-control" type="search" data-bind="textInput: searchPattern, focus: 'auto'" placeholder="Search blog posts..." aria-label="Search blog posts" />
+            <input class="form-control" type="search" data-bind="textInput: searchPattern, focus: true" placeholder="Search blog posts..." aria-label="Search blog posts" />
         </div>
     </fieldset>
 
@@ -23,7 +23,7 @@
     <spinner></spinner>
     <!--/ko-->
 
-    <div class="flex-item flex-item-grow list" data-bind="foreach: blogPosts, scrollable: {}">
+    <div class="flex-item flex-item-grow list" data-bind="foreach: blogPosts, scrollable: true">
         <div tabindex="0" class="list-item" data-bind="css: { selected: hasFocus }, click: $parent.selectBlogPost, hasFocus: hasFocus">
             <i class="paperbits-icon paperbits-chat-45-2"></i>
             <span data-bind="text: title"></span>

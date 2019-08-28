@@ -1,9 +1,9 @@
 <div class="flex-container flex-container-column fit">
-    <fieldset class="flex-item flex-item-grow form" data-bind="scrollable: {}">
+    <fieldset class="flex-item flex-item-grow form" data-bind="scrollable: true">
         <div class="form-group">
             <label for="title" class="form-label">Title</label>
             <div class="input-group">
-                <input type="text" id="title" class="form-control" data-bind="textInput: pageItem.title, validationElement: pageItem.title, focus: 'auto'" placeholder="e.g. About"
+                <input type="text" id="title" class="form-control" data-bind="textInput: pageItem.title, validationElement: pageItem.title, focus: true" placeholder="e.g. About"
                     maxlength="256" />
                 <button class="btn btn-danger input-group-btn" type="button" data-bind="validationMessageToggle: pageItem.title">!</button>
             </div>

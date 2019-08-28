@@ -3,7 +3,7 @@
 <!--/ko-->
 
 <div class="flex-container flex-container-column list-container">
-    <ul class="list" data-bind="foreach: blocks, scrollable: {}">
+    <ul class="list" data-bind="foreach: blocks, scrollable: true">
         <li class="list-item list-item-large">
             <a href="#" data-bind="hasFocus: hasFocus, click: $component.selectBlock">
                 <span data-bind="text: title"></span>

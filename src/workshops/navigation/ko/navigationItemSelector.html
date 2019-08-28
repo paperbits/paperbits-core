@@ -1,5 +1,5 @@
 <div class="flex-container flex-container-column">
-    <div class="flex-item flex-item-grow list" data-bind="with: navigationItemsTree(), scrollable: {}">
+    <div class="flex-item flex-item-grow list" data-bind="with: navigationItemsTree(), scrollable: true">
         <div class="list-item-children" data-bind="foreach: nodes">
             <div tabindex="0" class="list-item" data-bind="css: { selected: hasFocus }">
                 <!-- ko if: nodes().length > 0 -->

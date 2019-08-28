@@ -1,24 +1,27 @@
-<!--ko if: working()-->
-<spinner></spinner>
-<!--/ko-->
-
 <div class="editor">
     <h1>
         Add widget
     </h1>
-    <hr/>
-    <div role="list" class="flex-container flex-container-column list-container" data-bind="scrollable: {}">
+    <hr />
+
+    <!-- ko if: working() -->
+    <spinner></spinner>
+    <!-- /ko -->
+
+    <!-- ko ifnot: working() -->
+    <div role="list" class="flex-container flex-container-column list-container" data-bind="scrollable: true, focus: { childSelector: '.list-item' }">
         <!-- ko foreach: { data: categories, as: 'category'  } -->
-        <!--ko if: category.name -->
+        <!-- ko if: category.name -->
         <h2 class="text-center" data-bind="text: category.name"></h2>
-        <hr/>
-        <!--/ko-->
+        <hr />
+        <!-- /ko -->
         <div class="list" data-bind="foreach: category.items">
             <a href="#" role="listitem" class="list-item list-item-large" data-bind="click: $component.selectWidget">
                 <i class="paperbits-icon" data-bind="css: css"></i>
                 <span data-bind="text: displayName"></span>
             </a>
         </div>
-        <!--/ko-->
+        <!-- /ko -->
     </div>
+    <!-- /ko -->
 </div>
