@@ -1,9 +1,12 @@
 <div class="flex-container flex-container-column fit">
     <fieldset class="flex-item form">
         <div class="form-group">
-            <input class="form-control" type="search"
+            <input class="form-control" type="search" role="searchbox" 
                 data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: true" placeholder="Search pages..."
-                aria-label="Search pages" />
+                aria-label="Search pages" aria-controls="searchResult"/>
+            <p id="searchResult" class="text-hide" role="region" aria-live="polite"
+                data-bind="text: `Pages found: ${pages().length}`">
+            </p>
         </div>
     </fieldset>
 
@@ -25,7 +28,8 @@
     <spinner></spinner>
     <!--/ko-->
 
-    <div class="flex-item flex-item-grow list" role="list" data-bind="foreach: { data: pages, as: 'page' }, scrollable: true">
+    <div class="flex-item flex-item-grow list" role="list"
+        data-bind="foreach: { data: pages, as: 'page' }, scrollable: true">
         <a href="#" role="listitem" class="list-item"
             data-bind="css: { selected: page === $component.selectedPage() }, click: $component.selectPage, event: { keydown: $component.onKeyDown }">
             <i class="paperbits-icon paperbits-single-content-03"></i>
