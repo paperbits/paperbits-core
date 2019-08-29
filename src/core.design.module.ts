@@ -50,9 +50,10 @@ import { CardEditorModule } from "./card/ko/cardEditor.module";
 import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkResolver.design";
 import { GridEditorModule } from "./grid-layout-section/ko/gridEditor.module";
 import { GridCellEditorModule } from "./grid-cell/ko/gridCellEditor.module";
-import "./ko/bindingHandlers/bindingHandlers.command";
 import { PageHost } from "./workshops/page/ko/pageHost";
 import { Tray } from "./workshops/tray/tray";
+import "./ko/bindingHandlers/bindingHandlers.command";
+import "./ko/bindingHandlers/bindingHandlers.dialog";
 
 
 export class CoreDesignModule implements IInjectorModule {

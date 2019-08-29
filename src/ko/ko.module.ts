@@ -17,7 +17,6 @@ import "./bindingHandlers/bindingHandlers.size";
 import "./bindingHandlers/bindingHandlers.validationMessageToggle";
 import "./bindingHandlers/bindingHandlers.tooltipToggle";
 import "./bindingHandlers/bindingHandlers.collapse";
-import "./bindingHandlers/bindingHandlers.container";
 import "./bindingHandlers/bindingHandlers.stickTo";
 import "./bindingHandlers/bindingHandlers.scrollable";
 import "./bindingHandlers/bindingHandlers.confirm";
