@@ -19,29 +19,26 @@ ko.bindingHandlers["collapse"] = {
             targetElement.setAttribute("role", "region");
             targetElement.setAttribute("aria-hidden", (!expanded).toString());
 
-            const toggle = () => {
+            const toggle = (): void => {
                 const newValue = !visibleObservable();
                 visibleObservable(newValue);
                 triggerElement.setAttribute("aria-expanded", newValue.toString());
                 targetElement.setAttribute("aria-hidden", (!newValue).toString());
             };
 
-            const onPointerDown = (event: MouseEvent) => {
+            const onPointerDown = (event: MouseEvent): void => {
                 if (event.button !== 0) {
                     return;
                 }
                 toggle();
             };
 
-            const onClick = (event: MouseEvent) => {
+            const onClick = (event: MouseEvent): void => {
                 event.preventDefault();
                 event.stopImmediatePropagation();
             };
 
-            const onKeyDown = (event: KeyboardEvent) => {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-
+            const onKeyDown = (event: KeyboardEvent): void => {
                 if (event.keyCode === Keys.Enter || event.keyCode === Keys.Space) {
                     toggle();
                 }
