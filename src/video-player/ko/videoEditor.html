@@ -1,7 +1,7 @@
 ﻿<fieldset class="form" data-bind="scrollable: true">
     <div class="form-group form-group-collapsible">
         <label class="form-label">
-            <a href="#" class="form-group-toggle" data-bind="collapse: '#sourceCollapse'"></a>
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sourceCollapse'"></a>
             <b>Source</b>
         </label>
         <div id="sourceCollapse" class="collapse form-group-collapse">
@@ -19,14 +19,14 @@
 
     <div class="form-group form-group-collapsible">
         <label class="form-label">
-            <a href="#" class="form-group-toggle" data-bind="collapse: '#miscellaneousCollapse'"></a>
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#miscellaneousCollapse'"></a>
             <b>Miscellaneous</b>
         </label>
         <div id="miscellaneousCollapse" class="collapse form-group-collapse">
             <div class="form-group">
                 <label for="appearanceStyle" class="form-label">
                     Appearance
-                    <button class="btn btn-info" type="button" data-bind="tooltipToggle: 'Predefined appearance from style guide.'"></button>
+                    <button class="btn btn-info" type="button" title="Help" data-bind="tooltipToggle: 'Predefined appearance from style guide.'"></button>
                 </label>
                 <select id="appearanceStyle" class="form-control" data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
             </div>

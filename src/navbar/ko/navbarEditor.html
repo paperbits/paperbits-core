@@ -10,13 +10,13 @@
     <div class="form-group">
         <label for="appearanceStyle" class="form-label">
             Appearance
-            <button class="btn btn-info" type="button" data-bind="tooltipToggle: 'Predefined appearance from style guide.'"></button>
+            <button class="btn btn-info" type="button" title="Help" data-bind="tooltipToggle: 'Predefined appearance from style guide.'"></button>
         </label>
         <select id="appearanceStyle" class="form-control" data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
     </div>
     <div class="form-group">
         <label class="form-label">
-            <a href="#" class="form-group-toggle"></a>
+            <a href="#" class="form-group-toggle" title="Toggle section"></a>
             <b>Logo</b>
         </label>
         <div class="dropzone">
