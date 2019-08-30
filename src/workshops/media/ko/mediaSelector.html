@@ -11,12 +11,12 @@
     <!--/ko-->
 
     <div class="flex-container flex-container-column list-container">
-        <div class="flex-item flex-item-grow list"
+        <div class="flex-item flex-item-grow list" role="list"
             data-bind="foreach: { data: mediaItems, as: 'media' }, scrollable: true">
 
             <div class="list-item list-item-image"
                 data-bind="css: { selected: media.hasFocus }, dragsource: { sticky: true, payload: $data, ondragstart: $component.onDragStart, ondragend: $component.onDragEnd }">
-                <a class="thumbnail" href="#"
+                <a href="#" role="listitem" class="thumbnail" 
                     data-bind="click: $component.selectMedia, hasFocus: media.hasFocus, event: { keydown: $component.keydown }, style: { 'background-image': 'url('+media.thumbnailUrl()+')' }, attr: { title: media.fileName() }"></a>
             </div>
         </div>
