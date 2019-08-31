@@ -20,6 +20,7 @@ export class FormattingTools {
     public readonly italic: ko.Observable<boolean>;
     public readonly underlined: ko.Observable<boolean>;
     public readonly highlighted: ko.Observable<boolean>;
+    public readonly code: ko.Observable<boolean>;
     public readonly pre: ko.Observable<boolean>;
     public readonly style: ko.Observable<string>;
     public readonly appearance: ko.Observable<string>;
@@ -54,6 +55,7 @@ export class FormattingTools {
         this.italic = ko.observable<boolean>();
         this.underlined = ko.observable<boolean>();
         this.highlighted = ko.observable<boolean>();
+        this.code = ko.observable<boolean>();
         this.ul = ko.observable<boolean>();
         this.ol = ko.observable<boolean>();
         this.pre = ko.observable<boolean>();
@@ -85,6 +87,7 @@ export class FormattingTools {
         this.italic(selectionState.italic);
         this.underlined(selectionState.underlined);
         this.highlighted(selectionState.highlighted);
+        this.code(selectionState.code);
         this.colored(!!selectionState.colorKey);
         this.selectedColorKey(selectionState.colorKey);
         this.ul(selectionState.bulletedList);
@@ -205,6 +208,10 @@ export class FormattingTools {
 
     public toggleHighlighted(): void {
         this.htmlEditorProvider.getCurrentHtmlEditor().toggleHighlighted();
+    }
+
+    public toggleCode(): void {
+        this.htmlEditorProvider.getCurrentHtmlEditor().toggleCode();
     }
 
     public toggleSize(): void {

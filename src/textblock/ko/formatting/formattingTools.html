@@ -41,6 +41,11 @@
         <i class="paperbits-icon paperbits-marker-2"></i>
     </a>
 </div>
+<div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': code() }">
+    <a href="#" title="Toggle code" role="button" data-bind="click: toggleCode">
+        <i class="paperbits-icon paperbits-code"></i>
+    </a>
+</div>
 <div class="toolbox-btn toolbox-dropdown">
     <a href="#" title="Change block type" role="menu" aria-haspopup="true"
         data-bind="text: style, balloon: { component: { name: 'block-style-selector' } }"></a>
