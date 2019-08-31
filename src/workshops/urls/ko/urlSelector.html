@@ -9,7 +9,6 @@
             <span class="list-item-label" data-bind="text: title"></span>
         </a>
     </div>
-    
     <div class="form">
         <div class="input-group">
             <input type="text" class="form-control" data-bind="textInput: $component.uri" placeholder="e.g. https://paperbits.io" maxlength="256"
@@ -20,7 +19,7 @@
         </button>
         <!--ko if: selectedUrl()-->
         <button class="btn" data-bind="click: $component.deleteUrl">
-            <i class="paperbits-icon paperbits-simple-remove"></i> Add
+            <i class="paperbits-icon paperbits-simple-remove"></i> Delete
         </button>
         <!--/ko-->
     </div>
