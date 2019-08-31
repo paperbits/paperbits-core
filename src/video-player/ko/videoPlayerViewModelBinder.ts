@@ -43,7 +43,7 @@ export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerMo
             editor: "video-player-editor",
             applyChanges: (changes) => {
                 Object.assign(model, changes);
-                this.modelToViewModel(model, viewModel);
+                this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         };

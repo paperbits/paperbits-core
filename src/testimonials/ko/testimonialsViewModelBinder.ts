@@ -24,7 +24,7 @@ export class TestimonialsViewModelBinder implements ViewModelBinder<Testimonials
             model: model,
             editor: "testimonials-editor",
             applyChanges: () => {
-                this.modelToViewModel(model, viewModel);
+                this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         };

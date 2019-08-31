@@ -26,7 +26,7 @@ export class MapViewModelBinder {
             model: model,
             editor: "paperbits-map-editor",
             applyChanges: () => {
-                this.modelToViewModel(model, viewModel,);
+                this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         }

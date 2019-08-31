@@ -20,7 +20,7 @@ export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, Layou
         private readonly layoutModelBinder: LayoutModelBinder
     ) { }
 
-    public createBinding(model: LayoutModel, viewModel: LayoutViewModel, bindingContext: Bag<any>): void {
+    public createBinding(model: LayoutModel, viewModel: LayoutViewModel, bindingContext?: Bag<any>): void {
         let savingTimeout;
 
         const updateContent = async (): Promise<void> => {
@@ -56,7 +56,7 @@ export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, Layou
             handler: LayoutHandlers,
             provides: ["static", "scripts", "keyboard"],
             applyChanges: () => {
-                this.modelToViewModel(model, viewModel);
+                this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             },
             onCreate: () => {

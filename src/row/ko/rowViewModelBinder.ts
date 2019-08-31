@@ -49,7 +49,7 @@ export class RowViewModelBinder implements ViewModelBinder<RowModel, RowViewMode
             model: model,
             handler: RowHandlers,
             applyChanges: () => {
-                this.modelToViewModel(model, viewModel);
+                this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         };

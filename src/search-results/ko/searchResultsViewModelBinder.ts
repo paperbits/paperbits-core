@@ -19,7 +19,7 @@ export class SearchResultsViewModelBinder implements ViewModelBinder<SearchResul
             model: model,
             applyChanges: (updatedModel: SearchResultsModel) => {
                 Object.assign(model, updatedModel);
-                this.modelToViewModel(model, viewModel);
+                this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         };

@@ -51,7 +51,7 @@ export class SectionViewModelBinder implements ViewModelBinder<SectionModel, Sec
             handler: SectionHandlers,
             applyChanges: (changes) => {
                 Object.assign(model, changes);
-                this.modelToViewModel(model, viewModel);
+                this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         };

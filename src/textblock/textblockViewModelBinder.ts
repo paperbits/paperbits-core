@@ -28,7 +28,7 @@ export class TextblockViewModelBinder implements ViewModelBinder<TextblockModel,
             editor: "html-editor",
             editorResize: "horizontally",
             applyChanges: (changes) => {
-                this.modelToViewModel(model, viewModel);
+                this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         };

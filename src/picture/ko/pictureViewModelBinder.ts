@@ -46,7 +46,7 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
             editor: "paperbits-picture-editor",
             applyChanges: (changes) => {
                 Object.assign(model, changes);
-                this.modelToViewModel(model, viewModel);
+                this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         };

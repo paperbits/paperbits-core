@@ -51,7 +51,7 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
                 handler: CardHandlers,
                 applyChanges: (changes) => {
                     Object.assign(model, changes);
-                    this.modelToViewModel(model, viewModel);
+                    this.modelToViewModel(model, viewModel, bindingContext);
                     this.eventManager.dispatchEvent("onContentUpdate");
                 }
             };

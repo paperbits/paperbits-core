@@ -24,7 +24,7 @@ export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlay
             model: model,
             editor: "youtube-editor",
             applyChanges: () => {
-                this.modelToViewModel(model, viewModel);
+                this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         };

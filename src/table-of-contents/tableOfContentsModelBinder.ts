@@ -71,9 +71,9 @@ export class TableOfContentsModelBinder implements IModelBinder<TableOfContentsM
         tableOfContentsModel.maxHeading = contract.maxHeading || 1;
         tableOfContentsModel.items = [];
 
-        const currentPageUrl = bindingContext.navigationPath;
-
         if (contract.navigationItemKey) {
+            const currentPageUrl = bindingContext.navigationPath;
+
             const assignedNavigationItem = await this.navigationService.getNavigationItem(contract.navigationItemKey);
             tableOfContentsModel.title = tableOfContentsModel.title || assignedNavigationItem.label;
 

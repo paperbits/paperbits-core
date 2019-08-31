@@ -58,15 +58,29 @@ export class TableOfContentsEditor {
     }
 
     public async onNavigationItemChange(navigationItem: NavigationItemContract): Promise<void> {
-        const contract: TableOfContentsContract = {
-            type: "table-of-contents",
-            navigationItemKey: navigationItem.key
-        };
+        // const contract: TableOfContentsContract = {
+        //     type: "table-of-contents",
+        //     navigationItemKey: navigationItem.key
+        // };
 
-        const model = await this.tableOfContentsModelBinder.contractToModel(contract);
-        this.model = model;
+        // const model = await this.tableOfContentsModelBinder.contractToModel(contract);
+        // this.model = model;
+        // this.navigationItemTitle(navigationItem.label);
+        // this.applyChanges();
+
+
+        // const contract: TableOfContentsContract = {
+        //     type: "table-of-contents",
+        //     navigationItemKey: navigationItem.key
+        // };
+
+        this.model.navigationItemKey = navigationItem.key;
+
+        // const model = await this.tableOfContentsModelBinder.contractToModel(contract);
+        // this.model = model;
         this.navigationItemTitle(navigationItem.label);
         this.applyChanges();
+
     }
 
     public applyChanges(): void {

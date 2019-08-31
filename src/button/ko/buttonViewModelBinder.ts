@@ -3,6 +3,7 @@ import { ViewModelBinder } from "@paperbits/common/widgets";
 import { ButtonModel } from "../buttonModel";
 import { IEventManager } from "@paperbits/common/events";
 import { IStyleCompiler } from "@paperbits/common/styles";
+import { Bag } from "@paperbits/common";
 
 export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Button>  {
     constructor(
@@ -10,7 +11,7 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
         private readonly styleCompiler: IStyleCompiler
     ) { }
 
-    public async modelToViewModel(model: ButtonModel, viewModel?: Button): Promise<Button> {
+    public async modelToViewModel(model: ButtonModel, viewModel?: Button, bindingContext?: Bag<any>): Promise<Button> {
         if (!viewModel) {
             viewModel = new Button();
         }
@@ -29,7 +30,7 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
             editor: "paperbits-button-editor",
             applyChanges: (changes) => {
                 Object.assign(model, changes);
-                this.modelToViewModel(model, viewModel);
+                this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         };
