@@ -33,20 +33,17 @@ export class MediaSelector {
         private readonly viewManager: IViewManager,
         private readonly widgetService: IWidgetService
     ) {
-        this.onMounted = this.onMounted.bind(this);
-        this.selectMedia = this.selectMedia.bind(this);
-
         // setting up...
         this.mediaItems = ko.observableArray<MediaItem>();
         this.selectedMedia = ko.observable<MediaItem>();
         this.searchPattern = ko.observable<string>();
-        this.searchPattern.subscribe(this.searchMedia);
         this.working = ko.observable(true);
     }
 
     @OnMounted()
-    public onMounted(): void {
+    public initialize(): void {
         this.searchMedia();
+        this.searchPattern.subscribe(this.searchMedia);
     }
 
     public async searchMedia(searchPattern: string = ""): Promise<void> {

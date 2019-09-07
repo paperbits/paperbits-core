@@ -8,7 +8,7 @@ import { MediaItem } from "./mediaItem";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { Keys } from "@paperbits/common/keyboard";
 import { IEventManager } from "@paperbits/common/events";
-import { Component } from "@paperbits/common/ko/decorators";
+import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { IWidgetService } from "@paperbits/common/widgets";
 
 @Component({
@@ -19,9 +19,9 @@ import { IWidgetService } from "@paperbits/common/widgets";
 export class MediaWorkshop {
     private searchTimeout: any;
 
-    public searchPattern: ko.Observable<string>;
-    public mediaItems: ko.ObservableArray<MediaItem>;
-    public selectedMediaItem: ko.Observable<MediaItem>;
+    public readonly searchPattern: ko.Observable<string>;
+    public readonly mediaItems: ko.ObservableArray<MediaItem>;
+    public readonly selectedMediaItem: ko.Observable<MediaItem>;
     public readonly working: ko.Observable<boolean>;
 
     constructor(
@@ -31,21 +31,16 @@ export class MediaWorkshop {
         private readonly dropHandlers: IContentDropHandler[],
         private readonly widgetService: IWidgetService
     ) {
-        // rebinding...
-        this.searchMedia = this.searchMedia.bind(this);
-        this.uploadMedia = this.uploadMedia.bind(this);
-        this.onMediaUploaded = this.onMediaUploaded.bind(this);
-        this.onDragStart = this.onDragStart.bind(this);
-        this.onDragEnd = this.onDragEnd.bind(this);
-
-        // setting up...
         this.working = ko.observable(true);
         this.mediaItems = ko.observableArray<MediaItem>();
         this.searchPattern = ko.observable<string>("");
         this.selectedMediaItem = ko.observable<MediaItem>();
+    }
 
-        this.searchPattern.subscribe(this.searchMedia);
+    @OnMounted()
+    public initialize(): void {
         this.searchMedia();
+        this.searchPattern.subscribe(this.searchMedia);
     }
 
     private async launchSearch(searchPattern: string = ""): Promise<void> {
@@ -102,10 +97,6 @@ export class MediaWorkshop {
         }, 600);
     }
 
-    private onMediaUploaded(): void {
-        this.searchMedia();
-    }
-
     public async uploadMedia(): Promise<void> {
         const files = await this.viewManager.openUploadDialog();
 
@@ -123,6 +114,7 @@ export class MediaWorkshop {
 
         await Promise.all(uploadPromises);
         await this.searchMedia();
+
         this.working(false);
     }
 

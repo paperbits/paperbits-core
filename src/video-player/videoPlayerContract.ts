@@ -11,8 +11,14 @@ export interface VideoPlayerContract extends Contract {
      */
     sourceUrl?: string;
 
+    /**
+     * Specifies if video player controls are shown.
+     */
     controls?: boolean;
     
+    /**
+     * Specifies if video should play at start.
+     */
     autoplay?: boolean;
     
     styles?: any;

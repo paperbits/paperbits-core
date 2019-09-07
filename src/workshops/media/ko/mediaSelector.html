@@ -1,24 +1,45 @@
-<!--ko if: working()-->
-<spinner></spinner>
-<!--/ko-->
-
 <div class="editor">
     <h1>Select media</h1>
     <hr />
 
-    <!--ko if: $component.working()-->
-    <spinner></spinner>
-    <!--/ko-->
-
     <div class="flex-container flex-container-column list-container">
+        <fieldset class="flex-item form">
+            <div class="form-group">
+                <input class="form-control" type="search" role="searchbox"
+                    data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: true"
+                    placeholder="Search media..." aria-label="Search media" aria-controls="searchResult" />
+                <p id="searchResult" class="text-hide" role="region" aria-live="polite"
+                    data-bind="text: `Media files found: ${mediaItems().length}`">
+                </p>
+            </div>
+        </fieldset>
+
+        <!-- ko if: !working() && mediaItems().length === 0 -->
+
+        <!-- ko if: searchPattern() === "" -->
+        <p class="flex-item flex-item-grow text-center">It seems that you don't have media yet. Would you like to
+            <a href="#" class="btn-link" data-bind="click: uploadMedia">upload one</a>?
+        </p>
+        <!-- /ko -->
+
+        <!-- ko if: searchPattern() !== ""  -->
+        <p class="flex-item flex-item-grow text-center">Could not find anything. Try to change search criteria.</p>
+        <!-- /ko -->
+
+        <!-- /ko -->
+
+        <!-- ko if: $component.working() -->
+        <spinner></spinner>
+        <!-- /ko -->
+
         <div class="flex-item flex-item-grow list" role="list"
             data-bind="foreach: { data: mediaItems, as: 'media' }, scrollable: true">
-
-            <div class="list-item list-item-image"
-                data-bind="css: { selected: media.hasFocus }, dragsource: { sticky: true, payload: $data, ondragstart: $component.onDragStart, ondragend: $component.onDragEnd }">
-                <a href="#" role="listitem" class="thumbnail" 
-                    data-bind="click: $component.selectMedia, hasFocus: media.hasFocus, event: { keydown: $component.keydown }, style: { 'background-image': 'url('+media.thumbnailUrl()+')' }, attr: { title: media.fileName() }"></a>
-            </div>
+            <a href="#" role="listitem" class="list-item list-item-image"
+                data-bind="click: $component.selectMedia, css: { selected: media == $component.selectedMedia() }, attr: { 'aria-label': media.fileName() }, dragsource: { sticky: true, payload: $data, ondragstart: $parent.onDragStart, ondragend: $parent.onDragEnd }">
+                <span class="thumbnail"
+                    data-bind="style: { 'background-image': 'url('+media.thumbnailUrl()+')' }, attr: { title: media.fileName() }, event: { keydown: $component.onKeyDown }">
+                </span>
+            </a>
         </div>
 
         <div class="flex-item btn-group">

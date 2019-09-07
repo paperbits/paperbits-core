@@ -1,22 +1,30 @@
 <fieldset class="form" data-bind="scrollable: true">
     <div class="form-group form-group-collapsible">
         <label class="form-label">
-            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sourceCollapse'" aria-label="Toggle 'main' section"></a>
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sourceCollapse'"
+                aria-label="Toggle 'main' section"></a>
             <b>Main</b>
         </label>
         <div id="sourceCollapse" class="collapse form-group-collapse">
             <div class="dropzone">
-                <a href="#" class="dropzone-showbox"
+                <label for="source" class="form-label">
+                    Source
+                    <button class="btn btn-info" type="button" aria-label="Error" aria-haspopup="true"
+                        aria-hidden="true" title="Help"
+                        data-bind="tooltipToggle: 'Source of the picture. To change, click on preview area below and select a picture from media libaray.'"></button>
+                </label>
+                <a href="#" id="source" role="img" class="dropzone-showbox"
                     data-bind="balloon: { component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected } } }, focus: true">
-                    <div class="fit" data-bind="background: background"></div>
+                    <div class="fit" role="presentation" data-bind="background: background"></div>
                 </a>
             </div>
 
             <div class="form-group">
                 <label for="caption" class="form-label">
                     Caption
-                    <button class="btn btn-info" type="button" aria-label="Error" aria-haspopup="true" aria-hidden="true"
-                        title="Help" data-bind="tooltipToggle: 'An alternate text for an image'"></button>
+                    <button class="btn btn-info" type="button" aria-label="Error" aria-haspopup="true"
+                        aria-hidden="true" title="Help"
+                        data-bind="tooltipToggle: 'An alternate text for an image'"></button>
                 </label>
                 <input type="text" id="caption" class="form-control" data-bind="textInput: caption" maxlength="256" />
             </div>
@@ -24,8 +32,8 @@
             <div class="form-group">
                 <label class="form-label">
                     Link to
-                    <button class="btn btn-info" type="button"
-                        title="Help" data-bind="tooltipToggle: 'A link to be navigated on click.'"></button>
+                    <button class="btn btn-info" type="button" title="Help"
+                        data-bind="tooltipToggle: 'A link to be navigated on click.'"></button>
                 </label>
                 <div class="input-group">
                     <a href="#" class="form-control"
@@ -41,7 +49,8 @@
 
     <div class="form-group form-group-collapsible">
         <label class="form-label">
-            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'" aria-label="Toggle 'size' section"></a>
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
+                aria-label="Toggle 'size' section"></a>
             <b>Size</b>
         </label>
         <div id="sizeCollapse" class="collapse form-group-collapse">
@@ -61,15 +70,16 @@
 
     <div class="form-group form-group-collapsible">
         <label class="form-label">
-            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#miscellaneousCollapse'" aria-label="Toggle 'Styling' section"></a>
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#miscellaneousCollapse'"
+                aria-label="Toggle 'Styling' section"></a>
             <b>Styling</b>
         </label>
         <div id="miscellaneousCollapse" class="collapse form-group-collapse">
             <div class="form-group">
                 <label for="appearanceStyle" class="form-label">
                     Appearance
-                    <button class="btn btn-info" type="button"
-                        title="Help" data-bind="tooltipToggle: 'Predefined appearance from style guide.'"></button>
+                    <button class="btn btn-info" type="button" title="Help"
+                        data-bind="tooltipToggle: 'Predefined appearance from style guide.'"></button>
                 </label>
                 <select id="appearanceStyle" class="form-control"
                     data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
