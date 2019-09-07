@@ -195,7 +195,7 @@ export class BalloonBindingHandler {
 
                 ko.utils.domNodeDisposal.addDisposeCallback(toggleElement, () => {
                     toggleElement.removeEventListener("keydown", onKeyDown);
-                    toggleElement.removeEventListener("click", onClick)
+                    toggleElement.removeEventListener("click", onClick);
                     window.removeEventListener("scroll", onScroll, true);
                     eventManager.removeEventListener("onPointerDown", onPointerDown);
 

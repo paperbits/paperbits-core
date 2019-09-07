@@ -1,10 +1,12 @@
 ﻿import * as ko from "knockout";
 import { IInjector, IInjectorModule } from "@paperbits/common/injection";
+import { ComponentConfig } from "@paperbits/common/ko/decorators/component.decorator";
+import { ComponentDefinition } from "./bindingHandlers/bindingHandlers.component";
 
 export class KnockoutRegistrationLoaders implements IInjectorModule {
     public register(injector: IInjector): void {
         const injectableComponentLoader = {
-            loadViewModel(name: string, config: any, callback): void {
+            loadViewModel(name: string, config: ComponentConfig, callback: Function): void {
                 if (config.injectable) {
                     const viewModelConstructor = (params) => {
                         const resolvedInjectable: any = injector.resolve(config.injectable);
@@ -113,7 +115,7 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                 (<any>ko.components.defaultLoader).loadTemplate(name, nodes, callback);
             },
 
-            loadComponent(componentName: string, config: any, callback: (definition: KnockoutComponentTypes.Definition) => void): void {
+            loadComponent(componentName: string, config: ComponentConfig, callback: (definition: KnockoutComponentTypes.Definition) => void): void {
                 const callbackWrapper: (result: KnockoutComponentTypes.Definition) => void = (resultWrapper: KnockoutComponentTypes.Definition) => {
 
                     const createViewModelWrapper: (params: any, options: { element: Node; }) => any = (params: any, options: { element: Node; }) => {
@@ -129,11 +131,8 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                                 }
                             }
                             if (Object.keys(runtimeParams).length > 0) {
-                                params = Object.assign(runtimeParams, params);
+                                params = {...runtimeParams, ...params};
                             }
-                        }
-                        if (config.preprocess) {
-                            config.preprocess(options.element, params);
                         }
 
                         const viewModel = resultWrapper.createViewModel(params, options);
@@ -145,10 +144,11 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                         return viewModel;
                     };
 
-                    const definitionWrapper /*: KnockoutComponentTypes.Definition*/ = {
+                    const definitionWrapper: ComponentDefinition = {
                         template: resultWrapper.template,
                         createViewModel: createViewModelWrapper,
-                        constructor: config.constructor
+                        constructor: config.constructor,
+                        encapsulation: config.encapsulation
                     };
 
                     callback(definitionWrapper);
