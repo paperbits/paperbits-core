@@ -2,6 +2,11 @@
 
 let componentLoadingOperationUniqueId = 0;
 
+export interface ComponentDefinition extends ko.components.Component {
+    constructor: Function;
+    encapsulation?: "none" | "shadowDom";
+}
+
 ko.bindingHandlers["component"] = {
     init: (element: HTMLElement, valueAccessor, ignored1, ignored2, bindingContext) => {
         let currentViewModel;
@@ -71,7 +76,7 @@ ko.bindingHandlers["component"] = {
                     throw new Error(`Unknown component "${componentName}"`);
                 }
 
-                const root = cloneTemplateIntoElement(componentName, componentDefinition, element, !!(<any>componentDefinition).shadow);
+                const root = cloneTemplateIntoElement(componentDefinition, element);
                 const componentViewModel = createViewModel(componentDefinition, root, originalChildNodes, componentParams),
                     childBindingContext = bindingContext["createChildContext"](componentViewModel, /* dataItemAlias */ undefined, ctx => {
                         ctx["$component"] = componentViewModel;
@@ -101,28 +106,35 @@ const makeArray = (arrayLikeObject) => {
     return result;
 };
 
-const cloneNodes = (nodesArray, shouldCleanNodes) => {
-    for (var i = 0, j = nodesArray.length, newNodesArray = []; i < j; i++) {
+const cloneNodes = (nodesArray: Node[], shouldCleanNodes: boolean) => {
+    const newNodesArray = [], j = nodesArray.length;
+    for (let i = 0; i < j; i++) {
         const clonedNode = nodesArray[i].cloneNode(true);
         newNodesArray.push(shouldCleanNodes ? ko.cleanNode(clonedNode) : clonedNode);
     }
     return newNodesArray;
 };
 
-function cloneTemplateIntoElement(componentName, componentDefinition, element, useShadow: boolean): HTMLElement {
-    const template = componentDefinition["template"];
+function cloneTemplateIntoElement(componentDefinition: ComponentDefinition, element: HTMLElement): Element {
+    const template = componentDefinition.template;
 
     if (!template) {
         return element;
     }
 
     const clonedNodesArray = cloneNodes(template, false);
-    ko.virtualElements.setDomNodeChildren(element, clonedNodesArray);
-    return element;
+    if (componentDefinition.encapsulation === "shadowDom") {
+        const shadow = element.attachShadow({mode: "open"});
+        ko.virtualElements.setDomNodeChildren(shadow, clonedNodesArray);
+        return shadow.firstElementChild;
+    } else {
+        ko.virtualElements.setDomNodeChildren(element, clonedNodesArray);
+        return element;
+    }
 }
 
-function createViewModel(componentDefinition, element, originalChildNodes, componentParams) {
-    const componentViewModelFactory = componentDefinition["createViewModel"];
+function createViewModel(componentDefinition: ComponentDefinition, element: Element, originalChildNodes: any[], componentParams: any): any {
+    const componentViewModelFactory = componentDefinition.createViewModel;
 
     return componentViewModelFactory
         ? componentViewModelFactory.call(componentDefinition, componentParams, { element: element, templateNodes: originalChildNodes })
