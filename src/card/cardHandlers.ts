@@ -39,7 +39,7 @@ export class CardHandlers implements IWidgetHandler {
                     this.eventManager.dispatchEvent("onContentUpdate");
                 }
             },
-            selectionCommands: [{
+            selectCommands: [{
                 tooltip: "Edit card",
                 iconClass: "paperbits-edit-72",
                 position: "top right",

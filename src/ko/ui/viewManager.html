@@ -98,7 +98,7 @@
 
 <!-- ko with: selectedElementContextualEditor() -->
 <div class="fixed" data-bind="stickTo: { target: element, position: 'top right' }">
-    <!-- ko foreach: { data: selectionCommands, as: 'command' } -->
+    <!-- ko foreach: { data: selectCommands, as: 'command' } -->
     <button class="btn-standalone" data-bind="gridCommand: command">
         <i class="paperbits-icon" data-bind="css: command.iconClass"></i>
     </button>

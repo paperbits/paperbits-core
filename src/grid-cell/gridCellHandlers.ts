@@ -28,7 +28,7 @@ export class GridCellHandlers implements IWidgetHandler {
             color: "#9C27B0",
             hoverCommand: null,
             deleteCommand: null,
-            selectionCommands: [{
+            selectCommands: [{
                 tooltip: "Edit gridCell",
                 iconClass: "paperbits-edit-72",
                 position: "top right",

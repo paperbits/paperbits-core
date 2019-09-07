@@ -67,7 +67,7 @@ export class SectionHandlers {
                     this.eventManager.dispatchEvent("onContentUpdate");
                 }
             },
-            selectionCommands: [{
+            selectCommands: [{
                 tooltip: "Edit section",
                 iconClass: "paperbits-edit-72",
                 position: "top right",

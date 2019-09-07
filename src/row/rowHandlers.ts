@@ -54,7 +54,7 @@ export class RowHandlers implements IWidgetHandler {
                     }
                 },
             },
-            selectionCommands: null,
+            selectCommands: null,
             deleteCommand: {
                 tooltip: "Delete row",
                 color: "#29c4a9",

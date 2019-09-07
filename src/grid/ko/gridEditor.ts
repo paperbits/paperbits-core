@@ -94,7 +94,7 @@ export class GridEditor {
         }
 
         contextualEditor.element = element;
-        contextualEditor.selectionCommands = contextualEditor.selectionCommands || null;
+        contextualEditor.selectCommands = contextualEditor.selectCommands || null;
         contextualEditor.hoverCommand = contextualEditor.hoverCommand || null;
         contextualEditor.deleteCommand = contextualEditor.deleteCommand || null;
 
@@ -460,7 +460,7 @@ export class GridEditor {
                     this.viewManager.clearContextualEditors();
                 },
             },
-            selectionCommands: [{
+            selectCommands: [{
                 tooltip: "Edit widget",
                 iconClass: "paperbits-edit-72",
                 position: "top right",

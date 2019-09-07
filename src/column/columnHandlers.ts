@@ -28,7 +28,7 @@ export class ColumnHandlers implements IWidgetHandler {
             color: "#9C27B0",
             hoverCommand: null,
             deleteCommand: null,
-            selectionCommands: [{
+            selectCommands: [{
                 tooltip: "Edit column",
                 iconClass: "paperbits-edit-72",
                 position: "top right",
