@@ -10,22 +10,22 @@
     <!--/ko-->
 
     <div class="flex-item flex-item-grow list" data-bind="with: navigationItemsTree(), scrollable: true, focus: { childSelector: '.list-item' }">
-        <div class="list-item-children" data-bind="foreach: nodes">
+        <div class="list-item-group" data-bind="foreach: nodes">
             <div tabindex="0" class="list-item"
                 data-bind="css: { selected: hasFocus }, dragtarget: { accept: canAccept, ondropbefore: insertBefore, ondropafter: insertAfter, flow: 'vertical', onacceptbefore: $component.navigationItemsTree().onAcceptNodeBefore, onacceptafter: $component.navigationItemsTree().onAcceptNodeAfter }">
+                
                 <!-- ko if: nodes().length > 0 -->
                 <a href="#" role="button" class="list-item-collapse" data-bind="click: toggleCollapsed">
-                    <i class="paperbits-icon paperbits-circle-delete"
-                        data-bind="css: { 'paperbits-circle-add': collapsed() }"></i>
+                    <i class="paperbits-icon paperbits-circle-delete" data-bind="css: { 'paperbits-circle-add': collapsed() }"></i>
                 </a>
                 <!-- /ko -->
 
                 <div class="list-item-label"
                     data-bind="text: label, hasFocus: hasFocus, click: function(){ $data.hasFocus(true); $component.selectNavigationItem($data); }">
-                    -</div>
+                </div>
 
                 <!-- ko if: nodes().length > 0 && !collapsed() -->
-                <div class="list-item-children" data-bind="foreach: nodes">
+                <div class="list-item-group" data-bind="foreach: nodes">
                     <!--ko template: { name: 'node', data: $data }-->
                     <!--/ko-->
                 </div>
@@ -57,7 +57,7 @@
         </div>
 
         <!--ko if: nodes().length > 0 && !collapsed()-->
-        <div class="list-item-children" data-bind="foreach: nodes">
+        <div class="list-item-group" data-bind="foreach: nodes">
             <!--ko template: { name: 'node', data: $data }-->
             <!--/ko-->
         </div>

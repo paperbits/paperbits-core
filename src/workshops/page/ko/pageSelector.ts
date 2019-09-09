@@ -24,10 +24,6 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
     public onSelect: (selection: HyperlinkModel) => void;
 
     constructor(private readonly pageService: IPageService) {
-        this.onMounted = this.onMounted.bind(this);
-        this.selectPage = this.selectPage.bind(this);
-        this.selectAnchor = this.selectAnchor.bind(this);
-
         this.pages = ko.observableArray<PageItem>();
         this.selectedPage = ko.observable<PageItem>();
         this.searchPattern = ko.observable<string>();
@@ -64,9 +60,6 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
     }
 
     public async selectPage(page: PageItem): Promise<void> {
-        if (!page.hasFocus()) {
-            return;
-        }
         this.selectedPage(page);
         await this.getAnchors(page);
 
@@ -76,9 +69,6 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
     }
 
     public async selectAnchor(anchor: AnchorItem): Promise<void> {
-        if (!anchor.hasFocus()) {
-            return;
-        }
         if (this.onSelect) {
             const selectedPage = this.selectedPage();
             selectedPage.selectedAnchor = anchor;
@@ -86,7 +76,7 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
         }
     }
 
-    private async getAnchors(pageItem: PageItem) {
+    private async getAnchors(pageItem: PageItem): Promise<void> {
         const pageContent = await this.pageService.getPageContent(pageItem.key);
         const children = AnchorUtils.getHeadingNodes(pageContent);
         let selectedAnchor: AnchorItem;
@@ -100,9 +90,10 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
             }
             return anchor;
         });
+
         pageItem.anchors(anchors);
+
         if (selectedAnchor) {
-            selectedAnchor.hasFocus(true);
             this.selectAnchor(selectedAnchor);
         }
     }
