@@ -9,7 +9,7 @@
     <spinner></spinner>
     <!--/ko-->
 
-    <div class="flex-item flex-item-grow list"
+    <div class="flex-item flex-item-grow list" role="list"
         data-bind="with: navigationItemsTree(), scrollable: true, focus: { childSelector: '.list-item' }">
         <!-- ko foreach: { data: $data.nodes, as: 'node' }-->
         <!-- ko template: { name: 'node', data: node } -->
@@ -27,9 +27,7 @@
 
 
 <script id="node" type="text/html">
-    <div class="list-item-group"
-        data-bind="dragtarget: { accept: node.canAccept, ondropbefore: node.insertBefore, ondropafter: node.insertAfter, flow: 'vertical', onacceptbefore: $component.navigationItemsTree().onAcceptNodeBefore, onacceptafter: $component.navigationItemsTree().onAcceptNodeAfter }">
-
+    <div class="list-item-group">
         <!-- ko if: node.nodes && node.nodes().length > 0 -->
         <div class="list-item-collapsible">
             <a href="#" role="button" class="list-item-collapse" data-bind="click: node.toggleCollapsed">
@@ -51,9 +49,11 @@
         <!-- /ko -->
 
         <!-- ko ifnot: node.collapsed -->
+        <div role="list">
         <!-- ko foreach: { data: node.nodes, as: 'node' }-->
         <!-- ko template: { name: 'node', data: node } --><!-- /ko-->
         <!-- /ko-->
+        </div>
         <!-- /ko -->
     </div>
 </script>
