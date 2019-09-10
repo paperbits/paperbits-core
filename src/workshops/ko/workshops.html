@@ -10,12 +10,15 @@
             </a>
         </li>
         <!-- /ko -->
+        
+        <!-- ko if: userPhotoUrl -->
         <li role="presentation" class="toolbox-btn pull-down">
             <a href="#" role="tab" title="Account" aria-label="Account">
                 <div class="photo" data-bind="style: { 'background-image': 'url('+userPhotoUrl()+')' }">
                 </div>
             </a>
         </li>
+        <!-- /ko -->
     </ul>
 
     <!-- ko if: viewManager.journey().length > 0 -->
