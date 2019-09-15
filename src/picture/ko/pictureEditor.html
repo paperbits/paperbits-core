@@ -78,11 +78,14 @@
             <div class="form-group">
                 <label for="appearanceStyle" class="form-label">
                     Appearance
-                    <button class="btn btn-info" type="button" title="Help"
-                        data-bind="tooltipToggle: 'Predefined appearance from style guide.'"></button>
+                    <button class="btn btn-info" type="button" title="Help" data-bind="tooltipToggle: 'Predefined appearance from style guide.'"></button>
                 </label>
-                <select id="appearanceStyle" class="form-control"
-                    data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
+                <div class="input-group">
+                    <a href="#" class="form-control" data-bind="text: appearanceStyle() && appearanceStyle().displayName, balloon: { component: { name: 'style-appearance-selector', params: { snippetType: 'components/picture', onSelect: $component.onAppearanceSelected } } }">
+                    </a>
+                </div>
+                <!-- <select id="appearanceStyle" class="form-control"
+                    data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select> -->
             </div>
         </div>
     </div>

@@ -59,6 +59,7 @@ import "./ko/bindingHandlers/bindingHandlers.dialog";
 export class CoreDesignModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bindModule(new CoreModule());
+        injector.bindCollection("styleGroups");
         injector.bindCollection("dropHandlers");
         injector.bindCollectionLazily("workshopSections");
         injector.bindCollection("trayCommands");
