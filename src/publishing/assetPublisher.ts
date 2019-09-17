@@ -87,6 +87,11 @@ export class AssetPublisher implements IPublisher {
     }
 
     public async publish(): Promise<void> {
+        if (!fs.existsSync(assetsBaseBath)) {
+            console.warn(`Folder ${assetsBaseBath} doesn't exist. Copying assets will be skipped.`);
+            return;
+        }
+
         await this.copyAssets();
     }
 }
