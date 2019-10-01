@@ -3,7 +3,7 @@ import * as Utils from "@paperbits/common/utils";
 import template from "./formattingTools.html";
 import { IEventManager } from "@paperbits/common/events";
 import { IHtmlEditorProvider, HtmlEditorEvents, alignmentStyleKeys } from "@paperbits/common/editing";
-import { Component, OnMounted } from "@paperbits/common/ko/decorators";
+import { Component, OnMounted, OnDestroyed } from "@paperbits/common/ko/decorators";
 import { FontContract, ColorContract } from "@paperbits/styles/contracts";
 import { IViewManager } from "@paperbits/common/ui";
 import { StyleService } from "@paperbits/styles/styleService";
@@ -296,6 +296,7 @@ export class FormattingTools {
         }
     }
 
+    @OnDestroyed()
     public dispose(): void {
         this.eventManager.removeEventListener(HtmlEditorEvents.onSelectionChange, this.updateFormattingState);
     }

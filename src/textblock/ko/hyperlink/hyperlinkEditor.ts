@@ -4,7 +4,7 @@ import { IHtmlEditorProvider } from "@paperbits/common/editing/htmlEditorProvide
 import { IEventManager } from "@paperbits/common/events";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { PermalinkResolver } from "@paperbits/common/permalinks/permalinkResolver";
-import { Component } from "@paperbits/common/ko/decorators";
+import { Component, OnDestroyed } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "hyperlink-editor",
@@ -58,6 +58,7 @@ export class HyperlinkEditor {
         htmlEditor.expandSelection();
     }
 
+    @OnDestroyed()
     public dispose(): void {
         this.eventManager.removeEventListener("htmlEditorChanged", this.onSelectionChange);
     }
