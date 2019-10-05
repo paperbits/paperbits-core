@@ -28,7 +28,7 @@ export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, Navba
             });
         }
         else {
-            navbarItemViewModel.url(navbarItemModel.url);
+            navbarItemViewModel.url(navbarItemModel.targetUrl);
             navbarItemViewModel.isActive(navbarItemModel.isActive);
         }
 
@@ -42,9 +42,8 @@ export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, Navba
         if (!viewModel) {
             viewModel = new NavbarViewModel();
 
-            onUpdate = async (updatedRootContract: NavigationItemContract): Promise<void> => {
-                if (updatedRootContract.key === model.rootKey) {
-                    const updatedRootModel = await this.navbarModelBinder.navigationItemToNavbarItemModel(updatedRootContract);
+            onUpdate = async (updatedRootModel: NavigationItemModel): Promise<void> => {
+                if (updatedRootModel.key === model.rootKey) {
                     viewModel.navigationRoot(this.navbarItemModelToNavbarItemViewModel(updatedRootModel));
                 }
             };

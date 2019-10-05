@@ -1,11 +1,14 @@
 ﻿import * as ko from "knockout";
 import template from "./navigation.html";
-import { INavigationService } from "@paperbits/common/navigation/INavigationService";
+import { INavigationService, NavigationEvents } from "@paperbits/common/navigation";
 import { IViewManager, IView } from "@paperbits/common/ui";
 import { NavigationItemContract } from "@paperbits/common/navigation/navigationItemContract";
-import { NavigationTree } from "./navigationTree";
 import { NavigationItemViewModel } from "./navigationItemViewModel";
-import { Component, OnMounted } from "@paperbits/common/ko/decorators";
+import { Component, OnMounted, OnDestroyed } from "@paperbits/common/ko/decorators";
+import { NavigationModelBinder } from "../navigationModelBinder";
+import { NavigationViewModelBinder } from "./navigationViewModelBinder";
+import { IEventManager } from "@paperbits/common/events";
+
 
 @Component({
     selector: "navigation",
@@ -13,50 +16,76 @@ import { Component, OnMounted } from "@paperbits/common/ko/decorators";
     injectable: "navigationWorkshop"
 })
 export class NavigationWorkshop {
-    private selectedNavigationItem: ko.Observable<NavigationItemViewModel>;
-
-    public readonly navigationItemsTree: ko.Observable<NavigationTree>;
+    public readonly selection: ko.Observable<NavigationItemViewModel>;
+    public readonly root: ko.Observable<NavigationItemViewModel>;
     public readonly working: ko.Observable<boolean>;
+
+    private placeholderElement: HTMLElement;
 
     constructor(
         private readonly navigationService: INavigationService,
-        private readonly viewManager: IViewManager
+        private readonly viewManager: IViewManager,
+        private readonly navigationModelBinder: NavigationModelBinder,
+        private readonly navigationViewModelBinder: NavigationViewModelBinder,
+        private readonly eventManager: IEventManager
     ) {
         // rebinding...
         this.onNavigationUpdate = this.onNavigationUpdate.bind(this);
         this.selectNavigationItem = this.selectNavigationItem.bind(this);
-        this.navigationItemsTree = ko.observable<NavigationTree>();
-        this.selectedNavigationItem = ko.observable<NavigationItemViewModel>();
+        this.selection = ko.observable<NavigationItemViewModel>();
         this.working = ko.observable(true);
+
+        this.root = ko.observable();
+
+        this.placeholderElement = document.createElement("div");
+        this.placeholderElement.className = "placeholder";
+        this.placeholderElement.onmousemove = this.onNullPointerMove;
+
+        document.addEventListener("keydown", this.onKeyDown.bind(this), false);
     }
 
     @OnMounted()
     public async searchNavigationItems(): Promise<void> {
         this.working(true);
+
         const navigationItems = await this.navigationService.getNavigationItems();
-        const navigationTree = new NavigationTree(navigationItems);
-        this.navigationItemsTree(navigationTree);
+
+        const root: NavigationItemContract = {
+            key: null,
+            label: "",
+            navigationItems: navigationItems
+        };
+
+        const rootModel = await this.navigationModelBinder.contractToModel(root);
+        const rootViewModel = await this.navigationViewModelBinder.modelToViewModel(rootModel);
+
+        this.root(rootViewModel);
+
         this.working(false);
 
-        navigationTree.onUpdate.subscribe(this.onNavigationUpdate);
+        rootViewModel.onUpdate.subscribe(this.onNavigationUpdate);
     }
 
-    public async onNavigationUpdate(navigationItems: NavigationItemContract[]): Promise<void> {
-        await this.navigationService.updateNavigation(navigationItems);
+    public async onNavigationUpdate(): Promise<void> {
+        const rootModel = this.navigationViewModelBinder.viewModelToModel(this.root());
+        const rootContract = this.navigationModelBinder.modelToContract(rootModel);
+        
+        await this.navigationService.updateNavigation(rootContract.navigationItems);
+
+        rootModel.nodes.forEach(navigationItem => {
+            this.eventManager.dispatchEvent(NavigationEvents.onNavigationItemUpdate, navigationItem);
+        });
     }
 
     public addNavigationItem(): void {
-        const newNode = this.navigationItemsTree().addNode("< New >");
+        const currentNode = this.selection() || this.root();
+        const node = currentNode.addChild();
 
-        this.selectNavigationItem(newNode);
-    }
-
-    public isNodeSelected(): boolean {
-        return !!(this.navigationItemsTree() && this.navigationItemsTree().focusedNode());
+        this.selectNavigationItem(node);
     }
 
     public async selectNavigationItem(navigationItem: NavigationItemViewModel): Promise<void> {
-        this.selectedNavigationItem(navigationItem);
+        this.selection(navigationItem);
 
         const view: IView = {
             heading: "Navigation item",
@@ -64,18 +93,69 @@ export class NavigationWorkshop {
                 name: "navigation-details-workshop",
                 params: {
                     navigationItem: navigationItem,
-                    onDeleteCallback: (isRootItem: boolean) => {
-                        if (isRootItem) {
-                            this.navigationItemsTree().removeRootNode(navigationItem);
-                            this.viewManager.notifySuccess("Navigation", `Navigation item "${navigationItem.label()}" was deleted.`);
-                            this.viewManager.closeWorkshop("navigation-details-workshop");
-                        }
-                        this.searchNavigationItems();
+                    onDelete: () => {
+                        this.selection(navigationItem.parent);
                     }
                 }
             }
         };
 
         this.viewManager.openViewAsWorkshop(view);
+    }
+
+    private onNullPointerMove(event: MouseEvent): void {
+        event.stopPropagation();
+    }
+
+    public onNodeDragStart(sourceData: any, node: HTMLElement): void {
+        const width = node.clientWidth + "px";
+        const height = node.clientHeight + "px";
+
+        this.placeholderElement.style.width = width;
+        this.placeholderElement.style.height = height;
+
+        node.parentNode.insertBefore(this.placeholderElement, node.nextSibling);
+    }
+
+    /**
+     * Removes placehoder element.
+     */
+    public onNodeDragEnd(): void {
+        this.placeholderElement.parentElement.removeChild(this.placeholderElement);
+    }
+
+    /**
+     * Places placeholder element before target.
+     */
+    public onAcceptNodeBefore(node: HTMLElement, acceptingNode: HTMLElement): void {
+        acceptingNode.parentNode.insertBefore(this.placeholderElement, acceptingNode);
+    }
+
+    /**
+     * Places placeholder element after target.
+     */
+    public onAcceptNodeAfter(node: HTMLElement, acceptingNode: HTMLElement): void {
+        acceptingNode.parentNode.insertBefore(this.placeholderElement, acceptingNode.nextSibling);
+    }
+
+    public onKeyDown(event: KeyboardEvent): void {
+        if (!this.selection()) {
+            return;
+        }
+
+        switch (event.keyCode) {
+            case 37:
+                this.selection().moveNodeLeft();
+                break;
+            case 39:
+                this.selection().moveNodeRight();
+                break;
+            default:
+        }
+    }
+
+    @OnDestroyed()
+    public dispose(): void {
+        document.removeEventListener("keydown", this.onKeyDown.bind(this), false);
     }
 }

@@ -82,13 +82,13 @@ export class NavbarModelBinder implements IModelBinder<NavbarModel> {
             const contentItem = await this.contentItemService.getContentItemByKey(contract.targetKey);
 
             if (contentItem) {
-                navigationItem.url = contentItem.permalink;
+                navigationItem.targetUrl = contentItem.permalink;
             }
         }
         else {
             console.warn(`Navigation item "${navigationItem.label}" has no permalink assigned to it.`);
         }
-        navigationItem.isActive = navigationItem.url === this.router.getPath();
+        navigationItem.isActive = navigationItem.targetUrl === this.router.getPath();
 
         return navigationItem;
     }

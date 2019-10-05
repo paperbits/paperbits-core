@@ -15,7 +15,7 @@ export class NavigationDetailsWorkshop {
     public readonly hyperlink: ko.Observable<HyperlinkModel>;
 
     @Event()
-    public onDeleteCallback: (isRootItem: boolean) => void;
+    public onDelete: () => void;
 
     @Param()
     public navigationItem: NavigationItemViewModel;
@@ -60,23 +60,17 @@ export class NavigationDetailsWorkshop {
         this.hyperlink(hyperlink);
 
         const targetKey = hyperlink ? hyperlink.targetKey : null;
-        
+
         this.navigationItem.targetKey(targetKey);
     }
 
     public deleteNavigationItem(): void {
-        let isRootItem = false;
-        if (this.navigationItem.parent) {
-            this.navigationItem.remove();
+        this.navigationItem.remove();
+        this.viewManager.notifySuccess("Navigation", `Navigation item "${this.navigationItem.label()}" was deleted.`);
+        this.viewManager.closeWorkshop("navigation-details-workshop");
 
-            this.viewManager.notifySuccess("Navigation", `Navigation item "${this.navigationItem.label()}" was deleted.`);
-            this.viewManager.closeWorkshop("navigation-details-workshop");
-        } else {
-            isRootItem = true;
-        }
-
-        if (this.onDeleteCallback) {
-            this.onDeleteCallback(isRootItem);
+        if (this.onDelete) {
+            this.onDelete();
         }
     }
 }

@@ -1,42 +1,60 @@
-<div class="flex-container flex-container-column">
-    <div class="flex-item flex-item-grow list" data-bind="with: navigationItemsTree(), scrollable: true">
-        <div class="list-item-children" data-bind="foreach: nodes">
-            <div tabindex="0" class="list-item" data-bind="css: { selected: hasFocus }">
-                <!-- ko if: nodes().length > 0 -->
-                <a href="#" class="list-item-collapse" data-bind="click: toggleCollapsed">
-                    <i class="paperbits-icon paperbits-circle-delete" data-bind="css: { 'paperbits-circle-add': collapsed() }"></i>
-                </a>
-                <!-- /ko -->
+<div class="editor">
+    <h1>Select navigation root</h1>
+    <hr />
 
-                <div class="list-item-label" data-bind="text: label, hasFocus: hasFocus, click: function(){ $data.hasFocus(true); $component.selectNavigationItem($data); }">-</div>
+    <div class="flex-container flex-container-column">
+        <!-- ko if: working -->
+        <spinner></spinner>
+        <!-- /ko -->
 
-                <!-- ko if: nodes().length > 0 && !collapsed() -->
-                <div class="list-item-children" data-bind="foreach: nodes">
-                    <!--ko template: { name: 'node', data: $data }-->
-                    <!--/ko-->
-                </div>
-                <!-- /ko -->
-            </div>
+        <!-- ko ifnot: working -->
+
+        <!-- ko if: root().nodes().length === 0 -->
+        <p class="flex-item flex-item-grow text-center">It seems that you don't have navigation items yet.</p>
+        <!-- /ko -->
+
+        <div class="flex-item flex-item-grow list" role="list"
+            data-bind="scrollable: true, focus: { childSelector: '.list-item' }">
+            <!-- ko foreach: { data: root().nodes, as: 'node' } -->
+            <!-- ko template: { name: 'node', data: node } -->
+            <!-- /ko-->
+            <!-- /ko-->
         </div>
+
+        <!-- /ko -->
     </div>
 </div>
 
 
+
 <script id="node" type="text/html">
-    <div tabindex="0" class="list-item" data-bind="css: { selected: hasFocus }">
-        <!--ko if: nodes().length > 0-->
-        <a href="#" class="list-item-collapse" data-bind="click: toggleCollapsed">
-            <i class="paperbits-icon paperbits-circle-delete" data-bind="css: { 'paperbits-circle-add': collapsed() }"></i>
-        </a>
-        <!--/ko-->
-
-        <div data-bind="text: label, hasFocus: hasFocus, click: function(){ $data.hasFocus(true); $component.selectNavigationItem($data); }">-</div>
-
-        <!--ko if: nodes().length > 0 && !collapsed()-->
-        <div class="list-item-children" data-bind="foreach: nodes">
-            <!--ko template: { name: 'node', data: $data }-->
-            <!--/ko-->
+    <div class="list-item-group">
+        <!-- ko if: node.nodes && node.nodes().length > 0 -->
+        <div class="list-item-collapsible">
+            <a href="#" role="button" aria-label="Toggle nested items" class="list-item-collapse" data-bind="click: node.toggleCollapsed">
+                <i class="paperbits-icon paperbits-circle-delete"
+                    data-bind="css: { 'paperbits-circle-add': node.collapsed }"></i>
+            </a>
+            <a href="#" role="listitem" class="list-item" data-bind="click: $component.selectNavigationItem, attr: { 'aria-expanded': (!node.collapsed()).toString() }">
+                <!-- <i class="paperbits-icon paperbits-menu-34"></i> -->
+                <span data-bind="text: node.label"></span>
+            </a>
         </div>
-        <!--/ko-->
+        <!-- /ko -->
+
+        <!-- ko ifnot: node.nodes && node.nodes().length > 0 -->
+        <a href="#" role="listitem" class="list-item" data-bind="click: $component.selectNavigationItem">
+            <!-- <i class="paperbits-icon paperbits-menu-34"></i> -->
+            <span data-bind="text: node.label"></span>
+        </a>
+        <!-- /ko -->
+
+        <!-- ko ifnot: node.collapsed -->
+        <div role="list">
+        <!-- ko foreach: { data: node.nodes, as: 'node' } -->
+        <!-- ko template: { name: 'node', data: node } --><!-- /ko-->
+        <!-- /ko-->
+        </div>
+        <!-- /ko -->
     </div>
 </script>

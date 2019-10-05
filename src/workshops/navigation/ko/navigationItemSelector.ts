@@ -2,8 +2,9 @@ import * as ko from "knockout";
 import template from "./navigationItemSelector.html";
 import { NavigationItemViewModel } from "./navigationItemViewModel";
 import { NavigationItemContract, INavigationService } from "@paperbits/common/navigation";
-import { NavigationTree } from "./navigationTree";
-import { Component, Event, Param } from "@paperbits/common/ko/decorators";
+import { Component, Event, Param, OnMounted } from "@paperbits/common/ko/decorators";
+import { NavigationModelBinder } from "../navigationModelBinder";
+import { NavigationViewModelBinder } from "./navigationViewModelBinder";
 
 @Component({
     selector: "navigation-item-selector",
@@ -11,7 +12,22 @@ import { Component, Event, Param } from "@paperbits/common/ko/decorators";
     injectable: "navigationItemSelector"
 })
 export class NavigationItemSelector {
-    public navigationItemsTree: ko.Observable<NavigationTree>;
+    public readonly working: ko.Observable<boolean>;
+    public readonly root: ko.Observable<NavigationItemViewModel>;
+
+    constructor(
+        private readonly navigationService: INavigationService,
+        private readonly navigationModelBinder: NavigationModelBinder,
+        private readonly navigationViewModelBinder: NavigationViewModelBinder
+    ) {
+        // rebinding...
+        this.selectNavigationItem = this.selectNavigationItem.bind(this);
+        this.selectedNavigationItem = ko.observable<NavigationItemViewModel>();
+        this.working = ko.observable(true);
+        this.root = ko.observable();
+
+        this.initialize();
+    }
 
     @Param()
     public selectedNavigationItem: ko.Observable<NavigationItemViewModel>;
@@ -19,27 +35,34 @@ export class NavigationItemSelector {
     @Event()
     public onSelect: (selection: NavigationItemContract) => void;
 
-    constructor(private readonly navigationService: INavigationService) {
-        // rebinding...
-        this.selectNavigationItem = this.selectNavigationItem.bind(this);
-        this.navigationItemsTree = ko.observable<NavigationTree>();
-        this.selectedNavigationItem = ko.observable<NavigationItemViewModel>();
+    @OnMounted()
+    public async initialize(): Promise<void> {
+        this.working(true);
 
-        this.searchNavigationItems();
-    }
-
-    private async searchNavigationItems(): Promise<void> {
         const navigationItems = await this.navigationService.getNavigationItems();
-        const navigationTree = new NavigationTree(navigationItems);
 
-        this.navigationItemsTree(navigationTree);
+        const root: NavigationItemContract = {
+            key: null,
+            label: "",
+            navigationItems: navigationItems
+        };
+
+        const rootModel = await this.navigationModelBinder.contractToModel(root);
+        const rootViewModel = await this.navigationViewModelBinder.modelToViewModel(rootModel);
+
+        this.root(rootViewModel);
+
+        this.working(false);
     }
 
     public async selectNavigationItem(navigationItem: NavigationItemViewModel): Promise<void> {
         this.selectedNavigationItem(navigationItem);
 
         if (this.onSelect) {
-            this.onSelect(navigationItem.toContract());
+            const rootModel = this.navigationViewModelBinder.viewModelToModel(this.root());
+            const rootContract = this.navigationModelBinder.modelToContract(rootModel);
+            
+            this.onSelect(rootContract);
         }
     }
 }

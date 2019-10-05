@@ -8,7 +8,7 @@
                 <a href="#" class="btn pull-right" data-bind="click: $parent.discardDroppedContent">✖</a>
             </h1>
         </div>
-        <div class="droppedcontent-preview" data-bind="dragsource: { payload: $data, ondragstart: $parent.onDragStart, ondragend: $parent.onDragEnd }, background: background, lightbox: { url: previewUrl }">
+        <div class="droppedcontent-preview" data-bind="dragsource: { sourceData: $data, ondragstart: $parent.onDragStart, ondragend: $parent.onDragEnd }, background: background, lightbox: { url: previewUrl }">
         </div>
         <!--ko if: uploadables().length > 0 -->
         <button class="btn" data-bind="click: $parent.uploadContentAsMedia">

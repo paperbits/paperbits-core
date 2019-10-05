@@ -1,18 +1,20 @@
 ﻿import * as ko from "knockout";
-import { NavigationItemContract } from "@paperbits/common/navigation";
+import * as Utils from "@paperbits/common";
+import { NavigationItemContract, NavigationItemModel } from "@paperbits/common/navigation";
+import { Quadrant } from "@paperbits/common/ui";
 
 export class NavigationItemViewModel {
     public key: string;
     public label: ko.Observable<string>;
     public targetKey: ko.Observable<string>;
+    public targetUrl: ko.Observable<string>;
     public parent: NavigationItemViewModel;
     public nodes: ko.ObservableArray<NavigationItemViewModel>;
     public collapsed: ko.Observable<boolean>;
     public dragged: ko.Observable<boolean>;
-    public hasFocus: ko.Observable<boolean>;
     public onUpdate: ko.Subscribable<void>;
 
-    constructor(navitem: NavigationItemContract) {
+    constructor(navitem: NavigationItemModel) {
         this.moveNodeLeft = this.moveNodeLeft.bind(this);
         this.moveNodeRight = this.moveNodeRight.bind(this);
         this.onKeyDown = this.onKeyDown.bind(this);
@@ -22,18 +24,14 @@ export class NavigationItemViewModel {
 
         this.key = navitem.key;
         this.label = ko.observable<string>(navitem.label);
-
+        this.label.subscribe(() => this.notify());
         this.nodes = ko.observableArray<NavigationItemViewModel>([]);
         this.collapsed = ko.observable<boolean>(false);
         this.dragged = ko.observable<boolean>(false);
-        this.hasFocus = ko.observable<boolean>(false);
         this.onUpdate = new ko.subscribable<void>();
-
-        document.addEventListener("keydown", this.onKeyDown, false);
-
         this.targetKey = ko.observable<string>(navitem.targetKey);
-        this.targetKey.subscribe(() => this.onUpdate.notifySubscribers());
-        this.label.subscribe(() => this.onUpdate.notifySubscribers());
+        this.targetKey.subscribe(() => this.notify());
+        this.targetUrl = ko.observable<string>(navitem.targetUrl);
     }
 
     private isSiblingNode(node: NavigationItemViewModel): boolean {
@@ -48,7 +46,7 @@ export class NavigationItemViewModel {
         return this.parent && this.parent.parent && this.parent.parent.nodes.indexOf(node) >= 0 && this.parent !== node;
     }
 
-    private moveNodeLeft(): void {
+    public moveNodeLeft(): void {
         if (!this.parent.parent) {
             return;
         }
@@ -58,10 +56,10 @@ export class NavigationItemViewModel {
         this.parent.parent.nodes.splice(ownIndex + 1, 0, this);
         this.parent = this.parent.parent;
 
-        this.onUpdate.notifySubscribers();
+        this.notify();
     }
 
-    private moveNodeRight(): void {
+    public moveNodeRight(): void {
         const index = this.parent.nodes().indexOf(this);
 
         if (index === 0) {
@@ -73,7 +71,7 @@ export class NavigationItemViewModel {
         this.parent = previousSibling;
         previousSibling.nodes.push(this);
 
-        this.onUpdate.notifySubscribers();
+        this.notify();
     }
 
     public canAccept(node: NavigationItemViewModel): boolean {
@@ -87,7 +85,7 @@ export class NavigationItemViewModel {
             this.parent.nodes.splice(ownIndex, 0, node);
             node.parent = this.parent;
 
-            this.onUpdate.notifySubscribers();
+            this.notify();
         }
     }
 
@@ -98,7 +96,7 @@ export class NavigationItemViewModel {
             this.parent.nodes.splice(ownIndex + 1, 0, node);
             node.parent = this.parent;
 
-            this.onUpdate.notifySubscribers();
+            this.notify();
         }
 
         if (this.parent && this.isChildNode(node)) {
@@ -107,7 +105,7 @@ export class NavigationItemViewModel {
             this.parent.nodes.splice(ownIndex, 0, node);
             node.parent = this.parent;
 
-            this.onUpdate.notifySubscribers();
+            this.notify();
         }
     }
 
@@ -116,9 +114,9 @@ export class NavigationItemViewModel {
     }
 
     public onKeyDown(event: KeyboardEvent): void {
-        if (!this.hasFocus()) {
-            return;
-        }
+        // if (!this.hasFocus()) {
+        //     return;
+        // }
 
         switch (event.keyCode) {
             case 37:
@@ -133,24 +131,31 @@ export class NavigationItemViewModel {
 
     public remove(): void {
         this.parent.nodes.remove(this);
-        this.parent.onUpdate.notifySubscribers();
+        this.notify();
     }
 
-    public toContract(): NavigationItemContract {
-        let navigationItems = null;
+    public addChild(): NavigationItemViewModel {
+        const navitemModel = new NavigationItemModel();
+        navitemModel.key = Utils.guid();
+        navitemModel.label = "< New >";
 
-        if (this.nodes().length > 0) {
-            navigationItems = [];
-            this.nodes().forEach(x => navigationItems.push(x.toContract()));
+        const node = new NavigationItemViewModel(navitemModel);
+        node.parent = this;
+
+        this.nodes.push(node);
+
+        return node;
+    }
+
+    private notify(): void {
+        this.onUpdate.notifySubscribers();
+
+        if (this.parent) {
+            this.parent.notify();
         }
+    }
 
-        const navigationItem: NavigationItemContract = {
-            key: this.key,
-            label: this.label(),
-            targetKey: this.targetKey(),
-            navigationItems: navigationItems
-        };
-
-        return navigationItem;
+    public toString(): string {
+        return this.label();
     }
 }

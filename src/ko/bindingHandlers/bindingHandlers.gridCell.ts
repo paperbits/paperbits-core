@@ -79,7 +79,7 @@ ko.bindingHandlers["gridCellEditor"] = {
             dragsource: {
                 inertia: false,
                 sticky: true,
-                ondragstart: (payload: any, dragged: HTMLElement) => {
+                ondragstart: (sourceData: any, dragged: HTMLElement) => {
                     const elementRect = element.getBoundingClientRect();
                     element.style.width = elementRect.width + "px";
                     element.style.height = elementRect.height + "px";

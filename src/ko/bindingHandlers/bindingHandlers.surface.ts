@@ -43,7 +43,7 @@ ko.bindingHandlers["surface"] = {
         ko.applyBindingsToNode(element, {
             dragsource: {
                 sticky: false,
-                payload: "surface",
+                sourceData: "surface",
                 inertia: true,
                 preventDragging: (clickedElement: HTMLElement) => {
                     return clickedElement.closest("a, .form, .btn, .toolbox-btn, .toolbox-dropdown .cropbox") !== null;

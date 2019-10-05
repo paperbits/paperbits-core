@@ -27,7 +27,7 @@ export class TableOfContentsModelBinder implements IModelBinder<TableOfContentsM
         return items.map((item) => {
             const itemModel = new NavigationItemModel();
             itemModel.label = item.nodes[0].text;
-            itemModel.url = `#${item.attrs.id}`;
+            itemModel.targetUrl = `#${item.attrs.id}`;
             return itemModel;
         });
     }
@@ -40,7 +40,7 @@ export class TableOfContentsModelBinder implements IModelBinder<TableOfContentsM
             const contentItem = await this.contentItemService.getContentItemByKey(navigationItem.targetKey);
 
             if (contentItem) {
-                navbarItemModel.url = contentItem.permalink;
+                navbarItemModel.targetUrl = contentItem.permalink;
 
                 if (contentItem.permalink === currentPageUrl) {
                     navbarItemModel.isActive = true;
