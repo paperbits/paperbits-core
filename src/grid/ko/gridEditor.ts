@@ -460,7 +460,7 @@ export class GridEditor {
                     this.viewManager.clearContextualEditors();
                 },
             },
-            selectCommands: [{
+            selectCommands: context.binding.editor && context.binding.applyChanges && [{
                 tooltip: "Edit widget",
                 iconClass: "paperbits-edit-72",
                 position: "top right",
