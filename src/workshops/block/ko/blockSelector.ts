@@ -4,7 +4,7 @@ import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
 import { BlockItem } from "./blockItem";
 import { BlockContract } from "@paperbits/common/blocks/blockContract";
 import { IBlockService } from "@paperbits/common/blocks/IBlockService";
-import { Component, Param, Event } from "@paperbits/common/ko/decorators";
+import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "block-selector",
@@ -22,6 +22,11 @@ export class BlockSelector implements IResourceSelector<BlockContract> {
     @Event()
     public readonly onSelect: (block: BlockContract) => void;
 
+    @OnMounted()
+    public async initialize(): Promise<void> {
+        await this.searchBlocks();
+    }
+
     constructor(private readonly blockService: IBlockService) {
         this.selectBlock = this.selectBlock.bind(this);
         this.blocks = ko.observableArray<BlockItem>();
@@ -36,8 +41,6 @@ export class BlockSelector implements IResourceSelector<BlockContract> {
         this.searchPattern = ko.observable<string>();
         this.searchPattern.subscribe(this.searchBlocks);
         this.working = ko.observable(true);
-
-        this.searchBlocks();
     }
 
     public async searchBlocks(searchPattern: string = ""): Promise<void> {
