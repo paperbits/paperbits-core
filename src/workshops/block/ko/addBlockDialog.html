@@ -1,11 +1,22 @@
 <fieldset class="flex-item flex-item-grow form" data-bind="scrollable: true">
-    <label class="form-label">
-        Name for new design block
-    </label>
-    <div class="input-group">
-        <input type="text" class="form-control" data-bind="textInput: name, validationElement: name" placeholder="e.g. Features section"
-            maxlength="2000" />
-        <button class="btn btn-danger input-group-btn" type="button" data-bind="validationMessageToggle: name">!</button>
+    <div class="form-group">
+        <label class="form-label" for="blockName">
+            Name for new design block
+        </label>
+        <div class="input-group">
+            <input type="text" name="blockName" class="form-control" maxlength="2000" 
+                data-bind="textInput: name, validationElement: name" placeholder="e.g. Features section"/>
+            <button class="btn btn-danger input-group-btn" type="button" data-bind="validationMessageToggle: name">!</button>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="blockDescription">
+            Description
+        </label>
+        <div class="input-group">
+            <input type="text" name="blockDescription" class="form-control" maxlength="2000"
+                data-bind="textInput: description, validationElement: description" placeholder="details about a new design block" />
+        </div>
     </div>
 </fieldset>
 

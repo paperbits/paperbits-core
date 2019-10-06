@@ -8,6 +8,8 @@ import { GridModelBinder } from "../../grid-layout-section";
 import { presets } from "./gridPresets";
 import { SectionModel } from "../../section";
 import { GridViewModelBinder } from ".";
+import { BlockContract, BlockService } from "@paperbits/common/blocks";
+import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelector";
 
 @Component({
     selector: "grid-layout-selector",
@@ -16,24 +18,28 @@ import { GridViewModelBinder } from ".";
 })
 export class GridLayoutSelector implements IResourceSelector<any> {
     public readonly snippets: ko.ObservableArray<GridModel>;
+    public readonly selected: ko.Observable<string>;
 
     @Event()
     public onSelect: (rowModel: any) => void;
 
     constructor(
         private readonly gridModelBinder: GridModelBinder,
-        private readonly gridViewModelBinder: GridViewModelBinder
+        private readonly gridViewModelBinder: GridViewModelBinder,
+        private readonly modelBinderSelector: ModelBinderSelector,
+        private readonly blockService: BlockService
     ) {
         this.selectLayout = this.selectLayout.bind(this);
         this.snippets = ko.observableArray();
+        this.selected = ko.observable();
     }
 
     @OnMounted()
     public async initaialize(): Promise<void> {
         const snippets = [];
 
-        for (const preset of <any>Utils.clone(presets)) {
-            const model = await this.gridModelBinder.contractToModel(<any>preset);
+        for (const preset of Utils.clone<any>(presets)) {
+            const model = await this.gridModelBinder.contractToModel(preset);
             const viewModel = await this.gridViewModelBinder.modelToViewModel(model);
 
             snippets.push(viewModel);
@@ -99,6 +105,16 @@ export class GridLayoutSelector implements IResourceSelector<any> {
 
         if (this.onSelect) {
             this.onSelect(sectionModel);
+        }
+    }
+
+    public async onBlockSelected(block: BlockContract): Promise<void> {
+        const contract = await this.blockService.getBlockContent(block.key);
+        const modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(contract);
+        const model = await modelBinder.contractToModel(contract);
+
+        if (this.onSelect) {
+            this.onSelect(model);
         }
     }
 }

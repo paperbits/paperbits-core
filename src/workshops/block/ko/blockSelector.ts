@@ -43,7 +43,7 @@ export class BlockSelector implements IResourceSelector<BlockContract> {
     public async searchBlocks(searchPattern: string = ""): Promise<void> {
         this.working(true);
 
-        const blocks = await this.blockService.search(searchPattern);
+        const blocks = await this.blockService.search("page", searchPattern);
         const blockItems = blocks.map(block => new BlockItem(block));
 
         this.blocks(blockItems);

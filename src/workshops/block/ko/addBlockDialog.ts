@@ -14,6 +14,7 @@ import { SectionModel } from "../../../section/sectionModel";
 export class AddBlockDialog {
     public readonly working: ko.Observable<boolean>;
     public readonly name: ko.Observable<string>;
+    public readonly description: ko.Observable<string>;
 
     @Param()
     public readonly sectionModel: SectionModel;
@@ -31,12 +32,16 @@ export class AddBlockDialog {
         this.working = ko.observable(false);
         this.name = ko.observable<string>();
         this.name.extend(<any>{ required: true });
+        this.description = ko.observable<string>();
     }
 
     public async addBlock(): Promise<void> {
+        if (!this.name()) {
+            return;
+        }
         const content = this.sectionModelBinder.modelToContract(this.sectionModel);
 
-        await this.blockService.createBlock(this.name(), "", content);
+        await this.blockService.createBlock(this.name(), this.description(), content, "page");
         this.viewManager.notifySuccess("Blocks", "Block added to library.");
 
         this.onClose();

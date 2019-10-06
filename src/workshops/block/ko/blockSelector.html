@@ -2,12 +2,19 @@
 <spinner></spinner>
 <!--/ko-->
 
-<div class="flex-container flex-container-column list-container">
+<div class="flex-container flex-container-column list-row-container">
+    <!-- ko if: blocks().length === 0 -->
+    <span class="list-empty">No blocks in library</span>
+    <!-- /ko -->
+
+    <!-- ko if: blocks().length > 0 -->
     <ul class="list" data-bind="foreach: blocks, scrollable: true">
-        <li class="list-item list-item-large">
+        <li class="list-item list-item-row">
             <a href="#" data-bind="hasFocus: hasFocus, click: $component.selectBlock">
                 <span data-bind="text: title"></span>
             </a>
+            <span data-bind="text: description() ? ' - ' + description() : ''"></span>
         </li>
     </ul>
+    <!-- /ko -->
 </div>
