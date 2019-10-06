@@ -7,14 +7,14 @@
 
         <div class="tabs" role="tablist">
             <div class="tab" data-bind="css: { 'tab-is-active': !selected() }, attr: { 'aria-selected': !selected() }">
-                <a href="#" data-bind="click: selected.bind($data,undefined), focus: true" title="add empty section"
+                <a href="#" data-bind="click: selected.bind($data,undefined), focus: true" title="New section"
                     role="tab" aria-label="add empty section">
-                    Empty
+                    New section
                 </a>
             </div>
             <div class="tab"
                 data-bind="css: { 'tab-is-active': selected() === 'saved' }, attr: { 'aria-selected': selected() === 'saved' }">
-                <a href="#" data-bind="click: selected.bind($data,'saved')" title="add from library" role="tab"
+                <a href="#" data-bind="click: selected.bind($data,'saved')" title="From library" role="tab"
                     aria-label="add from library">
                     From library
                 </a>
