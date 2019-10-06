@@ -59,7 +59,7 @@ export class NavigationItemSelector {
         this.selectedNavigationItem(navigationItem);
 
         if (this.onSelect) {
-            const rootModel = this.navigationViewModelBinder.viewModelToModel(this.root());
+            const rootModel = this.navigationViewModelBinder.viewModelToModel(navigationItem);
             const rootContract = this.navigationModelBinder.modelToContract(rootModel);
             
             this.onSelect(rootContract);
