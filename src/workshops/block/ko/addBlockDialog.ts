@@ -41,7 +41,7 @@ export class AddBlockDialog {
         }
         const content = this.sectionModelBinder.modelToContract(this.sectionModel);
 
-        await this.blockService.createBlock(this.name(), this.description(), content, "page");
+        await this.blockService.createBlock(this.name(), this.description(), content, "section");
         this.viewManager.notifySuccess("Blocks", "Block added to library.");
 
         this.onClose();
