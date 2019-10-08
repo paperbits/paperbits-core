@@ -1,6 +1,6 @@
 {
     "name": "@paperbits/core",
-    "version": "0.1.155",
+    "version": "0.1.156",
     "description": "Paperbits core components.",
     "author": "Paperbits",
     "license": "MIT",
@@ -20,8 +20,8 @@
         "not ie < 11"
     ],
     "dependencies": {
-        "@paperbits/common": "0.1.155",
-        "@paperbits/styles": "0.1.155",
+        "@paperbits/common": "0.1.156",
+        "@paperbits/styles": "0.1.156",
         "cropperjs": "^1.4.0",
         "domino": "^2.1.3",
         "file-saver": "^2.0.0",
