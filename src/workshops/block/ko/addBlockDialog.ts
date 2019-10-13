@@ -3,8 +3,8 @@ import * as ko from "knockout";
 import { IBlockService } from "@paperbits/common/blocks";
 import { Component, Param, Event } from "@paperbits/common/ko/decorators";
 import { IViewManager } from "@paperbits/common/ui";
-import { SectionModelBinder } from "../../../section/sectionModelBinder";
-import { SectionModel } from "../../../section/sectionModel";
+import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelector";
+import { IModelBinder } from "@paperbits/common/editing";
 
 @Component({
     selector: "add-block-dialog",
@@ -17,14 +17,19 @@ export class AddBlockDialog {
     public readonly description: ko.Observable<string>;
 
     @Param()
-    public readonly sectionModel: SectionModel;
+    public readonly blockModel: any;
+    
+    @Param()
+    public readonly blockType: string;
 
     @Event()
     public readonly onClose: () => void;
 
+    private modelBinder: IModelBinder<any>;
+
     constructor(
         private readonly blockService: IBlockService,
-        private readonly sectionModelBinder: SectionModelBinder,
+        private readonly modelBinderSelector: ModelBinderSelector,
         private readonly viewManager: IViewManager
     ) {
         this.addBlock = this.addBlock.bind(this);
@@ -39,9 +44,12 @@ export class AddBlockDialog {
         if (!this.name()) {
             return;
         }
-        const content = this.sectionModelBinder.modelToContract(this.sectionModel);
+        if (!this.modelBinder) {
+            this.modelBinder = this.modelBinderSelector.getModelBinderByModel(this.blockModel);
+        }
+        const content = this.modelBinder.modelToContract(this.blockModel);
 
-        await this.blockService.createBlock(this.name(), this.description(), content, "section");
+        await this.blockService.createBlock(this.name(), this.description() || "", content, this.blockType);
         this.viewManager.notifySuccess("Blocks", "Block added to library.");
 
         this.onClose();

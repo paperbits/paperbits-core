@@ -74,24 +74,24 @@ export class SectionHandlers {
                 color: "#2b87da",
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
             },
-            // {
-            //     tooltip: "Add to library",
-            //     iconClass: "paperbits-simple-add",
-            //     position: "top right",
-            //     color: "#2b87da",
-            //     callback: () => {
-            //         const view: IView = {
-            //             heading: "Add to library",
-            //             component: {
-            //                 name: "add-block-dialog",
-            //                 params: { sectionModel: context.model }
-            //             },
-            //             resize: "vertically horizontally"
-            //         };
+            {
+                tooltip: "Add to library",
+                iconClass: "paperbits-simple-add",
+                position: "top right",
+                color: "#2b87da",
+                callback: () => {
+                    const view: IView = {
+                        heading: "Add to library",
+                        component: {
+                            name: "add-block-dialog",
+                            params: { blockModel: context.model, blockType: "section" }
+                        },
+                        resize: "vertically horizontally"
+                    };
 
-            //         this.viewManager.openViewAsPopup(view);
-            //     }
-            // }
+                    this.viewManager.openViewAsPopup(view);
+                }
+            }
         ]
         };
 

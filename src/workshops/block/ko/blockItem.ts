@@ -9,13 +9,15 @@ export class BlockItem {
     public hasFocus: ko.Observable<boolean>;
     public title: ko.Observable<string>;
     public description: ko.Observable<string>;
+    public widget: any;
 
-    constructor(block: BlockContract) {
+    constructor(block: BlockContract, widget: any) {
         this.key = block.key;
         this.contentKey = block.contentKey;
         this.title = ko.observable<string>(block.title);
         this.description = ko.observable<string>(block.description);
         this.hasFocus = ko.observable<boolean>();
+        this.widget = widget;
     }
 
     public toBlock(): BlockContract {

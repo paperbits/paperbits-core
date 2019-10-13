@@ -5,7 +5,7 @@
         </h1>
         <hr />
 
-        <!-- <div class="tabs" role="tablist">
+        <div class="tabs" role="tablist">
             <div class="tab" data-bind="css: { 'tab-is-active': !selected() }, attr: { 'aria-selected': !selected() }">
                 <a href="#" data-bind="click: selected.bind($data,undefined), focus: true" title="New section"
                     role="tab" aria-label="add empty section">
@@ -19,7 +19,7 @@
                     From library
                 </a>
             </div>
-        </div> -->
+        </div>
 
         <!-- ko if: !selected() -->
         <div class="flex-container flex-container-column">
@@ -40,8 +40,8 @@
         <!-- /ko -->
 
         <!-- ko if: selected() === 'saved' -->
-        <div class="flex-item flex-item-grow" role="tabpanel">
-            <block-selector params="onSelect: $component.onBlockSelected"></block-selector>
+        <div class="flex-item flex-item-grow add-block-container" role="tabpanel" data-bind="scrollable: true">
+            <block-selector params="{blockType: 'section', onSelect: $component.onBlockSelected}"></block-selector>
         </div>
         <!-- /ko -->
     </div>

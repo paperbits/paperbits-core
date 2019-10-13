@@ -8,11 +8,14 @@
     <!-- /ko -->
 
     <!-- ko if: blocks().length > 0 -->
-    <div class="flex-item flex-item-grow list" role="list" data-bind="foreach: blocks, scrollable: true">
-        <a href="#" role="listitem" class="list-item" data-bind="hasFocus: hasFocus, click: $component.selectBlock">
-            <span data-bind="text: title"></span>
-        </a>
-        <!-- <span data-bind="text: description() ? ' - ' + description() : ''"></span> -->
-    </div>
+    <ul class="flex-item flex-item-grow list">
+        <!-- ko foreach: { data: blocks, as: 'block'  } -->
+        <li class="list-item zoom-selector-item" data-bind="css: { selected: block.hasFocus }, click: $component.selectBlock"> 
+            <div class="zoom-item">
+                <widget-container params="{ widgetData: block.widget }"></widget-container>
+            </div>
+        </li>
+        <!-- /ko -->
+    </ul>
     <!-- /ko -->
 </div>
