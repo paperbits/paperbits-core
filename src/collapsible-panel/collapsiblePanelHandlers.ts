@@ -1,13 +1,13 @@
 ﻿import { IWidgetOrder, IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { CollapsiblePanelModel } from "./collapsiblePanelModel";
-import { IContextCommandSet, IViewManager } from "@paperbits/common/ui";
+import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { WidgetModel } from "@paperbits/common/widgets";
 import { EventManager } from "@paperbits/common/events";
 
 
 export class CollapsiblePanelHandlers implements IWidgetHandler {
     constructor(
-        private readonly viewManager: IViewManager,
+        private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager
     ) { }
 

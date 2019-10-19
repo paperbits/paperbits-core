@@ -2,7 +2,7 @@
 import template from "./blogs.html";
 import { IBlogService } from "@paperbits/common/blogs/IBlogService";
 import { Router } from "@paperbits/common/routing";
-import { IViewManager, IView } from "@paperbits/common/ui";
+import { ViewManager, View } from "@paperbits/common/ui";
 import { Keys } from "@paperbits/common/keyboard";
 import { Component } from "@paperbits/common/ko/decorators";
 import { BlogPostItem } from "./blogPostItem";
@@ -24,7 +24,7 @@ export class BlogWorkshop {
     constructor(
         private readonly blogService: IBlogService,
         private readonly router: Router,
-        private readonly viewManager: IViewManager,
+        private readonly viewManager: ViewManager,
         private readonly layoutViewModelBinder: LayoutViewModelBinder
     ) {
         // rebinding...
@@ -65,7 +65,7 @@ export class BlogWorkshop {
         this.selectedBlogPost(blogPostItem);
         this.viewManager.setHost({ name: "content-host" });
         
-        const view: IView = {
+        const view: View = {
             heading: "Blog post",
             component: {
                 name: "blog-post-details-workshop",

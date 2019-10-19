@@ -2,7 +2,7 @@
 import * as FileSaver from "file-saver";
 import template from "./mediaDetails.html";
 import { IMediaService } from "@paperbits/common/media";
-import { IViewManager } from "@paperbits/common/ui";
+import { ViewManager } from "@paperbits/common/ui";
 import { MediaItem } from "./mediaItem";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 
@@ -20,7 +20,7 @@ export class MediaDetailsWorkshop {
 
     constructor(
         private readonly mediaService: IMediaService,
-        private readonly viewManager: IViewManager
+        private readonly viewManager: ViewManager
     ) {
         // rebinding...
         this.onMounted = this.onMounted.bind(this);

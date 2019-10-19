@@ -1,10 +1,10 @@
 ﻿import * as ko from "knockout";
 import * as Objects from "@paperbits/common";
-import { IView } from "@paperbits/common/ui";
+import { View } from "@paperbits/common/ui";
 import "@paperbits/common/extensions";
 
 ko.bindingHandlers["surface"] = {
-    init(element: HTMLElement, valueAccessor?: () => IView) {
+    init(element: HTMLElement, valueAccessor?: () => View) {
         const view = valueAccessor();
         const settingsString = localStorage["settings"];
 

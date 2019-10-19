@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./layoutDetails.html";
 import { Router } from "@paperbits/common/routing";
-import { IViewManager } from "@paperbits/common/ui";
+import { ViewManager } from "@paperbits/common/ui";
 import { ILayoutService } from "@paperbits/common/layouts/";
 import { LayoutItem } from "./layoutItem";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
@@ -18,7 +18,7 @@ export class LayoutDetails {
     constructor(
         private readonly layoutService: ILayoutService,
         private readonly router: Router,
-        private readonly viewManager: IViewManager
+        private readonly viewManager: ViewManager
     ) { }
 
     @Param()

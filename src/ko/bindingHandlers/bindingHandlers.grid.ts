@@ -1,5 +1,5 @@
 import * as ko from "knockout";
-import { IViewManager, ViewManagerMode } from "@paperbits/common/ui";
+import { ViewManager, ViewManagerMode } from "@paperbits/common/ui";
 import { GridHelper } from "@paperbits/common/editing";
 import { EventManager } from "@paperbits/common/events";
 import { GridEditor } from "../../grid/ko/gridEditor";
@@ -7,7 +7,7 @@ import { IWidgetService } from "@paperbits/common/widgets";
 
 export class GridBindingHandler {
     constructor(
-        viewManager: IViewManager,
+        viewManager: ViewManager,
         eventManager: EventManager,
         widgetService: IWidgetService,
         gridEditor: GridEditor,
@@ -47,7 +47,7 @@ export class GridBindingHandler {
         ko.virtualElements.allowedBindings["layoutwidget"] = true;
     }
 
-    public static attachSectionDragEvents(sourceElement: HTMLElement, viewManager: IViewManager, eventManager: EventManager, widgetService: IWidgetService): void {
+    public static attachSectionDragEvents(sourceElement: HTMLElement, viewManager: ViewManager, eventManager: EventManager, widgetService: IWidgetService): void {
         let placeholderElement: HTMLElement;
 
         const onDragStart = (): HTMLElement => {
@@ -103,7 +103,7 @@ export class GridBindingHandler {
         }, null);
     }
 
-    public static attachRowDragEvents(sourceElement: HTMLElement, viewManager: IViewManager, eventManager: EventManager, widgetService: IWidgetService): void {
+    public static attachRowDragEvents(sourceElement: HTMLElement, viewManager: ViewManager, eventManager: EventManager, widgetService: IWidgetService): void {
         let placeholderElement: HTMLElement;
 
         const onDragStart = (): HTMLElement => {
@@ -164,7 +164,7 @@ export class GridBindingHandler {
         }, null);
     }
 
-    public static attachColumnDragEvents(sourceElement: HTMLElement, viewManager: IViewManager, eventManager: EventManager, widgetService: IWidgetService): void {
+    public static attachColumnDragEvents(sourceElement: HTMLElement, viewManager: ViewManager, eventManager: EventManager, widgetService: IWidgetService): void {
         let placeholderElement: HTMLElement;
 
         const onDragStart = (): HTMLElement => {
@@ -224,7 +224,7 @@ export class GridBindingHandler {
         }, null);
     }
 
-    public static attachWidgetDragEvents(sourceElement: HTMLElement, viewManager: IViewManager, eventManager: EventManager, widgetService: IWidgetService): void {
+    public static attachWidgetDragEvents(sourceElement: HTMLElement, viewManager: ViewManager, eventManager: EventManager, widgetService: IWidgetService): void {
         let placeholderElement: HTMLElement;
 
         const onDragStart = (): HTMLElement => {

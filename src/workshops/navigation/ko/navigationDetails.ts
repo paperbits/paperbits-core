@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import template from "./navigationDetails.html";
-import { IViewManager } from "@paperbits/common/ui";
+import { ViewManager } from "@paperbits/common/ui";
 import { NavigationItemViewModel } from "./navigationItemViewModel";
 import { HyperlinkModel, IPermalinkResolver } from "@paperbits/common/permalinks";
 import { Component, Event, OnMounted, Param } from "@paperbits/common/ko/decorators";
@@ -22,7 +22,7 @@ export class NavigationDetailsWorkshop {
 
     constructor(
         private readonly permalinkResolver: IPermalinkResolver,
-        private readonly viewManager: IViewManager
+        private readonly viewManager: ViewManager
     ) {
         // rebinding...
         this.onMounted = this.onMounted.bind(this);

@@ -42,7 +42,7 @@ import { MediaHyperlinkProvider } from "@paperbits/common/media";
 import { DragManager } from "@paperbits/common/ui/draggables";
 import { UnhandledErrorHandler } from "@paperbits/common/errors";
 import { PlaceholderViewModel } from "./placeholder/ko/placeholderViewModel";
-import { ViewManager, Tooltip } from "./ko/ui";
+import { DefaultViewManager, Tooltip } from "./ko/ui";
 import { KnockoutValidation } from "./ko/validation/validators";
 import { CropperBindingHandler } from "./workshops/cropper/cropper";
 import { GridEditor } from "./grid/ko";
@@ -68,7 +68,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindCollectionLazily("workshopSections");
         injector.bindCollection("trayCommands");
         injector.bindCollection("hyperlinkProviders");
-        injector.bindSingleton("viewManager", ViewManager);
+        injector.bindSingleton("viewManager", DefaultViewManager);
         injector.bindSingleton("tray", Tray);
         injector.bind("pageHyperlinkProvider", PageHyperlinkProvider);
         injector.bind("blogHyperlinkProvider", BlogHyperlinkProvider);

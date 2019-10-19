@@ -5,7 +5,7 @@ import { EventManager } from "@paperbits/common/events";
 import { IHtmlEditorProvider, HtmlEditorEvents, alignmentStyleKeys } from "@paperbits/common/editing";
 import { Component, OnMounted, OnDestroyed } from "@paperbits/common/ko/decorators";
 import { FontContract, ColorContract } from "@paperbits/styles/contracts";
-import { IViewManager } from "@paperbits/common/ui";
+import { ViewManager } from "@paperbits/common/ui";
 import { StyleService } from "@paperbits/styles/styleService";
 
 @Component({
@@ -40,7 +40,7 @@ export class FormattingTools {
     constructor(
         private readonly htmlEditorProvider: IHtmlEditorProvider,
         private readonly eventManager: EventManager,
-        private readonly viewManager: IViewManager,
+        private readonly viewManager: ViewManager,
         private readonly styleService: StyleService
     ) {
         this.style = ko.observable<string>();

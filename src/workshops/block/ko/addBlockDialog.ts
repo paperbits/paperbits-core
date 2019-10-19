@@ -2,7 +2,7 @@ import template from "./addBlockDialog.html";
 import * as ko from "knockout";
 import { IBlockService } from "@paperbits/common/blocks";
 import { Component, Param, Event } from "@paperbits/common/ko/decorators";
-import { IViewManager } from "@paperbits/common/ui";
+import { ViewManager } from "@paperbits/common/ui";
 import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelector";
 import { IModelBinder } from "@paperbits/common/editing";
 
@@ -30,7 +30,7 @@ export class AddBlockDialog {
     constructor(
         private readonly blockService: IBlockService,
         private readonly modelBinderSelector: ModelBinderSelector,
-        private readonly viewManager: IViewManager
+        private readonly viewManager: ViewManager
     ) {
         this.addBlock = this.addBlock.bind(this);
 

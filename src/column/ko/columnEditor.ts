@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import template from "./columnEditor.html";
-import { IViewManager } from "@paperbits/common/ui";
+import { ViewManager } from "@paperbits/common/ui";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { ColumnModel } from "../columnModel";
 
@@ -16,7 +16,7 @@ export class ColumnEditor {
     public readonly scrollOnOverlow: ko.Observable<boolean>;
     public readonly order: ko.Observable<number>;
 
-    constructor(private readonly viewManager: IViewManager) {
+    constructor(private readonly viewManager: ViewManager) {
         this.alignment = ko.observable<string>();
         this.verticalAlignment = ko.observable<string>();
         this.horizontalAlignment = ko.observable<string>();

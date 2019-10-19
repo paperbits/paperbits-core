@@ -4,7 +4,7 @@ import template from "./cropper.html";
 import { Component, Param } from "@paperbits/common/ko/decorators";
 import { EventManager } from "@paperbits/common/events";
 import { IMediaService } from "@paperbits/common/media";
-import { IViewManager } from "@paperbits/common/ui";
+import { ViewManager } from "@paperbits/common/ui";
 import { MediaItem } from "../media/ko/mediaItem";
 
 export class CropperBindingHandler {
@@ -52,7 +52,7 @@ export class PictureCropper {
 
     constructor(
         private readonly mediaService: IMediaService,
-        private readonly viewManager: IViewManager
+        private readonly viewManager: ViewManager
     ) {
         this.setMoveMode = this.setMoveMode.bind(this);
         this.setCropMode = this.setCropMode.bind(this);

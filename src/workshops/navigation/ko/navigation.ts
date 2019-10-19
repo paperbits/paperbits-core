@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./navigation.html";
 import { INavigationService, NavigationEvents } from "@paperbits/common/navigation";
-import { IViewManager, IView } from "@paperbits/common/ui";
+import { ViewManager, View } from "@paperbits/common/ui";
 import { NavigationItemContract } from "@paperbits/common/navigation/navigationItemContract";
 import { NavigationItemViewModel } from "./navigationItemViewModel";
 import { Component, OnMounted, OnDestroyed } from "@paperbits/common/ko/decorators";
@@ -24,7 +24,7 @@ export class NavigationWorkshop {
 
     constructor(
         private readonly navigationService: INavigationService,
-        private readonly viewManager: IViewManager,
+        private readonly viewManager: ViewManager,
         private readonly navigationModelBinder: NavigationModelBinder,
         private readonly navigationViewModelBinder: NavigationViewModelBinder,
         private readonly eventManager: EventManager
@@ -87,7 +87,7 @@ export class NavigationWorkshop {
     public async selectNavigationItem(navigationItem: NavigationItemViewModel): Promise<void> {
         this.selection(navigationItem);
 
-        const view: IView = {
+        const view: View = {
             heading: "Navigation item",
             component: {
                 name: "navigation-details-workshop",

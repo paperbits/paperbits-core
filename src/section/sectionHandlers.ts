@@ -1,4 +1,4 @@
-import { IContextCommandSet, IView, IViewManager } from "@paperbits/common/ui";
+import { IContextCommandSet, View, ViewManager } from "@paperbits/common/ui";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { WidgetContext } from "@paperbits/common/editing";
 import { SectionModel } from "./sectionModel";
@@ -8,7 +8,7 @@ import { EventManager } from "@paperbits/common/events";
 
 export class SectionHandlers {
     constructor(
-        private readonly viewManager: IViewManager,
+        private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager
     ) { }
 
@@ -80,7 +80,7 @@ export class SectionHandlers {
                 position: "top right",
                 color: "#2b87da",
                 callback: () => {
-                    const view: IView = {
+                    const view: View = {
                         heading: "Add to library",
                         component: {
                             name: "add-block-dialog",

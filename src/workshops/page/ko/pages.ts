@@ -2,7 +2,7 @@
 import template from "./pages.html";
 import { IPageService } from "@paperbits/common/pages";
 import { Router } from "@paperbits/common/routing";
-import { IViewManager, IView } from "@paperbits/common/ui";
+import { ViewManager, View } from "@paperbits/common/ui";
 import { Keys } from "@paperbits/common/keyboard";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { PageItem } from "./pageItem";
@@ -24,7 +24,7 @@ export class PagesWorkshop {
     constructor(
         private readonly pageService: IPageService,
         private readonly router: Router,
-        private readonly viewManager: IViewManager
+        private readonly viewManager: ViewManager
     ) {
         this.pages = ko.observableArray<PageItem>();
         this.selectedPage = ko.observable<PageItem>();
@@ -57,7 +57,7 @@ export class PagesWorkshop {
     public selectPage(pageItem: PageItem): void {
         this.selectedPage(pageItem);
 
-        const view: IView = {
+        const view: View = {
             heading: "Page",
             component: {
                 name: "page-details-workshop",

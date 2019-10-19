@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
 import { EventManager, GlobalEventHandler } from "@paperbits/common/events";
-import { IViewManager, ViewManagerMode } from "@paperbits/common/ui";
+import { ViewManager, ViewManagerMode } from "@paperbits/common/ui";
 import { Router, Route } from "@paperbits/common/routing";
 import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
 import { SiteService } from "@paperbits/common/sites";
@@ -13,7 +13,7 @@ export class HostBindingHandler {
     constructor(
         private readonly eventManager: EventManager,
         private readonly globalEventHandler: GlobalEventHandler,
-        private readonly viewManager: IViewManager,
+        private readonly viewManager: ViewManager,
         private readonly router: Router,
         private readonly siteService: SiteService,
         private readonly mediaService: IMediaService

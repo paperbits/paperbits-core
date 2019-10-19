@@ -4,7 +4,7 @@ import template from "./textStyleSelector.html";
 import { IHtmlEditorProvider } from "@paperbits/common/editing";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { StyleService } from "@paperbits/styles";
-import { IViewManager } from "@paperbits/common/ui/IViewManager";
+import { ViewManager } from "@paperbits/common/ui/viewManager";
 
 @Component({
     selector: "text-style-selector",
@@ -16,7 +16,7 @@ export class TextStyleSelector {
 
     constructor(
         private readonly styleService: StyleService,
-        private readonly viewManager: IViewManager,
+        private readonly viewManager: ViewManager,
         private readonly htmlEditorProvider: IHtmlEditorProvider
     ) {
         this.textStyles = ko.observableArray<any>();

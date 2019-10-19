@@ -6,7 +6,7 @@ import { StyleService } from "@paperbits/styles";
 import { CollapsiblePanelModel } from "../collapsiblePanelModel";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { ContainerStylePluginConfig } from "@paperbits/styles/contracts";
-import { IViewManager } from "@paperbits/common/ui";
+import { ViewManager } from "@paperbits/common/ui";
 import { EventManager } from "@paperbits/common/events";
 
 @Component({
@@ -18,7 +18,7 @@ export class CollapsiblePanelEditor {
     public readonly containerConfig: ko.Observable<ContainerStylePluginConfig>;
 
     constructor(
-        private readonly viewManager: IViewManager,
+        private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager
     ) {
         this.containerConfig = ko.observable<ContainerStylePluginConfig>();

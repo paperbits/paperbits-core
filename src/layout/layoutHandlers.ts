@@ -1,11 +1,11 @@
 import { DragSession } from "@paperbits/common/ui/draggables";
-import { IViewManager, IContextCommandSet } from "@paperbits/common/ui";
+import { ViewManager, IContextCommandSet } from "@paperbits/common/ui";
 import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { WidgetModel } from "@paperbits/common/widgets";
 
 
 export class LayoutHandlers implements IWidgetHandler {
-    constructor(private readonly viewManager: IViewManager) { }
+    constructor(private readonly viewManager: ViewManager) { }
 
     public onDragOver(dragSession: DragSession): boolean {
         return dragSession.type === "section";

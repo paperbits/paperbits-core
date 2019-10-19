@@ -3,7 +3,7 @@ import * as ko from "knockout";
 import * as Utils from "@paperbits/common";
 import * as Objects from "@paperbits/common/objects";
 import template from "./sectionEditor.html";
-import { IViewManager } from "@paperbits/common/ui";
+import { ViewManager } from "@paperbits/common/ui";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { SectionModel } from "../sectionModel";
 import { GridModel } from "../../grid-layout-section";
@@ -40,7 +40,7 @@ export class SectionEditor {
     public readonly marginRight: ko.Observable<string>;
     public readonly marginBottom: ko.Observable<string>;
 
-    constructor(private readonly viewManager: IViewManager) {
+    constructor(private readonly viewManager: ViewManager) {
         this.initialize = this.initialize.bind(this);
         this.onBackgroundUpdate = this.onBackgroundUpdate.bind(this);
         this.onTypographyUpdate = this.onTypographyUpdate.bind(this);

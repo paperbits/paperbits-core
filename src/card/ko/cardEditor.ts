@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import * as Objects from "@paperbits/common/objects";
 import * as Utils from "@paperbits/common/utils";
 import template from "./cardEditor.html";
-import { IViewManager } from "@paperbits/common/ui";
+import { ViewManager } from "@paperbits/common/ui";
 import { WidgetEditor } from "@paperbits/common/widgets";
 import { StyleService } from "@paperbits/styles";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
@@ -24,7 +24,7 @@ export class CardEditor implements WidgetEditor<CardModel> {
     public readonly containerConfig: ko.Observable<ContainerStylePluginConfig>;
 
     constructor(
-        private readonly viewManager: IViewManager,
+        private readonly viewManager: ViewManager,
         private readonly styleService: StyleService,
         private readonly eventManager: EventManager
     ) {

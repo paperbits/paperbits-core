@@ -5,7 +5,7 @@ import template from "./viewManager.html";
 import "@paperbits/common/extensions";
 import { Bag } from "@paperbits/common";
 import { EventManager, GlobalEventHandler } from "@paperbits/common/events";
-import { IComponent, IView, IViewManager, ICommand, ViewManagerMode, IHighlightConfig, IContextCommandSet, ISplitterConfig, Toast } from "@paperbits/common/ui";
+import { IComponent, View, ViewManager, ICommand, ViewManagerMode, IHighlightConfig, IContextCommandSet, ISplitterConfig, Toast } from "@paperbits/common/ui";
 import { Router } from "@paperbits/common/routing";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
@@ -21,15 +21,15 @@ declare let uploadDialog: HTMLInputElement;
     template: template,
     injectable: "viewManager"
 })
-export class ViewManager implements IViewManager {
+export class DefaultViewManager implements ViewManager {
     private contextualEditorsBag: Bag<IContextCommandSet> = {};
 
-    public journey: ko.ObservableArray<IView>;
+    public journey: ko.ObservableArray<View>;
     public journeyName: ko.Computed<string>;
     public toasts: ko.ObservableArray<Toast>;
     public balloons: ko.ObservableArray<IComponent>;
     public primaryToolboxVisible: ko.Observable<boolean>;
-    public widgetEditor: ko.Observable<IView>;
+    public widgetEditor: ko.Observable<View>;
     public contextualEditors: ko.ObservableArray<IContextCommandSet>;
     public highlightedElement: ko.Observable<IHighlightConfig>;
     public splitterElement: ko.Observable<ISplitterConfig>;
@@ -54,7 +54,7 @@ export class ViewManager implements IViewManager {
         this.mode = ViewManagerMode.selecting;
         this.toasts = ko.observableArray<Toast>();
         this.balloons = ko.observableArray<IComponent>();
-        this.journey = ko.observableArray<IView>();
+        this.journey = ko.observableArray<View>();
         this.journeyName = ko.pureComputed<string>(() => {
             if (this.journey().length === 0) {
                 return null;
@@ -63,7 +63,7 @@ export class ViewManager implements IViewManager {
             return this.journey()[0].heading;
         });
 
-        this.widgetEditor = ko.observable<IView>();
+        this.widgetEditor = ko.observable<View>();
         this.contextualEditors = ko.observableArray<IContextCommandSet>([]);
         this.highlightedElement = ko.observable<IHighlightConfig>();
         this.splitterElement = ko.observable<ISplitterConfig>();
@@ -163,7 +163,7 @@ export class ViewManager implements IViewManager {
         });
     }
 
-    public updateJourneyComponent(view: IView): void {
+    public updateJourneyComponent(view: View): void {
         let journey = this.journey();
 
         const existingComponent = journey.find(c => { return c.component.name === view.component.name; });
@@ -194,7 +194,7 @@ export class ViewManager implements IViewManager {
         this.mode = ViewManagerMode.selecting;
     }
 
-    public openViewAsWorkshop(view: IView): void {
+    public openViewAsWorkshop(view: View): void {
         this.clearContextualEditors();
         this.updateJourneyComponent(view);
         this.mode = ViewManagerMode.configure;
@@ -202,9 +202,9 @@ export class ViewManager implements IViewManager {
 
     /**
      * Deletes specified editors and all editors after.
-     * @param view IView
+     * @param view View
      */
-    public closeWorkshop(editor: IView | string): void {
+    public closeWorkshop(editor: View | string): void {
         const journey = this.journey();
         let view;
 
@@ -241,7 +241,7 @@ export class ViewManager implements IViewManager {
         });
     }
 
-    public openViewAsPopup(view: IView): void {
+    public openViewAsPopup(view: View): void {
         if (this.widgetEditor() === view) {
             return;
         }
@@ -254,7 +254,7 @@ export class ViewManager implements IViewManager {
         this.mode = ViewManagerMode.configure;
     }
 
-    public getOpenView(): IView {
+    public getOpenView(): View {
         return this.widgetEditor();
     }
 
@@ -264,7 +264,7 @@ export class ViewManager implements IViewManager {
     }
 
     public openWidgetEditor(binding: IWidgetBinding<any>): void {
-        const view: IView = {
+        const view: View = {
             component: {
                 name: binding.editor,
                 params: {

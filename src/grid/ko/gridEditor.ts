@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import * as Utils from "@paperbits/common/utils";
-import { IViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet as IContextCommandSet } from "@paperbits/common/ui";
+import { ViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet as IContextCommandSet } from "@paperbits/common/ui";
 import { IWidgetBinding, GridHelper, WidgetContext } from "@paperbits/common/editing";
 import { Keys } from "@paperbits/common/keyboard";
 import { IWidgetService } from "@paperbits/common/widgets";
@@ -19,7 +19,7 @@ export class GridEditor {
 
 
     constructor(
-        private readonly viewManager: IViewManager,
+        private readonly viewManager: ViewManager,
         private readonly widgetService: IWidgetService,
         private readonly router: Router,
         private readonly eventManager: EventManager

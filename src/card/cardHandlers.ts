@@ -3,13 +3,13 @@ import { CardModel } from "./cardModel";
 import { IWidgetOrder, IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { EventManager } from "@paperbits/common/events";
 import { DragSession } from "@paperbits/common/ui/draggables";
-import { IContextCommandSet, IViewManager } from "@paperbits/common/ui";
+import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { WidgetModel } from "@paperbits/common/widgets";
 
 
 export class CardHandlers implements IWidgetHandler {
     constructor(
-        private readonly viewManager: IViewManager,
+        private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager
     ) { }
 

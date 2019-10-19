@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import template from "./viewport-selector.html";
-import { IViewManager } from "@paperbits/common/ui";
+import { ViewManager } from "@paperbits/common/ui";
 import { Component } from "@paperbits/common/ko/decorators";
 import { EventManager } from "@paperbits/common/events";
 
@@ -13,7 +13,7 @@ export class ViewportSelector {
     public readonly viewport: ko.Observable<string>;
 
     constructor(
-        private readonly viewManager: IViewManager,
+        private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager
     ) {
         this.viewManager = viewManager;

@@ -3,7 +3,7 @@ import template from "./mediaSelector.html";
 import * as Utils from "@paperbits/common/utils";
 import { MediaItem } from "./mediaItem";
 import { IMediaService, MediaContract } from "@paperbits/common/media";
-import { IViewManager } from "@paperbits/common/ui";
+import { ViewManager } from "@paperbits/common/ui";
 import { EventManager } from "@paperbits/common/events";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { IWidgetService } from "@paperbits/common/widgets";
@@ -30,7 +30,7 @@ export class MediaSelector {
     constructor(
         private readonly eventManager: EventManager,
         private readonly mediaService: IMediaService,
-        private readonly viewManager: IViewManager,
+        private readonly viewManager: ViewManager,
         private readonly widgetService: IWidgetService
     ) {
         // setting up...

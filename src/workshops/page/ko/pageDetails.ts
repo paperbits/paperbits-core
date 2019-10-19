@@ -2,7 +2,7 @@
 import template from "./pageDetails.html";
 import { IPageService } from "@paperbits/common/pages";
 import { Router } from "@paperbits/common/routing";
-import { IViewManager } from "@paperbits/common/ui";
+import { ViewManager } from "@paperbits/common/ui";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { PageItem } from "./pageItem";
 
@@ -18,7 +18,7 @@ export class PageDetailsWorkshop {
     constructor(
         private readonly pageService: IPageService,
         private readonly router: Router,
-        private readonly viewManager: IViewManager,
+        private readonly viewManager: ViewManager,
     ) {
         this.onMounted = this.onMounted.bind(this);
         this.deletePage = this.deletePage.bind(this);

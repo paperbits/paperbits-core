@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import template from "./tray.html";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
-import { IToolButton, IViewManager } from "@paperbits/common/ui";
+import { ToolButton, ViewManager } from "@paperbits/common/ui";
 import { RoleModel, RoleService } from "@paperbits/common/user";
 
 
@@ -11,16 +11,16 @@ import { RoleModel, RoleService } from "@paperbits/common/user";
     injectable: "tray"
 })
 export class Tray {
-    public readonly buttons: ko.ObservableArray<IToolButton>;
+    public readonly buttons: ko.ObservableArray<ToolButton>;
     public readonly selectedRoles: ko.ObservableArray<RoleModel>;
     public readonly availableRoles: ko.ObservableArray<RoleModel>;
 
     constructor(
-        private readonly trayCommands: IToolButton[],
+        private readonly trayCommands: ToolButton[],
         private readonly roleService: RoleService,
-        private readonly viewManager: IViewManager,
+        private readonly viewManager: ViewManager,
     ) {
-        this.buttons = ko.observableArray<IToolButton>(trayCommands);
+        this.buttons = ko.observableArray<ToolButton>(trayCommands);
         this.availableRoles = ko.observableArray();
         this.selectedRoles = ko.observableArray();
     }

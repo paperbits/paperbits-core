@@ -3,7 +3,7 @@ import { LayoutViewModelBinder, LayoutViewModel } from "../../../layout/ko";
 import { Component, OnMounted, OnDestroyed } from "@paperbits/common/ko/decorators";
 import { Router, Route } from "@paperbits/common/routing";
 import { EventManager } from "@paperbits/common/events";
-import { IViewManager, ViewManagerMode } from "@paperbits/common/ui";
+import { ViewManager, ViewManagerMode } from "@paperbits/common/ui";
 
 
 @Component({
@@ -18,7 +18,7 @@ export class PageHost {
         private readonly layoutViewModelBinder: LayoutViewModelBinder,
         private readonly router: Router,
         private readonly eventManager: EventManager,
-        private readonly viewManager: IViewManager
+        private readonly viewManager: ViewManager
     ) {
         this.layoutViewModel = ko.observable();
         this.router.addRouteChangeListener(this.onRouteChange.bind(this));

@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import { EventManager } from "@paperbits/common/events";
 import { Keys } from "@paperbits/common/keyboard";
-import { IComponent, IViewManager } from "@paperbits/common/ui";
+import { IComponent, ViewManager } from "@paperbits/common/ui";
 
 export interface BalloonOptions {
     position: string;
@@ -15,7 +15,7 @@ export interface BalloonOptions {
 }
 
 export class BalloonBindingHandler {
-    constructor(viewManager: IViewManager, eventManager: EventManager) {
+    constructor(viewManager: ViewManager, eventManager: EventManager) {
         ko.bindingHandlers["balloon"] = {
             init: (toggleElement: HTMLElement, valueAccessor: () => BalloonOptions) => {
                 const options = ko.unwrap(valueAccessor());

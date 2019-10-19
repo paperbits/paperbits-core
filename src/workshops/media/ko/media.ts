@@ -2,7 +2,7 @@
 import template from "./media.html";
 import * as Utils from "@paperbits/common/utils";
 import { IMediaService } from "@paperbits/common/media";
-import { IViewManager, IView } from "@paperbits/common/ui";
+import { ViewManager, View } from "@paperbits/common/ui";
 import { IContentDropHandler, IContentDescriptor } from "@paperbits/common/editing";
 import { MediaItem } from "./mediaItem";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
@@ -27,7 +27,7 @@ export class MediaWorkshop {
     constructor(
         private readonly eventManager: EventManager,
         private readonly mediaService: IMediaService,
-        private readonly viewManager: IViewManager,
+        private readonly viewManager: ViewManager,
         private readonly dropHandlers: IContentDropHandler[],
         private readonly widgetService: IWidgetService
     ) {
@@ -121,7 +121,7 @@ export class MediaWorkshop {
     public selectMedia(mediaItem: MediaItem): void {
         this.selectedMediaItem(mediaItem);
 
-        const view: IView = {
+        const view: View = {
             heading: "Media file",
             component: {
                 name: "media-details-workshop",

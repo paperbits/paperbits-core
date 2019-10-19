@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import template from "./workshops.html";
-import { IViewManager, IView, IToolButton } from "@paperbits/common/ui";
+import { ViewManager, View, ToolButton } from "@paperbits/common/ui";
 import { UserService } from "@paperbits/common/user";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 
@@ -12,12 +12,12 @@ import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 export class Workshops {
     public userPhotoUrl: ko.Observable<string>;
     public resizing: ko.Computed<string>;
-    public sections: ko.ObservableArray<IToolButton>;
+    public sections: ko.ObservableArray<ToolButton>;
 
     constructor(
-        private readonly viewManager: IViewManager,
+        private readonly viewManager: ViewManager,
         private readonly userService: UserService,
-        private readonly workshopSections: IToolButton[]
+        private readonly workshopSections: ToolButton[]
     ) {
         this.userPhotoUrl = ko.observable<string>(null);
         this.resizing = ko.pureComputed(() => this.viewManager.journeyName() ? "vertically horizontally" : "vertically horizontally suspended");
@@ -30,7 +30,7 @@ export class Workshops {
         this.userPhotoUrl(url);
     }
 
-    public closeWorkshop(view: IView): void {
+    public closeWorkshop(view: View): void {
         this.viewManager.closeWorkshop(view);
     }
 }
