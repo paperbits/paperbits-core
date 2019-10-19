@@ -1,7 +1,5 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { IWidgetHandler } from "@paperbits/common/editing";
 import { NavbarEditor } from "./navbarEditor";
-import { NavbarHandlers } from "../navbarHandlers";
 import { IStyleGroup } from "@paperbits/common/styles/IStyleGroup";
 
 export class NavbarEditorModule implements IInjectorModule {
@@ -30,6 +28,5 @@ export class NavbarEditorModule implements IInjectorModule {
 
         injector.bind("navbarEditor", NavbarEditor);
         injector.bindInstanceToCollection("styleGroups", styleGroup);
-        injector.bindToCollection<IWidgetHandler>("widgetHandlers", NavbarHandlers, "navbarHandler");
     }
 }

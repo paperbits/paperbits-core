@@ -22,7 +22,7 @@ interface LayoutOption {
 })
 export class MenuEditor {
     public readonly navigationItemTitle: ko.Observable<string>;
-    public readonly showSubmenus: ko.Observable<boolean>;
+    public readonly showHeadings: ko.Observable<boolean>;
     public readonly headingLevelOptions: ko.ObservableArray<HeadingOption>;
     public readonly minHeadingLevel: ko.Observable<number>;
     public readonly maxHeadingLevel: ko.Observable<number>;
@@ -32,7 +32,7 @@ export class MenuEditor {
     public readonly appearanceStyle: ko.Observable<any>;
 
     constructor(private readonly styleService: StyleService) {
-        this.showSubmenus = ko.observable();
+        this.showHeadings = ko.observable();
         this.minHeadingLevel = ko.observable();
         this.maxHeadingLevel = ko.observable();
         this.layout = ko.observable();
@@ -66,7 +66,7 @@ export class MenuEditor {
 
     @OnMounted()
     public async initialize(): Promise<void> {
-        this.showSubmenus(!!this.model.minHeading || !!this.model.maxHeading);
+        this.showHeadings(!!this.model.minHeading || !!this.model.maxHeading);
         this.minHeadingLevel(this.model.minHeading || 1);
         this.maxHeadingLevel(this.model.maxHeading || 1);
 
@@ -86,7 +86,7 @@ export class MenuEditor {
         this.minHeadingLevel.subscribe(this.applyChanges);
         this.maxHeadingLevel.subscribe(this.applyChanges);
         this.layout.subscribe(this.applyChanges);
-        this.showSubmenus.subscribe(this.applyChanges);
+        this.showHeadings.subscribe(this.applyChanges);
         this.appearanceStyle.subscribe(this.applyChanges);
     }
 
@@ -97,7 +97,7 @@ export class MenuEditor {
     }
 
     public applyChanges(): void {
-        if (this.showSubmenus()) {
+        if (this.showHeadings()) {
             this.model.minHeading = this.minHeadingLevel();
             this.model.maxHeading = this.maxHeadingLevel();
         }

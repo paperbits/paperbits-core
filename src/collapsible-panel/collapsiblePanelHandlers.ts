@@ -15,7 +15,7 @@ export class CollapsiblePanelHandlers implements IWidgetHandler {
         const widgetOrder: IWidgetOrder = {
             name: "collapsiblePanel",
             displayName: "Collapsible panel",
-            iconClass: "paperbits-collapsiblePanel-2",
+            iconClass: "paperbits-menu-34",
             createModel: async () => {
                 return new CollapsiblePanelModel();
             }
