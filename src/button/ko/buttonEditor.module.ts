@@ -9,6 +9,7 @@ export class ButtonEditorModule implements IInjectorModule {
         injector.bindToCollection("widgetHandlers", ButtonHandlers, "buttonHandler");
 
         const styleGroup: IStyleGroup = { 
+            key: "button",
             name: "components_button", 
             groupName: "Buttons", 
             selectorTemplate: `<button data-bind="css: classNames, text: displayName"></button>`,

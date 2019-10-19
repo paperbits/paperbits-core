@@ -7,6 +7,7 @@ import { IStyleGroup } from "@paperbits/common/styles/IStyleGroup";
 export class NavbarEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {        
         const styleGroup: IStyleGroup = { 
+            key: "navbar",
             name: "components_navbar", 
             groupName: "Navigation", 
             selectorTemplate: undefined,

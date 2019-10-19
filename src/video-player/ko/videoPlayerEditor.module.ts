@@ -8,6 +8,7 @@ export class VideoPlayerEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("videoPlayerEditor", VideoEditor);
         const styleGroup: IStyleGroup = { 
+            key: "videoPlayer",
             name: "components_videoPlayer", 
             groupName: "Video Player", 
             selectorTemplate: undefined,

@@ -9,6 +9,7 @@ export class PictureEditorModule implements IInjectorModule {
         injector.bind("pictureEditor", PictureEditor);
 
         const styleGroup: IStyleGroup = { 
+            key: "picture",
             name: "components_picture", 
             groupName: "Pictures",
             selectorTemplate: `<img src="https://cdn.paperbits.io/images/placeholder-340x190.jpg" alt="Picture" data-bind="css: classNames" width="280px" height="190px" /><div data-bind="text: displayName"></div>`,

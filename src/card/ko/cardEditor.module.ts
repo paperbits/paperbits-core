@@ -8,6 +8,7 @@ export class CardEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {        
         injector.bind("cardEditor", CardEditor);
         const styleGroup: IStyleGroup = { 
+            key: "card",
             name: "components_card", 
             groupName: "Cards", 
             selectorTemplate: undefined,

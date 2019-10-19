@@ -1,12 +1,12 @@
 import * as ko from "knockout";
 import template from "./widgetContainer.html";
-import { Component, Param, OnMounted } from "@paperbits/common/ko/decorators";
+import { Component, Param, OnMounted, Encapsulation } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "widget-container",
     template: template,
     injectable: "widgetContainer",
-    encapsulation: "shadowDom"
+    encapsulation: Encapsulation.shadowDom
 })
 export class WidgetContainer {
     public widgetViewModel: ko.Observable<any>;
