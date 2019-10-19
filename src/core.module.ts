@@ -54,11 +54,12 @@ import { MenuModule } from "./menu/ko";
 export class CoreModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bindCollection("autostart");
+        injector.bindCollection("defaultStyles");
         injector.bindCollectionLazily("widgetHandlers");
         injector.bindCollectionLazily("routeGuards");
         injector.bindCollectionLazily("modelBinders");
         injector.bindCollectionLazily("viewModelBinders");
-
+        
         /*** Core ***/
         injector.bindSingleton("settingsProvider", SettingsProvider);
         injector.bindSingleton("router", DefaultRouter);

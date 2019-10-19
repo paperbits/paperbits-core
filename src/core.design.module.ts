@@ -58,6 +58,7 @@ import "./ko/bindingHandlers/bindingHandlers.command";
 import "./ko/bindingHandlers/bindingHandlers.dialog";
 import "./ko/bindingHandlers/bindingHandlers.activate";
 import { DesignerUserService } from "./ko/ui/designerUserService";
+import { RoleSelector, RoleInput } from "./workshops/roles/ko";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -93,6 +94,8 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bind("urlSelector", UrlSelector);
         injector.bind("confirmation", Confirmation);
         injector.bind("pageHost", PageHost);
+        injector.bind("roleSelector", RoleSelector);
+        injector.bind("roleInput", RoleInput);
         injector.bindSingleton("mediaPermalinkResolver", MediaPermalinkResolver);
         injector.bindModule(new TextblockEditorModule());
         injector.bindModule(new PictureEditorModule());
