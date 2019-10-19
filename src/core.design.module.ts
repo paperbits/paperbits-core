@@ -52,8 +52,12 @@ import { GridEditorModule } from "./grid-layout-section/ko/gridEditor.module";
 import { GridCellEditorModule } from "./grid-cell/ko/gridCellEditor.module";
 import { PageHost } from "./workshops/page/ko/pageHost";
 import { Tray } from "./workshops/tray/tray";
+import { CollapsiblePanelEditorModule } from "./collapsible-panel/ko";
+import { MenuEditorModule } from "./menu/ko";
 import "./ko/bindingHandlers/bindingHandlers.command";
 import "./ko/bindingHandlers/bindingHandlers.dialog";
+import "./ko/bindingHandlers/bindingHandlers.activate";
+import { DesignerUserService } from "./ko/ui/designerUserService";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -98,6 +102,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new TestimonialsEditorModule());
         injector.bindModule(new TableOfContentsEditorModule());
         injector.bindModule(new NavbarEditorModule());
+        injector.bindModule(new MenuEditorModule());
         injector.bindModule(new DropbucketModule());
         injector.bindModule(new PageDesignModule());
         injector.bindModule(new BlogDesignModule());
@@ -114,6 +119,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new LayoutEditorModule());
         injector.bindModule(new PageEditorModule());
         injector.bindModule(new CardEditorModule());
+        injector.bindModule(new CollapsiblePanelEditorModule());
         injector.bindToCollection("hyperlinkProviders", UrlHyperlinkProvider);
         injector.bindToCollection("autostart", HostBindingHandler);
         injector.bindToCollection("autostart", DraggablesBindingHandler);
@@ -121,6 +127,10 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindToCollection("autostart", LightboxBindingHandler);
         injector.bindToCollection("autostart", HistoryRouteHandler);
         injector.bindToCollection("autostart", Hinter);
-        injector.resolve("workshopSections"); 
+        injector.resolve("workshopSections");
+
+        const userService = new DesignerUserService();
+        injector.bindInstance("userService", userService);
+        injector.bindInstance("designerUserService", userService);
     }
 }

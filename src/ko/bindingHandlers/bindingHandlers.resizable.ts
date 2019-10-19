@@ -1,5 +1,5 @@
 import * as ko from "knockout";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { isNumber } from "util";
 
 interface ResizableOptions {
@@ -11,7 +11,7 @@ interface ResizableOptions {
 }
 
 export class ResizableBindingHandler {
-    constructor(eventManager: IEventManager) {
+    constructor(eventManager: EventManager) {
         ko.bindingHandlers.resizable = {
             init: (element: HTMLElement, valueAccessor: () => string | ResizableOptions) => {
                 const options = valueAccessor();

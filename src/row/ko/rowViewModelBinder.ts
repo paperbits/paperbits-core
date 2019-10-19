@@ -5,13 +5,13 @@ import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel"
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { RowHandlers } from "../rowHandlers";
 import { IWidgetBinding } from "@paperbits/common/editing";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { Bag } from "@paperbits/common";
 
 export class RowViewModelBinder implements ViewModelBinder<RowModel, RowViewModel> {
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
-        private readonly eventManager: IEventManager
+        private readonly eventManager: EventManager
     ) { }
 
     public async modelToViewModel(model: RowModel, viewModel?: RowViewModel, bindingContext?: Bag<any>): Promise<RowViewModel> {
@@ -48,8 +48,8 @@ export class RowViewModelBinder implements ViewModelBinder<RowModel, RowViewMode
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             handler: RowHandlers,
-            applyChanges: () => {
-                this.modelToViewModel(model, viewModel, bindingContext);
+            applyChanges: async () => {
+                await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         };

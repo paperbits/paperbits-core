@@ -6,9 +6,7 @@ import { IModelBinder } from "@paperbits/common/editing";
 import { Contract, Bag } from "@paperbits/common";
 
 export class GridCellModelBinder implements IModelBinder<GridCellModel> {
-    constructor(private readonly modelBinderSelector: ModelBinderSelector) {
-        this.contractToModel = this.contractToModel.bind(this);
-    }
+    constructor(private readonly modelBinderSelector: ModelBinderSelector) {    }
 
     public canHandleContract(contract: Contract): boolean {
         return contract.type === "grid-cell";
@@ -47,7 +45,7 @@ export class GridCellModelBinder implements IModelBinder<GridCellModel> {
     }
 
     public modelToContract(model: GridCellModel): Contract {
-        const contract: any = {
+        const contract: GridCellContract = {
             type: "grid-cell",
             nodes: [],
             role: model.role,

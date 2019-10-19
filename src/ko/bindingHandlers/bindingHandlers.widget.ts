@@ -5,10 +5,10 @@ export class WidgetBindingHandler {
         let componentLoadingOperationUniqueId = 0;
 
         ko.bindingHandlers["widget"] = {
-            init(element, valueAccessor, ignored1, ignored2, bindingContext) {
-                const abc = ko.utils.unwrapObservable(valueAccessor());
+            init(element: any, valueAccessor: any, ignored1: any, ignored2: any, bindingContext: ko.BindingContext): any {
+                const widgetConfig = ko.utils.unwrapObservable(valueAccessor());
 
-                if (!abc) {
+                if (!widgetConfig) {
                     return;
                 }
 
@@ -32,8 +32,6 @@ export class WidgetBindingHandler {
                     currentViewModel = null;
                     // Any in-flight loading operation is no longer relevant, so make sure we ignore its completion
                     currentLoadingOperationId = null;
-
-
                 };
                 const originalChildNodes = makeArray(ko.virtualElements.childNodes(element));
 
@@ -48,7 +46,7 @@ export class WidgetBindingHandler {
 
                     const loadingOperationId = currentLoadingOperationId = ++componentLoadingOperationUniqueId;
 
-                    const registration  = Reflect.getMetadata("knockout-component", componentViewModel.constructor);
+                    const registration = Reflect.getMetadata("knockout-component", componentViewModel.constructor);
 
                     if (!registration) {
                         throw new Error(`Could not find component registration for view model: ${componentViewModel}`);
@@ -75,7 +73,7 @@ export class WidgetBindingHandler {
                         if (!componentDefinition) {
                             throw new Error(`Unknown component "${componentName}".`);
                         }
-                        const root = cloneTemplateIntoElement(componentName, componentDefinition, element);
+                        const root = cloneTemplateIntoElement(componentDefinition, element);
 
                         const childBindingContext = bindingContext["createChildContext"](componentViewModel, /* dataItemAlias */ undefined, ctx => {
                             ctx["$component"] = componentViewModel;
@@ -85,19 +83,19 @@ export class WidgetBindingHandler {
                         currentViewModel = componentViewModel;
                         ko.applyBindingsToDescendants(childBindingContext, root);
 
-                        let correctedElement = element;
+                        let nonVirtualElement = element;
 
-                        if (correctedElement.nodeName === "#comment") {
+                        if (nonVirtualElement.nodeName === "#comment") {
                             do {
-                                correctedElement = correctedElement.nextSibling;
+                                nonVirtualElement = nonVirtualElement.nextSibling;
                             }
-                            while (correctedElement !== null && correctedElement.nodeName === "#comment");
+                            while (nonVirtualElement !== null && nonVirtualElement.nodeName === "#comment");
                         }
 
-                        if (correctedElement) {
-                            correctedElement["attachedViewModel"] = componentViewModel;
+                        if (nonVirtualElement) {
+                            nonVirtualElement["attachedViewModel"] = componentViewModel;
 
-                            ko.applyBindingsToNode(correctedElement, { layoutwidget: {} }, null);
+                            ko.applyBindingsToNode(nonVirtualElement, { layoutwidget: {} }, null);
                         }
                     });
                 }, null, { disposeWhenNodeIsRemoved: element });
@@ -126,7 +124,7 @@ export class WidgetBindingHandler {
             return newNodesArray;
         };
 
-        function cloneTemplateIntoElement(componentName, componentDefinition, element): HTMLElement {
+        function cloneTemplateIntoElement(componentDefinition: any, element: any): HTMLElement {
             const template = componentDefinition["template"];
 
             if (!template) {
@@ -136,13 +134,6 @@ export class WidgetBindingHandler {
             const clonedNodesArray = cloneNodes(template, false);
             ko.virtualElements.setDomNodeChildren(element, clonedNodesArray);
             return element;
-        }
-
-        function createViewModel(componentDefinition, element, originalChildNodes, componentParams) {
-            const componentViewModelFactory = componentDefinition["createViewModel"];
-            return componentViewModelFactory
-                ? componentViewModelFactory.call(componentDefinition, componentParams, { element: element, templateNodes: originalChildNodes })
-                : componentParams; // Template-only component
         }
     }
 }

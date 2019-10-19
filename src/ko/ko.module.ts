@@ -2,7 +2,6 @@ import * as ko from "knockout";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 
 import "./knockout.editors";
-import "./bindingHandlers/bindingHandlers.codeEditor";
 import "./bindingHandlers/bindingHandlers.columnSizeCfg";
 import "./bindingHandlers/bindingHandlers.component";
 import "./bindingHandlers/bindingHandlers.highlight";
@@ -19,6 +18,7 @@ import "./bindingHandlers/bindingHandlers.tooltipToggle";
 import "./bindingHandlers/bindingHandlers.collapse";
 import "./bindingHandlers/bindingHandlers.stickTo";
 import "./bindingHandlers/bindingHandlers.scrollable";
+import "./bindingHandlers/bindingHandlers.secured";
 import "./bindingHandlers/bindingHandlers.confirm";
 import "./bindingHandlers/bindingHandlers.gridCell";
 import "./bindingExtenders/bindingExtenders.max";

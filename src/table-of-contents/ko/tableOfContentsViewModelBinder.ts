@@ -1,13 +1,13 @@
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { TableOfContentsViewModel } from "./tableOfContentsViewModel";
 import { TableOfContentsModel } from "../tableOfContentsModel";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { Bag } from "@paperbits/common";
 import { TableOfContentsModelBinder, TableOfContentsContract } from "..";
 
 export class TableOfContentsViewModelBinder implements ViewModelBinder<TableOfContentsModel, TableOfContentsViewModel> {
     constructor(
-        private readonly eventManager: IEventManager,
+        private readonly eventManager: EventManager,
         private readonly tableOfContentsModelBinder: TableOfContentsModelBinder
     ) { }
 

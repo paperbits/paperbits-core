@@ -1,0 +1,6 @@
+<div class="toolbox">
+    <div class="list list-checkboxes" data-bind="foreach: { data: availableRoles, as: 'role'  }">
+        <a href="#" role="listitem" class="list-item" data-bind="text: role.name, click: $component.selectRole, css: { 'list-item-checked': $component.isSelected(role) }">
+        </a>
+    </div>
+</div>

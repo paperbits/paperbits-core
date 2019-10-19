@@ -8,7 +8,7 @@ import { StyleService } from "@paperbits/styles";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { CardModel } from "../cardModel";
 import { BackgroundStylePluginConfig, TypographyStylePluginConfig, ContainerStylePluginConfig } from "@paperbits/styles/contracts";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 
 
 @Component({
@@ -26,7 +26,7 @@ export class CardEditor implements WidgetEditor<CardModel> {
     constructor(
         private readonly viewManager: IViewManager,
         private readonly styleService: StyleService,
-        private readonly eventManager: IEventManager
+        private readonly eventManager: EventManager
     ) {
         this.appearanceStyles = ko.observableArray<any>();
         this.appearanceStyle = ko.observable<any>();

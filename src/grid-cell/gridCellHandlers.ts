@@ -1,5 +1,5 @@
 import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IContextCommandSet, IViewManager } from "@paperbits/common/ui";
 import { WidgetModel } from "@paperbits/common/widgets";
@@ -8,7 +8,7 @@ import { WidgetModel } from "@paperbits/common/widgets";
 export class GridCellHandlers implements IWidgetHandler {
     constructor(
         private readonly viewManager: IViewManager,
-        private readonly eventManager: IEventManager
+        private readonly eventManager: EventManager
     ) { }
 
     public onDragOver(dragSession: DragSession): boolean {
@@ -29,7 +29,7 @@ export class GridCellHandlers implements IWidgetHandler {
             hoverCommand: null,
             deleteCommand: null,
             selectCommands: [{
-                tooltip: "Edit gridCell",
+                tooltip: "Edit grid cell",
                 iconClass: "paperbits-edit-72",
                 position: "top right",
                 color: "#9C27B0",

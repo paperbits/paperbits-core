@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./hyperlinkEditor.html";
 import { IHtmlEditorProvider } from "@paperbits/common/editing/htmlEditorProvider";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { PermalinkResolver } from "@paperbits/common/permalinks/permalinkResolver";
 import { Component, OnDestroyed } from "@paperbits/common/ko/decorators";
@@ -17,7 +17,7 @@ export class HyperlinkEditor {
     constructor(
         private readonly htmlEditorProvider: IHtmlEditorProvider,
         private readonly permalinkResolver: PermalinkResolver,
-        private readonly eventManager: IEventManager
+        private readonly eventManager: EventManager
     ) {
         this.htmlEditorProvider = htmlEditorProvider;
         this.permalinkResolver = permalinkResolver;

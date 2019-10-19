@@ -3,13 +3,13 @@ import { DragSession } from "@paperbits/common/ui/draggables";
 import { WidgetContext } from "@paperbits/common/editing";
 import { SectionModel } from "./sectionModel";
 import { RowModel } from "../row/rowModel";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 
 
 export class SectionHandlers {
     constructor(
         private readonly viewManager: IViewManager,
-        private readonly eventManager: IEventManager
+        private readonly eventManager: EventManager
     ) { }
 
     public onDragOver(dragSession: DragSession): boolean {

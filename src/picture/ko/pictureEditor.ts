@@ -24,7 +24,7 @@ export class PictureEditor {
     public readonly hyperlinkTitle: ko.Computed<string>;
     public readonly width: ko.Observable<number>;
     public readonly height: ko.Observable<number>;
-    
+
     public readonly appearanceStyle: ko.Observable<StyleItemContract>;
 
     constructor(
@@ -93,9 +93,14 @@ export class PictureEditor {
         this.model.sourceKey = this.sourceKey();
         this.model.width = this.width();
         this.model.height = this.height();
-        this.model.styles = {
-            appearance: this.appearanceStyle().key
-        };
+
+        const appearanceStyle = this.appearanceStyle();
+
+        if (appearanceStyle) {
+            this.model.styles = {
+                appearance: this.appearanceStyle().key
+            };
+        }
 
         this.onChange(this.model);
     }

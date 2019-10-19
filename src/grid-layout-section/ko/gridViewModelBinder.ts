@@ -5,7 +5,7 @@ import { GridModel } from "../gridModel";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { GridHandlers } from "../gridHandlers";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { IStyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
 
@@ -13,7 +13,7 @@ import { Bag } from "@paperbits/common";
 export class GridViewModelBinder implements ViewModelBinder<GridModel, GridViewModel> {
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
-        private readonly eventManager: IEventManager,
+        private readonly eventManager: EventManager,
         private readonly styleCompiler: IStyleCompiler
     ) { }
 
@@ -49,9 +49,8 @@ export class GridViewModelBinder implements ViewModelBinder<GridModel, GridViewM
             flow: "block",
             editor: "grid-layout-grid-editor",
             handler: GridHandlers,
-            applyChanges: (changes) => {
-                Object.assign(model, changes);
-                this.modelToViewModel(model, viewModel, bindingContext);
+            applyChanges: async (changes) => {
+                await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         };

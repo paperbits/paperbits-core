@@ -4,12 +4,14 @@ import * as Arrays from "@paperbits/common/arrays";
 import template from "./viewManager.html";
 import "@paperbits/common/extensions";
 import { Bag } from "@paperbits/common";
-import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
+import { EventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { IComponent, IView, IViewManager, ICommand, ViewManagerMode, IHighlightConfig, IContextCommandSet, ISplitterConfig, Toast } from "@paperbits/common/ui";
 import { Router } from "@paperbits/common/routing";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { Component } from "@paperbits/common/ko/decorators";
+import { RoleModel, BuiltInRoles } from "@paperbits/common/user";
+import { DesignerUserService } from "./designerUserService";
 
 declare let uploadDialog: HTMLInputElement;
 
@@ -34,6 +36,7 @@ export class ViewManager implements IViewManager {
     public selectedElement: ko.Observable<IHighlightConfig>;
     public selectedElementContextualEditor: ko.Observable<IContextCommandSet>;
     public viewport: ko.Observable<string>;
+    public rolesScope: ko.ObservableArray<RoleModel>;
     public hostDocument: Document;
     public host: ko.Observable<IComponent>;
     public shutter: ko.Observable<boolean>;
@@ -41,8 +44,9 @@ export class ViewManager implements IViewManager {
     public mode: ViewManagerMode;
 
     constructor(
-        private readonly eventManager: IEventManager,
+        private readonly eventManager: EventManager,
         private readonly globalEventHandler: GlobalEventHandler,
+        private readonly designerUserService: DesignerUserService,
         private readonly router: Router
     ) {
 
@@ -58,7 +62,7 @@ export class ViewManager implements IViewManager {
 
             return this.journey()[0].heading;
         });
-        
+
         this.widgetEditor = ko.observable<IView>();
         this.contextualEditors = ko.observableArray<IContextCommandSet>([]);
         this.highlightedElement = ko.observable<IHighlightConfig>();
@@ -66,6 +70,7 @@ export class ViewManager implements IViewManager {
         this.selectedElement = ko.observable<IHighlightConfig>();
         this.selectedElementContextualEditor = ko.observable<IContextCommandSet>();
         this.viewport = ko.observable<string>("xl");
+        this.rolesScope = ko.observableArray([BuiltInRoles.everyone]);
         this.host = ko.observable<IComponent>();
         this.shutter = ko.observable<boolean>(true);
         this.dragSession = ko.observable();
@@ -166,7 +171,7 @@ export class ViewManager implements IViewManager {
         if (existingComponent) {
             journey = journey.splice(0, journey.indexOf(existingComponent));
         }
-        
+
         journey.push(view);
 
         this.journey(journey);
@@ -351,6 +356,16 @@ export class ViewManager implements IViewManager {
 
     public getViewport(): string {
         return this.viewport();
+    }
+
+    public setViewRoles(roles: RoleModel[]): void {
+        this.rolesScope(roles);
+        this.designerUserService.setUserRoles(roles.map(role => role.key));
+        this.eventManager.dispatchEvent("onUserRoleChange", roles);
+    }
+
+    public getViewRoles(): RoleModel[] {
+        return this.rolesScope();
     }
 
     public setShutter(): void {

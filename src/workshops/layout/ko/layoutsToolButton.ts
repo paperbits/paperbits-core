@@ -1,7 +1,7 @@
 import { IToolButton, IViewManager, IView } from "@paperbits/common/ui";
 
 export class LayoutsToolButton implements IToolButton {
-    public readonly iconClass: string = "paperbits-icon paperbits-layout-11";
+    public readonly iconClass: string = "paperbits-icon paperbits-layout-11-2";
     public readonly title: string = "Layouts";
 
     constructor(private readonly viewManager: IViewManager) { }

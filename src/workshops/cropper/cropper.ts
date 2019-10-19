@@ -2,13 +2,13 @@ import * as ko from "knockout";
 import * as Cropper from "cropperjs";
 import template from "./cropper.html";
 import { Component, Param } from "@paperbits/common/ko/decorators";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { IMediaService } from "@paperbits/common/media";
 import { IViewManager } from "@paperbits/common/ui";
 import { MediaItem } from "../media/ko/mediaItem";
 
 export class CropperBindingHandler {
-    constructor(eventManager: IEventManager) {
+    constructor(eventManager: EventManager) {
         ko.bindingHandlers["cropper"] = {
             init: (imageElement: HTMLImageElement, valueAccessor) => {
                 const observable = valueAccessor();

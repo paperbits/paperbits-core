@@ -6,13 +6,13 @@ import { ColumnModel } from "../columnModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { ColumnHandlers } from "../columnHandlers";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { Bag } from "@paperbits/common";
 
 export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, ColumnViewModel> {
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
-        private readonly eventManager: IEventManager
+        private readonly eventManager: EventManager
     ) { }
 
     private toTitleCase(str: string): string {
@@ -137,9 +137,8 @@ export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, Colum
              * type: "inline"
              */
 
-            applyChanges: (changes) => {
-                Object.assign(model, changes);
-                this.modelToViewModel(model, columnViewModel, bindingContext);
+            applyChanges: async (changes) => {
+                await this.modelToViewModel(model, columnViewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         };

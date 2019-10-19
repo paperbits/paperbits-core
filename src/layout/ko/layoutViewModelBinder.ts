@@ -5,7 +5,7 @@ import { LayoutModelBinder } from "../layoutModelBinder";
 import { LayoutHandlers } from "../layoutHandlers";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { IWidgetBinding } from "@paperbits/common/editing";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { ModelBinderSelector, ViewModelBinder } from "@paperbits/common/widgets";
 import { ILayoutService } from "@paperbits/common/layouts";
 import { Bag } from "@paperbits/common";
@@ -14,7 +14,7 @@ import { Bag } from "@paperbits/common";
 export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, LayoutViewModel> {
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
-        private readonly eventManager: IEventManager,
+        private readonly eventManager: EventManager,
         private readonly layoutService: ILayoutService,
         private readonly modelBinderSelector: ModelBinderSelector,
         private readonly layoutModelBinder: LayoutModelBinder
@@ -55,8 +55,8 @@ export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, Layou
             readonly: bindingContext ? bindingContext.readonly : false,
             handler: LayoutHandlers,
             provides: ["static", "scripts", "keyboard"],
-            applyChanges: () => {
-                this.modelToViewModel(model, viewModel, bindingContext);
+            applyChanges: async () => {
+                await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             },
             onCreate: () => {

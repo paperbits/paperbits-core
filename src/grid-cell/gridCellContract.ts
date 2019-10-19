@@ -32,7 +32,7 @@ export interface GridCellContract extends Contract {
      * @examples ["article", "header", "aside", "content", "footer"]
      */
     role: string;
-    position: Breakpoints<GridCellPosition>;
+    position?: Breakpoints<GridCellPosition>;
     span?: Breakpoints<GridCellSpan>;
     alignment?: any;
     nodes?: any[];

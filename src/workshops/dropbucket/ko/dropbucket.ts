@@ -2,7 +2,7 @@
 import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
 import { IViewManager } from "@paperbits/common/ui";
-import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
+import { EventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { IMediaService, MediaContract } from "@paperbits/common/media";
 import { IContentDropHandler, IContentDescriptor, IDataTransfer } from "@paperbits/common/editing";
 import { DropBucketItem } from "./dropbucketItem";
@@ -20,7 +20,7 @@ export class DropBucket {
 
     constructor(
         private readonly globalEventHandler: GlobalEventHandler,
-        private readonly eventManager: IEventManager,
+        private readonly eventManager: EventManager,
         private readonly mediaService: IMediaService,
         private readonly dropHandlers: IContentDropHandler[],
         private readonly viewManager: IViewManager,

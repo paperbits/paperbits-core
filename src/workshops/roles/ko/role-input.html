@@ -1,0 +1,14 @@
+<div class="form-group">
+    <label for="layout" class="form-label">
+        Visibile to
+    </label>
+
+    <div class="input-group">
+        <a href="#" class="form-control"
+            data-bind="text: selectedRolesDisplay, balloon: { component: { name: 'role-selector', params: { availableRoles: availableRoles, selectedRoles: selectedRoles, onSelect: onSelectionChange } }, position: 'top' }">
+        </a>
+        <div class="input-group-addon">
+            <i class="paperbits-icon paperbits-single-02"></i>
+        </div>
+    </div>
+</div>

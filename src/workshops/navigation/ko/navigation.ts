@@ -7,7 +7,7 @@ import { NavigationItemViewModel } from "./navigationItemViewModel";
 import { Component, OnMounted, OnDestroyed } from "@paperbits/common/ko/decorators";
 import { NavigationModelBinder } from "../navigationModelBinder";
 import { NavigationViewModelBinder } from "./navigationViewModelBinder";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 
 
 @Component({
@@ -27,7 +27,7 @@ export class NavigationWorkshop {
         private readonly viewManager: IViewManager,
         private readonly navigationModelBinder: NavigationModelBinder,
         private readonly navigationViewModelBinder: NavigationViewModelBinder,
-        private readonly eventManager: IEventManager
+        private readonly eventManager: EventManager
     ) {
         // rebinding...
         this.onNavigationUpdate = this.onNavigationUpdate.bind(this);

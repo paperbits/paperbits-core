@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import * as Utils from "@paperbits/common";
-import { NavigationItemContract, NavigationItemModel } from "@paperbits/common/navigation";
-import { Quadrant } from "@paperbits/common/ui";
+import { NavigationItemModel } from "@paperbits/common/navigation";
+
 
 export class NavigationItemViewModel {
     public key: string;

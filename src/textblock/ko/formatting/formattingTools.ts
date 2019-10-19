@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
 import template from "./formattingTools.html";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { IHtmlEditorProvider, HtmlEditorEvents, alignmentStyleKeys } from "@paperbits/common/editing";
 import { Component, OnMounted, OnDestroyed } from "@paperbits/common/ko/decorators";
 import { FontContract, ColorContract } from "@paperbits/styles/contracts";
@@ -39,7 +39,7 @@ export class FormattingTools {
 
     constructor(
         private readonly htmlEditorProvider: IHtmlEditorProvider,
-        private readonly eventManager: IEventManager,
+        private readonly eventManager: EventManager,
         private readonly viewManager: IViewManager,
         private readonly styleService: StyleService
     ) {

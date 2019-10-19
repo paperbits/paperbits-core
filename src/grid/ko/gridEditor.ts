@@ -5,7 +5,7 @@ import { IWidgetBinding, GridHelper, WidgetContext } from "@paperbits/common/edi
 import { Keys } from "@paperbits/common/keyboard";
 import { IWidgetService } from "@paperbits/common/widgets";
 import { Router } from "@paperbits/common/routing";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 
 export class GridEditor {
     private activeHighlightedElement: HTMLElement;
@@ -22,7 +22,7 @@ export class GridEditor {
         private readonly viewManager: IViewManager,
         private readonly widgetService: IWidgetService,
         private readonly router: Router,
-        private readonly eventManager: IEventManager
+        private readonly eventManager: EventManager
     ) {
         this.rerenderEditors = this.rerenderEditors.bind(this);
         this.onPointerDown = this.onPointerDown.bind(this);
@@ -138,17 +138,15 @@ export class GridEditor {
             return;
         }
 
-        const elements = this.getUnderlyingElements();
-        const roots = GridHelper.getComponentRoots(elements);
-        const element = roots.find(element => GridHelper.getWidgetBinding(element) !== null);
+        const element =  this.activeHighlightedElement;
 
         if (!element) {
             this.viewManager.closeView();
             return;
         }
 
+        
         const bindings = GridHelper.getParentWidgetBindings(element);
-
         const windgetIsInContent = bindings.some(x => x.name === "page" || x.name === "email-layout");
 
         let layoutEditing = false;
@@ -199,7 +197,7 @@ export class GridEditor {
             }
 
             const config: IHighlightConfig = {
-                element: element,
+                element: this.activeHighlightedElement,
                 text: widgetBinding["displayName"],
                 color: contextualEditor.color
             };

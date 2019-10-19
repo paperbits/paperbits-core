@@ -1,5 +1,5 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { IWidgetHandler, IContentDropHandler } from "@paperbits/common/editing";
+import { IWidgetHandler } from "@paperbits/common/editing";
 import { TableOfContentsEditor } from "./tableOfContentsEditor";
 import { TableOfContentsHandlers } from "../tableOfContentsHandlers";
 

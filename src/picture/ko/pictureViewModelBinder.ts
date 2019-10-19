@@ -1,7 +1,7 @@
 import { PictureViewModel } from "./pictureViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { PictureModel } from "../pictureModel";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { IStyleCompiler } from "@paperbits/common/styles/IStyleCompiler";
 import { Bag } from "@paperbits/common";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
@@ -9,7 +9,7 @@ import { IWidgetBinding } from "@paperbits/common/editing";
 
 export class PictureViewModelBinder implements ViewModelBinder<PictureModel, PictureViewModel> {
     constructor(
-        private readonly eventManager: IEventManager,
+        private readonly eventManager: EventManager,
         private readonly styleCompiler: IStyleCompiler,
         private readonly mediaPermalinkResolver: IPermalinkResolver,
     ) { }
@@ -44,9 +44,8 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             editor: "paperbits-picture-editor",
-            applyChanges: (changes) => {
-                Object.assign(model, changes);
-                this.modelToViewModel(model, viewModel, bindingContext);
+            applyChanges: async (changes) => {
+                await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         };

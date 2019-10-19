@@ -3,6 +3,11 @@
     <i class="paperbits-icon paperbits-mirror-2"></i>
 </button>
 
+<button class="toolbox-btn" data-bind="balloon: { component: { name: 'role-selector', params: { availableRoles: availableRoles, selectedRoles: selectedRoles, onSelect: onRoleSelect } }, position: 'top' }"
+    title="Role selection" aria-label="Role selection">
+    <i class="paperbits-icon paperbits-single-02"></i>
+</button>
+
 <!-- ko foreach: { data: buttons, as: 'button' } -->
 <button class="toolbox-btn"
     data-bind="attr: { title: button.title, 'aria-label': button.title }, click: button.onActivate, disable: button.disabled">

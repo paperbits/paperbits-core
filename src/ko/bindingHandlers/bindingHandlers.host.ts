@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
-import { IEventManager, GlobalEventHandler } from "@paperbits/common/events";
+import { EventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { IViewManager, ViewManagerMode } from "@paperbits/common/ui";
 import { Router, Route } from "@paperbits/common/routing";
 import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
@@ -11,7 +11,7 @@ export class HostBindingHandler {
     private readonly hostComponent: ko.Observable<any>;
 
     constructor(
-        private readonly eventManager: IEventManager,
+        private readonly eventManager: EventManager,
         private readonly globalEventHandler: GlobalEventHandler,
         private readonly viewManager: IViewManager,
         private readonly router: Router,
@@ -117,7 +117,7 @@ export class HostBindingHandler {
                 this.router.navigateTo(htmlLinkElement.href);
             }
             else {
-                this.eventManager.dispatchEvent("DesignTimeNavigationHint");
+                // this.eventManager.dispatchEvent("DesignTimeNavigationHint");
             }
         };
 

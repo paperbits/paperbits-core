@@ -1,13 +1,13 @@
 import { TextblockModel } from "./textblockModel";
 import { TextblockViewModel } from "./ko/textblockViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { Bag } from "@paperbits/common";
 
 export class TextblockViewModelBinder implements ViewModelBinder<TextblockModel, TextblockViewModel> {
     constructor(
         private readonly htmlEditorFactory,
-        private readonly eventManager: IEventManager
+        private readonly eventManager: EventManager
     ) { }
 
     public async modelToViewModel(model: TextblockModel, viewModel?: TextblockViewModel, bindingContext?: Bag<any>): Promise<TextblockViewModel> {
@@ -27,8 +27,8 @@ export class TextblockViewModelBinder implements ViewModelBinder<TextblockModel,
             flow: "block",
             editor: "html-editor",
             editorResize: "horizontally",
-            applyChanges: (changes) => {
-                this.modelToViewModel(model, viewModel, bindingContext);
+            applyChanges: async (changes) => {
+                await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
         };

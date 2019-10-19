@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./workshops.html";
 import { IViewManager, IView, IToolButton } from "@paperbits/common/ui";
-import { IUserService } from "@paperbits/common/user";
+import { UserService } from "@paperbits/common/user";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 
 @Component({
@@ -16,7 +16,7 @@ export class Workshops {
 
     constructor(
         private readonly viewManager: IViewManager,
-        private readonly userService: IUserService,
+        private readonly userService: UserService,
         private readonly workshopSections: IToolButton[]
     ) {
         this.userPhotoUrl = ko.observable<string>(null);

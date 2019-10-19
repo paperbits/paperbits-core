@@ -7,7 +7,7 @@ import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorat
 import { StyleItemContract } from "@paperbits/styles/contracts/styleItemContract";
 
 @Component({
-    selector: "paperbits-button-editor",
+    selector: "button-editor",
     template: template,
     injectable: "buttonEditor"
 })

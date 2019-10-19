@@ -5,14 +5,14 @@ import { CardModel } from "../cardModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { CardHandlers } from "../cardHandlers";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { IStyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
 
 export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewModel> {
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
-        private readonly eventManager: IEventManager,
+        private readonly eventManager: EventManager,
         private readonly styleCompiler: IStyleCompiler
     ) { }
 
@@ -49,9 +49,8 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
                 model: model,
                 editor: "card-editor",
                 handler: CardHandlers,
-                applyChanges: (changes) => {
-                    Object.assign(model, changes);
-                    this.modelToViewModel(model, viewModel, bindingContext);
+                applyChanges: async (changes) => {
+                    await this.modelToViewModel(model, viewModel, bindingContext);
                     this.eventManager.dispatchEvent("onContentUpdate");
                 }
             };

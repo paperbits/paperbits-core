@@ -7,7 +7,7 @@ import { IContentDropHandler, IContentDescriptor } from "@paperbits/common/editi
 import { MediaItem } from "./mediaItem";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { Keys } from "@paperbits/common/keyboard";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { IWidgetService } from "@paperbits/common/widgets";
 
@@ -25,7 +25,7 @@ export class MediaWorkshop {
     public readonly working: ko.Observable<boolean>;
 
     constructor(
-        private readonly eventManager: IEventManager,
+        private readonly eventManager: EventManager,
         private readonly mediaService: IMediaService,
         private readonly viewManager: IViewManager,
         private readonly dropHandlers: IContentDropHandler[],

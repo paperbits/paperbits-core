@@ -1,6 +1,7 @@
 import { HistoryRouteHandler } from "@paperbits/common/routing/historyRouteHandler";
 import { BackgroundBindingHandler } from "./ko/bindingHandlers/bindingHandlers.background";
 import { WidgetBindingHandler } from "./ko/bindingHandlers/bindingHandlers.widget";
+import { SecuredBindingHandler } from "./ko/bindingHandlers/bindingHandlers.secured";
 import { DefaultRouter, DefaultRouteGuard } from "@paperbits/common/routing";
 import { SettingsProvider } from "@paperbits/common/configuration";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
@@ -43,6 +44,8 @@ import { UrlService } from "@paperbits/common/urls";
 import { CardModule } from "./card/ko/card.module";
 import { GridModule } from "./grid-layout-section/ko/grid.module";
 import { GridCellModule } from "./grid-cell/ko/gridCell.module";
+import { CollapsiblePanelModule } from "./collapsible-panel/ko";
+import { MenuModule } from "./menu/ko";
 
 
 /**
@@ -55,7 +58,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindCollectionLazily("routeGuards");
         injector.bindCollectionLazily("modelBinders");
         injector.bindCollectionLazily("viewModelBinders");
-        
 
         /*** Core ***/
         injector.bindSingleton("settingsProvider", SettingsProvider);
@@ -99,15 +101,18 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new ButtonModule());
         // injector.bindModule(new MapModule());
         injector.bindModule(new TableOfContentsModule());
+        injector.bindModule(new MenuModule());
         injector.bindModule(new PictureModule());
         injector.bindModule(new VideoPlayerModule());
         injector.bindModule(new YoutubePlayerModule());
         injector.bindModule(new TestimonialsModule());
         injector.bindModule(new SearchResultsModule());
         injector.bindModule(new CardModule());
+        injector.bindModule(new CollapsiblePanelModule());
 
         injector.bindToCollection("routeGuards", DefaultRouteGuard);
         injector.bindToCollection("autostart", WidgetBindingHandler);
-        injector.bindToCollection("autostart", BackgroundBindingHandler);        
+        injector.bindToCollection("autostart", BackgroundBindingHandler);
+        injector.bindToCollection("autostart", SecuredBindingHandler);
     }
 }

@@ -1,7 +1,7 @@
 import { NavbarViewModel } from "./navbarViewModel";
 import { NavbarItemViewModel } from "./navbarItemViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { NavigationItemContract, NavigationItemModel, NavigationEvents } from "@paperbits/common/navigation";
 import { NavbarModel } from "../navbarModel";
 import { NavbarModelBinder } from "../navbarModelBinder";
@@ -11,7 +11,7 @@ import { Bag } from "@paperbits/common";
 
 export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, NavbarViewModel> {
     constructor(
-        private readonly eventManager: IEventManager,
+        private readonly eventManager: EventManager,
         private readonly navbarModelBinder: NavbarModelBinder,
         private readonly styleCompiler: IStyleCompiler
     ) { }
@@ -67,8 +67,8 @@ export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, Navba
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             editor: "navbar-editor",
-            applyChanges: () => {
-                this.modelToViewModel(model, viewModel, bindingContext);
+            applyChanges: async () => {
+                await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             },
             onCreate: () => {

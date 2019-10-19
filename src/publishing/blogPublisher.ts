@@ -1,6 +1,5 @@
 import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
-import template from "./page.html";
 import { IBlogService, BlogPostContract } from "@paperbits/common/blogs";
 import { IPublisher } from "@paperbits/common/publishing";
 import { IBlobStorage } from "@paperbits/common/persistence";

@@ -4,7 +4,7 @@ import * as Utils from "@paperbits/common/utils";
 import { MediaItem } from "./mediaItem";
 import { IMediaService, MediaContract } from "@paperbits/common/media";
 import { IViewManager } from "@paperbits/common/ui";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { IWidgetService } from "@paperbits/common/widgets";
 
@@ -28,7 +28,7 @@ export class MediaSelector {
     public onSelect: (media: MediaContract) => void;
 
     constructor(
-        private readonly eventManager: IEventManager,
+        private readonly eventManager: EventManager,
         private readonly mediaService: IMediaService,
         private readonly viewManager: IViewManager,
         private readonly widgetService: IWidgetService

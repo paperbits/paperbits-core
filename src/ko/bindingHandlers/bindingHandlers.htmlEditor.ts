@@ -1,12 +1,12 @@
 ﻿import * as ko from "knockout";
 import { IHtmlEditor } from "@paperbits/common/editing/IHtmlEditor";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { BlockModel } from "@paperbits/common/text/models";
 import { TextblockViewModel } from "../../textblock/ko/textblockViewModel";
 
 
 export class HtmlEditorBindingHandler {
-    constructor(eventManager: IEventManager) {
+    constructor(eventManager: EventManager) {
         ko.bindingHandlers["htmlEditor"] = {
             init(element: HTMLElement, valueAccessor: () => TextblockViewModel) {
                 const config = valueAccessor();

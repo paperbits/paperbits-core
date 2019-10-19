@@ -5,7 +5,7 @@ import template from "./gridCellEditor.html";
 import { IViewManager } from "@paperbits/common/ui";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { GridCellModel } from "../gridCellModel";
-import { IEventManager } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { ContainerStylePluginConfig } from "@paperbits/styles/contracts";
 
 
@@ -19,7 +19,7 @@ export class GridCellEditor {
 
     constructor(
         private readonly viewManager: IViewManager,
-        private readonly eventManager: IEventManager
+        private readonly eventManager: EventManager
     ) {
         this.containerConfig = ko.observable<ContainerStylePluginConfig>();
         this.eventManager.addEventListener("onViewportChange", this.initialize.bind(this));
