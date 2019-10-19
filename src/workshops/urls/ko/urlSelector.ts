@@ -3,6 +3,7 @@ import template from "./urlSelector.html";
 import { UrlItem } from "./urlItem";
 import { IUrlService, UrlContract } from "@paperbits/common/urls";
 import { Component, Event } from "@paperbits/common/ko/decorators";
+import { HyperlinkModel } from "@paperbits/common/permalinks/hyperlinkModel";
 
 @Component({
     selector: "url-selector",
@@ -15,6 +16,8 @@ export class UrlSelector {
     public readonly uri: ko.Observable<string>;
     public readonly working: ko.Observable<boolean>;
     public readonly selectedUrl: ko.Observable<UrlItem>;
+
+    private preSelectedModel: HyperlinkModel;
 
     @Event()
     public onSelect: (url: UrlContract) => void;
@@ -47,6 +50,15 @@ export class UrlSelector {
         const urlItems = urls.map(url => new UrlItem(url));
 
         this.urls(urlItems);
+
+        if (!this.selectedUrl() && this.preSelectedModel) {
+            const currentPermalink = this.preSelectedModel.href;
+            const current = urlItems.find(item => item.permalink() === currentPermalink);
+            if (current) {
+                await this.selectUrl(current);
+            }
+        }
+
         this.working(false);
     }
 
@@ -61,6 +73,10 @@ export class UrlSelector {
         if (this.onSelect) {
             this.onSelect(urlItem.toUrl());
         }
+    }
+
+    public selectResource(resource: HyperlinkModel): void {
+        this.preSelectedModel = resource;
     }
 
     public async createUrl(): Promise<void> {

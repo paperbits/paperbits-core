@@ -16,6 +16,7 @@ export class MediaItem {
     public keywords: ko.Observable<string>;
     public contentType: ko.Observable<string>;
     public widgetFactoryResult: IWidgetFactoryResult<any>;
+    public isSelected: ko.Observable<boolean>;
 
     constructor(mediaContract: MediaContract) {
         this.key = mediaContract.key;
@@ -27,6 +28,7 @@ export class MediaItem {
         this.contentType = ko.observable<string>(mediaContract.mimeType);
         this.thumbnailUrl = ko.observable<string>();
         this.downloadUrl = ko.observable<string>(mediaContract.downloadUrl);
+        this.isSelected = ko.observable<boolean>();
 
         this.getThumbnail(mediaContract);
     }

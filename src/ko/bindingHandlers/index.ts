@@ -22,3 +22,4 @@ export * from "./bindingHandlers.surface";
 export * from "./bindingHandlers.validationMessageToggle";
 export * from "./bindingHandlers.tooltipToggle";
 export * from "./bindingHandlers.widget";
+export * from "./bindingHandlers.selectItem";

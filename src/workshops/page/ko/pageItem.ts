@@ -6,6 +6,10 @@ export class AnchorItem {
     public title: string;
     public shortTitle: string;
     public elementId: string;
+    public isSelected: ko.Observable<boolean>;
+    constructor() {
+        this.isSelected = ko.observable<boolean>();
+    }
 }
 
 export class PageItem {
@@ -15,6 +19,7 @@ export class PageItem {
     public title: ko.Observable<string>;
     public description: ko.Observable<string>;
     public keywords: ko.Observable<string>;
+    public isSelected: ko.Observable<boolean>;
 
     public anchors: ko.ObservableArray<AnchorItem>;
     public selectedAnchor?: AnchorItem;
@@ -26,6 +31,7 @@ export class PageItem {
         this.description = ko.observable<string>(page.description);
         this.keywords = ko.observable<string>(page.keywords);
         this.permalink = ko.observable<string>(page.permalink);
+        this.isSelected = ko.observable<boolean>();
         this.anchors = ko.observableArray<AnchorItem>();
     }
 

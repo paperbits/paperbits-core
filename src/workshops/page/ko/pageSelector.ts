@@ -17,6 +17,8 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
     public readonly pages: ko.ObservableArray<PageItem>;
     public readonly working: ko.Observable<boolean>;
 
+    private preSelectedModel: HyperlinkModel;
+
     @Param()
     public selectedPage: ko.Observable<PageItem>;
 
@@ -36,17 +38,11 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
         this.searchPattern = ko.observable<string>();
         this.searchPattern.subscribe(this.searchPages);
         this.working = ko.observable(true);
-
-        this.searchPages();
     }
     
     @OnMounted()
     public onMounted(): void {
-        setTimeout(() => {            
-            if (this.selectedPage()) {
-                console.log("selected page", this.selectedPage());
-            }
-        }, 300);
+        this.searchPages();
     }
 
     public async searchPages(searchPattern: string = ""): Promise<void> {
@@ -56,11 +52,37 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
         const pageItems = pages.map(page => new PageItem(page));
 
         this.pages(pageItems);
+
+        if (!this.selectedPage() && this.preSelectedModel) {
+            const currentPermalink = this.preSelectedModel.href;
+            const current = pageItems.find(item => item.permalink() === currentPermalink);
+            if (current) {
+                await this.selectPage(current);
+                const currentAnchors = current.anchors();
+                if (this.preSelectedModel.anchor) {
+                    const currentAnchor = currentAnchors.find(item => item.elementId === this.preSelectedModel.anchor);
+                    if (currentAnchor) {
+                        await this.selectAnchor(currentAnchor);
+                    }
+                }
+            }
+        }
+
         this.working(false);
     }
 
     public async selectPage(page: PageItem): Promise<void> {
+        const prev = this.selectedPage();
+        if (prev) {
+            prev.isSelected(false);
+            if (prev.selectedAnchor) {
+                prev.selectedAnchor.isSelected(false);
+            }
+        }
+
         this.selectedPage(page);
+        page.isSelected(true);
+
         await this.getAnchors(page);
 
         if (this.onSelect) {
@@ -68,9 +90,14 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
         }
     }
 
+    public selectResource(resource: HyperlinkModel): void {
+        this.preSelectedModel = resource;
+    }
+
     public async selectAnchor(anchor: AnchorItem): Promise<void> {
         if (this.onSelect) {
             const selectedPage = this.selectedPage();
+            anchor.isSelected(true);
             selectedPage.selectedAnchor = anchor;
             this.onSelect(selectedPage.getHyperlink());
         }

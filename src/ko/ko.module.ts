@@ -22,6 +22,7 @@ import "./bindingHandlers/bindingHandlers.secured";
 import "./bindingHandlers/bindingHandlers.confirm";
 import "./bindingHandlers/bindingHandlers.gridCell";
 import "./bindingExtenders/bindingExtenders.max";
+import "./bindingHandlers/bindingHandlers.selectItem";
 
 export class KoModule implements IInjectorModule {
     public register(injector: IInjector): void {

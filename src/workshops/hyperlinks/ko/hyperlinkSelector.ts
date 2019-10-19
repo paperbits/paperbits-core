@@ -3,11 +3,8 @@ import template from "./hyperlinkSelector.html";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { IHyperlinkProvider } from "@paperbits/common/ui";
 import { Component, Event, Param, OnMounted } from "@paperbits/common/ko/decorators";
-import { PageSelector, PageItem, AnchorItem } from "../../page/ko";
-import { IPageService } from "@paperbits/common/pages";
 
 const defaultTarget = "_self";
-
 
 @Component({
     selector: "hyperlink-selector",
@@ -15,8 +12,6 @@ const defaultTarget = "_self";
     injectable: "hyperlinkSelector"
 })
 export class HyperlinkSelector {
-    private isValueSelected: boolean;
-
     public readonly hyperlinkProvider: ko.Observable<IHyperlinkProvider>;
     public readonly target: ko.Observable<string>;
 
@@ -27,9 +22,7 @@ export class HyperlinkSelector {
     public onChange: (hyperlink: HyperlinkModel) => void;
 
     constructor(
-        private readonly hyperlinkProviders: IHyperlinkProvider[],
-        private readonly pageService: IPageService,
-        private readonly pageSelector: PageSelector
+        private readonly hyperlinkProviders: IHyperlinkProvider[]
     ) {
         this.hyperlink = ko.observable<HyperlinkModel>();
         this.hyperlinkProvider = ko.observable<IHyperlinkProvider>(null);
@@ -105,19 +98,6 @@ export class HyperlinkSelector {
 
         if (!hyperlinkProvider) {
             hyperlinkProvider = this.hyperlinkProviders[this.hyperlinkProviders.length - 1];
-        }
-        else if (this.isValueSelected && hyperlinkProvider.componentName === "page-selector") {
-            const pageContract = await this.pageService.getPageByKey(hyperlink.targetKey);
-            const page = new PageItem(pageContract);
-
-            page.selectedAnchor = new AnchorItem();
-            page.selectedAnchor.elementId = hyperlink.anchor;
-
-            this.pageSelector.selectedPage(page);
-
-            await this.pageSelector.selectPage(page);
-
-            this.isValueSelected = true;
         }
 
         this.hyperlink(hyperlink);

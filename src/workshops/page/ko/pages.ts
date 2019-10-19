@@ -46,6 +46,15 @@ export class PagesWorkshop {
         const pageItems = pages.map(page => new PageItem(page));
 
         this.pages(pageItems);
+
+        if (!this.selectedPage()) {
+            const currentPermalink = this.router.getPath();
+            const current = pageItems.find(item => item.permalink() === currentPermalink);
+            if (current) {
+                this.selectedPage(current);
+                current.isSelected(true);
+            }
+        }
         this.working(false);
     }
 
@@ -55,7 +64,13 @@ export class PagesWorkshop {
     }
 
     public selectPage(pageItem: PageItem): void {
+        const prev = this.selectedPage();
+        if (prev) {
+            prev.isSelected(false);
+        }        
+
         this.selectedPage(pageItem);
+        pageItem.isSelected(true);
 
         const view: View = {
             heading: "Page",

@@ -7,6 +7,7 @@ import { ViewManager } from "@paperbits/common/ui";
 import { EventManager } from "@paperbits/common/events";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { IWidgetService } from "@paperbits/common/widgets";
+import { HyperlinkModel } from "@paperbits/common/permalinks/hyperlinkModel";
 
 @Component({
     selector: "media-selector",
@@ -17,6 +18,7 @@ export class MediaSelector {
     public readonly searchPattern: ko.Observable<string>;
     public readonly mediaItems: ko.ObservableArray<MediaItem>;
     public readonly working: ko.Observable<boolean>;
+    private preSelectedModel: HyperlinkModel;
 
     @Param()
     public selectedMedia: ko.Observable<MediaItem>;
@@ -52,14 +54,32 @@ export class MediaSelector {
         const mediaFiles = await this.mediaService.search(searchPattern, this.mimeType);
         const mediaItems = mediaFiles.map(media => new MediaItem(media));
         this.mediaItems(mediaItems);
+        if (!this.selectedMedia() && this.preSelectedModel) {
+            const currentPermalink = this.preSelectedModel.href;
+            const current = mediaItems.find(item => item.permalink() === currentPermalink);
+            if (current) {
+                this.selectMedia(current);
+            }
+        }
+
         this.working(false);
     }
 
     public selectMedia(media: MediaItem): void {
+        const prev = this.selectedMedia();
+        if (prev) {
+            prev.isSelected(false);
+        }
+
         this.selectedMedia(media);
+        media.isSelected(true);
         if (this.onSelect) {
             this.onSelect(media.toMedia());
         }
+    }
+
+    public selectResource(resource: HyperlinkModel): void {
+        this.preSelectedModel = resource;
     }
 
     public selectNone(): void {

@@ -31,7 +31,7 @@
     <div class="flex-item flex-item-grow list" role="list"
         data-bind="foreach: { data: pages, as: 'page' }, scrollable: true">
         <a href="#" role="listitem" class="list-item"
-            data-bind="css: { selected: page === $component.selectedPage() }, click: $component.selectPage, event: { keydown: $component.onKeyDown }">
+            data-bind="css: { selected: page.isSelected }, click: $component.selectPage, event: { keydown: $component.onKeyDown }, selectItem: page.isSelected">
             <i class="paperbits-icon paperbits-single-content-03"></i>
             <span data-bind="text: page.title"></span>
         </a>

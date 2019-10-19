@@ -21,9 +21,9 @@ ko.bindingHandlers["resourcePicker"] = {
             component: {
                 name: resourcePicker.componentName,
                 params: { onSelect: onSelectCallbackProxy },
-                oncreate: (resourceSelector: IResourceSelector<any>) => {
+                oncreate: (resourceSelector: IResourceSelector<HyperlinkModel>) => {
                     if (hyperlink && resourceSelector.selectResource) {
-                        resourceSelector.selectResource(hyperlink.href);
+                        resourceSelector.selectResource(hyperlink);
                     }
 
                     onSelectCallback = (newResource) => {
