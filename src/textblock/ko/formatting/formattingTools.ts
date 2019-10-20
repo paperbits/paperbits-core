@@ -78,6 +78,11 @@ export class FormattingTools {
         const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
 
         if (!htmlEditor) {
+            if (this.textStyles) {
+                const appearance = this.textStyles[0]["displayName"];    
+                this.appearance(appearance);
+                this.style("Normal");
+            }
             return;
         }
         
