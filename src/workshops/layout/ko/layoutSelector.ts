@@ -23,21 +23,10 @@ export class LayoutSelector implements IResourceSelector<LayoutContract> {
     public onSelect: (layout: LayoutContract) => void;
 
     constructor(private readonly layoutService: ILayoutService) {
-        this.onMounted = this.onMounted.bind(this);
-        this.selectLayout = this.selectLayout.bind(this);
-
-        this.layouts = ko.observableArray<LayoutItem>();
-        this.selectedLayout = ko.observable<LayoutItem>();
-        this.searchPattern = ko.observable<string>();
-        this.searchPattern.subscribe(this.searchLayouts);
-        this.working = ko.observable(true);
-
-        // setting up...
-        this.layouts = ko.observableArray<LayoutItem>();
-        this.selectedLayout = ko.observable<LayoutItem>();
-        this.searchPattern = ko.observable<string>();
-        this.searchPattern.subscribe(this.searchLayouts);
-        this.working = ko.observable(true);
+        this.layouts = ko.observableArray();
+        this.selectedLayout = ko.observable();
+        this.searchPattern = ko.observable();
+        this.working = ko.observable();
     }
 
     @OnMounted()
@@ -51,6 +40,7 @@ export class LayoutSelector implements IResourceSelector<LayoutContract> {
         const layouts = await this.layoutService.search(searchPattern);
         const layoutItems = layouts.map(layout => new LayoutItem(layout));
         this.layouts(layoutItems);
+        
         this.working(false);
     }
 

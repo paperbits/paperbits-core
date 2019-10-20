@@ -6,6 +6,7 @@ import { ViewManager, View } from "@paperbits/common/ui";
 import { Keys } from "@paperbits/common/keyboard";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { PageItem } from "./pageItem";
+import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 
 @Component({
@@ -14,8 +15,6 @@ import { PageItem } from "./pageItem";
     injectable: "pagesWorkshop"
 })
 export class PagesWorkshop {
-    private searchTimeout: any;
-
     public readonly searchPattern: ko.Observable<string>;
     public readonly pages: ko.ObservableArray<PageItem>;
     public readonly working: ko.Observable<boolean>;
@@ -34,11 +33,14 @@ export class PagesWorkshop {
 
     @OnMounted()
     public async initialize(): Promise<void> {
-        this.searchPattern.subscribe(this.searchPages);
-        this.searchPages();
+        await this.searchPages();
+
+        this.searchPattern
+            .extend(ChangeRateLimit)
+            .subscribe(this.searchPages);
     }
 
-    private async launchSearch(searchPattern: string = ""): Promise<void> {
+    private async searchPages(searchPattern: string = ""): Promise<void> {
         this.working(true);
         this.pages([]);
 
@@ -50,6 +52,7 @@ export class PagesWorkshop {
         if (!this.selectedPage()) {
             const currentPermalink = this.router.getPath();
             const current = pageItems.find(item => item.permalink() === currentPermalink);
+
             if (current) {
                 this.selectedPage(current);
                 current.isSelected(true);
@@ -58,16 +61,12 @@ export class PagesWorkshop {
         this.working(false);
     }
 
-    public async searchPages(searchPattern: string = ""): Promise<void> {
-        clearTimeout(this.searchTimeout);
-        this.searchTimeout = setTimeout(() => this.launchSearch(searchPattern), 600);
-    }
 
     public selectPage(pageItem: PageItem): void {
         const prev = this.selectedPage();
         if (prev) {
             prev.isSelected(false);
-        }        
+        }
 
         this.selectedPage(pageItem);
         pageItem.isSelected(true);

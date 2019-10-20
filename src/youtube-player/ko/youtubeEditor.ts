@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import template from "./youtubeEditor.html";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { YoutubePlayerModel } from "../youtubePlayerModel";
-import { changeRateLimit } from "../../ko/consts";
+import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { WidgetEditor } from "@paperbits/common/widgets";
 
 @Component({
@@ -40,23 +40,23 @@ export class YoutubeEditor implements WidgetEditor<YoutubePlayerModel> {
         this.loop(this.model.loop);
 
         this.videoId
-            .extend(changeRateLimit)
+            .extend(ChangeRateLimit)
             .subscribe(this.onControlsUpdate);
 
         this.origin
-            .extend(changeRateLimit)
+            .extend(ChangeRateLimit)
             .subscribe(this.onControlsUpdate);
 
         this.controls
-            .extend(changeRateLimit)
+            .extend(ChangeRateLimit)
             .subscribe(this.onControlsUpdate);
 
         this.autoplay
-            .extend(changeRateLimit)
+            .extend(ChangeRateLimit)
             .subscribe(this.onControlsUpdate);
 
         this.loop
-            .extend(changeRateLimit)
+            .extend(ChangeRateLimit)
             .subscribe(this.onControlsUpdate);
     }
 

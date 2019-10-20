@@ -6,6 +6,7 @@ import { IPageService } from "@paperbits/common/pages";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { AnchorUtils } from "../../../text/anchorUtils";
+import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "page-selector",
@@ -26,23 +27,19 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
     public onSelect: (selection: HyperlinkModel) => void;
 
     constructor(private readonly pageService: IPageService) {
-        this.pages = ko.observableArray<PageItem>();
-        this.selectedPage = ko.observable<PageItem>();
-        this.searchPattern = ko.observable<string>();
-        this.searchPattern.subscribe(this.searchPages);
-        this.working = ko.observable(true);
-
-        // setting up...
-        this.pages = ko.observableArray<PageItem>();
-        this.selectedPage = ko.observable<PageItem>();
-        this.searchPattern = ko.observable<string>();
-        this.searchPattern.subscribe(this.searchPages);
-        this.working = ko.observable(true);
+        this.pages = ko.observableArray();
+        this.selectedPage = ko.observable();
+        this.searchPattern = ko.observable();
+        this.working = ko.observable();
     }
-    
+
     @OnMounted()
-    public onMounted(): void {
-        this.searchPages();
+    public async onMounted(): Promise<void> {
+        await this.searchPages();
+
+        this.searchPattern
+            .extend(ChangeRateLimit)
+            .subscribe(this.searchPages);
     }
 
     public async searchPages(searchPattern: string = ""): Promise<void> {
@@ -56,11 +53,14 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
         if (!this.selectedPage() && this.preSelectedModel) {
             const currentPermalink = this.preSelectedModel.href;
             const current = pageItems.find(item => item.permalink() === currentPermalink);
+
             if (current) {
                 await this.selectPage(current);
                 const currentAnchors = current.anchors();
+
                 if (this.preSelectedModel.anchor) {
                     const currentAnchor = currentAnchors.find(item => item.elementId === this.preSelectedModel.anchor);
+
                     if (currentAnchor) {
                         await this.selectAnchor(currentAnchor);
                     }
@@ -73,8 +73,10 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
 
     public async selectPage(page: PageItem): Promise<void> {
         const prev = this.selectedPage();
+        
         if (prev) {
             prev.isSelected(false);
+
             if (prev.selectedAnchor) {
                 prev.selectedAnchor.isSelected(false);
             }

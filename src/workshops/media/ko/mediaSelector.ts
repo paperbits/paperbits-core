@@ -8,6 +8,7 @@ import { EventManager } from "@paperbits/common/events";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { IWidgetService } from "@paperbits/common/widgets";
 import { HyperlinkModel } from "@paperbits/common/permalinks/hyperlinkModel";
+import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "media-selector",
@@ -43,9 +44,12 @@ export class MediaSelector {
     }
 
     @OnMounted()
-    public initialize(): void {
-        this.searchMedia();
-        this.searchPattern.subscribe(this.searchMedia);
+    public async initialize(): Promise<void> {
+        await this.searchMedia();
+
+        this.searchPattern
+            .extend(ChangeRateLimit)
+            .subscribe(this.searchMedia);
     }
 
     public async searchMedia(searchPattern: string = ""): Promise<void> {
@@ -54,9 +58,11 @@ export class MediaSelector {
         const mediaFiles = await this.mediaService.search(searchPattern, this.mimeType);
         const mediaItems = mediaFiles.map(media => new MediaItem(media));
         this.mediaItems(mediaItems);
+
         if (!this.selectedMedia() && this.preSelectedModel) {
             const currentPermalink = this.preSelectedModel.href;
             const current = mediaItems.find(item => item.permalink() === currentPermalink);
+            
             if (current) {
                 this.selectMedia(current);
             }

@@ -1,12 +1,13 @@
 import template from "./blockSelector.html";
 import * as ko from "knockout";
-import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
+import { IResourceSelector } from "@paperbits/common/ui";
 import { BlockItem } from "./blockItem";
 import { BlockContract } from "@paperbits/common/blocks/blockContract";
-import { IBlockService } from "@paperbits/common/blocks/IBlockService";
+import { IBlockService } from "@paperbits/common/blocks";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelector";
 import { ViewModelBinderSelector } from "../../../ko/viewModelBinderSelector";
+import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "block-selector",
@@ -18,6 +19,18 @@ export class BlockSelector implements IResourceSelector<BlockContract> {
     public readonly blocks: ko.ObservableArray<BlockItem>;
     public readonly working: ko.Observable<boolean>;
     public readonly widgets: ko.ObservableArray<Object>;
+
+    constructor(
+        private readonly blockService: IBlockService,
+        private readonly modelBinderSelector: ModelBinderSelector,
+        private readonly viewModelBinderSelector: ViewModelBinderSelector
+    ) {
+        this.blocks = ko.observableArray();
+        this.widgets = ko.observableArray();
+        this.selectedBlockItem = ko.observable();
+        this.searchPattern = ko.observable();
+        this.working = ko.observable();
+    }
 
     @Param()
     public readonly selectedBlockItem: ko.Observable<BlockItem>;
@@ -31,23 +44,10 @@ export class BlockSelector implements IResourceSelector<BlockContract> {
     @OnMounted()
     public async initialize(): Promise<void> {
         await this.searchBlocks();
-    }
 
-    constructor(
-        private readonly blockService: IBlockService,
-        private readonly modelBinderSelector: ModelBinderSelector,
-        private readonly viewModelBinderSelector: ViewModelBinderSelector) {
-
-        this.blocks = ko.observableArray<BlockItem>();        
-        this.widgets = ko.observableArray<Object>();
-
-        this.selectedBlockItem = ko.observable<BlockItem>();
-        this.searchPattern = ko.observable<string>();
-        this.searchPattern.subscribe(this.searchBlocks);
-        
-        this.working = ko.observable(true);
-
-        this.selectBlock = this.selectBlock.bind(this);
+        this.searchPattern
+            .extend(ChangeRateLimit)
+            .subscribe(this.searchBlocks);
     }
 
     public async searchBlocks(searchPattern: string = ""): Promise<void> {

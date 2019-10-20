@@ -6,6 +6,7 @@ import { ILayoutService } from "@paperbits/common/layouts";
 import { Keys } from "@paperbits/common/keyboard";
 import { LayoutItem } from "./layoutItem";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
+import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "layouts",
@@ -13,8 +14,6 @@ import { Component, OnMounted } from "@paperbits/common/ko/decorators";
     injectable: "layoutsWorkshop"
 })
 export class LayoutsWorkshop {
-    private searchTimeout: any;
-
     public readonly searchPattern: ko.Observable<string>;
     public readonly layouts: ko.ObservableArray<LayoutItem>;
     public readonly working: ko.Observable<boolean>;
@@ -25,27 +24,22 @@ export class LayoutsWorkshop {
         private readonly router: Router,
         private readonly viewManager: ViewManager
     ) {
-        // rebinding...
-        this.searchLayouts = this.searchLayouts.bind(this);
-        this.addLayout = this.addLayout.bind(this);
-        this.selectLayout = this.selectLayout.bind(this);
-        this.onKeyDown = this.onKeyDown.bind(this);
-
-        // setting up...
-        this.layouts = ko.observableArray<LayoutItem>();
-        this.selectedLayout = ko.observable<LayoutItem>();
-        this.searchPattern = ko.observable<string>();
-        this.searchPattern.subscribe(this.searchLayouts);
-        this.working = ko.observable(true);
+        this.layouts = ko.observableArray();
+        this.selectedLayout = ko.observable();
+        this.searchPattern = ko.observable();
+        this.working = ko.observable();
     }
 
     @OnMounted()
     public async initialize(): Promise<void> {
-        this.searchPattern.subscribe(this.searchLayouts);
-        this.searchLayouts();
+        await this.searchLayouts();
+
+        this.searchPattern
+            .extend(ChangeRateLimit)
+            .subscribe(this.searchLayouts);
     }
 
-    public async launchSearch(searchPattern: string = ""): Promise<void> {
+    public async searchLayouts(searchPattern: string = ""): Promise<void> {
         this.working(true);
         this.layouts([]);
 
@@ -54,11 +48,6 @@ export class LayoutsWorkshop {
 
         this.layouts(layoutItems);
         this.working(false);
-    }
-
-    public async searchLayouts(searchPattern: string = ""): Promise<void> {
-        clearTimeout(this.searchTimeout);
-        this.searchTimeout = setTimeout(() => this.launchSearch(searchPattern), 600);
     }
 
     public selectLayout(layoutItem: LayoutItem): void {
@@ -107,7 +96,7 @@ export class LayoutsWorkshop {
     public onKeyDown(item: LayoutItem, event: KeyboardEvent): boolean {
         switch (event.keyCode) {
             case Keys.Delete:
-                    this.deleteSelectedLayout();
+                this.deleteSelectedLayout();
                 break;
 
             case Keys.Enter:

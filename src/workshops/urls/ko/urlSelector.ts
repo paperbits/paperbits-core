@@ -2,8 +2,9 @@ import * as ko from "knockout";
 import template from "./urlSelector.html";
 import { UrlItem } from "./urlItem";
 import { IUrlService, UrlContract } from "@paperbits/common/urls";
-import { Component, Event } from "@paperbits/common/ko/decorators";
-import { HyperlinkModel } from "@paperbits/common/permalinks/hyperlinkModel";
+import { Component, Event, OnMounted } from "@paperbits/common/ko/decorators";
+import { HyperlinkModel } from "@paperbits/common/permalinks";
+import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "url-selector",
@@ -19,28 +20,24 @@ export class UrlSelector {
 
     private preSelectedModel: HyperlinkModel;
 
+    constructor(private readonly urlService: IUrlService) {
+        this.uri = ko.observable<string>("https://");
+        this.urls = ko.observableArray();
+        this.selectedUrl = ko.observable();
+        this.searchPattern = ko.observable();
+        this.working = ko.observable();
+    }
+
     @Event()
     public onSelect: (url: UrlContract) => void;
 
-    constructor(private readonly urlService: IUrlService) {
-        this.selectUrl = this.selectUrl.bind(this);
-        this.createUrl = this.createUrl.bind(this);
+    @OnMounted()
+    public async onMounted(): Promise<void> {
+        await this.searchUrls();
 
-        this.uri = ko.observable<string>("https://");
-        this.urls = ko.observableArray<UrlItem>();
-        this.selectedUrl = ko.observable<UrlItem>();
-        this.searchPattern = ko.observable<string>();
-        this.searchPattern.subscribe(this.searchUrls);
-        this.working = ko.observable(true);
-
-        // setting up...
-        this.urls = ko.observableArray<UrlItem>();
-        this.selectedUrl = ko.observable<UrlItem>();
-        this.searchPattern = ko.observable<string>();
-        this.searchPattern.subscribe(this.searchUrls);
-        this.working = ko.observable(true);
-
-        this.searchUrls();
+        this.searchPattern
+            .extend(ChangeRateLimit)
+            .subscribe(this.searchUrls);
     }
 
     public async searchUrls(searchPattern: string = ""): Promise<void> {

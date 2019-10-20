@@ -10,6 +10,7 @@ import { Keys } from "@paperbits/common/keyboard";
 import { EventManager } from "@paperbits/common/events";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { IWidgetService } from "@paperbits/common/widgets";
+import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "media",
@@ -17,8 +18,6 @@ import { IWidgetService } from "@paperbits/common/widgets";
     injectable: "mediaWorkshop"
 })
 export class MediaWorkshop {
-    private searchTimeout: any;
-
     public readonly searchPattern: ko.Observable<string>;
     public readonly mediaItems: ko.ObservableArray<MediaItem>;
     public readonly selectedMediaItem: ko.Observable<MediaItem>;
@@ -38,31 +37,27 @@ export class MediaWorkshop {
     }
 
     @OnMounted()
-    public initialize(): void {
-        this.searchMedia();
-        this.searchPattern.subscribe(this.searchMedia);
+    public async initialize(): Promise<void> {
+        await this.searchMedia();
+
+        this.searchPattern
+            .extend(ChangeRateLimit)
+            .subscribe(this.searchMedia);
     }
 
-    private async launchSearch(searchPattern: string = ""): Promise<void> {
+    private async searchMedia(searchPattern: string = ""): Promise<void> {
         this.working(true);
-
-        const result: MediaItem[] = [];
-
-        this.mediaItems(result);
+        this.mediaItems([]);
 
         const mediaFiles = await this.mediaService.search(searchPattern);
 
         mediaFiles.forEach(async media => {
-            // TODO: Move this logic to drag start. MediaItem can get descriptor byitself;
-
             const mediaItem = new MediaItem(media);
             const descriptor = this.findContentDescriptor(media);
 
             if (descriptor && descriptor.getWidgetOrder) {
                 const order = await descriptor.getWidgetOrder();
                 mediaItem.widgetOrder = order;
-
-                // mediaItem.downloadUrl  = order.
             }
 
             this.mediaItems.push(mediaItem);
@@ -87,14 +82,6 @@ export class MediaWorkshop {
         }
 
         return result;
-    }
-
-    public async searchMedia(searchPattern: string = ""): Promise<void> {
-        clearTimeout(this.searchTimeout);
-
-        this.searchTimeout = setTimeout(() => {
-            this.launchSearch(searchPattern);
-        }, 600);
     }
 
     public async uploadMedia(): Promise<void> {

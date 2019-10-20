@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./youtube.html";
 import { Component } from "@paperbits/common/ko/decorators";
-import { changeRateLimit } from "../../ko/consts";
+import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "paperbits-youtube-player",
@@ -18,11 +18,11 @@ export class YoutubePlayerViewModel {
     constructor() {
         this.videoSource = ko.observable<string>();
 
-        this.videoId = ko.observable<string>().extend(changeRateLimit);
-        this.origin = ko.observable<string>().extend(changeRateLimit);
-        this.controls = ko.observable<boolean>().extend(changeRateLimit);
-        this.autoplay = ko.observable<boolean>().extend(changeRateLimit);
-        this.loop = ko.observable<boolean>().extend(changeRateLimit);
+        this.videoId = ko.observable<string>().extend(ChangeRateLimit);
+        this.origin = ko.observable<string>().extend(ChangeRateLimit);
+        this.controls = ko.observable<boolean>().extend(ChangeRateLimit);
+        this.autoplay = ko.observable<boolean>().extend(ChangeRateLimit);
+        this.loop = ko.observable<boolean>().extend(ChangeRateLimit);
 
         this.onControlsUpdate = this.onControlsUpdate.bind(this);
 

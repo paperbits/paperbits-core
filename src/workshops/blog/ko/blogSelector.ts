@@ -4,6 +4,7 @@ import { IResourceSelector } from "@paperbits/common/ui";
 import { BlogPostItem } from "./blogPostItem";
 import { IBlogService, BlogPostContract } from "@paperbits/common/blogs";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
+import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "blog-selector",
@@ -15,33 +16,29 @@ export class BlogSelector implements IResourceSelector<BlogPostContract> {
     public readonly posts: ko.ObservableArray<BlogPostItem>;
     public readonly working: ko.Observable<boolean>;
 
+    constructor(private readonly blogService: IBlogService) {
+        this.posts = ko.observableArray();
+        this.selectedPost = ko.observable();
+        this.searchPattern = ko.observable();
+        this.working = ko.observable();
+        this.posts = ko.observableArray();
+        this.searchPattern = ko.observable();
+        this.working = ko.observable();
+    }
+
     @Param()
     public selectedPost: ko.Observable<BlogPostItem>;
 
     @Event()
     public onSelect: (blog: BlogPostContract) => void;
 
-    constructor(private readonly blogService: IBlogService) {
-        this.onMounted = this.onMounted.bind(this);
-        this.selectPost = this.selectPost.bind(this);
-
-        this.posts = ko.observableArray<BlogPostItem>();
-        this.selectedPost = ko.observable<BlogPostItem>();
-        this.searchPattern = ko.observable<string>();
-        this.searchPattern.subscribe(this.searchPosts);
-        this.working = ko.observable(true);
-
-        // setting up...
-        this.posts = ko.observableArray<BlogPostItem>();
-        this.selectedPost = ko.observable<BlogPostItem>();
-        this.searchPattern = ko.observable<string>();
-        this.searchPattern.subscribe(this.searchPosts);
-        this.working = ko.observable(true);
-    }
-
     @OnMounted()
     public async onMounted(): Promise<void> {
-        this.searchPosts();
+        await this.searchPosts();
+
+        this.searchPattern
+            .extend(ChangeRateLimit)
+            .subscribe(this.searchPosts);
     }
 
     public async searchPosts(searchPattern: string = ""): Promise<void> {
@@ -50,6 +47,7 @@ export class BlogSelector implements IResourceSelector<BlogPostContract> {
         const blogs = await this.blogService.search(searchPattern);
         const blogItems = blogs.map(blog => new BlogPostItem(blog));
         this.posts(blogItems);
+        
         this.working(false);
     }
 
