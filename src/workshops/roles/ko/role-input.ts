@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import template from "./role-input.html";
 import { Component, Event, OnMounted, Param } from "@paperbits/common/ko/decorators";
-import { RoleModel, RoleService } from "@paperbits/common/user";
+import { RoleModel, RoleService, BuiltInRoles } from "@paperbits/common/user";
 
 @Component({
     selector: "role-input",
@@ -30,12 +30,10 @@ export class RoleInput {
         const availableRoles = await this.roleService.getRoles();
         this.availableRoles(availableRoles);
 
-        if (!this.selection) {
-            return;
-        }
+        const selectedRoles = this.selection
+            ? availableRoles.filter(x => this.selection.includes(x.key))
+            : [BuiltInRoles.everyone];
 
-        const selectedRoles = availableRoles.filter(x => this.selection.includes(x.key));
-        
         this.selectedRoles(selectedRoles);
         this.updateDisplay(selectedRoles);
     }
@@ -51,7 +49,6 @@ export class RoleInput {
         this.selection = roles.map(role => role.key);
 
         if (this.onChange) {
-            console.log(this.selection);
             this.onChange(this.selection);
         }
     }
