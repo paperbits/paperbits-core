@@ -8,7 +8,7 @@ export class DesignerUserService implements UserService {
     }
 
     public async getUserPhotoUrl(): Promise<string> {
-        return "https://cdn.paperbits.io/images/portrait.svg";
+        return null;
     }
 
     public async getUserRoles(): Promise<string[]> {

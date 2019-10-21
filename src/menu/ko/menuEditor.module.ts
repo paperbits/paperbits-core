@@ -1,4 +1,4 @@
-import styleTemplate from "./styleGuideTemplate.html";
+import styleTemplate from "./styleGuideSnippet.html";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { IWidgetHandler } from "@paperbits/common/editing";
 import { IStyleGroup } from "@paperbits/common/styles";

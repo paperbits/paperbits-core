@@ -31,7 +31,7 @@ export class MenuModule implements IInjectorModule {
                         navItem: {
                             active: {
                                 allowedStates: ["hover", "focus", "active", "disabled"],
-                                displayName: "Navigation link",
+                                displayName: "Navigation link (active)",
                                 key: "components/menu/default/components/navItem/active"
                             },
                             default: {
