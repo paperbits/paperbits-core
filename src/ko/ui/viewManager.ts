@@ -214,10 +214,10 @@ export class DefaultViewManager implements ViewManager {
         else {
             view = editor;
         }
-
+        
         const indexOfClosingEditor = journey.indexOf(view);
 
-        journey.length = indexOfClosingEditor;
+        journey.splice(indexOfClosingEditor);
 
         this.journey(journey);
         this.mode = ViewManagerMode.selecting;
