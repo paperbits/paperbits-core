@@ -23,6 +23,7 @@ declare let uploadDialog: HTMLInputElement;
 })
 export class DefaultViewManager implements ViewManager {
     private contextualEditorsBag: Bag<IContextCommandSet> = {};
+    private previousHost: IComponent;
 
     public journey: ko.ObservableArray<View>;
     public journeyName: ko.Computed<string>;
@@ -90,6 +91,7 @@ export class DefaultViewManager implements ViewManager {
 
     public setHost(component: IComponent): void {
         const currentComponent = this.host();
+        this.previousHost = currentComponent;
 
         if (currentComponent && currentComponent.name === component.name) {
             return;
@@ -97,6 +99,13 @@ export class DefaultViewManager implements ViewManager {
 
         this.clearContextualEditors();
         this.host(component);
+    }
+
+    public activatePreviousHost(): void {
+        if (this.previousHost) {
+            this.setHost(this.previousHost);
+            this.previousHost = undefined;
+        }
     }
 
     public getHost(): IComponent {
@@ -195,6 +204,9 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public openViewAsWorkshop(view: View): void {
+        if (this.host().name !== view.component.name) {
+            this.activatePreviousHost();
+        }
         this.clearContextualEditors();
         this.updateJourneyComponent(view);
         this.mode = ViewManagerMode.configure;
@@ -261,6 +273,7 @@ export class DefaultViewManager implements ViewManager {
     public closeEditors(): void {
         this.closeView();
         this.clearJourney();
+        this.activatePreviousHost();
     }
 
     public openWidgetEditor(binding: IWidgetBinding<any>): void {
