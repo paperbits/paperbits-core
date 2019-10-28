@@ -26,8 +26,6 @@ export class PageViewModelBinder implements ViewModelBinder<PageModel, PageViewM
                 return;
             }
 
-            const page = await this.pageService.getPageByPermalink(bindingContext.navigationPath);
-
             const contentContract = {
                 type: "page",
                 nodes: []
@@ -38,7 +36,7 @@ export class PageViewModelBinder implements ViewModelBinder<PageModel, PageViewM
                 contentContract.nodes.push(modelBinder.modelToContract(section));
             });
 
-            await this.pageService.updatePageContent(page.key, contentContract);
+            await this.pageService.updatePageContent(model.key, contentContract);
         };
 
         const scheduleUpdate = async (): Promise<void> => {

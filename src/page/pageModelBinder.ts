@@ -42,6 +42,7 @@ export class PageModelBinder implements IModelBinder<PageModel> {
 
         if (pageContract) {
             const pageModel = new PageModel();
+            pageModel.key = pageContract.key;
             pageModel.title = pageContract.title;
             pageModel.description = pageContract.description;
             pageModel.keywords = pageContract.keywords;
