@@ -3,7 +3,7 @@
     <ul role="tablist" class="flex-item toolbox-btn-group toolbox-btn-group-vertical">
         <!-- ko foreach: { data: sections, as: 'section' } -->
         <li role="presentation" class="toolbox-btn"
-            data-bind="css: { 'toolbox-btn-is-active': $component.viewManager.journeyName() == section.title || $component.viewManager.getHost().name == section.hostName}">
+            data-bind="css: { 'toolbox-btn-is-active': $component.viewManager.journeyName() == section.title }">
             <a href="#" role="tab"
                 data-bind="attr: { title: section.title, 'aria-label': section.title }, click: section.onActivate">
                 <i data-bind="css: section.iconClass"></i>
