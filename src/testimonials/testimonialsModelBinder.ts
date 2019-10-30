@@ -18,8 +18,8 @@ export class TestimonialsModelBinder implements IModelBinder<TestimonialsModel> 
     public async contractToModel(contract: TestimonialsContract): Promise<TestimonialsModel> {
         const model = new TestimonialsModel();
         model.textContent = contract.textContent;
-        model.allStarsCount  = contract.allStarsCount;
-        model.starsCount  = contract.starsCount;
+        model.allStarsCount  = contract.allStarsCount || 0;
+        model.starsCount  = contract.starsCount || 0;
         model.author      = contract.author;
         model.authorTitle = contract.authorTitle;
         return model;
