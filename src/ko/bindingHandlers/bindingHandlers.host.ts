@@ -113,11 +113,8 @@ export class HostBindingHandler {
                 event.preventDefault();
             }
 
-            if (event.ctrlKey) { // Preventing click on links if Ctrl key is not pressed.
+            if (event.ctrlKey || event.metaKey) { // Preventing click on links if Ctrl key is not pressed.
                 this.router.navigateTo(htmlLinkElement.href);
-            }
-            else {
-                // this.eventManager.dispatchEvent("DesignTimeNavigationHint");
             }
         };
 
