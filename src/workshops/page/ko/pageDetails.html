@@ -11,9 +11,11 @@
         <div class="form-group">
             <label for="permalink" class="form-label">Permalink</label>
             <div class="input-group">
-                <input type="text" id="permalink" class="form-control" data-bind="textInput: pageItem.permalink, validationElement: pageItem.permalink"
+                <input type="text" id="permalink" class="form-control" data-bind="textInput: pageItem.permalink, validationElement: pageItem.permalink, disable: $component.isReserved"
                     placeholder="e.g. /about" maxlength="2000" spellcheck="false" />
+                <!-- ko ifnot: $component.isReserved -->
                 <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: pageItem.permalink" type="button">!</button>
+                <!-- /ko -->
             </div>
         </div>
         <div class="form-group">
@@ -29,7 +31,7 @@
         </div>
     </fieldset>
 
-    <!-- ko if: canDelete -->
+    <!-- ko ifnot: $component.isReserved -->
     <div class="flex-item btn-group">
         <button class="btn" data-bind="confirm: { message: 'Are you sure you want to delete this page?', onConfirm: deletePage }">
             <i class="paperbits-icon paperbits-simple-remove"></i>

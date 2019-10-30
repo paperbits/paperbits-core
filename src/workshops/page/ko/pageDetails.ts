@@ -12,18 +12,19 @@ import { PageItem } from "./pageItem";
     injectable: "pageDetailsWorkshop"
 })
 export class PageDetailsWorkshop {
-    public isHomePage: ko.Computed<boolean>;
-    public canDelete: ko.Computed<boolean>;
+    public readonly isReserved: ko.Observable<boolean>;
 
     constructor(
         private readonly pageService: IPageService,
         private readonly router: Router,
         private readonly viewManager: ViewManager,
+        private readonly reservedPermalinks: string[]
     ) {
         this.onMounted = this.onMounted.bind(this);
         this.deletePage = this.deletePage.bind(this);
         this.updatePage = this.updatePage.bind(this);
         this.updatePermlaink = this.updatePermlaink.bind(this);
+        this.isReserved = ko.observable(false);
     }
 
     @Param()
@@ -44,18 +45,15 @@ export class PageDetailsWorkshop {
         this.pageItem.keywords
             .subscribe(this.updatePage);
 
-        const validPermalink = this.pageItem.permalink
-            .extend(<any>{ required: true, uniquePermalink: this.pageItem.key, onlyValid: true });
+        let validPermalink = this.pageItem.permalink;
 
-        validPermalink.subscribe(this.updatePermlaink);
-
-        this.isHomePage = ko.pureComputed(() => {
-            return validPermalink() === "/";
-        });
-
-        this.canDelete = ko.computed(() => {
-            return !this.isHomePage();
-        });
+        if (this.reservedPermalinks.includes(this.pageItem.permalink())) {
+            this.isReserved(true);
+        }
+        else {
+            validPermalink = validPermalink.extend(<any>{ required: true, validPermalink: this.pageItem.key, onlyValid: true });
+            validPermalink.subscribe(this.updatePermlaink);
+        }
 
         this.viewManager.setHost({ name: "content-host" });
         await this.router.navigateTo(validPermalink());

@@ -42,7 +42,7 @@ export class BlogPostDetailsWorkshop {
             .subscribe(this.updateBlogPost);
 
         this.blogPostItem.permalink
-            .extend(<any>{ uniquePermalink: this.blogPostItem.permalink, required: true, onlyValid: true })
+            .extend(<any>{ validPermalink: this.blogPostItem.permalink, required: true, onlyValid: true })
             .subscribe(this.updatePermlaink);
 
         const blogPost = await this.blogService.getBlogPostByKey(this.blogPostItem.key);

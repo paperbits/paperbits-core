@@ -9,7 +9,8 @@ const errorClassName = "is-invalid";
 export class KnockoutValidation {
     constructor(
         private readonly pageService: IPageService,
-        private readonly layoutService: ILayoutService
+        private readonly layoutService: ILayoutService,
+        private readonly reservedPermalinks: string[]
     ) {
         validation.init({
             errorElementClass: errorClassName,
@@ -40,19 +41,24 @@ export class KnockoutValidation {
             return resultObservable;
         };
 
-        validation.rules["uniquePermalink"] = {
+        validation.rules["validPermalink"] = {
             async: true,
-            validator: async (permalinkUri: string, contentItemKey: string, callback: (isInUse: boolean) => void) => {
-                if (!permalinkUri) {
+            validator: async (permalink: string, contentItemKey: string, callback: (isInUse: boolean) => void) => {
+                if (!permalink) {
                     return false;
                 }
 
-                const page = await this.pageService.getPageByPermalink(permalinkUri);
+                if (this.reservedPermalinks.includes(permalink)) {
+                    callback(false);
+                    return;
+                }
+
+                const page = await this.pageService.getPageByPermalink(permalink);
                 const conflict = page && page.key !== contentItemKey;
 
                 callback(!conflict);
             },
-            message: "This permalink is already in use."
+            message: "This permalink is reserved or already in use."
         };
 
         validation.rules["uniqueLayoutUri"] = {

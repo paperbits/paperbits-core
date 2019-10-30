@@ -64,6 +64,7 @@ export class PagesWorkshop {
 
     public selectPage(pageItem: PageItem): void {
         const prev = this.selectedPage();
+
         if (prev) {
             prev.isSelected(false);
         }
@@ -101,7 +102,6 @@ export class PagesWorkshop {
     }
 
     public async deleteSelectedPage(): Promise<void> {
-        // TODO: Show confirmation dialog according to mockup
         this.viewManager.closeWorkshop("page-details-workshop");
 
         await this.pageService.deletePage(this.selectedPage().toContract());

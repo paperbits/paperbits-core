@@ -54,11 +54,11 @@ import { PageHost } from "./workshops/page/ko/pageHost";
 import { Tray } from "./workshops/tray/tray";
 import { CollapsiblePanelEditorModule } from "./collapsible-panel/ko";
 import { MenuEditorModule } from "./menu/ko";
+import { DesignerUserService } from "./ko/ui/designerUserService";
+import { RoleSelector, RoleInput } from "./workshops/roles/ko";
 import "./ko/bindingHandlers/bindingHandlers.command";
 import "./ko/bindingHandlers/bindingHandlers.dialog";
 import "./ko/bindingHandlers/bindingHandlers.activate";
-import { DesignerUserService } from "./ko/ui/designerUserService";
-import { RoleSelector, RoleInput } from "./workshops/roles/ko";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -130,6 +130,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindToCollection("autostart", LightboxBindingHandler);
         injector.bindToCollection("autostart", HistoryRouteHandler);
         injector.bindToCollection("autostart", Hinter);
+        injector.bindInstance("reservedPermalinks", ["/", "/404", "/500"]);
         injector.resolve("workshopSections");
 
         const userService = new DesignerUserService();
