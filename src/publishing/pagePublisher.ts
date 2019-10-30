@@ -5,12 +5,14 @@ import { IPageService, PageContract } from "@paperbits/common/pages";
 import { ISiteService } from "@paperbits/common/sites";
 import { SitemapBuilder } from "./sitemapBuilder";
 import { Logger } from "@paperbits/common/logging";
+import { IMediaService } from "@paperbits/common/media";
 
 
 export class PagePublisher implements IPublisher {
     constructor(
         private readonly pageService: IPageService,
         private readonly siteService: ISiteService,
+        private readonly mediaService: IMediaService,
         private readonly outputBlobStorage: IBlobStorage,
         private readonly htmlPagePublisher: HtmlPagePublisher,
         private readonly logger: Logger
@@ -40,6 +42,17 @@ export class PagePublisher implements IPublisher {
             }
         };
 
+        if (settings.site.faviconSourceKey) {
+            try {
+                const media = await this.mediaService.getMediaByKey(settings.site.faviconSourceKey);
+                htmlPage.faviconPermalink = media.permalink;
+            }
+            catch (error) {
+                this.logger.traceError(error, "Could not retrieve favicon.");
+            }
+        }
+
+        // settings.site.faviconSourceKey
         const htmlContent = await this.renderPage(htmlPage);
 
         let permalink = page.permalink;
