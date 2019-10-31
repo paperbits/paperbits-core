@@ -45,7 +45,10 @@ export class PagePublisher implements IPublisher {
         if (settings.site.faviconSourceKey) {
             try {
                 const media = await this.mediaService.getMediaByKey(settings.site.faviconSourceKey);
-                htmlPage.faviconPermalink = media.permalink;
+
+                if (media) {
+                    htmlPage.faviconPermalink = media.permalink;
+                }
             }
             catch (error) {
                 this.logger.traceError(error, "Could not retrieve favicon.");
