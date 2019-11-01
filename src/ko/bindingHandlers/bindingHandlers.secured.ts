@@ -16,7 +16,7 @@ export class SecuredBindingHandler {
                 const applyRoles = async () => {
                     const widgetRoles = ko.unwrap(valueAccessor()) || [BuiltInRoles.everyone.key];
                     const userRoles = await this.userService.getUserRoles();
-                    const visibleToUser = userRoles.some(x => widgetRoles.includes(x)) || widgetRoles.includes(BuiltInRoles.everyone.key)
+                    const visibleToUser = userRoles.some(x => widgetRoles.includes(x)) || widgetRoles.includes(BuiltInRoles.everyone.key);
                     
 
                     const roles = widgetRoles

@@ -4,7 +4,7 @@ export class DesignerUserService implements UserService {
     private currentViewRoles: string[];
 
     constructor() {
-        this.currentViewRoles = [BuiltInRoles.everyone.key];
+        this.currentViewRoles = [BuiltInRoles.anonymous.key];
     }
 
     public async getUserPhotoUrl(): Promise<string> {
