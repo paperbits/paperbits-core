@@ -28,7 +28,8 @@ export class Tray {
     @OnMounted()
     public async initialize(): Promise<void> {
         this.buttons(this.trayCommands);
-        this.availableRoles(await this.roleService.getRoles());
+        const roles = await this.roleService.getRoles();
+        this.availableRoles(roles.slice(1)); // Excluding Everyone.
         this.selectedRoles(this.viewManager.getViewRoles());
     }
 

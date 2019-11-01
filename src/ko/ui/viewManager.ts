@@ -71,7 +71,7 @@ export class DefaultViewManager implements ViewManager {
         this.selectedElement = ko.observable<IHighlightConfig>();
         this.selectedElementContextualEditor = ko.observable<IContextCommandSet>();
         this.viewport = ko.observable<string>("xl");
-        this.rolesScope = ko.observableArray([BuiltInRoles.everyone]);
+        this.rolesScope = ko.observableArray([BuiltInRoles.anonymous]);
         this.host = ko.observable<IComponent>();
         this.shutter = ko.observable<boolean>(true);
         this.dragSession = ko.observable();
