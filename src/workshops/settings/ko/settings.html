@@ -2,11 +2,11 @@
 <spinner></spinner>
 <!--/ko-->
 
-<div class="flex-container flex-container-column fit">
+<div class="flex flex-column fit">
     <fieldset class="flex-item flex-item-grow form" data-bind="scrollable: true">
         <div class="form-group">
             <label class="form-label">Favicon</label>
-            <div class="flex-container">
+            <div class="flex">
                 <div class="flex-item dropzone-showbox dropzone-square" data-bind="background: favicon, balloon: { component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected, mimeType: 'image/x-icon' } }, position: 'top' }"></div>
 
                 <button class="flex-item flex-item-grow btn" data-bind="balloon: { component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected, mimeType: $component.mimeType } }, position: 'top' }">

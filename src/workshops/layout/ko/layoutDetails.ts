@@ -59,7 +59,6 @@ export class LayoutDetails {
     }
 
     public async deleteLayout(): Promise<void> {
-        // TODO: Show confirmation dialog according to mockup
         await this.layoutService.deleteLayout(this.layoutItem.toLayout());
 
         this.viewManager.notifySuccess("Layouts", `Page "${this.layoutItem.title()}" was deleted.`);

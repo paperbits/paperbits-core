@@ -1,4 +1,4 @@
-<div class="toolbox toolbox-position-left workshops-container flex-container flex-container-row"
+<div class="toolbox toolbox-position-left workshops-container flex flex-row"
     data-bind="visible: viewManager.primaryToolboxVisible, resizable: resizing">
     <ul role="tablist" class="flex-item toolbox-btn-group toolbox-btn-group-vertical">
         <!-- ko foreach: { data: sections, as: 'section' } -->
@@ -22,9 +22,9 @@
     </ul>
 
     <!-- ko if: viewManager.journey().length > 0 -->
-    <div role="tabpanel" class="flex-container flex-item flex-item-grow workshop"
+    <div role="tabpanel" class="flex flex-item flex-item-grow workshop"
         data-bind="foreach: viewManager.journey()">
-        <div class="flex-item flex-container flex-container-column workshop-journey-step">
+        <div class="flex-item flex flex-column workshop-journey-step">
             <h1>
                 <span data-bind="text: heading"></span>
                 <!-- ko if: $data.helpText -->

@@ -1,5 +1,5 @@
 <div class="editor row-layout-selector">
-    <div class="flex-container flex-container-row">
+    <div class="flex flex-row">
         <h1>
             Add section
         </h1>
@@ -22,7 +22,7 @@
         </div>
 
         <!-- ko if: !selected() -->
-        <div class="flex-container flex-container-column">
+        <div class="flex flex-column">
             <div class="flex-item flex-item-grow" role="tabpanel">
                 <div role="list">
                     <!-- ko foreach: { data: $component.snippets, as: 'snippet' } -->

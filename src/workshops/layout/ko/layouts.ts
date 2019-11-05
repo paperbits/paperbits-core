@@ -52,6 +52,14 @@ export class LayoutsWorkshop {
 
     public selectLayout(layoutItem: LayoutItem): void {
         this.selectedLayout(layoutItem);
+
+        /*
+           1. Layout can have its own host component;
+           2. New host component can accept additional parameters, like layout ID;
+           3. Page metadata and page content are mixed. There should be separate ContentModelBinder.
+              This would help us to address Blogs as well.
+           4. Each "host" would know what type of "content" they build.
+        */
         this.viewManager.setHost({ name: "content-host" });
 
         const view: View = {
