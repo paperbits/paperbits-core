@@ -8,8 +8,6 @@ import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { VideoPlayerEditorModule } from "./video-player/ko/videoPlayerEditor.module";
 import { PictureEditorModule } from "./picture/ko/pictureEditor.module";
 import { YoutubePlayerEditorModule } from "./youtube-player/ko/youtubePlayerEditor.module";
-import { NavbarEditorModule } from "./navbar/ko/navbarEditor.module";
-import { TableOfContentsEditorModule } from "./table-of-contents/ko/tableOfContentsEditor.module";
 import { ButtonEditorModule } from "./button/ko/buttonEditor.module";
 import { TestimonialsEditorModule } from "./testimonials/ko/testimonialsEditor.module";
 import { ColumnEditorModule } from "./column/ko/columnEditor.module";
@@ -103,8 +101,6 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new VideoPlayerEditorModule());
         injector.bindModule(new YoutubePlayerEditorModule());
         injector.bindModule(new TestimonialsEditorModule());
-        injector.bindModule(new TableOfContentsEditorModule());
-        injector.bindModule(new NavbarEditorModule());
         injector.bindModule(new MenuEditorModule());
         injector.bindModule(new DropbucketModule());
         injector.bindModule(new PageDesignModule());

@@ -10,7 +10,6 @@ import { PictureModule } from "./picture/ko/picture.module";
 import { VideoPlayerModule } from "./video-player/ko/videoPlayer.module";
 import { YoutubePlayerModule } from "./youtube-player/ko/youtubePlayer.module";
 import { NavbarModule } from "./navbar/ko/navbar.module";
-import { TableOfContentsModule } from "./table-of-contents/ko/tableOfContents.module";
 import { MapModule } from "./map/ko/map.module";
 import { ButtonModule } from "./button/ko/button.module";
 import { TestimonialsModule } from "./testimonials/ko/testimonials.module";
@@ -101,7 +100,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new NavbarModule());
         injector.bindModule(new ButtonModule());
         // injector.bindModule(new MapModule());
-        injector.bindModule(new TableOfContentsModule());
         injector.bindModule(new MenuModule());
         injector.bindModule(new PictureModule());
         injector.bindModule(new VideoPlayerModule());
