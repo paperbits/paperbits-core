@@ -2,7 +2,7 @@
 <dropbucket></dropbucket>
 
 <!-- ko if: host -->
-<div class="viewport" data-bind="host: { viewport: viewport, host: host }, css: { shutter: shutter }"></div>
+<div class="viewport" data-bind="host: { viewport: viewport, host: host, block: block }, css: { shutter: shutter }"></div>
 <!-- /ko -->
 
 <div class="toasts" data-bind="foreach: toasts">
@@ -41,6 +41,8 @@
     </div>
 </div>
 <!-- /ko -->
+
+<!-- ko if: $component.designTime -->
 
 <!-- ko foreach: { data: contextualEditors, as: 'contextualEditor' } -->
 <!-- ko if: contextualEditor.hoverCommand -->
@@ -113,6 +115,8 @@
     </button>
     <!-- /ko -->
 </div>
+<!-- /ko -->
+
 <!-- /ko -->
 
 <!-- /ko -->

@@ -7,13 +7,20 @@ ko.bindingHandlers["activate"] = {
         const onActivate = valueAccessor();
         const data = ko.dataFor(element);
 
-        const onClick = () => onActivate(data);
+        const onClick = (event: PointerEvent) => {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            onActivate(data);
+        };
 
         const onKeyDown = (event: KeyboardEvent) => {
-            if (event.keyCode === Keys.Enter ||
-                event.keyCode === Keys.Space) {
-                onActivate(data);
+            if (event.keyCode !== Keys.Enter && event.keyCode !== Keys.Space) {
+                return;
             }
+
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            onActivate(data);
         };
 
         element.addEventListener("keydown", onKeyDown);

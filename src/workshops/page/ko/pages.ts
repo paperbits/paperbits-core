@@ -100,27 +100,4 @@ export class PagesWorkshop {
 
         this.working(false);
     }
-
-    public async deleteSelectedPage(): Promise<void> {
-        this.viewManager.closeWorkshop("page-details-workshop");
-
-        await this.pageService.deletePage(this.selectedPage().toContract());
-        await this.searchPages();
-
-        this.router.navigateTo("/");
-    }
-
-    public onKeyDown(item: PageItem, event: KeyboardEvent): boolean {
-        switch (event.keyCode) {
-            case Keys.Delete:
-                this.deleteSelectedPage();
-                break;
-
-            case Keys.Enter:
-            case Keys.Space:
-                this.selectPage(item);
-        }
-
-        return true;
-    }
 }

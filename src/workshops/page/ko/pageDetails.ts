@@ -55,8 +55,8 @@ export class PageDetailsWorkshop {
             validPermalink.subscribe(this.updatePermlaink);
         }
 
-        this.viewManager.setHost({ name: "content-host" });
         await this.router.navigateTo(validPermalink());
+        this.viewManager.setHost({ name: "page-host" });
     }
 
     private async updatePage(): Promise<void> {

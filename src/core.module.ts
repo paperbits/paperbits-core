@@ -1,4 +1,3 @@
-import { HistoryRouteHandler } from "@paperbits/common/routing/historyRouteHandler";
 import { BackgroundBindingHandler } from "./ko/bindingHandlers/bindingHandlers.background";
 import { WidgetBindingHandler } from "./ko/bindingHandlers/bindingHandlers.widget";
 import { SecuredBindingHandler } from "./ko/bindingHandlers/bindingHandlers.secured";

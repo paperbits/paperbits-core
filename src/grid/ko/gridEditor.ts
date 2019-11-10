@@ -29,6 +29,8 @@ export class GridEditor {
         this.attach = this.attach.bind(this);
         this.detach = this.detach.bind(this);
         this.onKeyDown = this.onKeyDown.bind(this);
+        this.onPointerMove = this.onPointerMove.bind(this);
+        this.onWindowScroll = this.onWindowScroll.bind(this);
 
         this.actives = {};
     }
@@ -138,14 +140,13 @@ export class GridEditor {
             return;
         }
 
-        const element =  this.activeHighlightedElement;
+        const element = this.activeHighlightedElement;
 
         if (!element) {
             this.viewManager.closeView();
             return;
         }
 
-        
         const bindings = GridHelper.getParentWidgetBindings(element);
         const windgetIsInContent = bindings.some(x => x.name === "page" || x.name === "email-layout");
 
@@ -157,12 +158,11 @@ export class GridEditor {
             layoutEditing = metadata["routeKind"] === "layout";
         }
 
-        if ((!windgetIsInContent && !layoutEditing && this.viewManager.getHost().name === "content-host")) {
+        if ((!windgetIsInContent && !layoutEditing && this.viewManager.getHost().name === "page-host")) {
             event.preventDefault();
             event.stopPropagation();
 
             this.eventManager.dispatchEvent("InactiveLayoutHint");
-
             return;
         }
 
@@ -174,6 +174,10 @@ export class GridEditor {
 
         if (widgetBinding.readonly) {
             return;
+        }
+
+        if (element["dragSource"]) { // TODO: Maybe make part of Binding?
+            element["dragSource"].beginDrag(element, this.pointerX, this.pointerY);
         }
 
         if (widgetBinding.editor !== "html-editor") {
@@ -205,6 +209,8 @@ export class GridEditor {
             this.viewManager.setSelectedElement(config, contextualEditor);
             this.selectedContextualEditor = contextualEditor;
         }
+
+
     }
 
     private onPointerMove(event: MouseEvent): void {
@@ -529,16 +535,16 @@ export class GridEditor {
 
     public attach(ownerDocument: Document): void {
         this.ownerDocument = ownerDocument;
-        // Firefox doesn't fire "mousemove" events by some reason
-        this.ownerDocument.addEventListener("mousemove", this.onPointerMove.bind(this), true);
-        this.ownerDocument.addEventListener("scroll", this.onWindowScroll.bind(this));
+        // Firefox doesn't fire "pointermove" events by some reason
+        this.ownerDocument.addEventListener("mousemove", this.onPointerMove, true);
+        this.ownerDocument.addEventListener("scroll", this.onWindowScroll);
         this.ownerDocument.addEventListener("mousedown", this.onPointerDown, true);
         this.ownerDocument.addEventListener("keydown", this.onKeyDown);
     }
 
     public detach(): void {
-        this.ownerDocument.removeEventListener("mousemove", this.onPointerMove.bind(this), true);
-        this.ownerDocument.removeEventListener("scroll", this.onWindowScroll.bind(this));
+        this.ownerDocument.removeEventListener("mousemove", this.onPointerMove, true);
+        this.ownerDocument.removeEventListener("scroll", this.onWindowScroll);
         this.ownerDocument.removeEventListener("mousedown", this.onPointerDown, true);
         this.ownerDocument.removeEventListener("keydown", this.onKeyDown);
     }

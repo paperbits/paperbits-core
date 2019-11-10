@@ -7,11 +7,11 @@ import { ViewManager, ViewManagerMode } from "@paperbits/common/ui";
 
 
 @Component({
-    selector: "page-host",
+    selector: "layout-host",
     template: "<!-- ko if: layoutViewModel --><!-- ko widget: layoutViewModel, grid: {} --><!-- /ko --><!-- /ko -->",
-    injectable: "pageHost"
+    injectable: "layoutHost"
 })
-export class PageHost {
+export class LayoutHost {
     public readonly layoutViewModel: ko.Observable<LayoutViewModel>;
 
     constructor(
@@ -21,18 +21,16 @@ export class PageHost {
         private readonly viewManager: ViewManager
     ) {
         this.layoutViewModel = ko.observable();
-        this.pageKey = ko.observable();
+        this.layoutKey = ko.observable();
     }
 
-    
     @Param()
-    public pageKey: ko.Observable<string>;
+    public layoutKey: ko.Observable<string>;
 
     @OnMounted()
     public async initialize(): Promise<void> {
         await this.refreshContent();
 
-        this.router.addRouteChangeListener(this.onRouteChange);
         this.eventManager.addEventListener("onDataPush", () => this.onDataPush());
     }
 
@@ -48,23 +46,10 @@ export class PageHost {
     private async refreshContent(): Promise<void> {
         this.viewManager.setShutter();
         const route = this.router.getCurrentRoute();
-        const routeKind = route.metadata["routeKind"];
-        const layoutViewModel = await this.layoutViewModelBinder.getLayoutViewModel(route.path, routeKind);
+
+        const layoutViewModel = await this.layoutViewModelBinder.getLayoutViewModelByKey(route.path, this.layoutKey());
        
         this.layoutViewModel(layoutViewModel);
         this.viewManager.removeShutter();
-    }
-
-    private async onRouteChange(route: Route): Promise<void> {
-        if (route.previous && route.previous.path === route.path && route.previous.metadata["routeKind"] === route.metadata["routeKind"]) {
-            return;
-        }
-
-        await this.refreshContent();
-    }
-
-    @OnDestroyed()
-    public dispose(): void {
-        this.router.removeRouteChangeListener(this.onRouteChange);
     }
 }

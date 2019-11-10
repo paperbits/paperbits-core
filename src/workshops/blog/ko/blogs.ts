@@ -52,7 +52,7 @@ export class BlogWorkshop {
 
     public selectBlogPost(blogPostItem: BlogPostItem): void {
         this.selectedBlogPost(blogPostItem);
-        this.viewManager.setHost({ name: "content-host" });
+        this.viewManager.setHost({ name: "page-host" });
 
         const view: View = {
             heading: "Blog post",

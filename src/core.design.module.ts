@@ -49,6 +49,7 @@ import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkRe
 import { GridEditorModule } from "./grid-layout-section/ko/gridEditor.module";
 import { GridCellEditorModule } from "./grid-cell/ko/gridCellEditor.module";
 import { PageHost } from "./workshops/page/ko/pageHost";
+import { LayoutHost } from "./workshops/layout/ko/layoutHost";
 import { Tray } from "./workshops/tray/tray";
 import { CollapsiblePanelEditorModule } from "./collapsible-panel/ko";
 import { MenuEditorModule } from "./menu/ko";
@@ -92,6 +93,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bind("urlSelector", UrlSelector);
         injector.bind("confirmation", Confirmation);
         injector.bind("pageHost", PageHost);
+        injector.bind("layoutHost", LayoutHost);
         injector.bind("roleSelector", RoleSelector);
         injector.bind("roleInput", RoleInput);
         injector.bindSingleton("mediaPermalinkResolver", MediaPermalinkResolver);

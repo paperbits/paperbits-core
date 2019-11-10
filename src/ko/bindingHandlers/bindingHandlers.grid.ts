@@ -15,6 +15,10 @@ export class GridBindingHandler {
         ko.bindingHandlers["grid"] = {
             init(gridElement: HTMLElement): void {
                 gridEditor.attach(gridElement.ownerDocument);
+
+                ko.utils.domNodeDisposal.addDisposeCallback(gridElement, () => {
+                    gridEditor.detach();
+                });
             }
         };
 

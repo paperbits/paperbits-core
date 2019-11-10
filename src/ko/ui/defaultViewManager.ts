@@ -1,7 +1,7 @@
 ﻿import * as _ from "lodash";
 import * as ko from "knockout";
 import * as Arrays from "@paperbits/common/arrays";
-import template from "./viewManager.html";
+import template from "./defaultViewManager.html";
 import "@paperbits/common/extensions";
 import { Bag } from "@paperbits/common";
 import { EventManager, GlobalEventHandler } from "@paperbits/common/events";
@@ -9,7 +9,7 @@ import { IComponent, View, ViewManager, ICommand, ViewManagerMode, IHighlightCon
 import { Router } from "@paperbits/common/routing";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
-import { Component } from "@paperbits/common/ko/decorators";
+import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { RoleModel, BuiltInRoles } from "@paperbits/common/user";
 import { DesignerUserService } from "./designerUserService";
 
@@ -23,26 +23,28 @@ declare let uploadDialog: HTMLInputElement;
 })
 export class DefaultViewManager implements ViewManager {
     private contextualEditorsBag: Bag<IContextCommandSet> = {};
-    private previousHost: IComponent;
 
-    public journey: ko.ObservableArray<View>;
-    public journeyName: ko.Computed<string>;
-    public toasts: ko.ObservableArray<Toast>;
-    public balloons: ko.ObservableArray<IComponent>;
-    public primaryToolboxVisible: ko.Observable<boolean>;
-    public widgetEditor: ko.Observable<View>;
-    public contextualEditors: ko.ObservableArray<IContextCommandSet>;
-    public highlightedElement: ko.Observable<IHighlightConfig>;
-    public splitterElement: ko.Observable<ISplitterConfig>;
-    public selectedElement: ko.Observable<IHighlightConfig>;
-    public selectedElementContextualEditor: ko.Observable<IContextCommandSet>;
-    public viewport: ko.Observable<string>;
-    public rolesScope: ko.ObservableArray<RoleModel>;
-    public hostDocument: Document;
-    public host: ko.Observable<IComponent>;
-    public shutter: ko.Observable<boolean>;
-    public dragSession: ko.Observable<DragSession>;
+    public readonly designTime: ko.Observable<boolean>;
+    public readonly previewable: ko.Observable<boolean>;
+    public readonly block: ko.Computed<boolean>;
+    public readonly journey: ko.ObservableArray<View>;
+    public readonly journeyName: ko.Computed<string>;
+    public readonly toasts: ko.ObservableArray<Toast>;
+    public readonly balloons: ko.ObservableArray<IComponent>;
+    public readonly primaryToolboxVisible: ko.Observable<boolean>;
+    public readonly widgetEditor: ko.Observable<View>;
+    public readonly contextualEditors: ko.ObservableArray<IContextCommandSet>;
+    public readonly highlightedElement: ko.Observable<IHighlightConfig>;
+    public readonly splitterElement: ko.Observable<ISplitterConfig>;
+    public readonly selectedElement: ko.Observable<IHighlightConfig>;
+    public readonly selectedElementContextualEditor: ko.Observable<IContextCommandSet>;
+    public readonly viewport: ko.Observable<string>;
+    public readonly rolesScope: ko.ObservableArray<RoleModel>;
+    public readonly host: ko.Observable<IComponent>;
+    public readonly shutter: ko.Observable<boolean>;
+    public readonly dragSession: ko.Observable<DragSession>;
     public mode: ViewManagerMode;
+    public hostDocument: Document;
 
     constructor(
         private readonly eventManager: EventManager,
@@ -50,8 +52,11 @@ export class DefaultViewManager implements ViewManager {
         private readonly designerUserService: DesignerUserService,
         private readonly router: Router
     ) {
-
-        // setting up...
+        this.designTime = ko.observable(false);
+        this.previewable = ko.observable(true);
+        this.block = ko.computed(() => {
+            return this.designTime() && this.previewable();
+        });
         this.mode = ViewManagerMode.selecting;
         this.toasts = ko.observableArray<Toast>();
         this.balloons = ko.observableArray<IComponent>();
@@ -76,7 +81,10 @@ export class DefaultViewManager implements ViewManager {
         this.shutter = ko.observable<boolean>(true);
         this.dragSession = ko.observable();
         this.primaryToolboxVisible = ko.observable<boolean>(false);
+    }
 
+    @OnMounted()
+    public initialize(): void {
         this.globalEventHandler.addDragEnterListener(this.hideToolboxes.bind(this));
         this.globalEventHandler.addDragDropListener(this.onDragEnd.bind(this));
         this.globalEventHandler.addDragEndListener(this.onDragEnd.bind(this));
@@ -84,28 +92,38 @@ export class DefaultViewManager implements ViewManager {
         this.eventManager.addEventListener("virtualDragEnd", this.onDragEnd.bind(this));
 
         this.router.addRouteChangeListener(this.onRouteChange.bind(this));
-        globalEventHandler.appendDocument(document);
+        this.globalEventHandler.appendDocument(document);
 
-        eventManager.addEventListener("onEscape", this.closeEditors.bind(this));
+        this.eventManager.addEventListener("onEscape", this.closeEditors.bind(this));
+        this.eventManager.addEventListener("onKeyDown", this.onKeyDown.bind(this));
+        this.eventManager.addEventListener("onKeyUp", this.onKeyUp.bind(this));
+    }
+
+    private onKeyDown(event: KeyboardEvent): void {
+        if (!event.ctrlKey && !event.metaKey) {
+            return;
+        }
+
+        this.designTime(false);
+    }
+
+    private onKeyUp(event: KeyboardEvent): void {
+        if (event.ctrlKey || event.metaKey) {
+            return;
+        }
+        this.designTime(true);
     }
 
     public setHost(component: IComponent): void {
         const currentComponent = this.host();
-        this.previousHost = currentComponent;
 
-        if (currentComponent && currentComponent.name === component.name) {
+        if (currentComponent && currentComponent.name === component.name && !currentComponent.params) {
             return;
         }
 
         this.clearContextualEditors();
         this.host(component);
-    }
-
-    public activatePreviousHost(): void {
-        if (this.previousHost) {
-            this.setHost(this.previousHost);
-            this.previousHost = undefined;
-        }
+        this.previewable(component.name !== "style-guide");
     }
 
     public getHost(): IComponent {
@@ -204,9 +222,6 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public openViewAsWorkshop(view: View): void {
-        if (this.host().name !== view.component.name) {
-            this.activatePreviousHost();
-        }
         this.clearContextualEditors();
         this.updateJourneyComponent(view);
         this.mode = ViewManagerMode.configure;
@@ -226,7 +241,7 @@ export class DefaultViewManager implements ViewManager {
         else {
             view = editor;
         }
-        
+
         const indexOfClosingEditor = journey.indexOf(view);
 
         journey.splice(indexOfClosingEditor);
@@ -264,6 +279,8 @@ export class DefaultViewManager implements ViewManager {
         this.closeView();
         this.widgetEditor(view);
         this.mode = ViewManagerMode.configure;
+
+        this.designTime(false); // Review: It's here for text editor
     }
 
     public getOpenView(): View {
@@ -271,9 +288,14 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public closeEditors(): void {
+        const host = this.host();
+
+        if (!this.getOpenView() && this.journey().length === 0 && host && host.name !== "page-host") {
+            this.setHost({ name: "page-host" });
+        }
+
         this.closeView();
         this.clearJourney();
-        this.activatePreviousHost();
     }
 
     public openWidgetEditor(binding: IWidgetBinding<any>): void {
@@ -327,6 +349,7 @@ export class DefaultViewManager implements ViewManager {
         this.setSplitter(null);
         this.selectedElement(null);
         this.selectedElementContextualEditor(null);
+        this.designTime(true);
 
         if (this.mode !== ViewManagerMode.configure) {
             this.mode = ViewManagerMode.selecting;

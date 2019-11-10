@@ -49,9 +49,7 @@ export class LayoutDetails {
             return !this.isDefaultLayout();
         });
 
-        const permalinkTemplate = validPermalinkTemplate();
-
-        await this.router.navigateTo(permalinkTemplate, this.layoutItem.title(), { routeKind: "layout" });
+        this.viewManager.setHost({ name: "layout-host", params: { layoutKey: this.layoutItem.key } });
     }
 
     private async updateLayout(): Promise<void> {
@@ -68,6 +66,6 @@ export class LayoutDetails {
             this.onDeleteCallback();
         }
 
-        await this.router.navigateTo("/");
+        this.viewManager.setHost({ name: "page-host" }); // Returning to editing current page.
     }
 }
