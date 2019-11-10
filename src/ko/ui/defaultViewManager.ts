@@ -100,6 +100,10 @@ export class DefaultViewManager implements ViewManager {
     }
 
     private onKeyDown(event: KeyboardEvent): void {
+        if (this.getOpenView()) {
+            return;
+        }
+
         if (!event.ctrlKey && !event.metaKey) {
             return;
         }
@@ -108,6 +112,10 @@ export class DefaultViewManager implements ViewManager {
     }
 
     private onKeyUp(event: KeyboardEvent): void {
+        if (this.getOpenView()) {
+            return;
+        }
+
         if (event.ctrlKey || event.metaKey) {
             return;
         }
