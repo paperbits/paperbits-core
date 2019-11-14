@@ -65,7 +65,12 @@ export class PagePublisher implements IPublisher {
 
         if (!isHtmlFile) {
             /* if filename has no *.html extension we publish it to a dedicated folder with index.html */
-            permalink = `${permalink}/index.html`;
+
+            if (!permalink.endsWith("/")) {
+                permalink += "/";
+            }
+
+            permalink = `${permalink}index.html`;
         }
 
         const contentBytes = Utils.stringToUnit8Array(htmlContent);

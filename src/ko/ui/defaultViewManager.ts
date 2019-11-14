@@ -145,6 +145,7 @@ export class DefaultViewManager implements ViewManager {
     private onRouteChange(): void {
         this.clearContextualEditors();
         this.closeView();
+        this.setHost({ name: "page-host" });
     }
 
     public getCurrentJourney(): string {
