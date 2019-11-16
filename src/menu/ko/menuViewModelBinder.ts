@@ -5,8 +5,9 @@ import { MenuViewModel } from "./menuViewModel";
 import { MenuModel } from "../menuModel";
 import { MenuModelBinder, MenuContract } from "..";
 import { MenuItemViewModel } from "./menuItemViewModel";
-import { NavigationItemModel } from "@paperbits/common/navigation";
+import { NavigationItemModel, NavigationEvents } from "@paperbits/common/navigation";
 import { IStyleCompiler } from "@paperbits/common/styles";
+import { IWidgetBinding } from "@paperbits/common/editing";
 
 
 export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewModel> {
@@ -43,7 +44,14 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles));
         }
 
-        viewModel["widgetBinding"] = {
+        const onUpdate = async (updatedRootModel: NavigationItemModel): Promise<void> => {
+            if (updatedRootModel.key === model.navigationItemKey) {
+                const menuItems = updatedRootModel.nodes.map(menuItem => this.menuItemModelToViewModel(menuItem));
+                viewModel.nodes(menuItems);
+            }
+        };
+
+        const binding: IWidgetBinding<MenuModel> = {
             displayName: "Menu",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
@@ -60,11 +68,19 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
                 };
 
                 model = await this.menuModelBinder.contractToModel(contract, bindingContext);
+                await this.modelToViewModel(model, viewModel, bindingContext);
 
-                this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
+            },
+            onCreate: () => {
+                this.eventManager.addEventListener(NavigationEvents.onNavigationItemUpdate, onUpdate);
+            },
+            onDispose: () => {
+                this.eventManager.removeEventListener(NavigationEvents.onNavigationItemUpdate, onUpdate);
             }
         };
+
+        viewModel["widgetBinding"] = binding;
 
         return viewModel;
     }
