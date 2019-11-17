@@ -60,9 +60,13 @@ export class NavigationItemSelector {
 
         if (this.onSelect) {
             const rootModel = this.navigationViewModelBinder.viewModelToModel(navigationItem);
-            const rootContract = this.navigationModelBinder.modelToContract(rootModel);
-            
-            this.onSelect(rootContract);
+            this.onSelect(rootModel);
+        }
+    }
+
+    public selectNone(): void {
+        if (this.onSelect) {
+            this.onSelect(null);
         }
     }
 }

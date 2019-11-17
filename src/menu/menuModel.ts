@@ -3,8 +3,7 @@ import { NavigationItemModel } from "@paperbits/common/navigation";
 
 
 export class MenuModel {
-    public title?: string;
-    public navigationItemKey?: string;
+    public navigationItem?: NavigationItemModel;
     public minHeading?: number;
     public maxHeading?: number;
     public items: NavigationItemModel[];

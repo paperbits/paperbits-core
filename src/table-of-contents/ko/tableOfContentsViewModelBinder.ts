@@ -22,7 +22,6 @@ export class TableOfContentsViewModelBinder implements ViewModelBinder<TableOfCo
             displayName: "Table of contents",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
-            editor: "table-of-contents-editor",
             applyChanges: async (updatedModel: TableOfContentsModel) => {
                 const contract: TableOfContentsContract = {
                     type: "table-of-contents",

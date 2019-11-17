@@ -90,7 +90,6 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
         }
 
         const menuModel = new MenuModel();
-        menuModel.navigationItemKey = contract.navigationItemKey;
         menuModel.minHeading = contract.minHeading;
         menuModel.maxHeading = contract.maxHeading;
         menuModel.items = [];
@@ -98,22 +97,16 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
         menuModel.roles = contract.roles || [BuiltInRoles.everyone.key];
         menuModel.styles = contract.styles || { appearance: "components/menu/default" };
 
-
         const currentPageUrl = bindingContext.navigationPath;
 
         if (contract.navigationItemKey) {
             const rootNavigationItem = await this.navigationService.getNavigationItem(contract.navigationItemKey);
 
             if (rootNavigationItem) {
-                menuModel.title = menuModel.title || rootNavigationItem.label;
-
-                if (rootNavigationItem.navigationItems) {
-                    const promises = rootNavigationItem.navigationItems.map(async navigationItem =>
-                        await this.processNavigationItem(navigationItem, currentPageUrl, menuModel.minHeading, menuModel.maxHeading));
-
-                    const results = await Promise.all(promises);
-                    menuModel.items = results;
-                }
+                const root = await this.processNavigationItem(rootNavigationItem, currentPageUrl, menuModel.minHeading, menuModel.maxHeading);
+                menuModel.items = root.nodes;
+                menuModel.navigationItem = root;
+                menuModel.navigationItem.key = contract.navigationItemKey;
             }
         }
 
@@ -136,11 +129,12 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
             type: "menu",
             minHeading: model.minHeading,
             maxHeading: model.maxHeading,
-            navigationItemKey: model.navigationItemKey,
+            navigationItemKey: model.navigationItem?.key,
             layout: model.layout,
             styles: model.styles,
             roles: roles
         };
+
 
         return contract;
     }

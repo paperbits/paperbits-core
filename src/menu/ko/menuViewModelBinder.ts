@@ -45,7 +45,7 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
         }
 
         const onUpdate = async (updatedRootModel: NavigationItemModel): Promise<void> => {
-            if (updatedRootModel.key === model.navigationItemKey) {
+            if (updatedRootModel.key === model.navigationItem?.key) {
                 const menuItems = updatedRootModel.nodes.map(menuItem => this.menuItemModelToViewModel(menuItem));
                 viewModel.nodes(menuItems);
             }
@@ -56,18 +56,26 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             editor: "menu-editor",
-            applyChanges: async (updatedModel: MenuModel) => {
+            applyChanges: async (updates: MenuModel) => {
                 const contract: MenuContract = {
                     type: "menu",
-                    navigationItemKey: updatedModel.navigationItemKey,
-                    layout: updatedModel.layout,
-                    roles: updatedModel.roles,
-                    minHeading: updatedModel.minHeading,
-                    maxHeading: updatedModel.maxHeading,
-                    styles: updatedModel.styles
+                    navigationItemKey: updates.navigationItem?.key,
+                    layout: updates.layout,
+                    roles: updates.roles,
+                    minHeading: updates.minHeading,
+                    maxHeading: updates.maxHeading,
+                    styles: updates.styles
                 };
 
-                model = await this.menuModelBinder.contractToModel(contract, bindingContext);
+                const model1 = await this.menuModelBinder.contractToModel(contract, bindingContext);
+                model.navigationItem = model1.navigationItem;
+                model.items = model1.items;
+                model.layout = model1.layout;
+                model.roles = model1.roles;
+                model.minHeading = model1.minHeading;
+                model.maxHeading = model1.maxHeading;
+                model.styles = model1.styles;
+
                 await this.modelToViewModel(model, viewModel, bindingContext);
 
                 this.eventManager.dispatchEvent("onContentUpdate");

@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./menuEditor.html";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
-import { NavigationItemContract } from "@paperbits/common/navigation";
+import { NavigationItemModel } from "@paperbits/common/navigation";
 import { StyleService } from "@paperbits/styles";
 import { MenuModel } from "../menuModel";
 
@@ -14,6 +14,8 @@ interface LayoutOption {
     label: string;
     value: string;
 }
+
+const emptySelectionLabel = "Click to select navigation item...";
 
 @Component({
     selector: "menu-editor",
@@ -54,8 +56,7 @@ export class MenuEditor {
             // { label: "Site map", value: "sitemap" }
         ]);
 
-        this.onNavigationItemChange = this.onNavigationItemChange.bind(this);
-        this.navigationItemTitle = ko.observable<string>("Click to select navigation item...");
+        this.navigationItemTitle = ko.observable();
     }
 
     @Param()
@@ -73,13 +74,8 @@ export class MenuEditor {
         const variations = await this.styleService.getComponentVariations("menu");
         this.appearanceStyles(variations.filter(x => x.category === "appearance"));
 
-        if (this.model.styles) {
-            this.appearanceStyle(this.model.styles.appearance);
-        }
-
-        if (this.model.title) {
-            this.navigationItemTitle(this.model.title);
-        }
+        this.appearanceStyle(this.model.styles?.appearance);
+        this.navigationItemTitle(this.model.navigationItem?.label || emptySelectionLabel);
 
         this.layout(this.model.layout);
 
@@ -90,9 +86,9 @@ export class MenuEditor {
         this.appearanceStyle.subscribe(this.applyChanges);
     }
 
-    public async onNavigationItemChange(navigationItem: NavigationItemContract): Promise<void> {
-        this.model.navigationItemKey = navigationItem.key;
-        this.navigationItemTitle(navigationItem.label);
+    public async onNavigationItemChange(navigationItem: NavigationItemModel): Promise<void> {
+        this.model.navigationItem = navigationItem;
+        this.navigationItemTitle(navigationItem?.label || emptySelectionLabel);
         this.applyChanges();
     }
 
