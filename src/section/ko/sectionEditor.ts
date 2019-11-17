@@ -78,27 +78,26 @@ export class SectionEditor {
                 }
             }
 
-            if (this.model.styles["size"]) {
-                this.stretch(true);
-            }
-
             const stickToStyles = <any>Objects.getObjectAt(`instance/stickTo/${viewport}`, this.model.styles);
 
             if (stickToStyles) {
                 this.stickTo(stickToStyles);
             }
+
+            const stretchStyle = Objects.getObjectAt(`instance/size/${viewport}/stretch`, this.model.styles);
+            this.stretch(!!stretchStyle);
         }
 
         const gridModel = <GridModel>this.model.widgets[0];
         const gridStyles = gridModel.styles;
-        const sizeStyles = <any>Objects.getObjectAt(`instance/size/${viewport}`, gridStyles);
+        const containerSizeStyles = <any>Objects.getObjectAt(`instance/size/${viewport}`, gridStyles);
         const marginStyles = <any>Objects.getObjectAt(`instance/margin/${viewport}`, gridStyles);
-        
-        if (sizeStyles) {
-            this.minWidth(sizeStyles.minWidth);
-            this.maxWidth(sizeStyles.maxWidth);
-            this.minHeight(sizeStyles.minHeight);
-            this.maxHeight(sizeStyles.maxHeight);
+
+        if (containerSizeStyles) {
+            this.minWidth(containerSizeStyles.minWidth);
+            this.maxWidth(containerSizeStyles.maxWidth);
+            this.minHeight(containerSizeStyles.minHeight);
+            this.maxHeight(containerSizeStyles.maxHeight);
         }
 
         if (marginStyles) {
@@ -131,13 +130,6 @@ export class SectionEditor {
         const viewport = this.viewManager.getViewport();
         this.model.styles = this.model.styles || {};
 
-        // if (this.stretch()) {
-        //     this.model.styles["size"] = { xs: styleKeyStretch };
-        // }
-        // else {
-        //     delete this.model.styles["size"];
-        // }
-
         if (this.model["styles"]["instance"] && !this.model["styles"]["instance"]["key"]) {
             this.model["styles"]["instance"]["key"] = Utils.randomClassName();
         }
@@ -145,15 +137,15 @@ export class SectionEditor {
         const gridModel = <GridModel>this.model.widgets[0];
         const gridStyles = gridModel.styles;
 
-        const sizeStyles: SizeStylePluginConfig = {
+        const containerSizeStyles: SizeStylePluginConfig = {
             minWidth: this.minWidth(),
             maxWidth: this.maxWidth(),
             minHeight: this.minHeight(),
             maxHeight: this.maxHeight()
         };
 
-        Objects.cleanupObject(sizeStyles);
-        Objects.setValue(`instance/size/${viewport}`, gridStyles, sizeStyles);
+        Objects.cleanupObject(containerSizeStyles);
+        Objects.setValue(`instance/size/${viewport}`, gridStyles, containerSizeStyles);
 
         const marginStyle: MarginStylePluginConfig = {
             top: this.marginTop(),
@@ -167,8 +159,8 @@ export class SectionEditor {
 
         Objects.cleanupObject(marginStyle);
         Objects.setValue(`instance/margin/${viewport}`, gridStyles, marginStyle);
-
         Objects.setValue(`instance/stickTo/${viewport}`, this.model.styles, this.stickTo());
+        Objects.setValue(`instance/size/${viewport}/stretch`, this.model.styles, this.stretch());
 
         this.onChange(this.model);
     }
