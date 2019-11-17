@@ -1,29 +1,33 @@
 <div class="editor">
-    <h1>Select navigation root</h1>
-    <hr />
+    <div class="flex flex-column list-container">
+        <h1>Select navigation root</h1>
+        <hr />
 
-    <div class="flex flex-column">
-        <!-- ko if: working -->
-        <spinner></spinner>
-        <!-- /ko -->
+        <div class="flex flex-column">
+            <!-- ko if: working -->
+            <spinner></spinner>
+            <!-- /ko -->
 
-        <!-- ko ifnot: working -->
+            <!-- ko ifnot: working -->
 
-        <!-- ko if: root().nodes().length === 0 -->
-        <p class="flex-item flex-item-grow text-center">It seems that you don't have navigation items yet.</p>
-        <!-- /ko -->
+            <!-- ko if: root().nodes().length === 0 -->
+            <p class="flex-item flex-item-grow text-center">It seems that you don't have navigation items yet.</p>
+            <!-- /ko -->
 
-        <div class="flex-item flex-item-grow list" role="list"
-            data-bind="scrollable: true, focus: { childSelector: '.list-item' }">
-            <!-- ko foreach: { data: root().nodes, as: 'node' } -->
-            <!-- ko template: { name: 'node', data: node } -->
-            <!-- /ko-->
-            <!-- /ko-->
+            <div class="flex-item flex-item-grow list" role="list"
+                data-bind="scrollable: true, focus: { childSelector: '.list-item' }">
+                <!-- ko foreach: { data: root().nodes, as: 'node' } -->
+                <!-- ko template: { name: 'node', data: node } -->
+                <!-- /ko-->
+                <!-- /ko-->
+            </div>
+
+            <!-- /ko -->
         </div>
-
-        <!-- /ko -->
     </div>
 </div>
+
+
 
 
 

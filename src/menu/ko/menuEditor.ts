@@ -68,7 +68,7 @@ export class MenuEditor {
     public async initialize(): Promise<void> {
         this.showHeadings(!!this.model.minHeading || !!this.model.maxHeading);
         this.minHeadingLevel(this.model.minHeading || 1);
-        this.maxHeadingLevel(this.model.maxHeading || 1);
+        this.maxHeadingLevel(this.model.maxHeading || 6);
 
         const variations = await this.styleService.getComponentVariations("menu");
         this.appearanceStyles(variations.filter(x => x.category === "appearance"));
