@@ -1,6 +1,6 @@
 import * as Utils from "@paperbits/common/utils";
 import { Contract, Bag } from "@paperbits/common";
-import { IStyleCompiler } from "@paperbits/common/styles";
+import { StyleCompiler } from "@paperbits/common/styles";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { BlockModel } from "@paperbits/common/text/models/blockModel";
 import { BlockContract } from "../contracts/blockContract";
@@ -10,7 +10,7 @@ export class BlockModelBinder {
 
     constructor(
         private readonly modelBinderSelector: ModelBinderSelector,
-        private readonly styleCompiler: IStyleCompiler
+        private readonly styleCompiler: StyleCompiler
     ) {
     }
 

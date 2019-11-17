@@ -1,5 +1,5 @@
 import { Contract, Bag } from "@paperbits/common";
-import { IStyleCompiler } from "@paperbits/common/styles";
+import { StyleCompiler } from "@paperbits/common/styles";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { ListModel } from "@paperbits/common/text/models/listModel";
 import { ListContract } from "../contracts/listContract";
@@ -9,7 +9,7 @@ export class ListModelBinder {
 
     constructor(
         private readonly modelBinderSelector: ModelBinderSelector,
-        private readonly styleCompiler: IStyleCompiler
+        private readonly styleCompiler: StyleCompiler
     ) { }
 
     public canHandleContract(contract: Contract): boolean {

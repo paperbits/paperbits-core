@@ -2,14 +2,14 @@ import { VideoPlayerViewModel } from "./videoPlayerViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { VideoPlayerModel } from "../videoPlayerModel";
 import { EventManager } from "@paperbits/common/events";
-import { IStyleCompiler } from "@paperbits/common/styles/IStyleCompiler";
+import { StyleCompiler } from "@paperbits/common/styles/StyleCompiler";
 import { Bag } from "@paperbits/common";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
 
 export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerModel, VideoPlayerViewModel> {
     constructor(
         private readonly eventManager: EventManager,
-        private readonly styleCompiler: IStyleCompiler,
+        private readonly styleCompiler: StyleCompiler,
         private readonly mediaPermalinkResolver: IPermalinkResolver
     ) { }
 

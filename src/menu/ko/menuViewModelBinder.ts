@@ -6,7 +6,7 @@ import { MenuModel } from "../menuModel";
 import { MenuModelBinder, MenuContract } from "..";
 import { MenuItemViewModel } from "./menuItemViewModel";
 import { NavigationItemModel, NavigationEvents } from "@paperbits/common/navigation";
-import { IStyleCompiler } from "@paperbits/common/styles";
+import { StyleCompiler } from "@paperbits/common/styles";
 import { IWidgetBinding } from "@paperbits/common/editing";
 
 
@@ -14,7 +14,7 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
     constructor(
         private readonly eventManager: EventManager,
         private readonly menuModelBinder: MenuModelBinder,
-        private readonly styleCompiler: IStyleCompiler
+        private readonly styleCompiler: StyleCompiler
     ) { }
 
     private menuItemModelToViewModel(navitem: NavigationItemModel, level: number = 0): MenuItemViewModel {

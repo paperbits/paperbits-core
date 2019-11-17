@@ -6,7 +6,7 @@ import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel"
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { GridHandlers } from "../gridHandlers";
 import { EventManager } from "@paperbits/common/events";
-import { IStyleCompiler } from "@paperbits/common/styles";
+import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
 
 
@@ -14,7 +14,7 @@ export class GridViewModelBinder implements ViewModelBinder<GridModel, GridViewM
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly eventManager: EventManager,
-        private readonly styleCompiler: IStyleCompiler
+        private readonly styleCompiler: StyleCompiler
     ) { }
 
     public async modelToViewModel(model: GridModel, viewModel?: GridViewModel, bindingContext?: Bag<any>): Promise<GridViewModel> {

@@ -2,13 +2,13 @@ import { Button } from "./buttonViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { ButtonModel } from "../buttonModel";
 import { EventManager } from "@paperbits/common/events";
-import { IStyleCompiler } from "@paperbits/common/styles";
+import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
 
 export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Button>  {
     constructor(
         private readonly eventManager: EventManager,
-        private readonly styleCompiler: IStyleCompiler
+        private readonly styleCompiler: StyleCompiler
     ) { }
 
     public async modelToViewModel(model: ButtonModel, viewModel?: Button, bindingContext?: Bag<any>): Promise<Button> {
@@ -25,6 +25,7 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
 
         viewModel["widgetBinding"] = {
             displayName: "Button",
+            readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             flow: "inline",
             editor: "button-editor",

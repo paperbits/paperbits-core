@@ -2,7 +2,7 @@ import { CollapsiblePanel } from "./collapsiblePanelViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { CollapsiblePanelModel } from "../collapsiblePanelModel";
 import { EventManager } from "@paperbits/common/events";
-import { IStyleCompiler } from "@paperbits/common/styles";
+import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
 import { PlaceholderViewModel } from "../../placeholder/ko";
 import { ViewModelBinderSelector } from "../../ko";
@@ -13,7 +13,7 @@ export class CollapsiblePanelViewModelBinder implements ViewModelBinder<Collapsi
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly eventManager: EventManager,
-        private readonly styleCompiler: IStyleCompiler
+        private readonly styleCompiler: StyleCompiler
     ) { }
 
     public async modelToViewModel(model: CollapsiblePanelModel, viewModel?: CollapsiblePanel, bindingContext?: Bag<any>): Promise<CollapsiblePanel> {
@@ -43,6 +43,7 @@ export class CollapsiblePanelViewModelBinder implements ViewModelBinder<Collapsi
 
         viewModel["widgetBinding"] = {
             displayName: "Collapsible panel",
+            readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             flow: "inline",
             editor: "collapsible-panel-editor",

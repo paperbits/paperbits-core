@@ -36,13 +36,13 @@ export class GridEditor {
     }
 
     private isModelBeingEdited(binding: IWidgetBinding<any>): boolean {
-        const session = this.viewManager.getOpenView();
+        const view = this.viewManager.getOpenView();
 
-        if (!session) {
+        if (!view) {
             return false;
         }
 
-        if (session.component.name !== binding.editor) {
+        if (view.component.name !== binding.editor) {
             return false;
         }
 
@@ -141,12 +141,6 @@ export class GridEditor {
         }
 
         const element = this.activeHighlightedElement;
-
-        if (!element) {
-            this.viewManager.closeView();
-            return;
-        }
-
         const bindings = GridHelper.getParentWidgetBindings(element);
         const windgetIsInContent = bindings.some(x => x.name === "page" || x.name === "email-layout");
 
@@ -192,6 +186,10 @@ export class GridEditor {
             if (widgetBinding.editor) {
                 this.viewManager.openWidgetEditor(widgetBinding);
             }
+
+            if (this.isModelBeingEdited(widgetBinding)) {
+                return;
+            }
         }
         else {
             const contextualEditor = this.getContextualEditor(element, "top");
@@ -209,8 +207,6 @@ export class GridEditor {
             this.viewManager.setSelectedElement(config, contextualEditor);
             this.selectedContextualEditor = contextualEditor;
         }
-
-
     }
 
     private onPointerMove(event: MouseEvent): void {
@@ -232,12 +228,12 @@ export class GridEditor {
         switch (this.viewManager.mode) {
             case ViewManagerMode.selecting:
             case ViewManagerMode.selected:
+            case ViewManagerMode.configure:
                 this.renderHighlightedElements();
                 break;
 
             case ViewManagerMode.dragging:
                 this.renderDropHandlers();
-
                 break;
         }
     }
@@ -411,7 +407,8 @@ export class GridEditor {
     }
 
     private renderHighlightedElements(): void {
-        if (this.scrolling || (this.viewManager.mode !== ViewManagerMode.selecting && this.viewManager.mode !== ViewManagerMode.selected)) {
+        if (this.scrolling) {
+            // || (this.viewManager.mode !== ViewManagerMode.selecting && this.viewManager.mode !== ViewManagerMode.selected)) {
             return;
         }
 

@@ -5,7 +5,7 @@ import { EventManager } from "@paperbits/common/events";
 import { NavigationItemContract, NavigationItemModel, NavigationEvents } from "@paperbits/common/navigation";
 import { NavbarModel } from "../navbarModel";
 import { NavbarModelBinder } from "../navbarModelBinder";
-import { IStyleCompiler } from "@paperbits/common/styles/IStyleCompiler";
+import { StyleCompiler } from "@paperbits/common/styles/StyleCompiler";
 import { Bag } from "@paperbits/common";
 
 
@@ -13,7 +13,7 @@ export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, Navba
     constructor(
         private readonly eventManager: EventManager,
         private readonly navbarModelBinder: NavbarModelBinder,
-        private readonly styleCompiler: IStyleCompiler
+        private readonly styleCompiler: StyleCompiler
     ) { }
 
     private navbarItemModelToNavbarItemViewModel(navbarItemModel: NavigationItemModel): NavbarItemViewModel {

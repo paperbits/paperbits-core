@@ -2,7 +2,7 @@ import { PictureViewModel } from "./pictureViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { PictureModel } from "../pictureModel";
 import { EventManager } from "@paperbits/common/events";
-import { IStyleCompiler } from "@paperbits/common/styles/IStyleCompiler";
+import { StyleCompiler } from "@paperbits/common/styles/StyleCompiler";
 import { Bag } from "@paperbits/common";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { IWidgetBinding } from "@paperbits/common/editing";
@@ -10,7 +10,7 @@ import { IWidgetBinding } from "@paperbits/common/editing";
 export class PictureViewModelBinder implements ViewModelBinder<PictureModel, PictureViewModel> {
     constructor(
         private readonly eventManager: EventManager,
-        private readonly styleCompiler: IStyleCompiler,
+        private readonly styleCompiler: StyleCompiler,
         private readonly mediaPermalinkResolver: IPermalinkResolver,
     ) { }
 

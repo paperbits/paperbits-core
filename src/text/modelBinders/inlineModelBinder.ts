@@ -1,7 +1,7 @@
 import { Contract } from "@paperbits/common";
 import { IPermalinkResolver, HyperlinkModel } from "@paperbits/common/permalinks";
 import { IPageService } from "@paperbits/common/pages";
-import { IStyleCompiler } from "@paperbits/common/styles";
+import { StyleCompiler } from "@paperbits/common/styles";
 import { InlineModel, MarkModel, ColorModel } from "@paperbits/common/text/models";
 import { InlineContract, MarkContract } from "../contracts";
 
@@ -9,7 +9,7 @@ import { InlineContract, MarkContract } from "../contracts";
 
 export class InlineModelBinder {
     constructor(
-        private readonly styleCompiler: IStyleCompiler,
+        private readonly styleCompiler: StyleCompiler,
         private readonly pageService: IPageService,
         private readonly permalinkResolver: IPermalinkResolver
     ) { }
