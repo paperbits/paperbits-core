@@ -26,7 +26,7 @@ export class MenuViewModel {
 
     constructor() {
         this.nodes = ko.observableArray<MenuItemViewModel>([]);
-        this.layout = ko.observable("horizontal");
+        this.layout = ko.observable("vertical");
         this.roles = ko.observableArray<string>();
         this.styles = ko.observable();
         this.isEmpty = ko.pureComputed(() => {

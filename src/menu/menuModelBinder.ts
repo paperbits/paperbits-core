@@ -25,52 +25,51 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
         return model instanceof MenuModel;
     }
 
-    private async processNavigationItem(contract: NavigationItemContract, currentPageUrl: string, minHeading: number, maxHeading?: number): Promise<NavigationItemModel> {
-        const navbarItemModel = new NavigationItemModel();
-        navbarItemModel.label = contract.label;
+    private async processNavigationItem(contract: NavigationItemContract, permalink: string, minHeading: number, maxHeading?: number): Promise<NavigationItemModel> {
+        const navitemModel = new NavigationItemModel();
+        navitemModel.label = contract.label;
 
         if (contract.navigationItems) {
             const tasks = [];
 
             contract.navigationItems.forEach(child => {
-                tasks.push(this.processNavigationItem(child, currentPageUrl, minHeading, maxHeading));
+                tasks.push(this.processNavigationItem(child, permalink, minHeading, maxHeading));
             });
 
             const results = await Promise.all(tasks);
 
             results.forEach(child => {
-                navbarItemModel.nodes.push(child);
+                navitemModel.nodes.push(child);
             });
         }
 
         if (!contract.targetKey) {
-            return navbarItemModel;
+            return navitemModel;
         }
 
         const contentItem = await this.contentItemService.getContentItemByKey(contract.targetKey);
 
         if (!contentItem) {
-            return navbarItemModel;
+            return navitemModel;
         }
 
-        navbarItemModel.targetUrl = contentItem.permalink;
+        navitemModel.targetUrl = contentItem.permalink;
 
-        if (contentItem.permalink === currentPageUrl) {
-            navbarItemModel.isActive = true;
-
-            if (minHeading && maxHeading) {
-                navbarItemModel.nodes = await this.processAnchorItems(contentItem.key, minHeading, maxHeading);
-            }
+        if (contentItem.permalink === permalink) {
+            navitemModel.isActive = true;
         }
 
-        return navbarItemModel;
+        if (minHeading && maxHeading && navitemModel.targetUrl === permalink) {
+            const localNavItems = await this.processAnchorItems(permalink, minHeading, maxHeading);
+            navitemModel.nodes.push(...localNavItems);
+        }
+
+        return navitemModel;
     }
 
-    private async processAnchorItems(contentItemKey: string, minHeading: number, maxHeading?: number): Promise<NavigationItemModel[]> {
-        if (!contentItemKey.startsWith("pages/")) { // TODO: Get rid of hardcoded values.
-            return [];
-        }
-        const pageContent = await this.pageService.getPageContent(contentItemKey);
+    private async processAnchorItems(permalink: string, minHeading: number, maxHeading?: number): Promise<NavigationItemModel[]> {
+        const page = await this.pageService.getPageByPermalink(permalink);
+        const pageContent = await this.pageService.getPageContent(page.key);
         const children = AnchorUtils.getHeadingNodes(pageContent, minHeading, maxHeading);
 
         if (children.length === 0) {
@@ -99,24 +98,29 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
         menuModel.roles = contract.roles || [BuiltInRoles.everyone.key];
         menuModel.styles = contract.styles || { appearance: "components/menu/default" };
 
-        if (!contract.navigationItemKey) {
-            return menuModel;
-        }
 
         const currentPageUrl = bindingContext.navigationPath;
 
-        const rootNavigationItem = await this.navigationService.getNavigationItem(contract.navigationItemKey);
-        menuModel.title = menuModel.title || rootNavigationItem.label;
+        if (contract.navigationItemKey) {
+            const rootNavigationItem = await this.navigationService.getNavigationItem(contract.navigationItemKey);
 
-        if (!rootNavigationItem || !rootNavigationItem.navigationItems) {
-            return menuModel;
+            if (rootNavigationItem) {
+                menuModel.title = menuModel.title || rootNavigationItem.label;
+
+                if (rootNavigationItem.navigationItems) {
+                    const promises = rootNavigationItem.navigationItems.map(async navigationItem =>
+                        await this.processNavigationItem(navigationItem, currentPageUrl, menuModel.minHeading, menuModel.maxHeading));
+
+                    const results = await Promise.all(promises);
+                    menuModel.items = results;
+                }
+            }
         }
 
-        const promises = rootNavigationItem.navigationItems.map(async navigationItem =>
-            await this.processNavigationItem(navigationItem, currentPageUrl, menuModel.minHeading, menuModel.maxHeading));
-
-        const results = await Promise.all(promises);
-        menuModel.items = results;
+        if (menuModel.items.length === 0 && menuModel.minHeading && menuModel.maxHeading) {
+            const localNavItems = await this.processAnchorItems(currentPageUrl, menuModel.minHeading, menuModel.maxHeading);
+            menuModel.items.push(...localNavItems);
+        }
 
         return menuModel;
     }

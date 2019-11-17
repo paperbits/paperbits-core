@@ -15,5 +15,6 @@ export class MenuModel {
     constructor() {
         this.items = [];
         this.roles = null;
+        this.layout = "vertical";
     }
 }
