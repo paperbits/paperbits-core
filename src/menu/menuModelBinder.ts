@@ -25,7 +25,7 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
         return model instanceof MenuModel;
     }
 
-    private async processNavigationItem(contract: NavigationItemContract, permalink: string, minHeading: number, maxHeading?: number): Promise<NavigationItemModel> {
+    private async processNavigationItem(contract: NavigationItemContract, permalink: string, minHeading: number, maxHeading: number, level: number = 0): Promise<NavigationItemModel> {
         const navitemModel = new NavigationItemModel();
         navitemModel.label = contract.label;
 
@@ -33,7 +33,7 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
             const tasks = [];
 
             contract.navigationItems.forEach(child => {
-                tasks.push(this.processNavigationItem(child, permalink, minHeading, maxHeading));
+                tasks.push(this.processNavigationItem(child, permalink, minHeading, maxHeading, level + 1));
             });
 
             const results = await Promise.all(tasks);
@@ -59,7 +59,7 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
             navitemModel.isActive = true;
         }
 
-        if (minHeading && maxHeading && navitemModel.targetUrl === permalink) {
+        if (level > 0 && minHeading && maxHeading && navitemModel.targetUrl === permalink) {
             const localNavItems = await this.processAnchorItems(permalink, minHeading, maxHeading);
             navitemModel.nodes.push(...localNavItems);
         }
