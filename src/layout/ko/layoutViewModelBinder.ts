@@ -24,8 +24,6 @@ export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, Layou
         let savingTimeout;
 
         const updateContent = async (): Promise<void> => {
-            const layout = await this.layoutService.getLayoutByPermalink(bindingContext.navigationPath);
-
             const contentContract = {
                 type: "layout",
                 nodes: []
@@ -36,7 +34,7 @@ export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, Layou
                 contentContract.nodes.push(modelBinder.modelToContract(section));
             });
 
-            await this.layoutService.updateLayoutContent(layout.key, contentContract);
+            await this.layoutService.updateLayoutContent(model.key, contentContract);
         };
 
         const scheduleUpdate = async (): Promise<void> => {
