@@ -28,16 +28,16 @@ export class MenuModule implements IInjectorModule {
                                 }
                             }
                         },
-                        navItem: {
+                        navLink: {
                             active: {
                                 allowedStates: ["hover", "focus", "active", "disabled"],
                                 displayName: "Navigation link (active)",
-                                key: "components/menu/default/components/navItem/active"
+                                key: "components/menu/default/components/navLink/active"
                             },
                             default: {
                                 allowedStates: ["hover", "focus", "active", "disabled"],
                                 displayName: "Navigation link",
-                                key: "components/menu/default/components/navItem/default",
+                                key: "components/menu/default/components/navLink/default",
                                 margin: {
                                     left: 20,
                                     right: 25
