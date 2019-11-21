@@ -14,8 +14,6 @@ export class MenuModule implements IInjectorModule {
                 return;
             }
 
-            style["version"] = "0.1.177";
-
             const menuVariations = Object.keys(style);
 
             menuVariations.forEach(variationKey => {
