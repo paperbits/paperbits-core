@@ -9,6 +9,41 @@ export class MenuModule implements IInjectorModule {
         injector.bindToCollection("modelBinders", MenuModelBinder, "menuModelBinder");
         injector.bindToCollection("viewModelBinders", MenuViewModelBinder, "menuViewModelBinder");
 
+        const migrate = (style: any): void => { // Temporary migration mechanism
+            if (!style) {
+                return;
+            }
+
+            style["version"] = "0.1.177";
+
+            const menuVariations = Object.keys(style);
+
+            menuVariations.forEach(variationKey => {
+                const menuVariation = style[variationKey];
+
+                const components = menuVariation["components"];
+
+                if (!components) {
+                    return;
+                }
+
+                const navItem = components["navItem"];
+
+                if (!navItem) {
+                    return;
+                }
+
+                components["navLink"] = navItem;
+                delete components["navItem"];
+
+                const navItemVariations = Object.keys(navItem);
+                navItemVariations.forEach(variationKey => {
+                    const navItemVariation = navItem[variationKey];
+                    navItemVariation["key"] = navItemVariation["key"].replaceAll("/navItem/", "/navLink/");
+                });
+            });
+        };
+
         const defaultStyle: DefaultStyle = {
             key: "menu",
             style: {
@@ -52,7 +87,8 @@ export class MenuModule implements IInjectorModule {
                     displayName: "Normal menu",
                     key: "components/menu/default"
                 }
-            }
+            },
+            migrate: migrate
         };
 
         injector.bindInstanceToCollection("defaultStyles", defaultStyle);
