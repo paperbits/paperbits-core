@@ -2,7 +2,7 @@ import { PictureViewModel } from "./pictureViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { PictureModel } from "../pictureModel";
 import { EventManager } from "@paperbits/common/events";
-import { StyleCompiler } from "@paperbits/common/styles/StyleCompiler";
+import { StyleCompiler } from "@paperbits/common/styles/styleCompiler";
 import { Bag } from "@paperbits/common";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { IWidgetBinding } from "@paperbits/common/editing";

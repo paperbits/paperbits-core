@@ -2,7 +2,7 @@ import { VideoPlayerViewModel } from "./videoPlayerViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { VideoPlayerModel } from "../videoPlayerModel";
 import { EventManager } from "@paperbits/common/events";
-import { StyleCompiler } from "@paperbits/common/styles/StyleCompiler";
+import { StyleCompiler } from "@paperbits/common/styles/styleCompiler";
 import { Bag } from "@paperbits/common";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
 

@@ -1,4 +1,4 @@
-import template from "./collapsetoggle.html";
+import template from "./collapseToggle.html";
 import { Component, RuntimeComponent } from "@paperbits/common/ko/decorators";
 
 
