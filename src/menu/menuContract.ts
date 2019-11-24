@@ -1,4 +1,5 @@
 import { Contract } from "@paperbits/common";
+import { LocalStyles } from "@paperbits/common/styles";
 
 /**
  * Menu widget contract.
@@ -32,5 +33,5 @@ export interface MenuContract extends Contract {
     /**
      * Menu styles.
      */
-    styles: any;
+    styles: LocalStyles;
 }

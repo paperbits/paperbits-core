@@ -1,5 +1,5 @@
 import { NavigationItemModel } from "@paperbits/common/navigation";
-import { Bag } from "@paperbits/common/bag";
+import { LocalStyles } from "@paperbits/common/styles";
 
 export class NavbarModel {
     public rootKey: string; // Should it move to NavbarItemModel?
@@ -9,5 +9,5 @@ export class NavbarModel {
     public pictureSourceUrl: string;
     public pictureWidth: string | number;
     public pictureHeight: string | number;
-    public styles: Bag<string>;
+    public styles: LocalStyles;
 }

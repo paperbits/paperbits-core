@@ -13,7 +13,7 @@ export class ButtonEditorModule implements IInjectorModule {
             name: "components_button", 
             groupName: "Buttons", 
             selectorTemplate: `<button data-bind="css: classNames">Button</button>`,
-            styleTemplate: `<button data-bind="stylePreview:variant">Button</button>`
+            styleTemplate: `<button data-bind="stylePreview: variation.key">Button</button>`
         };
         injector.bindInstanceToCollection("styleGroups", styleGroup);
     }

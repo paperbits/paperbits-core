@@ -28,7 +28,7 @@ export class BlockModelBinder {
         if (contract.attrs) {
             if (contract.attrs.styles) {
                 model.attrs = { styles: contract.attrs.styles };
-                const className = await this.styleCompiler.getClassNamesByStyleConfigAsync(contract.attrs.styles);
+                const className = await this.styleCompiler.getClassNamesForLocalStylesAsync(contract.attrs.styles);
                 if (className) {
                     model.attrs.className = className;
                 }

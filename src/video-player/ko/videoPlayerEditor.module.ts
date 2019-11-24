@@ -12,7 +12,7 @@ export class VideoPlayerEditorModule implements IInjectorModule {
             name: "components_videoPlayer", 
             groupName: "Video Player", 
             selectorTemplate: undefined,
-            styleTemplate: `<video class="no-pointer-events" data-bind="stylePreview:variant" style="width: 340px"><source src="https://cdn.paperbits.io/videos/planet-earth.mp4" /></video>`
+            styleTemplate: `<video class="no-pointer-events" data-bind="stylePreview: variation" style="width: 340px"><source src="https://cdn.paperbits.io/videos/planet-earth.mp4" /></video>`
         };
         injector.bindInstanceToCollection("styleGroups", styleGroup);
         injector.bindToCollection<IWidgetHandler>("widgetHandlers", VideoHandlers, "videoHandler");

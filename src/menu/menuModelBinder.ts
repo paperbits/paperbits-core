@@ -8,6 +8,7 @@ import { MenuContract } from "./menuContract";
 import { AnchorUtils } from "../text/anchorUtils";
 import { BlockContract } from "../text/contracts";
 import { MenuModel } from "./menuModel";
+import { LocalStyles } from "@paperbits/common/styles";
 
 
 export class MenuModelBinder implements IModelBinder<MenuModel> {

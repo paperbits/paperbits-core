@@ -1,5 +1,5 @@
 import { HyperlinkModel } from "@paperbits/common/permalinks";
-import { Bag } from "@paperbits/common/bag";
+import { LocalStyles } from "@paperbits/common/styles";
 
 export class PictureModel {
     public sourceKey: string;
@@ -7,5 +7,5 @@ export class PictureModel {
     public hyperlink: HyperlinkModel;
     public width: number;
     public height: number;
-    public styles: Bag<string>;
+    public styles: LocalStyles;
 }

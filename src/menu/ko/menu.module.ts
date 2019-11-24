@@ -1,5 +1,5 @@
-import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { DefaultStyle } from "@paperbits/common/styles";
+import { IInjector, IInjectorModule } from "@paperbits/common/injection";
+import { StyleHandler, StyleContract, PluginBag } from "@paperbits/common/styles";
 import { MenuModelBinder } from "../menuModelBinder";
 import { MenuViewModelBinder } from "./menuViewModelBinder";
 
@@ -42,53 +42,111 @@ export class MenuModule implements IInjectorModule {
             });
         };
 
-        const defaultStyle: DefaultStyle = {
-            key: "menu",
-            style: {
+        const getDropdownStyle = (key: string): StyleContract => {
+            return {
+                key: key,
+                category: "appearance",
+                displayName: "Menu dropdown",
+                background: {
+                    colorKey: "colors/defaultBg"
+                },
+                shadow: {
+                    shadowKey: "shadows/shadow2"
+                },
+                padding: {
+                    top: 5,
+                    left: 5,
+                    right: 5,
+                    bottom: 5
+                },
+                components: {
+                    navLink: {
+                        default: getNavLinkStyle(`${key}/components/navLink/default`),
+                        active: getActiveNavLinkStyle(`${key}/components/navLink/active`),
+                    }
+                }
+            };
+        };
+
+        const getNavLinkStyle = (key: string): StyleContract => {
+            return {
+                key: key,
+                allowedStates: ["hover", "focus", "active", "disabled"],
+                displayName: "Navigation link",
+                typography: {
+                    colorKey: "colors/default"
+                }
+            };
+        };
+
+        const getActiveNavLinkStyle = (key: string): StyleContract => {
+            return {
+                key: key,
+                allowedStates: ["hover", "focus", "active", "disabled"],
+                displayName: "Navigation link (active)",
+                typography: {
+                    fontWeight: "bold"
+                }
+            };
+        };
+
+        const getMenuStyle = (key: string): any => {
+            return {
                 default: {
+                    displayName: "Normal menu",
+                    key: key,
                     category: "appearance",
                     components: {
                         dropdown: {
-                            default: {
-                                background: {
-                                    colorKey: "colors/defaultBg"
-                                },
-                                category: "appearance",
-                                displayName: "Menu dropdown",
-                                key: "components/menu/default/components/dropdown/default",
-                                shadow: {
-                                    shadowKey: "shadows/shadow2"
-                                }
-                            }
+                            default: getDropdownStyle(`${key}/components/dropdown/default`)
                         },
                         navLink: {
-                            active: {
-                                allowedStates: ["hover", "focus", "active", "disabled"],
-                                displayName: "Navigation link (active)",
-                                key: "components/menu/default/components/navLink/active"
-                            },
-                            default: {
-                                allowedStates: ["hover", "focus", "active", "disabled"],
-                                displayName: "Navigation link",
-                                key: "components/menu/default/components/navLink/default",
-                                margin: {
-                                    left: 20,
-                                    right: 25
-                                },
-                                padding: {
-                                    bottom: 5,
-                                    top: 5
-                                }
-                            }
+                            default: getNavLinkStyle(`${key}/components/navLink/default`),
+                            active: getActiveNavLinkStyle(`${key}/components/navLink/active`),
                         }
-                    },
-                    displayName: "Normal menu",
-                    key: "components/menu/default"
+                    }
                 }
-            },
-            migrate: migrate
+            };
         };
 
-        injector.bindInstanceToCollection("defaultStyles", defaultStyle);
+        const getDefaultStyle = (key: string = `components/menu/default`) => {
+            const regex = /components\/(\w*)\/(\w*)/gm;
+
+            let matches;
+
+            const components = [];
+
+            while ((matches = regex.exec(key)) !== null) {
+                if (matches.index === regex.lastIndex) {
+                    regex.lastIndex++;
+                }
+
+                const component = matches[1];
+                const variation = matches[2];
+
+                components.push(component);
+            }
+
+            const component = components[components.length - 1];
+
+            switch (component) {
+                case "menu":
+                    return getMenuStyle(key);
+                case "navLink":
+                    return getNavLinkStyle(key);
+                case "dropdown":
+                    return getDropdownStyle(key);
+                default:
+                    return null;
+            }
+        };
+
+        const styleHandler: StyleHandler = {
+            key: "menu",
+            migrate: migrate,
+            getDefaultStyle: getDefaultStyle
+        };
+
+        injector.bindInstanceToCollection("styleHandlers", styleHandler);
     }
 }

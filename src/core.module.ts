@@ -52,7 +52,7 @@ import { MenuModule } from "./menu/ko";
 export class CoreModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bindCollection("autostart");
-        injector.bindCollection("defaultStyles");
+        injector.bindCollection("styleHandlers");
         injector.bindCollectionLazily("widgetHandlers");
         injector.bindCollectionLazily("routeGuards");
         injector.bindCollectionLazily("modelBinders");

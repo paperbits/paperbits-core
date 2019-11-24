@@ -1,15 +1,11 @@
 import { WidgetModel } from "@paperbits/common/widgets";
-import { StyleContract } from "@paperbits/common/styles/styleConfig";
+import { LocalStyles } from "@paperbits/common/styles";
 
 export class SectionModel {
     public widgets: WidgetModel[];
-    public container: string;
-    public padding: string;
-    public styles: StyleContract;
+    public styles: LocalStyles;
 
     constructor() {
-        this.container = "container";
-        this.padding = "with-padding";
         this.styles = null;
         this.widgets = [];
     }

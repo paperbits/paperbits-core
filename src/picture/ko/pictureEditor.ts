@@ -6,7 +6,7 @@ import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorat
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 import { PictureModel } from "../pictureModel";
 import { StyleService } from "@paperbits/styles/styleService";
-import { StyleItemContract } from "@paperbits/styles/contracts/styleItemContract";
+import { LocalStyles } from "@paperbits/common/styles";
 
 
 @Component({
@@ -25,7 +25,7 @@ export class PictureEditor {
     public readonly width: ko.Observable<number>;
     public readonly height: ko.Observable<number>;
 
-    public readonly appearanceStyle: ko.Observable<StyleItemContract>;
+    public readonly appearanceStyle: ko.Observable<LocalStyles>;
 
     constructor(
         private readonly styleService: StyleService,
@@ -81,7 +81,7 @@ export class PictureEditor {
         this.appearanceStyle.subscribe(this.applyChanges);
     }
 
-    public onAppearanceSelected(snippet: StyleItemContract): void {
+    public onAppearanceSelected(snippet: LocalStyles): void {
         if (snippet) {
             this.appearanceStyle(snippet);
         }

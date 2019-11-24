@@ -1,8 +1,8 @@
-import { Bag } from "@paperbits/common/bag";
+import { LocalStyles } from "@paperbits/common/styles";
 
 export class VideoPlayerModel {
     public sourceKey?: string;
     public controls?: boolean;
     public autoplay?: boolean;
-    public styles: Bag<string>;
+    public styles: LocalStyles;
 }

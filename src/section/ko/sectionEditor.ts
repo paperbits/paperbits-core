@@ -70,7 +70,7 @@ export class SectionEditor {
 
         if (this.model.styles) {
             if (this.model.styles["instance"]) {
-                const sectionStyles = this.model.styles["instance"];
+                const sectionStyles = this.model.styles.instance;
 
                 if (sectionStyles) {
                     this.background(sectionStyles.background);

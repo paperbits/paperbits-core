@@ -1,8 +1,8 @@
-import { Bag } from "@paperbits/common";
 import { WidgetModel } from "@paperbits/common/widgets";
+import { LocalStyles } from "@paperbits/common/styles";
 
 export class CollapsiblePanelModel {
-    public styles: Bag<string>;
+    public styles: LocalStyles;
     public widgets?: WidgetModel[];
 
     constructor() {

@@ -1,30 +1,33 @@
-<nav data-bind="stylePreview: variant">
+<nav data-bind="stylePreview: variation.key" class="design-menu-horizontal">
     <div class="menu menu-horizontal">
         <ul class="nav">
-            <li class="nav-item">
-                <a href="#" class="nav-link" data-bind="stylable: variant.components.navLink.default">
+            <li class="nav-item collapsible expanded">
+                <a href="#" class="nav-link" data-bind="styleable: variation.components.navLink.default">
                     Nav link
                 </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link nav-link-active" data-bind="stylable: variant.components.navLink.active">
-                    Nav link (active)
-                </a>
-            </li>
-            <li class="nav-item collapsible expanded">
-                <a href="#" class="nav-link" data-bind="stylable: variant.components.navLink.default">
-                    Nav link (dropdown)
-                </a>
-                <div class="dropdown collapsible-content" data-bind="stylable: variant.components.dropdown.default">
+                <div class="dropdown collapsible-content"
+                    data-bind="styleable: variation.key + '/components/dropdown/default'">
                     <ul class="nav nav-horizontal">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">Nav link 4</a>
+                            <a href="#" class="nav-link"
+                                data-bind="styleable: variation.key + '/components/dropdown/default/components/navLink/default'">
+                                Nav link
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">Nav link 5</a>
+                            <a href="#" class="nav-link nav-link-active"
+                                data-bind="styleable: variation.key + '/components/dropdown/default/components/navLink/active'">
+                                Nav link (active)
+                            </a>
                         </li>
                     </ul>
                 </div>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link nav-link-active"
+                    data-bind="styleable: variation.key + '/components/navLink/active'">
+                    Nav link (active)
+                </a>
             </li>
         </ul>
     </div>

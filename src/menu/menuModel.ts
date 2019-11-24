@@ -1,5 +1,5 @@
-import { Bag } from "@paperbits/common";
 import { NavigationItemModel } from "@paperbits/common/navigation";
+import { LocalStyles } from "@paperbits/common/styles";
 
 
 export class MenuModel {
@@ -9,7 +9,7 @@ export class MenuModel {
     public items: NavigationItemModel[];
     public layout: string;
     public roles?: string[];
-    public styles: Bag<string>;
+    public styles: LocalStyles;
 
     constructor() {
         this.items = [];

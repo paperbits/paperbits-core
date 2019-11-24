@@ -4,7 +4,7 @@ import { StyleService } from "@paperbits/styles";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { ButtonModel } from "../buttonModel";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
-import { StyleItemContract } from "@paperbits/styles/contracts/styleItemContract";
+import { LocalStyles } from "@paperbits/common/styles";
 
 @Component({
     selector: "button-editor",
@@ -15,7 +15,7 @@ export class ButtonEditor {
     public readonly label: ko.Observable<string>;
     public readonly hyperlink: ko.Observable<HyperlinkModel>;
     public readonly hyperlinkTitle: ko.Observable<string>;
-    public readonly appearanceStyle: ko.Observable<StyleItemContract>;
+    public readonly appearanceStyle: ko.Observable<LocalStyles>;
     public readonly sizeStyles: ko.ObservableArray<any>;
     public readonly sizeStyle: ko.Observable<any>;
 
@@ -66,7 +66,7 @@ export class ButtonEditor {
         }
     }
 
-    public onAppearanceSelected(snippet: StyleItemContract): void {
+    public onAppearanceSelected(snippet: LocalStyles): void {
         if (snippet) {
             this.appearanceStyle(snippet);
         }

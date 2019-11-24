@@ -1,5 +1,6 @@
 import { WidgetModel } from "@paperbits/common/widgets";
 import { Breakpoints } from "@paperbits/common";
+import { LocalStyles } from "@paperbits/common/styles";
 
 export class ColumnModel implements WidgetModel {
     public widgets: WidgetModel[];
@@ -9,7 +10,7 @@ export class ColumnModel implements WidgetModel {
     public order: Breakpoints;
     public overflowX: string;
     public overflowY: string;
-    public styles: Object;
+    public styles: LocalStyles;
 
     constructor() {
         this.widgets = [];
