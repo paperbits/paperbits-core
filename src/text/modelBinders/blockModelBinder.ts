@@ -63,6 +63,11 @@ export class BlockModelBinder {
 
         contract.attrs = model.attrs;
 
+        if (/^heading\d$/gm.test(contract.type) && (!contract.attrs || !contract.attrs.id)) {
+            contract.attrs = contract.attrs || {};
+            contract.attrs.id = Utils.identifier();
+        }
+
         if (model.nodes && model.nodes.length > 0) {
             contract.nodes = [];
 
