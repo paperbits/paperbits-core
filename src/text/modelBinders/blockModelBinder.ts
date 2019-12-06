@@ -33,13 +33,13 @@ export class BlockModelBinder {
                     model.attrs.className = className;
                 }
             }
-            if (contract.attrs.id) {
+            if (contract.attrs.id || contract.attrs.key) {
                 model.attrs = model.attrs || {};
-                model.attrs.id = contract.attrs.id ;
+                model.attrs.id = contract.attrs.id || contract.attrs.key;
             }
         }
 
-        if (contract.type.startsWith("heading") && contract.type.length === 8 && (!contract.attrs || !contract.attrs.id)) {
+        if (/^heading\d$/gm.test(contract.type) && (!model.attrs || !model.attrs.id)) {
             model.attrs = model.attrs || {};
             model.attrs.id = Utils.identifier();
         }
@@ -61,19 +61,11 @@ export class BlockModelBinder {
             type: model.type
         };
 
-        if (model.attrs) { 
-            if (model.attrs.styles) {
-                contract.attrs = { styles: model.attrs.styles };
-            }
-            if (model.attrs.id) {
-                contract.attrs = contract.attrs || {};
-                contract.attrs.id = model.attrs.id;
-            }
-        }
+        contract.attrs = model.attrs;
 
         if (model.nodes && model.nodes.length > 0) {
             contract.nodes = [];
-            
+
             model.nodes.forEach(contentItem => {
                 const modelBinder = this.modelBinderSelector.getModelBinderByModel(contentItem);
                 contract.nodes.push(<any>modelBinder.modelToContract(contentItem));
