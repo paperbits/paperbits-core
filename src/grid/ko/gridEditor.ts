@@ -174,13 +174,13 @@ export class GridEditor {
             event.preventDefault();
         }
 
+        if (this.isModelBeingEdited(widgetBinding)) {
+            return;
+        }
+
         if (this.isModelSelected(widgetBinding)) {
             if (widgetBinding.editor) {
                 this.viewManager.openWidgetEditor(widgetBinding);
-            }
-
-            if (this.isModelBeingEdited(widgetBinding)) {
-                return;
             }
         }
         else {
@@ -265,7 +265,7 @@ export class GridEditor {
             return false;
         });
 
-        if (!acceptingParentElement) {
+        if (!acceptingParentElement || elements.some(element => element.classList.contains("dragged-origin"))) {
             delete dragSession.targetElement;
             delete dragSession.targetBinding;
 
@@ -288,7 +288,6 @@ export class GridEditor {
             if (sourceElementFlow === "inline" && hoveredElementFlow === "inline") {
                 if (quadrant.horizontal === "right") {
                     dragSession.insertIndex++;
-                    dragSession["abc"] = "1";
                 }
 
                 this.viewManager.setSplitter({
