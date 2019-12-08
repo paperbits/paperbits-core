@@ -12,23 +12,6 @@ export class SectionHandlers {
         private readonly eventManager: EventManager
     ) { }
 
-    public onDragOver(dragSession: DragSession): boolean {
-        return dragSession.type === "row";
-    }
-
-    public onDragDrop(dragSession: DragSession): void {
-        switch (dragSession.type) {
-            case "row":
-                dragSession.targetBinding.model.widgets.splice(dragSession.insertIndex, 0, dragSession.sourceModel);
-                break;
-
-            default:
-                throw new Error(`Unknown type: ${dragSession.type}`);
-        }
-        dragSession.targetBinding.applyChanges();
-        dragSession.sourceParentBinding.applyChanges();
-    }
-
     public getContextualEditor(context: WidgetContext): IContextCommandSet {
         const sectionContextualEditor: IContextCommandSet = {
             color: "#2b87da",
@@ -92,7 +75,7 @@ export class SectionHandlers {
                     this.viewManager.openViewAsPopup(view);
                 }
             }
-        ]
+            ]
         };
 
         if (context.model.widgets.length === 0) {

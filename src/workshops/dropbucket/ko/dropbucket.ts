@@ -192,7 +192,6 @@ export class DropBucket {
         this.droppedItems.remove(item);
 
         this.viewManager.beginDrag({
-            type: "widget",
             sourceModel: widgetModel,
             sourceBinding: widgetBinding
         });

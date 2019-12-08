@@ -1,27 +1,11 @@
 import { DragSession } from "@paperbits/common/ui/draggables";
-import { ViewManager, IContextCommandSet } from "@paperbits/common/ui";
+import { IContextCommandSet } from "@paperbits/common/ui";
 import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
-import { WidgetModel } from "@paperbits/common/widgets";
 
 
 export class LayoutHandlers implements IWidgetHandler {
-    constructor(private readonly viewManager: ViewManager) { }
-
-    public onDragOver(dragSession: DragSession): boolean {
-        return dragSession.type === "section";
-    }
-
-    public onDragDrop(dragSession: DragSession): void {
-        switch (dragSession.type) {
-            case "section":
-                dragSession.targetBinding.model.widgets.splice(dragSession.insertIndex, 0, dragSession.sourceModel);
-                break;
-
-            default:
-                throw new Error(`Unknown type: ${dragSession.type}`);
-        }
-        dragSession.targetBinding.applyChanges();
-        dragSession.sourceParentBinding.applyChanges();
+    public canAccept(dragSession: DragSession): boolean {
+        return dragSession.sourceBinding.name === "section";
     }
 
     public getContextualEditor(context: WidgetContext): IContextCommandSet {

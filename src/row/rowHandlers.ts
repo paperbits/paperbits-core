@@ -8,27 +8,6 @@ import { RowModel } from "../row/rowModel";
 export class RowHandlers implements IWidgetHandler {
     constructor(private readonly viewManager: ViewManager) { }
 
-    public onDragOver(dragSession: DragSession): boolean {
-        return dragSession.type === "column";
-    }
-
-    public onDragDrop(dragSession: DragSession): void {
-        switch (dragSession.type) {
-            case "column":
-                dragSession.targetBinding.model.widgets.splice(dragSession.insertIndex, 0, dragSession.sourceModel);
-                break;
-
-            case "widget":
-                const columnToInsert = new ColumnModel();
-                columnToInsert.size.md = 3;
-                columnToInsert.widgets.push(dragSession.sourceModel);
-                dragSession.targetBinding.model.widgets.splice(dragSession.insertIndex, 0, columnToInsert);
-                break;
-        }
-        dragSession.targetBinding.applyChanges();
-        dragSession.sourceParentBinding.applyChanges();
-    }
-
     public getContextualEditor(context: WidgetContext): IContextCommandSet {
         const rowContextualEditor: IContextCommandSet = {
             color: "#29c4a9",

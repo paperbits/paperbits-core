@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import * as Utils from "@paperbits/common/utils";
 import { ViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet as IContextCommandSet } from "@paperbits/common/ui";
-import { IWidgetBinding, GridHelper, WidgetContext } from "@paperbits/common/editing";
+import { IWidgetBinding, GridHelper, WidgetContext, WidgetStackItem } from "@paperbits/common/editing";
 import { Keys } from "@paperbits/common/keyboard";
 import { IWidgetService } from "@paperbits/common/widgets";
 import { Router } from "@paperbits/common/routing";
@@ -170,16 +170,8 @@ export class GridEditor {
             return;
         }
 
-        if (element["dragSource"]) { // TODO: Maybe make part of Binding?
-            element["dragSource"].beginDrag(element, this.pointerX, this.pointerY);
-        }
-
         if (widgetBinding.editor !== "html-editor") {
             event.preventDefault();
-        }
-
-        if (this.isModelBeingEdited(widgetBinding)) {
-            return;
         }
 
         if (this.isModelSelected(widgetBinding)) {
@@ -192,6 +184,12 @@ export class GridEditor {
             }
         }
         else {
+            event.preventDefault(); // To prevent document selection.
+
+            if (element["dragSource"]) { // TODO: Maybe make part of Binding?
+                element["dragSource"].beginDrag(element, this.pointerX, this.pointerY);
+            }
+
             const contextualEditor = this.getContextualEditor(element, "top");
 
             if (!contextualEditor) {
@@ -247,7 +245,33 @@ export class GridEditor {
 
         const elements = this.getUnderlyingElements();
 
-        if (elements.some(element => element.classList.contains("dragged-origin"))) {
+        if (elements.length === 0) {
+            return;
+        }
+
+        const dragRelatedElements: WidgetStackItem[] = GridHelper
+            .getWidgetStack(elements[1])
+            .filter(x => {
+                if (x.binding.name === dragSession.sourceBinding.name) {
+                    return true;
+                }
+
+                if (x.binding.handler) {
+                    const handler = this.widgetService.getWidgetHandler(x.binding.handler);
+
+                    if (handler && handler.canAccept && handler.canAccept(dragSession)) {
+                        return true;
+                    }
+                }
+                return false;
+            })
+            .reverse();
+
+
+        let acceptingParentElement: WidgetStackItem;
+        let siblingElement: WidgetStackItem;
+
+        if (dragRelatedElements.length === 0) {
             delete dragSession.targetElement;
             delete dragSession.targetBinding;
 
@@ -255,121 +279,85 @@ export class GridEditor {
             return;
         }
 
-        const acceptorElement = elements
-            .filter(element => dragSession.sourceElement !== element)
-            .map(element => {
-                const binding = GridHelper.getWidgetBinding(element);
+        acceptingParentElement = dragRelatedElements[0];
+        dragSession.targetElement = acceptingParentElement.element;
+        dragSession.targetBinding = GridHelper.getWidgetBinding(acceptingParentElement.element);
 
-                if (binding && binding.handler) {
-                    const handler = this.widgetService.getWidgetHandler(binding.handler);
+        if (dragRelatedElements.length > 1) {
+            siblingElement = dragRelatedElements[1];
+        }
 
-                    if (binding && handler.onDragOver && handler.onDragOver(dragSession)) {
-                        return element;
-                    }
-                }
-
-                return null;
-            })
-            .find(x => x !== null);
-
-        if (acceptorElement) {
-            const childNodes = Array.prototype.slice
-                .call(acceptorElement.childNodes)
-                .filter(node =>
-                    node.nodeName !== "#comment" &&
-                    node !== dragSession.sourceElement &&
-                    GridHelper.getModel(node) !== null);
-
-            const intersection = _.intersection(childNodes, elements);
-
-            dragSession.targetElement = acceptorElement;
-            dragSession.targetBinding = GridHelper.getWidgetBinding(acceptorElement);
-
-            let hoveredElement = acceptorElement;
-
+        if (siblingElement) {
+            const quadrant = Utils.pointerToClientQuadrant(this.pointerX, this.pointerY, siblingElement.element);
             const sourceElementFlow = dragSession.sourceBinding.flow || "inline";
 
-            const quadrant = Utils.pointerToClientQuadrant(this.pointerX, this.pointerY, hoveredElement);
+            dragSession.insertIndex = acceptingParentElement.binding.model.widgets.indexOf(siblingElement.binding.model);
 
-            if (intersection.length > 0) {
-                hoveredElement = intersection[0];
+            const hoveredElementFlow = siblingElement.binding.flow || "inline";
 
-                dragSession.insertIndex = childNodes.indexOf(hoveredElement);
-
-                const hoveredElementBinding = GridHelper.getWidgetBinding(hoveredElement);
-
-                const hoveredElementFlow = hoveredElementBinding.flow || "inline";
-
-                if (sourceElementFlow === "inline" && hoveredElementFlow === "inline") {
-                    if (quadrant.horizontal === "right") {
-                        dragSession.insertIndex++;
-                    }
-
-                    this.viewManager.setSplitter({
-                        element: hoveredElement,
-                        side: quadrant.horizontal,
-                        where: "outside"
-                    });
+            if (sourceElementFlow === "inline" && hoveredElementFlow === "inline") {
+                if (quadrant.horizontal === "right") {
+                    dragSession.insertIndex++;
                 }
-                else {
-                    if (quadrant.vertical === "bottom") {
-                        dragSession.insertIndex++;
-                    }
 
-                    this.viewManager.setSplitter({
-                        element: hoveredElement,
-                        side: quadrant.vertical,
-                        where: "outside"
-                    });
-                }
+                this.viewManager.setSplitter({
+                    element: siblingElement.element,
+                    side: quadrant.horizontal,
+                    where: "outside"
+                });
             }
             else {
-                const hoveredElementBinding = GridHelper.getWidgetBinding(hoveredElement);
-
-                if (hoveredElementBinding.model.widgets.length === 0) {
-                    dragSession.insertIndex = 0;
-
-                    this.viewManager.setSplitter({
-                        element: hoveredElement,
-                        side: quadrant.vertical,
-                        where: "inside"
-                    });
-
-                    return;
+                if (quadrant.vertical === "bottom") {
+                    dragSession.insertIndex++;
                 }
-                else {
-                    const children = Array.prototype.slice.call(hoveredElement.children);
 
-                    if (quadrant.vertical === "top") {
-                        dragSession.insertIndex = 0;
-
-                        const child = children[0];
-
-                        this.viewManager.setSplitter({
-                            element: child,
-                            side: "top",
-                            where: "outside"
-                        });
-                    }
-                    else {
-                        dragSession.insertIndex = children.length - 1;
-
-                        const child = children[dragSession.insertIndex];
-
-                        this.viewManager.setSplitter({
-                            element: child,
-                            side: "bottom",
-                            where: "outside"
-                        });
-                    }
-                }
+                this.viewManager.setSplitter({
+                    element: siblingElement.element,
+                    side: quadrant.vertical,
+                    where: "outside"
+                });
             }
         }
         else {
-            delete dragSession.targetElement;
-            delete dragSession.targetBinding;
+            const quadrant = Utils.pointerToClientQuadrant(this.pointerX, this.pointerY, acceptingParentElement.element);
 
-            this.viewManager.setSplitter(null);
+            if (acceptingParentElement.binding.model.widgets.length === 0) {
+                dragSession.insertIndex = 0;
+
+                this.viewManager.setSplitter({
+                    element: acceptingParentElement.element,
+                    side: quadrant.vertical,
+                    where: "inside"
+                });
+
+                return;
+            }
+            else {
+                const children = Array.prototype.slice.call(acceptingParentElement.element.children);
+
+                if (quadrant.vertical === "top") {
+                    dragSession.insertIndex = 0;
+
+                    const child = children[0];
+
+                    this.viewManager.setSplitter({
+                        element: child,
+                        side: "top",
+                        where: "outside"
+                    });
+                }
+                else {
+                    dragSession.insertIndex = children.length - 1;
+
+                    const child = children[dragSession.insertIndex];
+
+                    this.viewManager.setSplitter({
+                        element: child,
+                        side: "bottom",
+                        where: "outside"
+                    });
+                }
+            }
         }
     }
 

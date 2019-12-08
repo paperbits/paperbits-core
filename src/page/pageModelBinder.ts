@@ -29,7 +29,7 @@ export class PageModelBinder implements IModelBinder<PageModel> {
             pageModel.title = pageContract.title;
             pageModel.description = pageContract.description;
             pageModel.keywords = pageContract.keywords;
-            pageModel.widgets = [<any>new PlaceholderModel("Content")];
+            pageModel.widgets = [<any>new PlaceholderModel("Page content")];
 
             return pageModel;
         }

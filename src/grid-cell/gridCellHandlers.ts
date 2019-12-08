@@ -11,16 +11,8 @@ export class GridCellHandlers implements IWidgetHandler {
         private readonly eventManager: EventManager
     ) { }
 
-    public onDragOver(dragSession: DragSession): boolean {
-        return dragSession.type === "widget";
-    }
-
-    public onDragDrop(dragSession: DragSession): void {
-        if (dragSession.type === "widget") {
-            dragSession.targetBinding.model.widgets.splice(dragSession.insertIndex, 0, dragSession.sourceModel);
-        }
-        dragSession.targetBinding.applyChanges();
-        dragSession.sourceParentBinding.applyChanges();
+    public canAccept(dragSession: DragSession): boolean {
+        return !["section", "row", "column"].includes(dragSession.sourceBinding.name);
     }
 
     public getContextualEditor(context: WidgetContext): IContextCommandSet {
@@ -37,26 +29,27 @@ export class GridCellHandlers implements IWidgetHandler {
             }]
         };
 
+        if (context.model.widgets.length !== 0) {
+            return gridCellContextualEditor;
+        }
 
-        if (context.model.widgets.length === 0) {
-            gridCellContextualEditor.hoverCommand = {
-                color: "#607d8b",
-                position: "center",
-                tooltip: "Add widget",
-                component: {
-                    name: "widget-selector",
-                    params: {
-                        onRequest: () => context.providers,
-                        onSelect: (widget: WidgetModel) => {
-                            context.model.widgets.push(widget);
-                            context.binding.applyChanges();
-                            this.eventManager.dispatchEvent("onContentUpdate");
-                            this.viewManager.clearContextualEditors();
-                        }
+        gridCellContextualEditor.hoverCommand = {
+            color: "#607d8b",
+            position: "center",
+            tooltip: "Add widget",
+            component: {
+                name: "widget-selector",
+                params: {
+                    onRequest: () => context.providers,
+                    onSelect: (widget: WidgetModel) => {
+                        context.model.widgets.push(widget);
+                        context.binding.applyChanges();
+                        this.eventManager.dispatchEvent("onContentUpdate");
+                        this.viewManager.clearContextualEditors();
                     }
                 }
-            };
-        }
+            }
+        };
 
         return gridCellContextualEditor;
     }

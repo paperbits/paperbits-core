@@ -127,7 +127,6 @@ export class MediaSelector {
         const widgetBinding = item.widgetFactoryResult.widgetBinding;
 
         this.viewManager.beginDrag({
-            type: "widget",
             sourceModel: widgetModel,
             sourceBinding: widgetBinding
         });
