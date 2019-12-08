@@ -95,7 +95,7 @@ export class WidgetBindingHandler {
                         if (nonVirtualElement) {
                             nonVirtualElement["attachedViewModel"] = componentViewModel;
 
-                            ko.applyBindingsToNode(nonVirtualElement, { layoutwidget: {} }, null);
+                            ko.applyBindingsToNode(nonVirtualElement, { draggable: {} }, null);
                         }
                     });
                 }, null, { disposeWhenNodeIsRemoved: element });

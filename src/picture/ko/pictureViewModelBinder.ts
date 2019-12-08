@@ -40,6 +40,7 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
         }
 
         const binding: IWidgetBinding<PictureModel> = {
+            name: "picture",
             displayName: "Picture",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,

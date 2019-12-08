@@ -24,37 +24,11 @@ export class GridBindingHandler {
 
         ko.virtualElements.allowedBindings["grid"] = true;
 
-        ko.bindingHandlers["dragdrag"] = {
+        ko.bindingHandlers["draggable"] = {
             init(element: HTMLElement): void {
                 GridBindingHandler.attachWidgetDragEvents(element, viewManager, eventManager, widgetService);
             }
         };
-
-        ko.bindingHandlers["layoutsection"] = {
-            init(element: HTMLElement): void {
-                GridBindingHandler.attachWidgetDragEvents(element, viewManager, eventManager, widgetService);
-            }
-        };
-
-        ko.bindingHandlers["layoutrow"] = {
-            init(element: HTMLElement): void {
-                GridBindingHandler.attachWidgetDragEvents(element, viewManager, eventManager, widgetService);
-            }
-        };
-
-        ko.bindingHandlers["layoutcolumn"] = {
-            init(element: HTMLElement): void {
-                GridBindingHandler.attachWidgetDragEvents(element, viewManager, eventManager, widgetService);
-            }
-        };
-
-        ko.bindingHandlers["layoutwidget"] = {
-            init(element: HTMLElement): void {
-                GridBindingHandler.attachWidgetDragEvents(element, viewManager, eventManager, widgetService);
-            }
-        };
-
-        ko.virtualElements.allowedBindings["layoutwidget"] = true;
     }
 
     public static attachWidgetDragEvents(sourceElement: HTMLElement, viewManager: ViewManager, eventManager: EventManager, widgetService: IWidgetService): void {

@@ -50,7 +50,7 @@ export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, Layou
             name: "layout",
             displayName: "Layout",
             model: model,
-            readonly: bindingContext ? bindingContext.readonly : false,
+            readonly: bindingContext && bindingContext["routeKind"] !== "layout",
             handler: LayoutHandlers,
             provides: ["static", "scripts", "keyboard"],
             applyChanges: async () => {

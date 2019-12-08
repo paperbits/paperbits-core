@@ -249,29 +249,23 @@ export class GridEditor {
             return;
         }
 
-        const dragRelatedElements: WidgetStackItem[] = GridHelper
-            .getWidgetStack(elements[1])
-            .filter(x => {
-                if (x.binding.name === dragSession.sourceBinding.name) {
-                    return true;
-                }
+        const stack = GridHelper.getWidgetStack(elements[1]);
 
-                if (x.binding.handler) {
-                    const handler = this.widgetService.getWidgetHandler(x.binding.handler);
-
-                    if (handler && handler.canAccept && handler.canAccept(dragSession)) {
-                        return true;
-                    }
-                }
+        const acceptingParentElement = stack.find(x => {
+            if (!x.binding.handler) {
                 return false;
-            })
-            .reverse();
+            }
 
+            const handler = this.widgetService.getWidgetHandler(x.binding.handler);
 
-        let acceptingParentElement: WidgetStackItem;
-        let siblingElement: WidgetStackItem;
+            if (handler && handler.canAccept && handler.canAccept(dragSession)) {
+                return true;
+            }
 
-        if (dragRelatedElements.length === 0) {
+            return false;
+        });
+
+        if (!acceptingParentElement) {
             delete dragSession.targetElement;
             delete dragSession.targetBinding;
 
@@ -279,25 +273,22 @@ export class GridEditor {
             return;
         }
 
-        acceptingParentElement = dragRelatedElements[0];
         dragSession.targetElement = acceptingParentElement.element;
         dragSession.targetBinding = GridHelper.getWidgetBinding(acceptingParentElement.element);
 
-        if (dragRelatedElements.length > 1) {
-            siblingElement = dragRelatedElements[1];
-        }
+        const siblingElement: WidgetStackItem = stack.find(x => x.element.parentElement === acceptingParentElement.element);
 
         if (siblingElement) {
             const quadrant = Utils.pointerToClientQuadrant(this.pointerX, this.pointerY, siblingElement.element);
             const sourceElementFlow = dragSession.sourceBinding.flow || "inline";
 
             dragSession.insertIndex = acceptingParentElement.binding.model.widgets.indexOf(siblingElement.binding.model);
-
             const hoveredElementFlow = siblingElement.binding.flow || "inline";
 
             if (sourceElementFlow === "inline" && hoveredElementFlow === "inline") {
                 if (quadrant.horizontal === "right") {
                     dragSession.insertIndex++;
+                    dragSession["abc"] = "1";
                 }
 
                 this.viewManager.setSplitter({
@@ -307,6 +298,7 @@ export class GridEditor {
                 });
             }
             else {
+
                 if (quadrant.vertical === "bottom") {
                     dragSession.insertIndex++;
                 }
@@ -347,8 +339,7 @@ export class GridEditor {
                     });
                 }
                 else {
-                    dragSession.insertIndex = children.length - 1;
-
+                    dragSession.insertIndex = children.length;
                     const child = children[dragSession.insertIndex];
 
                     this.viewManager.setSplitter({

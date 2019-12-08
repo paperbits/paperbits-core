@@ -13,11 +13,6 @@ const widgetDisplayName = "Picture";
 
 export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
     private static readonly imageFileExtensions = [".jpg", ".jpeg", ".png", ".svg", ".gif"];
-    private readonly pictureViewModelBinder: PictureViewModelBinder;
-
-    // constructor(pictureViewModelBinder: PictureViewModelBinder) {
-    //     this.pictureViewModelBinder = pictureViewModelBinder;
-    // }
 
     private async getWidgetOrderByConfig(sourceUrl: string, caption: string): Promise<IWidgetOrder> {
         const widgetOrder: IWidgetOrder = {
