@@ -53,6 +53,7 @@ import { LayoutHost } from "./workshops/layout/ko/layoutHost";
 import { Tray } from "./workshops/tray/tray";
 import { CollapsiblePanelEditorModule } from "./collapsible-panel/ko";
 import { MenuEditorModule } from "./menu/ko";
+import { Spinner } from "./ko";
 import { DesignerUserService } from "./ko/ui/designerUserService";
 import { RoleSelector, RoleInput } from "./workshops/roles/ko";
 import "./ko/bindingHandlers/bindingHandlers.command";
@@ -96,6 +97,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bind("layoutHost", LayoutHost);
         injector.bind("roleSelector", RoleSelector);
         injector.bind("roleInput", RoleInput);
+        injector.bind("spinner", Spinner);
         injector.bindSingleton("mediaPermalinkResolver", MediaPermalinkResolver);
         injector.bindModule(new TextblockEditorModule());
         injector.bindModule(new PictureEditorModule());

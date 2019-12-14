@@ -1,7 +1,6 @@
 import * as ko from "knockout";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 
-import "./knockout.editors";
 import "./bindingHandlers/bindingHandlers.columnSizeCfg";
 import "./bindingHandlers/bindingHandlers.component";
 import "./bindingHandlers/bindingHandlers.highlight";

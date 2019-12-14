@@ -8,7 +8,7 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
         const injectableComponentLoader = {
             loadViewModel(name: string, config: ComponentConfig, callback: Function): void {
                 if (config.injectable) {
-                    const viewModelConstructor = (params) => {
+                    const viewModelConstructor = function (params) {
                         const resolvedInjectable: any = injector.resolve(config.injectable);
 
                         let instance = resolvedInjectable;
@@ -119,7 +119,7 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                                 }
                             }
                             if (Object.keys(runtimeParams).length > 0) {
-                                params = {...runtimeParams, ...params};
+                                params = { ...runtimeParams, ...params };
                             }
                         }
 
