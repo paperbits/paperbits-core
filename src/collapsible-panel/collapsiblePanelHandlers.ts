@@ -3,6 +3,7 @@ import { CollapsiblePanelModel } from "./collapsiblePanelModel";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { WidgetModel } from "@paperbits/common/widgets";
 import { EventManager } from "@paperbits/common/events";
+import { DragSession } from "@paperbits/common/ui/draggables";
 
 
 export class CollapsiblePanelHandlers implements IWidgetHandler {
@@ -10,6 +11,10 @@ export class CollapsiblePanelHandlers implements IWidgetHandler {
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager
     ) { }
+
+    public canAccept(dragSession: DragSession): boolean {
+        return !["section", "row", "column", "collapsiblePanel"].includes(dragSession.sourceBinding.name);
+    }
 
     public async getWidgetOrder(): Promise<IWidgetOrder> {
         const widgetOrder: IWidgetOrder = {

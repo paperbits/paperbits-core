@@ -2,7 +2,6 @@ import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
 import * as Objects from "@paperbits/common/objects";
 import template from "./collapsiblePanelEditor.html";
-import { StyleService } from "@paperbits/styles";
 import { CollapsiblePanelModel } from "../collapsiblePanelModel";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { ContainerStylePluginConfig } from "@paperbits/styles/contracts";

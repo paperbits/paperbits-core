@@ -31,7 +31,7 @@ export class CollapsiblePanelViewModelBinder implements ViewModelBinder<Collapsi
         }
 
         if (widgetViewModels.length === 0) {
-            widgetViewModels.push(new PlaceholderViewModel("Content"));
+            widgetViewModels.push(new PlaceholderViewModel("Collapsible panel content"));
         }
 
         if (model.styles) {

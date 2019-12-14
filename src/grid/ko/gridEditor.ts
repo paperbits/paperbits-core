@@ -130,7 +130,7 @@ export class GridEditor {
             return;
         }
 
-        if (event.button !== 0) {
+        if (event.which !== 1) {
             return;
         }
 
