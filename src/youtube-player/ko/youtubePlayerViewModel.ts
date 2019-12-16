@@ -3,7 +3,7 @@ import template from "./youtube.html";
 import { Component } from "@paperbits/common/ko/decorators";
 
 @Component({
-    selector: "youtube-player",
+    selector: "paperbits-youtube-player",
     template: template
 })
 export class YoutubePlayerViewModel {
