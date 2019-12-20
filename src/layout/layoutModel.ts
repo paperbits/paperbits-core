@@ -1,5 +1,8 @@
 import { WidgetModel } from "@paperbits/common/widgets";
 
+/**
+ * Layout model.
+ */
 export class LayoutModel {
     /**
      * Unique identifier.

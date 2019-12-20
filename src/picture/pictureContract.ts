@@ -1,6 +1,9 @@
 ﻿import { Contract } from "@paperbits/common/contract";
 import { HyperlinkContract } from "@paperbits/common/editing";
 
+/**
+ * Picture widget contract.
+ */
 export interface PictureContract extends Contract {
     /**
      * Key of a permalink referencing the source of the picture.

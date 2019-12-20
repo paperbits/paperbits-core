@@ -31,7 +31,7 @@ export interface MenuContract extends Contract {
     roles?: string[];
 
     /**
-     * Menu styles.
+     * Menu local styles.
      */
     styles: LocalStyles;
 }
