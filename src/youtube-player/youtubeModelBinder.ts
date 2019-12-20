@@ -32,7 +32,6 @@ export class YoutubeModelBinder implements IModelBinder<YoutubePlayerModel> {
         const youtubeConfig: YoutubePlayerContract = {
             type: "youtube-player",
             videoId: youtubeModel.videoId,
-            origin: youtubeModel.origin,
             controls: youtubeModel.controls,
             autoplay: youtubeModel.autoplay,
             loop: youtubeModel.loop
