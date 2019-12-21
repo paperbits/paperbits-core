@@ -20,7 +20,6 @@ export class YoutubeModelBinder implements IModelBinder<YoutubePlayerModel> {
         const youtubePlayerModel = new YoutubePlayerModel();
 
         youtubePlayerModel.videoId = youtubeNode.videoId || youtubeNode["videoKey"];
-        youtubePlayerModel.origin = youtubeNode.origin;
         youtubePlayerModel.controls = youtubeNode.controls;
         youtubePlayerModel.autoplay = youtubeNode.autoplay;
         youtubePlayerModel.loop = youtubeNode.loop;
