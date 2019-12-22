@@ -52,7 +52,7 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         sectionModel.widgets = [viewModel["widgetBinding"].model]; // TODO: Refactor!
 
         const gridModel = sectionModel.widgets[0];
-        const styles = gridModel["styles"]["instance"];
+        const styles = gridModel.styles.instance;
 
         styles["size"] = {
             sm: {
@@ -87,7 +87,7 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         };
 
         gridModel.widgets.forEach(x => {
-            x["styles"]["instance"]["padding"] = {
+            x.styles.instance["padding"] = {
                 xs: {
                     top: 5,
                     left: 5,

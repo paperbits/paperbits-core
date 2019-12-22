@@ -69,7 +69,7 @@ export class SectionEditor {
         const viewport = this.viewManager.getViewport();
 
         if (this.model.styles) {
-            if (this.model.styles["instance"]) {
+            if (this.model.styles.instance) {
                 const sectionStyles = this.model.styles.instance;
 
                 if (sectionStyles) {
@@ -130,8 +130,8 @@ export class SectionEditor {
         const viewport = this.viewManager.getViewport();
         this.model.styles = this.model.styles || {};
 
-        if (this.model["styles"]["instance"] && !this.model["styles"]["instance"]["key"]) {
-            this.model["styles"]["instance"]["key"] = Utils.randomClassName();
+        if (this.model.styles.instance && !this.model.styles.instance.key) {
+            this.model.styles.instance.key = Utils.randomClassName();
         }
 
         const gridModel = <GridModel>this.model.widgets[0];
@@ -167,13 +167,13 @@ export class SectionEditor {
 
     public onBackgroundUpdate(background: BackgroundStylePluginConfig): void {
         Objects.setStructure("styles/instance/background", this.model);
-        this.model["styles"]["instance"]["background"] = background;
+        this.model.styles.instance["background"] = background;
         this.applyChanges();
     }
 
     public onTypographyUpdate(typography: TypographyStylePluginConfig): void {
         Objects.setStructure("styles/instance/typography", this.model);
-        this.model["styles"]["instance"]["typography"] = typography;
+        this.model.styles.instance["typography"] = typography;
         this.applyChanges();
     }
 }

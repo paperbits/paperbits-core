@@ -381,7 +381,15 @@ export class GridEditor {
     }
 
     private getUnderlyingElements(): HTMLElement[] {
-        return Utils.elementsFromPoint(this.ownerDocument, this.pointerX, this.pointerY);
+        const elements = Utils.elementsFromPoint(this.ownerDocument, this.pointerX, this.pointerY);
+
+        const index = elements.findIndex(x => x.classList.contains("backdrop"));
+
+        if (index >= 0) {
+            elements.splice(index);
+        }
+
+        return elements;
     }
 
     private renderHighlightedElements(): void {

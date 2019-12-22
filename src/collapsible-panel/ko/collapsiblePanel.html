@@ -1,12 +1,17 @@
 <div class="collapsible collapsible-panel">
+    <div class="backdrop"></div>
     <div class="collapsible-content" data-bind="styled: $component.styles">
         <!-- ko foreach: { data: widgets, as: 'widget'  } -->
         <!-- ko widget: widget -->
         <!-- /ko -->
         <!-- /ko -->
+
+        <button class="collapsible-panel-toggle" aria-label="Toggle" data-toggle="modal">
+            <i class="icon icon-simple-remove"></i>
+        </button>
     </div>
 
-    <button class="collapsible-toggle hamburger" aria-label="Toggle" data-toggle="collapsible">
+    <button class="collapsible-panel-toggle" aria-label="Toggle" data-toggle="modal">
         <i class="icon icon-menu-8"></i>
     </button>
 </div>
