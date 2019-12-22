@@ -22,6 +22,7 @@
     "dependencies": {
         "@paperbits/common": "0.1.194",
         "@paperbits/styles": "0.1.194",
+        "auth0-js": "^9.12.1",
         "cropperjs": "^1.5.6",
         "domino": "^2.1.3",
         "file-saver": "^2.0.2",
@@ -34,6 +35,7 @@
         "xhr2": "^0.2.0"
     },
     "devDependencies": {
+        "@types/auth0-js": "^9.10.7",
         "@types/google-maps": "^3.2.1",
         "@types/knockout": "^3.4.66",
         "@types/knockout.mapping": "^2.0.35",

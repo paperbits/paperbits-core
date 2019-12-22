@@ -1,0 +1,23 @@
+<fieldset class="login">
+    <h1>Sign-in</h1>
+    <!-- ko if: isBasicEnabled -->
+    <div class="form-group">
+        <input type="email" class="form-control" id="email`" placeholder="Email" data-bind="textInput: email, validationElement: email">
+    </div>
+    <div class="form-group">
+        <input type="password" class="form-control" id="password" placeholder="Password" data-bind="textInput: password">
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary" data-bind="click: login, disable: !email() || !password() || !canLogin()">Log in</button>
+    </div>
+    <!-- /ko -->
+    <div class="form-group">
+        <!-- ko if: isGoogleEnabled -->
+        <button class="btn btn-primary" data-bind="click: loginWithGoogle, disable: !canLogin()">Sign in with Google</button>
+        <!-- /ko -->
+        <!-- ko if: isGithubEnabled -->
+        <button class="btn btn-primary" data-bind="click: loginWithGithub, disable: !canLogin()">Sign in with Github</button>
+        <!-- /ko -->
+    </div>
+    
+</fieldset>

@@ -1,0 +1,101 @@
+<fieldset class="form" data-bind="scrollable: true">
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sourceCollapse'"
+                aria-label="Toggle 'Main' section"></a>
+            <b>Main</b>
+        </label>
+        <div id="sourceCollapse" class="collapse form-group-collapse">
+            <div class="form-group">
+                <label for="successRedirectUrl" class="form-label">Redirect URL 
+                    <button class="btn btn-info" type="button" aria-haspopup="true"
+                        aria-hidden="true" title="Help"
+                        data-bind="tooltipToggle: 'Url where the widget will redirect after success authorization'"></button>
+                </label>
+                <input type="text" id="successRedirectUrl" class="form-control" data-bind="textInput: successRedirectUrl" />
+            </div>
+            <div class="form-group">
+                <label for="domain" class="form-label">Domain
+                    <button class="btn btn-info" type="button" aria-haspopup="true"
+                        aria-hidden="true" title="Help"
+                        data-bind="tooltipToggle: 'Your Auth0 domain'"></button>
+                </label>
+                <input type="text" id="domain" class="form-control" data-bind="textInput: domain" maxlength="1256" />
+            </div>
+            <div class="form-group">
+                <label for="clientID" class="form-label">Client ID
+                    <button class="btn btn-info" type="button" aria-haspopup="true"
+                        aria-hidden="true" title="Help"
+                        data-bind="tooltipToggle: 'Your Auth0 client identifier obtained when creating the client in the Auth0 Dashboard'"></button>
+                </label>
+                <input type="text" id="clientID" class="form-control" data-bind="textInput: clientID" maxlength="256" />
+            </div>
+            <div class="form-group">
+                <label for="redirectUri" class="form-label">Redirect Uri (Path for a page where the widget is located)
+                    <button class="btn btn-info" type="button" aria-haspopup="true"
+                        aria-hidden="true" title="Help"
+                        data-bind="tooltipToggle: 'Url that the Auth0 will redirect after Auth with the Authorization Response'"></button>
+                </label>
+                <input type="text" id="redirectUri" class="form-control" data-bind="textInput: redirectUri" />
+            </div>
+            <div class="form-group">
+                <label for="audience" class="form-label">Audience
+                    <button class="btn btn-info" type="button" aria-haspopup="true"
+                        aria-hidden="true" title="Help"
+                        data-bind="tooltipToggle: 'Identifier of the resource server who will consume the access token issued after Auth'"></button>
+                </label>
+                <input type="text" id="audience" class="form-control" data-bind="textInput: audience" maxlength="256" />
+            </div>
+            <div class="form-group">
+                <label for="responseType" class="form-label">Response type
+                    <button class="btn btn-info" type="button" aria-haspopup="true"
+                        aria-hidden="true" title="Help"
+                        data-bind="tooltipToggle: 'Type of the response used by OAuth 2.0 flow'"></button>
+                </label>
+                <input type="text" id="responseType" class="form-control" data-bind="textInput: responseType" maxlength="256" />
+            </div>
+            <div class="form-group">
+                <label for="scope" class="form-label">Scope
+                    <button class="btn btn-info" type="button" aria-haspopup="true"
+                        aria-hidden="true" title="Help"
+                        data-bind="tooltipToggle: 'Scopes to be requested during Auth.'"></button>
+                </label>
+                <input type="text" id="scope" class="form-control" data-bind="textInput: scope" maxlength="256" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#connectionsCollapse'"
+                aria-label="Toggle 'Connections' section"></a>
+            <b>Connections</b>
+        </label>
+        <div id="connectionsCollapse" class="collapse form-group-collapse">        
+            <div class="form-group">
+                <label for="realm" class="form-label">Realm
+                    <button class="btn btn-info" type="button" aria-haspopup="true"
+                        aria-hidden="true" title="Help"
+                        data-bind="tooltipToggle: 'Database connection name for Basic authorization'"></button>
+                </label>
+                <input type="text" id="realm" class="form-control" data-bind="textInput: realm" maxlength="256" />
+            </div>
+            <div class="form-group">
+                <label for="googleConnectionName" class="form-label">Google connection name
+                    <button class="btn btn-info" type="button" aria-haspopup="true"
+                        aria-hidden="true" title="Help"
+                        data-bind="tooltipToggle: 'Google connection name granted to a client (application)'"></button>
+                </label>
+                <input type="text" id="googleConnectionName" class="form-control" data-bind="textInput: googleConnectionName" maxlength="256" />
+            </div>
+            <div class="form-group">
+                <label for="githubConnectionName" class="form-label">Github connection name
+                    <button class="btn btn-info" type="button" aria-haspopup="true"
+                        aria-hidden="true" title="Help"
+                        data-bind="tooltipToggle: 'Github connection name granted to a client (application)'"></button>
+                </label>
+                <input type="text" id="githubConnectionName" class="form-control" data-bind="textInput: githubConnectionName" maxlength="256" />
+            </div>
+        </div>
+    </div>
+</fieldset>
