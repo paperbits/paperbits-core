@@ -4,7 +4,7 @@ import * as Utils from "@paperbits/common/utils";
 import { IMediaService } from "@paperbits/common/media";
 import { ViewManager, View } from "@paperbits/common/ui";
 import { IContentDropHandler, IContentDescriptor } from "@paperbits/common/editing";
-import { MediaItem } from "./mediaItem";
+import { MediaItem, defaultFileName, defaultURL } from "./mediaItem";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { Keys } from "@paperbits/common/keyboard";
 import { EventManager } from "@paperbits/common/events";
@@ -103,6 +103,14 @@ export class MediaWorkshop {
         await this.searchMedia();
 
         this.working(false);
+    }
+
+    public async linkMedia(): Promise<void> {
+        const mediaContract = await this.mediaService.createMediaUrl(defaultFileName, defaultURL, "image");
+        const mediaItem = new MediaItem(mediaContract);
+
+        this.mediaItems.push(mediaItem);
+        this.selectMedia(mediaItem);
     }
 
     public selectMedia(mediaItem: MediaItem): void {

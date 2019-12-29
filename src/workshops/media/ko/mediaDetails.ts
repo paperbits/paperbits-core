@@ -5,6 +5,7 @@ import { IMediaService } from "@paperbits/common/media";
 import { ViewManager } from "@paperbits/common/ui";
 import { MediaItem } from "./mediaItem";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
+import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "media-details-workshop",
@@ -32,22 +33,39 @@ export class MediaDetailsWorkshop {
     @OnMounted()
     public async onMounted(): Promise<void> {
         this.mediaItem.fileName
+            .extend(ChangeRateLimit)
             .extend(<any>{ required: true, onlyValid: true })
             .subscribe(this.updateMedia);
 
+        this.mediaItem.downloadUrl
+            .extend(ChangeRateLimit)
+            .extend(<any>{ required: true, onlyValid: true })
+            .subscribe(this.updateMediaUrl);
+
         this.mediaItem.description
+            .extend(ChangeRateLimit)
             .subscribe(this.updateMedia);
 
         this.mediaItem.keywords
+            .extend(ChangeRateLimit)
             .subscribe(this.updateMedia);
 
         this.mediaItem.permalink
+            .extend(ChangeRateLimit)
             .extend(<any>{ validPermalink: this.mediaItem.key, onlyValid: true })
             .subscribe(this.updateMedia);
 
         const mediaContract = await this.mediaService.getMediaByKey(this.mediaItem.key);
 
         this.mediaItem.permalink(mediaContract.permalink);
+    }
+
+    private async updateMediaUrl(): Promise<void> {
+        if (this.mediaItem.isDefaultFileName() && !this.mediaItem.isDefaultUrl()) {
+            const newName = this.mediaItem.downloadUrl().split("/").pop();
+            this.mediaItem.updateDefault(newName);
+        }
+        await this.updateMedia();
     }
 
     private async updateMedia(): Promise<void> {

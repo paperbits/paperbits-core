@@ -3,6 +3,8 @@ import * as MediaUtils from "@paperbits/common/media/mediaUtils";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { IWidgetOrder, IWidgetFactoryResult } from "@paperbits/common/editing";
 
+export const defaultFileName: string = "media.svg";
+export const defaultURL: string = "https://cdn.paperbits.io/images/logo.svg";
 
 export class MediaItem {
     public key: string;
@@ -16,7 +18,7 @@ export class MediaItem {
     public keywords: ko.Observable<string>;
     public contentType: ko.Observable<string>;
     public widgetFactoryResult: IWidgetFactoryResult<any>;
-    public isSelected: ko.Observable<boolean>;
+    public isSelected: ko.Observable<boolean>;    
 
     constructor(mediaContract: MediaContract) {
         this.key = mediaContract.key;
@@ -44,6 +46,20 @@ export class MediaItem {
         else {
             this.thumbnailUrl(null); // TODO: Placeholder?
         }
+    }
+
+    public isDefaultFileName(): boolean {
+        return this.fileName() === defaultFileName;
+    }
+
+    public isDefaultUrl(): boolean {
+        return this.downloadUrl() === defaultURL;
+    }
+
+    public updateDefault(newName: string): void {
+        this.fileName(newName);
+        this.permalink(this.permalink().replace(defaultFileName, newName));
+        this.thumbnailUrl(this.downloadUrl());
     }
 
     public toMedia(): MediaContract {

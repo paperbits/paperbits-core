@@ -23,6 +23,19 @@
             </div>
         </div>
 
+        <!-- ko ifnot: mediaItem.blobKey  -->
+        <div class="form-group">
+            <label for="downloadUrl" class="form-label">
+                Reference URL
+            </label>
+            <div class="input-group">
+                <input type="text" id="downloadUrl" class="form-control" data-bind="textInput: mediaItem.downloadUrl, validationElement: mediaItem.downloadUrl"
+                    placeholder="https://cdn.paperbits.io/images/logo.svg" maxlength="2000" spellcheck="false" />
+                <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: mediaItem.downloadUrl" type="button">!</button>
+            </div>
+        </div>
+        <!-- /ko -->
+
         <div class="form-group">
             <label for="description" class="form-label">
                 Description
@@ -39,10 +52,12 @@
     </fieldset>
 
     <div class="flex-item btn-group">
+        <!-- ko if: mediaItem.blobKey  -->
         <button class="btn" data-bind="click: openCropper">
             <i class="paperbits-icon paperbits-crop"></i>
             Crop
         </button>
+        <!-- /ko -->
 
         <button class="btn" data-bind="click: downloadMedia">
             <i class="paperbits-icon paperbits-square-download"></i>
