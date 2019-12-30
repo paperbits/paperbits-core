@@ -34,6 +34,12 @@
                 <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: mediaItem.downloadUrl" type="button">!</button>
             </div>
         </div>
+        <div class="form-group">
+            <label for="contentType" class="form-label">
+                Content type
+            </label>
+            <select id="contentType" class="form-control" data-bind="options: contentTypes, value: mediaItem.contentType"></select>
+        </div>
         <!-- /ko -->
 
         <div class="form-group">

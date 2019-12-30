@@ -106,7 +106,7 @@ export class MediaWorkshop {
     }
 
     public async linkMedia(): Promise<void> {
-        const mediaContract = await this.mediaService.createMediaUrl(defaultFileName, defaultURL, "image");
+        const mediaContract = await this.mediaService.createMediaUrl(defaultFileName, defaultURL, "image/svg+xml");
         const mediaItem = new MediaItem(mediaContract);
 
         this.mediaItems.push(mediaItem);

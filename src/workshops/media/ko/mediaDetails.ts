@@ -13,6 +13,22 @@ import { ChangeRateLimit } from "@paperbits/common/ko/consts";
     injectable: "mediaDetailsWorkshop"
 })
 export class MediaDetailsWorkshop {
+    public contentTypes: string[] = [
+        "image/gif",
+        "image/jpeg",
+        "image/png",
+        "image/tiff",
+        "image/x-icon",
+        "image/svg+xml",
+        "video/mpeg",
+        "video/mp4",
+        "video/quicktime",
+        "video/x-ms-wmv",
+        "video/x-msvideo",
+        "video/x-flv",
+        "video/webm",
+    ]
+
     @Param()
     public readonly mediaItem: MediaItem;
 
@@ -41,6 +57,11 @@ export class MediaDetailsWorkshop {
             .extend(ChangeRateLimit)
             .extend(<any>{ required: true, onlyValid: true })
             .subscribe(this.updateMediaUrl);
+
+        this.mediaItem.contentType
+            .extend(ChangeRateLimit)
+            .extend(<any>{ required: true, onlyValid: true })
+            .subscribe(this.updateMedia);
 
         this.mediaItem.description
             .extend(ChangeRateLimit)
