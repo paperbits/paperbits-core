@@ -81,7 +81,7 @@ export class PictureEditor {
         this.appearanceStyle.subscribe(this.applyChanges);
     }
 
-    public onAppearanceSelected(snippet: LocalStyles): void {
+    public onVariationSelected(snippet: LocalStyles): void {
         if (snippet) {
             this.appearanceStyle(snippet);
         }
