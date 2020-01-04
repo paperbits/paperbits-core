@@ -5,7 +5,6 @@ import { Component, Param, OnMounted, Encapsulation } from "@paperbits/common/ko
 @Component({
     selector: "widget-container",
     template: template,
-    injectable: "widgetContainer",
     encapsulation: Encapsulation.shadowDom
 })
 export class WidgetContainer {

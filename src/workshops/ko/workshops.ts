@@ -6,8 +6,7 @@ import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "workshops",
-    template: template,
-    injectable: "workshops"
+    template: template
 })
 export class Workshops {
     public userPhotoUrl: ko.Observable<string>;

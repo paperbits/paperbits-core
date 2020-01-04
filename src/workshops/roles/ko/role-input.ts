@@ -5,8 +5,7 @@ import { RoleModel, RoleService, BuiltInRoles } from "@paperbits/common/user";
 
 @Component({
     selector: "role-input",
-    template: template,
-    injectable: "roleInput"
+    template: template
 })
 export class RoleInput {
     public readonly selectedRolesDisplay: ko.Observable<string>;

@@ -6,8 +6,7 @@ import { TextblockModel } from "..";
 
 @Component({
     selector: "html-editor",
-    template: template,
-    injectable: "textblockEditor"
+    template: template
 })
 export class TextblockEditor {
     public pluginNames: ko.ObservableArray<string>;

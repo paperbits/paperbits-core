@@ -4,8 +4,7 @@ import { Component } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "page-layout",
-    template: template,
-    injectable: "layout"
+    template: template
 })
 export class LayoutViewModel {
     public title: ko.Observable<string>;

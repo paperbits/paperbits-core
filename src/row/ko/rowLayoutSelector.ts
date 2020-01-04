@@ -15,8 +15,7 @@ export interface columnSizeCfg {
 
 @Component({
     selector: "row-layout-selector",
-    template: template,
-    injectable: "rowLayoutSelector"
+    template: template
 })
 export class RowLayoutSelector implements IResourceSelector<RowModel> {
     public readonly rowConfigs: columnSizeCfg[][] = [

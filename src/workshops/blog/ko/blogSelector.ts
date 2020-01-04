@@ -8,8 +8,7 @@ import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "blog-selector",
-    template: template,
-    injectable: "blogSelector"
+    template: template
 })
 export class BlogSelector implements IResourceSelector<BlogPostContract> {
     public readonly searchPattern: ko.Observable<string>;

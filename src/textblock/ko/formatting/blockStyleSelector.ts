@@ -4,8 +4,7 @@ import { Component } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "block-style-selector",
-    template: template,
-    injectable: "blockStyleSelector"
+    template: template
 })
 export class BlockStyleSelector {
     constructor(

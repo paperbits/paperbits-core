@@ -8,8 +8,7 @@ import { PageItem } from "./pageItem";
 
 @Component({
     selector: "page-details-workshop",
-    template: template,
-    injectable: "pageDetailsWorkshop"
+    template: template
 })
 export class PageDetailsWorkshop {
     public readonly isReserved: ko.Observable<boolean>;

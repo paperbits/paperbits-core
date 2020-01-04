@@ -6,10 +6,10 @@ import { ButtonModel } from "../buttonModel";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { LocalStyles } from "@paperbits/common/styles";
 
+
 @Component({
     selector: "button-editor",
-    template: template,
-    injectable: "buttonEditor"
+    template: template
 })
 export class ButtonEditor {
     public readonly label: ko.Observable<string>;

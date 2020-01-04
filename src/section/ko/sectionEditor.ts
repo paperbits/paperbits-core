@@ -21,8 +21,7 @@ const styleKeyStretch = "utils/block/stretch";
 
 @Component({
     selector: "layout-section-editor",
-    template: template,
-    injectable: "sectionEditor"
+    template: template
 })
 export class SectionEditor {
     public readonly stickTo: ko.Observable<string>;

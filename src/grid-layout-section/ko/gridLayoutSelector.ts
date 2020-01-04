@@ -13,8 +13,7 @@ import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelect
 
 @Component({
     selector: "grid-layout-selector",
-    template: template,
-    injectable: "gridLayoutSelector"
+    template: template
 })
 export class GridLayoutSelector implements IResourceSelector<any> {
     public readonly snippets: ko.ObservableArray<GridModel>;

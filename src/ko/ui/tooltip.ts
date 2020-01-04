@@ -3,8 +3,7 @@ import { Component, Param } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "tooltip",
-    template: template,
-    injectable: "tooltip"
+    template: template
 })
 export class Tooltip {
     @Param()

@@ -4,8 +4,7 @@ import { Component, Event, Param, OnMounted } from "@paperbits/common/ko/decorat
 
 @Component({
     selector: "confirmation",
-    template: template,
-    injectable: "confirmation"
+    template: template
 })
 export class Confirmation {
     public readonly message: ko.Observable<string>;

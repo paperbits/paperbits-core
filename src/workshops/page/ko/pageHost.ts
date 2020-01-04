@@ -8,8 +8,7 @@ import { ViewManager, ViewManagerMode } from "@paperbits/common/ui";
 
 @Component({
     selector: "page-host",
-    template: "<!-- ko if: layoutViewModel --><!-- ko widget: layoutViewModel, grid: {} --><!-- /ko --><!-- /ko -->",
-    injectable: "pageHost"
+    template: "<!-- ko if: layoutViewModel --><!-- ko widget: layoutViewModel, grid: {} --><!-- /ko --><!-- /ko -->"
 })
 export class PageHost {
     public readonly layoutViewModel: ko.Observable<LayoutViewModel>;

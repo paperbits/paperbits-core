@@ -1,17 +1,14 @@
 ﻿import * as ko from "knockout";
 import template from "./layouts.html";
-import { Router } from "@paperbits/common/routing";
 import { ViewManager, View } from "@paperbits/common/ui";
 import { ILayoutService } from "@paperbits/common/layouts";
-import { Keys } from "@paperbits/common/keyboard";
 import { LayoutItem } from "./layoutItem";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "layouts",
-    template: template,
-    injectable: "layoutsWorkshop"
+    template: template
 })
 export class LayoutsWorkshop {
     public readonly searchPattern: ko.Observable<string>;
@@ -21,7 +18,6 @@ export class LayoutsWorkshop {
 
     constructor(
         private readonly layoutService: ILayoutService,
-        private readonly router: Router,
         private readonly viewManager: ViewManager
     ) {
         this.layouts = ko.observableArray();

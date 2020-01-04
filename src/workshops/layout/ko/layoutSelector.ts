@@ -8,8 +8,7 @@ import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorat
 
 @Component({
     selector: "layout-selector",
-    template: template,
-    injectable: "layoutSelector"
+    template: template
 })
 export class LayoutSelector implements IResourceSelector<LayoutContract> {
     public readonly searchPattern: ko.Observable<string>;

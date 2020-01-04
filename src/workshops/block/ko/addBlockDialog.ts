@@ -8,8 +8,7 @@ import { IModelBinder } from "@paperbits/common/editing";
 
 @Component({
     selector: "add-block-dialog",
-    template: template,
-    injectable: "addBlockDialog"
+    template: template
 })
 export class AddBlockDialog {
     public readonly working: ko.Observable<boolean>;

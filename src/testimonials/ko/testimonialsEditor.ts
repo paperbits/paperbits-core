@@ -6,8 +6,7 @@ import { TestimonialsModel } from "../testimonialsModel";
 
 @Component({
     selector: "testimonials-editor",
-    template: template,
-    injectable: "testimonialsEditor"
+    template: template
 })
 export class TestimonialsEditor {
     public textContent: ko.Observable<string>;

@@ -7,8 +7,7 @@ import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "auth0-login-editor",
-    template: template,
-    injectable: "auth0LoginEditor"
+    template: template
 })
 export class Auth0LoginEditor implements WidgetEditor<Auth0LoginModel> {
     public readonly successRedirectUrl: ko.Observable<string>;

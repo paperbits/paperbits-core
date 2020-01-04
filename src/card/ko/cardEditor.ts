@@ -13,8 +13,7 @@ import { EventManager } from "@paperbits/common/events";
 
 @Component({
     selector: "card-editor",
-    template: template,
-    injectable: "cardEditor"
+    template: template
 })
 export class CardEditor implements WidgetEditor<CardModel> {
     public readonly background: ko.Observable<BackgroundStylePluginConfig>;

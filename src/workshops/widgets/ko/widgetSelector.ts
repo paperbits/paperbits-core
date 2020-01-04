@@ -6,8 +6,7 @@ import { Component, Event, OnMounted } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "widget-selector",
-    template: template,
-    injectable: "widgetSelector"
+    template: template
 })
 export class WidgetSelector {
     public readonly categories: ko.Observable<{name: string, items: WidgetItem[]}[]>;

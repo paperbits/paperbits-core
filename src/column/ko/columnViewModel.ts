@@ -4,8 +4,7 @@ import { Component } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "layout-column",
-    template: template,
-    injectable: "column"
+    template: template
 })
 export class ColumnViewModel {
     public widgets: ko.ObservableArray<Object>;

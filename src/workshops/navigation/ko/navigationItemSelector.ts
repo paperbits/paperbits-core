@@ -8,8 +8,7 @@ import { NavigationViewModelBinder } from "./navigationViewModelBinder";
 
 @Component({
     selector: "navigation-item-selector",
-    template: template,
-    injectable: "navigationItemSelector"
+    template: template
 })
 export class NavigationItemSelector {
     public readonly working: ko.Observable<boolean>;

@@ -10,8 +10,7 @@ import { EventManager, CommonEvents } from "@paperbits/common/events";
 
 @Component({
     selector: "collapsible-panel-editor",
-    template: template,
-    injectable: "collapsiblePanelEditor"
+    template: template
 })
 export class CollapsiblePanelEditor {
     public readonly containerConfig: ko.Observable<ContainerStylePluginConfig>;

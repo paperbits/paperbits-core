@@ -8,8 +8,7 @@ import { Component, OnDestroyed } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "hyperlink-editor",
-    template: template,
-    injectable: "hyperlinkEditor"
+    template: template
 })
 export class HyperlinkEditor {
     public readonly hyperlink: ko.Observable<HyperlinkModel>;

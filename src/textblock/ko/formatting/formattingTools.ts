@@ -10,8 +10,7 @@ import { StyleService } from "@paperbits/styles/styleService";
 
 @Component({
     selector: "formatting",
-    template: template,
-    injectable: "formattingTools"
+    template: template
 })
 export class FormattingTools {
     private textStyles: {}[];

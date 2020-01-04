@@ -8,8 +8,7 @@ import { BlockService } from "@paperbits/common/blocks";
 
 @Component({
     selector: "section-layout-selector",
-    template: template,
-    injectable: "sectionLayoutSelector"
+    template: template
 })
 export class SectionLayoutSelector implements IResourceSelector<SectionModel> {
     @Event()

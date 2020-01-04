@@ -2,7 +2,6 @@
 
 @Component({
     selector: "spinner",
-    template: `<div></div><div></div><div></div>`,
-    injectable: "spinner"
+    template: `<div></div><div></div><div></div>`
 })
 export class Spinner { }

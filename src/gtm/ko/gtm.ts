@@ -6,8 +6,7 @@ import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "paperbits-gtm",
-    template: template,
-    injectable: "gtm"
+    template: template
 })
 export class GoogleTagManager {
     public static gtmDataLayerName = "dataLayer";

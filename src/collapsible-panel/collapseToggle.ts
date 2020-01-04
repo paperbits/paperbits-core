@@ -7,7 +7,6 @@ import { Component, RuntimeComponent } from "@paperbits/common/ko/decorators";
 })
 @Component({
     selector: "collapse-toggle",
-    template: template,
-    injectable: "collapseToggle"
+    template: template
 })
 export class CollapseToggle { }

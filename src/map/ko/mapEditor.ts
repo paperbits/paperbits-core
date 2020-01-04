@@ -5,8 +5,7 @@ import { MapModel } from "../mapModel";
 
 @Component({
     selector: "paperbits-map-editor",
-    template: template,
-    injectable: "mapEditor"
+    template: template
 })
 export class MapEditor {
     public location: ko.Observable<string>;

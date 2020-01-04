@@ -8,8 +8,7 @@ import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorat
 
 @Component({
     selector: "layout-details-workshop",
-    template: template,
-    injectable: "layoutDetails"
+    template: template
 })
 export class LayoutDetails {
     public isDefaultLayout: ko.Computed<boolean>;

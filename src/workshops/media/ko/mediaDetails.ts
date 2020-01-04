@@ -9,8 +9,7 @@ import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "media-details-workshop",
-    template: template,
-    injectable: "mediaDetailsWorkshop"
+    template: template
 })
 export class MediaDetailsWorkshop {
     public contentTypes: string[] = [

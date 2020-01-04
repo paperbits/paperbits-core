@@ -12,8 +12,7 @@ import { IWidgetService } from "@paperbits/common/widgets";
 
 @Component({
     selector: "dropbucket",
-    template: template,
-    injectable: "dropbucket"
+    template: template
 })
 export class DropBucket {
     public droppedItems: ko.ObservableArray<DropBucketItem>;

@@ -8,8 +8,7 @@ import { ViewManager } from "@paperbits/common/ui/viewManager";
 
 @Component({
     selector: "text-style-selector",
-    template: template,
-    injectable: "textStyleSelector"
+    template: template
 })
 export class TextStyleSelector {
     public textStyles: ko.ObservableArray<any>;

@@ -18,8 +18,7 @@ declare let uploadDialog: HTMLInputElement;
 
 @Component({
     selector: "view-manager",
-    template: template,
-    injectable: "viewManager"
+    template: template
 })
 export class DefaultViewManager implements ViewManager {
     private contextualEditorsBag: Bag<IContextCommandSet> = {};

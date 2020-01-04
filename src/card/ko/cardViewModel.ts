@@ -5,8 +5,7 @@ import { StyleModel } from "@paperbits/common/styles";
 
 @Component({
     selector: "card",
-    template: template,
-    injectable: "card"
+    template: template
 })
 export class CardViewModel {
     public widgets: ko.ObservableArray<Object>;

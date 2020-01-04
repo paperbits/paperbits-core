@@ -11,8 +11,7 @@ import { ContainerStylePluginConfig } from "@paperbits/styles/contracts";
 
 @Component({
     selector: "grid-cell-editor",
-    template: template,
-    injectable: "gridCellEditor"
+    template: template
 })
 export class GridCellEditor {
     public readonly containerConfig: ko.Observable<ContainerStylePluginConfig>;

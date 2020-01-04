@@ -5,8 +5,7 @@ import { StyleModel } from "@paperbits/common/styles";
 
 @Component({
     selector: "grid-cell",
-    template: template,
-    injectable: "gridCell"
+    template: template
 })
 export class GridCellViewModel {
     public widgets: ko.ObservableArray<Object>;

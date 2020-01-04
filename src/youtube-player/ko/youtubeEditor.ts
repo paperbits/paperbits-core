@@ -7,8 +7,7 @@ import { WidgetEditor } from "@paperbits/common/widgets";
 
 @Component({
     selector: "youtube-editor",
-    template: template,
-    injectable: "youtubeEditor"
+    template: template
 })
 export class YoutubeEditor implements WidgetEditor<YoutubePlayerModel> {
     public readonly videoId: ko.Observable<string>;

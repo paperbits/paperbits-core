@@ -8,8 +8,7 @@ import { IPermalinkResolver } from "@paperbits/common/permalinks";
 
 @Component({
     selector: "video-player-editor",
-    template: template,
-    injectable: "videoPlayerEditor"
+    template: template
 })
 export class VideoEditor {
     public readonly sourceUrl: ko.Observable<string>;

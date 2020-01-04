@@ -41,8 +41,7 @@ export class CropperBindingHandler {
 
 @Component({
     selector: "picture-cropper",
-    template: template,
-    injectable: "pictureCropper"
+    template: template
 })
 export class PictureCropper {
     public cropperInstance: ko.Observable<any>;

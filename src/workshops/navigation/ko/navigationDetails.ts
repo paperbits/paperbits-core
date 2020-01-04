@@ -7,8 +7,7 @@ import { Component, Event, OnMounted, Param } from "@paperbits/common/ko/decorat
 
 @Component({
     selector: "navigation-details-workshop",
-    template: template,
-    injectable: "navigationDetailsWorkshop"
+    template: template
 })
 export class NavigationDetailsWorkshop {
     public readonly hyperlinkTitle: ko.Computed<string>;

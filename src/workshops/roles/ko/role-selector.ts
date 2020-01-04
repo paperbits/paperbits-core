@@ -5,8 +5,7 @@ import { RoleModel } from "@paperbits/common/user";
 
 @Component({
     selector: "role-selector",
-    template: template,
-    injectable: "roleSelector"
+    template: template
 })
 export class RoleSelector {
     constructor() {

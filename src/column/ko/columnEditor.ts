@@ -6,8 +6,7 @@ import { ColumnModel } from "../columnModel";
 
 @Component({
     selector: "layout-column-editor",
-    template: template,
-    injectable: "columnEditor"
+    template: template
 })
 export class ColumnEditor {
     public readonly verticalAlignment: ko.Observable<string>;

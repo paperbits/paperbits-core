@@ -4,8 +4,7 @@ import { Component } from "@paperbits/common/ko/decorators";
 
 @Component({
     selector: "paperbits-placeholder",
-    template: template,
-    injectable: "placeholderWidget",
+    template: template
 })
 export class PlaceholderViewModel {
     public title: ko.Observable<string>;

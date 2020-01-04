@@ -6,8 +6,7 @@ import { EventManager, CommonEvents } from "@paperbits/common/events";
 
 @Component({
     selector: "viewport-selector",
-    template: template,
-    injectable: "viewportSelector"
+    template: template
 })
 export class ViewportSelector {
     public readonly viewport: ko.Observable<string>;

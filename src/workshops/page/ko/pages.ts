@@ -3,7 +3,6 @@ import template from "./pages.html";
 import { IPageService } from "@paperbits/common/pages";
 import { Router } from "@paperbits/common/routing";
 import { ViewManager, View } from "@paperbits/common/ui";
-import { Keys } from "@paperbits/common/keyboard";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { PageItem } from "./pageItem";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
@@ -11,8 +10,7 @@ import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "pages",
-    template: template,
-    injectable: "pagesWorkshop"
+    template: template
 })
 export class PagesWorkshop {
     public readonly searchPattern: ko.Observable<string>;

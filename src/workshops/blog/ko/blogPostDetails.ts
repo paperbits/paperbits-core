@@ -7,8 +7,7 @@ import { BlogPostItem } from "./blogPostItem";
 
 @Component({
     selector: "blog-post-details-workshop",
-    template: template,
-    injectable: "blogPostDetailsWorkshop"
+    template: template
 })
 export class BlogPostDetailsWorkshop {
     @Param()

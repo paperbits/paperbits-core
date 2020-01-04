@@ -12,8 +12,7 @@ import { EventManager } from "@paperbits/common/events";
 
 @Component({
     selector: "navigation",
-    template: template,
-    injectable: "navigationWorkshop"
+    template: template
 })
 export class NavigationWorkshop {
     public readonly selection: ko.Observable<NavigationItemViewModel>;

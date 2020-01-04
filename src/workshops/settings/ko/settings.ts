@@ -8,8 +8,7 @@ import { BackgroundModel } from "@paperbits/common/widgets/background";
 
 @Component({
     selector: "settings",
-    template: template,
-    injectable: "settingsWorkshop"
+    template: template
 })
 export class SettingsWorkshop {
     public readonly working: ko.Observable<boolean>;

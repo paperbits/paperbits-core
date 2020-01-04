@@ -7,8 +7,7 @@ import { RoleModel, RoleService } from "@paperbits/common/user";
 
 @Component({
     selector: "tray",
-    template: template,
-    injectable: "tray"
+    template: template
 })
 export class Tray {
     public readonly buttons: ko.ObservableArray<ToolButton>;

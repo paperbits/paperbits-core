@@ -11,8 +11,7 @@ import { LocalStyles } from "@paperbits/common/styles";
 
 @Component({
     selector: "paperbits-picture-editor",
-    template: template,
-    injectable: "pictureEditor"
+    template: template
 })
 export class PictureEditor {
     public readonly caption: ko.Observable<string>;

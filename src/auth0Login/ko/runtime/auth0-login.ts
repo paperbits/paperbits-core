@@ -8,8 +8,7 @@ import { Component, RuntimeComponent, Param, OnMounted } from "@paperbits/common
 })
 @Component({
     selector: "auth0-login-runtime",
-    template: template,
-    injectable: "auth0Login"
+    template: template
 })
 export class Auth0Login {
     @Param()

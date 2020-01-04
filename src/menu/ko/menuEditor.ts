@@ -19,8 +19,7 @@ const emptySelectionLabel = "Click to select navigation item...";
 
 @Component({
     selector: "menu-editor",
-    template: template,
-    injectable: "menuEditor"
+    template: template
 })
 export class MenuEditor {
     public readonly navigationItemTitle: ko.Observable<string>;

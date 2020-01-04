@@ -8,8 +8,7 @@ import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "url-selector",
-    template: template,
-    injectable: "urlSelector"
+    template: template
 })
 export class UrlSelector {
     public readonly searchPattern: ko.Observable<string>;

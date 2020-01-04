@@ -8,8 +8,7 @@ const defaultTarget = "_self";
 
 @Component({
     selector: "hyperlink-selector",
-    template: template,
-    injectable: "hyperlinkSelector"
+    template: template
 })
 export class HyperlinkSelector {
     public readonly hyperlinkProvider: ko.Observable<IHyperlinkProvider>;

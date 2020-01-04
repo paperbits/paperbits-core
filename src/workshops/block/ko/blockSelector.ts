@@ -11,8 +11,7 @@ import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "block-selector",
-    template: template,
-    injectable: "blockSelector"
+    template: template
 })
 export class BlockSelector implements IResourceSelector<BlockContract> {
     public readonly searchPattern: ko.Observable<string>;

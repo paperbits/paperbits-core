@@ -12,8 +12,7 @@ import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "media-selector",
-    template: template,
-    injectable: "mediaSelector"
+    template: template
 })
 export class MediaSelector {
     public readonly searchPattern: ko.Observable<string>;

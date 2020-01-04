@@ -10,8 +10,7 @@ import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "page-selector",
-    template: template,
-    injectable: "pageSelector"
+    template: template
 })
 export class PageSelector implements IResourceSelector<HyperlinkModel> {
     public readonly searchPattern: ko.Observable<string>;
