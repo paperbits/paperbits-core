@@ -87,7 +87,6 @@ export class LayoutViewModelBinder implements ViewModelBinder<LayoutModel, Layou
             viewModels.push(widgetViewModel);
         }
 
-        viewModel.permalinkTemplate(model.permalinkTemplate);
         viewModel.widgets(viewModels);
 
         if (!viewModel["widgetBinding"]) {

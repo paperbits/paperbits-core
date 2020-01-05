@@ -26,9 +26,6 @@ export class PageModelBinder implements IModelBinder<PageModel> {
     public async contractToModel(pageContract: PageContract, bindingContext?: Bag<any>): Promise<PageModel> {
         if (bindingContext && bindingContext["routeKind"] === "layout") {
             const pageModel = new PageModel();
-            pageModel.title = pageContract.title;
-            pageModel.description = pageContract.description;
-            pageModel.keywords = pageContract.keywords;
             pageModel.widgets = [<any>new PlaceholderModel("Page content")];
 
             return pageModel;
@@ -43,9 +40,6 @@ export class PageModelBinder implements IModelBinder<PageModel> {
         if (pageContract) {
             const pageModel = new PageModel();
             pageModel.key = pageContract.key;
-            pageModel.title = pageContract.title;
-            pageModel.description = pageContract.description;
-            pageModel.keywords = pageContract.keywords;
 
             const pageContent = await this.pageService.getPageContent(pageContract.key);
 
@@ -66,9 +60,6 @@ export class PageModelBinder implements IModelBinder<PageModel> {
         }
 
         const pageModel = new PageModel();
-        pageModel.title = "";
-        pageModel.description = "";
-        pageModel.keywords = "";
         pageModel.widgets = [<any>new PlaceholderModel("No pages")];
 
         return pageModel;

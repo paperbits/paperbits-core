@@ -30,9 +30,6 @@ export class BlogModelBinder implements IModelBinder<BlogPostModel> {
         }
 
         const blogPostModel = new BlogPostModel();
-        blogPostModel.title = blogPostContract.title;
-        blogPostModel.description = blogPostContract.description;
-        blogPostModel.keywords = blogPostContract.keywords;
 
         const blogPostContent = await this.blogService.getBlogPostContent(blogPostContract.key);
         const modelPromises = blogPostContent.nodes.map(async (contract) => {

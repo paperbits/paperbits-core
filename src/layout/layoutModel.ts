@@ -1,28 +1,13 @@
 import { WidgetModel } from "@paperbits/common/widgets";
 
 /**
- * Layout model.
+ * Layout widget model.
  */
-export class LayoutModel {
+export class LayoutModel implements WidgetModel {
     /**
      * Unique identifier.
      */
     public key: string;
-
-    /**
-     * Layout title, e.g. Master page.
-     */
-    public title: string;
-
-    /**
-     * Layout description.
-     */
-    public description: string; 
-    
-    /**
-     * Template of URL where layout needs to be applied.
-     */
-    public permalinkTemplate: string;
 
     /**
      * Child nodes.

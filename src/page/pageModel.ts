@@ -1,10 +1,17 @@
 import { WidgetModel } from "@paperbits/common/widgets/widgetModel";
 
-export class PageModel {
+/**
+ * Page widget model.
+ */
+export class PageModel implements WidgetModel {
+    /**
+     * Unique identifier.
+     */
     public key: string;
-    public title: string;
-    public description: string;
-    public keywords: string;
+
+    /**
+     * Child nodes.
+     */
     public widgets: WidgetModel[];
 
     constructor() {
