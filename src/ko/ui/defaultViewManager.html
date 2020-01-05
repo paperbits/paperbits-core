@@ -2,7 +2,11 @@
 <dropbucket></dropbucket>
 
 <!-- ko if: host -->
-<div class="viewport" data-bind="host: { viewport: viewport, host: host, block: block }, css: { shutter: shutter }"></div>
+<div class="viewport" data-bind="host: { viewport: viewport, host: host, block: block }"></div>
+
+<div class="shutter" data-bind="css: { 'active': shutter }">
+    <spinner class="fit"></spinner>
+</div>
 <!-- /ko -->
 
 <div class="toasts" data-bind="foreach: toasts">
