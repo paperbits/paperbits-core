@@ -17,6 +17,11 @@ export interface ButtonContract extends Contract {
     styles?: any;
 
     /**
+     * Keys of user roles.
+     */
+    roles?: string[];
+    
+    /**
      * Assigned hyperlink.
      */
     hyperlink?: HyperlinkContract;

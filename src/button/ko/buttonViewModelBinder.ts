@@ -18,6 +18,7 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
 
         viewModel.label(model.label);
         viewModel.hyperlink(model.hyperlink);
+        viewModel.roles(model.roles);
 
         if (model.styles) {
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles));
@@ -29,7 +30,7 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
             model: model,
             flow: "inline",
             editor: "button-editor",
-            applyChanges: async (changes) => {
+            applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }

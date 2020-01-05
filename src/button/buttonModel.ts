@@ -20,6 +20,11 @@ export class ButtonModel {
      */
     public styles: LocalStyles;
 
+    /**
+     * Keys of user roles.
+     */
+    public roles?: string[];
+
     constructor() {
         this.label = "Button";
         this.styles = { appearance: "components/button/default" };

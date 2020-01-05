@@ -39,4 +39,6 @@
         </label>
         <select id="sizeStyle" class="form-control" data-bind="options: sizeStyles, value: sizeStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
     </div>
+
+    <role-input params="{ selection: model.roles, onChange: onRoleSelect }"></role-input>
 </fieldset>
