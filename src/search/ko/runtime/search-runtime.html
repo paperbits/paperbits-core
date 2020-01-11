@@ -1,0 +1,20 @@
+<form data-bind="/search" enctype="application/x-www-form-urlencoded">
+    <div class="input-group">
+        <input type="search" class="form-control" data-bind="textInput: searchPattern" placeholder="Search website..." aria-label="Search website" />
+    </div>
+</form>
+
+<!-- ko if: hasResults -->
+<!-- ko if: results().length > 0 -->
+<article data-bind="foreach: results">
+    <h2>
+        <a data-bind="attr: { href: $data.url }, text: $data.title"></a>
+    </h2>
+    <p data-bind="text: $data.fragment"></p>
+</article>
+<!-- /ko -->
+
+<!-- ko if: results().length === 0 -->
+<p>No results found</p>
+<!-- /ko -->
+<!-- /ko -->
