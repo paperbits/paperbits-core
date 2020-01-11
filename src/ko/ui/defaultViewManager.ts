@@ -328,6 +328,7 @@ export class DefaultViewManager implements ViewManager {
         this.clearContextualEditors();
         this.mode = ViewManagerMode.selecting;
         this.primaryToolboxVisible(true);
+        this.designTime(true);
     }
 
     public setContextualEditor(editorName: string, contextualEditor: IContextCommandSet): void {
@@ -351,6 +352,10 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public clearContextualEditors(): void {
+        if (this.mode === ViewManagerMode.configure) {
+            return;
+        }
+
         this.contextualEditorsBag = {};
         this.contextualEditors([]);
         this.highlightedElement(null);
@@ -358,10 +363,7 @@ export class DefaultViewManager implements ViewManager {
         this.selectedElement(null);
         this.selectedElementContextualEditor(null);
         this.designTime(true);
-
-        if (this.mode !== ViewManagerMode.configure) {
-            this.mode = ViewManagerMode.selecting;
-        }
+        this.mode = ViewManagerMode.selecting;
     }
 
     public setHighlight(config: IHighlightConfig): void {
