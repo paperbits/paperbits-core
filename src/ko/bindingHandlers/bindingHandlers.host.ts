@@ -110,14 +110,16 @@ export class HostBindingHandler {
         };
 
         const onLoad = async (): Promise<void> => {
-            this.globalEventHandler.appendDocument(hostElement.contentDocument);
-            this.setRootElement(hostElement.contentDocument.body);
+            const contentDocument = hostElement.contentDocument;
+
+            this.globalEventHandler.appendDocument(contentDocument);
+            this.setRootElement(contentDocument.body);
 
             /* TODO: Move these events to grid designer code */
-            hostElement.contentDocument.addEventListener("mousedown", onPointerDown, true);
-            hostElement.contentDocument.addEventListener("click", onClick, true);
+            contentDocument.addEventListener("mousedown", onPointerDown, true);
+            contentDocument.addEventListener("click", onClick, true);
 
-            this.viewManager["hostDocument"] = hostElement.contentDocument;
+            this.viewManager["hostDocument"] = contentDocument;
 
             /* intercepting push state of the hosted iframe window */
             hostedWindowHistory = hostElement.contentDocument.defaultView.window.history;
