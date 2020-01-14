@@ -145,5 +145,12 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
         };
 
         ko.components.loaders.unshift(injectableComponentLoader);
+
+        ko.bindingProvider.instance.preprocessNode = (node: HTMLElement): Node[] => {
+            if (node.removeAttribute) {
+                setImmediate(() => node.removeAttribute("data-bind"));
+            }
+            return null;
+        };
     }
 }
