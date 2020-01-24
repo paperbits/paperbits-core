@@ -41,7 +41,7 @@
 
         <!-- ko if: selected() === 'saved' -->
         <div class="flex-item flex-item-grow add-block-container" role="tabpanel" data-bind="scrollable: true">
-            <block-selector params="{blockType: 'section', onSelect: $component.onBlockSelected}"></block-selector>
+            <block-selector params="{ blockType: 'layout-section', onSelect: $component.onBlockSelected }"></block-selector>
         </div>
         <!-- /ko -->
     </div>
