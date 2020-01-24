@@ -1,29 +1,23 @@
 import * as lunr from "lunr";
 import * as h2p from "html2plaintext";
-
-interface SearchableDocument {
-    permalink: string;
-    title: string;
-    description: string;
-    body: string;
-}
-
-const indexerConfig = function (documents: SearchableDocument[]): lunr.ConfigFunction {
-    return function (): void {
-        this.ref("permalink");
-        this.field("title");
-        this.field("description");
-        this.field("body");
-
-        documents.forEach(document => this.add(document), this);
-    };
-};
+import { SearchableDocument } from "./searchableDocument";
 
 export class SearchIndexBuilder {
     private documents: any[];
 
     constructor() {
         this.documents = [];
+    }
+
+    private getIndexerConfigFunc(documents: SearchableDocument[]): lunr.ConfigFunction {
+        return function (): void {
+            this.ref("permalink");
+            this.field("title");
+            this.field("description");
+            this.field("body");
+
+            documents.forEach(document => this.add(document), this);
+        };
     }
 
     public appendPage(permalink: string, title: string, description: string, body: string): void {
@@ -45,7 +39,7 @@ export class SearchIndexBuilder {
     }
 
     public buildIndex(): string {
-        const index = lunr(indexerConfig(this.documents));
+        const index = lunr(this.getIndexerConfigFunc(this.documents));
         return JSON.stringify(index);
     }
 }
