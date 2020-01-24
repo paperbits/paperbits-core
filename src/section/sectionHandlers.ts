@@ -67,7 +67,10 @@ export class SectionHandlers {
                         heading: "Add to library",
                         component: {
                             name: "add-block-dialog",
-                            params: { blockModel: context.model, blockType: "section" }
+                            params: {
+                                blockModel: context.model,
+                                blockType: "layout-section"
+                            }
                         },
                         resize: "vertically horizontally"
                     };

@@ -54,10 +54,11 @@ export class BlockSelector implements IResourceSelector<BlockContract> {
 
         const blocks = await this.blockService.search(this.blockType, searchPattern);
         const blockItems = [];
+
         for (const block of blocks) {
-            const contract = await this.blockService.getBlockContent(block.key);
-            const modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(contract);
-            const model = await modelBinder.contractToModel(contract);
+            const content = await this.blockService.getBlockContent(block.key);
+            const modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(content);
+            const model = await modelBinder.contractToModel(content);
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(model);
             const widget = await widgetViewModelBinder.modelToViewModel(model);
 
