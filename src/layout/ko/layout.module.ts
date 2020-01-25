@@ -1,8 +1,8 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { ViewModelBinder } from "@paperbits/common/widgets";
 import { LayoutViewModel } from "./layoutViewModel";
 import { LayoutModelBinder } from "../layoutModelBinder";
 import { LayoutViewModelBinder } from "./layoutViewModelBinder";
+
 
 export class LayoutModule implements IInjectorModule {
     public register(injector: IInjector): void {        
