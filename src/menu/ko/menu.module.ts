@@ -1,5 +1,5 @@
 import { IInjector, IInjectorModule } from "@paperbits/common/injection";
-import { StyleHandler, StyleContract, PluginBag } from "@paperbits/common/styles";
+import { StyleHandler, VariationContract, PluginBag } from "@paperbits/common/styles";
 import { MenuModelBinder } from "../menuModelBinder";
 import { MenuViewModelBinder } from "./menuViewModelBinder";
 
@@ -42,7 +42,7 @@ export class MenuModule implements IInjectorModule {
             });
         };
 
-        const getDropdownStyle = (key: string): StyleContract => {
+        const getDropdownStyle = (key: string): VariationContract => {
             return {
                 key: key,
                 category: "appearance",
@@ -68,7 +68,7 @@ export class MenuModule implements IInjectorModule {
             };
         };
 
-        const getNavLinkStyle = (key: string): StyleContract => {
+        const getNavLinkStyle = (key: string): VariationContract => {
             return {
                 key: key,
                 allowedStates: ["hover", "focus", "active", "disabled"],
@@ -79,7 +79,7 @@ export class MenuModule implements IInjectorModule {
             };
         };
 
-        const getActiveNavLinkStyle = (key: string): StyleContract => {
+        const getActiveNavLinkStyle = (key: string): VariationContract => {
             return {
                 key: key,
                 allowedStates: ["hover", "focus", "active", "disabled"],
