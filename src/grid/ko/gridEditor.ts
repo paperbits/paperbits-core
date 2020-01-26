@@ -6,6 +6,7 @@ import { Keys } from "@paperbits/common/keyboard";
 import { IWidgetService } from "@paperbits/common/widgets";
 import { Router } from "@paperbits/common/routing";
 import { EventManager } from "@paperbits/common/events";
+import { ContentModel } from "../../content";
 
 export class GridEditor {
     private activeHighlightedElement: HTMLElement;
@@ -142,7 +143,7 @@ export class GridEditor {
 
         const element = this.activeHighlightedElement;
         const bindings = GridHelper.getParentWidgetBindings(element);
-        const windgetIsInContent = bindings.some(x => x.name === "page" || x.name === "email-layout");
+        const windgetIsInContent = bindings.some(x => x.model instanceof ContentModel);
 
         let layoutEditing = false;
 

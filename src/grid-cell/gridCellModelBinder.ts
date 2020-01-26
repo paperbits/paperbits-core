@@ -1,12 +1,14 @@
-import * as Utils from "@paperbits/common/utils";
 import { GridCellModel } from "./gridCellModel";
 import { GridCellContract } from "./gridCellContract";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
-import { IModelBinder } from "@paperbits/common/editing";
 import { Contract, Bag } from "@paperbits/common";
+import { ContentModelBinder } from "../content";
 
-export class GridCellModelBinder implements IModelBinder<GridCellModel> {
-    constructor(private readonly modelBinderSelector: ModelBinderSelector) {    }
+
+export class GridCellModelBinder extends ContentModelBinder<GridCellModel> {
+    constructor(protected modelBinderSelector: ModelBinderSelector) {
+        super(modelBinderSelector);
+    }
 
     public canHandleContract(contract: Contract): boolean {
         return contract.type === "grid-cell";
@@ -23,23 +25,13 @@ export class GridCellModelBinder implements IModelBinder<GridCellModel> {
             gridCellModel.styles = contract.styles;
         }
 
-        if (contract.position) {
-            contract.position = Utils.optimizeBreakpoints(contract.position);
-            gridCellModel.position = contract.position;
-        }
-
         gridCellModel.role = contract.role;
 
         if (!contract.nodes) {
             contract.nodes = [];
         }
 
-        const modelPromises = contract.nodes.map(async (contract: Contract) => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-            return modelBinder.contractToModel(contract, bindingContext);
-        });
-
-        gridCellModel.widgets = await Promise.all<any>(modelPromises);
+        gridCellModel.widgets = await this.getChildModels(contract.nodes, bindingContext);
 
         return gridCellModel;
     }

@@ -19,10 +19,6 @@ export class PageDetailsWorkshop {
         private readonly viewManager: ViewManager,
         private readonly reservedPermalinks: string[]
     ) {
-        this.onMounted = this.onMounted.bind(this);
-        this.deletePage = this.deletePage.bind(this);
-        this.updatePage = this.updatePage.bind(this);
-        this.updatePermlaink = this.updatePermlaink.bind(this);
         this.isReserved = ko.observable(false);
     }
 

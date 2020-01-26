@@ -5,7 +5,6 @@ import { IPublisher } from "@paperbits/common/publishing";
 import { IBlobStorage } from "@paperbits/common/persistence";
 import { SettingsContract, ISiteService } from "@paperbits/common/sites";
 import { IMediaService, MediaContract } from "@paperbits/common/media";
-import { LayoutViewModelBinder } from "../layout/ko";
 import { ISettingsProvider } from "@paperbits/common/configuration";
 
 export class BlogPublisher implements IPublisher {
@@ -13,7 +12,6 @@ export class BlogPublisher implements IPublisher {
         private readonly blogService: IBlogService,
         private readonly siteService: ISiteService,
         private readonly outputBlobStorage: IBlobStorage,
-        private readonly layoutViewModelBinder: LayoutViewModelBinder,
         private readonly mediaService: IMediaService
     ) {
         this.publish = this.publish.bind(this);
@@ -28,13 +26,13 @@ export class BlogPublisher implements IPublisher {
         let htmlContent: string;
 
         const buildContentPromise = new Promise(async (resolve, reject) => {
-            const layoutViewModel = await this.layoutViewModelBinder.getLayoutViewModel(post.permalink, null);
-            ko.applyBindingsToNode(templateDocument.body, { widget: layoutViewModel }, null);
+            // const layoutViewModel = await this.layoutViewModelBinder.getLayoutViewModel(post.permalink);
+            // ko.applyBindingsToNode(templateDocument.body, { widget: layoutViewModel }, null);
 
-            setTimeout(() => {
-                htmlContent = "<!DOCTYPE html>" + templateDocument.documentElement.outerHTML;
-                resolve();
-            }, 500);
+            // setTimeout(() => {
+            //     htmlContent = "<!DOCTYPE html>" + templateDocument.documentElement.outerHTML;
+            //     resolve();
+            // }, 500);
         });
 
         await buildContentPromise;

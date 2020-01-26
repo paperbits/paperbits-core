@@ -27,11 +27,14 @@ export class PagePublisher implements IPublisher {
     }
 
     private async renderAndUpload(settings: any, page: PageContract, indexer: SearchIndexBuilder): Promise<void> {
+        const pageContent = await this.pageService.getPageContent(page.key);
+
         const htmlPage: HtmlPage = {
             title: [page.title, settings.site.title].join(" - "),
             description: page.description || settings.site.description,
             keywords: page.keywords || settings.site.keywords,
             permalink: page.permalink,
+            content: pageContent,
             author: settings.site.author,
             openGraph: {
                 type: page.permalink === "/" ? "website" : "article",

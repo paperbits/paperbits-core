@@ -4,7 +4,7 @@ import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { WidgetModel } from "@paperbits/common/widgets";
 
 
-export class PageHandlers implements IWidgetHandler {
+export class ContentHandlers implements IWidgetHandler {
     constructor(private readonly viewManager: ViewManager) { }
 
     public canAccept(dragSession: DragSession): boolean {

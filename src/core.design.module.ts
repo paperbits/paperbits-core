@@ -31,7 +31,6 @@ import { WidgetSelector } from "./workshops/widgets/ko/widgetSelector";
 import { UrlSelector } from "./workshops/urls/ko/urlSelector";
 import { LayoutDesignModule } from "./layout/ko/layout.design.module";
 import { HistoryRouteHandler } from "@paperbits/common/routing";
-import { BlogHyperlinkProvider } from "@paperbits/common/blogs/blogHyperlinkProvider";
 import { UrlHyperlinkProvider } from "@paperbits/common/urls/urlHyperlinkProvider";
 import { MediaHyperlinkProvider } from "@paperbits/common/media";
 import { DragManager } from "@paperbits/common/ui/draggables";
@@ -54,6 +53,7 @@ import { RoleSelector, RoleInput } from "./workshops/roles/ko";
 import "./ko/bindingHandlers/bindingHandlers.command";
 import "./ko/bindingHandlers/bindingHandlers.dialog";
 import "./ko/bindingHandlers/bindingHandlers.activate";
+import { ContentEditorModule } from "./content/ko";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -67,7 +67,6 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindSingleton("viewManager", DefaultViewManager);
         injector.bindSingleton("tray", Tray);
         
-        injector.bind("blogHyperlinkProvider", BlogHyperlinkProvider);
         injector.bind("mediaHyperlinkProvider", MediaHyperlinkProvider);
         injector.bind("urlHyperlinkProvider", UrlHyperlinkProvider);
         injector.bind("gridEditor", GridEditor);
@@ -101,7 +100,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new MenuEditorModule());
         injector.bindModule(new DropbucketModule());
         injector.bindModule(new PageDesignModule());
-        injector.bindModule(new BlogDesignModule());
+        // injector.bindModule(new BlogDesignModule());
         injector.bindModule(new MediaWorkshopModule());
         injector.bindModule(new LayoutDesignModule());
         injector.bindModule(new BlockWorkshopModule());
@@ -112,6 +111,8 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new SectionEditorModule());
         injector.bindModule(new GridEditorModule());
         injector.bindModule(new GridCellEditorModule());
+        injector.bindModule(new LayoutDesignModule());
+        injector.bindModule(new ContentEditorModule());
         injector.bindModule(new CardEditorModule());
         injector.bindModule(new CollapsiblePanelEditorModule());
         injector.bindToCollection("hyperlinkProviders", UrlHyperlinkProvider);

@@ -1,18 +1,19 @@
 import * as ko from "knockout";
-import { ContentViewModelBinder, ContentViewModel } from "../../../content/ko";
-import { Component, OnMounted, Param } from "@paperbits/common/ko/decorators";
-import { Router } from "@paperbits/common/routing";
+import { Component, OnMounted, OnDestroyed, Param } from "@paperbits/common/ko/decorators";
+import { Router, Route } from "@paperbits/common/routing";
 import { EventManager } from "@paperbits/common/events";
 import { ViewManager, ViewManagerMode } from "@paperbits/common/ui";
+import { ContentViewModelBinder, ContentViewModel } from "../../../content/ko";
 import { ILayoutService } from "@paperbits/common/layouts";
+import { IBlogService } from "@paperbits/common/blogs";
 import { Contract } from "@paperbits/common";
 
 
 @Component({
-    selector: "layout-host",
+    selector: "blog-post-host",
     template: "<!-- ko if: contentViewModel --><!-- ko widget: contentViewModel, grid: {} --><!-- /ko --><!-- /ko -->"
 })
-export class LayoutHost {
+export class BlogHost {
     public readonly contentViewModel: ko.Observable<ContentViewModel>;
 
     constructor(
@@ -20,19 +21,21 @@ export class LayoutHost {
         private readonly router: Router,
         private readonly eventManager: EventManager,
         private readonly viewManager: ViewManager,
-        private readonly layoutService: ILayoutService
+        private readonly layoutService: ILayoutService,
+        private readonly blogService: IBlogService
     ) {
         this.contentViewModel = ko.observable();
-        this.layoutKey = ko.observable();
+        this.blogPostKey = ko.observable();
     }
 
     @Param()
-    public layoutKey: ko.Observable<string>;
+    public blogPostKey: ko.Observable<string>;
 
     @OnMounted()
     public async initialize(): Promise<void> {
         await this.refreshContent();
 
+        this.router.addRouteChangeListener(this.onRouteChange);
         this.eventManager.addEventListener("onDataPush", () => this.onDataPush());
     }
 
@@ -49,24 +52,43 @@ export class LayoutHost {
         this.viewManager.setShutter();
 
         const route = this.router.getCurrentRoute();
-        const layoutContentContract = await this.layoutService.getLayoutContent(this.layoutKey());
+        const postContract = await this.blogService.getBlogPostByPermalink(route.path);
+        const postContentContract = await this.blogService.getBlogPostContent(postContract.key);
+
+        this.blogPostKey(postContract.key);
 
         const bindingContext = {
             navigationPath: route.path,
-            routeKind: "layout",
+            routeKind: "blog-post",
             template: {
-                layout: {
-                    value: layoutContentContract,
-                    onValueUpdate: async (updatedContentContract: Contract) => {
-                        await this.layoutService.updateLayoutContent(this.layoutKey(), updatedContentContract);
+                page: {
+                    value: postContentContract,
+                    onValueUpdate: async (updatedPostContract: Contract) => {
+                        await this.blogService.updateBlogPostContent(postContract.key, updatedPostContract);
                     }
                 }
             }
         };
 
+        const layoutContract = await this.layoutService.getLayoutByPermalink(route.path);
+        const layoutContentContract = await this.layoutService.getLayoutContent(layoutContract.key);
         const contentViewModel = await this.contentViewModelBinder.getContentViewModelByKey(layoutContentContract, bindingContext);
 
         this.contentViewModel(contentViewModel);
+
         this.viewManager.removeShutter();
+    }
+
+    private async onRouteChange(route: Route): Promise<void> {
+        if (route.previous && route.previous.path === route.path) {
+            return;
+        }
+
+        await this.refreshContent();
+    }
+
+    @OnDestroyed()
+    public dispose(): void {
+        this.router.removeRouteChangeListener(this.onRouteChange);
     }
 }

@@ -1,4 +1,5 @@
-﻿import template from "./blogPostDetails.html";
+﻿import * as ko from "knockout";
+import template from "./blogPostDetails.html";
 import { IBlogService } from "@paperbits/common/blogs";
 import { Router } from "@paperbits/common/routing";
 import { ViewManager } from "@paperbits/common/ui";
@@ -10,23 +11,22 @@ import { BlogPostItem } from "./blogPostItem";
     template: template
 })
 export class BlogPostDetailsWorkshop {
+    public readonly isReserved: ko.Observable<boolean>;
+
+    constructor(
+        private readonly blogService: IBlogService,
+        private readonly router: Router,
+        private readonly viewManager: ViewManager,
+        private readonly reservedPermalinks: string[]
+    ) {
+        this.isReserved = ko.observable(false);
+    }
+
     @Param()
     public readonly blogPostItem: BlogPostItem;
 
     @Event()
     public readonly onDeleteCallback: () => void;
-
-    constructor(
-        private readonly blogService: IBlogService,
-        private readonly router: Router,
-        private readonly viewManager: ViewManager
-    ) {
-        // rebinding...
-        this.onMounted = this.onMounted.bind(this);
-        this.deleteBlogPost = this.deleteBlogPost.bind(this);
-        this.updateBlogPost = this.updateBlogPost.bind(this);
-        this.updatePermlaink = this.updatePermlaink.bind(this);
-    }
 
     @OnMounted()
     public async onMounted(): Promise<void> {
@@ -44,10 +44,18 @@ export class BlogPostDetailsWorkshop {
             .extend(<any>{ validPermalink: this.blogPostItem.permalink, required: true, onlyValid: true })
             .subscribe(this.updatePermlaink);
 
-        const blogPost = await this.blogService.getBlogPostByKey(this.blogPostItem.key);
+        let validPermalink = this.blogPostItem.permalink;
 
-        this.blogPostItem.permalink(blogPost.permalink);
-        this.router.navigateTo(blogPost.permalink, blogPost.title);
+        if (this.reservedPermalinks.includes(this.blogPostItem.permalink())) {
+            this.isReserved(true);
+        }
+        else {
+            validPermalink = validPermalink.extend(<any>{ required: true, validPermalink: this.blogPostItem.key, onlyValid: true });
+            validPermalink.subscribe(this.updatePermlaink);
+        }
+
+        await this.router.navigateTo(validPermalink());
+        this.viewManager.setHost({ name: "blog-post-host" });
     }
 
     private async updateBlogPost(): Promise<void> {

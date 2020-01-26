@@ -50,15 +50,21 @@ export class BlogWorkshop {
     }
 
     public selectBlogPost(blogPostItem: BlogPostItem): void {
+        const prev = this.selectedBlogPost();
+
+        // if (prev) {
+        //     prev.isSelected(false);
+        // }
+
         this.selectedBlogPost(blogPostItem);
-        this.viewManager.setHost({ name: "page-host" });
+        // blogPostItem.isSelected(true);
 
         const view: View = {
             heading: "Blog post",
             component: {
                 name: "blog-post-details-workshop",
                 params: {
-                    pageItem: blogPostItem,
+                    blogPostItem: blogPostItem,
                     onDeleteCallback: () => {
                         this.searchPosts();
                     }
@@ -79,7 +85,6 @@ export class BlogWorkshop {
         this.blogPosts.push(postItem);
         this.selectBlogPost(postItem);
 
-        this.router.navigateTo(postUrl, post.title);
         this.working(false);
     }
 

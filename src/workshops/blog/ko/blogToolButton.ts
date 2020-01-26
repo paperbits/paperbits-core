@@ -11,7 +11,7 @@ export class BlogWorkshopToolButton implements ToolButton {
 
         const view: View = {
             heading: this.title,
-            component: { name: "page-details-workshop" }
+            component: { name: "blogs" }
         };
 
         this.viewManager.openViewAsWorkshop(view);
