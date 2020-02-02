@@ -21,7 +21,7 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
         viewModel.roles(model.roles);
 
         if (model.styles) {
-            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles));
+            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext.styleManager));
         }
 
         viewModel["widgetBinding"] = {

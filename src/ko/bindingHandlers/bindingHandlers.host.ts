@@ -5,6 +5,8 @@ import { Router, Route } from "@paperbits/common/routing";
 import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
 import { SiteService } from "@paperbits/common/sites";
 import { IMediaService } from "@paperbits/common/media";
+import { StyleCompiler } from "@paperbits/common/styles";
+
 
 export class HostBindingHandler {
     private readonly hostComponent: ko.Observable<any>;
@@ -172,12 +174,11 @@ export class HostBindingHandler {
     }
 
     private async setRootElement(bodyElement: HTMLElement): Promise<void> {
-        ko.applyBindingsToNode(bodyElement, { component: this.hostComponent }, null);
-
         const styleElement = document.createElement("style");
         bodyElement.ownerDocument.head.appendChild(styleElement);
 
         ko.applyBindingsToNode(bodyElement, { css: { design: this.designTime } }, null);
         ko.applyBindingsToNode(styleElement, { styleSheet: {} }, null);
+        ko.applyBindingsToNode(bodyElement, { component: this.hostComponent }, null);
     }
 }

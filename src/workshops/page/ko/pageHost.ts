@@ -7,6 +7,7 @@ import { ContentViewModelBinder, ContentViewModel } from "../../../content/ko";
 import { ILayoutService } from "@paperbits/common/layouts";
 import { IPageService } from "@paperbits/common/pages";
 import { Contract } from "@paperbits/common";
+import { StyleCompiler, StyleManager } from "@paperbits/common/styles";
 
 
 @Component({
@@ -22,7 +23,8 @@ export class PageHost {
         private readonly eventManager: EventManager,
         private readonly viewManager: ViewManager,
         private readonly layoutService: ILayoutService,
-        private readonly pageService: IPageService
+        private readonly pageService: IPageService,
+        private readonly styleCompiler: StyleCompiler
     ) {
         this.contentViewModel = ko.observable();
         this.pagePostKey = ko.observable();
@@ -57,7 +59,12 @@ export class PageHost {
 
         this.pagePostKey(pageContract.key);
 
+        const styleManager = new StyleManager(this.eventManager);
+        const styleSheet = await this.styleCompiler.getStyleSheet();
+        styleManager.setStyleSheet(styleSheet);
+
         const bindingContext = {
+            styleManager: styleManager,
             navigationPath: route.path,
             routeKind: "page",
             template: {

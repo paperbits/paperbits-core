@@ -81,6 +81,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
             childBindingContext = <Bag<any>>Objects.clone(bindingContext);
             childBindingContext.readonly = model.type !== bindingContext?.routeKind;
             childBindingContext.template = bindingContext.template;
+            childBindingContext.styleManager = bindingContext.styleManager;
         }
 
         const viewModels = [];

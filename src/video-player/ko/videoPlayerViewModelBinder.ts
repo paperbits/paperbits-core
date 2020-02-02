@@ -33,7 +33,7 @@ export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerMo
         viewModel.autoplay(model.autoplay);
 
         if (model.styles) {
-            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles));
+            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext.styleManager));
         }
 
         viewModel["widgetBinding"] = {
