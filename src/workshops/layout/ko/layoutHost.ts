@@ -6,6 +6,7 @@ import { EventManager } from "@paperbits/common/events";
 import { ViewManager, ViewManagerMode } from "@paperbits/common/ui";
 import { ILayoutService } from "@paperbits/common/layouts";
 import { Contract } from "@paperbits/common";
+import { StyleManager, StyleCompiler } from "@paperbits/common/styles";
 
 
 @Component({
@@ -20,7 +21,8 @@ export class LayoutHost {
         private readonly router: Router,
         private readonly eventManager: EventManager,
         private readonly viewManager: ViewManager,
-        private readonly layoutService: ILayoutService
+        private readonly layoutService: ILayoutService,
+        private readonly styleCompiler: StyleCompiler
     ) {
         this.contentViewModel = ko.observable();
         this.layoutKey = ko.observable();
@@ -50,8 +52,13 @@ export class LayoutHost {
 
         const route = this.router.getCurrentRoute();
         const layoutContentContract = await this.layoutService.getLayoutContent(this.layoutKey());
+        
+        const styleManager = new StyleManager(this.eventManager);
+        const styleSheet = await this.styleCompiler.getStyleSheet();
+        styleManager.setStyleSheet(styleSheet);
 
         const bindingContext = {
+            styleManager: styleManager,
             navigationPath: route.path,
             routeKind: "layout",
             template: {

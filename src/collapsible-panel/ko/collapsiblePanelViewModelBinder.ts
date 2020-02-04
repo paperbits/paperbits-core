@@ -35,7 +35,7 @@ export class CollapsiblePanelViewModelBinder implements ViewModelBinder<Collapsi
         }
 
         if (model.styles) {
-            const styleModel = await this.styleCompiler.getStyleModelAsync(model.styles);
+            const styleModel = await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext.styleManager);
             viewModel.styles(styleModel);
         }
 
