@@ -24,7 +24,7 @@ export class SearchIndexBuilder {
         const regex = /<main.*>([\s\S]*)<\/main>/g;
         const match = regex.exec(body);
 
-        if (match?.length < 1) {
+        if (!match || match.length < 1) {
             return;
         }
 
