@@ -11,6 +11,8 @@ export class KnockoutHtmlPagePublisherPlugin implements HtmlPagePublisherPlugin 
     ) { }
 
     public async apply(document: Document, page: HtmlPage): Promise<void> {
+        ko.tasks.scheduler = (callback) => setImmediate(callback);
+
         return new Promise(async (resolve, reject) => {
             try {
                 const layoutContract = await this.layoutService.getLayoutByPermalink(page.permalink);
