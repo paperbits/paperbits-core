@@ -41,7 +41,7 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
         viewModel.roles(model.roles);
 
         if (model.styles) {
-            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext.styleManager));
+            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }
 
         const onUpdate = async (updatedRootModel: NavigationItemModel): Promise<void> => {

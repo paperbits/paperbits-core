@@ -27,9 +27,9 @@
                 <div role="list">
                     <!-- ko foreach: { data: $component.snippets, as: 'snippet' } -->
                     <a href="#" class="snippet-grid list-item" role="listitem"
-                        data-bind="click: $component.selectLayout, styled: snippet.styles">
+                        data-bind="click: $component.selectLayout, styledInPlace: snippet.styles">
                         <!-- ko foreach: { data: snippet.widgets, as: 'widget' } -->
-                        <div class="snippet-grid-cell" data-bind="styled: widget.styles, attr: { role: widget.role }">
+                        <div class="snippet-grid-cell" data-bind="styledInPlace: widget.styles, attr: { role: widget.role }">
                         </div>
                         <!-- /ko -->
                     </a>

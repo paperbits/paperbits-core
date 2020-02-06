@@ -59,7 +59,7 @@ export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, Navba
         viewModel.pictureHeight(model.pictureHeight);
 
         if (model.styles) {
-            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext.styleManager));
+            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }
 
         viewModel["widgetBinding"] = {
