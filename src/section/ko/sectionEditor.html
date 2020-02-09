@@ -32,30 +32,11 @@
 
     <div class="form-group form-group-collapsible">
         <label class="form-label">
-            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#marginCollapse'"></a>
-            <b>Container margins</b>
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#boxCollapse'"></a>
+            <b>Box</b>
         </label>
-        <div id="marginCollapse" class="collapse form-group-collapse">
-            <div class="form-group">
-                <label for="marginTop" class="form-label">Top (px)</label>
-                <input type="number" id="marginTop" class="form-control" placeholder="(Not set)"
-                    data-bind="textInput: marginTop" />
-            </div>
-            <!-- <div class="form-group">
-                <label class="form-label">Left</label>
-                <input type="number" class="form-control" placeholder="(Not set)"
-                    data-bind="textInput: marginLeft" />
-            </div>
-            <div class="form-group">
-                <label class="form-label">Right</label>
-                <input type="number" class="form-control" placeholder="(Not set)"
-                    data-bind="textInput: marginRight" />
-            </div> -->
-            <div class="form-group">
-                <label for="marginBottom" class="form-label">Bottom (px)</label>
-                <input type="number" id="marginBottom" class="form-control" placeholder="(Not set)"
-                    data-bind="textInput: marginBottom" />
-            </div>
+        <div id="boxCollapse" class="collapse form-group-collapse">
+            <box params="{ features: 'margin', box: elementStyleBox, onUpdate: onBoxUpdate }"></box>
         </div>
     </div>
 
