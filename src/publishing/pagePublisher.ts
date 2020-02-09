@@ -69,6 +69,16 @@ export class PagePublisher implements IPublisher {
             }
         };
 
+        if (page.jsonLd) {
+            let structuredData: any;
+            try {
+                structuredData = JSON.parse(page.jsonLd);
+                htmlPage.structuredData = structuredData;
+            } catch (error) {
+                console.log("Error on parsing page.jsonLd: ", error);
+            }
+        }
+
         if (settings.site.faviconSourceKey) {
             try {
                 const media = await this.mediaService.getMediaByKey(settings.site.faviconSourceKey);

@@ -19,6 +19,7 @@ export class PageItem {
     public title: ko.Observable<string>;
     public description: ko.Observable<string>;
     public keywords: ko.Observable<string>;
+    public jsonLd: ko.Observable<string>;
     public isSelected: ko.Observable<boolean>;
 
     public anchors: ko.ObservableArray<AnchorItem>;
@@ -30,6 +31,7 @@ export class PageItem {
         this.title = ko.observable<string>(page.title);
         this.description = ko.observable<string>(page.description);
         this.keywords = ko.observable<string>(page.keywords);
+        this.jsonLd = ko.observable<string>(page.jsonLd);
         this.permalink = ko.observable<string>(page.permalink);
         this.isSelected = ko.observable<boolean>();
         this.anchors = ko.observableArray<AnchorItem>();
@@ -54,6 +56,7 @@ export class PageItem {
             title: this.title(),
             description: this.description(),
             keywords: this.keywords(),
+            jsonLd: this.jsonLd(),
             contentKey: this.contentKey,
             permalink: this.permalink()
         };

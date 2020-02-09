@@ -1,19 +1,16 @@
 import { ISiteService } from "@paperbits/common/sites";
-import { ISettingsProvider } from "@paperbits/common/configuration";
 import { HtmlPagePublisherPlugin, HtmlPage } from "@paperbits/common/publishing";
 
 export class StructuredDataHtmlPagePublisherPlugin implements HtmlPagePublisherPlugin {
-    constructor(
-        private readonly siteService: ISiteService,
-        private readonly settingsProvider: ISettingsProvider) { }
+    constructor(private readonly siteService: ISiteService) { }
 
     public async apply(document: Document, page: HtmlPage): Promise<void> {
+        let structuredDataObject: any =  page.structuredData;
+
         /* Ensure rendering structured data for home page only */
-        if (page.permalink !== "/") {
+        if (page.permalink !== "/" && !structuredDataObject) {
             return;
         }
-
-        let structuredDataObject =  await this.settingsProvider.getSetting<object>("structuredData");
         
         if (!structuredDataObject) {
             const settings = await this.siteService.getSiteSettings();
@@ -24,7 +21,7 @@ export class StructuredDataHtmlPagePublisherPlugin implements HtmlPagePublisherP
                 "name": settings.site.title,
                 "description": settings.site.description
             };
-        }        
+        }
 
         const structuredDataScriptElement = document.createElement("script");
         structuredDataScriptElement.setAttribute("type", "application/ld+json");

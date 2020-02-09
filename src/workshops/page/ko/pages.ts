@@ -78,6 +78,10 @@ export class PagesWorkshop {
                     pageItem: pageItem,
                     onDeleteCallback: () => {
                         this.searchPages();
+                    },
+                    onCopyCallback: async (item: PageItem) => {
+                        await this.searchPages();
+                        this.selectPage(item);
                     }
                 }
             }
