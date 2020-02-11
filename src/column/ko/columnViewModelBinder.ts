@@ -128,6 +128,7 @@ export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, Colum
             readonly: bindingContext ? bindingContext.readonly : false,
             flow: "inline",
             model: model,
+            draggable: false,
             editor: "layout-column-editor",
             handler: ColumnHandlers,
 

@@ -153,7 +153,7 @@ export class GridEditor {
             layoutEditing = metadata["routeKind"] === "layout";
         }
 
-        if ((!windgetIsInContent && !layoutEditing && this.viewManager.getHost().name === "page-host")) {
+        if ((!windgetIsInContent && !layoutEditing)) {
             event.preventDefault();
             event.stopPropagation();
 
@@ -250,7 +250,7 @@ export class GridEditor {
             return;
         }
 
-        const stack = GridHelper.getWidgetStack(elements[1]);
+        const stack = GridHelper.getWidgetStack(elements[0]);
 
         const acceptingParentElement = stack.find(x => {
             if (!x.binding.handler) {
@@ -262,7 +262,7 @@ export class GridEditor {
             if (handler && handler.canAccept && handler.canAccept(dragSession)) {
                 return true;
             }
-
+           
             return false;
         });
 

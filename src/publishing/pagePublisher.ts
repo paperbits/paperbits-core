@@ -1,4 +1,5 @@
 import * as Utils from "@paperbits/common/utils";
+import template from "./page.html";
 import { IPublisher, HtmlPage, HtmlPagePublisher } from "@paperbits/common/publishing";
 import { IBlobStorage } from "@paperbits/common/persistence";
 import { IPageService, PageContract } from "@paperbits/common/pages";
@@ -42,7 +43,9 @@ export class PagePublisher implements IPublisher {
             description: page.description || settings.site.description,
             keywords: page.keywords || settings.site.keywords,
             permalink: page.permalink,
+            url: `https://${settings.site.hostname}${page.permalink}`,
             content: pageContent,
+            template: template,
             styleReferences: [
                 `/styles/styles.css`,
                 page.permalink === "/"

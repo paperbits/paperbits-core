@@ -7,6 +7,7 @@ export class TestimonialsHandlers implements IWidgetHandler {
             name: "testimonials",
             displayName: "Testimonials",
             iconClass: "paperbits-favourite-31",
+            requires: ["html", "js"],
             createModel: async () => {
                 const model = new TestimonialsModel();
                 model.starsCount = 5;

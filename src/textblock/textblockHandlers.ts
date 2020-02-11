@@ -9,6 +9,7 @@ export class TextblockHandlers implements IWidgetHandler {
             name: "text-block",
             displayName: "Text block",
             iconClass: "paperbits-edit-2",
+            requires: [],
             createModel: async () => {
                 return new TextblockModel([
                     {

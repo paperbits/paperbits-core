@@ -24,6 +24,7 @@ export class MapViewModelBinder {
             displayName: "Map",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
+            draggable: true,
             editor: "paperbits-map-editor",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);

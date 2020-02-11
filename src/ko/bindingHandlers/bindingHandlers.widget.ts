@@ -1,4 +1,5 @@
 ﻿import * as ko from "knockout";
+import { IWidgetBinding } from "@paperbits/common/editing";
 
 export class WidgetBindingHandler {
     public constructor() {
@@ -52,7 +53,7 @@ export class WidgetBindingHandler {
                         throw new Error(`Could not find component registration for view model: ${componentViewModel}`);
                     }
 
-                    const binding = componentViewModel["widgetBinding"];
+                    const binding: IWidgetBinding<any> = componentViewModel["widgetBinding"];
 
                     if (binding && binding.onCreate) {
                         binding.onCreate();
@@ -95,7 +96,11 @@ export class WidgetBindingHandler {
                         if (nonVirtualElement) {
                             nonVirtualElement["attachedViewModel"] = componentViewModel;
 
-                            ko.applyBindingsToNode(nonVirtualElement, { draggable: {} }, null);
+                            const binding: IWidgetBinding<any> = componentViewModel["widgetBinding"];
+
+                            if (binding?.draggable) {
+                                ko.applyBindingsToNode(nonVirtualElement, { draggable: {} }, null);
+                            }
                         }
                     });
                 }, null, { disposeWhenNodeIsRemoved: element });

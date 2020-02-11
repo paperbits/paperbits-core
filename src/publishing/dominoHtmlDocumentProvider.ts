@@ -5,7 +5,8 @@ declare var global: any;
 
 export class DominoHtmlDocumentProvider implements HtmlDocumentProvider {
     public createDocument(html?: string): Document {
-        global.window = domino.createWindow(html);
+        const window = domino.createWindow(html);
+        global.window = window;
         global.document = window.document;
         global.navigator = window.navigator;
 

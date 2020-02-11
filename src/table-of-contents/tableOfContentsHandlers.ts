@@ -7,7 +7,7 @@ export class TableOfContentsHandlers implements IWidgetHandler {
             name: "table-of-contents",
             displayName: "Table of contents",
             iconClass: "paperbits-cheque-3",
-            requires: ["scripts"],
+            requires: ["html", "js"],
             createModel: async () => new TableOfContentsModel()
         };
 

@@ -45,6 +45,7 @@ export class CollapsiblePanelViewModelBinder implements ViewModelBinder<Collapsi
             displayName: "Collapsible panel",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
+            draggable: true,
             flow: "inline",
             editor: "collapsible-panel-editor",
             handler: CollapsiblePanelHandlers,

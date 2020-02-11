@@ -7,7 +7,7 @@ export class SearchHandlers implements IWidgetHandler {
             name: "search",
             displayName: "Search website",
             iconClass: "paperbits-cheque-3",
-            requires: ["scripts"],
+            requires: ["html", "js"],
             createModel: async () => new SearchModel()
         };
 

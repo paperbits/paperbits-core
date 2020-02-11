@@ -18,6 +18,7 @@ export class SearchViewModelBinder implements ViewModelBinder<SearchModel, Searc
                 displayName: "Search website",
                 readonly: bindingContext ? bindingContext.readonly : false,
                 model: model,
+                draggable: true,
                 applyChanges: async (changes: SearchModel) => {
                     await this.modelToViewModel(model, viewModel, bindingContext);
                     this.eventManager.dispatchEvent("onContentUpdate");

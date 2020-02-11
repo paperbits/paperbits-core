@@ -21,6 +21,7 @@ export class CollapsiblePanelHandlers implements IWidgetHandler {
             name: "collapsiblePanel",
             displayName: "Collapsible panel",
             iconClass: "paperbits-menu-34",
+            requires: ["html", "js"],
             createModel: async () => {
                 return new CollapsiblePanelModel();
             }

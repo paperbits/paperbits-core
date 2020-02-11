@@ -40,6 +40,7 @@ export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerMo
             displayName: "Video player",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
+            draggable: true,
             editor: "video-player-editor",
             applyChanges: async (changes) => {
                 await this.modelToViewModel(model, viewModel, bindingContext);

@@ -16,7 +16,7 @@
     <!--/ko-->
 </nav>
 
-<script id="horizontalMenu" type="text/html">
+<template id="horizontalMenu" type="text/html">
     <ul class="nav" data-bind="foreach: { data: $data.nodes, as: 'item' }">
         <!-- ko if: item.nodes().length > 0 -->
         <li class="nav-item collapsible" data-bind="css: { 'expanded': expanded }">
@@ -35,9 +35,9 @@
         </li>
         <!-- /ko -->      
     </ul>
-</script>
+</template>
 
-<script id="verticalMenu" type="text/html">
+<template id="verticalMenu" type="text/html">
     <ul class="nav" data-bind="foreach: { data: $data.nodes, as: 'item' }">
         <!-- ko if: item.nodes().length > 0 -->
         <li class="nav-item collapsible" data-bind="css: { 'expanded': expanded }">
@@ -54,4 +54,4 @@
         </li>
         <!-- /ko -->      
     </ul>
-</script>
+</template>

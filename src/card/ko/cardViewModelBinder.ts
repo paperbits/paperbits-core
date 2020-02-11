@@ -47,6 +47,7 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
                 readonly: bindingContext ? bindingContext.readonly : false,
                 flow: "inline",
                 model: model,
+                draggable: true,
                 editor: "card-editor",
                 handler: CardHandlers,
                 applyChanges: async (changes) => {

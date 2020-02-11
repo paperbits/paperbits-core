@@ -66,6 +66,7 @@ export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, Navba
             displayName: "Navigation bar",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
+            draggable: true,
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");

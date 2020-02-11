@@ -51,6 +51,7 @@ export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, G
             readonly: bindingContext ? bindingContext.readonly : false,
             flow: "inline",
             model: model,
+            draggable: false,
             editor: "grid-cell-editor",
             handler: GridCellHandlers,
             applyChanges: async (changes) => {

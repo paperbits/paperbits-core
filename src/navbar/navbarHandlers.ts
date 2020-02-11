@@ -7,7 +7,7 @@ export class NavbarHandlers implements IWidgetHandler {
             name: "navbar",
             displayName: "Navigation bar",
             iconClass: "paperbits-menu-34",
-            requires: ["scripts"],
+            requires: ["html", "js"],
             createModel: async () => {
                 return new NavbarModel();
             }

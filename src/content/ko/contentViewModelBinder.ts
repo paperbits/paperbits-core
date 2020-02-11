@@ -45,16 +45,16 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
             savingTimeout = setTimeout(updateContent, 600);
         };
 
-        const isReadonly = !(model.widgets.length === 1 && model.widgets[0] instanceof PlaceholderModel);
+        const isReadonly = model.type !== bindingContext?.routeKind;
 
         const binding: IWidgetBinding<ContentModel> = {
             displayName: "Content",
             readonly: isReadonly,
             name: "content",
             model: model,
+            draggable: true,
             handler: ContentHandlers,
             applyChanges: async () => await this.modelToViewModel(model, viewModel, bindingContext),
-            provides: ["static", "scripts", "keyboard"],
             onCreate: () => {
                 if (model.type === bindingContext?.routeKind) {
                     this.eventManager.addEventListener("onContentUpdate", scheduleUpdate);
@@ -109,6 +109,8 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
     public async getContentViewModelByKey(contentContract: Contract, bindingContext: any): Promise<any> {
         const layoutModel = await this.contentModelBinder.contractToModel(contentContract, bindingContext);
         const layoutViewModel = await this.modelToViewModel(layoutModel, null, bindingContext);
+
+        layoutViewModel["widgetBinding"].readonly = true;
 
         return layoutViewModel;
     }

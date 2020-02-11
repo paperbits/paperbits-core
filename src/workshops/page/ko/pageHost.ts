@@ -54,7 +54,17 @@ export class PageHost {
         this.viewManager.setShutter();
 
         const route = this.router.getCurrentRoute();
-        const pageContract = await this.pageService.getPageByPermalink(route.path);
+        let pageContract = await this.pageService.getPageByPermalink(route.path);
+
+        if (!pageContract) {
+            pageContract = await this.pageService.getPageByPermalink("/404");
+
+            if (!pageContract) {
+                this.viewManager.removeShutter();
+                return;
+            }
+        }
+
         const pageContentContract = await this.pageService.getPageContent(pageContract.key);
 
         this.pagePostKey(pageContract.key);
@@ -80,6 +90,8 @@ export class PageHost {
         const layoutContract = await this.layoutService.getLayoutByPermalink(route.path);
         const layoutContentContract = await this.layoutService.getLayoutContent(layoutContract.key);
         const contentViewModel = await this.contentViewModelBinder.getContentViewModelByKey(layoutContentContract, bindingContext);
+
+        contentViewModel["widgetBinding"].provides = ["html", "js", "interaction"];
 
         this.contentViewModel(contentViewModel);
 

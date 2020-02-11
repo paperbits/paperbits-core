@@ -46,6 +46,7 @@ export class GridViewModelBinder implements ViewModelBinder<GridModel, GridViewM
             displayName: "Grid",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
+            draggable: false,
             flow: "block",
             editor: "grid-layout-grid-editor",
             handler: GridHandlers,

@@ -9,7 +9,7 @@ export class MapHandlers implements IWidgetHandler, IContentDropHandler {
             name: "map",
             displayName: "Map",
             iconClass: "paperbits-m-location",
-            requires: ["scripts"],
+            requires: ["html", "js"],
             createModel: async () => {
                 const model = new MapModel();
                 model.caption = config.caption;

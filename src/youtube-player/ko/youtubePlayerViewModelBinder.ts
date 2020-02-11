@@ -28,6 +28,7 @@ export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlay
             displayName: "Youtube player",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
+            draggable: true,
             editor: "youtube-editor",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
