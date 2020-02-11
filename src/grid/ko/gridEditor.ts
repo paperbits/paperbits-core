@@ -250,7 +250,7 @@ export class GridEditor {
             return;
         }
 
-        const stack = GridHelper.getWidgetStack(elements[0]);
+        const stack = GridHelper.getWidgetStack(elements[1]);
 
         const acceptingParentElement = stack.find(x => {
             if (!x.binding.handler) {
