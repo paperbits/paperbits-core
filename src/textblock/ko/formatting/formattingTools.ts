@@ -78,13 +78,13 @@ export class FormattingTools {
 
         if (!htmlEditor) {
             if (this.textStyles) {
-                const appearance = this.textStyles[0]["displayName"];    
+                const appearance = this.textStyles[0]["displayName"];
                 this.appearance(appearance);
                 this.style("Normal");
             }
             return;
         }
-        
+
         const selectionState = htmlEditor.getSelectionState();
 
         this.bold(selectionState.bold);
@@ -123,7 +123,7 @@ export class FormattingTools {
         this.alignment(alignment);
         if (this.textStyles) {
             let appearance = this.textStyles[0]["displayName"];
-            
+
             if (selectionState.appearance) {
                 // const breakpoint = Utils.getClosestBreakpoint(selectionState.appearance, this.viewManager.getViewport());
                 // const styleKey = selectionState.appearance[breakpoint];
@@ -136,7 +136,7 @@ export class FormattingTools {
             this.appearance(appearance);
         }
 
-        
+
 
         this.anchored(!!selectionState.anchorKey);
 
@@ -180,123 +180,273 @@ export class FormattingTools {
     }
 
     public toggleNn(): void {
-        // this.htmlEditorProvider.getCurrentHtmlEditor().setList(this.intentions.container.list.nested_numbering);
+        // htmlEditor.setList(this.intentions.container.list.nested_numbering);
         this.updateFormattingState();
     }
 
     public toggleBold(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleBold();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleBold();
     }
 
     public toggleItalic(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleItalic();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+        
+        htmlEditor.toggleItalic();
     }
 
     // public setStyle(intention: Intention): void {
-    //     this.htmlEditorProvider.getCurrentHtmlEditor().toggleIntention(intention);
+    //     htmlEditor.toggleIntention(intention);
     //     this.updateFormattingState();
     // }
 
     // public setSize(intention: Intention): void {
-    //     this.htmlEditorProvider.getCurrentHtmlEditor().toggleIntention(intention);
+    //     htmlEditor.toggleIntention(intention);
     //     this.updateFormattingState();
     // }
 
     public toggleParagraph(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleParagraph();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleParagraph();
     }
 
     public toggleUnderlined(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleUnderlined();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleUnderlined();
     }
 
     public toggleHighlighted(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleHighlighted();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleHighlighted();
     }
 
     public toggleCode(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleCode();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleCode();
     }
 
     public toggleSize(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleSize();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleSize();
     }
 
     public toggleOrderedList(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleOrderedList();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleOrderedList();
     }
 
     public toggleUnorderedList(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleUnorderedList();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleUnorderedList();
     }
 
     public incIndent(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().increaseIndent();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.increaseIndent();
 
         this.updateFormattingState();
     }
     public decIndent(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().decreaseIndent();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.decreaseIndent();
     }
 
     public toggleH1(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleH1();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleH1();
     }
 
     public toggleH2(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleH2();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleH2();
     }
 
     public toggleH3(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleH3();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleH3();
     }
 
     public toggleH4(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleH4();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleH4();
     }
 
     public toggleH5(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleH5();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleH5();
     }
 
     public toggleH6(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleH6();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleH6();
     }
 
     public toggleQuote(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleQuote();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleQuote();
     }
 
     public toggleFormatted(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleFormatted();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleFormatted();
     }
 
     public toggleAlignLeft(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().alignLeft(this.viewManager.getViewport());
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+        
+        htmlEditor.alignLeft(this.viewManager.getViewport());
     }
 
     public toggleAlignCenter(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().alignCenter(this.viewManager.getViewport());
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.alignCenter(this.viewManager.getViewport());
     }
 
     public toggleAlignRight(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().alignRight(this.viewManager.getViewport());
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.alignRight(this.viewManager.getViewport());
     }
 
     public toggleJustify(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().justify(this.viewManager.getViewport());
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.justify(this.viewManager.getViewport());
     }
 
     public resetToNormal(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleParagraph();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleParagraph();
     }
 
     public onColorSelected(color: ColorContract): void {
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
         if (color) {
-            this.htmlEditorProvider.getCurrentHtmlEditor().setColor(color.key);
+            htmlEditor.setColor(color.key);
         }
         else {
-            this.htmlEditorProvider.getCurrentHtmlEditor().removeColor();
+            htmlEditor.removeColor();
         }
     }
 
