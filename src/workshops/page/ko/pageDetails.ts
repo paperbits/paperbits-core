@@ -5,6 +5,7 @@ import { Router } from "@paperbits/common/routing";
 import { ViewManager } from "@paperbits/common/ui";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { PageItem } from "./pageItem";
+import { ISettingsProvider } from "@paperbits/common/configuration";
 
 @Component({
     selector: "page-details-workshop",
@@ -12,14 +13,17 @@ import { PageItem } from "./pageItem";
 })
 export class PageDetailsWorkshop {
     public readonly isReserved: ko.Observable<boolean>;
+    public readonly isSeoEnabled: ko.Observable<boolean>;
 
     constructor(
         private readonly pageService: IPageService,
         private readonly router: Router,
         private readonly viewManager: ViewManager,
-        private readonly reservedPermalinks: string[]
+        private readonly reservedPermalinks: string[],
+        private readonly settingsProvider: ISettingsProvider
     ) {
         this.isReserved = ko.observable(false);
+        this.isSeoEnabled = ko.observable(false);
     }
 
     @Param()
@@ -33,6 +37,11 @@ export class PageDetailsWorkshop {
 
     @OnMounted()
     public async onMounted(): Promise<void> {
+        const seoSetting = await this.settingsProvider.getSetting<boolean>("enableSeo");
+        if (seoSetting) {
+            this.isSeoEnabled(seoSetting);
+        }
+        
         this.pageItem.title
             .extend(<any>{ required: true, onlyValid: true })
             .subscribe(this.updatePage);

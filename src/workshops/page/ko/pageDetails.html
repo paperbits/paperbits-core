@@ -29,10 +29,12 @@
                 />
             </div>
         </div>
-        <!-- <div class="form-group">
+        <!-- ko if: $component.isSeoEnabled -->
+        <div class="form-group">
             <label for="jsonLd" class="form-label">JSON-LD</label>
             <textarea id="jsonLd" class="form-control" data-bind="textInput: pageItem.jsonLd"></textarea>
-        </div> -->
+        </div>
+        <!-- /ko -->
     </fieldset>
 
     <!-- ko ifnot: $component.isReserved -->
