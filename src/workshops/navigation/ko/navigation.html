@@ -7,7 +7,7 @@
     </p>
     <!-- /ko -->
 
-    <div class="flex-item flex-item-grow list" role="list"
+    <div class="flex flex-column flex-item flex-item-grow" role="list"
         data-bind="scrollable: true, focus: { childSelector: '.list-item' }">
         <!-- ko foreach: { data: root().nodes, as: 'node' } -->
         <!-- ko template: { name: 'node', data: node } -->

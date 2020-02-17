@@ -35,7 +35,7 @@
     <spinner></spinner>
     <!--/ko-->
 
-    <div class="flex-item flex-item-grow list" role="list" data-bind="foreach: layouts, scrollable: true">
+    <div class="flex flex-column flex-item flex-item-grow" role="list" data-bind="foreach: layouts, scrollable: true">
         <a href="#" role="listitem" class="list-item"
             data-bind="css: { selected: hasFocus }, hasFocus: hasFocus, activate: $component.selectLayout">
             <i class="paperbits-icon paperbits-layout-11-2"></i>
