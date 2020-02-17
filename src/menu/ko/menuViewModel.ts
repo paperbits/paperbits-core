@@ -8,13 +8,20 @@
 
 import * as ko from "knockout";
 import template from "./menu.html";
+import horizontalMenuTemplate from "./horizontalMenu.html";
+import verticalMenuTemplate from "./verticalMenu.html";
 import { Component } from "@paperbits/common/ko/decorators";
 import { MenuItemViewModel } from "./menuItemViewModel";
 import { StyleModel } from "@paperbits/common/styles";
 
+
 @Component({
     selector: "menu",
-    template: template
+    template: template,
+    childTemplates: {
+        horizontalMenu: horizontalMenuTemplate,
+        verticalMenu: verticalMenuTemplate
+    }
 })
 export class MenuViewModel {
     public readonly isEmpty: ko.Computed<boolean>;
