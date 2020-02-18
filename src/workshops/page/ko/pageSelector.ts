@@ -106,7 +106,7 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
 
     private async getAnchors(pageItem: PageItem): Promise<void> {
         const pageContent = await this.pageService.getPageContent(pageItem.key);
-        const children = AnchorUtils.getHeadingNodes(pageContent);
+        const children = AnchorUtils.getHeadingNodes(pageContent, 1, 6);
         let selectedAnchor: AnchorItem;
 
         const anchors = children.map(item => {
