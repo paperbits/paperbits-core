@@ -30,8 +30,7 @@ export class CardEditor implements WidgetEditor<CardModel> {
         this.appearanceStyles = ko.observableArray<any>();
         this.appearanceStyle = ko.observable<any>();
         this.containerConfig = ko.observable<ContainerStylePluginConfig>();
-
-        this.eventManager.addEventListener("onViewportChange", this.updateObservables.bind(this));
+        this.background = ko.observable<BackgroundStylePluginConfig>();
     }
 
     @Param()
@@ -48,6 +47,7 @@ export class CardEditor implements WidgetEditor<CardModel> {
         this.updateObservables();
 
         this.appearanceStyle.subscribe(this.onAppearanceChange);
+        this.eventManager.addEventListener("onViewportChange", this.updateObservables);
     }
 
     private updateObservables(): void {
@@ -69,6 +69,8 @@ export class CardEditor implements WidgetEditor<CardModel> {
                 };
 
                 this.containerConfig(containerConfig);
+
+                this.background(styleConfig.background);
             }
         }
 
@@ -77,9 +79,14 @@ export class CardEditor implements WidgetEditor<CardModel> {
 
     public onContainerChange(config: ContainerStylePluginConfig): void {
         const viewport = this.viewManager.getViewport();
-        Objects.setValue(`styles/instance/container/${viewport}/alignment`, this.model, config.alignment);
-        Objects.setValue(`styles/instance/container/${viewport}/overflow`, this.model, config.overflow);
+        Objects.setValue(`instance/container/${viewport}/alignment`, this.model.styles, config.alignment);
+        Objects.setValue(`instance/container/${viewport}/overflow`, this.model.styles, config.overflow);
 
+        this.onChange(this.model);
+    }
+
+    public onBackgroundUpdate(background: BackgroundStylePluginConfig): void {
+        Objects.setValue("instance/background", this.model.styles, background);
         this.onChange(this.model);
     }
 

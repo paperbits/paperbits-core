@@ -16,11 +16,8 @@ import {
 } from "@paperbits/styles/contracts";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { EventManager } from "@paperbits/common/events/eventManager";
+import { CommonEvents } from "@paperbits/common/events";
 
-
-const styleKeySnapTop = "utils/block/snapToTop";
-const styleKeySnapBottom = "utils/block/snapToBottom";
-const styleKeyStretch = "utils/block/stretch";
 
 @Component({
     selector: "layout-section-editor",
@@ -36,19 +33,14 @@ export class SectionEditor {
     public readonly maxWidth: ko.Observable<string>;
     public readonly minHeight: ko.Observable<string>;
     public readonly maxHeight: ko.Observable<string>;
-    
+
     public readonly elementStyleBox: ko.Observable<BoxStylePluginConfig>;
     private gridModel: GridModel;
-    private isSubscribed: boolean;
 
     constructor(
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager
     ) {
-        this.initialize = this.initialize.bind(this);
-        this.eventManager.addEventListener("onViewportChange", this.initialize);
-        this.onBackgroundUpdate = this.onBackgroundUpdate.bind(this);
-        this.onTypographyUpdate = this.onTypographyUpdate.bind(this);
         this.stickTo = ko.observable<string>("none");
         this.stretch = ko.observable<boolean>(false);
         this.background = ko.observable<BackgroundStylePluginConfig>();
@@ -57,8 +49,7 @@ export class SectionEditor {
         this.maxWidth = ko.observable<string>();
         this.minHeight = ko.observable<string>();
         this.maxHeight = ko.observable<string>();
-
-        this.elementStyleBox = ko.observable();   
+        this.elementStyleBox = ko.observable();
     }
 
     @Param()
@@ -69,6 +60,20 @@ export class SectionEditor {
 
     @OnMounted()
     public async initialize(): Promise<void> {
+        this.updateObservables();
+        this.stickTo.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.stretch.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.background.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.typography.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.minWidth.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.maxWidth.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.minHeight.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.maxHeight.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.elementStyleBox.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.eventManager.addEventListener(CommonEvents.onViewportChange, this.updateObservables);
+    }
+
+    private updateObservables(): void {
         const viewport = this.viewManager.getViewport();
 
         if (this.model.styles) {
@@ -96,27 +101,13 @@ export class SectionEditor {
         const containerSizeStyles = Objects.getObjectAt<SizeStylePluginConfig>(`instance/size/${viewport}`, gridStyles);
         const marginStyles = Objects.getObjectAt<MarginStylePluginConfig>(`instance/margin/${viewport}`, gridStyles);
 
-        this.elementStyleBox({margin: marginStyles});
+        this.elementStyleBox({ margin: marginStyles });
 
         if (containerSizeStyles) {
             this.minWidth(containerSizeStyles.minWidth);
             this.maxWidth(containerSizeStyles.maxWidth);
             this.minHeight(containerSizeStyles.minHeight);
             this.maxHeight(containerSizeStyles.maxHeight);
-        }
-
-        if (!this.isSubscribed) {
-            this.stickTo.extend(ChangeRateLimit).subscribe(this.applyChanges);
-            this.stretch.extend(ChangeRateLimit).subscribe(this.applyChanges);
-            this.background.extend(ChangeRateLimit).subscribe(this.applyChanges);
-            this.typography.extend(ChangeRateLimit).subscribe(this.applyChanges);
-            this.minWidth.extend(ChangeRateLimit).subscribe(this.applyChanges);
-            this.maxWidth.extend(ChangeRateLimit).subscribe(this.applyChanges);
-            this.minHeight.extend(ChangeRateLimit).subscribe(this.applyChanges);
-            this.maxHeight.extend(ChangeRateLimit).subscribe(this.applyChanges);
-            
-            this.elementStyleBox.extend(ChangeRateLimit).subscribe(this.applyChanges);
-            this.isSubscribed = true;
         }
     }
 
@@ -154,14 +145,12 @@ export class SectionEditor {
     }
 
     public onBackgroundUpdate(background: BackgroundStylePluginConfig): void {
-        Objects.setStructure("styles/instance/background", this.model);
-        this.model.styles.instance["background"] = background;
+        Objects.setValue("instance/background", this.model.styles, background);
         this.applyChanges();
     }
 
     public onTypographyUpdate(typography: TypographyStylePluginConfig): void {
-        Objects.setStructure("styles/instance/typography", this.model);
-        this.model.styles.instance["typography"] = typography;
+        Objects.setValue("instance/typography", this.model.styles, typography);
         this.applyChanges();
     }
 

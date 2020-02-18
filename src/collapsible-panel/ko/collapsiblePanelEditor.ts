@@ -37,14 +37,13 @@ export class CollapsiblePanelEditor {
 
     @OnMounted()
     public initialize(): void {
-        this.resetValues();
-
-        this.eventManager.addEventListener(CommonEvents.onViewportChange, this.resetValues);
+        this.updateObservables();
         this.minWidth.extend(ChangeRateLimit).subscribe(this.applyChanges);
         this.maxWidth.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.eventManager.addEventListener(CommonEvents.onViewportChange, this.updateObservables);
     }
 
-    private resetValues(): void {
+    private updateObservables(): void {
         const viewport = this.viewManager.getViewport();
 
         const localStyle = this.model.styles?.instance;
