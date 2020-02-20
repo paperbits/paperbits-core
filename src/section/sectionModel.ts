@@ -6,7 +6,7 @@ export class SectionModel {
     public styles: LocalStyles;
 
     constructor() {
-        this.styles = null;
+        this.styles = {};
         this.widgets = [];
     }
 }
