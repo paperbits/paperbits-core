@@ -98,7 +98,7 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
         menuModel.roles = contract.roles || [BuiltInRoles.everyone.key];
         menuModel.styles = contract.styles || { appearance: "components/menu/default" };
 
-        const currentPageUrl = bindingContext.navigationPath;
+        const currentPageUrl = bindingContext?.navigationPath;
 
         if (contract.navigationItemKey) {
             const rootNavigationItem = await this.navigationService.getNavigationItem(contract.navigationItemKey);

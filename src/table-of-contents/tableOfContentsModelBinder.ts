@@ -72,7 +72,7 @@ export class TableOfContentsModelBinder implements IModelBinder<TableOfContentsM
         tableOfContentsModel.items = [];
 
         if (contract.navigationItemKey) {
-            const currentPageUrl = bindingContext.navigationPath;
+            const currentPageUrl = bindingContext?.navigationPath;
 
             const assignedNavigationItem = await this.navigationService.getNavigationItem(contract.navigationItemKey);
             tableOfContentsModel.title = tableOfContentsModel.title || assignedNavigationItem.label;
