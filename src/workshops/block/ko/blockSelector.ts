@@ -8,6 +8,7 @@ import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorat
 import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelector";
 import { ViewModelBinderSelector } from "../../../ko/viewModelBinderSelector";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
+import { StyleManager } from "@paperbits/common/styles";
 
 @Component({
     selector: "block-selector",
@@ -62,12 +63,18 @@ export class BlockSelector implements IResourceSelector<BlockContract> {
                 content.type = block.type;
             }
 
+            const styleManager = new StyleManager();
+
+            const bindingContext = {
+                styleManager: styleManager
+            };
+
             const modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(content);
             const model = await modelBinder.contractToModel(content);
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(model);
-            const widget = await widgetViewModelBinder.modelToViewModel(model);
+            const widget = await widgetViewModelBinder.modelToViewModel(model, null, bindingContext);
 
-            blockItems.push(new BlockItem(block, widget));
+            blockItems.push(new BlockItem(block, widget, styleManager));
         }
 
         this.blocks(blockItems);

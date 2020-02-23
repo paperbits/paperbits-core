@@ -8,14 +8,14 @@
     <!-- /ko -->
 
     <!-- ko if: blocks().length > 0 -->
-    <ul class="flex-item flex-item-grow list">
+    <div class="flex flex-column flex-item flex-item-grow" role="list" data-bind="scrollable: true">
         <!-- ko foreach: { data: blocks, as: 'block'  } -->
-        <li class="list-item zoom-selector-item" data-bind="css: { selected: block.hasFocus }, click: $component.selectBlock"> 
+        <div class="list-item zoom-selector-item" data-bind="css: { selected: block.hasFocus }, click: $component.selectBlock"> 
             <div class="zoom-item">
-                <widget-container params="{ widgetData: block.widget }"></widget-container>
+                <widget-container params="{ widgetData: block }"></widget-container>
             </div>
-        </li>
+        </div>
         <!-- /ko -->
-    </ul>
+    </div>
     <!-- /ko -->
 </div>
