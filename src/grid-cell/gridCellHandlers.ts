@@ -1,14 +1,16 @@
-import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
+import { IWidgetHandler, WidgetContext, GridHelper } from "@paperbits/common/editing";
 import { EventManager } from "@paperbits/common/events";
 import { DragSession } from "@paperbits/common/ui/draggables";
-import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
-import { WidgetModel } from "@paperbits/common/widgets";
+import { IContextCommandSet, ViewManager, IHighlightConfig } from "@paperbits/common/ui";
+import { WidgetModel, WidgetService } from "@paperbits/common/widgets";
+import { SectionModel } from "../section";
 
 
 export class GridCellHandlers implements IWidgetHandler {
     constructor(
         private readonly viewManager: ViewManager,
-        private readonly eventManager: EventManager
+        private readonly eventManager: EventManager,
+        private readonly widgetService: WidgetService
     ) { }
 
     public canAccept(dragSession: DragSession): boolean {
@@ -26,6 +28,15 @@ export class GridCellHandlers implements IWidgetHandler {
                 position: "top right",
                 color: "#9C27B0",
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
+            },
+            {
+                tooltip: "Switch to parent",
+                iconClass: "paperbits-enlarge-vertical",
+                position: "top right",
+                color: "#9C27B0",
+                callback: () => {
+                    context.switchToParent(SectionModel);
+                }
             }]
         };
 

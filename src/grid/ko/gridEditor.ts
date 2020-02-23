@@ -66,6 +66,7 @@ export class GridEditor {
             binding = GridHelper.getWidgetBinding(element);
         }
 
+
         let parentModel;
         const parentBinding = GridHelper.getParentWidgetBinding(element);
 
@@ -79,7 +80,30 @@ export class GridEditor {
             model: model,
             binding: binding,
             half: half,
-            providers: providers
+            providers: providers,
+            switchToParent: (modelType: any) => {
+                const stack = GridHelper.getWidgetStack(element);
+                const stackItem = stack.find(x => x.binding.model instanceof modelType);
+
+                if (!stackItem) {
+                    return;
+                }
+
+                const contextualEditor = this.getContextualEditor(stackItem.element, "top");
+
+                if (!contextualEditor) {
+                    return;
+                }
+
+                const config: IHighlightConfig = {
+                    element: this.activeHighlightedElement,
+                    text: stackItem.binding.displayName,
+                    color: contextualEditor.color
+                };
+
+                this.viewManager.setSelectedElement(config, contextualEditor);
+                this.selectedContextualEditor = contextualEditor;
+            }
         };
 
         let contextualEditor: IContextCommandSet;
@@ -262,7 +286,7 @@ export class GridEditor {
             if (handler && handler.canAccept && handler.canAccept(dragSession)) {
                 return true;
             }
-           
+
             return false;
         });
 
