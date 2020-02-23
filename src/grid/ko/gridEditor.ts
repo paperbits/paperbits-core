@@ -96,7 +96,7 @@ export class GridEditor {
                 }
 
                 const config: IHighlightConfig = {
-                    element: this.activeHighlightedElement,
+                    element: stackItem.element,
                     text: stackItem.binding.displayName,
                     color: contextualEditor.color
                 };
