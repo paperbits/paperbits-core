@@ -7,6 +7,8 @@ import { BackgroundModel } from "@paperbits/common/widgets/background";
 import { PictureModel } from "../pictureModel";
 import { StyleService } from "@paperbits/styles/styleService";
 import { LocalStyles } from "@paperbits/common/styles";
+import { SizeStylePluginConfig } from "@paperbits/styles/plugins/size/sizeStylePluginConfig";
+import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 
 @Component({
@@ -21,9 +23,8 @@ export class PictureEditor {
     public readonly background: ko.Observable<BackgroundModel>;
     public readonly hyperlink: ko.Observable<HyperlinkModel>;
     public readonly hyperlinkTitle: ko.Computed<string>;
-    public readonly width: ko.Observable<number>;
-    public readonly height: ko.Observable<number>;
 
+    public readonly sizeConfig: ko.Observable<SizeStylePluginConfig>;
     public readonly appearanceStyle: ko.Observable<LocalStyles>;
 
     constructor(
@@ -35,10 +36,9 @@ export class PictureEditor {
         this.hyperlink = ko.observable<HyperlinkModel>();
         this.animation = ko.observable<string>();
         this.sourceKey = ko.observable<string>();
-        this.width = ko.observable<number>();
-        this.height = ko.observable<number>();
         this.background = ko.observable();
         this.hyperlinkTitle = ko.computed<string>(() => this.hyperlink() ? this.hyperlink().title : "Add a link...");
+        this.sizeConfig = ko.observable<SizeStylePluginConfig>();
         this.appearanceStyle = ko.observable<any>();
     }
 
@@ -61,8 +61,7 @@ export class PictureEditor {
 
         this.caption(this.model.caption);
         this.hyperlink(this.model.hyperlink);
-        this.width(this.model.width);
-        this.height(this.model.height);
+        this.sizeConfig({width: this.model.width, height: this.model.height});
 
         const variations = await this.styleService.getComponentVariations("picture");
 
@@ -71,13 +70,12 @@ export class PictureEditor {
             this.appearanceStyle(selectedAppearence);
         }
 
-        this.caption.subscribe(this.applyChanges);
-        this.layout.subscribe(this.applyChanges);
-        this.hyperlink.subscribe(this.applyChanges);
-        this.animation.subscribe(this.applyChanges);
-        this.width.subscribe(this.applyChanges);
-        this.height.subscribe(this.applyChanges);
-        this.appearanceStyle.subscribe(this.applyChanges);
+        this.caption.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.layout.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.hyperlink.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.animation.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.sizeConfig.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.appearanceStyle.extend(ChangeRateLimit).subscribe(this.applyChanges);
     }
 
     public onVariationSelected(snippet: LocalStyles): void {
@@ -90,8 +88,9 @@ export class PictureEditor {
         this.model.caption = this.caption();
         this.model.hyperlink = this.hyperlink();
         this.model.sourceKey = this.sourceKey();
-        this.model.width = this.width();
-        this.model.height = this.height();
+
+        const test = this.sizeConfig();
+        Object.assign(this.model, this.sizeConfig());
 
         const appearanceStyle = this.appearanceStyle();
 
@@ -126,5 +125,9 @@ export class PictureEditor {
     public onHyperlinkChange(hyperlink: HyperlinkModel): void {
         this.hyperlink(hyperlink);
         this.applyChanges();
+    }
+
+    public onSizeUpdate(sizeConfig: SizeStylePluginConfig): void {
+        this.sizeConfig(sizeConfig);
     }
 }

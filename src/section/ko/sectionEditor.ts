@@ -18,7 +18,6 @@ import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { EventManager } from "@paperbits/common/events/eventManager";
 import { CommonEvents } from "@paperbits/common/events";
 
-
 @Component({
     selector: "layout-section-editor",
     template: template
@@ -27,12 +26,8 @@ export class SectionEditor {
     public readonly stickTo: ko.Observable<string>;
     public readonly background: ko.Observable<BackgroundStylePluginConfig>;
     public readonly typography: ko.Observable<TypographyStylePluginConfig>;
+    public readonly sizeConfig: ko.Observable<SizeStylePluginConfig>;
     public readonly stretch: ko.Observable<boolean>;
-
-    public readonly minWidth: ko.Observable<string>;
-    public readonly maxWidth: ko.Observable<string>;
-    public readonly minHeight: ko.Observable<string>;
-    public readonly maxHeight: ko.Observable<string>;
 
     public readonly elementStyleBox: ko.Observable<BoxStylePluginConfig>;
     private gridModel: GridModel;
@@ -45,10 +40,7 @@ export class SectionEditor {
         this.stretch = ko.observable<boolean>(false);
         this.background = ko.observable<BackgroundStylePluginConfig>();
         this.typography = ko.observable<TypographyStylePluginConfig>();
-        this.minWidth = ko.observable<string>();
-        this.maxWidth = ko.observable<string>();
-        this.minHeight = ko.observable<string>();
-        this.maxHeight = ko.observable<string>();
+        this.sizeConfig = ko.observable<SizeStylePluginConfig>();
         this.elementStyleBox = ko.observable();
     }
 
@@ -65,11 +57,8 @@ export class SectionEditor {
         this.stretch.extend(ChangeRateLimit).subscribe(this.applyChanges);
         this.background.extend(ChangeRateLimit).subscribe(this.applyChanges);
         this.typography.extend(ChangeRateLimit).subscribe(this.applyChanges);
-        this.minWidth.extend(ChangeRateLimit).subscribe(this.applyChanges);
-        this.maxWidth.extend(ChangeRateLimit).subscribe(this.applyChanges);
-        this.minHeight.extend(ChangeRateLimit).subscribe(this.applyChanges);
-        this.maxHeight.extend(ChangeRateLimit).subscribe(this.applyChanges);
         this.elementStyleBox.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.sizeConfig.extend(ChangeRateLimit).subscribe(this.applyChanges);
         this.eventManager.addEventListener(CommonEvents.onViewportChange, this.updateObservables);
     }
 
@@ -102,13 +91,7 @@ export class SectionEditor {
         const marginStyles = Objects.getObjectAt<MarginStylePluginConfig>(`instance/margin/${viewport}`, gridStyles);
 
         this.elementStyleBox({ margin: marginStyles });
-
-        if (containerSizeStyles) {
-            this.minWidth(containerSizeStyles.minWidth);
-            this.maxWidth(containerSizeStyles.maxWidth);
-            this.minHeight(containerSizeStyles.minHeight);
-            this.maxHeight(containerSizeStyles.maxHeight);
-        }
+        this.sizeConfig(containerSizeStyles);
     }
 
     /**
@@ -124,14 +107,7 @@ export class SectionEditor {
 
         const gridStyles = this.gridModel.styles;
 
-        const containerSizeStyles: SizeStylePluginConfig = {
-            minWidth: this.minWidth(),
-            maxWidth: this.maxWidth(),
-            minHeight: this.minHeight(),
-            maxHeight: this.maxHeight()
-        };
-
-        Objects.cleanupObject(containerSizeStyles);
+        const containerSizeStyles: SizeStylePluginConfig = this.sizeConfig();
         Objects.setValue(`instance/size/${viewport}`, gridStyles, containerSizeStyles);
 
         const marginStyle = this.elementStyleBox().margin;
@@ -156,5 +132,9 @@ export class SectionEditor {
 
     public onBoxUpdate(pluginConfig: BoxStylePluginConfig): void {
         this.elementStyleBox(pluginConfig);
+    }
+
+    public onSizeUpdate(sizeConfig: SizeStylePluginConfig): void {
+        this.sizeConfig(sizeConfig);
     }
 }

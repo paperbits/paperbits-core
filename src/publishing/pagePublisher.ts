@@ -105,18 +105,11 @@ export class PagePublisher implements IPublisher {
 
         let permalink = page.permalink;
 
-        const regex = /\/[\w]+\.html$/gm;
-        const isHtmlFile = regex.test(permalink);
-
-        if (!isHtmlFile) {
-            /* if filename has no *.html extension we publish it to a dedicated folder with index.html */
-
-            if (!permalink.endsWith("/")) {
-                permalink += "/";
-            }
-
-            permalink = `${permalink}index.html`;
+        if (!permalink.endsWith("/")) {
+            permalink += "/";
         }
+
+        permalink = `${permalink}index.html`;        
 
         const contentBytes = Utils.stringToUnit8Array(htmlContent);
         await this.outputBlobStorage.uploadBlob(permalink, contentBytes, "text/html");

@@ -12,8 +12,8 @@ export class ButtonEditorModule implements IInjectorModule {
             key: "button",
             name: "components_button", 
             groupName: "Buttons", 
-            selectorTemplate: `<button data-bind="css: classNames">Button</button>`,
-            styleTemplate: `<button data-bind="stylePreview: variation.key">Button</button>`
+            selectorTemplate: `<a href="#" data-bind="css: classNames" style="display: inline-block">Button</a>`,
+            styleTemplate: `<a href="#" data-bind="stylePreview: variation.key" style="display: inline-block">Button</button>`
         };
         injector.bindInstanceToCollection("styleGroups", styleGroup);
     }

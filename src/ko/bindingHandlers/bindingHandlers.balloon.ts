@@ -12,6 +12,7 @@ export interface BalloonOptions {
     isOpen: any;
     onOpen?: () => void;
     onClose?: () => void;
+    closeTimeout?: number;
 }
 
 export class BalloonBindingHandler {
@@ -92,6 +93,10 @@ export class BalloonBindingHandler {
 
                     if (options.onOpen) {
                         options.onOpen();
+                    }
+                    
+                    if (options.closeTimeout) {
+                        setTimeout(close, options.closeTimeout);
                     }
                 };
 

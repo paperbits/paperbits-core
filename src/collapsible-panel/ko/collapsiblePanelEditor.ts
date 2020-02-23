@@ -16,8 +16,7 @@ import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 export class CollapsiblePanelEditor {
     public readonly containerConfig: ko.Observable<ContainerStylePluginConfig>;
     public readonly backgroundConfig: ko.Observable<BackgroundStylePluginConfig>;
-    public readonly minWidth: ko.Observable<string>;
-    public readonly maxWidth: ko.Observable<string>;
+    public readonly sizeConfig: ko.Observable<SizeStylePluginConfig>;
 
     constructor(
         private readonly viewManager: ViewManager,
@@ -25,8 +24,7 @@ export class CollapsiblePanelEditor {
     ) {
         this.backgroundConfig = ko.observable<BackgroundStylePluginConfig>();
         this.containerConfig = ko.observable<ContainerStylePluginConfig>();
-        this.minWidth = ko.observable<string>();
-        this.maxWidth = ko.observable<string>();
+        this.sizeConfig = ko.observable<SizeStylePluginConfig>();
     }
 
     @Param()
@@ -38,8 +36,7 @@ export class CollapsiblePanelEditor {
     @OnMounted()
     public initialize(): void {
         this.updateObservables();
-        this.minWidth.extend(ChangeRateLimit).subscribe(this.applyChanges);
-        this.maxWidth.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.sizeConfig.extend(ChangeRateLimit).subscribe(this.applyChanges);
         this.eventManager.addEventListener(CommonEvents.onViewportChange, this.updateObservables);
     }
 
@@ -59,11 +56,7 @@ export class CollapsiblePanelEditor {
         this.backgroundConfig(backgroundConfig);
 
         const containerSizeStyles = Objects.getObjectAt<SizeStylePluginConfig>(`instance/size/${viewport}`, this.model.styles);
-
-        this.minWidth(containerSizeStyles?.minWidth);
-        this.maxWidth(containerSizeStyles?.maxWidth);
-        // this.minHeight(containerSizeStyles.minHeight);
-        // this.maxHeight(containerSizeStyles.maxHeight);
+        this.sizeConfig(containerSizeStyles);
     }
 
     public onContainerUpdate(config: ContainerStylePluginConfig): void {
@@ -84,15 +77,14 @@ export class CollapsiblePanelEditor {
         const viewport = this.viewManager.getViewport();
         this.model.styles = this.model.styles || {};
 
-        const containerSizeStyles: SizeStylePluginConfig = {
-            minWidth: this.minWidth(),
-            maxWidth: this.maxWidth()
-        };
-
-        Objects.cleanupObject(containerSizeStyles);
+        const containerSizeStyles: SizeStylePluginConfig = this.sizeConfig();
         Objects.setValue(`instance/size/${viewport}`, this.model.styles, containerSizeStyles);
 
         this.onChange(this.model);
+    }
+
+    public onSizeUpdate(sizeConfig: SizeStylePluginConfig): void {
+        this.sizeConfig(sizeConfig);
     }
 
     @OnDestroyed()
