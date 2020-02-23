@@ -108,6 +108,7 @@ export class DefaultViewManager implements ViewManager {
         }
 
         this.designTime(false);
+        this.primaryToolboxVisible(false);
     }
 
     private onKeyUp(event: KeyboardEvent): void {
@@ -118,7 +119,9 @@ export class DefaultViewManager implements ViewManager {
         if (event.ctrlKey || event.metaKey) {
             return;
         }
+
         this.designTime(true);
+        this.primaryToolboxVisible(true);
     }
 
     public setHost(component: IComponent): void {
