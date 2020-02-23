@@ -37,11 +37,6 @@ export class PageDetailsWorkshop {
 
     @OnMounted()
     public async onMounted(): Promise<void> {
-        const seoSetting = await this.settingsProvider.getSetting<boolean>("enableSeo");
-        if (seoSetting) {
-            this.isSeoEnabled(seoSetting);
-        }
-        
         this.pageItem.title
             .extend(<any>{ required: true, onlyValid: true })
             .subscribe(this.updatePage);
@@ -60,6 +55,12 @@ export class PageDetailsWorkshop {
         else {
             validPermalink = validPermalink.extend(<any>{ required: true, validPermalink: this.pageItem.key, onlyValid: true });
             validPermalink.subscribe(this.updatePermlaink);
+        }
+
+        const seoSetting = await this.settingsProvider.getSetting<boolean>("enableSeo");
+        
+        if (seoSetting) {
+            this.isSeoEnabled(seoSetting);
         }
 
         await this.router.navigateTo(validPermalink());
