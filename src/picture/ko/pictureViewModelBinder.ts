@@ -45,7 +45,7 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: true,
-            editor: "paperbits-picture-editor",
+            editor: "picture-editor",
             applyChanges: async (changes) => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");

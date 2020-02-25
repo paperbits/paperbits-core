@@ -12,7 +12,7 @@ import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 
 @Component({
-    selector: "paperbits-picture-editor",
+    selector: "picture-editor",
     template: template
 })
 export class PictureEditor {
@@ -61,7 +61,7 @@ export class PictureEditor {
 
         this.caption(this.model.caption);
         this.hyperlink(this.model.hyperlink);
-        this.sizeConfig({width: this.model.width, height: this.model.height});
+        this.sizeConfig({ width: this.model.width, height: this.model.height });
 
         const variations = await this.styleService.getComponentVariations("picture");
 
@@ -89,7 +89,6 @@ export class PictureEditor {
         this.model.hyperlink = this.hyperlink();
         this.model.sourceKey = this.sourceKey();
 
-        const test = this.sizeConfig();
         Object.assign(this.model, this.sizeConfig());
 
         const appearanceStyle = this.appearanceStyle();
@@ -127,7 +126,8 @@ export class PictureEditor {
         this.applyChanges();
     }
 
-    public onSizeUpdate(sizeConfig: SizeStylePluginConfig): void {
+    public onSizeChange(sizeConfig: SizeStylePluginConfig): void {
         this.sizeConfig(sizeConfig);
+        this.applyChanges();
     }
 }
