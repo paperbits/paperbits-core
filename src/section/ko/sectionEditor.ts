@@ -26,10 +26,11 @@ export class SectionEditor {
     public readonly stickTo: ko.Observable<string>;
     public readonly background: ko.Observable<BackgroundStylePluginConfig>;
     public readonly typography: ko.Observable<TypographyStylePluginConfig>;
+    public readonly box: ko.Observable<BoxStylePluginConfig>;
     public readonly sizeConfig: ko.Observable<SizeStylePluginConfig>;
     public readonly stretch: ko.Observable<boolean>;
 
-    public readonly elementStyleBox: ko.Observable<BoxStylePluginConfig>;
+   
     private gridModel: GridModel;
 
     constructor(
@@ -41,7 +42,7 @@ export class SectionEditor {
         this.background = ko.observable<BackgroundStylePluginConfig>();
         this.typography = ko.observable<TypographyStylePluginConfig>();
         this.sizeConfig = ko.observable<SizeStylePluginConfig>();
-        this.elementStyleBox = ko.observable();
+        this.box = ko.observable<BoxStylePluginConfig>();
     }
 
     @Param()
@@ -57,7 +58,7 @@ export class SectionEditor {
         this.stretch.extend(ChangeRateLimit).subscribe(this.applyChanges);
         this.background.extend(ChangeRateLimit).subscribe(this.applyChanges);
         this.typography.extend(ChangeRateLimit).subscribe(this.applyChanges);
-        this.elementStyleBox.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.box.extend(ChangeRateLimit).subscribe(this.applyChanges);
         this.sizeConfig.extend(ChangeRateLimit).subscribe(this.applyChanges);
         this.eventManager.addEventListener(CommonEvents.onViewportChange, this.updateObservables);
     }
@@ -90,7 +91,7 @@ export class SectionEditor {
         const containerSizeStyles = Objects.getObjectAt<SizeStylePluginConfig>(`instance/size/${viewport}`, gridStyles);
         const marginStyles = Objects.getObjectAt<MarginStylePluginConfig>(`instance/margin/${viewport}`, gridStyles);
 
-        this.elementStyleBox({ margin: marginStyles });
+        this.box({ margin: marginStyles });
         this.sizeConfig(containerSizeStyles);
     }
 
@@ -110,7 +111,7 @@ export class SectionEditor {
         const containerSizeStyles: SizeStylePluginConfig = this.sizeConfig();
         Objects.setValue(`instance/size/${viewport}`, gridStyles, containerSizeStyles);
 
-        const marginStyle = this.elementStyleBox().margin;
+        const marginStyle = this.box().margin;
 
         Objects.cleanupObject(marginStyle);
         Objects.setValue(`instance/margin/${viewport}`, gridStyles, marginStyle);
@@ -131,7 +132,7 @@ export class SectionEditor {
     }
 
     public onBoxUpdate(pluginConfig: BoxStylePluginConfig): void {
-        this.elementStyleBox(pluginConfig);
+        this.box(pluginConfig);
     }
 
     public onSizeUpdate(sizeConfig: SizeStylePluginConfig): void {
