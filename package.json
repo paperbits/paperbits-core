@@ -26,6 +26,7 @@
         "domino": "^2.1.4",
         "file-saver": "^2.0.2",
         "google-maps": "^3.3.0",
+        "html-minifier": "^4.0.0",
         "html2plaintext": "^2.1.2",
         "knockout": "^3.5.1",
         "knockout.validation": "^2.0.4",

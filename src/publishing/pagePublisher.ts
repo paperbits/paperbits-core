@@ -1,4 +1,5 @@
 import * as Utils from "@paperbits/common/utils";
+import { minify } from "html-minifier";
 import template from "./page.html";
 import { IPublisher, HtmlPage, HtmlPagePublisher } from "@paperbits/common/publishing";
 import { IBlobStorage } from "@paperbits/common/persistence";
@@ -29,9 +30,25 @@ export class PagePublisher implements IPublisher {
 
     public async renderPage(page: HtmlPage): Promise<string> {
         this.logger.traceEvent(`Publishing page ${page.title}...`);
-
         const htmlContent = await this.htmlPagePublisher.renderHtml(page);
-        return htmlContent;
+
+        return minify(htmlContent, {
+            removeAttributeQuotes: true,
+            caseSensitive: true,
+            collapseBooleanAttributes: true,
+            collapseInlineTagWhitespace: true,
+            collapseWhitespace: true,
+            html5: true,
+            minifyCSS: true,
+            preserveLineBreaks: false,
+            removeComments: true,
+            removeEmptyAttributes: true,
+            removeOptionalTags: false,
+            removeRedundantAttributes: false,
+            removeScriptTypeAttributes: false,
+            removeStyleLinkTypeAttributes: false,
+            removeTagWhitespace: true
+        });
     }
 
     private async renderAndUpload(settings: any, page: PageContract, indexer: SearchIndexBuilder): Promise<void> {
@@ -109,7 +126,7 @@ export class PagePublisher implements IPublisher {
             permalink += "/";
         }
 
-        permalink = `${permalink}index.html`;        
+        permalink = `${permalink}index.html`;
 
         const contentBytes = Utils.stringToUnit8Array(htmlContent);
         await this.outputBlobStorage.uploadBlob(permalink, contentBytes, "text/html");
