@@ -1,5 +1,5 @@
 import * as Utils from "@paperbits/common/utils";
-import { minify } from "html-minifier";
+import { minify } from "html-minifier-terser";
 import template from "./page.html";
 import { IPublisher, HtmlPage, HtmlPagePublisher } from "@paperbits/common/publishing";
 import { IBlobStorage } from "@paperbits/common/persistence";
