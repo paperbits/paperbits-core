@@ -22,7 +22,7 @@ export class SectionModelBinder implements IModelBinder<SectionModel> {
         const model = new SectionModel();
 
         contract.nodes = contract.nodes || [];
-        model.styles = contract.styles;
+        model.styles = contract.styles || {};
 
         const modelPromises = contract.nodes.map(async (contract: Contract) => {
             const modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(contract);
