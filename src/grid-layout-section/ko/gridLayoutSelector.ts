@@ -8,8 +8,10 @@ import { GridModelBinder } from "../../grid-layout-section";
 import { presets } from "./gridPresets";
 import { SectionModel } from "../../section";
 import { GridViewModelBinder } from ".";
-import { BlockContract, BlockService } from "@paperbits/common/blocks";
+import { BlockService } from "@paperbits/common/blocks";
 import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelector";
+import { ISettingsProvider } from "@paperbits/common/configuration/ISettingsProvider";
+import { UpdateBlock } from "../../workshops/block/ko/blockSelector";
 
 @Component({
     selector: "grid-layout-selector",
@@ -18,6 +20,7 @@ import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelect
 export class GridLayoutSelector implements IResourceSelector<any> {
     public readonly snippets: ko.ObservableArray<GridModel>;
     public readonly selected: ko.Observable<string>;
+    public isBlocksEnabled: ko.Observable<boolean>;
 
     @Event()
     public onSelect: (rowModel: any) => void;
@@ -26,11 +29,13 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         private readonly gridModelBinder: GridModelBinder,
         private readonly gridViewModelBinder: GridViewModelBinder,
         private readonly modelBinderSelector: ModelBinderSelector,
-        private readonly blockService: BlockService
+        private readonly blockService: BlockService,
+        private readonly settingsProvider: ISettingsProvider
     ) {
         this.selectLayout = this.selectLayout.bind(this);
         this.snippets = ko.observableArray();
         this.selected = ko.observable();
+        this.isBlocksEnabled = ko.observable();
     }
 
     @OnMounted()
@@ -44,6 +49,9 @@ export class GridLayoutSelector implements IResourceSelector<any> {
             snippets.push(viewModel);
         }
         this.snippets(snippets);
+
+        const blocksUrl = await this.settingsProvider.getSetting<string>("blocksUrl");
+        this.isBlocksEnabled(blocksUrl ? true : false);
     }
 
     public selectLayout(viewModel: any): void {
@@ -107,8 +115,8 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         }
     }
 
-    public async onBlockSelected(block: BlockContract): Promise<void> {
-        const contract = await this.blockService.getBlockContent(block.key);
+    public async onBlockSelected(updateBlock: UpdateBlock): Promise<void> {
+        const contract = await this.blockService.getBlockContent(updateBlock.block.key, updateBlock.blockType);
         const modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(contract);
         const model = await modelBinder.contractToModel(contract);
 

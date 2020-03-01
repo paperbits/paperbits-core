@@ -3,18 +3,19 @@ import * as ko from "knockout";
 import { IResourceSelector } from "@paperbits/common/ui";
 import { BlockItem } from "./blockItem";
 import { BlockContract } from "@paperbits/common/blocks/blockContract";
-import { IBlockService } from "@paperbits/common/blocks";
+import { IBlockService, BlockType } from "@paperbits/common/blocks";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelector";
 import { ViewModelBinderSelector } from "../../../ko/viewModelBinderSelector";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { StyleManager } from "@paperbits/common/styles";
 
+export interface UpdateBlock { block: BlockContract; blockType: BlockType; }
 @Component({
     selector: "block-selector",
     template: template
 })
-export class BlockSelector implements IResourceSelector<BlockContract> {
+export class BlockSelector implements IResourceSelector<UpdateBlock> {
     public readonly searchPattern: ko.Observable<string>;
     public readonly blocks: ko.ObservableArray<BlockItem>;
     public readonly working: ko.Observable<boolean>;
@@ -27,19 +28,15 @@ export class BlockSelector implements IResourceSelector<BlockContract> {
     ) {
         this.blocks = ko.observableArray();
         this.widgets = ko.observableArray();
-        this.selectedBlockItem = ko.observable();
         this.searchPattern = ko.observable();
         this.working = ko.observable();
     }
 
     @Param()
-    public readonly selectedBlockItem: ko.Observable<BlockItem>;
-
-    @Param()
-    public readonly blockType: string;
+    public readonly blockType: BlockType;
 
     @Event()
-    public readonly onSelect: (block: BlockContract) => void;
+    public readonly onSelect: (updateBlock: UpdateBlock) => void;
 
     @OnMounted()
     public async initialize(): Promise<void> {
@@ -57,7 +54,7 @@ export class BlockSelector implements IResourceSelector<BlockContract> {
         const blockItems = [];
 
         for (const block of blocks) {
-            const content = await this.blockService.getBlockContent(block.key);
+            const content = await this.blockService.getBlockContent(block.key, this.blockType);
 
             if (!content.type) {
                 content.type = block.type;
@@ -82,10 +79,16 @@ export class BlockSelector implements IResourceSelector<BlockContract> {
     }
 
     public async selectBlock(block: BlockItem): Promise<void> {
-        this.selectedBlockItem(block);
-
         if (this.onSelect) {
-            this.onSelect(block.toBlock());
+            this.onSelect({block: block.toBlock(), blockType: this.blockType});
+        }
+    }
+
+    public async deleteBlock(block: BlockItem, event: any): Promise<void> {
+        event.stopImmediatePropagation();
+        if (block && this.blockType === BlockType.saved) {
+            await this.blockService.deleteBlock(block.toBlock());
+            await this.searchBlocks(this.searchPattern());
         }
     }
 }

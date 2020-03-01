@@ -19,6 +19,15 @@
                     From library
                 </a>
             </div>
+             <!-- ko if: isBlocksEnabled -->
+            <div class="tab"
+                data-bind="css: { 'tab-is-active': selected() === 'blocks' }, attr: { 'aria-selected': selected() === 'blocks' }">
+                <a href="#" data-bind="click: selected.bind($data,'blocks')" title="Blocks" role="tab"
+                    aria-label="add from blocks">
+                    Blocks
+                </a>
+            </div>
+            <!-- /ko -->
         </div>
 
         <!-- ko if: !selected() -->
@@ -29,8 +38,7 @@
                     <a href="#" class="snippet-grid list-item" role="listitem"
                         data-bind="click: $component.selectLayout, styledInPlace: snippet.styles">
                         <!-- ko foreach: { data: snippet.widgets, as: 'widget' } -->
-                        <div class="snippet-grid-cell" data-bind="styledInPlace: widget.styles, attr: { role: widget.role }">
-                        </div>
+                        <div class="snippet-grid-cell" data-bind="styledInPlace: widget.styles, attr: { role: widget.role }"></div>
                         <!-- /ko -->
                     </a>
                     <!-- /ko -->
@@ -40,8 +48,14 @@
         <!-- /ko -->
 
         <!-- ko if: selected() === 'saved' -->
-        <div class="flex-item flex-item-grow add-block-container" role="tabpanel" data-bind="scrollable: true">
+        <div class="flex flex-column add-block-container" role="tabpanel">
             <block-selector params="{ blockType: 'layout-section', onSelect: $component.onBlockSelected }"></block-selector>
+        </div>
+        <!-- /ko -->
+
+        <!-- ko if: selected() === 'blocks' -->
+        <div class="flex flex-column add-block-container" role="tabpanel">
+            <block-selector params="{ blockType: 'blocks-section', onSelect: $component.onBlockSelected }"></block-selector>
         </div>
         <!-- /ko -->
     </div>

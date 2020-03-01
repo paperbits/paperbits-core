@@ -1,6 +1,6 @@
 import template from "./addBlockDialog.html";
 import * as ko from "knockout";
-import { IBlockService } from "@paperbits/common/blocks";
+import { IBlockService, BlockType } from "@paperbits/common/blocks";
 import { Component, Param, Event } from "@paperbits/common/ko/decorators";
 import { ViewManager } from "@paperbits/common/ui";
 import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelector";
@@ -19,7 +19,7 @@ export class AddBlockDialog {
     public readonly blockModel: any;
     
     @Param()
-    public readonly blockType: string;
+    public readonly blockType: BlockType;
 
     @Event()
     public readonly onClose: () => void;
