@@ -26,6 +26,9 @@ export class LayoutDetails {
     @Event()
     public readonly onDeleteCallback: () => void;
 
+    @Event()
+    private readonly onCopyCallback: (layoutItem: LayoutItem) => void;
+
     @OnMounted()
     public async onMounted(): Promise<void> {
         this.layoutItem.title
@@ -52,11 +55,11 @@ export class LayoutDetails {
     }
 
     private async updateLayout(): Promise<void> {
-        await this.layoutService.updateLayout(this.layoutItem.toLayout());
+        await this.layoutService.updateLayout(this.layoutItem.toContract());
     }
 
     public async deleteLayout(): Promise<void> {
-        await this.layoutService.deleteLayout(this.layoutItem.toLayout());
+        await this.layoutService.deleteLayout(this.layoutItem.toContract());
 
         this.viewManager.notifySuccess("Layouts", `Page "${this.layoutItem.title()}" was deleted.`);
         this.viewManager.closeWorkshop("layout-details-workshop");
@@ -66,5 +69,25 @@ export class LayoutDetails {
         }
 
         this.viewManager.setHost({ name: "page-host" }); // Returning to editing current page.
+    }
+
+    public async copyLayout(): Promise<void> {
+        const copyPermalink = `${this.layoutItem.permalinkTemplate()} copy`;
+        const layoutContract = await this.layoutService.createLayout(`${this.layoutItem.title()} copy`, this.layoutItem.description(), copyPermalink);
+
+        const copyContract = this.layoutItem.toContract();
+        copyContract.key = layoutContract.key;
+        copyContract.permalinkTemplate = layoutContract.permalinkTemplate;
+        copyContract.title = layoutContract.title;
+        copyContract.contentKey = layoutContract.contentKey;
+
+        await this.layoutService.updateLayout(copyContract);
+
+        const layoutContentContract = await this.layoutService.getLayoutContent(this.layoutItem.key);
+        await this.layoutService.updateLayoutContent(copyContract.key, layoutContentContract);
+
+        if (this.onCopyCallback) {
+            this.onCopyCallback(new LayoutItem(copyContract));
+        }
     }
 }

@@ -47,7 +47,7 @@ export class LayoutSelector implements IResourceSelector<LayoutContract> {
         this.selectedLayout(layout);
 
         if (this.onSelect) {
-            this.onSelect(layout.toLayout());
+            this.onSelect(layout.toContract());
         }
     }
 }
