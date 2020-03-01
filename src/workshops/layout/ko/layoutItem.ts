@@ -21,7 +21,7 @@ export class LayoutItem {
         this.hasFocus = ko.observable<boolean>(false);
     }
 
-    public toLayout(): LayoutContract {
+    public toContract(): LayoutContract {
         return {
             key: this.key,
             title: this.title(),

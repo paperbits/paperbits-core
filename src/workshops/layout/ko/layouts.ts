@@ -57,6 +57,10 @@ export class LayoutsWorkshop {
                     layoutItem: layoutItem,
                     onDeleteCallback: () => {
                         this.searchLayouts();
+                    },
+                    onCopyCallback: async (item: LayoutItem) => {
+                        await this.searchLayouts();
+                        this.selectLayout(item);
                     }
                 }
             }
