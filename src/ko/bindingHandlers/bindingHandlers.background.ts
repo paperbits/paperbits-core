@@ -3,7 +3,7 @@ import * as ko from "knockout";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 
 ko.bindingHandlers["style"] = {
-    update(element, valueAccessor) {
+    update(element: HTMLElement, valueAccessor): void {
         const value = ko.utils.unwrapObservable(valueAccessor() || {});
 
         ko.utils.objectForEach(value, function (styleName, styleValue) {
@@ -32,7 +32,13 @@ export class BackgroundBindingHandler {
                             "background-image": `url("${ko.unwrap(backgroundModel.sourceUrl)}")`,
                             "background-repeat": "no-repeat",
                             "background-size": "contain",
-                            "background-position": "center"
+                            "background-position": "center",
+                            "background-color": backgroundModel.color
+                        });
+                    }
+                    else if (backgroundModel.color) {
+                        styleObservable({
+                            "background-color": backgroundModel.color
                         });
                     }
                     else {
