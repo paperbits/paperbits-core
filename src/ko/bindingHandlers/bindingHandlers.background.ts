@@ -22,74 +22,25 @@ ko.bindingHandlers["style"] = {
 export class BackgroundBindingHandler {
     constructor(styleService: StyleService) {
         ko.bindingHandlers["background"] = {
-            init(element: HTMLElement, valueAccessor) {
+            init(element: HTMLElement, valueAccessor: () => BackgroundModel): void {
                 const configuration = valueAccessor();
                 const styleObservable = ko.observable();
-                const cssObservable = ko.observable();
 
                 const setBackground = async (backgroundModel: BackgroundModel) => {
-                    if (element.nodeName === "IMG") {
-                        if (backgroundModel.sourceUrl) {
-                            element["src"] = backgroundModel.sourceUrl;
-                        }
-                        return;
-                    }
-
-                    const style = {};
-                    const css = [];
-
-                    if (backgroundModel.colorKey) {
-                        const color = await styleService.getStyleByKey(backgroundModel.colorKey);
-                        if (color) {
-                            Object.assign(style, { "background-color": color.value });
-                        }
-                        else {
-                            console.warn(`Could not find color with key ${backgroundModel.colorKey}`);
-                        }
-                    }
-                    else if (backgroundModel.color) {
-                        Object.assign(style, { "background-color": backgroundModel.color || null });
-                    }
-
                     if (backgroundModel.sourceUrl) {
-                        Object.assign(style, { "background-image": `url("${ko.unwrap(backgroundModel.sourceUrl)}")` });
+                        styleObservable({
+                            "background-image": `url("${ko.unwrap(backgroundModel.sourceUrl)}")`,
+                            "background-repeat": "no-repeat",
+                            "background-size": "contain",
+                            "background-position": "center"
+                        });
                     }
                     else {
-                        Object.assign(style, { "background-image": null });
+                        styleObservable(null);
                     }
-
-                    Object.assign(style, { "background-position": backgroundModel.position || null });
-
-                    Object.assign(style, { "background-size": backgroundModel.size || null });
-
-                    Object.assign(style, { "background-repeat": backgroundModel.repeat || "no-repeat" });
-
-
-                    // if (config.videoUrl) {
-                    //     let elements = [].slice.call(element.getElementsByTagName("video"));
-
-                    //     let video: HTMLVideoElement;
-
-                    //     if (elements.length > 0) {
-                    //         video = elements[0];
-                    //     }
-                    //     else {
-                    //         video = document.createElement("video");
-                    //         video.classList.add("fit", "no-pointer-events")
-                    //         element.prepend(video);
-                    //     }
-
-                    //     video.src = config.videoUrl;
-                    //     video.autoplay = true;
-                    //     video.muted = true;
-                    //     video.loop = true;
-                    // }
-
-                    styleObservable(style);
-                    cssObservable(css.join(" "));
                 };
 
-                ko.applyBindingsToNode(element, { style: styleObservable, css: cssObservable }, null);
+                ko.applyBindingsToNode(element, { style: styleObservable }, null);
 
                 if (ko.isObservable(configuration)) {
                     configuration.subscribe((newConfiguration) => {

@@ -6,6 +6,8 @@ import { ViewManager } from "@paperbits/common/ui";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { PageItem } from "./pageItem";
 import { ISettingsProvider } from "@paperbits/common/configuration";
+import { BackgroundModel } from "@paperbits/common/widgets/background";
+import { MediaContract, IMediaService } from "@paperbits/common/media";
 
 @Component({
     selector: "page-details-workshop",
@@ -14,16 +16,19 @@ import { ISettingsProvider } from "@paperbits/common/configuration";
 export class PageDetailsWorkshop {
     public readonly isReserved: ko.Observable<boolean>;
     public readonly isSeoEnabled: ko.Observable<boolean>;
+    public readonly socialShareImage: ko.Observable<BackgroundModel>;
 
     constructor(
         private readonly pageService: IPageService,
         private readonly router: Router,
         private readonly viewManager: ViewManager,
         private readonly reservedPermalinks: string[],
-        private readonly settingsProvider: ISettingsProvider
+        private readonly settingsProvider: ISettingsProvider,
+        private readonly mediaService: IMediaService
     ) {
         this.isReserved = ko.observable(false);
         this.isSeoEnabled = ko.observable(false);
+        this.socialShareImage = ko.observable();
     }
 
     @Param()
@@ -39,13 +44,16 @@ export class PageDetailsWorkshop {
     public async onMounted(): Promise<void> {
         this.pageItem.title
             .extend(<any>{ required: true, onlyValid: true })
-            .subscribe(this.updatePage);
+            .subscribe(this.applyChanges);
 
         this.pageItem.description
-            .subscribe(this.updatePage);
+            .subscribe(this.applyChanges);
 
         this.pageItem.keywords
-            .subscribe(this.updatePage);
+            .subscribe(this.applyChanges);
+
+        this.pageItem.jsonLd
+            .subscribe(this.applyChanges);
 
         let validPermalink = this.pageItem.permalink;
 
@@ -54,11 +62,21 @@ export class PageDetailsWorkshop {
         }
         else {
             validPermalink = validPermalink.extend(<any>{ required: true, validPermalink: this.pageItem.key, onlyValid: true });
-            validPermalink.subscribe(this.updatePermlaink);
+            validPermalink.subscribe(this.onPermalinkChange);
+        }
+
+        const socialShareData = this.pageItem.socialShareData();
+
+        if (socialShareData?.imageSourceKey) {
+            const media = await this.mediaService.getMediaByKey(socialShareData.imageSourceKey);
+
+            const imageModel = new BackgroundModel();
+            imageModel.sourceUrl = media.downloadUrl;
+            this.socialShareImage(imageModel);
         }
 
         const seoSetting = await this.settingsProvider.getSetting<boolean>("enableSeo");
-        
+
         if (seoSetting) {
             this.isSeoEnabled(seoSetting);
         }
@@ -67,15 +85,15 @@ export class PageDetailsWorkshop {
         this.viewManager.setHost({ name: "page-host" });
     }
 
-    private async updatePage(): Promise<void> {
+    private async applyChanges(): Promise<void> {
         await this.pageService.updatePage(this.pageItem.toContract());
     }
 
-    private async updatePermlaink(): Promise<void> {
+    private async onPermalinkChange(): Promise<void> {
         const permalink = this.pageItem.permalink();
         this.router.updateHistory(permalink, this.pageItem.title());
 
-        await this.updatePage();
+        await this.applyChanges();
     }
 
     public async deletePage(): Promise<void> {
@@ -109,5 +127,20 @@ export class PageDetailsWorkshop {
         if (this.onCopyCallback) {
             this.onCopyCallback(new PageItem(copyContract));
         }
+    }
+
+    public async onMediaSelected(media: MediaContract): Promise<void> {
+        const socialShareData = this.pageItem.socialShareData() || {};
+
+        socialShareData.imageSourceKey = media.key;
+        socialShareData.title = this.pageItem.title();
+
+        this.pageItem.socialShareData(socialShareData);
+
+        const imageModel = new BackgroundModel();
+        imageModel.sourceUrl = media.downloadUrl;
+        this.socialShareImage(imageModel);
+
+        await this.applyChanges();
     }
 }

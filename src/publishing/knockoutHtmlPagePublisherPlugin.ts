@@ -1,5 +1,6 @@
 import * as ko from "knockout";
-import { HtmlPage, HtmlPagePublisherPlugin } from "@paperbits/common/publishing";
+import { HtmlPage } from "@paperbits/common/publishing/htmlPage";
+import { HtmlPagePublisherPlugin } from "@paperbits/common/publishing/htmlPagePublisherPlugin";
 import { ContentViewModelBinder } from "../content/ko";
 import { ILayoutService } from "@paperbits/common/layouts";
 

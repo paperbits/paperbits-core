@@ -1,15 +1,14 @@
 import * as Utils from "@paperbits/common/utils";
 import template from "./page.html";
 import { minify } from "html-minifier-terser";
-import { IPublisher, HtmlPage, HtmlPagePublisher } from "@paperbits/common/publishing";
+import { IPublisher, HtmlPage, HtmlPagePublisher, SearchIndexBuilder } from "@paperbits/common/publishing";
 import { IBlobStorage } from "@paperbits/common/persistence";
 import { IPageService, PageContract } from "@paperbits/common/pages";
 import { ISiteService } from "@paperbits/common/sites";
 import { Logger } from "@paperbits/common/logging";
 import { IMediaService } from "@paperbits/common/media";
 import { StyleCompiler, StyleManager } from "@paperbits/common/styles";
-import { SitemapBuilder } from "./sitemapBuilder";
-import { SearchIndexBuilder } from "./searchIndexBuilder";
+import { SitemapBuilder } from "@paperbits/common/publishing/sitemapBuilder";
 import { LocalStyleBuilder } from "./localStyleBuilder";
 
 
@@ -36,7 +35,7 @@ export class PagePublisher implements IPublisher {
             removeAttributeQuotes: true,
             caseSensitive: true,
             collapseBooleanAttributes: true,
-            collapseInlineTagWhitespace: true,
+            collapseInlineTagWhitespace: false,
             collapseWhitespace: true,
             html5: true,
             minifyCSS: true,
@@ -47,7 +46,7 @@ export class PagePublisher implements IPublisher {
             removeRedundantAttributes: false,
             removeScriptTypeAttributes: false,
             removeStyleLinkTypeAttributes: false,
-            removeTagWhitespace: true
+            removeTagWhitespace: false
         });
     }
 
@@ -70,6 +69,7 @@ export class PagePublisher implements IPublisher {
                     : `${page.permalink}/styles.css`
             ],
             author: settings.site.author,
+            socialShareData: page.socialShareData,
             openGraph: {
                 type: page.permalink === "/" ? "website" : "article",
                 title: page.title,
@@ -93,9 +93,10 @@ export class PagePublisher implements IPublisher {
             let structuredData: any;
             try {
                 structuredData = JSON.parse(page.jsonLd);
-                htmlPage.structuredData = structuredData;
-            } catch (error) {
-                console.log("Error on parsing page.jsonLd: ", error);
+                htmlPage.linkedData = structuredData;
+            }
+            catch (error) {
+                console.log("Unable to parse page linked data: ", error);
             }
         }
 

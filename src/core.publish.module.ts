@@ -4,10 +4,13 @@ import { PagePublisher } from "./publishing/pagePublisher";
 import { SitePublisher } from "./publishing/sitePublisher";
 import { MediaPublisher } from "./publishing/mediaPublisher";
 import { KnockoutHtmlPagePublisherPlugin } from "./publishing/knockoutHtmlPagePublisherPlugin";
-import { HtmlPagePublisher } from "@paperbits/common/publishing";
-import { DominoHtmlDocumentProvider } from "./publishing/dominoHtmlDocumentProvider";
-import { OpenGraphHtmlPagePublisherPlugin } from "./publishing/openGraphHtmlPagePublisherPlugin";
-import { StructuredDataHtmlPagePublisherPlugin } from "./publishing/structuredDataHtmlPagePublisherPlugin";
+import {
+    HtmlPagePublisher,
+    OpenGraphHtmlPagePublisherPlugin,
+    LinkedDataHtmlPagePublisherPlugin,
+    SocialShareDataHtmlPagePublisherPlugin,
+    DominoHtmlDocumentProvider
+} from "@paperbits/common/publishing";
 
 
 export class CorePublishModule implements IInjectorModule {
@@ -22,7 +25,8 @@ export class CorePublishModule implements IInjectorModule {
         injector.bind("htmlDocumentProvider", DominoHtmlDocumentProvider);
         injector.bindCollection("htmlPagePublisherPlugins");
         injector.bindToCollection("htmlPagePublisherPlugins", KnockoutHtmlPagePublisherPlugin);
-        injector.bindToCollection("htmlPagePublisherPlugins", StructuredDataHtmlPagePublisherPlugin);
+        injector.bindToCollection("htmlPagePublisherPlugins", LinkedDataHtmlPagePublisherPlugin);
         injector.bindToCollection("htmlPagePublisherPlugins", OpenGraphHtmlPagePublisherPlugin);
+        injector.bindToCollection("htmlPagePublisherPlugins", SocialShareDataHtmlPagePublisherPlugin);
     }
 }

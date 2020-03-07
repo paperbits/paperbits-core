@@ -3,32 +3,46 @@
         <div class="form-group">
             <label for="title" class="form-label">Title</label>
             <div class="input-group">
-                <input type="text" id="title" class="form-control" data-bind="textInput: pageItem.title, validationElement: pageItem.title, focus: true" placeholder="e.g. About"
-                    maxlength="256" />
-                <button class="btn btn-danger input-group-btn" type="button" data-bind="validationMessageToggle: pageItem.title">!</button>
+                <input type="text" id="title" class="form-control"
+                    data-bind="textInput: pageItem.title, validationElement: pageItem.title, focus: true"
+                    placeholder="e.g. About" maxlength="256" />
+                <button class="btn btn-danger input-group-btn" type="button"
+                    data-bind="validationMessageToggle: pageItem.title">!</button>
             </div>
         </div>
         <div class="form-group">
             <label for="permalink" class="form-label">Permalink</label>
             <div class="input-group">
-                <input type="text" id="permalink" class="form-control" data-bind="textInput: pageItem.permalink, validationElement: pageItem.permalink, disable: $component.isReserved"
+                <input type="text" id="permalink" class="form-control"
+                    data-bind="textInput: pageItem.permalink, validationElement: pageItem.permalink, disable: $component.isReserved"
                     placeholder="e.g. /about" maxlength="2000" spellcheck="false" />
                 <!-- ko ifnot: $component.isReserved -->
-                <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: pageItem.permalink" type="button">!</button>
+                <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: pageItem.permalink"
+                    type="button">!</button>
                 <!-- /ko -->
             </div>
         </div>
         <div class="form-group">
             <label for="description" class="form-label">Description</label>
-            <textarea id="description" class="form-control" data-bind="textInput: pageItem.description" maxlength="256"></textarea>
+            <textarea id="description" class="form-control" data-bind="textInput: pageItem.description"
+                maxlength="256"></textarea>
         </div>
         <div class="form-group">
             <label for="keywords" class="form-label">Keywords</label>
             <div class="input-group">
-                <input type="text" id="keywords" class="form-control" data-bind="textInput: pageItem.keywords" placeholder="e.g. about" maxlength="256"
-                />
+                <input type="text" id="keywords" class="form-control" data-bind="textInput: pageItem.keywords"
+                    placeholder="e.g. about" maxlength="256" />
             </div>
         </div>
+        <div class="form-group">
+            <label class="form-label">Social share image</label>
+            <div class="dropzone">
+                <div class="flex-item dropzone-showbox"
+                    data-bind="background: socialShareImage, balloon: { component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected } }, position: 'top' }">
+                </div>
+            </div>
+        </div>
+
         <!-- ko if: $component.isSeoEnabled -->
         <div class="form-group">
             <label for="jsonLd" class="form-label">JSON-LD</label>
@@ -39,7 +53,8 @@
 
     <!-- ko ifnot: $component.isReserved -->
     <div class="flex-item btn-group">
-        <button class="btn" data-bind="confirm: { message: 'Are you sure you want to delete this page?', onConfirm: deletePage }">
+        <button class="btn"
+            data-bind="confirm: { message: 'Are you sure you want to delete this page?', onConfirm: deletePage }">
             <i class="paperbits-icon paperbits-simple-remove"></i>
             Delete page
         </button>
