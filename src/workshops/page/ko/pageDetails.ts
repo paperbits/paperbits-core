@@ -67,12 +67,14 @@ export class PageDetailsWorkshop {
 
         const socialShareData = this.pageItem.socialShareData();
 
-        if (socialShareData?.imageSourceKey) {
-            const media = await this.mediaService.getMediaByKey(socialShareData.imageSourceKey);
+        if (socialShareData?.image?.sourceKey) {
+            const media = await this.mediaService.getMediaByKey(socialShareData.image.sourceKey);
 
-            const imageModel = new BackgroundModel();
-            imageModel.sourceUrl = media.downloadUrl;
-            this.socialShareImage(imageModel);
+            if (media) {
+                const imageModel = new BackgroundModel();
+                imageModel.sourceUrl = media.downloadUrl;
+                this.socialShareImage(imageModel);
+            }
         }
 
         const seoSetting = await this.settingsProvider.getSetting<boolean>("enableSeo");
@@ -130,10 +132,17 @@ export class PageDetailsWorkshop {
     }
 
     public async onMediaSelected(media: MediaContract): Promise<void> {
-        const socialShareData = this.pageItem.socialShareData() || {};
+        if (!media) {
+            this.socialShareImage(null);
+        }
 
-        socialShareData.imageSourceKey = media.key;
-        socialShareData.title = this.pageItem.title();
+        const socialShareData = this.pageItem.socialShareData();
+
+        socialShareData.image = {
+            sourceKey: media.key,
+            // width: 1200,
+            // height: 620
+        };
 
         this.pageItem.socialShareData(socialShareData);
 

@@ -32,7 +32,6 @@ export class PagePublisher implements IPublisher {
         const htmlContent = await this.htmlPagePublisher.renderHtml(page);
 
         return minify(htmlContent, {
-            removeAttributeQuotes: true,
             caseSensitive: true,
             collapseBooleanAttributes: true,
             collapseInlineTagWhitespace: false,
@@ -46,7 +45,8 @@ export class PagePublisher implements IPublisher {
             removeRedundantAttributes: false,
             removeScriptTypeAttributes: false,
             removeStyleLinkTypeAttributes: false,
-            removeTagWhitespace: false
+            removeTagWhitespace: false,
+            removeAttributeQuotes: false
         });
     }
 
@@ -60,6 +60,7 @@ export class PagePublisher implements IPublisher {
             keywords: page.keywords || settings.site.keywords,
             permalink: page.permalink,
             url: `https://${settings.site.hostname}${page.permalink}`,
+            siteHostName: settings.site.hostname,
             content: pageContent,
             template: template,
             styleReferences: [
@@ -72,11 +73,9 @@ export class PagePublisher implements IPublisher {
             socialShareData: page.socialShareData,
             openGraph: {
                 type: page.permalink === "/" ? "website" : "article",
-                title: page.title,
+                title: page.title || settings.site.title,
                 description: page.description || settings.site.description,
-                url: page.permalink,
                 siteName: settings.site.title
-                // image: { ... }
             },
             bindingContext: {
                 styleManager: styleManager,
