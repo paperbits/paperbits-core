@@ -132,23 +132,26 @@ export class PageDetailsWorkshop {
     }
 
     public async onMediaSelected(media: MediaContract): Promise<void> {
-        if (!media) {
+        let socialShareData = null;
+
+        if (media) {
+            socialShareData = {
+                image: {
+                    sourceKey: media.key,
+                    // width: 1200,
+                    // height: 620
+                }
+            };
+
+            const imageModel = new BackgroundModel();
+            imageModel.sourceUrl = media.downloadUrl;
+            this.socialShareImage(imageModel);
+        }
+        else {
             this.socialShareImage(null);
         }
 
-        const socialShareData = this.pageItem.socialShareData() || {};
-
-        socialShareData.image = {
-            sourceKey: media.key,
-            // width: 1200,
-            // height: 620
-        };
-
         this.pageItem.socialShareData(socialShareData);
-
-        const imageModel = new BackgroundModel();
-        imageModel.sourceUrl = media.downloadUrl;
-        this.socialShareImage(imageModel);
 
         await this.applyChanges();
     }

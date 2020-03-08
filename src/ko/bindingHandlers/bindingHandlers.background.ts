@@ -42,7 +42,13 @@ export class BackgroundBindingHandler {
                         });
                     }
                     else {
-                        styleObservable(null);
+                        styleObservable({
+                            "background-image": null,
+                            "background-repeat": null,
+                            "background-size": null,
+                            "background-position": null,
+                            "background-color": null
+                        });
                     }
                 };
 
