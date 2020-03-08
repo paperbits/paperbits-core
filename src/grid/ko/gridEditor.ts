@@ -167,7 +167,7 @@ export class GridEditor {
 
         const element = this.activeHighlightedElement;
         const bindings = GridHelper.getParentWidgetBindings(element);
-        const windgetIsInContent = bindings.some(x => x.model instanceof ContentModel);
+        const windgetIsInContent = bindings.some(x => x.model instanceof ContentModel || x.name === "email-layout");
 
         let layoutEditing = false;
 
