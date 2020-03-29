@@ -1,16 +1,14 @@
 import { IModelBinder } from "@paperbits/common/editing";
-import { IContentItemService } from "@paperbits/common/contentItems";
-import { INavigationService, NavigationItemContract, NavigationItemModel } from "@paperbits/common/navigation";
+import { NavigationItemContract, NavigationItemModel } from "@paperbits/common/navigation";
 import { Router } from "@paperbits/common/routing";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { Contract } from "@paperbits/common/contract";
+import { Bag } from "@paperbits/common";
 
 
 export class NavigationModelBinder implements IModelBinder<NavigationItemModel> {
     constructor(
-        private readonly mediaPermalinkResolver: IPermalinkResolver,
-        private readonly navigationService: INavigationService,
-        private readonly contentItemService: IContentItemService,
+        private readonly permalinkResolver: IPermalinkResolver,
         private readonly router: Router
     ) { }
 
@@ -22,7 +20,7 @@ export class NavigationModelBinder implements IModelBinder<NavigationItemModel> 
         return model instanceof NavigationItemModel;
     }
 
-    public async contractToModel(contract: NavigationItemContract): Promise<NavigationItemModel> {
+    public async contractToModel(contract: NavigationItemContract, bindingContext?: Bag<any>): Promise<NavigationItemModel> {
         if (!contract) {
             throw new Error(`Parameter "contract" not specified.`);
         }
@@ -47,11 +45,8 @@ export class NavigationModelBinder implements IModelBinder<NavigationItemModel> 
             });
         }
         else if (contract.targetKey) {
-            const contentItem = await this.contentItemService.getContentItemByKey(contract.targetKey);
-
-            if (contentItem) {
-                model.targetUrl = contentItem.permalink;
-            }
+            const targetUrl = await this.permalinkResolver.getUrlByTargetKey(contract.targetKey, bindingContext?.locale);
+            model.targetUrl = targetUrl;
         }
         else {
             console.warn(`Navigation item "${model.label}" has no permalink assigned to it.`);

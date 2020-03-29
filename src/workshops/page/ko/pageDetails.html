@@ -34,6 +34,8 @@
                     placeholder="e.g. about" maxlength="256" />
             </div>
         </div>
+
+        <!-- ko if: $component.isSeoEnabled -->
         <div class="form-group">
             <label class="form-label">Social share image</label>
             <div class="dropzone">
@@ -42,8 +44,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- ko if: $component.isSeoEnabled -->
         <div class="form-group">
             <label for="jsonLd" class="form-label">JSON-LD</label>
             <textarea id="jsonLd" class="form-control" data-bind="textInput: pageItem.jsonLd"></textarea>

@@ -1,45 +1,46 @@
-import { BackgroundBindingHandler } from "./ko/bindingHandlers/bindingHandlers.background";
-import { WidgetBindingHandler } from "./ko/bindingHandlers/bindingHandlers.widget";
-import { SecuredBindingHandler } from "./ko/bindingHandlers/bindingHandlers.secured";
-import { DefaultRouter, DefaultRouteGuard } from "@paperbits/common/routing";
-import { SettingsProvider } from "@paperbits/common/configuration";
-import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { ModelBinderSelector, WidgetService } from "@paperbits/common/widgets";
-import { PictureModule } from "./picture/ko/picture.module";
-import { VideoPlayerModule } from "./video-player/ko/videoPlayer.module";
-import { YoutubePlayerModule } from "./youtube-player/ko/youtubePlayer.module";
-import { NavbarModule } from "./navbar/ko/navbar.module";
-import { MapModule } from "./map/ko/map.module";
-import { ButtonModule } from "./button/ko/button.module";
-import { TestimonialsModule } from "./testimonials/ko/testimonials.module";
-import { KoModule } from "./ko/ko.module";
-import { ColumnModule } from "./column/ko/column.module";
-import { SectionModule } from "./section/ko/section.module";
-import { RowModule } from "./row/ko/row.module";
-import { TextblockModule } from "./textblock/ko/textblock.module";
-import { BackgroundModelBinder } from "@paperbits/common/widgets/background";
-import { KnockoutRegistrationLoaders } from "./ko/knockout.loaders";
-import { ViewModelBinderSelector } from "./ko/viewModelBinderSelector";
-import { PermalinkResolver } from "@paperbits/common/permalinks";
-import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkResolver";
-import { XmlHttpRequestClient } from "@paperbits/common/http";
-import { DefaultEventManager, GlobalEventHandler } from "@paperbits/common/events";
-import { LocalCache } from "@paperbits/common/caching";
-import { LayoutService } from "@paperbits/common/layouts/layoutService";
-import { ContentItemService } from "@paperbits/common/contentItems/contentItemService";
-import { PageService } from "@paperbits/common/pages";
-import { BlogService } from "@paperbits/common/blogs";
-import { MediaService } from "@paperbits/common/media";
 import { BlockService } from "@paperbits/common/blocks";
+import { BlogService } from "@paperbits/common/blogs";
+import { LocalCache } from "@paperbits/common/caching";
+import { SettingsProvider } from "@paperbits/common/configuration";
+import { DefaultEventManager, GlobalEventHandler } from "@paperbits/common/events";
+import { XmlHttpRequestClient } from "@paperbits/common/http";
+import { IInjector, IInjectorModule } from "@paperbits/common/injection";
+import { LayoutService } from "@paperbits/common/layouts/layoutService";
+import { LocaleService } from "@paperbits/common/localization";
+import { MediaService } from "@paperbits/common/media";
+import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkResolver";
 import { NavigationService } from "@paperbits/common/navigation";
+import { PageService } from "@paperbits/common/pages";
+import { PagePermalinkResolver } from "@paperbits/common/pages/pagePermalinkResolver";
+import { PermalinkResolver } from "@paperbits/common/permalinks";
+import { DefaultRouteGuard, DefaultRouter } from "@paperbits/common/routing";
 import { SiteService } from "@paperbits/common/sites";
 import { UrlService } from "@paperbits/common/urls";
+import { UrlPermalinkResolver } from "@paperbits/common/urls/urlPermalinkResolver";
+import { ModelBinderSelector, WidgetService } from "@paperbits/common/widgets";
+import { BackgroundModelBinder } from "@paperbits/common/widgets/background";
+import { ButtonModule } from "./button/ko/button.module";
 import { CardModule } from "./card/ko/card.module";
-import { GridModule } from "./grid-layout-section/ko/grid.module";
-import { GridCellModule } from "./grid-cell/ko/gridCell.module";
 import { CollapsiblePanelModule } from "./collapsible-panel/ko";
-import { MenuModule } from "./menu/ko";
+import { ColumnModule } from "./column/ko/column.module";
 import { ContentModule } from "./content/ko";
+import { GridCellModule } from "./grid-cell/ko/gridCell.module";
+import { GridModule } from "./grid-layout-section/ko/grid.module";
+import { BackgroundBindingHandler } from "./ko/bindingHandlers/bindingHandlers.background";
+import { SecuredBindingHandler } from "./ko/bindingHandlers/bindingHandlers.secured";
+import { WidgetBindingHandler } from "./ko/bindingHandlers/bindingHandlers.widget";
+import { KnockoutRegistrationLoaders } from "./ko/knockout.loaders";
+import { KoModule } from "./ko/ko.module";
+import { ViewModelBinderSelector } from "./ko/viewModelBinderSelector";
+import { MenuModule } from "./menu/ko";
+import { NavbarModule } from "./navbar/ko/navbar.module";
+import { PictureModule } from "./picture/ko/picture.module";
+import { RowModule } from "./row/ko/row.module";
+import { SectionModule } from "./section/ko/section.module";
+import { TestimonialsModule } from "./testimonials/ko/testimonials.module";
+import { TextblockModule } from "./textblock/ko/textblock.module";
+import { VideoPlayerModule } from "./video-player/ko/videoPlayer.module";
+import { YoutubePlayerModule } from "./youtube-player/ko/youtubePlayer.module";
 
 
 /**
@@ -53,6 +54,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindCollectionLazily("routeGuards");
         injector.bindCollectionLazily("modelBinders");
         injector.bindCollectionLazily("viewModelBinders");
+        injector.bindCollectionLazily("permalinkResolvers");
         
         /*** Core ***/
         injector.bindSingleton("settingsProvider", SettingsProvider);
@@ -63,7 +65,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("localCache", LocalCache);
 
         /*** Services ***/
-        injector.bindSingleton("contentItemService", ContentItemService);
         injector.bindSingleton("widgetService", WidgetService);
         injector.bindSingleton("layoutService", LayoutService);
         injector.bindSingleton("pageService", PageService);
@@ -73,8 +74,11 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("navigationService", NavigationService);
         injector.bindSingleton("siteService", SiteService);
         injector.bindSingleton("urlService", UrlService);
+        injector.bindSingleton("localeService", LocaleService);
         injector.bindSingleton("permalinkResolver", PermalinkResolver);
-        injector.bindSingleton("mediaPermalinkResolver", MediaPermalinkResolver);
+        injector.bindToCollection("permalinkResolvers", MediaPermalinkResolver, "mediaPermalinkResolver");
+        injector.bindToCollection("permalinkResolvers", PagePermalinkResolver, "pagePermalinkResolver");
+        injector.bindToCollection("permalinkResolvers", UrlPermalinkResolver, "urlPermalinkResolver");
 
         injector.bind("modelBinderSelector", ModelBinderSelector);
         injector.bind("viewModelBinderSelector", ViewModelBinderSelector);

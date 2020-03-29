@@ -1,21 +1,20 @@
-import { Contract, Bag } from "@paperbits/common";
-import { INavigationService, NavigationItemContract, NavigationItemModel } from "@paperbits/common/navigation";
-import { IPageService } from "@paperbits/common/pages";
+import { Bag, Contract } from "@paperbits/common";
 import { IModelBinder } from "@paperbits/common/editing";
+import { ILocaleService } from "@paperbits/common/localization";
+import { INavigationService, NavigationItemContract, NavigationItemModel } from "@paperbits/common/navigation";
+import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { BuiltInRoles } from "@paperbits/common/user";
-import { IContentItemService } from "@paperbits/common/contentItems";
-import { MenuContract } from "./menuContract";
 import { AnchorUtils } from "../text/anchorUtils";
 import { BlockContract } from "../text/contracts";
+import { MenuContract } from "./menuContract";
 import { MenuModel } from "./menuModel";
-import { LocalStyles } from "@paperbits/common/styles";
 
 
 export class MenuModelBinder implements IModelBinder<MenuModel> {
     constructor(
-        private readonly contentItemService: IContentItemService,
+        private readonly permalinkResolver: IPermalinkResolver,
         private readonly navigationService: INavigationService,
-        private readonly pageService: IPageService
+        private readonly localeService: ILocaleService
     ) { }
 
     public canHandleContract(contract: Contract): boolean {
@@ -26,7 +25,33 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
         return model instanceof MenuModel;
     }
 
-    private async processNavigationItem(contract: NavigationItemContract, permalink: string, minHeading: number, maxHeading: number, level: number = 0): Promise<NavigationItemModel> {
+    private async getLanguageNavigationMenu(bindingContext: Bag<any>): Promise<NavigationItemModel> {
+        const locales = await this.localeService.getLocales();
+        const defaultLocale = await this.localeService.getDefaultLocale();
+        const requestedLocaleCode = bindingContext?.locale || defaultLocale;
+        const requestedLocale = locales.find(x => x.code === requestedLocaleCode);
+        const languageNavItems = [];
+
+        for (const locale of locales) {
+            const targetUrl = bindingContext?.contentItemKey
+                ? await this.permalinkResolver.getUrlByTargetKey(bindingContext.contentItemKey, locale.code)
+                : "/";
+
+            languageNavItems.push({
+                label: locale.displayName,
+                targetUrl: targetUrl
+            });
+        }
+
+        const currentLanguageNavItem: NavigationItemModel = {
+            label: requestedLocale?.displayName,
+            nodes: languageNavItems
+        };
+
+        return currentLanguageNavItem;
+    }
+
+    private async processNavigationItem(locale: string, contract: NavigationItemContract, permalink: string, minHeading: number, maxHeading: number, level: number = 0): Promise<NavigationItemModel> {
         const navitemModel = new NavigationItemModel();
         navitemModel.label = contract.label;
 
@@ -34,7 +59,7 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
             const tasks = [];
 
             contract.navigationItems.forEach(child => {
-                tasks.push(this.processNavigationItem(child, permalink, minHeading, maxHeading, level + 1));
+                tasks.push(this.processNavigationItem(locale, child, permalink, minHeading, maxHeading, level + 1));
             });
 
             const results = await Promise.all(tasks);
@@ -48,30 +73,24 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
             return navitemModel;
         }
 
-        const contentItem = await this.contentItemService.getContentItemByKey(contract.targetKey);
+        const targetUrl = await this.permalinkResolver.getUrlByTargetKey(contract.targetKey, locale);
+        navitemModel.targetUrl = targetUrl;
 
-        if (!contentItem) {
-            return navitemModel;
-        }
-
-        navitemModel.targetUrl = contentItem.permalink;
-
-        if (contentItem.permalink === permalink) {
+        if (targetUrl === permalink) {
             navitemModel.isActive = true;
         }
 
         if (level > 0 && minHeading && maxHeading && navitemModel.targetUrl === permalink) {
-            const localNavItems = await this.processAnchorItems(permalink, minHeading, maxHeading);
+            const localNavItems = await this.processAnchorItems(permalink, locale, minHeading, maxHeading);
             navitemModel.nodes.push(...localNavItems);
         }
 
         return navitemModel;
     }
 
-    private async processAnchorItems(permalink: string, minHeading: number, maxHeading?: number): Promise<NavigationItemModel[]> {
-        const page = await this.pageService.getPageByPermalink(permalink);
-        const pageContent = await this.pageService.getPageContent(page.key);
-        const children = AnchorUtils.getHeadingNodes(pageContent, minHeading, maxHeading);
+    private async processAnchorItems(permalink: string, locale: string, minHeading: number, maxHeading?: number): Promise<NavigationItemModel[]> {
+        const content = await this.permalinkResolver.getContentByPermalink(permalink, locale);
+        const children = AnchorUtils.getHeadingNodes(content, minHeading, maxHeading);
 
         if (children.length === 0) {
             return [];
@@ -101,18 +120,26 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
         const currentPageUrl = bindingContext?.navigationPath;
 
         if (contract.navigationItemKey) {
-            const rootNavigationItem = await this.navigationService.getNavigationItem(contract.navigationItemKey);
+            let root: NavigationItemModel;
 
-            if (rootNavigationItem) {
-                const root = await this.processNavigationItem(rootNavigationItem, currentPageUrl, menuModel.minHeading, menuModel.maxHeading);
-                menuModel.items = root.nodes;
-                menuModel.navigationItem = root;
-                menuModel.navigationItem.key = contract.navigationItemKey;
+            if (contract.navigationItemKey === "@locales") {
+                root = await this.getLanguageNavigationMenu(bindingContext);
             }
+            else {
+                const rootNavigationItem = await this.navigationService.getNavigationItem(contract.navigationItemKey);
+
+                if (rootNavigationItem) {
+                    root = await this.processNavigationItem(bindingContext?.locale, rootNavigationItem, currentPageUrl, menuModel.minHeading, menuModel.maxHeading);
+                }
+            }
+
+            menuModel.items = root.nodes;
+            menuModel.navigationItem = root;
+            menuModel.navigationItem.key = contract.navigationItemKey;
         }
 
         if (menuModel.items.length === 0 && menuModel.minHeading && menuModel.maxHeading) {
-            const localNavItems = await this.processAnchorItems(currentPageUrl, menuModel.minHeading, menuModel.maxHeading);
+            const localNavItems = await this.processAnchorItems(currentPageUrl, bindingContext?.locale, menuModel.minHeading, menuModel.maxHeading);
             menuModel.items.push(...localNavItems);
         }
 

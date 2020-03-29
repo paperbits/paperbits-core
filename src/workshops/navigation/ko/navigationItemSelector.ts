@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import template from "./navigationItemSelector.html";
 import { NavigationItemViewModel } from "./navigationItemViewModel";
-import { NavigationItemContract, INavigationService } from "@paperbits/common/navigation";
+import { NavigationItemContract, INavigationService, NavigationItemModel } from "@paperbits/common/navigation";
 import { Component, Event, Param, OnMounted } from "@paperbits/common/ko/decorators";
 import { NavigationModelBinder } from "../navigationModelBinder";
 import { NavigationViewModelBinder } from "./navigationViewModelBinder";
@@ -32,7 +32,7 @@ export class NavigationItemSelector {
     public selectedNavigationItem: ko.Observable<NavigationItemViewModel>;
 
     @Event()
-    public onSelect: (selection: NavigationItemContract) => void;
+    public onSelect: (selection: NavigationItemModel) => void;
 
     @OnMounted()
     public async initialize(): Promise<void> {
@@ -40,9 +40,16 @@ export class NavigationItemSelector {
 
         const navigationItems = await this.navigationService.getNavigationItems();
 
+        const lang: NavigationItemContract = {
+            key: "@locales",
+            label: "Languages"
+        };
+
+        navigationItems.push(lang);
+
         const root: NavigationItemContract = {
             key: null,
-            label: "",
+            label: "Root",
             navigationItems: navigationItems
         };
 

@@ -1,28 +1,15 @@
-import { Contract } from "@paperbits/common";
+import { Contract, Bag } from "@paperbits/common";
 import { IPermalinkResolver, HyperlinkModel } from "@paperbits/common/permalinks";
-import { IPageService } from "@paperbits/common/pages";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { InlineModel, MarkModel, ColorModel } from "@paperbits/common/text/models";
 import { InlineContract, MarkContract } from "../contracts";
 
 
-
 export class InlineModelBinder {
     constructor(
         private readonly styleCompiler: StyleCompiler,
-        private readonly pageService: IPageService,
         private readonly permalinkResolver: IPermalinkResolver
     ) { }
-
-    private async getHyperlinkForPage(pageKey: string) {
-        let linkModel = await this.permalinkResolver.getHyperlinkByTargetKey(pageKey);
-
-        if (!linkModel) {
-            const notFoundPage = await this.pageService.getPageByPermalink("/404");
-            linkModel = await this.permalinkResolver.getHyperlinkByTargetKey(notFoundPage.key);
-        }
-        return linkModel;
-    }
 
     public canHandleContract(contract: Contract): boolean {
         return contract.type === "text";
@@ -32,7 +19,7 @@ export class InlineModelBinder {
         return model.type === "text"; // TODO: Replace with instanceOf
     }
 
-    public async contractToModel(contract: InlineContract): Promise<InlineModel> {
+    public async contractToModel(contract: InlineContract, bindingContent?: Bag<any>): Promise<InlineModel> {
         const model = new InlineModel();
         model.text = contract.text;
 
@@ -40,22 +27,24 @@ export class InlineModelBinder {
             const modelPromises = contract.marks.map(async (mark) => {
                 const markModel = new MarkModel(mark.type);
 
-                if (mark.type === "hyperlink") {
-                    const targetKey = mark.attrs["targetKey"];
+                switch (mark.type) {
+                    case "hyperlink":
+                        const targetKey = mark.attrs["targetKey"];
 
-                    if (targetKey) {
-                        markModel.attrs = await this.getHyperlinkForPage(targetKey);
-                        const anchor = markModel.attrs.href !== "/404" && mark.attrs["anchor"];
-                        
-                        if (anchor) {
-                            markModel.attrs.anchor = anchor;
-                            markModel.attrs.anchorName = mark.attrs["anchorName"];
+                        if (targetKey) {
+                            const hyperlink = await this.permalinkResolver.getHyperlinkByTargetKey(targetKey, bindingContent?.locale);
+                            markModel.attrs = hyperlink;
+                            const anchor = mark?.attrs["anchor"];
+
+                            if (anchor) {
+                                markModel.attrs.anchor = anchor;
+                                markModel.attrs.anchorName = mark.attrs["anchorName"];
+                            }
                         }
-                    }
-                    markModel.attrs["target"] = mark.attrs["target"];
-                }
-                else {
-                    if (mark.type === "color") {
+                        markModel.attrs["target"] = mark.attrs["target"];
+                        break;
+
+                    case "color":
                         const contract = <ColorModel>mark.attrs;
 
                         if (contract && contract.colorKey) {
@@ -67,7 +56,7 @@ export class InlineModelBinder {
                                 colorClass: colorClass
                             };
                         }
-                    }
+                        break;
                 }
 
                 return markModel;

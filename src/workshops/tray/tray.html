@@ -1,7 +1,16 @@
-<button class="toolbox-btn" data-bind="balloon: { component: 'viewport-selector', position: 'top' }"
-    title="Viewport selection" aria-label="Viewport selection">
-    <i class="paperbits-icon paperbits-mirror-2"></i>
-</button>
+<div class="toolbox-btn">
+    <a href="#" data-bind="balloon: { component: 'viewport-selector', position: 'top' }" title="Viewport selection" aria-label="Viewport selection">
+        <i class="paperbits-icon paperbits-mirror-2"></i>
+    </a>
+</div>
+
+<!-- ko if: localizationEnabled -->
+<div class="toolbox-btn">
+    <a href="#" data-bind="balloon: { component: 'locale-selector', position: 'top' }" title="Locale selection" aria-label="Locale selection">
+        <i class="paperbits-icon paperbits-world"></i>
+    </a>
+</div>
+<!-- /ko -->
 
 <button class="toolbox-btn" data-bind="balloon: { component: { name: 'role-selector', params: { availableRoles: availableRoles, selectedRoles: selectedRoles, onSelect: onRoleSelect } }, position: 'top' }"
     title="Role selection" aria-label="Role selection">

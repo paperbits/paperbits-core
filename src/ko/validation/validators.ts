@@ -2,13 +2,13 @@
 import * as ko from "knockout";
 import * as validation from "knockout.validation";
 import { ILayoutService } from "@paperbits/common/layouts/ILayoutService";
-import { IPageService } from "@paperbits/common/pages";
+import { IPermalinkResolver } from "@paperbits/common/permalinks";
 
 const errorClassName = "is-invalid";
 
 export class KnockoutValidation {
     constructor(
-        private readonly pageService: IPageService,
+        private readonly permalinkResolver: IPermalinkResolver,
         private readonly layoutService: ILayoutService,
         private readonly reservedPermalinks: string[]
     ) {
@@ -53,8 +53,8 @@ export class KnockoutValidation {
                     return;
                 }
 
-                const page = await this.pageService.getPageByPermalink(permalink);
-                const conflict = page && page.key !== contentItemKey;
+                const contentItem = await this.permalinkResolver.getContentItemByPermalink(permalink);
+                const conflict = contentItem && contentItem.key !== contentItemKey;
 
                 callback(!conflict);
             },

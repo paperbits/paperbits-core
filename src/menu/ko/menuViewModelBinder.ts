@@ -25,7 +25,10 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
         viewModel.url(navitem.targetUrl);
         viewModel.isActive(navitem.isActive);
         viewModel.level(level);
-        viewModel.nodes(navitem.nodes.map(x => this.menuItemModelToViewModel(x, level)));
+
+        if (navitem.nodes) {
+            viewModel.nodes(navitem.nodes.map(x => this.menuItemModelToViewModel(x, level)));
+        }
 
         return viewModel;
     }

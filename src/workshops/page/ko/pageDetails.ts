@@ -8,6 +8,7 @@ import { PageItem } from "./pageItem";
 import { ISettingsProvider } from "@paperbits/common/configuration";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 import { MediaContract, IMediaService } from "@paperbits/common/media";
+import { ILocaleService } from "@paperbits/common/localization";
 
 @Component({
     selector: "page-details-workshop",
@@ -24,7 +25,8 @@ export class PageDetailsWorkshop {
         private readonly viewManager: ViewManager,
         private readonly reservedPermalinks: string[],
         private readonly settingsProvider: ISettingsProvider,
-        private readonly mediaService: IMediaService
+        private readonly mediaService: IMediaService,
+        private readonly localeService: ILocaleService
     ) {
         this.isReserved = ko.observable(false);
         this.isSeoEnabled = ko.observable(false);
@@ -75,6 +77,13 @@ export class PageDetailsWorkshop {
                 imageModel.sourceUrl = media.downloadUrl;
                 this.socialShareImage(imageModel);
             }
+        }
+
+        const locale = await this.localeService.getCurrentLocale();
+        const defaultLocale = await this.localeService.getDefaultLocale();
+
+        if (locale !== defaultLocale) {
+            this.isReserved(true);
         }
 
         const seoSetting = await this.settingsProvider.getSetting<boolean>("enableSeo");

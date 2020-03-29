@@ -18,7 +18,7 @@ export class LocalStyleBuilder {
         let uploadUrl;
 
         if (permalink === "/") {
-            uploadUrl = `styles.css`;
+            uploadUrl = `/styles.css`;
         }
         else {
             uploadUrl = `${permalink}/styles.css`;

@@ -2,7 +2,7 @@ import { PictureModel } from "./pictureModel";
 import { PictureContract } from "./pictureContract";
 import { IModelBinder } from "@paperbits/common/editing";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
-import { Contract } from "@paperbits/common";
+import { Contract, Bag } from "@paperbits/common";
 
 export class PictureModelBinder implements IModelBinder<PictureModel> {
     constructor(private readonly permalinkResolver: IPermalinkResolver) { }
@@ -15,7 +15,7 @@ export class PictureModelBinder implements IModelBinder<PictureModel> {
         return model instanceof PictureModel;
     }
 
-    public async contractToModel(contract: PictureContract): Promise<PictureModel> {
+    public async contractToModel(contract: PictureContract, bindingContext: Bag<any>): Promise<PictureModel> {
         const model = new PictureModel();
         model.caption = contract.caption;
         model.width = contract.width;
@@ -25,7 +25,7 @@ export class PictureModelBinder implements IModelBinder<PictureModel> {
 
         if (contract.hyperlink) {
             try {
-                model.hyperlink = await this.permalinkResolver.getHyperlinkByTargetKey(contract.hyperlink.targetKey);
+                model.hyperlink = await this.permalinkResolver.getHyperlinkByTargetKey(contract.hyperlink.targetKey, bindingContext?.locale);
             }
             catch (error) {
                 console.log(error);

@@ -1,0 +1,28 @@
+<fieldset class="form" data-bind="scrollable: {}">
+    <div class="form-group">
+        <label class="form-label">
+            Language
+            <button class="btn btn-info" type="button" data-bind="tooltipToggle: 'Locale code, e.g. en-us'"></button>
+        </label>
+        <select id="textTransform" class="form-control"
+                    data-bind="options: languages, value: selectedLanguage, optionsText: 'displayName'"></select>
+    </div>
+    <!-- ko if: locales -->
+    <div class="form-group">
+        <label class="form-label">
+            Display name
+            <button class="btn btn-info" type="button"
+                data-bind="tooltipToggle: 'Locale display name. e.g. English (US)'"></button>
+        </label>
+        <select id="textTransform" class="form-control"
+                    data-bind="options: locales, value: selectedLocale, optionsText: 'displayName'"></select>
+    </div>
+    <!-- /ko -->
+</fieldset>
+
+<div class="flex-item btn-group">
+    <button class="btn" data-bind="click: addLocale">
+        <i class="paperbits-icon paperbits-simple-add"></i>
+        Add locale
+    </button>
+</div>

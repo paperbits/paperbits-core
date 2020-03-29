@@ -1,22 +1,22 @@
-import { NavbarModel } from "./navbarModel";
-import { NavbarContract } from "./navbarContract";
-import { IModelBinder } from "@paperbits/common/editing";
-import { IContentItemService } from "@paperbits/common/contentItems";
-import { INavigationService, NavigationItemContract, NavigationItemModel } from "@paperbits/common/navigation";
-import { Router } from "@paperbits/common/routing";
-import { IPermalinkResolver } from "@paperbits/common/permalinks";
+import { Bag } from "@paperbits/common";
 import { Contract } from "@paperbits/common/contract";
+import { IModelBinder } from "@paperbits/common/editing";
+import { INavigationService, NavigationItemContract, NavigationItemModel } from "@paperbits/common/navigation";
+import { IPermalinkResolver } from "@paperbits/common/permalinks";
+import { Router } from "@paperbits/common/routing";
+import { NavbarContract } from "./navbarContract";
+import { NavbarModel } from "./navbarModel";
 
 
 export class NavbarModelBinder implements IModelBinder<NavbarModel> {
     constructor(
         private readonly mediaPermalinkResolver: IPermalinkResolver,
         private readonly navigationService: INavigationService,
-        private readonly contentItemService: IContentItemService,
+        private readonly permalinkResolver: IPermalinkResolver,
         private readonly router: Router
     ) { }
 
-    public async contractToModel(contract: NavbarContract): Promise<NavbarModel> {
+    public async contractToModel(contract: NavbarContract, bindingContext: Bag<any>): Promise<NavbarModel> {
         if (!contract) {
             throw new Error(`Parameter "contract" not specified.`);
         }
@@ -25,7 +25,7 @@ export class NavbarModelBinder implements IModelBinder<NavbarModel> {
         const navigationItemContract = await this.navigationService.getNavigationItem(contract.rootKey);
 
         if (navigationItemContract) {
-            const navbarItemModel = await this.navigationItemToNavbarItemModel(navigationItemContract);
+            const navbarItemModel = await this.navigationItemToNavbarItemModel(navigationItemContract, bindingContext?.locale);
             navbarModel.root = navbarItemModel;
         }
 
@@ -56,7 +56,7 @@ export class NavbarModelBinder implements IModelBinder<NavbarModel> {
         return model instanceof NavbarModel;
     }
 
-    public async navigationItemToNavbarItemModel(contract: NavigationItemContract): Promise<NavigationItemModel> {
+    public async navigationItemToNavbarItemModel(contract: NavigationItemContract, locale: string): Promise<NavigationItemModel> {
         if (!contract) {
             throw new Error(`Parameter "contract" not specified.`);
         }
@@ -69,7 +69,7 @@ export class NavbarModelBinder implements IModelBinder<NavbarModel> {
             const tasks = [];
 
             contract.navigationItems.forEach(child => {
-                tasks.push(this.navigationItemToNavbarItemModel(child));
+                tasks.push(this.navigationItemToNavbarItemModel(child, locale));
             });
 
             const results = await Promise.all(tasks);
@@ -79,11 +79,8 @@ export class NavbarModelBinder implements IModelBinder<NavbarModel> {
             });
         }
         else if (contract.targetKey) {
-            const contentItem = await this.contentItemService.getContentItemByKey(contract.targetKey);
-
-            if (contentItem) {
-                navigationItem.targetUrl = contentItem.permalink;
-            }
+            const targetUrl = await this.permalinkResolver.getUrlByTargetKey(contract.targetKey, locale);
+            navigationItem.targetUrl = targetUrl;
         }
         else {
             console.warn(`Navigation item "${navigationItem.label}" has no permalink assigned to it.`);

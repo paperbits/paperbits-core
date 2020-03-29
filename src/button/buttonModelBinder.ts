@@ -27,7 +27,7 @@ export class ButtonModelBinder implements IModelBinder<ButtonModel>  {
         model.styles = contract.styles || { appearance: "components/button/default" };
 
         if (contract.hyperlink) {
-            model.hyperlink = await this.permalinkResolver.getHyperlinkFromConfig(contract.hyperlink);
+            model.hyperlink = await this.permalinkResolver.getHyperlinkFromContract(contract.hyperlink);
         }
 
         return model;

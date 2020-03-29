@@ -1,18 +1,14 @@
-import { TableOfContentsModel } from "./tableOfContentsModel";
-import { INavigationService, NavigationItemContract, NavigationItemModel } from "@paperbits/common/navigation";
-import { IPageService } from "@paperbits/common/pages";
+import { Bag, Contract } from "@paperbits/common";
 import { IModelBinder } from "@paperbits/common/editing";
-import { IContentItemService } from "@paperbits/common/contentItems";
+import { INavigationService, NavigationItemContract, NavigationItemModel } from "@paperbits/common/navigation";
+import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { TableOfContentsContract } from "./tableOfContentsContract";
-import { Contract, Bag } from "@paperbits/common";
-import { AnchorUtils } from "../text/anchorUtils";
-import { BlockContract } from "../text/contracts";
+import { TableOfContentsModel } from "./tableOfContentsModel";
 
 export class TableOfContentsModelBinder implements IModelBinder<TableOfContentsModel> {
     constructor(
-        private readonly contentItemService: IContentItemService,
-        private readonly navigationService: INavigationService,
-        private readonly pageService: IPageService
+        private readonly permalinkResolver: IPermalinkResolver,
+        private readonly navigationService: INavigationService
     ) { }
 
     public canHandleContract(contract: Contract): boolean {
@@ -23,37 +19,16 @@ export class TableOfContentsModelBinder implements IModelBinder<TableOfContentsM
         return model instanceof TableOfContentsModel;
     }
 
-    private processAnchorItems(items: BlockContract[]): NavigationItemModel[] {
-        return items.map((item) => {
-            const itemModel = new NavigationItemModel();
-            itemModel.label = item.nodes[0].text;
-            itemModel.targetUrl = `#${item.attrs.id}`;
-            return itemModel;
-        });
-    }
-
-    private async processNavigationItem(navigationItem: NavigationItemContract, currentPageUrl: string,  minHeading: number, maxHeading?: number): Promise<NavigationItemModel> {
+    private async processNavigationItem(navigationItem: NavigationItemContract, permalink: string): Promise<NavigationItemModel> {
         const navbarItemModel = new NavigationItemModel();
         navbarItemModel.label = navigationItem.label;
 
         if (navigationItem.targetKey) {
-            const contentItem = await this.contentItemService.getContentItemByKey(navigationItem.targetKey);
+            const targetUrl = await this.permalinkResolver.getUrlByTargetKey(navigationItem.targetKey);
+            navbarItemModel.targetUrl = targetUrl;
 
-            if (contentItem) {
-                navbarItemModel.targetUrl = contentItem.permalink;
-
-                if (contentItem.permalink === currentPageUrl) {
-                    navbarItemModel.isActive = true;
-
-                    if (contentItem.key && contentItem.key.startsWith("pages/")) {
-                        const pageContent = await this.pageService.getPageContent(contentItem.key);
-                        const children = AnchorUtils.getHeadingNodes(pageContent, minHeading, maxHeading);
-
-                        if (children.length > 0) {
-                            navbarItemModel.nodes = this.processAnchorItems(children);
-                        }
-                    }
-                }
+            if (targetUrl === permalink) {
+                navbarItemModel.isActive = true;
             }
         }
 
@@ -79,7 +54,7 @@ export class TableOfContentsModelBinder implements IModelBinder<TableOfContentsM
 
             if (assignedNavigationItem && assignedNavigationItem.navigationItems) { // has child nav items
                 const promises = assignedNavigationItem.navigationItems.map(async navigationItem => {
-                    return await this.processNavigationItem(navigationItem, currentPageUrl, tableOfContentsModel.minHeading, tableOfContentsModel.maxHeading);
+                    return await this.processNavigationItem(navigationItem, currentPageUrl);
                 });
 
                 const results = await Promise.all(promises);
