@@ -16,8 +16,8 @@ export class KnockoutHtmlPagePublisherPlugin implements HtmlPagePublisherPlugin 
 
         return new Promise(async (resolve, reject) => {
             try {
-                const layoutContract = await this.layoutService.getLayoutByPermalink(page.permalink);
-                const layoutContentContract = await this.layoutService.getLayoutContent(layoutContract.key);
+                const layoutContract = await this.layoutService.getLayoutByPermalink(page.permalink, page.bindingContext?.locale);
+                const layoutContentContract = await this.layoutService.getLayoutContent(layoutContract.key, page.bindingContext?.locale);
                 const layoutContentViewModel = await this.contentViewModelBinder.getContentViewModelByKey(layoutContentContract, page.bindingContext);
 
                 ko.applyBindingsToNode(document.body, { widget: layoutContentViewModel }, null);

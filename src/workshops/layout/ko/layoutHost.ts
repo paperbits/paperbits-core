@@ -36,6 +36,7 @@ export class LayoutHost {
         await this.refreshContent();
 
         this.eventManager.addEventListener("onDataPush", () => this.onDataPush());
+        this.eventManager.addEventListener("onLocaleChange", () => this.onLocaleUpdate());
     }
 
     /**
@@ -45,6 +46,10 @@ export class LayoutHost {
         if (this.viewManager.mode === ViewManagerMode.selecting || this.viewManager.mode === ViewManagerMode.selected) {
             await this.refreshContent();
         }
+    }
+
+    private async onLocaleUpdate(): Promise<void> {
+        await this.refreshContent();
     }
 
     private async refreshContent(): Promise<void> {

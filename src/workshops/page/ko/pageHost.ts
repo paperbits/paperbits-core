@@ -52,7 +52,7 @@ export class PageHost {
     }
 
     private async onLocaleUpdate(): Promise<void> {
-        this.refreshContent();
+        await this.refreshContent();
     }
 
     private async refreshContent(): Promise<void> {
