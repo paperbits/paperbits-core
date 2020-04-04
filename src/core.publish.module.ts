@@ -10,7 +10,8 @@ import {
     LinkedDataHtmlPagePublisherPlugin,
     SocialShareDataHtmlPagePublisherPlugin,
     DominoHtmlDocumentProvider,
-    SitemapBuilder
+    SitemapBuilder,
+    SearchIndexBuilder
 } from "@paperbits/common/publishing";
 
 
@@ -23,6 +24,7 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindToCollection("publishers", MediaPublisher);
         injector.bindSingleton("sitePublisher", SitePublisher);
         injector.bindSingleton("sitemapBuilder", SitemapBuilder);
+        injector.bindSingleton("searchIndexBuilder", SearchIndexBuilder);
         injector.bind("htmlPagePublisher", HtmlPagePublisher);
         injector.bind("htmlDocumentProvider", DominoHtmlDocumentProvider);
         injector.bindCollection("htmlPagePublisherPlugins");

@@ -1,5 +1,5 @@
 import * as Utils from "@paperbits/common/utils";
-import { IPublisher, SitemapBuilder } from "@paperbits/common/publishing";
+import { IPublisher, SitemapBuilder, SearchIndexBuilder } from "@paperbits/common/publishing";
 import { Logger } from "@paperbits/common/logging";
 import { IBlobStorage } from "@paperbits/common/persistence";
 
@@ -9,6 +9,7 @@ export class SitePublisher implements IPublisher {
         private readonly publishers: IPublisher[],
         private readonly logger: Logger,
         private readonly sitemapBuilder: SitemapBuilder,
+        private readonly searchIndexBuilder: SearchIndexBuilder,
         private readonly outputBlobStorage: IBlobStorage
     ) { }
 
@@ -21,9 +22,12 @@ export class SitePublisher implements IPublisher {
             }
 
             const sitemapXml = await this.sitemapBuilder.buildSitemap();
-            const contentBytes = Utils.stringToUnit8Array(sitemapXml);
+            const sitemapXmlBytes = Utils.stringToUnit8Array(sitemapXml);
+            await this.outputBlobStorage.uploadBlob("sitemap.xml", sitemapXmlBytes, "text/xml");
 
-            await this.outputBlobStorage.uploadBlob("sitemap.xml", contentBytes, "text/xml");
+            const searchIndex = await this.searchIndexBuilder.buildIndex();
+            const searchIndexBytes = Utils.stringToUnit8Array(searchIndex);
+            await this.outputBlobStorage.uploadBlob("search-index.json", searchIndexBytes, "application/json");
 
             this.logger.traceEvent("Website published successfully.");
         }

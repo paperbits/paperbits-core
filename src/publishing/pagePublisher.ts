@@ -1,7 +1,13 @@
 import * as Utils from "@paperbits/common/utils";
 import template from "./page.html";
 import { minify } from "html-minifier-terser";
-import { IPublisher, HtmlPage, HtmlPagePublisher, SearchIndexBuilder } from "@paperbits/common/publishing";
+import {
+    IPublisher,
+    HtmlPage,
+    HtmlPagePublisher,
+    SitemapBuilder,
+    SearchIndexBuilder
+} from "@paperbits/common/publishing";
 import { IBlobStorage } from "@paperbits/common/persistence";
 import { IPageService, PageContract } from "@paperbits/common/pages";
 import { ISiteService } from "@paperbits/common/sites";
@@ -9,7 +15,6 @@ import { Logger } from "@paperbits/common/logging";
 import { ILocaleService } from "@paperbits/common/localization";
 import { IMediaService } from "@paperbits/common/media";
 import { StyleCompiler, StyleManager } from "@paperbits/common/styles";
-import { SitemapBuilder } from "@paperbits/common/publishing/sitemapBuilder";
 import { LocalStyleBuilder } from "./localStyleBuilder";
 
 
@@ -25,6 +30,7 @@ export class PagePublisher implements IPublisher {
         private readonly styleCompiler: StyleCompiler,
         private readonly localeService: ILocaleService,
         private readonly sitemapBuilder: SitemapBuilder,
+        private readonly searchIndexBuilder: SearchIndexBuilder,
         private readonly logger: Logger
     ) {
         this.localStyleBuilder = new LocalStyleBuilder(this.outputBlobStorage);
@@ -59,16 +65,16 @@ export class PagePublisher implements IPublisher {
         }
     }
 
-    private async renderAndUpload(settings: any, page: PageContract, indexer: SearchIndexBuilder, locale?: string): Promise<void> {
+    private async renderAndUpload(settings: any, page: PageContract, locale?: string): Promise<void> {
         const siteAuthor = settings?.site?.author;
         const siteTitle = settings?.site?.title;
         const siteDescription = settings?.site?.description;
         const siteKeywords = settings?.site?.keywords;
         const siteHostname = settings?.site?.hostname;
         const faviconSourceKey = settings?.site?.faviconSourceKey;
-        
+
         const localePrefix = locale ? `/${locale}` : "";
-        
+
         const pagePermalink = `${localePrefix}${page.permalink}`;
         const pageContent = await this.pageService.getPageContent(page.key, locale);
         const pageUrl = siteHostname
@@ -144,8 +150,8 @@ export class PagePublisher implements IPublisher {
         const styleSheets = styleManager.getAllStyleSheets();
         this.localStyleBuilder.buildLocalStyle(pagePermalink, styleSheets);
 
-        indexer.appendPage(pagePermalink, htmlPage.title, htmlPage.description, htmlContent);
         this.sitemapBuilder.appendPermalink(pagePermalink);
+        this.searchIndexBuilder.appendPage(pagePermalink, htmlPage.title, htmlPage.description, htmlContent);
 
         let permalink = pagePermalink;
 
@@ -173,7 +179,6 @@ export class PagePublisher implements IPublisher {
         try {
             const results = [];
             const settings = await this.siteService.getSiteSettings();
-            const searchIndexBuilder = new SearchIndexBuilder();
 
             if (localizationEnabled) {
                 for (const locale of locales) {
@@ -184,7 +189,7 @@ export class PagePublisher implements IPublisher {
                     const pages = await this.pageService.search("", localeCode);
 
                     for (const page of pages) {
-                        results.push(this.renderAndUpload(settings, page, searchIndexBuilder, localeCode));
+                        results.push(this.renderAndUpload(settings, page, localeCode));
                     }
                 }
             }
@@ -192,7 +197,7 @@ export class PagePublisher implements IPublisher {
                 const pages = await this.pageService.search("");
 
                 for (const page of pages) {
-                    results.push(this.renderAndUpload(settings, page, searchIndexBuilder));
+                    results.push(this.renderAndUpload(settings, page));
                 }
             }
 
