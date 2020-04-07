@@ -3,7 +3,7 @@ import template from "./tray.html";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { ToolButton, ViewManager } from "@paperbits/common/ui";
 import { RoleModel, RoleService } from "@paperbits/common/user";
-import { ISiteService } from "@paperbits/common/sites";
+import { ISettingsProvider } from "@paperbits/common/configuration";
 
 
 @Component({
@@ -20,7 +20,7 @@ export class Tray {
         private readonly trayCommands: ToolButton[],
         private readonly roleService: RoleService,
         private readonly viewManager: ViewManager,
-        // private readonly siteService: ISiteService
+        private readonly settingsProvider: ISettingsProvider
     ) {
         this.buttons = ko.observableArray<ToolButton>(trayCommands);
         this.availableRoles = ko.observableArray();
@@ -35,11 +35,8 @@ export class Tray {
         this.availableRoles(roles.slice(1)); // Excluding Everyone.
         this.selectedRoles(this.viewManager.getViewRoles());
 
-        // const settings = await this.siteService.getSiteSettings();
-
-        // if (settings.localizationEnabled) {
-        this.localizationEnabled(true);
-        // }
+        const localizationEnabled = await this.settingsProvider.getSetting<boolean>("localizationEnabled");
+        this.localizationEnabled(!!localizationEnabled);
     }
 
     public onRoleSelect(roles: RoleModel[]): void {

@@ -1,5 +1,5 @@
 ﻿import * as ko from "knockout";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { Keys } from "@paperbits/common/keyboard";
 import { IComponent, ViewManager } from "@paperbits/common/ui";
 
@@ -16,14 +16,15 @@ export interface BalloonOptions {
 }
 
 export class BalloonBindingHandler {
-    constructor(viewManager: ViewManager, eventManager: EventManager) {
+    constructor(eventManager?: EventManager) {
         ko.bindingHandlers["balloon"] = {
             init: (toggleElement: HTMLElement, valueAccessor: () => BalloonOptions) => {
                 const options = ko.unwrap(valueAccessor());
 
                 let balloonX;
                 let balloonY;
-                let balloonElement;
+                let balloonHost: HTMLElement;
+                let balloonElement: HTMLElement;
                 let balloonIsOpen = false;
                 let closeTimeout;
 
@@ -98,14 +99,19 @@ export class BalloonBindingHandler {
                 const open = (): void => {
                     resetCloseTimeout();
 
-                    if (!balloonIsOpen) {
-                        viewManager.addBalloon(componentConfig);
+                    if (balloonIsOpen) {
+                        return;
+                    }
 
-                        balloonIsOpen = true;
+                    balloonHost = document.createElement("div");
+                    balloonHost.classList.add("balloon", "balloon-is-active");
+                    ko.applyBindingsToNode(balloonHost, { component: componentConfig }, null);
+                    document.body.appendChild(balloonHost);
 
-                        if (options.onOpen) {
-                            options.onOpen();
-                        }
+                    balloonIsOpen = true;
+
+                    if (options.onOpen) {
+                        options.onOpen();
                     }
                 };
 
@@ -114,7 +120,11 @@ export class BalloonBindingHandler {
                         return;
                     }
 
-                    viewManager.removeBalloon(componentConfig);
+                    if (balloonHost) {
+                        ko.cleanNode(balloonHost);
+                        balloonHost.remove();
+                        balloonHost = null;
+                    }
 
                     balloonIsOpen = false;
 
@@ -209,15 +219,25 @@ export class BalloonBindingHandler {
                 toggleElement.addEventListener("keydown", onKeyDown);
                 toggleElement.addEventListener("click", onClick);
                 window.addEventListener("scroll", onScroll, true);
-                eventManager.addEventListener("onPointerDown", onPointerDown);
+
+                if (eventManager) {
+                    eventManager.addEventListener("onPointerDown", onPointerDown);
+                }
+                else {
+                    document.addEventListener("pointerdown", onPointerDown, true);
+                }
 
                 ko.utils.domNodeDisposal.addDisposeCallback(toggleElement, () => {
                     toggleElement.removeEventListener("keydown", onKeyDown);
                     toggleElement.removeEventListener("click", onClick);
                     window.removeEventListener("scroll", onScroll, true);
-                    eventManager.removeEventListener("onPointerDown", onPointerDown);
 
-                    viewManager.removeBalloon(componentConfig);
+                    if (eventManager) {
+                        eventManager.removeEventListener("onPointerDown", onPointerDown);
+                    }
+                    else {
+                        window.removeEventListener("pointerdown", onPointerDown, true);
+                    }
                 });
             }
         };

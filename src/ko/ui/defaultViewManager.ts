@@ -29,7 +29,6 @@ export class DefaultViewManager implements ViewManager {
     public readonly journey: ko.ObservableArray<View>;
     public readonly journeyName: ko.Computed<string>;
     public readonly toasts: ko.ObservableArray<Toast>;
-    public readonly balloons: ko.ObservableArray<IComponent>;
     public readonly primaryToolboxVisible: ko.Observable<boolean>;
     public readonly widgetEditor: ko.Observable<View>;
     public readonly contextualEditors: ko.ObservableArray<IContextCommandSet>;
@@ -59,7 +58,6 @@ export class DefaultViewManager implements ViewManager {
         });
         this.mode = ViewManagerMode.selecting;
         this.toasts = ko.observableArray<Toast>();
-        this.balloons = ko.observableArray<IComponent>();
         this.journey = ko.observableArray<View>();
         this.journeyName = ko.pureComputed<string>(() => {
             if (this.journey().length === 0) {
@@ -449,13 +447,5 @@ export class DefaultViewManager implements ViewManager {
         this.showToolboxes();
         this.highlightedElement(null);
         this.selectedElement(null);
-    }
-
-    public addBalloon(component: IComponent): void {
-        this.balloons.push(component);
-    }
-
-    public removeBalloon(component: IComponent): void {
-        this.balloons.remove(component);
     }
 }
