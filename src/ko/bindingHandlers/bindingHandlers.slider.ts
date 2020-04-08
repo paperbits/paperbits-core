@@ -1,21 +1,25 @@
 import * as ko from "knockout";
 
 export interface SliderConfig {
-    onmousemove: (element: HTMLElement, position: number, index?: number) => void;
-    initialize?: (element: HTMLElement, data: any) => void;
+    onmousemove: (data: any, percentage: number) => void;
+    onmousedrop?: () => void;
     data?: any;
-    index?: number;
+    percentage?: number;
+    offset?: number;
 }
 
 ko.bindingHandlers["slider"] = {
     init: (element: HTMLElement, valueAccessor: () => SliderConfig) => {
         const config = ko.unwrap(valueAccessor());
+
+        const parentWidth = element.parentElement.getBoundingClientRect().width
+        const offset = config.offset || 0;
+
+        let percentage = config.percentage || 0;
         let dragging = false
         let initialOffset = null;
 
-        if (config.initialize && config.data) {
-            config.initialize(element, config.data);
-        }
+        element.style.left = parentWidth * 1.0 / 100 * percentage - offset + "px";
 
         const onMouseDown = (event: MouseEvent) => {
             dragging = true;
@@ -24,6 +28,9 @@ ko.bindingHandlers["slider"] = {
 
         const onMouseUp = (event: MouseEvent) => {
             dragging = false;
+            if (config.onmousedrop) {
+                config.onmousedrop();
+            }
         }
 
         const onMouseMove = (event: MouseEvent) => {
@@ -44,10 +51,8 @@ ko.bindingHandlers["slider"] = {
             
             let position =  x - initialOffset ;
             element.style.left = position + "px";
-
-            if (config.index) {
-                config.onmousemove(element, position, config.index);
-            }
+            percentage = (position + offset) / parentWidth * 100;
+            config.onmousemove(config.data, percentage);
 
         }
 
