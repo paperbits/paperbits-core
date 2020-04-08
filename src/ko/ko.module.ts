@@ -18,6 +18,7 @@ import "./bindingHandlers/bindingHandlers.collapse";
 import "./bindingHandlers/bindingHandlers.stickTo";
 import "./bindingHandlers/bindingHandlers.scrollable";
 import "./bindingHandlers/bindingHandlers.secured";
+import "./bindingHandlers/bindingHandlers.slider";
 import "./bindingHandlers/bindingHandlers.confirm";
 import "./bindingHandlers/bindingHandlers.gridCell";
 import "./bindingExtenders/bindingExtenders.max";
