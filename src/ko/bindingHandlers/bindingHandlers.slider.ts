@@ -1,9 +1,10 @@
 import * as ko from "knockout";
 
 export interface SliderConfig {
-    onmousemove: (element: HTMLElement, position: number, index: number) => void;
-    initialize: (element: HTMLElement, data: any) => void;
-    data: any;
+    onmousemove: (element: HTMLElement, position: number, index?: number) => void;
+    initialize?: (element: HTMLElement, data: any) => void;
+    data?: any;
+    index?: number;
 }
 
 ko.bindingHandlers["slider"] = {
@@ -12,7 +13,9 @@ ko.bindingHandlers["slider"] = {
         let dragging = false
         let initialOffset = null;
 
-        config.initialize(element, config.data);
+        if (config.initialize && config.data) {
+            config.initialize(element, config.data);
+        }
 
         const onMouseDown = (event: MouseEvent) => {
             dragging = true;
@@ -42,14 +45,10 @@ ko.bindingHandlers["slider"] = {
             let position =  x - initialOffset ;
             element.style.left = position + "px";
 
-            let index = 0;
-            let node = element;
-            while (node.previousElementSibling) {
-                node = <HTMLElement>node.previousElementSibling;
-                index += 1;
+            if (config.index) {
+                config.onmousemove(element, position, config.index);
             }
 
-            config.onmousemove(element, position, index);
         }
 
         element.addEventListener("mousedown", onMouseDown);
