@@ -51,6 +51,10 @@ export class BalloonBindingHandler {
                 };
 
                 const updatePosition = async (): Promise<void> => {
+                    if (!balloonHost || !balloonElement) {
+                        return;
+                    }
+
                     const triggerRect = toggleElement.getBoundingClientRect();
                     const targetRect = balloonElement.getBoundingClientRect();
 
