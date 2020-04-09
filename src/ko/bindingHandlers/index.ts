@@ -19,6 +19,7 @@ export * from "./bindingHandlers.size";
 export * from "./bindingHandlers.splitter";
 export * from "./bindingHandlers.stickTo";
 export * from "./bindingHandlers.surface";
+export * from "./bindingHandlers.slider";
 export * from "./bindingHandlers.validationMessageToggle";
 export * from "./bindingHandlers.tooltipToggle";
 export * from "./bindingHandlers.widget";
