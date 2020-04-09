@@ -94,6 +94,8 @@ export class BalloonBindingHandler {
 
                     balloonElement.style.top = `${balloonY}px`;
                     balloonElement.style.left = `${balloonX}px`;
+
+                    balloonHost.classList.add("balloon-is-active");
                 };
 
                 const open = (): void => {
@@ -104,7 +106,7 @@ export class BalloonBindingHandler {
                     }
 
                     balloonHost = document.createElement("div");
-                    balloonHost.classList.add("balloon", "balloon-is-active");
+                    balloonHost.classList.add("balloon");
                     ko.applyBindingsToNode(balloonHost, { component: componentConfig }, null);
                     document.body.appendChild(balloonHost);
 
