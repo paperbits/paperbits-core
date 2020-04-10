@@ -42,6 +42,7 @@ export class DefaultViewManager implements ViewManager {
     public readonly shutter: ko.Observable<boolean>;
     public readonly dragSession: ko.Observable<DragSession>;
     public readonly locale: ko.Observable<string>;
+    public readonly previewMode: ko.Observable<boolean>;
     public mode: ViewManagerMode;
     public hostDocument: Document;
 
@@ -53,6 +54,7 @@ export class DefaultViewManager implements ViewManager {
     ) {
         this.designTime = ko.observable(false);
         this.previewable = ko.observable(true);
+        this.previewMode = ko.observable(false);
         this.block = ko.computed(() => {
             return this.designTime() && this.previewable();
         });
@@ -80,6 +82,22 @@ export class DefaultViewManager implements ViewManager {
         this.shutter = ko.observable<boolean>(true);
         this.dragSession = ko.observable();
         this.primaryToolboxVisible = ko.observable<boolean>(false);
+
+        this.previewMode.subscribe((previewMode) => {
+            if (previewMode) {
+                this.hideToolboxes()
+            } else {
+                this.showToolboxes();
+            }
+            this.designTime(!previewMode);
+        });
+        this.designTime.subscribe(() => {
+            if (!this.previewMode()) {
+                this.designTime(!this.previewMode());
+            }
+        })
+
+        
     }
 
     @OnMounted()
@@ -329,6 +347,10 @@ export class DefaultViewManager implements ViewManager {
         this.mode = ViewManagerMode.selecting;
         this.primaryToolboxVisible(true);
         this.designTime(true);
+    }
+
+    public togglePreviewMode(): void {
+        this.previewMode(!this.previewMode());
     }
 
     public setContextualEditor(editorName: string, contextualEditor: IContextCommandSet): void {

@@ -66,7 +66,7 @@ export class HostBindingHandler {
 
                 ko.applyBindingsToNode(element, { css: css }, null);
 
-                const hostElement = this.createIFrame();
+                const hostElement = this.createIFrame(config["previewMode"]);
                 element.appendChild(hostElement);
             },
 
@@ -77,7 +77,7 @@ export class HostBindingHandler {
         };
     }
 
-    private createIFrame(): HTMLIFrameElement {
+    private createIFrame(previewMode: ko.Observable<boolean>): HTMLIFrameElement {
         const hostElement: HTMLIFrameElement = document.createElement("iframe");
         hostElement.src = "/page.html?designtime=true";
         hostElement.classList.add("host");
@@ -88,7 +88,7 @@ export class HostBindingHandler {
         };
 
         const onPointerDown = (event: MouseEvent): void => {
-            if (!event.ctrlKey && !event.metaKey) {
+            if (!event.ctrlKey && !event.metaKey && !previewMode()) {
                 return;
             }
 
@@ -174,6 +174,7 @@ export class HostBindingHandler {
     }
 
     private async setRootElement(bodyElement: HTMLElement): Promise<void> {
+        console.log(123);
         const styleElement = document.createElement("style");
         bodyElement.ownerDocument.head.appendChild(styleElement);
 

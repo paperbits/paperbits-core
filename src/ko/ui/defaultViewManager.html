@@ -1,15 +1,16 @@
-<workshops></workshops>
-<dropbucket></dropbucket>
+
+<workshops data-bind="visible: !$component.previewMode()"></workshops>
+<dropbucket data-bind="visible: !$component.previewMode()"></dropbucket>
 
 <!-- ko if: host -->
-<div class="viewport" data-bind="host: { viewport: viewport, host: host, block: block }"></div>
+<div class="viewport" data-bind="host: { viewport: viewport, host: host, block: block, previewMode: $component.previewMode }"></div>
 
 <div class="shutter" data-bind="css: { 'active': shutter }">
     <spinner class="fit"></spinner>
 </div>
 <!-- /ko -->
 
-<div class="toasts" data-bind="foreach: toasts">
+<div class="toasts" data-bind="visible: !$component.previewMode(), foreach: toasts">
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-indicator">
             <i data-bind="css: state"></i>
@@ -33,7 +34,7 @@
 </div>
 
 <!-- ko with: widgetEditor() -->
-<div class="toolbox toolbox-position-left-offset" data-bind="resizable: resize, surface: $data, dialog: {}">
+<div class="toolbox toolbox-position-left-offset" data-bind="visible: !$component.previewMode(), resizable: resize, surface: $data, dialog: {}">
     <div class="editor resizable-content flex flex-column">
         <h1>
             <span data-bind="text: heading"></span>
@@ -48,17 +49,17 @@
 
 <!-- ko if: $component.designTime -->
 
-<!-- ko foreach: { data: contextualEditors, as: 'contextualEditor' } -->
-<!-- ko if: contextualEditor.hoverCommand -->
-<button class="fixed btn-standalone"
-    data-bind="stickTo: { target: contextualEditor.element, position: contextualEditor.hoverCommand.position }, balloon: { component: contextualEditor.hoverCommand.component, onOpen: $component.onHoverCommandActivate, onClose: $component.onHoverCommandDeactivate }, background: { color: contextualEditor.hoverCommand.color }, attr: { title: contextualEditor.hoverCommand.tooltip }">
-    <i class="paperbits-icon paperbits-simple-add"></i>
-</button>
-<!-- /ko -->
-<!-- /ko -->
+    <!-- ko foreach: { data: contextualEditors, as: 'contextualEditor' } -->
+    <!-- ko if: contextualEditor.hoverCommand -->
+    <button class="fixed btn-standalone"
+        data-bind="visible: !$component.previewMode(), stickTo: { target: contextualEditor.element, position: contextualEditor.hoverCommand.position }, balloon: { component: contextualEditor.hoverCommand.component, onOpen: $component.onHoverCommandActivate, onClose: $component.onHoverCommandDeactivate }, background: { color: contextualEditor.hoverCommand.color }, attr: { title: contextualEditor.hoverCommand.tooltip }">
+        <i class="paperbits-icon paperbits-simple-add"></i>
+    </button>
+    <!-- /ko -->
+    <!-- /ko -->
 
 <!-- ko if: highlightedElement -->
-<div class="layout-editor-selection" data-bind="highlight: highlightedElement">
+<div class="layout-editor-selection" data-bind="visible: !$component.previewMode(), highlight: highlightedElement">
     <svg alignment="top left">
         <path d="M0,0 L14,0 L14,14 L12,14 L12,2 L0,2 Z" stroke="rgba(255,255,255,.5)" stroke-width="1"
             data-bind="attr: { fill: highlightedElement().color }" />
@@ -79,11 +80,11 @@
 <!-- /ko -->
 
 <!-- ko if: splitterElement -->
-<div class="layout-editor-splitter" data-bind="splitter: splitterElement"></div>
+<div class="layout-editor-splitter" data-bind="visible: !$component.previewMode(), splitter: splitterElement"></div>
 <!-- /ko -->
 
 <!-- ko if: selectedElement -->
-<div class="layout-editor-selection" data-bind="highlight: selectedElement">
+<div class="layout-editor-selection" data-bind="visible: !$component.previewMode(), highlight: selectedElement">
     <svg alignment="top left">
         <path d="M0,0 L14,0 L14,14 L12,14 L12,2 L0,2 Z" stroke="rgba(255,255,255,.5)" stroke-width="1"
             data-bind="attr: { fill: selectedElement().color }" />
@@ -103,7 +104,7 @@
 </div>
 
 <!-- ko with: selectedElementContextualEditor() -->
-<div class="fixed" data-bind="stickTo: { target: element, position: 'top right' }">
+<div class="fixed" data-bind="visible: !$component.previewMode(), stickTo: { target: element, position: 'top right' }">
     <!-- ko foreach: { data: selectCommands, as: 'command' } -->
     <button class="btn-standalone" data-bind="gridCommand: command">
         <i class="paperbits-icon" data-bind="css: command.iconClass"></i>
@@ -125,6 +126,15 @@
 
 <!-- /ko -->
 
-<tray class="toolbox toolbox-position-left-bottom" data-bind="visible: primaryToolboxVisible"></tray>
+<tray class="toolbox toolbox-position-left-bottom" data-bind="visible: !$component.previewMode() && primaryToolboxVisible"></tray>
 
-<input id="uploadDialog" type="file" multiple="multiple" aria-hidden="true" class="d-none" />
+<div class="toolbox toolbox-position-right-top">
+    <button class="toolbox-btn" data-bind="visible: !$component.previewMode(), click: $component.togglePreviewMode">
+        <i class="paperbits-icon paperbits-lightning"></i>
+    </button>
+    <button class="toolbox-btn" data-bind="visible: $component.previewMode(), click: $component.togglePreviewMode">
+        <i class="paperbits-icon paperbits-single-02"></i>
+    </button>
+</div>
+
+<input id="uploadDialog" type="file" multiple="multiple" aria-hidden="true" class="d-none" data-bind="visible: !$component.previewMode()"/>
