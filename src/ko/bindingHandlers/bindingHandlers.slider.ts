@@ -11,12 +11,11 @@ export interface SliderConfig {
 ko.bindingHandlers["slider"] = {
     init: (element: HTMLElement, valueAccessor: () => SliderConfig) => {
         const config = ko.unwrap(valueAccessor());
-
-        const parentWidth = element.parentElement.getBoundingClientRect().width
+        const parentWidth = element.parentElement.getBoundingClientRect().width;
         const offset = config.offset || 0;
 
         let percentage = config.percentage || 0;
-        let dragging = false
+        let dragging = false;
         let initialOffset = null;
 
         element.style.left = parentWidth * 1.0 / 100 * percentage - offset + "px";
@@ -24,14 +23,14 @@ ko.bindingHandlers["slider"] = {
         const onMouseDown = (event: MouseEvent) => {
             dragging = true;
             initialOffset = event.pageX - element.offsetLeft;
-        }
+        };
 
         const onMouseUp = (event: MouseEvent) => {
             dragging = false;
             if (config.onmousedrop) {
                 config.onmousedrop();
             }
-        }
+        };
 
         const onMouseMove = (event: MouseEvent) => {
             if (!dragging) {
@@ -49,15 +48,21 @@ ko.bindingHandlers["slider"] = {
                 x =  parentRect.x + parentRect.width;
             }
             
-            let position =  x - initialOffset ;
+            const position =  x - initialOffset ;
             element.style.left = position + "px";
             percentage = (position + offset) / parentWidth * 100;
             config.onmousemove(config.data, percentage);
 
-        }
+        };
 
         element.addEventListener("mousedown", onMouseDown);
-        element.addEventListener("mouseup", onMouseUp);
-        element.parentElement.addEventListener("mousemove", onMouseMove);
+        window.addEventListener("mouseup", onMouseUp, true);
+        window.addEventListener("mousemove", onMouseMove, true);
+
+        ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
+            element.removeEventListener("mousedown", onMouseDown);
+            window.removeEventListener("mouseup", onMouseUp, true);
+            window.removeEventListener("mousemove", onMouseMove, true);
+        });
     }
-}
+};
