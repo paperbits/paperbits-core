@@ -103,7 +103,6 @@ export class BalloonBindingHandler {
 
                     balloonElement.style.top = `${balloonY}px`;
                     balloonElement.style.left = `${balloonX}px`;
-                    balloonElement.classList.add("balloon-is-active");
                 };
 
                 const open = (): void => {
@@ -114,7 +113,8 @@ export class BalloonBindingHandler {
                     }
 
                     createBalloonElement();
-                    setTimeout(updatePosition, 100); // Let element chance to render and determine sizes
+                    balloonElement.classList.add("balloon-is-active");
+                    requestAnimationFrame(updatePosition);
 
                     balloonIsOpen = true;
 
