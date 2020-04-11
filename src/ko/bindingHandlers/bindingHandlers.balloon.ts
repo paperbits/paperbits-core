@@ -12,6 +12,7 @@ export interface BalloonOptions {
     isOpen: any;
     onOpen?: () => void;
     onClose?: () => void;
+    closeOn: ko.Subscribable;
     closeTimeout?: number;
 }
 
@@ -46,6 +47,7 @@ export class BalloonBindingHandler {
                         document.body.appendChild(balloonElement);
                     };
                 }
+
 
                 const resetCloseTimeout = () => {
                     if (options.closeTimeout) {
@@ -128,16 +130,16 @@ export class BalloonBindingHandler {
                         return;
                     }
 
-                    if (balloonElement) {
-                        ko.cleanNode(balloonElement);
-                        balloonElement.remove();
-                        balloonElement = null;
-                    }
-
                     balloonIsOpen = false;
 
                     if (options.onClose) {
                         options.onClose();
+                    }
+
+                    if (balloonElement) {
+                        ko.cleanNode(balloonElement);
+                        balloonElement.remove();
+                        balloonElement = null;
                     }
                 };
 
@@ -224,6 +226,10 @@ export class BalloonBindingHandler {
                     requestAnimationFrame(updatePosition);
                 };
 
+                if (options.closeOn) {
+                    options.closeOn.subscribe(() => close());
+                }
+
                 toggleElement.addEventListener("keydown", onKeyDown);
                 toggleElement.addEventListener("click", onClick);
                 window.addEventListener("scroll", onScroll, true);
@@ -239,6 +245,12 @@ export class BalloonBindingHandler {
                     toggleElement.removeEventListener("keydown", onKeyDown);
                     toggleElement.removeEventListener("click", onClick);
                     window.removeEventListener("scroll", onScroll, true);
+
+                    if (balloonElement) {
+                        ko.cleanNode(balloonElement);
+                        balloonElement.remove();
+                        balloonElement = null;
+                    }
 
                     if (eventManager) {
                         eventManager.removeEventListener("onPointerDown", onPointerDown);
