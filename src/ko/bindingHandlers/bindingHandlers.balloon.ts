@@ -1,13 +1,13 @@
 ﻿import * as ko from "knockout";
-import { EventManager, GlobalEventHandler } from "@paperbits/common/events";
+import { EventManager } from "@paperbits/common/events";
 import { Keys } from "@paperbits/common/keyboard";
-import { IComponent, ViewManager } from "@paperbits/common/ui";
+import { IComponent, ITemplate } from "@paperbits/common/ui";
 
 export interface BalloonOptions {
     position: string;
-    element?: HTMLElement;
     selector?: string;
     component?: IComponent;
+    template?: ITemplate;
     onCreated?: (handle) => void;
     isOpen: any;
     onOpen?: () => void;
@@ -23,18 +23,28 @@ export class BalloonBindingHandler {
 
                 let balloonX;
                 let balloonY;
-                let balloonHost: HTMLElement;
                 let balloonElement: HTMLElement;
                 let balloonIsOpen = false;
                 let closeTimeout;
 
-                let componentConfig: IComponent;
+                let createBalloonElement: () => void;
 
-                if (typeof options.component === "string") {
-                    componentConfig = { name: options.component };
+                if (options.component) {
+                    createBalloonElement = () => {
+                        balloonElement = document.createElement("div");
+                        balloonElement.classList.add("balloon");
+                        ko.applyBindingsToNode(balloonElement, { component: options.component }, null);
+                        document.body.appendChild(balloonElement);
+                    };
                 }
-                else {
-                    componentConfig = options.component;
+
+                if (options.template) {
+                    createBalloonElement = () => {
+                        balloonElement = document.createElement("div");
+                        balloonElement.classList.add("balloon");
+                        ko.applyBindingsToNode(balloonElement, { template: options.template }, null);
+                        document.body.appendChild(balloonElement);
+                    };
                 }
 
                 const resetCloseTimeout = () => {
@@ -44,14 +54,9 @@ export class BalloonBindingHandler {
                     }
                 };
 
-                componentConfig.oncreate = (model, element) => {
-                    balloonElement = element;
-
-                    setTimeout(updatePosition, 100); // Let element chance to render and determine sizes
-                };
 
                 const updatePosition = async (): Promise<void> => {
-                    if (!balloonHost || !balloonElement) {
+                    if (!balloonElement || !balloonElement) {
                         return;
                     }
 
@@ -98,8 +103,7 @@ export class BalloonBindingHandler {
 
                     balloonElement.style.top = `${balloonY}px`;
                     balloonElement.style.left = `${balloonX}px`;
-
-                    balloonHost.classList.add("balloon-is-active");
+                    balloonElement.classList.add("balloon-is-active");
                 };
 
                 const open = (): void => {
@@ -109,10 +113,8 @@ export class BalloonBindingHandler {
                         return;
                     }
 
-                    balloonHost = document.createElement("div");
-                    balloonHost.classList.add("balloon");
-                    ko.applyBindingsToNode(balloonHost, { component: componentConfig }, null);
-                    document.body.appendChild(balloonHost);
+                    createBalloonElement();
+                    setTimeout(updatePosition, 100); // Let element chance to render and determine sizes
 
                     balloonIsOpen = true;
 
@@ -126,10 +128,10 @@ export class BalloonBindingHandler {
                         return;
                     }
 
-                    if (balloonHost) {
-                        ko.cleanNode(balloonHost);
-                        balloonHost.remove();
-                        balloonHost = null;
+                    if (balloonElement) {
+                        ko.cleanNode(balloonElement);
+                        balloonElement.remove();
+                        balloonElement = null;
                     }
 
                     balloonIsOpen = false;
