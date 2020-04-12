@@ -29,7 +29,7 @@ export class GridEditor {
         this.onPointerDown = this.onPointerDown.bind(this);
         this.attach = this.attach.bind(this);
         this.detach = this.detach.bind(this);
-        this.onKeyDown = this.onKeyDown.bind(this);
+        this.onDelete = this.onDelete.bind(this);
         this.onPointerMove = this.onPointerMove.bind(this);
         this.onWindowScroll = this.onWindowScroll.bind(this);
 
@@ -376,8 +376,8 @@ export class GridEditor {
         }
     }
 
-    private onKeyDown(event: KeyboardEvent): void {
-        if (this.viewManager.mode === ViewManagerMode.selected && event.keyCode === Keys.Delete && this.selectedContextualEditor && this.selectedContextualEditor.deleteCommand) {
+    private onDelete(): void {
+        if (this.viewManager.mode === ViewManagerMode.selected  && this.selectedContextualEditor && this.selectedContextualEditor.deleteCommand) {
             this.selectedContextualEditor.deleteCommand.callback();
         }
     }
@@ -547,13 +547,13 @@ export class GridEditor {
         this.ownerDocument.addEventListener("mousemove", this.onPointerMove, true);
         this.ownerDocument.addEventListener("scroll", this.onWindowScroll);
         this.ownerDocument.addEventListener("mousedown", this.onPointerDown, true);
-        this.ownerDocument.addEventListener("keydown", this.onKeyDown);
+        this.eventManager.addEventListener("onDelete", this.onDelete);
     }
 
     public detach(): void {
         this.ownerDocument.removeEventListener("mousemove", this.onPointerMove, true);
         this.ownerDocument.removeEventListener("scroll", this.onWindowScroll);
         this.ownerDocument.removeEventListener("mousedown", this.onPointerDown, true);
-        this.ownerDocument.removeEventListener("keydown", this.onKeyDown);
+        this.eventManager.removeEventListener("onDelete", this.onDelete);
     }
 }
