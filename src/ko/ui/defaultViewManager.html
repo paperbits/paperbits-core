@@ -37,10 +37,10 @@
     <div class="editor resizable-content flex flex-column">
         <h1>
             <span data-bind="text: heading"></span>
-            <button class="btn pull-right" title="Close" aria-label="Close" data-bind="click: $component.closeView">
-                <i class="paperbits-icon paperbits-simple-remove"></i>
-            </button>
         </h1>
+        <button class="btn btn-dismiss" title="Close" aria-label="Close" data-bind="click: $component.closeView">
+            <i class="paperbits-icon paperbits-simple-remove"></i>
+        </button>
         <hr />
         <!-- ko component: { name: component.name, params: component.params, oncreate: component.oncreate } -->
         <!--/ko -->

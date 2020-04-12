@@ -5,10 +5,10 @@
         <div class="droppedcontent-details">
             <h1>
                 <span data-bind="text: description"></span>
-                <button class="btn pull-right" title="Close" aria-label="Close" data-bind="click: $parent.discardDroppedContent">
-                    <i class="paperbits-icon paperbits-simple-remove"></i>
-                </button>
             </h1>
+            <button class="btn btn-dismiss" title="Close" aria-label="Close" data-bind="click: $parent.discardDroppedContent">
+                <i class="paperbits-icon paperbits-simple-remove"></i>
+            </button>
         </div>
         <div class="droppedcontent-preview" data-bind="dragsource: { sourceData: $data, ondragstart: $parent.onDragStart, ondragend: $parent.onDragEnd }, background: background, lightbox: { url: previewUrl }">
         </div>
