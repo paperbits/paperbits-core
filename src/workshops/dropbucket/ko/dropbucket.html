@@ -5,7 +5,9 @@
         <div class="droppedcontent-details">
             <h1>
                 <span data-bind="text: description"></span>
-                <a href="#" class="btn pull-right" data-bind="click: $parent.discardDroppedContent">✖</a>
+                <button class="btn pull-right" title="Close" aria-label="Close" data-bind="click: $parent.discardDroppedContent">
+                    <i class="paperbits-icon paperbits-simple-remove"></i>
+                </button>
             </h1>
         </div>
         <div class="droppedcontent-preview" data-bind="dragsource: { sourceData: $data, ondragstart: $parent.onDragStart, ondragend: $parent.onDragEnd }, background: background, lightbox: { url: previewUrl }">
