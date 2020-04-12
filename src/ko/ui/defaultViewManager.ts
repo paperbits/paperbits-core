@@ -84,18 +84,8 @@ export class DefaultViewManager implements ViewManager {
         this.primaryToolboxVisible = ko.observable<boolean>(false);
 
         this.previewMode.subscribe((previewMode) => {
-            if (previewMode) {
-                this.hideToolboxes()
-            } else {
-                this.showToolboxes();
-            }
             this.designTime(!previewMode);
         });
-        this.designTime.subscribe(() => {
-            if (!this.previewMode()) {
-                this.designTime(!this.previewMode());
-            }
-        })
 
         
     }
@@ -137,7 +127,10 @@ export class DefaultViewManager implements ViewManager {
             return;
         }
 
-        this.designTime(true);
+        
+        if (!this.previewMode()) {
+            this.designTime(true);
+        }
     }
 
     public setHost(component: IComponent): void {
@@ -346,7 +339,9 @@ export class DefaultViewManager implements ViewManager {
         this.clearContextualEditors();
         this.mode = ViewManagerMode.selecting;
         this.primaryToolboxVisible(true);
-        this.designTime(true);
+        if (!this.previewMode()) {
+            this.designTime(true);
+        }
     }
 
     public togglePreviewMode(): void {
@@ -384,7 +379,11 @@ export class DefaultViewManager implements ViewManager {
         this.setSplitter(null);
         this.selectedElement(null);
         this.selectedElementContextualEditor(null);
-        this.designTime(true);
+
+        
+        if (!this.previewMode()) {
+            this.designTime(true);
+        }
         this.mode = ViewManagerMode.selecting;
     }
 
