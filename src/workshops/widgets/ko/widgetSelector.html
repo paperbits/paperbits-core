@@ -16,8 +16,7 @@
         <h2 class="text-center" data-bind="text: category.name"></h2>
         <hr />
         <!-- /ko -->
-        <div class="" data-bind="foreach: category.items">
-            
+        <div data-bind="foreach: category.items">
             <a href="#" role="listitem" class="list-item list-item-large" data-bind="click: $component.selectWidget">
                 <i class="paperbits-icon" data-bind="css: css"></i>
                 <span data-bind="text: displayName"></span>

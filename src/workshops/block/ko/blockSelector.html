@@ -1,43 +1,39 @@
-<div class="editor">
-    <div class="flex flex-column">
-        <fieldset class="flex-item form">
-            <div class="form-group">
-                <input class="form-control" type="search" role="searchbox" 
-                    data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: true" placeholder="Search item..."
-                    aria-label="Search items" aria-controls="searchResult"/>
-                <p id="searchResult" class="text-hide" role="region" aria-live="polite"
-                    data-bind="text: `Items found: ${blocks().length}`">
-                </p>
-            </div>
-        </fieldset>
+<fieldset class="flex-item form">
+    <div class="form-group">
+        <input class="form-control" type="search" role="searchbox"
+            data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: true" placeholder="Search item..."
+            aria-label="Search items" aria-controls="searchResult" />
+        <p id="searchResult" class="text-hide" role="region" aria-live="polite"
+            data-bind="text: `Items found: ${blocks().length}`">
+        </p>
+    </div>
+</fieldset>
 
-        <!--ko if: working()-->
-        <spinner></spinner>
-        <!--/ko-->
+<!--ko if: working()-->
+<spinner></spinner>
+<!--/ko-->
 
-        <!--ko ifnot: working()-->
+<!--ko ifnot: working()-->
 
-        <!-- ko if: blocks().length === 0 -->
-        <span class="list-empty">No items found.</span>
+<!-- ko if: blocks().length === 0 -->
+<span class="list-empty">No items found.</span>
+<!-- /ko -->
+
+<!-- ko if: blocks().length > 0 -->
+<div role="list" data-bind="foreach: blocks, scrollable: true">
+    <div class="list-item" data-bind="css: { selected: hasFocus }, click: $component.selectBlock">
+        <!-- ko if: $component.blockType !== 'blocks-section' -->
+        <button class="btn-standalone remove-block" data-bind="click: $component.deleteBlock">
+            <i class="paperbits-icon paperbits-trash-simple"></i>
+        </button>
         <!-- /ko -->
-
-        <!-- ko if: blocks().length > 0 -->
-        <div class="" role="list" data-bind="foreach: blocks, scrollable: true" style="max-height: 500px;">            
-            <div class="list-item" data-bind="css: { selected: hasFocus }, click: $component.selectBlock">
-                <!-- ko if: $component.blockType !== 'blocks-section' -->
-                <button class="btn-standalone remove-block" data-bind="click: $component.deleteBlock">
-                    <i class="paperbits-icon paperbits-trash-simple"></i>
-                </button>
-                <!-- /ko -->
-                <div class="zoom-selector-item"> 
-                    <div class="zoom-item">
-                        <widget-container params="{ widgetData: $data }"></widget-container>
-                    </div>
-                </div>
+        <div class="zoom-selector-item">
+            <div class="zoom-item">
+                <widget-container params="{ widgetData: $data }"></widget-container>
             </div>
         </div>
-        <!-- /ko -->
-
-        <!-- /ko -->
     </div>
 </div>
+<!-- /ko -->
+
+<!-- /ko -->

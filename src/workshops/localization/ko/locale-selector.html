@@ -1,4 +1,4 @@
-<div class="toolbox">
+<div class="flex flex-column">
     <div class="list-checkboxes" data-bind="foreach: { data: locales, as: 'locale'  }">
         <a href="#" role="listitem" class="list-item"
             data-bind="text: locale.displayName, click: $component.selectLocale, css: { 'list-item-checked': locale === $component.selectedLocale() }">
