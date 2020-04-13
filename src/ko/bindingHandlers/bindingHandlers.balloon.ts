@@ -81,9 +81,10 @@ export class BalloonBindingHandler {
                         availableSpace = spaceBottom - egdeGap;
                     }
 
+                    balloonElement.style.maxHeight = availableSpace + "px";
+
                     if (balloonRect.height > availableSpace) {
                         balloonHeight = availableSpace;
-                        balloonElement.style.height = availableSpace + "px";
                     }
 
                     switch (position) {

@@ -11,8 +11,8 @@
     <div class="form-group">
         <label for="targetValue" class="form-label">
             Open in
-            <button class="btn btn-info" type="button"
-                title="Help" data-bind="tooltipToggle: 'Specifies how to open the link.'"></button>
+            <button class="btn btn-info" type="button" title="Help"
+                data-bind="tooltipToggle: 'Specifies how to open the link.'"></button>
         </label>
         <label class="form-label">
             <input type="radio" name="target" value="_self" data-bind="checked: target" /> Same window
@@ -24,17 +24,20 @@
     <!--/ko-->
 
     <div class="tabs" role="tablist">
-        <div class="tab" data-bind="css: { 'tab-is-active': !hyperlinkProvider() }, attr: { 'aria-selected': !hyperlinkProvider() }">
-            <a href="#" data-bind="click: clearProvider, focus: true" title="Clear hyperlink" role="tab" aria-label="Clear hyperlink">
+        <div class="tab"
+            data-bind="css: { 'tab-is-active': !hyperlinkProvider() }, attr: { 'aria-selected': !hyperlinkProvider() }">
+            <a href="#" data-bind="click: clearProvider, focus: true" title="Clear hyperlink" role="tab"
+                aria-label="Clear hyperlink">
                 <i class="paperbits-icon paperbits-ban"></i>
             </a>
         </div>
 
         <!--ko foreach: { data: hyperlinkProviders, as: 'hyperlinkProvider' } -->
         <!--ko if: hyperlinkProvider.componentName !== 'blog-selector' -->
-        <div class="tab" 
+        <div class="tab"
             data-bind="css: { 'tab-is-active': $parent.hyperlinkProvider() && hyperlinkProvider.componentName === $parent.hyperlinkProvider().componentName }, attr: { 'title': hyperlinkProvider.name, 'aria-selected': $parent.hyperlinkProvider() && hyperlinkProvider.componentName === $parent.hyperlinkProvider().componentName }">
-            <a href="#" role="tab" data-bind="click: $parent.selectProvider, attr: { 'aria-label': hyperlinkProvider.name, 'aria-controls': hyperlinkProvider.componentName }">
+            <a href="#" role="tab"
+                data-bind="click: $parent.selectProvider, attr: { 'aria-label': hyperlinkProvider.name, 'aria-controls': hyperlinkProvider.componentName }">
                 <i data-bind="css: hyperlinkProvider.iconClass"></i>
             </a>
         </div>
@@ -43,11 +46,12 @@
     </div>
 
     <!-- ko with: hyperlinkProvider -->
-    <div class="flex flex-column">
-        <div class="flex-item flex-item-grow" role="tabpanel"
+    <div role="tabpanel" class="flex flex-column">
+        <div class="flex flex-column flex-item-grow" role="tabpanel"
             data-bind="resourcePicker: { resourcePicker: $component.hyperlinkProvider, onSelect: $component.onHyperlinkSelected, hyperlink: $component.hyperlink }, attr: { id: componentName, 'aria-label': name }">
         </div>
     </div>
+
     <!--/ko-->
     <!-- ko ifnot: hyperlinkProvider -->
     <p>There is no resource selected for hyperlink.</p>

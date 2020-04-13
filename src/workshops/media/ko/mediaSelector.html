@@ -1,53 +1,51 @@
-<div class="editor">
-    <div class="flex flex-column list-container">
-        <fieldset class="flex-item form">
-            <div class="form-group">
-                <input class="form-control" type="search" role="searchbox"
-                    data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: true"
-                    placeholder="Search media..." aria-label="Search media" aria-controls="searchResult" />
-                <p id="searchResult" class="text-hide" role="region" aria-live="polite"
-                    data-bind="text: `Media files found: ${mediaItems().length}`">
-                </p>
-            </div>
-        </fieldset>
-
-        <!-- ko if: !working() && mediaItems().length === 0 -->
-
-        <!-- ko if: searchPattern() === "" -->
-        <p class="flex-item flex-item-grow text-center">It seems that you don't have media yet. Would you like to
-            <a href="#" class="btn-link" data-bind="click: uploadMedia">upload one</a>?
-        </p>
-        <!-- /ko -->
-
-        <!-- ko if: searchPattern() !== ""  -->
-        <p class="flex-item flex-item-grow text-center">Could not find anything. Try to change search criteria.</p>
-        <!-- /ko -->
-
-        <!-- /ko -->
-
-        <!-- ko if: $component.working() -->
-        <spinner></spinner>
-        <!-- /ko -->
-
-        <div class="flex flex-row flex-wrap flex-item flex-item-grow" role="list"
-            data-bind="foreach: { data: mediaItems, as: 'media' }, scrollable: true">
-            <a href="#" role="listitem" class="list-item list-item-image"
-                data-bind="click: $component.selectMedia, selectItem: isSelected, css: { selected: media == $component.selectedMedia() }, attr: { 'aria-label': media.fileName() }">
-                <span class="thumbnail"
-                    data-bind="style: { 'background-image': 'url('+media.thumbnailUrl()+')' }, attr: { title: media.fileName() }, event: { keydown: $component.onKeyDown }">
-                </span>
-            </a>
+<div class="flex flex-column">
+    <fieldset class="flex-item form">
+        <div class="form-group">
+            <input class="form-control" type="search" role="searchbox"
+                data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: true" placeholder="Search media..."
+                aria-label="Search media" aria-controls="searchResult" />
+            <p id="searchResult" class="text-hide" role="region" aria-live="polite"
+                data-bind="text: `Media files found: ${mediaItems().length}`">
+            </p>
         </div>
+    </fieldset>
 
-        <div class="flex-item btn-group">
-            <button class="btn" data-bind="click: $component.uploadMedia">
-                <i class="paperbits-icon paperbits-square-upload"></i>
-                Upload file
-            </button>
-            <button class="btn" data-bind="click: $component.selectNone">
-                <i class="paperbits-icon paperbits-ban"></i>
-                None
-            </button>
-        </div>
+    <!-- ko if: !working() && mediaItems().length === 0 -->
+
+    <!-- ko if: searchPattern() === "" -->
+    <p class="flex-item flex-item-grow text-center">It seems that you don't have media yet. Would you like to
+        <a href="#" class="btn-link" data-bind="click: uploadMedia">upload one</a>?
+    </p>
+    <!-- /ko -->
+
+    <!-- ko if: searchPattern() !== ""  -->
+    <p class="flex-item flex-item-grow text-center">Could not find anything. Try to change search criteria.</p>
+    <!-- /ko -->
+
+    <!-- /ko -->
+
+    <!-- ko if: $component.working() -->
+    <spinner></spinner>
+    <!-- /ko -->
+
+    <div role="list" class="flex flex-row flex-wrap list-container"
+        data-bind="foreach: { data: mediaItems, as: 'media' }, scrollable: true">
+        <a href="#" role="listitem" class="list-item list-item-image"
+            data-bind="click: $component.selectMedia, selectItem: isSelected, css: { selected: media == $component.selectedMedia() }, attr: { 'aria-label': media.fileName() }">
+            <span class="thumbnail"
+                data-bind="style: { 'background-image': 'url('+media.thumbnailUrl()+')' }, attr: { title: media.fileName() }, event: { keydown: $component.onKeyDown }">
+            </span>
+        </a>
+    </div>
+
+    <div class="flex-item btn-group">
+        <button class="btn" data-bind="click: $component.uploadMedia">
+            <i class="paperbits-icon paperbits-square-upload"></i>
+            Upload file
+        </button>
+        <button class="btn" data-bind="click: $component.selectNone">
+            <i class="paperbits-icon paperbits-ban"></i>
+            None
+        </button>
     </div>
 </div>

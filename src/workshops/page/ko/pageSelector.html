@@ -1,38 +1,34 @@
-<div class="editor">
-    <div class="flex flex-column list-container">
-        <fieldset class="flex-item form">
-            <div class="form-group">
-                <input class="form-control" type="search" role="searchbox"
-                    data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: true"
-                    placeholder="Search pages..." aria-label="Search pages" aria-controls="searchResult" />
-                <p id="searchResult" class="text-hide" role="region" aria-live="polite"
-                    data-bind="text: `Pages found: ${pages().length}`">
-                </p>
-            </div>
-        </fieldset>
+<fieldset class="flex-item form">
+    <div class="form-group">
+        <input class="form-control" type="search" role="searchbox"
+            data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: true" placeholder="Search pages..."
+            aria-label="Search pages" aria-controls="searchResult" />
+        <p id="searchResult" class="text-hide" role="region" aria-live="polite"
+            data-bind="text: `Pages found: ${pages().length}`">
+        </p>
+    </div>
+</fieldset>
 
-        <!-- ko if: $component.working() -->
-        <spinner></spinner>
-        <!-- /ko -->
+<!-- ko if: $component.working() -->
+<spinner></spinner>
+<!-- /ko -->
 
-        <div class="flex flex-column flex-item flex-item-grow" data-bind="foreach: pages, scrollable: true">
-            <div class="list-item-group">
-                <a href="#" role="listitem" class="list-item"
-                    data-bind="css: { selected: isSelected }, click: $component.selectPage, attr: { title: title }, selectItem: isSelected">
-                    <i class="paperbits-icon paperbits-single-content-03"></i>
-                    <span class="list-item-label" data-bind="text: title"></span>
-                </a>
+<div class="flex flex-column flex-item flex-item-grow" data-bind="foreach: pages, scrollable: true">
+    <div class="list-item-group">
+        <a href="#" role="listitem" class="list-item"
+            data-bind="css: { selected: isSelected }, click: $component.selectPage, attr: { title: title }, selectItem: isSelected">
+            <i class="paperbits-icon paperbits-single-content-03"></i>
+            <span class="list-item-label" data-bind="text: title"></span>
+        </a>
 
-                <!-- ko if: anchors() && anchors().length > 0 -->
-                <div class="list-item-group" data-bind="foreach: anchors" role="list">
-                    <a href="#" role="listitem" class="list-item"
-                        data-bind="click: $component.selectAnchor, attr: { title: shortTitle }, css: { selected: isSelected }, selectItem: isSelected">
-                        <i class="paperbits-icon paperbits-anchor"></i>
-                        <span class="list-item-label" data-bind="text: shortTitle"></span>
-                    </a>
-                </div>
-                <!-- /ko -->
-            </div>
+        <!-- ko if: anchors() && anchors().length > 0 -->
+        <div class="list-item-group" data-bind="foreach: anchors" role="list">
+            <a href="#" role="listitem" class="list-item"
+                data-bind="click: $component.selectAnchor, attr: { title: shortTitle }, css: { selected: isSelected }, selectItem: isSelected">
+                <i class="paperbits-icon paperbits-anchor"></i>
+                <span class="list-item-label" data-bind="text: shortTitle"></span>
+            </a>
         </div>
+        <!-- /ko -->
     </div>
 </div>
