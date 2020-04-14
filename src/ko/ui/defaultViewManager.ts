@@ -84,6 +84,11 @@ export class DefaultViewManager implements ViewManager {
         this.primaryToolboxVisible = ko.observable<boolean>(false);
 
         this.previewMode.subscribe((previewMode) => {
+            if (previewMode) {
+                this.hideToolboxes();
+            } else {
+                this.showToolboxes();
+            }
             this.designTime(!previewMode);
         });
 
@@ -338,8 +343,8 @@ export class DefaultViewManager implements ViewManager {
         this.eventManager.dispatchEvent("onWidgetEditorClose");
         this.clearContextualEditors();
         this.mode = ViewManagerMode.selecting;
-        this.primaryToolboxVisible(true);
         if (!this.previewMode()) {
+            this.primaryToolboxVisible(true);
             this.designTime(true);
         }
     }

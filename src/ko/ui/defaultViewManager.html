@@ -1,6 +1,6 @@
 
-<workshops data-bind="visible: !$component.previewMode()"></workshops>
-<dropbucket data-bind="visible: !$component.previewMode()"></dropbucket>
+<workshops></workshops>
+<dropbucket></dropbucket>
 
 <!-- ko if: host -->
 <div class="viewport" data-bind="host: { viewport: viewport, host: host, block: block, previewMode: $component.previewMode }"></div>
@@ -128,7 +128,7 @@
 
 <!-- /ko -->
 
-<tray class="toolbox toolbox-position-left-bottom" data-bind="visible: !$component.previewMode() && primaryToolboxVisible"></tray>
+<tray class="toolbox toolbox-position-left-bottom" data-bind="visible: primaryToolboxVisible"></tray>
 
 <div class="toolbox toolbox-position-right-top">
     <button class="toolbox-btn" data-bind="visible: !$component.previewMode(), click: $component.togglePreviewMode">
