@@ -27,6 +27,9 @@ export class PictureEditor {
     public readonly sizeConfig: ko.Observable<SizeStylePluginConfig>;
     public readonly appearanceStyle: ko.Observable<LocalStyles>;
 
+    private readonly DEFAULT_WIDTH: number = 200;
+    private readonly DEFAULT_HEIGHT: number = 200;
+
     constructor(
         private readonly styleService: StyleService,
         private readonly mediaPermalinkResolver: IPermalinkResolver,
@@ -116,9 +119,22 @@ export class PictureEditor {
             background.size = "contain";
             background.position = "center center";
             this.background(background);
+
+            this.updateSizeConfigForSelectedMedia(media);
         }
 
         this.applyChanges();
+    }
+
+    public updateSizeConfigForSelectedMedia(media: MediaContract): void {
+        if (media.downloadUrl) {
+            const selectedMedia = new Image();
+            selectedMedia.src = media.downloadUrl;
+            this.sizeConfig({
+                width: selectedMedia.width || this.DEFAULT_WIDTH,
+                height: selectedMedia.height || this.DEFAULT_HEIGHT
+            });
+        }
     }
 
     public onHyperlinkChange(hyperlink: HyperlinkModel): void {
