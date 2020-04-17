@@ -11,7 +11,7 @@
             <div class="input-group">
                 <input id="hyperlink" class="form-control" readonly data-bind="value: hyperlinkTitle" />
                 <button class="btn input-group-btn"
-                    data-bind="balloon: { component: { name: 'hyperlink-selector', params: { hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange } } }">
+                    data-bind="balloon: { position: 'right', component: { name: 'hyperlink-selector', params: { hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange } } }">
                     <i class="paperbits-icon paperbits-link-69-2"></i>
                 </button>
             </div>

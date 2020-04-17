@@ -13,7 +13,7 @@
 <spinner></spinner>
 <!-- /ko -->
 
-<div class="flex flex-column flex-item flex-item-grow" data-bind="foreach: pages, scrollable: true">
+<div class="flex flex-column flex-item flex-item-grow list" data-bind="foreach: pages, scrollable: true">
     <div class="list-item-group">
         <a href="#" role="listitem" class="list-item"
             data-bind="css: { selected: isSelected }, click: $component.selectPage, attr: { title: title }, selectItem: isSelected">

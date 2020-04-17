@@ -14,7 +14,7 @@
                         data-bind="tooltipToggle: 'Source of the picture. To change, click on preview area below and select a picture from media libaray.'"></button>
                 </label>
                 <a href="#" id="source" role="img" class="dropzone-showbox"
-                    data-bind="balloon: { component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected } } }, focus: true">
+                    data-bind="balloon: { position: 'right', component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected } } }, focus: true">
                     <div class="fit" role="presentation" data-bind="background: background"></div>
                 </a>
             </div>
