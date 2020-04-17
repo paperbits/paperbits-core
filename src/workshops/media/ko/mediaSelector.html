@@ -28,7 +28,7 @@
     <spinner></spinner>
     <!-- /ko -->
 
-    <div role="list" class="flex flex-row flex-wrap list-container"
+    <div role="list" class="flex flex-row flex-wrap list"
         data-bind="foreach: { data: mediaItems, as: 'media' }, scrollable: true">
         <a href="#" role="listitem" class="list-item list-item-image"
             data-bind="click: $component.selectMedia, selectItem: isSelected, css: { selected: media == $component.selectedMedia() }, attr: { 'aria-label': media.fileName() }">
