@@ -42,6 +42,7 @@ export class DefaultViewManager implements ViewManager {
     public readonly shutter: ko.Observable<boolean>;
     public readonly dragSession: ko.Observable<DragSession>;
     public readonly locale: ko.Observable<string>;
+    public readonly previewMode: ko.Observable<boolean>;
     public mode: ViewManagerMode;
     public hostDocument: Document;
 
@@ -51,6 +52,7 @@ export class DefaultViewManager implements ViewManager {
         private readonly designerUserService: DesignerUserService,
         private readonly router: Router
     ) {
+        this.previewMode = ko.observable(false);
         this.designTime = ko.observable(false);
         this.previewable = ko.observable(true);
         this.block = ko.computed(() => {
@@ -80,6 +82,8 @@ export class DefaultViewManager implements ViewManager {
         this.shutter = ko.observable<boolean>(true);
         this.dragSession = ko.observable();
         this.primaryToolboxVisible = ko.observable<boolean>(false);
+
+        
     }
 
     @OnMounted()
@@ -96,6 +100,18 @@ export class DefaultViewManager implements ViewManager {
         this.eventManager.addEventListener("onEscape", this.closeEditors.bind(this));
         this.eventManager.addEventListener("onKeyDown", this.onKeyDown.bind(this));
         this.eventManager.addEventListener("onKeyUp", this.onKeyUp.bind(this));
+    }
+
+    public enablePreviewMode(): void {
+        this.previewMode(true);
+        this.hideToolboxes();
+        this.designTime(false)
+    }
+
+    public disablePreviewMode(): void {
+        this.previewMode(false);
+        this.showToolboxes();
+        this.designTime(true);
     }
 
     private onKeyDown(event: KeyboardEvent): void {
@@ -119,6 +135,10 @@ export class DefaultViewManager implements ViewManager {
             return;
         }
 
+        if (this.previewMode()) {
+            return;
+        }
+        
         this.designTime(true);
     }
 
@@ -220,7 +240,9 @@ export class DefaultViewManager implements ViewManager {
     public hideToolboxes(): void {
         this.journey([]);
         this.primaryToolboxVisible(false);
-        this.mode = ViewManagerMode.dragging;
+        if (!this.previewMode()) {
+            this.mode = ViewManagerMode.dragging;
+        }
         this.clearContextualEditors();
     }
 
@@ -323,10 +345,14 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public closeView(): void {
+        if (this.previewMode()) {
+            return;
+        }
         this.widgetEditor(null);
         this.eventManager.dispatchEvent("onWidgetEditorClose");
         this.clearContextualEditors();
         this.mode = ViewManagerMode.selecting;
+
         this.primaryToolboxVisible(true);
         this.designTime(true);
     }
@@ -362,22 +388,34 @@ export class DefaultViewManager implements ViewManager {
         this.setSplitter(null);
         this.selectedElement(null);
         this.selectedElementContextualEditor(null);
-        this.designTime(true);
+
+        if (!this.previewMode()) {
+            this.designTime(true);
+        }
         this.mode = ViewManagerMode.selecting;
     }
 
     public setHighlight(config: IHighlightConfig): void {
+        if (this.previewMode()) {
+            return;
+        }
         this.highlightedElement(null);
         this.setSplitter(null);
         this.highlightedElement(config);
     }
 
     public setSplitter(config: ISplitterConfig): void {
+        if (this.previewMode()) {
+            return;
+        }
         this.splitterElement(null);
         this.splitterElement(config);
     }
 
     public setSelectedElement(config: IHighlightConfig, contextualEditor: IContextCommandSet): void {
+        if (this.previewMode()) {
+            return;
+        }
         this.clearContextualEditors();
         this.closeView();
         this.selectedElement(null);
@@ -444,7 +482,7 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public onDragEnd(): void {
-        this.showToolboxes();
+        this.disablePreviewMode()
         this.highlightedElement(null);
         this.selectedElement(null);
     }

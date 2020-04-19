@@ -1,6 +1,6 @@
 ﻿<!-- ko if: droppedItems().length > 0 -->
 
-<ul data-bind="foreach: droppedItems()">
+<ul data-bind="visible: viewManager.primaryToolboxVisible, foreach: droppedItems()">
     <li class="toolbox droppedcontent">
         <div class="droppedcontent-details">
             <h1>
