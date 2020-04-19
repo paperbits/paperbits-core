@@ -52,9 +52,9 @@ export class DefaultViewManager implements ViewManager {
         private readonly designerUserService: DesignerUserService,
         private readonly router: Router
     ) {
+        this.previewMode = ko.observable(false);
         this.designTime = ko.observable(false);
         this.previewable = ko.observable(true);
-        this.previewMode = ko.observable(false);
         this.block = ko.computed(() => {
             return this.designTime() && this.previewable();
         });
@@ -83,15 +83,6 @@ export class DefaultViewManager implements ViewManager {
         this.dragSession = ko.observable();
         this.primaryToolboxVisible = ko.observable<boolean>(false);
 
-        this.previewMode.subscribe((previewMode) => {
-            if (previewMode) {
-                this.hideToolboxes();
-            } else {
-                this.showToolboxes();
-            }
-            this.designTime(!previewMode);
-        });
-
         
     }
 
@@ -109,6 +100,18 @@ export class DefaultViewManager implements ViewManager {
         this.eventManager.addEventListener("onEscape", this.closeEditors.bind(this));
         this.eventManager.addEventListener("onKeyDown", this.onKeyDown.bind(this));
         this.eventManager.addEventListener("onKeyUp", this.onKeyUp.bind(this));
+    }
+
+    public enablePreviewMode(): void {
+        this.previewMode(true);
+        this.hideToolboxes();
+        this.designTime(false)
+    }
+
+    public disablePreviewMode(): void {
+        this.previewMode(false);
+        this.showToolboxes();
+        this.designTime(true);
     }
 
     private onKeyDown(event: KeyboardEvent): void {
@@ -132,10 +135,11 @@ export class DefaultViewManager implements ViewManager {
             return;
         }
 
-        
-        if (!this.previewMode()) {
-            this.designTime(true);
+        if (this.previewMode()) {
+            return;
         }
+        
+        this.designTime(true);
     }
 
     public setHost(component: IComponent): void {
@@ -236,7 +240,9 @@ export class DefaultViewManager implements ViewManager {
     public hideToolboxes(): void {
         this.journey([]);
         this.primaryToolboxVisible(false);
-        this.mode = ViewManagerMode.dragging;
+        if (!this.previewMode()) {
+            this.mode = ViewManagerMode.dragging;
+        }
         this.clearContextualEditors();
     }
 
@@ -339,18 +345,16 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public closeView(): void {
+        if (this.previewMode()) {
+            return;
+        }
         this.widgetEditor(null);
         this.eventManager.dispatchEvent("onWidgetEditorClose");
         this.clearContextualEditors();
         this.mode = ViewManagerMode.selecting;
-        if (!this.previewMode()) {
-            this.primaryToolboxVisible(true);
-            this.designTime(true);
-        }
-    }
 
-    public togglePreviewMode(): void {
-        this.previewMode(!this.previewMode());
+        this.primaryToolboxVisible(true);
+        this.designTime(true);
     }
 
     public setContextualEditor(editorName: string, contextualEditor: IContextCommandSet): void {
@@ -385,7 +389,6 @@ export class DefaultViewManager implements ViewManager {
         this.selectedElement(null);
         this.selectedElementContextualEditor(null);
 
-        
         if (!this.previewMode()) {
             this.designTime(true);
         }
@@ -393,17 +396,26 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public setHighlight(config: IHighlightConfig): void {
+        if (this.previewMode()) {
+            return;
+        }
         this.highlightedElement(null);
         this.setSplitter(null);
         this.highlightedElement(config);
     }
 
     public setSplitter(config: ISplitterConfig): void {
+        if (this.previewMode()) {
+            return;
+        }
         this.splitterElement(null);
         this.splitterElement(config);
     }
 
     public setSelectedElement(config: IHighlightConfig, contextualEditor: IContextCommandSet): void {
+        if (this.previewMode()) {
+            return;
+        }
         this.clearContextualEditors();
         this.closeView();
         this.selectedElement(null);
