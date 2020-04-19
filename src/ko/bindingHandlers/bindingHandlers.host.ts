@@ -174,7 +174,6 @@ export class HostBindingHandler {
     }
 
     private async setRootElement(bodyElement: HTMLElement): Promise<void> {
-        console.log(123);
         const styleElement = document.createElement("style");
         bodyElement.ownerDocument.head.appendChild(styleElement);
 
