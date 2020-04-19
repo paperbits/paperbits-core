@@ -131,10 +131,10 @@
 <tray class="toolbox toolbox-position-left-bottom" data-bind="visible: primaryToolboxVisible"></tray>
 
 <div class="toolbox toolbox-position-right-top">
-    <button class="toolbox-btn" data-bind="click: $component.enablePreviewMode">
+    <button class="toolbox-btn" data-bind="visible: !$component.previewMode(), click: $component.enablePreviewMode">
         <i class="paperbits-icon paperbits-lightning"></i>
     </button>
-    <button class="toolbox-btn" data-bind="click: $component.disablePreviewMode">
+    <button class="toolbox-btn" data-bind="visible: $component.previewMode(), click: $component.disablePreviewMode">
         <i class="paperbits-icon paperbits-single-02"></i>
     </button>
 </div>
