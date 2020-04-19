@@ -1,7 +1,7 @@
 ﻿import template from "./dropbucket.html";
 import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
-import { ViewManager } from "@paperbits/common/ui";
+import { ViewManager, ViewManagerMode } from "@paperbits/common/ui";
 import { EventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { IMediaService, MediaContract } from "@paperbits/common/media";
 import { IContentDropHandler, IContentDescriptor, IDataTransfer } from "@paperbits/common/editing";
@@ -80,6 +80,10 @@ export class DropBucket {
     }
 
     private onDragDrop(event: DragEvent): void {
+    
+        if (this.viewManager.mode == ViewManagerMode.preview){
+            return;
+        }
         if (!this.canHandleDrop(event)) {
             return;
         }
@@ -182,6 +186,9 @@ export class DropBucket {
     }
 
     public onDragStart(item: DropBucketItem): HTMLElement {
+        if (this.viewManager.mode == ViewManagerMode.preview){
+            return;
+        }
         item.widgetFactoryResult = item.widgetOrder().createWidget();
 
         const widgetElement = item.widgetFactoryResult.element;
@@ -199,6 +206,9 @@ export class DropBucket {
     }
 
     public async onDragEnd(dropbucketItem: DropBucketItem): Promise<void> {
+        if (this.viewManager.mode == ViewManagerMode.preview){
+            return;
+        }
         dropbucketItem.widgetFactoryResult.element.remove();
         this.droppedItems.remove(dropbucketItem);
 

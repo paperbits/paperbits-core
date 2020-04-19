@@ -106,12 +106,14 @@ export class DefaultViewManager implements ViewManager {
         this.previewMode(true);
         this.hideToolboxes();
         this.designTime(false)
+        this.mode = ViewManagerMode.preview;
     }
 
     public disablePreviewMode(): void {
         this.previewMode(false);
         this.showToolboxes();
         this.designTime(true);
+        this.mode = ViewManagerMode.configure;
     }
 
     private onKeyDown(event: KeyboardEvent): void {
@@ -391,8 +393,8 @@ export class DefaultViewManager implements ViewManager {
 
         if (!this.previewMode()) {
             this.designTime(true);
+            this.mode = ViewManagerMode.selecting;
         }
-        this.mode = ViewManagerMode.selecting;
     }
 
     public setHighlight(config: IHighlightConfig): void {
@@ -482,7 +484,6 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public onDragEnd(): void {
-        this.disablePreviewMode()
         this.highlightedElement(null);
         this.selectedElement(null);
     }
