@@ -5,6 +5,7 @@ import { BlogPostItem } from "./blogPostItem";
 import { IBlogService, BlogPostContract } from "@paperbits/common/blogs";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
+import { HyperlinkModel } from "@paperbits/common/permalinks";
 
 @Component({
     selector: "blog-selector",
@@ -31,6 +32,9 @@ export class BlogSelector implements IResourceSelector<BlogPostContract> {
     @Event()
     public onSelect: (blog: BlogPostContract) => void;
 
+    @Event()
+    public onHyperlinkSelect: (selection: HyperlinkModel) => void;
+
     @OnMounted()
     public async onMounted(): Promise<void> {
         await this.searchPosts();
@@ -46,15 +50,19 @@ export class BlogSelector implements IResourceSelector<BlogPostContract> {
         const blogs = await this.blogService.search(searchPattern);
         const blogItems = blogs.map(blog => new BlogPostItem(blog));
         this.posts(blogItems);
-        
+
         this.working(false);
     }
 
-    public async selectPost(blog: BlogPostItem): Promise<void> {
-        this.selectedPost(blog);
+    public async selectPost(blogPost: BlogPostItem): Promise<void> {
+        this.selectedPost(blogPost);
 
         if (this.onSelect) {
-            this.onSelect(blog.toBlogPost());
+            this.onSelect(blogPost.toBlogPost());
+        }
+
+        if (this.onHyperlinkSelect) {
+            this.onHyperlinkSelect(blogPost.getHyperlink());
         }
     }
 }

@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 import { BlogPostContract } from "@paperbits/common/blogs";
+import { HyperlinkModel } from "@paperbits/common/permalinks";
 
 export class BlogPostItem {
     private contentKey?: string;
@@ -19,6 +20,20 @@ export class BlogPostItem {
         this.keywords = ko.observable<string>(blogPost.keywords);
         this.permalink = ko.observable<string>(blogPost.permalink);
         this.hasFocus = ko.observable<boolean>(false);
+    }
+
+    public getHyperlink(): HyperlinkModel {
+        const hyperlinkModel = new HyperlinkModel();
+        hyperlinkModel.title = this.title();
+        hyperlinkModel.targetKey = this.key;
+        hyperlinkModel.href = this.permalink();
+        
+        // if (this.selectedAnchor) {
+        //     hyperlinkModel.anchor = this.selectedAnchor.elementId;
+        //     hyperlinkModel.anchorName = this.selectedAnchor.shortTitle;
+        // }
+
+        return hyperlinkModel;
     }
 
     public toBlogPost(): BlogPostContract {

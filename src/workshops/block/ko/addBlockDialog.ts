@@ -51,6 +51,8 @@ export class AddBlockDialog {
         await this.blockService.createBlock(this.name(), this.description() || "", content, this.blockType);
         this.viewManager.notifySuccess("Blocks", "Block added to library.");
 
-        this.onClose();
+        if (this.onClose){
+            this.onClose();
+        }
     }
 }

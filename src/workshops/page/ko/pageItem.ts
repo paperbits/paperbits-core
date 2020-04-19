@@ -24,6 +24,7 @@ export class PageItem {
     public readonly jsonLd: ko.Observable<string>;
     public readonly isSelected: ko.Observable<boolean>;
     public readonly socialShareData: ko.Observable<SocialShareData>;
+    public readonly anchorsLoaded: ko.Observable<boolean>;
 
     public anchors: ko.ObservableArray<AnchorItem>;
     public selectedAnchor?: AnchorItem;
@@ -39,6 +40,7 @@ export class PageItem {
         this.isSelected = ko.observable<boolean>();
         this.anchors = ko.observableArray<AnchorItem>();
         this.socialShareData = ko.observable<SocialShareData>(page.socialShareData);
+        this.anchorsLoaded = ko.observable(false);
     }
 
     public getHyperlink(): HyperlinkModel {

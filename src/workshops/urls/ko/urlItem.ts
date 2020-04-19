@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 import { UrlContract } from "@paperbits/common/urls/urlContract";
+import { HyperlinkModel } from "@paperbits/common/permalinks";
 
 export class UrlItem {
     public key: string;
@@ -17,12 +18,21 @@ export class UrlItem {
         this.hasFocus = ko.observable<boolean>(false);
     }
 
-    public toUrl(): UrlContract {
+    public toContract(): UrlContract {
         return {
             key: this.key,
             title: this.title(),
             description: this.description(),
             permalink: this.permalink()
         };
+    }
+
+    public getHyperlink(): HyperlinkModel {
+        const hyperlinkModel = new HyperlinkModel();
+        hyperlinkModel.title = this.title();
+        hyperlinkModel.targetKey = this.key;
+        hyperlinkModel.href = this.permalink();
+        
+        return hyperlinkModel;
     }
 }

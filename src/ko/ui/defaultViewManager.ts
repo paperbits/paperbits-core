@@ -1,6 +1,7 @@
 ﻿import * as _ from "lodash";
 import * as ko from "knockout";
 import * as Arrays from "@paperbits/common/arrays";
+import * as Utils from "@paperbits/common/utils";
 import template from "./defaultViewManager.html";
 import "@paperbits/common/extensions";
 import { Bag } from "@paperbits/common";
@@ -9,9 +10,10 @@ import { IComponent, View, ViewManager, ICommand, ViewManagerMode, IHighlightCon
 import { Router } from "@paperbits/common/routing";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
-import { Component, OnMounted } from "@paperbits/common/ko/decorators";
+import { Component, OnMounted, OnDestroyed } from "@paperbits/common/ko/decorators";
 import { RoleModel, BuiltInRoles } from "@paperbits/common/user";
 import { DesignerUserService } from "./designerUserService";
+import { ViewStack } from "./viewStack";
 
 declare let uploadDialog: HTMLInputElement;
 
@@ -49,7 +51,8 @@ export class DefaultViewManager implements ViewManager {
         private readonly eventManager: EventManager,
         private readonly globalEventHandler: GlobalEventHandler,
         private readonly designerUserService: DesignerUserService,
-        private readonly router: Router
+        private readonly router: Router,
+        private readonly viewStack: ViewStack
     ) {
         this.designTime = ko.observable(false);
         this.previewable = ko.observable(true);
@@ -93,7 +96,7 @@ export class DefaultViewManager implements ViewManager {
         this.router.addRouteChangeListener(this.onRouteChange.bind(this));
         this.globalEventHandler.appendDocument(document);
 
-        this.eventManager.addEventListener("onEscape", this.closeEditors.bind(this));
+        this.eventManager.addEventListener("onTopLevelEscape", this.onEscape.bind(this));
         this.eventManager.addEventListener("onKeyDown", this.onKeyDown.bind(this));
         this.eventManager.addEventListener("onKeyUp", this.onKeyUp.bind(this));
     }
@@ -281,6 +284,13 @@ export class DefaultViewManager implements ViewManager {
             return;
         }
 
+        view.hitTest = (el) => { // TODO: Move to bindingHandler
+            return !!Utils.closest(el, (x: HTMLElement) =>
+                (x.getAttribute && !!x.getAttribute("contentEditable")) || // TODO: Move hitTest check to text editor
+                (x?.classList && Arrays.coerce(x.classList).includes("toolbox")));
+        };
+
+        view.close = () => this.closeView();
         view.component.params.onClose = () => this.closeView();
 
         this.clearContextualEditors();
@@ -289,19 +299,23 @@ export class DefaultViewManager implements ViewManager {
         this.mode = ViewManagerMode.configure;
 
         this.designTime(false); // Review: It's here for text editor
+
+        this.viewStack.pushView(view);
     }
 
     public getOpenView(): View {
         return this.widgetEditor();
     }
 
-    public closeEditors(): void {
+    public onEscape(): void {
         const host = this.host();
 
         if (!this.getOpenView() && this.journey().length === 0 && host && host.name !== "page-host") {
-            this.setHost({ name: "page-host" });
+            this.setHost({ name: "page-host" }); // TODO: Get host type by current route.
         }
+    }
 
+    public closeEditors(): void {
         this.closeView();
         this.clearJourney();
     }
@@ -447,5 +461,12 @@ export class DefaultViewManager implements ViewManager {
         this.showToolboxes();
         this.highlightedElement(null);
         this.selectedElement(null);
+    }
+
+
+
+    @OnDestroyed()
+    public dispose(): void {
+        // TODO
     }
 }

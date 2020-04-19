@@ -1,7 +1,8 @@
 ﻿import * as ko from "knockout";
 import { EventManager } from "@paperbits/common/events";
 import { Keys } from "@paperbits/common/keyboard";
-import { IComponent, ITemplate } from "@paperbits/common/ui";
+import { IComponent, ITemplate, View } from "@paperbits/common/ui";
+import { ViewStack } from "../ui/viewStack";
 
 export interface BalloonOptions {
     position: string;
@@ -17,13 +18,12 @@ export interface BalloonOptions {
 }
 
 export class BalloonBindingHandler {
-    constructor(eventManager?: EventManager) {
+    constructor(viewStack: ViewStack, eventManager?: EventManager) {
         ko.bindingHandlers["balloon"] = {
             init: (toggleElement: HTMLElement, valueAccessor: () => BalloonOptions) => {
                 const options = ko.unwrap(valueAccessor());
 
-                let balloonX;
-                let balloonY;
+                let view: View;
                 let balloonElement: HTMLElement;
                 let balloonIsOpen = false;
                 let closeTimeout;
@@ -75,6 +75,10 @@ export class BalloonBindingHandler {
                     const balloonTipShift = 10;
                     const egdeGap = 10;
 
+                    let balloonLeft;
+                    let balloonTop;
+                    let balloonBottom;
+
                     let positionX: string;
                     let positionY: string;
                     let availableSpaceX: number;
@@ -117,17 +121,17 @@ export class BalloonBindingHandler {
 
                     switch (positionY) {
                         case "top":
-                            balloonY = triggerRect.top;
+                            balloonTop = triggerRect.top;
 
-                            if ((balloonY - balloonHeight) < 0) {
+                            if ((balloonTop - balloonHeight) < 0) {
                                 positionY = "bottom";
                             }
                             break;
 
                         case "bottom":
-                            balloonY = triggerRect.top + triggerRect.height;
+                            balloonTop = triggerRect.top + triggerRect.height;
 
-                            if (balloonY + balloonHeight > window.innerHeight) {
+                            if (balloonTop + balloonHeight > window.innerHeight) {
                                 positionY = "top";
                             }
                             break;
@@ -135,17 +139,17 @@ export class BalloonBindingHandler {
 
                     switch (positionX) {
                         case "left":
-                            balloonX = triggerRect.left;
+                            balloonLeft = triggerRect.left;
 
-                            if ((balloonX - balloonWidth) < 0) {
+                            if ((balloonLeft - balloonWidth) < 0) {
                                 positionX = "right";
                             }
                             break;
 
                         case "right":
-                            balloonX = triggerRect.left + triggerRect.width;
+                            balloonLeft = triggerRect.left + triggerRect.width;
 
-                            if (balloonX + balloonWidth > window.innerWidth) {
+                            if (balloonLeft + balloonWidth > window.innerWidth) {
                                 positionX = "left";
                             }
                             break;
@@ -156,20 +160,19 @@ export class BalloonBindingHandler {
                     balloonElement.classList.remove("balloon-left");
                     balloonElement.classList.remove("balloon-right");
 
-
                     if (preferredDirection === "vertical") {
                         switch (positionY) {
                             case "top":
                                 balloonElement.classList.add("balloon-top");
-                                balloonY = triggerRect.top - balloonHeight;
-                                balloonX = triggerRect.left + (triggerRect.width / 2) - (balloonWidth / 2);
+                                balloonTop = triggerRect.top - balloonHeight - 5;
+                                balloonLeft = triggerRect.left + (triggerRect.width / 2) - (balloonWidth / 2);
 
                                 break;
 
                             case "bottom":
                                 balloonElement.classList.add("balloon-bottom");
-                                balloonY = triggerRect.top + triggerRect.height;
-                                balloonX = triggerRect.left + (triggerRect.width / 2) - (balloonWidth / 2);
+                                balloonTop = triggerRect.top + triggerRect.height + 5;
+                                balloonLeft = triggerRect.left + (triggerRect.width / 2) - (balloonWidth / 2);
                                 break;
                         }
                     }
@@ -177,35 +180,39 @@ export class BalloonBindingHandler {
                         switch (positionX) {
                             case "left":
                                 balloonElement.classList.add("balloon-left");
-                                balloonY = triggerRect.top + (triggerRect.height / 2) - (balloonHeight / 2) - balloonTipShift;
-                                balloonX = triggerRect.left - balloonWidth - balloonTipShift;
+                                balloonTop = triggerRect.top + (triggerRect.height / 2) - (balloonHeight / 2) - balloonTipShift;
+                                balloonLeft = triggerRect.left - balloonWidth - balloonTipShift;
                                 break;
 
                             case "right":
                                 balloonElement.classList.add("balloon-right");
-                                balloonY = triggerRect.top + (triggerRect.height / 2) - (balloonHeight / 2) - balloonTipShift;
-                                balloonX = triggerRect.right + balloonTipShift;
+                                balloonTop = triggerRect.top + (triggerRect.height / 2) - (balloonHeight / 2) - balloonTipShift;
+                                balloonLeft = triggerRect.right + balloonTipShift;
                                 break;
                         }
                     }
 
-                    if (balloonY < egdeGap) {
-                        balloonY = egdeGap;
+                    if (balloonTop < egdeGap) {
+                        balloonTop = egdeGap;
                     }
 
-                    if (balloonY + balloonHeight > innerHeight - egdeGap) {
-                        balloonElement.style.bottom = `${egdeGap}px`;
+                    if (balloonTop + balloonHeight > innerHeight - egdeGap) {
+                        balloonBottom = egdeGap;
+                    }
+                    else {
+                        balloonBottom = innerHeight - (balloonTop + balloonHeight);
                     }
 
-                    if (balloonX < egdeGap) {
-                        balloonX = egdeGap;
+                    if (balloonLeft < egdeGap) {
+                        balloonLeft = egdeGap;
                     }
 
-                    balloonElement.style.top = `${balloonY}px`;
-                    balloonElement.style.left = `${balloonX}px`;
+                    balloonElement.style.top = `${balloonTop}px`;
+                    balloonElement.style.left = `${balloonLeft}px`;
+                    balloonElement.style.bottom = `${balloonBottom}px`;
                 };
 
-                const open = (): void => {
+                const open = (returnFocusTo: HTMLElement): void => {
                     resetCloseTimeout();
 
                     if (balloonIsOpen) {
@@ -213,6 +220,19 @@ export class BalloonBindingHandler {
                     }
 
                     createBalloonElement();
+
+                    view = {
+                        close: close,
+                        element: balloonElement,
+                        returnFocusTo: returnFocusTo,
+                        hitTest: (targetElement) => {
+                            const element = closest(targetElement, x => x === balloonElement) || closest(targetElement, x => x === toggleElement);
+                            return !!element;
+                        }
+                    };
+
+                    viewStack.pushView(view);
+
                     balloonElement.classList.add("balloon-is-active");
                     requestAnimationFrame(updatePosition);
 
@@ -238,6 +258,13 @@ export class BalloonBindingHandler {
                         ko.cleanNode(balloonElement);
                         balloonElement.remove();
                         balloonElement = null;
+
+                        viewStack.removeView(view);
+                    }
+
+                    if (options.isOpen && options.isOpen()) {
+                        // TODO: ViewManager should have stack of open editors, so they need to be closed one by one.
+                        options.isOpen(false);
                     }
                 };
 
@@ -250,7 +277,7 @@ export class BalloonBindingHandler {
                         }
                     }
                     else {
-                        open();
+                        open(toggleElement);
                     }
                 };
 
@@ -278,19 +305,15 @@ export class BalloonBindingHandler {
                         return;
                     }
 
-                    const element = closest(<any>event.target, (node) => node === toggleElement);
+                    const targetElement = <HTMLElement>event.target;
+
+                    const element = closest(targetElement, (node) => node === toggleElement);
 
                     if (element) {
                         event.preventDefault();
                         event.stopPropagation();
                         toggle();
                         return;
-                    }
-
-                    const balloon = closest(<any>event.target, (node) => node === balloonElement);
-
-                    if (!balloon) {
-                        close();
                     }
                 };
 
@@ -300,13 +323,6 @@ export class BalloonBindingHandler {
                         case Keys.Space:
                             event.preventDefault();
                             toggle();
-                            break;
-
-                        case Keys.Esc:
-                            if (options.isOpen && options.isOpen()) {
-                                // TODO: ViewManager should have stack of open editors, so they need to be closed one by one.
-                                options.isOpen(false);
-                            }
                             break;
                     }
                 };

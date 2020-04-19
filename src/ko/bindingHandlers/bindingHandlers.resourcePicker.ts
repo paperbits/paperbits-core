@@ -2,6 +2,12 @@ import * as ko from "knockout";
 import { IResourceSelector, IHyperlinkProvider  } from "@paperbits/common/ui";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 
+
+
+// ko.bindingHandlers["resourcePicker"] = {
+
+
+
 ko.bindingHandlers["resourcePicker"] = {
     init: (element: HTMLElement, valueAccessor) => {
         const config = valueAccessor();
@@ -17,21 +23,42 @@ ko.bindingHandlers["resourcePicker"] = {
             }
         };
 
-        ko.applyBindingsToNode(element, {
-            component: {
-                name: resourcePicker.componentName,
-                params: { onSelect: onSelectCallbackProxy },
-                oncreate: (resourceSelector: IResourceSelector<HyperlinkModel>) => {
-                    if (hyperlink && resourceSelector.selectResource) {
-                        resourceSelector.selectResource(hyperlink);
-                    }
+        // ko.applyBindingsToNode(element, {
+        //     component: {
+        //         name: resourcePicker.componentName,
+        //         params: { onSelect: onSelectCallbackProxy },
+        //         oncreate: (resourceSelector: IResourceSelector<HyperlinkModel>) => {
+        //             if (hyperlink && resourceSelector.selectResource) {
+        //                 resourceSelector.selectResource(hyperlink);
+        //             }
 
-                    onSelectCallback = (newResource) => {
-                        const hyperlink = resourcePicker.getHyperlinkFromResource(newResource);
-                        onSelect(hyperlink);
-                    };
+        //             onSelectCallback = (newResource) => {
+        //                 const hyperlink = resourcePicker.getHyperlinkFromResource(newResource);
+        //                 onSelect(hyperlink);
+        //             };
+        //         }
+        //     }
+        // }, null);
+
+
+        ko.applyBindingsToNode(element, {
+            balloon: {
+                component: {
+                    name: resourcePicker.componentName,
+                    params: { onSelect: onSelectCallbackProxy },
+                    oncreate: (resourceSelector: IResourceSelector<HyperlinkModel>) => {
+                        if (hyperlink && resourceSelector.selectResource) {
+                            resourceSelector.selectResource(hyperlink);
+                        }
+    
+                        onSelectCallback = (newResource) => {
+                            const hyperlink = resourcePicker.getHyperlinkFromResource(newResource);
+                            onSelect(hyperlink);
+                        };
+                    }
                 }
             }
+          
         }, null);
     }
 };

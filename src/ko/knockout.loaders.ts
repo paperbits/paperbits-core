@@ -78,7 +78,12 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
 
                     if (eventDescriptions) {
                         eventDescriptions.forEach(methodReference => {
-                            instance[methodReference] = params[methodReference];
+                            if (params && params[methodReference]) {
+                                instance[methodReference] = params[methodReference];
+                            }
+                            else {
+                                console.warn(`Event "${methodReference}" in the component "${name}" doesn't have listeners.`);
+                            }
                         });
                     }
 

@@ -8,7 +8,8 @@ ko.bindingHandlers["tooltipToggle"] = {
             console.warn("No tooltip text specified for element: " + triggerElement.nodeType);
             return;
         }
-        
+
+        const isOpen = ko.observable();
         const textParams: any = {};
         let closeTimeout = 0;
 
@@ -16,13 +17,16 @@ ko.bindingHandlers["tooltipToggle"] = {
             textParams.observableText = tooltipText;
             closeTimeout = 5000; // close after 5 sec
             triggerElement.setAttribute("aria-label", tooltipText());
-        } else {
+        }
+        else {
             textParams.text = tooltipText;
             triggerElement.setAttribute("aria-label", tooltipText);
         }
 
         triggerElement.setAttribute("role", "tooltip");
         triggerElement.setAttribute("aria-live", "polite");
+
+        let balloonHandle;
 
         ko.applyBindingsToNode(triggerElement, {
             balloon: {
@@ -31,8 +35,21 @@ ko.bindingHandlers["tooltipToggle"] = {
                     params: textParams
                 },
                 position: "top",
-                isOpen: ko.observable(),
-                closeTimeout: closeTimeout
+                isOpen: isOpen,
+                closeTimeout: closeTimeout,
+                onCreated: (handle) => {
+                    balloonHandle = handle;
+                }
+            },
+            event: {
+                mouseenter: () => {
+                    balloonHandle.open();
+                },
+                mouseleave: () => {
+                    setTimeout(() => {
+                        balloonHandle.close();
+                    }, 300);
+                }
             }
         }, null);
     }

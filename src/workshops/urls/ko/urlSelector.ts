@@ -28,7 +28,10 @@ export class UrlSelector {
     }
 
     @Event()
-    public onSelect: (url: UrlContract) => void;
+    public onSelect: (selection: UrlContract) => void;
+
+    @Event()
+    public onHyperlinkSelect: (selection: UrlContract) => void;
 
     @OnMounted()
     public async onMounted(): Promise<void> {
@@ -58,8 +61,9 @@ export class UrlSelector {
         this.working(false);
     }
 
-    public async selectUrl(urlItem: UrlItem, anchorKey?: string): Promise<void> {
+    public async selectUrl(urlItem: UrlItem): Promise<void> {
         const uri = this.selectedUrl();
+        
         if (uri) {
             uri.hasFocus(false);
         }
@@ -67,7 +71,11 @@ export class UrlSelector {
         this.selectedUrl(urlItem);
 
         if (this.onSelect) {
-            this.onSelect(urlItem.toUrl());
+            this.onSelect(urlItem.toContract());
+        }
+
+        if (this.onHyperlinkSelect) {
+            this.onHyperlinkSelect(urlItem.getHyperlink());
         }
     }
 
@@ -86,7 +94,7 @@ export class UrlSelector {
     public async deleteUrl(): Promise<void> {
         const uri = this.selectedUrl();
         if (uri) {
-            await this.urlService.deleteUrl(uri.toUrl());
+            await this.urlService.deleteUrl(uri.toContract());
         }
         this.uri("https://");
         await this.searchUrls();
