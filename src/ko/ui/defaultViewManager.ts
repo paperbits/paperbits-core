@@ -103,6 +103,7 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public enablePreviewMode(): void {
+        this.clearJourney();
         this.previewMode(true);
         this.hideToolboxes();
         this.designTime(false)
