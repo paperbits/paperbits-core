@@ -468,6 +468,9 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public onDragEnd(): void {
+        if (this.mode !== ViewManagerMode.preview) {
+            this.showToolboxes();
+        }
         this.highlightedElement(null);
         this.selectedElement(null);
     }
