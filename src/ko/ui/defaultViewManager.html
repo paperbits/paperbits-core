@@ -3,14 +3,14 @@
 <dropbucket></dropbucket>
 
 <!-- ko if: host -->
-<div class="viewport" data-bind="host: { viewport: viewport, host: host, block: block, previewMode: $component.previewMode }"></div>
+<div class="viewport" data-bind="host: { viewport: viewport, host: host, block: block}"></div>
 
 <div class="shutter" data-bind="css: { 'active': shutter }">
     <spinner class="fit"></spinner>
 </div>
 <!-- /ko -->
 
-<div class="toasts" data-bind="visible: !$component.previewMode(), foreach: toasts">
+<div class="toasts" data-bind="foreach: toasts">
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-indicator">
             <i data-bind="css: state"></i>
@@ -131,10 +131,11 @@
 <tray class="toolbox toolbox-position-left-bottom" data-bind="visible: primaryToolboxVisible"></tray>
 
 <div class="toolbox toolbox-position-right-top">
-    <button class="toolbox-btn" data-bind="visible: !$component.previewMode(), click: $component.enablePreviewMode">
+    <button class="toolbox-btn" data-bind="visible: primaryToolboxVisible(), click: $component.enablePreviewMode">
         <i class="paperbits-icon paperbits-lightning"></i>
     </button>
-    <button class="toolbox-btn" data-bind="visible: $component.previewMode(), click: $component.disablePreviewMode">
+
+    <button class="toolbox-btn" data-bind="visible: !primaryToolboxVisible(), click: $component.disablePreviewMode">
         <i class="paperbits-icon paperbits-single-02"></i>
     </button>
 </div>

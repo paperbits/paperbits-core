@@ -42,7 +42,6 @@ export class DefaultViewManager implements ViewManager {
     public readonly shutter: ko.Observable<boolean>;
     public readonly dragSession: ko.Observable<DragSession>;
     public readonly locale: ko.Observable<string>;
-    public readonly previewMode: ko.Observable<boolean>;
     public mode: ViewManagerMode;
     public hostDocument: Document;
 
@@ -52,7 +51,6 @@ export class DefaultViewManager implements ViewManager {
         private readonly designerUserService: DesignerUserService,
         private readonly router: Router
     ) {
-        this.previewMode = ko.observable(false);
         this.designTime = ko.observable(false);
         this.previewable = ko.observable(true);
         this.block = ko.computed(() => {
@@ -102,21 +100,6 @@ export class DefaultViewManager implements ViewManager {
         this.eventManager.addEventListener("onKeyUp", this.onKeyUp.bind(this));
     }
 
-    public enablePreviewMode(): void {
-        this.clearJourney();
-        this.previewMode(true);
-        this.hideToolboxes();
-        this.designTime(false)
-        this.mode = ViewManagerMode.preview;
-    }
-
-    public disablePreviewMode(): void {
-        this.previewMode(false);
-        this.showToolboxes();
-        this.designTime(true);
-        this.mode = ViewManagerMode.configure;
-    }
-
     private onKeyDown(event: KeyboardEvent): void {
         if (this.getOpenView()) {
             return;
@@ -138,7 +121,7 @@ export class DefaultViewManager implements ViewManager {
             return;
         }
 
-        if (this.previewMode()) {
+        if (this.mode === ViewManagerMode.preview) {
             return;
         }
         
@@ -243,7 +226,7 @@ export class DefaultViewManager implements ViewManager {
     public hideToolboxes(): void {
         this.journey([]);
         this.primaryToolboxVisible(false);
-        if (!this.previewMode()) {
+        if (this.mode !== ViewManagerMode.preview) {
             this.mode = ViewManagerMode.dragging;
         }
         this.clearContextualEditors();
@@ -348,7 +331,7 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public closeView(): void {
-        if (this.previewMode()) {
+        if (this.mode === ViewManagerMode.preview) {
             return;
         }
         this.widgetEditor(null);
@@ -392,14 +375,14 @@ export class DefaultViewManager implements ViewManager {
         this.selectedElement(null);
         this.selectedElementContextualEditor(null);
 
-        if (!this.previewMode()) {
+        if (this.mode !== ViewManagerMode.preview) {
             this.designTime(true);
             this.mode = ViewManagerMode.selecting;
         }
     }
 
     public setHighlight(config: IHighlightConfig): void {
-        if (this.previewMode()) {
+        if (this.mode === ViewManagerMode.preview) {
             return;
         }
         this.highlightedElement(null);
@@ -408,7 +391,7 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public setSplitter(config: ISplitterConfig): void {
-        if (this.previewMode()) {
+        if (this.mode === ViewManagerMode.preview) {
             return;
         }
         this.splitterElement(null);
@@ -416,7 +399,7 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public setSelectedElement(config: IHighlightConfig, contextualEditor: IContextCommandSet): void {
-        if (this.previewMode()) {
+        if (this.mode === ViewManagerMode.preview) {
             return;
         }
         this.clearContextualEditors();
@@ -487,5 +470,22 @@ export class DefaultViewManager implements ViewManager {
     public onDragEnd(): void {
         this.highlightedElement(null);
         this.selectedElement(null);
+    }
+
+
+    public enablePreviewMode(): void {
+        this.clearJourney();
+        this.hideToolboxes();
+        this.designTime(false)
+        this.toasts().forEach(toast => {
+            this.removeToast(toast);
+        });
+        this.mode = ViewManagerMode.preview;
+    }
+
+    public disablePreviewMode(): void {
+        this.showToolboxes();
+        this.designTime(true);
+        this.mode = ViewManagerMode.configure;
     }
 }
