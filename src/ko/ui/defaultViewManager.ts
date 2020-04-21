@@ -337,6 +337,12 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public closeView(): void {
+        const view = this.widgetEditor();
+
+        if (view) {
+            this.viewStack.removeView(view);
+        }
+
         this.widgetEditor(null);
         this.eventManager.dispatchEvent("onWidgetEditorClose");
         this.clearContextualEditors();

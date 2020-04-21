@@ -61,12 +61,12 @@
                     Appearance
                     <button class="btn btn-info" type="button" data-bind="tooltipToggle: 'Predefined appearance from style guide.'"></button>
                 </label>
-                <div class="input-group">
+                <!-- <div class="input-group">
                     <a href="#" class="form-control" data-bind="text: appearanceStyle() && appearanceStyle().displayName, balloon: { component: { name: 'style-variation-selector', params: { snippetType: 'components/picture', onSelect: $component.onVariationSelected } } }">
                     </a>
-                </div>
-                <!-- <select id="appearanceStyle" class="form-control"
-                    data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select> -->
+                </div> -->
+                <select id="appearanceStyle" class="form-control"
+                    data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select> 
             </div>
         </div>
     </div>
