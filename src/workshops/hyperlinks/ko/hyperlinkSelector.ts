@@ -108,10 +108,6 @@ export class HyperlinkSelector {
             hyperlinkProvider = this.hyperlinkProviders.find(x => x.canHandleHyperlink(hyperlink.targetKey));
         }
 
-        if (!hyperlinkProvider) {
-            hyperlinkProvider = this.hyperlinkProviders[this.hyperlinkProviders.length - 1];
-        }
-
         this.hyperlink(hyperlink);
         this.target(hyperlink.target || defaultTarget);
         this.hyperlinkProvider(hyperlinkProvider);
