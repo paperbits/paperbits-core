@@ -56,6 +56,7 @@ import "./ko/bindingHandlers/bindingHandlers.dialog";
 import "./ko/bindingHandlers/bindingHandlers.activate";
 import { ContentEditorModule } from "./content/ko";
 import { ViewStack } from "./ko/ui/viewStack";
+import { MediaDisplay } from "./workshops/media/ko/mediaDisplay";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -69,6 +70,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindSingleton("viewManager", DefaultViewManager);
         injector.bindSingleton("tray", Tray);
         injector.bindSingleton("viewStack", ViewStack);
+        injector.bind("mediaDisplay", MediaDisplay);
         
         injector.bind("mediaHyperlinkProvider", MediaHyperlinkProvider);
         injector.bind("urlHyperlinkProvider", UrlHyperlinkProvider);

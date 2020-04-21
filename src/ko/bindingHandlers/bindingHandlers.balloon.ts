@@ -15,10 +15,17 @@ export interface BalloonOptions {
     onClose?: () => void;
     closeOn: ko.Subscribable;
     closeTimeout?: number;
+    displayOnEnter?: boolean;
 }
 
 export class BalloonBindingHandler {
+    private inBalloon: ko.Observable<boolean>;
+    private mouseOn: ko.Observable<boolean>;
     constructor(viewStack: ViewStack, eventManager?: EventManager) {
+
+        this.inBalloon = ko.observable(false);
+        this.mouseOn = ko.observable(false);
+
         ko.bindingHandlers["balloon"] = {
             init: (toggleElement: HTMLElement, valueAccessor: () => BalloonOptions) => {
                 const options = ko.unwrap(valueAccessor());
@@ -317,6 +324,31 @@ export class BalloonBindingHandler {
                     }
                 };
 
+                const onMouseEnter = async (event: MouseEvent): Promise<void> => {
+                    this.mouseOn(true);
+                    open(toggleElement);
+                    balloonElement.addEventListener("mouseenter", () => {
+                        this.inBalloon(true);
+                    })
+                    balloonElement.addEventListener("mouseleave", () => {
+                        this.inBalloon(false);
+                    })
+                }
+
+                const onMouseLeave = async (event: MouseEvent): Promise<void> => {
+                    this.mouseOn(false);
+                }
+
+                const closeHover = async (): Promise<void> => {
+                    // setTimeout(() => {
+                        if (!this.mouseOn() && !this.inBalloon()) {
+                            close();
+                        }
+                    // }, 20);
+                }
+
+                
+ 
                 const onKeyDown = async (event: KeyboardEvent): Promise<void> => {
                     switch (event.keyCode) {
                         case Keys.Enter:
@@ -340,12 +372,22 @@ export class BalloonBindingHandler {
                     requestAnimationFrame(updatePosition);
                 };
 
+                const onBalloonEnter = async(): Promise<void> => {
+                    // inBalloon = true;
+                }
+
                 if (options.closeOn) {
                     options.closeOn.subscribe(() => close());
                 }
 
                 toggleElement.addEventListener("keydown", onKeyDown);
                 toggleElement.addEventListener("click", onClick);
+                if (options.displayOnEnter) {
+                    toggleElement.addEventListener("mouseenter", onMouseEnter);
+                    toggleElement.addEventListener("mouseleave", onMouseLeave);
+                    this.inBalloon.subscribe(closeHover);
+                    this.mouseOn.subscribe(closeHover);
+                }
                 window.addEventListener("scroll", onScroll, true);
 
                 if (eventManager) {
@@ -358,6 +400,10 @@ export class BalloonBindingHandler {
                 ko.utils.domNodeDisposal.addDisposeCallback(toggleElement, () => {
                     toggleElement.removeEventListener("keydown", onKeyDown);
                     toggleElement.removeEventListener("click", onClick);
+                    if (options.displayOnEnter) {
+                        toggleElement.removeEventListener("mouseenter", onMouseEnter);
+                        toggleElement.removeEventListener("mouseleave", onMouseLeave);
+                    }
                     window.removeEventListener("scroll", onScroll, true);
 
                     if (balloonElement) {
