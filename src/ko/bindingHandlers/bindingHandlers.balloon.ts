@@ -342,7 +342,7 @@ export class BalloonBindingHandler {
                 const closeHover = async (): Promise<void> => {
                     // setTimeout(() => {
                         if (!this.mouseOn() && !this.inBalloon()) {
-                            close();
+                            // close();
                         }
                     // }, 20);
                 }
