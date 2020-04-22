@@ -83,6 +83,8 @@ export class DefaultViewManager implements ViewManager {
         this.shutter = ko.observable<boolean>(true);
         this.dragSession = ko.observable();
         this.primaryToolboxVisible = ko.observable<boolean>(false);
+
+        
     }
 
     @OnMounted()
@@ -122,6 +124,10 @@ export class DefaultViewManager implements ViewManager {
             return;
         }
 
+        if (this.mode === ViewManagerMode.preview) {
+            return;
+        }
+        
         this.designTime(true);
     }
 
@@ -223,7 +229,9 @@ export class DefaultViewManager implements ViewManager {
     public hideToolboxes(): void {
         this.journey([]);
         this.primaryToolboxVisible(false);
-        this.mode = ViewManagerMode.dragging;
+        if (this.mode !== ViewManagerMode.preview) {
+            this.mode = ViewManagerMode.dragging;
+        }
         this.clearContextualEditors();
     }
 
@@ -337,6 +345,9 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public closeView(): void {
+        if (this.mode === ViewManagerMode.preview) {
+            return;
+        }
         const view = this.widgetEditor();
 
         if (view) {
@@ -347,6 +358,7 @@ export class DefaultViewManager implements ViewManager {
         this.eventManager.dispatchEvent("onWidgetEditorClose");
         this.clearContextualEditors();
         this.mode = ViewManagerMode.selecting;
+
         this.primaryToolboxVisible(true);
         this.designTime(true);
     }
@@ -382,22 +394,34 @@ export class DefaultViewManager implements ViewManager {
         this.setSplitter(null);
         this.selectedElement(null);
         this.selectedElementContextualEditor(null);
-        this.designTime(true);
-        this.mode = ViewManagerMode.selecting;
+
+        if (this.mode !== ViewManagerMode.preview) {
+            this.designTime(true);
+            this.mode = ViewManagerMode.selecting;
+        }
     }
 
     public setHighlight(config: IHighlightConfig): void {
+        if (this.mode === ViewManagerMode.preview) {
+            return;
+        }
         this.highlightedElement(null);
         this.setSplitter(null);
         this.highlightedElement(config);
     }
 
     public setSplitter(config: ISplitterConfig): void {
+        if (this.mode === ViewManagerMode.preview) {
+            return;
+        }
         this.splitterElement(null);
         this.splitterElement(config);
     }
 
     public setSelectedElement(config: IHighlightConfig, contextualEditor: IContextCommandSet): void {
+        if (this.mode === ViewManagerMode.preview) {
+            return;
+        }
         this.clearContextualEditors();
         this.closeView();
         this.selectedElement(null);
@@ -464,12 +488,28 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public onDragEnd(): void {
-        this.showToolboxes();
+        if (this.mode !== ViewManagerMode.preview) {
+            this.showToolboxes();
+        }
         this.highlightedElement(null);
         this.selectedElement(null);
     }
 
+    public enablePreviewMode(): void {
+        this.clearJourney();
+        this.hideToolboxes();
+        this.designTime(false)
+        this.toasts().forEach(toast => {
+            this.removeToast(toast);
+        });
+        this.mode = ViewManagerMode.preview;
+    }
 
+    public disablePreviewMode(): void {
+        this.showToolboxes();
+        this.designTime(true);
+        this.mode = ViewManagerMode.configure;
+    }
 
     @OnDestroyed()
     public dispose(): void {

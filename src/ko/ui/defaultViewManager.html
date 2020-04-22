@@ -1,3 +1,4 @@
+
 <workshops></workshops>
 <dropbucket></dropbucket>
 
@@ -129,4 +130,14 @@
 
 <tray class="toolbox toolbox-position-left-bottom" data-bind="visible: primaryToolboxVisible"></tray>
 
-<input id="uploadDialog" type="file" multiple="multiple" aria-hidden="true" class="d-none" />
+<input id="uploadDialog" type="file" multiple="multiple" aria-hidden="true" class="d-none"/>
+
+<div class="toolbox toolbox-position-right-top">
+    <button class="toolbox-btn" data-bind="visible: primaryToolboxVisible(), click: $component.enablePreviewMode">
+        <i class="paperbits-icon paperbits-lightning"></i>
+    </button>
+
+    <button class="toolbox-btn" data-bind="visible: !primaryToolboxVisible(), click: $component.disablePreviewMode">
+        <i class="paperbits-icon paperbits-single-02"></i>
+    </button>
+</div>

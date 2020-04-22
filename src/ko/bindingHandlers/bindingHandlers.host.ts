@@ -88,7 +88,7 @@ export class HostBindingHandler {
         };
 
         const onPointerDown = (event: MouseEvent): void => {
-            if (!event.ctrlKey && !event.metaKey) {
+            if (!event.ctrlKey && !event.metaKey && (this.viewManager.mode != ViewManagerMode.preview)) {
                 return;
             }
 
