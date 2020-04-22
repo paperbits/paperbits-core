@@ -45,8 +45,11 @@ export class DefaultViewManager implements ViewManager {
     public readonly dragSession: ko.Observable<DragSession>;
     public readonly locale: ko.Observable<string>;
     public readonly canPreview: ko.Computed<boolean>;
+
     public mode: ViewManagerMode;
     public hostDocument: Document;
+
+    private previousMode: ViewManagerMode;
 
     constructor(
         private readonly eventManager: EventManager,
@@ -496,6 +499,7 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public enablePreviewMode(): void {
+        this.previousMode = this.mode;
         this.clearJourney();
         this.hideToolboxes();
         this.designTime(false)
@@ -508,7 +512,7 @@ export class DefaultViewManager implements ViewManager {
     public disablePreviewMode(): void {
         this.showToolboxes();
         this.designTime(true);
-        this.mode = ViewManagerMode.configure;
+        this.mode = this.previousMode;
     }
 
     @OnDestroyed()
