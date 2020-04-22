@@ -2,9 +2,20 @@ import * as ko from "knockout";
 
 ko.bindingHandlers["tooltipToggle"] = {
     init: (triggerElement: HTMLElement, valueAccessor, allBindings) => {
-        const tooltipText = valueAccessor();
+        const options = valueAccessor();
 
-        if (!tooltipText) {
+        let tooltipMessage: any;
+        let tooltipPosition: string = "top";
+
+        if (typeof options === "string" || ko.isObservable(options)) {
+            tooltipMessage = options;
+        }
+        else {
+            tooltipMessage = options.message;
+            tooltipPosition = options.position || "top";
+        }
+
+        if (!tooltipMessage) {
             console.warn("No tooltip text specified for element: " + triggerElement.nodeType);
             return;
         }
@@ -13,14 +24,14 @@ ko.bindingHandlers["tooltipToggle"] = {
         const textParams: any = {};
         let closeTimeout = 0;
 
-        if (ko.isObservable(tooltipText)) {
-            textParams.observableText = tooltipText;
+        if (ko.isObservable(tooltipMessage)) {
+            textParams.observableText = tooltipMessage;
             closeTimeout = 5000; // close after 5 sec
-            triggerElement.setAttribute("aria-label", tooltipText());
+            triggerElement.setAttribute("aria-label", tooltipMessage());
         }
         else {
-            textParams.text = tooltipText;
-            triggerElement.setAttribute("aria-label", tooltipText);
+            textParams.text = tooltipMessage;
+            triggerElement.setAttribute("aria-label", tooltipMessage);
         }
 
         triggerElement.setAttribute("role", "tooltip");
@@ -34,7 +45,7 @@ ko.bindingHandlers["tooltipToggle"] = {
                     name: "tooltip",
                     params: textParams
                 },
-                position: "top",
+                position: tooltipPosition,
                 isOpen: isOpen,
                 closeTimeout: closeTimeout,
                 onCreated: (handle) => {

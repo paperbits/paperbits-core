@@ -68,11 +68,9 @@ export class PictureEditor {
         this.hyperlink(this.model.hyperlink);
         this.sizeConfig({ width: this.model.width, height: this.model.height });
 
-        if (this.model.styles) {
-            const variations = await this.styleService.getComponentVariations("picture");
-            this.appearanceStyles(variations.filter(x => x.category === "appearance"));
-            this.appearanceStyle(this.model.styles?.appearance);
-        }
+        const variations = await this.styleService.getComponentVariations("picture");
+        this.appearanceStyles(variations.filter(x => x.category === "appearance"));
+        this.appearanceStyle(this.model.styles?.appearance);
 
         this.caption.extend(ChangeRateLimit).subscribe(this.applyChanges);
         this.layout.extend(ChangeRateLimit).subscribe(this.applyChanges);

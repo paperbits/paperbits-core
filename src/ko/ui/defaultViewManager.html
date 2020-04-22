@@ -132,12 +132,14 @@
 
 <input id="uploadDialog" type="file" multiple="multiple" aria-hidden="true" class="d-none"/>
 
+<!-- ko if: canPreview -->
 <div class="toolbox toolbox-position-right-top">
-    <button class="toolbox-btn" data-bind="visible: primaryToolboxVisible(), click: $component.enablePreviewMode">
-        <i class="paperbits-icon paperbits-lightning"></i>
+    <button class="toolbox-btn" data-bind="visible: primaryToolboxVisible(), click: $component.enablePreviewMode, tooltipToggle: { message: '<h1>Preview</h1><p>See the website live before publishing.<p>', position: 'left' }">
+        <i class="paperbits-icon paperbits-l-search"></i>
     </button>
 
-    <button class="toolbox-btn" data-bind="visible: !primaryToolboxVisible(), click: $component.disablePreviewMode">
-        <i class="paperbits-icon paperbits-single-02"></i>
+    <button class="toolbox-btn" data-bind="visible: !primaryToolboxVisible(), click: $component.disablePreviewMode, tooltipToggle: { message: '<h1>Exit preview</h1><p>Return to editing the content.<p>', position: 'left' }">
+        <i class="paperbits-icon paperbits-ban"></i>
     </button>
 </div>
+<!-- /ko -->

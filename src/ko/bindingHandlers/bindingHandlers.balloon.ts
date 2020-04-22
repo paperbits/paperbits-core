@@ -180,13 +180,13 @@ export class BalloonBindingHandler {
                         switch (positionX) {
                             case "left":
                                 balloonElement.classList.add("balloon-left");
-                                balloonTop = triggerRect.top + (triggerRect.height / 2) - (balloonHeight / 2) - balloonTipShift;
+                                balloonTop = triggerRect.top + (triggerRect.height / 2) - (balloonHeight / 2);
                                 balloonLeft = triggerRect.left - balloonWidth - balloonTipShift;
                                 break;
 
                             case "right":
                                 balloonElement.classList.add("balloon-right");
-                                balloonTop = triggerRect.top + (triggerRect.height / 2) - (balloonHeight / 2) - balloonTipShift;
+                                balloonTop = triggerRect.top + (triggerRect.height / 2) - (balloonHeight / 2);
                                 balloonLeft = triggerRect.right + balloonTipShift;
                                 break;
                         }

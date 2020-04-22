@@ -44,6 +44,7 @@ export class DefaultViewManager implements ViewManager {
     public readonly shutter: ko.Observable<boolean>;
     public readonly dragSession: ko.Observable<DragSession>;
     public readonly locale: ko.Observable<string>;
+    public readonly canPreview: ko.Computed<boolean>;
     public mode: ViewManagerMode;
     public hostDocument: Document;
 
@@ -83,8 +84,7 @@ export class DefaultViewManager implements ViewManager {
         this.shutter = ko.observable<boolean>(true);
         this.dragSession = ko.observable();
         this.primaryToolboxVisible = ko.observable<boolean>(false);
-
-        
+        this.canPreview = ko.pureComputed<boolean>(() => this.host()?.name === "page-host");
     }
 
     @OnMounted()
@@ -127,7 +127,7 @@ export class DefaultViewManager implements ViewManager {
         if (this.mode === ViewManagerMode.preview) {
             return;
         }
-        
+
         this.designTime(true);
     }
 
