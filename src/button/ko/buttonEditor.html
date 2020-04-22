@@ -2,7 +2,7 @@
     <div class="form-group">
         <label class="form-label">
             Label
-            <button class="btn btn-info" type="button" title="Help" data-bind="tooltipToggle: 'Text on the button'"></button>
+            <button class="btn btn-info" type="button" data-bind="tooltipToggle: 'Text on the button'"></button>
         </label>
         <input type="text" class="form-control" data-bind="textInput: label" maxlength="256" />
     </div>
@@ -10,10 +10,12 @@
     <div class="form-group">
         <label class="form-label">
             Link to
-            <button class="btn btn-info" type="button" title="Help" data-bind="tooltipToggle: 'A link to be navigated on click.'"></button>
+            <button class="btn btn-info" type="button"
+                data-bind="tooltipToggle: 'A link to be navigated on click.'"></button>
         </label>
         <div class="input-group">
-            <a href="#" class="form-control" data-bind="text: hyperlinkTitle, balloon: { component: { name: 'hyperlink-selector', params: { hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange } } }">
+            <a href="#" class="form-control"
+                data-bind="text: hyperlinkTitle, balloon: { component: { name: 'hyperlink-selector', params: { hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange } } }">
             </a>
             <div class="input-group-addon">
                 <i class="paperbits-icon paperbits-link-69-2"></i>
@@ -24,18 +26,21 @@
     <div class="form-group">
         <label for="appearanceStyle" class="form-label">
             Appearance
-            <button class="btn btn-info" type="button" title="Help" data-bind="tooltipToggle: 'Predefined appearance from style guide.'"></button>
+            <button class="btn btn-info" type="button"
+                data-bind="tooltipToggle: 'Predefined appearance from style guide.'"></button>
         </label>
-        <div class="input-group">
+        <!-- <div class="input-group">
             <a href="#" class="form-control" data-bind="text: appearanceStyle() && appearanceStyle().displayName, balloon: { component: { name: 'style-variation-selector', params: { snippetType: 'components/button', onSelect: $component.onVariationSelected } } }">
             </a>
-        </div>
+        </div> -->
+        <select id="appearanceStyle" class="form-control"
+            data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
     </div>
 
     <!-- <div class="form-group">
         <label for="sizeStyle" class="form-label">
             Size
-            <button class="btn btn-info" type="button" title="Help" data-bind="tooltipToggle: 'Predefined size from style guide.'"></button>
+            <button class="btn btn-info" type="button" data-bind="tooltipToggle: 'Predefined size from style guide.'"></button>
         </label>
         <select id="sizeStyle" class="form-control" data-bind="options: sizeStyles, value: sizeStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
     </div> -->

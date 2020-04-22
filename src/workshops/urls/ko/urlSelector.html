@@ -1,26 +1,61 @@
-<!--ko if: working()-->
-<spinner></spinner>
-<!--/ko-->
-
-<div class="flex flex-column list">
-    <div class="flex flex-column flex-item flex-item-grow" role="list" data-bind="foreach: urls, scrollable: true">
-        <a href="#" role="listitem" class="list-item" data-bind="css: { selected: hasFocus }, click: $component.selectUrl, event: { keydown: $component.keydown }, attr: { title: title }, selectItem: hasFocus">
-            <i class="paperbits-icon paperbits-link-69-2"></i>
-            <span class="list-item-label" data-bind="text: title"></span>
-        </a>
-    </div>
-    <div class="form">
-        <div class="input-group">
-            <input type="text" class="form-control" data-bind="textInput: $component.uri" placeholder="e.g. https://paperbits.io" maxlength="256"
-                spellcheck="false" />
+<div class="editor flex flex-column">
+    <h1>
+        URLs
+    </h1>
+    <hr />
+    <fieldset class="flex-item form">
+        <div class="form-group">
+            <input class="form-control" type="search" role="searchbox"
+                data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: true" placeholder="Search URLs..."
+                aria-label="Search URL" aria-controls="searchResult" />
+            <p id="searchResult" class="text-hide" role="region" aria-live="polite"
+                data-bind="text: `URLs found: ${urls().length}`">
+            </p>
         </div>
-        <button class="btn" data-bind="click: $component.createUrl">
-            <i class="paperbits-icon paperbits-simple-add"></i> Add
-        </button>
-        <!--ko if: selectedUrl()-->
-        <button class="btn" data-bind="click: $component.deleteUrl">
-            <i class="paperbits-icon paperbits-simple-remove"></i> Delete
-        </button>
-        <!--/ko-->
+    </fieldset>
+
+
+    <!-- ko if: $component.working() -->
+    <spinner></spinner>
+    <!-- /ko -->
+
+    <!-- ko if: !working() && urls().length === 0 -->
+    <div class="flex flex-column flex-item flex-item-grow list">
+        <!-- ko if: searchPattern() === "" -->
+        <p class="flex-item flex-item-grow text-center">
+            It seems that you don't have URLs yet.
+        </p>
+        <!-- /ko -->
+
+        <!-- ko if: searchPattern() !== ""  -->
+        <p class="flex-item flex-item-grow text-center">
+            Could not find anything. Try to change search criteria.</p>
+        <!-- /ko -->
+    </div>
+    <!-- /ko -->
+
+    <div class="list flex flex-column flex-item flex-item-grow ">
+        <div class="flex-item flex-item-grow" role="list" data-bind="foreach: urls, scrollable: true">
+            <a href="#" role="listitem" class="list-item"
+                data-bind="css: { selected: hasFocus }, click: $component.selectUrl, event: { keydown: $component.keydown }, attr: { title: title }, selectItem: hasFocus">
+                <i class="paperbits-icon paperbits-link-69-2"></i>
+                <span class="list-item-label" data-bind="text: title"></span>
+            </a>
+        </div>
+        
+        <div class="flex-item btn-group">
+            <div class="input-group">
+                <input type="text" class="form-control" data-bind="textInput: $component.uri"
+                    placeholder="e.g. https://paperbits.io" maxlength="256" spellcheck="false" />
+            </div>
+            <button class="btn" data-bind="click: $component.createUrl">
+                <i class="paperbits-icon paperbits-simple-add"></i> Add
+            </button>
+            <!--ko if: selectedUrl()-->
+            <button class="btn" data-bind="click: $component.deleteUrl">
+                <i class="paperbits-icon paperbits-simple-remove"></i> Delete
+            </button>
+            <!--/ko-->
+        </div>
     </div>
 </div>

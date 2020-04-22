@@ -15,15 +15,17 @@ export class ButtonEditor {
     public readonly label: ko.Observable<string>;
     public readonly hyperlink: ko.Observable<HyperlinkModel>;
     public readonly hyperlinkTitle: ko.Observable<string>;
-    public readonly appearanceStyle: ko.Observable<LocalStyles>;
+    public readonly appearanceStyle: ko.Observable<any>;
+    public readonly appearanceStyles: ko.ObservableArray<any>;
     public readonly sizeStyles: ko.ObservableArray<any>;
     public readonly sizeStyle: ko.Observable<any>;
 
     constructor(private readonly styleService: StyleService) {
         this.label = ko.observable<string>();
-        this.appearanceStyle = ko.observable<any>();
-        this.sizeStyles = ko.observableArray<any>();
-        this.sizeStyle = ko.observable<any>();
+        this.appearanceStyles = ko.observableArray();
+        this.appearanceStyle = ko.observable();
+        this.sizeStyles = ko.observableArray();
+        this.sizeStyle = ko.observable();
         this.hyperlink = ko.observable<HyperlinkModel>();
         this.hyperlinkTitle = ko.observable<string>();
     }
@@ -36,15 +38,12 @@ export class ButtonEditor {
 
     @OnMounted()
     public async initialize(): Promise<void> {
-        const buttonVariations = await this.styleService.getComponentVariations("button");
-        this.sizeStyles(buttonVariations.filter(x => x.category === "size").concat({ displayName: "Default", key: undefined }));
-
         this.label(this.model.label);
 
         if (this.model.styles) {
-            const selectedAppearence = buttonVariations.find(x => x.category === "appearance" && x.key === this.model.styles.appearance);
-            this.sizeStyle(this.model.styles.size);
-            this.appearanceStyle(selectedAppearence);
+            const variations = await this.styleService.getComponentVariations("button");
+            this.appearanceStyles(variations.filter(x => x.category === "appearance"));
+            this.appearanceStyle(this.model.styles?.appearance);
         }
 
         this.hyperlink(this.model.hyperlink);
@@ -81,7 +80,7 @@ export class ButtonEditor {
         this.model.label = this.label();
         this.model.hyperlink = this.hyperlink();
         this.model.styles = {
-            appearance: this.appearanceStyle().key,
+            appearance: this.appearanceStyle(),
             size: this.sizeStyle()
         };
 

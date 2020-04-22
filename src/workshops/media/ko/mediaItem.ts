@@ -2,6 +2,7 @@
 import * as MediaUtils from "@paperbits/common/media/mediaUtils";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { IWidgetOrder, IWidgetFactoryResult } from "@paperbits/common/editing";
+import { HyperlinkModel } from "@paperbits/common/permalinks";
 
 export const defaultFileName: string = "media.svg";
 export const defaultURL: string = "https://cdn.paperbits.io/images/logo.svg";
@@ -18,7 +19,7 @@ export class MediaItem {
     public keywords: ko.Observable<string>;
     public contentType: ko.Observable<string>;
     public widgetFactoryResult: IWidgetFactoryResult<any>;
-    public isSelected: ko.Observable<boolean>;    
+    public isSelected: ko.Observable<boolean>;
 
     constructor(mediaContract: MediaContract) {
         this.key = mediaContract.key;
@@ -73,5 +74,14 @@ export class MediaItem {
             downloadUrl: this.downloadUrl(),
             permalink: this.permalink()
         };
+    }
+
+    public getHyperlink(): HyperlinkModel {
+        const hyperlinkModel = new HyperlinkModel();
+        hyperlinkModel.title = this.fileName();
+        hyperlinkModel.targetKey = this.key;
+        hyperlinkModel.href = this.permalink();
+
+        return hyperlinkModel;
     }
 }

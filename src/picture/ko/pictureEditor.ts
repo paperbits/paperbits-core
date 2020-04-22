@@ -25,7 +25,8 @@ export class PictureEditor {
     public readonly hyperlinkTitle: ko.Computed<string>;
 
     public readonly sizeConfig: ko.Observable<SizeStylePluginConfig>;
-    public readonly appearanceStyle: ko.Observable<LocalStyles>;
+    public readonly appearanceStyles: ko.ObservableArray<any>;
+    public readonly appearanceStyle: ko.Observable<any>;
 
     private readonly DEFAULT_WIDTH: number = 200;
     private readonly DEFAULT_HEIGHT: number = 200;
@@ -41,8 +42,9 @@ export class PictureEditor {
         this.sourceKey = ko.observable<string>();
         this.background = ko.observable();
         this.hyperlinkTitle = ko.computed<string>(() => this.hyperlink() ? this.hyperlink().title : "Add a link...");
-        this.sizeConfig = ko.observable<SizeStylePluginConfig>();
-        this.appearanceStyle = ko.observable<any>();
+        this.sizeConfig = ko.observable();
+        this.appearanceStyles = ko.observableArray();
+        this.appearanceStyle = ko.observable();
     }
 
     @Param()
@@ -66,11 +68,10 @@ export class PictureEditor {
         this.hyperlink(this.model.hyperlink);
         this.sizeConfig({ width: this.model.width, height: this.model.height });
 
-        const variations = await this.styleService.getComponentVariations("picture");
-
         if (this.model.styles) {
-            const selectedAppearence = variations.find(x => x.category === "appearance" && x.key === this.model.styles.appearance);
-            this.appearanceStyle(selectedAppearence);
+            const variations = await this.styleService.getComponentVariations("picture");
+            this.appearanceStyles(variations.filter(x => x.category === "appearance"));
+            this.appearanceStyle(this.model.styles?.appearance);
         }
 
         this.caption.extend(ChangeRateLimit).subscribe(this.applyChanges);
@@ -98,7 +99,7 @@ export class PictureEditor {
 
         if (appearanceStyle) {
             this.model.styles = {
-                appearance: this.appearanceStyle().key
+                appearance: this.appearanceStyle()
             };
         }
 
@@ -127,14 +128,17 @@ export class PictureEditor {
     }
 
     public updateSizeConfigForSelectedMedia(media: MediaContract): void {
-        if (media.downloadUrl) {
-            const selectedMedia = new Image();
-            selectedMedia.src = media.downloadUrl;
-            this.sizeConfig({
-                width: selectedMedia.width || this.DEFAULT_WIDTH,
-                height: selectedMedia.height || this.DEFAULT_HEIGHT
-            });
+        if (!media.downloadUrl) {
+            return;
         }
+
+        const selectedMedia = new Image();
+        selectedMedia.src = media.downloadUrl;
+
+        this.sizeConfig({
+            width: selectedMedia.width || this.DEFAULT_WIDTH,
+            height: selectedMedia.height || this.DEFAULT_HEIGHT
+        });
     }
 
     public onHyperlinkChange(hyperlink: HyperlinkModel): void {
