@@ -32,7 +32,7 @@
         data-bind="foreach: { data: mediaItems, as: 'media' }, scrollable: true">
         <a href="#" role="listitem" class="list-item list-item-image"
             data-bind="click: $component.selectMedia, css: { selected: media == $component.selectedMediaItem() }, attr: { 'aria-label': media.fileName() },
-            balloon: { displayOnEnter: true, component: { name: 'media-display', params: { item: media }}}">
+            balloon: { displayOnEnter: true, offsetOnEnter: 800, component: { name: 'media-display', params: { item: media }}}">
             <span class="thumbnail"
                 data-bind="style: { 'background-image': 'url('+media.thumbnailUrl()+')' }, attr: { title: media.fileName() }, event: { keydown: $component.onKeyDown }">
             </span>
@@ -58,12 +58,11 @@
     </a>
 </div> -->
 
-<div class="gallery">
+<!-- <div class="gallery">
     <a href="img/2-1.jpg" data-caption="Image caption">
         <img src="ihttps://media.geeksforgeeks.org/wp-content/uploads/20190506164011/logo3.png" alt="First image">
     </a>
     <a href="img/2-2.jpg">
         <img src="https://media.geeksforgeeks.org/wp-content/uploads/20190506164011/logo3.png" alt="Second image">
     </a>
-    ...
-</div>
+</div> -->

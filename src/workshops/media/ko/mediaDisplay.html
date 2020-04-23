@@ -1,13 +1,7 @@
 <fieldset style="max-width: 480px; min-width: 100px; height: auto;" class="form flex-item flex-item-grow" data-bind="scrollable: true">
     <!-- ko if: item -->
-    <a href="#" data-bind="lightbox: { url: item.thumbnailUrl }">
+    <a href="#" data-bind="lightbox: { url: item.thumbnailUrl, fileName: item.fileName }">
         <img style="width: 100%; height: auto;" data-bind="attr: { src: item.thumbnailUrl }" />
     </a>
     <!-- /ko -->
 </fieldset>
-
-<!-- <div style="top: 10px; left: 10px; bottom: 10px; right: 0px; z-index: 10000; position: fixed;">
-    <div class="fit" style="background-color: black; opacity: 0.5;">
-    </div>
-    <img style="max-width: 80%; max-height: 80%;" data-bind="attr: { src: item.thumbnailUrl }" />
-</div> -->

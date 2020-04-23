@@ -12,20 +12,6 @@ import { MediaItem } from "./mediaItem";
 })
 export class MediaDisplay {
 
-    public media: ko.Observable<MediaItem>;
-
     @Param()
     public readonly item: MediaItem;
-
-    @Event()
-    public readonly onSelect: (gradient: MediaItem) => void;
-
-    constructor() {
-        this.media = ko.observable<MediaItem>();
-    }
-
-    @OnMounted()s
-    public async initialize(): Promise<void> {
-        this.media(this.item);
-    }
 }

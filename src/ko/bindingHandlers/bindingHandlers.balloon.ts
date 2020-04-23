@@ -16,19 +16,19 @@ export interface BalloonOptions {
     closeOn: ko.Subscribable;
     closeTimeout?: number;
     displayOnEnter?: boolean;
+    offsetOnEnter?: number;
 }
 
 export class BalloonBindingHandler {
-    private inBalloon: ko.Observable<boolean>;
-    private mouseOn: ko.Observable<boolean>;
     constructor(viewStack: ViewStack, eventManager?: EventManager) {
-
-        this.inBalloon = ko.observable(false);
-        this.mouseOn = ko.observable(false);
 
         ko.bindingHandlers["balloon"] = {
             init: (toggleElement: HTMLElement, valueAccessor: () => BalloonOptions) => {
+
                 const options = ko.unwrap(valueAccessor());
+
+                let inBalloon = false
+                let isHoverOver = false;
 
                 let view: View;
                 let balloonElement: HTMLElement;
@@ -325,26 +325,33 @@ export class BalloonBindingHandler {
                 };
 
                 const onMouseEnter = async (event: MouseEvent): Promise<void> => {
-                    this.mouseOn(true);
-                    open(toggleElement);
-                    balloonElement.addEventListener("mouseenter", () => {
-                        this.inBalloon(true);
-                    })
-                    balloonElement.addEventListener("mouseleave", () => {
-                        this.inBalloon(false);
-                    })
+                    isHoverOver = true;
+                    setTimeout(() => {
+                        if (!isHoverOver) {
+                            return;
+                        }
+                        open(toggleElement);
+                        balloonElement.addEventListener("mouseenter", () => {
+                            inBalloon = true;
+                        })
+                        balloonElement.addEventListener("mouseleave", () => {
+                            inBalloon = false;
+                            checkCloseHoverBalloon();
+                        })
+                    }, options.offsetOnEnter || 0);
                 }
 
                 const onMouseLeave = async (event: MouseEvent): Promise<void> => {
-                    this.mouseOn(false);
+                    isHoverOver = false;
+                    checkCloseHoverBalloon();
                 }
 
-                const closeHover = async (): Promise<void> => {
-                    // setTimeout(() => {
-                        if (!this.mouseOn() && !this.inBalloon()) {
-                            // close();
+                const checkCloseHoverBalloon = async (): Promise<void> => {
+                    setTimeout(() => {
+                        if (!isHoverOver && !inBalloon) {
+                            close();
                         }
-                    // }, 20);
+                    }, 20);
                 }
 
                 
@@ -372,10 +379,6 @@ export class BalloonBindingHandler {
                     requestAnimationFrame(updatePosition);
                 };
 
-                const onBalloonEnter = async(): Promise<void> => {
-                    // inBalloon = true;
-                }
-
                 if (options.closeOn) {
                     options.closeOn.subscribe(() => close());
                 }
@@ -385,8 +388,6 @@ export class BalloonBindingHandler {
                 if (options.displayOnEnter) {
                     toggleElement.addEventListener("mouseenter", onMouseEnter);
                     toggleElement.addEventListener("mouseleave", onMouseLeave);
-                    this.inBalloon.subscribe(closeHover);
-                    this.mouseOn.subscribe(closeHover);
                 }
                 window.addEventListener("scroll", onScroll, true);
 
