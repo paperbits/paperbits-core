@@ -209,7 +209,7 @@ export class BalloonBindingHandler {
 
                     balloonElement.style.top = `${balloonTop}px`;
                     balloonElement.style.left = `${balloonLeft}px`;
-                    balloonElement.style.bottom = `${balloonBottom}px`;
+                    balloonElement.style.height = `${balloonHeight}px`;
                 };
 
                 const open = (returnFocusTo: HTMLElement): void => {
