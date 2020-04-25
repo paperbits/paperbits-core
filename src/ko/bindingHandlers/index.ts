@@ -21,6 +21,6 @@ export * from "./bindingHandlers.stickTo";
 export * from "./bindingHandlers.surface";
 export * from "./bindingHandlers.slider";
 export * from "./bindingHandlers.validationMessageToggle";
-export * from "./bindingHandlers.tooltipToggle";
+export * from "./bindingHandlers.tooltip";
 export * from "./bindingHandlers.widget";
 export * from "./bindingHandlers.selectItem";

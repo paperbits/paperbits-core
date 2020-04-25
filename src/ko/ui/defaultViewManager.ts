@@ -244,6 +244,7 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public openViewAsWorkshop(view: View): void {
+        this.viewStack.clear();
         this.clearContextualEditors();
         this.updateJourneyComponent(view);
         this.mode = ViewManagerMode.configure;
@@ -320,6 +321,14 @@ export class DefaultViewManager implements ViewManager {
 
     public onEscape(): void {
         const host = this.host();
+
+        if (this.viewStack.getViews().length === 0 && this.journey().length > 0) {
+            const journey = this.journey();
+            journey.pop();
+            this.journey(journey);
+
+            return;
+        }
 
         if (!this.getOpenView() && this.journey().length === 0 && host && host.name !== "page-host") {
             this.setHost({ name: "page-host" }); // TODO: Get host type by current route.

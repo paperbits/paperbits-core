@@ -2,7 +2,7 @@
     <div class="form-group">
         <label class="form-label">
             Label
-            <button class="btn btn-info" type="button" data-bind="tooltipToggle: 'Text on the button'"></button>
+            <button class="btn btn-info" type="button" data-bind="tooltip: 'Text on the button'"></button>
         </label>
         <input type="text" class="form-control" data-bind="textInput: label" maxlength="256" />
     </div>
@@ -11,7 +11,7 @@
         <label class="form-label">
             Link to
             <button class="btn btn-info" type="button"
-                data-bind="tooltipToggle: 'A link to be navigated on click.'"></button>
+                data-bind="tooltip: 'A link to be navigated on click.'"></button>
         </label>
         <div class="input-group">
             <a href="#" class="form-control"
@@ -27,7 +27,7 @@
         <label for="appearanceStyle" class="form-label">
             Appearance
             <button class="btn btn-info" type="button"
-                data-bind="tooltipToggle: 'Predefined appearance from style guide.'"></button>
+                data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
         </label>
         <!-- <div class="input-group">
             <a href="#" class="form-control" data-bind="text: appearanceStyle() && appearanceStyle().displayName, balloon: { component: { name: 'style-variation-selector', params: { snippetType: 'components/button', onSelect: $component.onVariationSelected } } }">
@@ -40,7 +40,7 @@
     <!-- <div class="form-group">
         <label for="sizeStyle" class="form-label">
             Size
-            <button class="btn btn-info" type="button" data-bind="tooltipToggle: 'Predefined size from style guide.'"></button>
+            <button class="btn btn-info" type="button" data-bind="tooltip: 'Predefined size from style guide.'"></button>
         </label>
         <select id="sizeStyle" class="form-control" data-bind="options: sizeStyles, value: sizeStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
     </div> -->

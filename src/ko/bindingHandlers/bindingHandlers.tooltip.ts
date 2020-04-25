@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 
-ko.bindingHandlers["tooltipToggle"] = {
-    init: (triggerElement: HTMLElement, valueAccessor, allBindings) => {
+ko.bindingHandlers["tooltip"] = {
+    init: (triggerElement: HTMLElement, valueAccessor) => {
         const options = valueAccessor();
 
         let tooltipMessage: any;

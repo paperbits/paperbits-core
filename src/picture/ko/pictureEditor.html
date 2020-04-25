@@ -11,7 +11,7 @@
                     Source
                     <button class="btn btn-info" type="button" aria-label="Error" aria-haspopup="true"
                         aria-hidden="true"
-                        data-bind="tooltipToggle: 'Source of the picture. To change, click on preview area below and select a picture from media libaray.'"></button>
+                        data-bind="tooltip: 'Source of the picture. To change, click on preview area below and select a picture from media libaray.'"></button>
                 </label>
                 <a href="#" id="source" role="img" class="dropzone-showbox"
                     data-bind="balloon: { position: 'right', component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected } } }, focus: true">
@@ -24,7 +24,7 @@
                     Caption
                     <button class="btn btn-info" type="button" aria-label="Error" aria-haspopup="true"
                         aria-hidden="true"
-                        data-bind="tooltipToggle: 'An alternate text for an image'"></button>
+                        data-bind="tooltip: 'An alternate text for an image'"></button>
                 </label>
                 <input type="text" id="caption" class="form-control" data-bind="textInput: caption" maxlength="256" />
             </div>
@@ -33,7 +33,7 @@
                 <label class="form-label">
                     Link to
                     <button class="btn btn-info" type="button"
-                        data-bind="tooltipToggle: 'A link to be navigated on click.'"></button>
+                        data-bind="tooltip: 'A link to be navigated on click.'"></button>
                 </label>
                 <div class="input-group">
                     <a href="#" class="form-control"
@@ -59,7 +59,7 @@
             <div class="form-group">
                 <label for="appearanceStyle" class="form-label">
                     Appearance
-                    <button class="btn btn-info" type="button" data-bind="tooltipToggle: 'Predefined appearance from style guide.'"></button>
+                    <button class="btn btn-info" type="button" data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
                 </label>
                 <!-- <div class="input-group">
                     <a href="#" class="form-control" data-bind="text: appearanceStyle() && appearanceStyle().displayName, balloon: { component: { name: 'style-variation-selector', params: { snippetType: 'components/picture', onSelect: $component.onVariationSelected } } }">

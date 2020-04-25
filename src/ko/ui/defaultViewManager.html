@@ -39,7 +39,7 @@
         <h1>
             <span data-bind="text: heading"></span>
         </h1>
-        <button class="btn btn-dismiss" title="Close" aria-label="Close" data-bind="click: $component.closeView">
+        <button class="btn btn-dismiss" aria-label="Close" data-bind="click: $component.closeView, tooltip: 'Close'">
             <i class="paperbits-icon paperbits-simple-remove"></i>
         </button>
         <hr />
@@ -134,11 +134,11 @@
 
 <!-- ko if: canPreview -->
 <div class="toolbox toolbox-position-right-top">
-    <button class="toolbox-btn" data-bind="visible: primaryToolboxVisible(), click: $component.enablePreviewMode, tooltipToggle: { message: '<h1>Preview</h1><p>See the website live before publishing.<p>', position: 'left' }">
+    <button class="toolbox-btn" data-bind="visible: primaryToolboxVisible(), click: $component.enablePreviewMode, tooltip: { message: '<h1>Preview</h1><p>See the website live before publishing.<p>', position: 'left' }">
         <i class="paperbits-icon paperbits-l-search"></i>
     </button>
 
-    <button class="toolbox-btn" data-bind="visible: !primaryToolboxVisible(), click: $component.disablePreviewMode, tooltipToggle: { message: '<h1>Exit preview</h1><p>Return to editing the content.<p>', position: 'left' }">
+    <button class="toolbox-btn" data-bind="visible: !primaryToolboxVisible(), click: $component.disablePreviewMode, tooltip: { message: '<h1>Exit preview</h1><p>Return to editing the content.<p>', position: 'left' }">
         <i class="paperbits-icon paperbits-ban"></i>
     </button>
 </div>

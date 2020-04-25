@@ -68,4 +68,8 @@ export class ViewStack {
     public getViews(): View[] {
         return [...this.stack]; // clone array
     }
+
+    public clear(): void {
+        this.stack = [];
+    }
 }

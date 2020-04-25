@@ -13,7 +13,7 @@ import "./bindingHandlers/bindingHandlers.align";
 import "./bindingHandlers/bindingHandlers.focus";
 import "./bindingHandlers/bindingHandlers.size";
 import "./bindingHandlers/bindingHandlers.validationMessageToggle";
-import "./bindingHandlers/bindingHandlers.tooltipToggle";
+import "./bindingHandlers/bindingHandlers.tooltip";
 import "./bindingHandlers/bindingHandlers.collapse";
 import "./bindingHandlers/bindingHandlers.stickTo";
 import "./bindingHandlers/bindingHandlers.scrollable";
