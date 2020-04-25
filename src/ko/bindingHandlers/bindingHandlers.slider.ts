@@ -1,20 +1,20 @@
 import * as ko from "knockout";
 
 export interface SliderConfig {
-    onmousemove: (data: any, percentage: number) => void;
-    onmousedrop?: () => void;
     data?: any;
     percentage?: number;
     offset?: number;
+    onChange: (viewModel: any, percentage: number) => void;
 }
 
 ko.bindingHandlers["slider"] = {
-    init: (element: HTMLElement, valueAccessor: () => SliderConfig) => {
+    init: (element: HTMLElement, valueAccessor: () => SliderConfig, allBindings, viewModel, bindingContext) => {
         const config = ko.unwrap(valueAccessor());
         const parentWidth = element.parentElement.getBoundingClientRect().width;
         const offset = config.offset || 0;
+        const data = bindingContext["$data"];
 
-        let percentage = config.percentage || 0;
+        let percentage = ko.unwrap(config.percentage) || 0;
         let dragging = false;
         let initialOffset = null;
 
@@ -27,8 +27,13 @@ ko.bindingHandlers["slider"] = {
 
         const onMouseUp = (event: MouseEvent) => {
             dragging = false;
-            if (config.onmousedrop) {
-                config.onmousedrop();
+
+            if (config.onChange) {
+                config.onChange(data, percentage);
+            }
+
+            if (ko.isObservable(config.percentage)) {
+                config.percentage(percentage);
             }
         };
 
@@ -36,23 +41,29 @@ ko.bindingHandlers["slider"] = {
             if (!dragging) {
                 return;
             }
-            
+
             const parentRect = element.parentElement.getBoundingClientRect();
             let x = event.pageX;
-            
-            if (x < parentRect.x) {
-                x =  parentRect.x;
-            }
-            
-            if (x > parentRect.x + parentRect.width) {
-                x =  parentRect.x + parentRect.width;
-            }
-            
-            const position =  x - initialOffset ;
-            element.style.left = position + "px";
-            percentage = (position + offset) / parentWidth * 100;
-            config.onmousemove(config.data, percentage);
 
+            if (x < parentRect.x) {
+                x = parentRect.x;
+            }
+
+            if (x > parentRect.x + parentRect.width) {
+                x = parentRect.x + parentRect.width;
+            }
+
+            const position = x - initialOffset;
+            element.style.left = position + "px";
+            percentage = Math.floor((position + offset) / parentWidth * 100);
+
+            if (config.onChange) {
+                config.onChange(data, percentage);
+            }
+
+            if (ko.isObservable(config.percentage)) {
+                config.percentage(percentage);
+            }
         };
 
         element.addEventListener("mousedown", onMouseDown);
