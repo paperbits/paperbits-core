@@ -462,10 +462,13 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public setShutter(): void {
+        this.previousMode = this.mode;
+        this.mode = ViewManagerMode.pause;
         this.shutter(true);
     }
 
     public removeShutter(): void {
+        this.mode = this.previousMode;
         this.shutter(false);
     }
 
