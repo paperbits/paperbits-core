@@ -141,11 +141,9 @@ export class PictureEditor {
 
     public onHyperlinkChange(hyperlink: HyperlinkModel): void {
         this.hyperlink(hyperlink);
-        this.applyChanges();
     }
 
     public onSizeChange(sizeConfig: SizeStylePluginConfig): void {
         this.sizeConfig(sizeConfig);
-        this.applyChanges();
     }
 }
