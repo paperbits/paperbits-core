@@ -6,7 +6,7 @@
         </label>
         <div id="sourceCollapse" class="collapse form-group-collapse">
             <div class="dropzone">
-                <a href="#" class="dropzone-showbox" data-bind="balloon: { component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected, mimeType: $component.mimeType } } }">
+                <a href="#" class="dropzone-showbox" data-bind="balloon: { component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected, mimeType: $component.mimeType } }, position: 'right' }">
                     <!-- ko if: sourceUrl -->
                     <video class="fit" controls>
                         <source data-bind="attr: { src: sourceUrl }" />

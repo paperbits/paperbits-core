@@ -5,8 +5,6 @@ import { YoutubePlayerModel } from "../youtubePlayerModel";
 import { EventManager } from "@paperbits/common/events";
 import { Bag } from "@paperbits/common";
 
-const defaultVideoId = "M7lc1UVf-VE";
-
 export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlayerModel, YoutubePlayerViewModel> {
     constructor(private readonly eventManager: EventManager) { }
 
@@ -15,11 +13,14 @@ export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlay
             viewModel = new YoutubePlayerViewModel();
         }
 
-        const videoId = model.videoId ?? defaultVideoId;
+        const videoId = model.videoId;
         const autoplay = model.autoplay ? "1" : "0";
         const controls = model.controls ? "1" : "0";
         const loop = model.loop ? "1" : "0";
-        const url = `https://www.youtube.com/embed/${videoId}?autoplay=${autoplay}&controls=${controls}&loop=${loop}`;
+
+        const url = videoId
+            ? `https://www.youtube.com/embed/${videoId}?autoplay=${autoplay}&controls=${controls}&loop=${loop}`
+            : null;
 
         viewModel.sourceUrl(url);
 

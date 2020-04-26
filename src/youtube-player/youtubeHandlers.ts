@@ -1,10 +1,8 @@
 ﻿import { IWidgetOrder, IContentDropHandler, IContentDescriptor, IDataTransfer, IWidgetHandler } from "@paperbits/common/editing";
 import { YoutubePlayerModel } from "./youtubePlayerModel";
 
-const defaultYoutubeClipId = "KK9bwTlAvgo";
-
 export class YoutubeHandlers implements IWidgetHandler, IContentDropHandler {
-    private async getWidgetOrderByConfig(youtubeClipId: string): Promise<IWidgetOrder> {
+    private async getWidgetOrderByConfig(youtubeClipId?: string): Promise<IWidgetOrder> {
         const widgetOrder: IWidgetOrder = {
             name: "youtube-player",
             displayName: "Youtube player",
@@ -22,7 +20,7 @@ export class YoutubeHandlers implements IWidgetHandler, IContentDropHandler {
     }
 
     public async getWidgetOrder(): Promise<IWidgetOrder> {
-        return this.getWidgetOrderByConfig(defaultYoutubeClipId);
+        return this.getWidgetOrderByConfig();
     }
 
     public getContentDescriptorFromDataTransfer(dataTransfer: IDataTransfer): IContentDescriptor {
