@@ -34,12 +34,12 @@ import { KoModule } from "./ko/ko.module";
 import { ViewModelBinderSelector } from "./ko/viewModelBinderSelector";
 import { MenuModule } from "./menu/ko";
 import { NavbarModule } from "./navbar/ko/navbar.module";
-import { PictureModule } from "./picture/ko/picture.module";
+import { PictureModule } from "./picture/picture.module";
 import { RowModule } from "./row/ko/row.module";
 import { SectionModule } from "./section/ko/section.module";
 import { TestimonialsModule } from "./testimonials/ko/testimonials.module";
 import { TextblockModule } from "./textblock/ko/textblock.module";
-import { VideoPlayerModule } from "./video-player/ko/videoPlayer.module";
+import { VideoPlayerModule } from "./video-player/videoPlayer.module";
 import { YoutubePlayerModule } from "./youtube-player/ko/youtubePlayer.module";
 
 

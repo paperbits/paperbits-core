@@ -1,9 +1,7 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { ViewModelBinder } from "@paperbits/common/widgets";
-import { VideoPlayerViewModel } from "./videoPlayerViewModel";
-import { VideoPlayerModelBinder } from "../videoPlayerModelBinder";
-import { VideoPlayerViewModelBinder } from "./videoPlayerViewModelBinder";
-import { IModelBinder } from "@paperbits/common/editing";
+import { VideoPlayerViewModel } from "./ko/videoPlayerViewModel";
+import { VideoPlayerModelBinder } from "./videoPlayerModelBinder";
+import { VideoPlayerViewModelBinder } from "./ko/videoPlayerViewModelBinder";
 
 export class VideoPlayerModule implements IInjectorModule {
     public register(injector: IInjector): void {
