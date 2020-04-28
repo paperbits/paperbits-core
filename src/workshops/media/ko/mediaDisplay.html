@@ -1,7 +1,7 @@
-<fieldset style="max-width: 480px; min-width: 100px; height: auto;" class="form flex-item flex-item-grow" data-bind="scrollable: true">
+<fieldset class="form flex-item flex-item-grow fieldset-image" data-bind="scrollable: true">
     <!-- ko if: item -->
     <a href="#" data-bind="lightbox: { url: item.thumbnailUrl, fileName: item.fileName }">
-        <img style="width: 100%; height: auto;" data-bind="attr: { src: item.thumbnailUrl }" />
+        <img class="lightbox-image" data-bind="attr: { src: item.thumbnailUrl }" />
     </a>
     <!-- /ko -->
 </fieldset>
