@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "lib": [
+            "es2019",
+            "dom"
+        ],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "declaration": false,
+        "noImplicitAny": false,
+        "noStrictGenericChecks": true,
+        "removeComments": true,
+        "noLib": false,
+        "skipLibCheck": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "allowUnreachableCode": true,
+        "listFiles": false,
+        "sourceMap": true,
+        "allowSyntheticDefaultImports": true,
+        "incremental": true
+    },
+    "include": [
+        "./src/**/*.ts"
+    ],
+    "exclude": [
+        "./node_modules"
+    ]
+}

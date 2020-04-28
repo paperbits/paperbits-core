@@ -14,6 +14,7 @@ import { Component, OnMounted, OnDestroyed } from "@paperbits/common/ko/decorato
 import { RoleModel, BuiltInRoles } from "@paperbits/common/user";
 import { DesignerUserService } from "./designerUserService";
 import { ViewStack } from "./viewStack";
+import { ISettingsProvider } from "@paperbits/common/configuration";
 
 declare let uploadDialog: HTMLInputElement;
 
@@ -45,6 +46,7 @@ export class DefaultViewManager implements ViewManager {
     public readonly dragSession: ko.Observable<DragSession>;
     public readonly locale: ko.Observable<string>;
     public readonly canPreview: ko.Computed<boolean>;
+    public readonly websitePreviewEnabled: ko.Observable<boolean>;
 
     public mode: ViewManagerMode;
     public hostDocument: Document;
@@ -55,6 +57,7 @@ export class DefaultViewManager implements ViewManager {
         private readonly eventManager: EventManager,
         private readonly globalEventHandler: GlobalEventHandler,
         private readonly designerUserService: DesignerUserService,
+        private readonly settingsProvider: ISettingsProvider,
         private readonly router: Router,
         private readonly viewStack: ViewStack
     ) {
@@ -84,14 +87,15 @@ export class DefaultViewManager implements ViewManager {
         this.locale = ko.observable<string>("en-us");
         this.rolesScope = ko.observableArray([BuiltInRoles.anonymous]);
         this.host = ko.observable<IComponent>();
-        this.shutter = ko.observable<boolean>(true);
+        this.shutter = ko.observable(true);
         this.dragSession = ko.observable();
-        this.primaryToolboxVisible = ko.observable<boolean>(false);
-        this.canPreview = ko.pureComputed<boolean>(() => this.host()?.name === "page-host");
+        this.primaryToolboxVisible = ko.observable(false);
+        this.websitePreviewEnabled = ko.observable(false);
+        this.canPreview = ko.pureComputed<boolean>(() => this.websitePreviewEnabled() && this.host()?.name === "page-host");
     }
 
     @OnMounted()
-    public initialize(): void {
+    public async initialize(): Promise<void> {
         this.globalEventHandler.addDragEnterListener(this.hideToolboxes.bind(this));
         this.globalEventHandler.addDragDropListener(this.onDragEnd.bind(this));
         this.globalEventHandler.addDragEndListener(this.onDragEnd.bind(this));
@@ -104,6 +108,9 @@ export class DefaultViewManager implements ViewManager {
         this.eventManager.addEventListener("onTopLevelEscape", this.onEscape.bind(this));
         this.eventManager.addEventListener("onKeyDown", this.onKeyDown.bind(this));
         this.eventManager.addEventListener("onKeyUp", this.onKeyUp.bind(this));
+
+        const websitePreviewEnabled = await this.settingsProvider.getSetting<boolean>("websitePreviewEnabled");
+        this.websitePreviewEnabled(websitePreviewEnabled || false);
     }
 
     private onKeyDown(event: KeyboardEvent): void {
