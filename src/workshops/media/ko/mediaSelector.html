@@ -38,7 +38,8 @@
         <div role="list" class="flex flex-row flex-item flex-item-grow flex-wrap"
             data-bind="foreach: { data: mediaItems, as: 'media' }, scrollable: true">
             <a href="#" role="listitem" class="list-item list-item-image"
-                data-bind="click: $component.selectMedia, selectItem: isSelected, css: { selected: media == $component.selectedMedia() }, attr: { 'aria-label': media.fileName() }">
+                data-bind="click: $component.selectMedia, selectItem: isSelected, css: { selected: media == $component.selectedMedia() }, attr: { 'aria-label': media.fileName() },
+                balloon: { displayOnEnter: true, offsetOnEnter: 800, component: { name: 'media-display', params: { item: media }}}">
                 <span class="thumbnail"
                     data-bind="style: { 'background-image': 'url('+media.thumbnailUrl()+')' }, attr: { title: media.fileName() }, event: { keydown: $component.onKeyDown }">
                 </span>

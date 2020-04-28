@@ -7,13 +7,14 @@ export class LightboxBindingHandler {
             init(element, valueAccessor) {
                 const configuration = valueAccessor();
                 let lightboxContentUrl = ko.unwrap(configuration.url);
+                let lightBoxContendFileName = ko.unwrap(configuration.fileName);
 
                 const setContentUrl = (url: string) => {
                     lightboxContentUrl = url;
                 };
 
                 const showLightbox = () => {
-                    lightbox.show(lightboxContentUrl);
+                    lightbox.show(lightboxContentUrl, lightBoxContendFileName);
                 };
 
                 if (ko.isObservable(configuration.url)) {
