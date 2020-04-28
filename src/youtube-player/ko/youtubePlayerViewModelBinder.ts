@@ -4,9 +4,13 @@ import { YoutubePlayerViewModel } from "./youtubePlayerViewModel";
 import { YoutubePlayerModel } from "../youtubePlayerModel";
 import { EventManager } from "@paperbits/common/events";
 import { Bag } from "@paperbits/common";
+import { StyleCompiler } from "@paperbits/common/styles";
 
 export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlayerModel, YoutubePlayerViewModel> {
-    constructor(private readonly eventManager: EventManager) { }
+    constructor(
+        private readonly eventManager: EventManager,
+        private readonly styleCompiler: StyleCompiler
+    ) { }
 
     public async modelToViewModel(model: YoutubePlayerModel, viewModel?: YoutubePlayerViewModel, bindingContext?: Bag<any>): Promise<YoutubePlayerViewModel> {
         if (!viewModel) {
@@ -23,6 +27,10 @@ export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlay
             : null;
 
         viewModel.sourceUrl(url);
+        
+        if (model.styles) {
+            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
+        }
 
         const biding: IWidgetBinding<YoutubePlayerModel> = {
             name: "youtube-player",

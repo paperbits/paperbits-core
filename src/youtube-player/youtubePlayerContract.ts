@@ -20,4 +20,9 @@ export interface YoutubePlayerContract extends Contract {
      * Indicates whether the clip needs to be played in the loop.
      */
     loop?: boolean;
+
+    /**
+     * Widget styles.
+     */
+    styles?: any;
 }
