@@ -60,7 +60,7 @@ export class YoutubeEditor implements WidgetEditor<YoutubePlayerModel> {
     }
 
     public onSizeChange(pluginConfig: SizeStylePluginConfig): void {
-        Objects.setValue(`styls/instance/size`, this.model, pluginConfig);
+        Objects.setValue(`styles/instance/size`, this.model, pluginConfig);
         this.applyChanges();
     }
 

@@ -29,7 +29,8 @@ export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlay
         viewModel.sourceUrl(url);
         
         if (model.styles) {
-            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
+            const st = await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager);
+            viewModel.styles(st);
         }
 
         const biding: IWidgetBinding<YoutubePlayerModel> = {
