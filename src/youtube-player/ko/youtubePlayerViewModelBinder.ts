@@ -1,6 +1,6 @@
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { ViewModelBinder } from "@paperbits/common/widgets";
-import { YoutubePlayerViewModel } from "./youtubePlayerViewModel";
+import { YoutubePlayerViewModel } from "./youtubePlayer";
 import { YoutubePlayerModel } from "../youtubePlayerModel";
 import { EventManager } from "@paperbits/common/events";
 import { Bag } from "@paperbits/common";
@@ -39,7 +39,7 @@ export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlay
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: true,
-            editor: "youtube-editor",
+            editor: "youtube-player-editor",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");

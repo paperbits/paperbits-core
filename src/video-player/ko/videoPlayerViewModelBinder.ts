@@ -1,4 +1,4 @@
-import { VideoPlayerViewModel } from "./videoPlayerViewModel";
+import { VideoPlayer } from "./videoPlayer";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { VideoPlayerModel } from "../videoPlayerModel";
 import { EventManager } from "@paperbits/common/events";
@@ -6,16 +6,16 @@ import { StyleCompiler } from "@paperbits/common/styles/styleCompiler";
 import { Bag } from "@paperbits/common";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
 
-export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerModel, VideoPlayerViewModel> {
+export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerModel, VideoPlayer> {
     constructor(
         private readonly eventManager: EventManager,
         private readonly styleCompiler: StyleCompiler,
         private readonly mediaPermalinkResolver: IPermalinkResolver
     ) { }
 
-    public async modelToViewModel(model: VideoPlayerModel, viewModel?: VideoPlayerViewModel, bindingContext?: Bag<any>): Promise<VideoPlayerViewModel> {
+    public async modelToViewModel(model: VideoPlayerModel, viewModel?: VideoPlayer, bindingContext?: Bag<any>): Promise<VideoPlayer> {
         if (!viewModel) {
-            viewModel = new VideoPlayerViewModel();
+            viewModel = new VideoPlayer();
         }
 
         let sourceUrl = null;

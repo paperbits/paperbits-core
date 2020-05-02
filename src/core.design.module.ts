@@ -7,7 +7,7 @@ import { CoreModule } from "./core.module";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { VideoPlayerDesignModule } from "./video-player/videoPlayer.design.module";
 import { PictureDesignModule } from "./picture/picture.design.module";
-import { YoutubePlayerEditorModule } from "./youtube-player/ko/youtubePlayerEditor.module";
+import { YoutubePlayerDesignModule } from "./youtube-player/youtubePlayer.design.module";
 import { ButtonEditorModule } from "./button/ko/buttonEditor.module";
 import { TestimonialsEditorModule } from "./testimonials/ko/testimonialsEditor.module";
 import { ColumnEditorModule } from "./column/ko/columnEditor.module";
@@ -102,7 +102,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new PictureDesignModule());
         injector.bindModule(new ButtonEditorModule());
         injector.bindModule(new VideoPlayerDesignModule());
-        injector.bindModule(new YoutubePlayerEditorModule());
+        injector.bindModule(new YoutubePlayerDesignModule());
         injector.bindModule(new TestimonialsEditorModule());
         injector.bindModule(new MenuEditorModule());
         injector.bindModule(new DropbucketModule());

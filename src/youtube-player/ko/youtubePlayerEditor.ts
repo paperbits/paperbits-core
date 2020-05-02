@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import * as Objects from "@paperbits/common/objects";
-import template from "./youtubeEditor.html";
+import template from "./youtubePlayerEditor.html";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { YoutubePlayerModel } from "../youtubePlayerModel";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
@@ -8,10 +8,10 @@ import { WidgetEditor } from "@paperbits/common/widgets";
 import { SizeStylePluginConfig } from "@paperbits/styles/contracts";
 
 @Component({
-    selector: "youtube-editor",
+    selector: "youtube-player-editor",
     template: template
 })
-export class YoutubeEditor implements WidgetEditor<YoutubePlayerModel> {
+export class YoutubePlayerEditor implements WidgetEditor<YoutubePlayerModel> {
     public readonly videoId: ko.Observable<string>;
     public readonly controls: ko.Observable<boolean>;
     public readonly autoplay: ko.Observable<boolean>;

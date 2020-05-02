@@ -1,13 +1,13 @@
 import template from "./ko/styleGuideCard.html";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { IWidgetHandler, IContentDropHandler } from "@paperbits/common/editing";
-import { VideoEditor } from "./ko/videoEditor";
-import { VideoHandlers } from "./ko/videoHandlers";
+import { VideoPlayerEditor } from "./ko/videoPlayerEditor";
+import { VideoPlayerHandlers } from "./videoPlayerHandlers";
 import { IStyleGroup } from "@paperbits/common/styles/IStyleGroup";
 
 export class VideoPlayerDesignModule implements IInjectorModule {
     public register(injector: IInjector): void {
-        injector.bind("videoPlayerEditor", VideoEditor);
+        injector.bind("videoPlayerEditor", VideoPlayerEditor);
         
         const styleGroup: IStyleGroup = { 
             key: "videoPlayer",
@@ -17,7 +17,7 @@ export class VideoPlayerDesignModule implements IInjectorModule {
             styleTemplate: template
         };
         injector.bindInstanceToCollection("styleGroups", styleGroup);
-        injector.bindToCollection<IWidgetHandler>("widgetHandlers", VideoHandlers, "videoHandler");
-        injector.bindToCollection<IContentDropHandler>("dropHandlers", VideoHandlers, "videoHandler");
+        injector.bindToCollection<IWidgetHandler>("widgetHandlers", VideoPlayerHandlers, "videoHandler");
+        injector.bindToCollection<IContentDropHandler>("dropHandlers", VideoPlayerHandlers, "videoHandler");
     }
 }

@@ -39,8 +39,8 @@ import { RowModule } from "./row/ko/row.module";
 import { SectionModule } from "./section/ko/section.module";
 import { TestimonialsModule } from "./testimonials/ko/testimonials.module";
 import { TextblockModule } from "./textblock/ko/textblock.module";
-import { VideoPlayerModule } from "./video-player/videoPlayer.module";
-import { YoutubePlayerModule } from "./youtube-player/ko/youtubePlayer.module";
+import { VideoPlayerModule } from "./video-player/videoPlayer.publish.module";
+import { YoutubePlayerPublishModule } from "./youtube-player/youtubePlayer.publish.module";
 
 
 /**
@@ -99,7 +99,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new MenuModule());
         injector.bindModule(new PictureModule());
         injector.bindModule(new VideoPlayerModule());
-        injector.bindModule(new YoutubePlayerModule());
+        injector.bindModule(new YoutubePlayerPublishModule());
         injector.bindModule(new TestimonialsModule());
         injector.bindModule(new CardModule());
         injector.bindModule(new CollapsiblePanelModule());

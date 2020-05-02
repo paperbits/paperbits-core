@@ -1,9 +1,9 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { YoutubeModelBinder } from "../youtubeModelBinder";
-import { YoutubePlayerViewModel } from "./youtubePlayerViewModel";
-import { YoutubePlayerViewModelBinder } from "./youtubePlayerViewModelBinder";
+import { YoutubeModelBinder } from "./youtubeModelBinder";
+import { YoutubePlayerViewModel } from "./ko/youtubePlayer";
+import { YoutubePlayerViewModelBinder } from "./ko/youtubePlayerViewModelBinder";
 
-export class YoutubePlayerModule implements IInjectorModule {
+export class YoutubePlayerPublishModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("youtubePlayer", YoutubePlayerViewModel); 
         injector.bindToCollection("modelBinders", YoutubeModelBinder);

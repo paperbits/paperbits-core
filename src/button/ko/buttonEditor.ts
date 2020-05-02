@@ -15,17 +15,13 @@ export class ButtonEditor {
     public readonly label: ko.Observable<string>;
     public readonly hyperlink: ko.Observable<HyperlinkModel>;
     public readonly hyperlinkTitle: ko.Observable<string>;
-    public readonly appearanceStyle: ko.Observable<any>;
+    public readonly appearanceStyle: ko.Observable<string>;
     public readonly appearanceStyles: ko.ObservableArray<any>;
-    public readonly sizeStyles: ko.ObservableArray<any>;
-    public readonly sizeStyle: ko.Observable<any>;
 
     constructor(private readonly styleService: StyleService) {
         this.label = ko.observable<string>();
         this.appearanceStyles = ko.observableArray();
         this.appearanceStyle = ko.observable();
-        this.sizeStyles = ko.observableArray();
-        this.sizeStyle = ko.observable();
         this.hyperlink = ko.observable<HyperlinkModel>();
         this.hyperlinkTitle = ko.observable<string>();
     }
@@ -43,13 +39,12 @@ export class ButtonEditor {
         if (this.model.styles) {
             const variations = await this.styleService.getComponentVariations("button");
             this.appearanceStyles(variations.filter(x => x.category === "appearance"));
-            this.appearanceStyle(this.model.styles?.appearance);
+            this.appearanceStyle(<string>this.model.styles?.appearance);
         }
 
         this.hyperlink(this.model.hyperlink);
         this.onHyperlinkChange(this.model.hyperlink);
 
-        this.sizeStyle.subscribe(this.applyChanges);
         this.appearanceStyle.subscribe(this.applyChanges);
         this.label.subscribe(this.applyChanges);
         this.hyperlink.subscribe(this.applyChanges);
@@ -65,12 +60,6 @@ export class ButtonEditor {
         }
     }
 
-    public onVariationSelected(snippet: LocalStyles): void {
-        if (snippet) {
-            this.appearanceStyle(snippet);
-        }
-    }
-
     public onRoleSelect(roles: string[]): void {
         this.model.roles = roles;
         this.applyChanges();
@@ -80,8 +69,7 @@ export class ButtonEditor {
         this.model.label = this.label();
         this.model.hyperlink = this.hyperlink();
         this.model.styles = {
-            appearance: this.appearanceStyle(),
-            size: this.sizeStyle()
+            appearance: this.appearanceStyle()
         };
 
         this.onChange(this.model);
