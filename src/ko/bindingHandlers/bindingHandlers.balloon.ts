@@ -32,6 +32,7 @@ export class BalloonBindingHandler {
 
                 let view: View;
                 let balloonElement: HTMLElement;
+                let balloonTipElement: HTMLElement;
                 let balloonIsOpen = false;
                 let closeTimeout;
 
@@ -54,6 +55,27 @@ export class BalloonBindingHandler {
                         document.body.appendChild(balloonElement);
                     };
                 }
+
+                const createBalloonTip = () => {
+                    balloonTipElement = document.createElement("div");
+                    balloonTipElement.classList.add("balloon-tip");
+                    document.body.appendChild(balloonTipElement);
+                };
+
+                const removeBalloon = () => {
+                    if (!balloonElement) {
+                        return;
+                    }
+
+                    ko.cleanNode(balloonElement);
+                    balloonElement.remove();
+                    balloonElement = null;
+
+                    balloonTipElement.remove();
+                    balloonTipElement = null;
+
+                    viewStack.removeView(view);
+                };
 
                 const resetCloseTimeout = () => {
                     if (options.closeTimeout) {
@@ -79,7 +101,7 @@ export class BalloonBindingHandler {
                     const spaceLeft = triggerRect.left;
                     const spaceRight = window.innerWidth - triggerRect.height;
 
-                    const balloonTipShift = 10;
+                    const balloonTipSize = 10;
                     const egdeGap = 10;
 
                     let balloonLeft;
@@ -93,6 +115,9 @@ export class BalloonBindingHandler {
                     let balloonHeight: number = balloonRect.height;
                     let balloonWidth: number = balloonRect.width;
 
+                    let balloonTipX;
+                    let balloonTipY;
+
                     if (preferredDirection === "vertical") {
                         if (spaceTop > spaceBottom) {
                             positionY = "top";
@@ -101,19 +126,21 @@ export class BalloonBindingHandler {
                         else {
                             positionY = "bottom";
                             availableSpaceY = spaceBottom - egdeGap;
+
                         }
                     }
                     else {
                         if (spaceLeft > spaceRight) {
                             positionX = "left";
                             availableSpaceX = spaceLeft - egdeGap;
+
                         }
                         else {
                             positionX = "right";
                             availableSpaceX = spaceRight - egdeGap;
+
                         }
                     }
-
 
                     balloonElement.style.maxHeight = availableSpaceY + "px";
                     balloonElement.style.maxWidth = availableSpaceX + "px";
@@ -162,39 +189,46 @@ export class BalloonBindingHandler {
                             break;
                     }
 
-                    balloonElement.classList.remove("balloon-top");
-                    balloonElement.classList.remove("balloon-bottom");
-                    balloonElement.classList.remove("balloon-left");
-                    balloonElement.classList.remove("balloon-right");
+                    balloonTipElement.classList.remove("balloon-top");
+                    balloonTipElement.classList.remove("balloon-bottom");
+                    balloonTipElement.classList.remove("balloon-left");
+                    balloonTipElement.classList.remove("balloon-right");
 
                     if (preferredDirection === "vertical") {
                         switch (positionY) {
                             case "top":
-                                balloonElement.classList.add("balloon-top");
                                 balloonTop = triggerRect.top - balloonHeight - 5;
                                 balloonLeft = triggerRect.left + (triggerRect.width / 2) - (balloonWidth / 2);
-
+                                balloonTipX = triggerRect.left + Math.floor(triggerRect.width / 2) - (balloonTipSize / 2);
+                                balloonTipY = triggerRect.top - balloonTipSize;
+                                balloonTipElement.classList.add("balloon-top");
                                 break;
 
                             case "bottom":
-                                balloonElement.classList.add("balloon-bottom");
                                 balloonTop = triggerRect.top + triggerRect.height + 5;
                                 balloonLeft = triggerRect.left + (triggerRect.width / 2) - (balloonWidth / 2);
+                                balloonTipX = triggerRect.left + Math.floor(triggerRect.width / 2) - (balloonTipSize / 2);
+                                balloonTipY = triggerRect.bottom;
+                                balloonTipElement.classList.add("balloon-bottom");
                                 break;
                         }
                     }
                     else {
                         switch (positionX) {
                             case "left":
-                                balloonElement.classList.add("balloon-left");
                                 balloonTop = triggerRect.top + (triggerRect.height / 2) - (balloonHeight / 2);
-                                balloonLeft = triggerRect.left - balloonWidth - balloonTipShift;
+                                balloonLeft = triggerRect.left - balloonWidth - balloonTipSize;
+                                balloonTipX = triggerRect.left - balloonTipSize - (balloonTipSize / 2);
+                                balloonTipY = triggerRect.top + Math.floor(triggerRect.height / 2) - (balloonTipSize / 2);
+                                balloonTipElement.classList.add("balloon-left");
                                 break;
 
                             case "right":
-                                balloonElement.classList.add("balloon-right");
                                 balloonTop = triggerRect.top + (triggerRect.height / 2) - (balloonHeight / 2);
-                                balloonLeft = triggerRect.right + balloonTipShift;
+                                balloonLeft = triggerRect.right + balloonTipSize;
+                                balloonTipX = triggerRect.right + (balloonTipSize / 2);
+                                balloonTipY = triggerRect.top + Math.floor(triggerRect.height / 2) - (balloonTipSize / 2);
+                                balloonTipElement.classList.add("balloon-right");
                                 break;
                         }
                     }
@@ -217,6 +251,9 @@ export class BalloonBindingHandler {
                     balloonElement.style.top = `${balloonTop}px`;
                     balloonElement.style.left = `${balloonLeft}px`;
                     balloonElement.style.height = `${balloonHeight}px`;
+
+                    balloonTipElement.style.top = `${balloonTipY}px`;
+                    balloonTipElement.style.left = `${balloonTipX}px`;
                 };
 
                 const open = (returnFocusTo: HTMLElement): void => {
@@ -227,6 +264,7 @@ export class BalloonBindingHandler {
                     }
 
                     createBalloonElement();
+                    createBalloonTip();
 
                     view = {
                         close: close,
@@ -242,7 +280,7 @@ export class BalloonBindingHandler {
 
                     balloonElement.classList.add("balloon-is-active");
                     requestAnimationFrame(updatePosition);
-
+                  
                     balloonIsOpen = true;
 
                     if (options.onOpen) {
@@ -261,13 +299,7 @@ export class BalloonBindingHandler {
                         options.onClose();
                     }
 
-                    if (balloonElement) {
-                        ko.cleanNode(balloonElement);
-                        balloonElement.remove();
-                        balloonElement = null;
-
-                        viewStack.removeView(view);
-                    }
+                    removeBalloon();
 
                     if (options.isOpen && options.isOpen()) {
                         // TODO: ViewManager should have stack of open editors, so they need to be closed one by one.
@@ -333,18 +365,18 @@ export class BalloonBindingHandler {
                         open(toggleElement);
                         balloonElement.addEventListener("mouseenter", () => {
                             inBalloon = true;
-                        })
+                        });
                         balloonElement.addEventListener("mouseleave", () => {
                             inBalloon = false;
                             checkCloseHoverBalloon();
-                        })
+                        });
                     }, options.offsetOnEnter || 0);
-                }
+                };
 
                 const onMouseLeave = async (event: MouseEvent): Promise<void> => {
                     isHoverOver = false;
                     checkCloseHoverBalloon();
-                }
+                };
 
                 const checkCloseHoverBalloon = async (): Promise<void> => {
                     setTimeout(() => {
@@ -352,10 +384,8 @@ export class BalloonBindingHandler {
                             close();
                         }
                     }, 20);
-                }
+                };
 
-                
- 
                 const onKeyDown = async (event: KeyboardEvent): Promise<void> => {
                     switch (event.keyCode) {
                         case Keys.Enter:
@@ -401,17 +431,14 @@ export class BalloonBindingHandler {
                 ko.utils.domNodeDisposal.addDisposeCallback(toggleElement, () => {
                     toggleElement.removeEventListener("keydown", onKeyDown);
                     toggleElement.removeEventListener("click", onClick);
+
                     if (options.displayOnEnter) {
                         toggleElement.removeEventListener("mouseenter", onMouseEnter);
                         toggleElement.removeEventListener("mouseleave", onMouseLeave);
                     }
                     window.removeEventListener("scroll", onScroll, true);
 
-                    if (balloonElement) {
-                        ko.cleanNode(balloonElement);
-                        balloonElement.remove();
-                        balloonElement = null;
-                    }
+                    removeBalloon();
 
                     if (eventManager) {
                         eventManager.removeEventListener("onPointerDown", onPointerDown);
