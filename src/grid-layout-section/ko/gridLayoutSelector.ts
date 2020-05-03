@@ -50,7 +50,7 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         }
         this.snippets(snippets);
 
-        const blocksUrl = await this.settingsProvider.getSetting<string>("blocksUrl");
+        const blocksUrl = await this.settingsProvider.getSetting<string>("blockSnippetsUrl");
         this.isBlocksEnabled(blocksUrl ? true : false);
     }
 
