@@ -105,8 +105,10 @@ export class BalloonBindingHandler {
                     const egdeGap = 10;
 
                     let balloonLeft;
+                    let balloonRight;
                     let balloonTop;
                     let balloonBottom;
+                    let selectedPosition;
 
                     let positionX: string;
                     let positionY: string;
@@ -142,8 +144,7 @@ export class BalloonBindingHandler {
                         }
                     }
 
-                    balloonElement.style.maxHeight = availableSpaceY + "px";
-                    balloonElement.style.maxWidth = availableSpaceX + "px";
+
 
                     if (balloonRect.height > availableSpaceY) {
                         balloonHeight = availableSpaceY;
@@ -202,6 +203,7 @@ export class BalloonBindingHandler {
                                 balloonTipX = triggerRect.left + Math.floor(triggerRect.width / 2) - (balloonTipSize / 2);
                                 balloonTipY = triggerRect.top - balloonTipSize;
                                 balloonTipElement.classList.add("balloon-top");
+                                selectedPosition = "top";
                                 break;
 
                             case "bottom":
@@ -210,6 +212,7 @@ export class BalloonBindingHandler {
                                 balloonTipX = triggerRect.left + Math.floor(triggerRect.width / 2) - (balloonTipSize / 2);
                                 balloonTipY = triggerRect.bottom;
                                 balloonTipElement.classList.add("balloon-bottom");
+                                selectedPosition = "bottom";
                                 break;
                         }
                     }
@@ -221,6 +224,7 @@ export class BalloonBindingHandler {
                                 balloonTipX = triggerRect.left - balloonTipSize - (balloonTipSize / 2);
                                 balloonTipY = triggerRect.top + Math.floor(triggerRect.height / 2) - (balloonTipSize / 2);
                                 balloonTipElement.classList.add("balloon-left");
+                                selectedPosition = "left";
                                 break;
 
                             case "right":
@@ -229,6 +233,7 @@ export class BalloonBindingHandler {
                                 balloonTipX = triggerRect.right + (balloonTipSize / 2);
                                 balloonTipY = triggerRect.top + Math.floor(triggerRect.height / 2) - (balloonTipSize / 2);
                                 balloonTipElement.classList.add("balloon-right");
+                                selectedPosition = "right";
                                 break;
                         }
                     }
@@ -248,9 +253,38 @@ export class BalloonBindingHandler {
                         balloonLeft = egdeGap;
                     }
 
-                    balloonElement.style.top = `${balloonTop}px`;
-                    balloonElement.style.left = `${balloonLeft}px`;
-                    balloonElement.style.height = `${balloonHeight}px`;
+                    delete balloonElement.style.top;
+                    delete balloonElement.style.bottom;
+                    delete balloonElement.style.left;
+                    delete balloonElement.style.right;
+
+                    switch (selectedPosition) {
+                        case "top":
+                            balloonElement.style.bottom = `${balloonBottom}px`;
+                            balloonElement.style.left = `${balloonLeft}px`;
+                            break;
+
+                        case "bottom":
+                            balloonElement.style.top = `${balloonTop}px`;
+                            balloonElement.style.left = `${balloonLeft}px`;
+                            break;
+
+                        case "left":
+                            balloonElement.style.top = `${balloonTop}px`;
+                            balloonElement.style.height = `${balloonHeight}px`;
+                            // balloonElement.style.right = `${balloonRight}px`; // TODO: Make it work
+                            balloonElement.style.left = `${balloonLeft}px`;
+                            break;
+
+                        case "right":
+                            balloonElement.style.top = `${balloonTop}px`;
+                            balloonElement.style.height = `${balloonHeight}px`;
+                            balloonElement.style.left = `${balloonLeft}px`;
+                            break;
+                    }
+
+                    balloonElement.style.maxHeight = availableSpaceY + "px";
+                    balloonElement.style.maxWidth = availableSpaceX + "px";
 
                     balloonTipElement.style.top = `${balloonTipY}px`;
                     balloonTipElement.style.left = `${balloonTipX}px`;
@@ -280,7 +314,7 @@ export class BalloonBindingHandler {
 
                     balloonElement.classList.add("balloon-is-active");
                     requestAnimationFrame(updatePosition);
-                  
+
                     balloonIsOpen = true;
 
                     if (options.onOpen) {
