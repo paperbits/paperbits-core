@@ -1,0 +1,35 @@
+<fieldset class="form" data-bind="scrollable: true">
+    <div class="form-group">
+        <label class="form-label">
+            Label
+            <button class="btn btn-info" type="button" data-bind="tooltip: 'Text on the button'"></button>
+        </label>
+        <input type="text" class="form-control" data-bind="textInput: label" maxlength="256" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">
+            Calendy link
+            <button class="btn btn-info" type="button"
+                data-bind="tooltip: 'A link to be navigated on click.'"></button>
+        </label>
+        <div class="input-group">
+            <a href="#" class="form-control"
+                data-bind="text: hyperlinkTitle, balloon: { component: { name: 'hyperlink-selector', params: { hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange } } }">
+            </a>
+            <div class="input-group-addon">
+                <i class="paperbits-icon paperbits-link-69-2"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="appearanceStyle" class="form-label">
+            Appearance
+            <button class="btn btn-info" type="button"
+                data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
+        </label>
+        <select id="appearanceStyle" class="form-control"
+            data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
+    </div>
+</fieldset>
