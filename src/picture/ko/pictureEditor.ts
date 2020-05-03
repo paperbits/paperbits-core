@@ -21,13 +21,9 @@ export class PictureEditor {
     public readonly background: ko.Observable<BackgroundModel>;
     public readonly hyperlink: ko.Observable<HyperlinkModel>;
     public readonly hyperlinkTitle: ko.Computed<string>;
-
     public readonly sizeConfig: ko.Observable<SizeStylePluginConfig>;
     public readonly appearanceStyles: ko.ObservableArray<any>;
     public readonly appearanceStyle: ko.Observable<any>;
-
-    private readonly DEFAULT_WIDTH: number = 200;
-    private readonly DEFAULT_HEIGHT: number = 200;
 
     constructor(
         private readonly styleService: StyleService,
@@ -56,7 +52,6 @@ export class PictureEditor {
             background.sourceKey = this.model.sourceKey;
             background.sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(this.model.sourceKey);
             this.background(background);
-
             this.sourceKey(this.model.sourceKey);
         }
 
@@ -110,7 +105,9 @@ export class PictureEditor {
             background.position = "center center";
             this.background(background);
 
-            this.updateSizeConfigForSelectedMedia(media);
+            if (!this.model.width && !this.model.height) {
+                this.updateSizeConfigForSelectedMedia(media); // TODO: Set size to media itself on upload
+            }
         }
 
         this.applyChanges();
@@ -125,8 +122,8 @@ export class PictureEditor {
         selectedMedia.src = media.downloadUrl;
 
         this.sizeConfig({
-            width: selectedMedia.width || this.DEFAULT_WIDTH,
-            height: selectedMedia.height || this.DEFAULT_HEIGHT
+            width: selectedMedia.width,
+            height: selectedMedia.height
         });
     }
 

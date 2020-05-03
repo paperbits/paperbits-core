@@ -8,14 +8,7 @@
         <div class="tab" data-bind="css: { 'tab-is-active': !selected() }, attr: { 'aria-selected': !selected() }">
             <a href="#" data-bind="click: selected.bind($data,undefined), focus: true" title="New section" role="tab"
                 aria-label="add empty section">
-                New section
-            </a>
-        </div>
-        <div class="tab"
-            data-bind="css: { 'tab-is-active': selected() === 'saved' }, attr: { 'aria-selected': selected() === 'saved' }">
-            <a href="#" data-bind="click: selected.bind($data,'saved')" title="From library" role="tab"
-                aria-label="Add from library">
-                From library
+                Empty
             </a>
         </div>
         <!-- ko if: isBlocksEnabled -->
@@ -27,10 +20,18 @@
             </a>
         </div>
         <!-- /ko -->
+        <div class="tab"
+            data-bind="css: { 'tab-is-active': selected() === 'saved' }, attr: { 'aria-selected': selected() === 'saved' }">
+            <a href="#" data-bind="click: selected.bind($data,'saved')" title="From library" role="tab"
+                aria-label="Add from library">
+                Saved
+            </a>
+        </div>
     </div>
     <!-- ko if: !selected() -->
 
-    <div role="tabpanel" class="flex flex-column flex-grow" data-bind="scrollable: true, focus: { childSelector: '.list-item' }">
+    <div role="tabpanel" class="flex flex-column flex-grow"
+        data-bind="scrollable: true, focus: { childSelector: '.list-item' }">
         <div role="list" data-bind="foreach: { data: $component.snippets, as: 'snippet' }">
             <a href="#" class="snippet-grid list-item" role="listitem"
                 data-bind="click: $component.selectLayout, styledInPlace: snippet.styles">
@@ -46,14 +47,16 @@
 
     <!-- ko if: selected() === 'saved' -->
     <div role="tabpanel" class="flex flex-column add-block-container">
-        <block-selector class="flex flex-column" params="{ blockType: 'layout-section', onSelect: $component.onBlockSelected }">
+        <block-selector class="flex flex-column"
+            params="{ blockType: 'layout-section', onSelect: $component.onBlockSelected }">
         </block-selector>
     </div>
     <!-- /ko -->
 
     <!-- ko if: selected() === 'blocks' -->
     <div role="tabpanel" class="flex flex-column add-block-container">
-        <block-selector params="{ blockType: 'blocks-section', onSelect: $component.onBlockSelected }">
+        <block-selector class="flex flex-column"
+            params="{ blockType: 'blocks-section', onSelect: $component.onBlockSelected }">
         </block-selector>
     </div>
     <!-- /ko -->
