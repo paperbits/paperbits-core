@@ -1,14 +1,14 @@
 import * as ko from "knockout";
-import template from "./calendlyCalendlyButtonEditor.html";
+import template from "./calendlyButtonEditor.html";
 import { StyleService } from "@paperbits/styles";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
-import { CalendlyButtonModel } from "../calendlyCalendlyButtonModel";
+import { CalendlyButtonModel } from "../calendlyButtonModel";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { LocalStyles } from "@paperbits/common/styles";
 
 
 @Component({
-    selector: "calendlyCalendlyButton-editor",
+    selector: "calendlyButton-editor",
     template: template
 })
 export class CalendlyButtonEditor {
@@ -37,7 +37,7 @@ export class CalendlyButtonEditor {
         this.label(this.model.label);
 
         if (this.model.styles) {
-            const variations = await this.styleService.getComponentVariations("calendlyCalendlyButton");
+            const variations = await this.styleService.getComponentVariations("calendlyButton");
             this.appearanceStyles(variations.filter(x => x.category === "appearance"));
             this.appearanceStyle(<string>this.model.styles?.appearance);
         }

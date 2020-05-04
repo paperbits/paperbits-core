@@ -7,7 +7,7 @@ import { HyperlinkContract } from "@paperbits/common/editing";
  */
 export interface CalendlyButtonContract extends Contract {
     /**
-     * Label on the calendlyCalendlyButton.
+     * Label on the calendlyButton.
      */
     label: string;
 

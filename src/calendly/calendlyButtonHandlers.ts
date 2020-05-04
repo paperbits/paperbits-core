@@ -1,13 +1,13 @@
 ﻿import { IWidgetOrder, IWidgetHandler } from "@paperbits/common/editing";
-import { CalendlyButtonModel } from "./calendlyCalendlyButtonModel";
+import { CalendlyButtonModel } from "./calendlyButtonModel";
 
 
 export class CalendlyButtonHandlers implements IWidgetHandler {
     public async getWidgetOrder(): Promise<IWidgetOrder> {
         const widgetOrder: IWidgetOrder = {
-            name: "calendlyCalendlyButton",
+            name: "calendlyButton",
             displayName: "CalendlyButton",
-            iconClass: "paperbits-calendlyCalendlyButton-2",
+            iconClass: "paperbits-calendlyButton-2",
             requires: [],
             createModel: async () => {
                 return new CalendlyButtonModel();

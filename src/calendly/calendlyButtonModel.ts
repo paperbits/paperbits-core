@@ -6,7 +6,7 @@ import { LocalStyles } from "@paperbits/common/styles";
  */
 export class CalendlyButtonModel {
     /**
-     * Label on the calendlyCalendlyButton.
+     * Label on the calendlyButton.
      */
     public label: string;
 
@@ -27,6 +27,6 @@ export class CalendlyButtonModel {
 
     constructor() {
         this.label = "CalendlyButton";
-        this.styles = { appearance: "components/calendlyCalendlyButton/default" };
+        this.styles = { appearance: "components/calendlyButton/default" };
     }
 }

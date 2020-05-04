@@ -1,3 +1,3 @@
-export * from "./calendlyCalendlyButtonHandlers";
-export * from "./calendlyCalendlyButtonModel";
-export * from "./calendlyCalendlyButtonModelBinder";
+export * from "./calendlyButtonHandlers";
+export * from "./calendlyButtonModel";
+export * from "./calendlyButtonModelBinder";

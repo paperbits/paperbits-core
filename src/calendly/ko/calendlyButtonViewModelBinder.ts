@@ -1,11 +1,10 @@
-import { CalendlyButton } from "./calendlyCalendlyButtonViewModel";
+import { CalendlyButton } from "./calendlyButtonViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
-import { CalendlyButtonModel } from "../calendlyCalendlyButtonModel";
+import { CalendlyButtonModel } from "../calendlyButtonModel";
 import { EventManager } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
-
-export class CalendlyButtonViewModelBinder implements ViewModelBinder<CalendlyButtonModel, CalendlyButton>  {
+ export class CalendlyButtonViewModelBinder implements ViewModelBinder<CalendlyButtonModel, CalendlyButton>  {
     constructor(
         private readonly eventManager: EventManager,
         private readonly styleCompiler: StyleCompiler
@@ -25,12 +24,12 @@ export class CalendlyButtonViewModelBinder implements ViewModelBinder<CalendlyBu
         }
 
         viewModel["widgetBinding"] = {
-            displayName: "CalendlyButton",
+            displayName: "Calendly button",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: true,
             flow: "inline",
-            editor: "calendlyCalendlyButton-editor",
+            editor: "calendlyButton-editor",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");

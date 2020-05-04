@@ -1,8 +1,8 @@
 import { IModelBinder } from "@paperbits/common/editing";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
-import { CalendlyButtonModel } from "./calendlyCalendlyButtonModel";
+import { CalendlyButtonModel } from "./calendlyButtonModel";
 import { Contract } from "@paperbits/common";
-import { CalendlyButtonContract } from "./calendlyCalendlyButtonContract";
+import { CalendlyButtonContract } from "./calendlyButtonContract";
 import { BuiltInRoles } from "@paperbits/common/user";
 
 
@@ -13,7 +13,7 @@ export class CalendlyButtonModelBinder implements IModelBinder<CalendlyButtonMod
     }
 
     public canHandleContract(contract: Contract): boolean {
-        return contract.type === "calendlyCalendlyButton";
+        return contract.type === "calendlyButton";
     }
 
     public canHandleModel(model: Object): boolean {
@@ -24,7 +24,7 @@ export class CalendlyButtonModelBinder implements IModelBinder<CalendlyButtonMod
         const model = new CalendlyButtonModel();
         model.label = contract.label;
         model.roles = contract.roles || [BuiltInRoles.everyone.key];
-        model.styles = contract.styles || { appearance: "components/calendlyCalendlyButton/default" };
+        model.styles = contract.styles || { appearance: "components/calendlyButton/default" };
 
         if (contract.hyperlink) {
             model.hyperlink = await this.permalinkResolver.getHyperlinkFromContract(contract.hyperlink);
@@ -40,20 +40,20 @@ export class CalendlyButtonModelBinder implements IModelBinder<CalendlyButtonMod
             ? null
             : model.roles;
 
-        const calendlyCalendlyButtonConfig: CalendlyButtonContract = {
-            type: "calendlyCalendlyButton",
+        const calendlyButtonConfig: CalendlyButtonContract = {
+            type: "calendlyButton",
             label: model.label,
             styles: model.styles,
             roles: roles
         };
 
         if (model.hyperlink) {
-            calendlyCalendlyButtonConfig.hyperlink = {
+            calendlyButtonConfig.hyperlink = {
                 target: model.hyperlink.target,
                 targetKey: model.hyperlink.targetKey
             };
         }
 
-        return calendlyCalendlyButtonConfig;
+        return calendlyButtonConfig;
     }
 }

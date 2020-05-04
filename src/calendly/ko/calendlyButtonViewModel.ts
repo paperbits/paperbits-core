@@ -1,12 +1,12 @@
 import * as ko from "knockout";
-import template from "./calendlyCalendlyButton.html";
+import template from "./calendlyButton.html";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { Component } from "@paperbits/common/ko/decorators";
 import { StyleModel } from "@paperbits/common/styles";
 
 
 @Component({
-    selector: "paperbits-calendlyCalendlyButton",
+    selector: "calendly-button",
     template: template
 })
 export class CalendlyButton {

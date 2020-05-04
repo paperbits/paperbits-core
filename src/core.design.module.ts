@@ -57,6 +57,8 @@ import "./ko/bindingHandlers/bindingHandlers.activate";
 import { ContentEditorModule } from "./content/ko";
 import { ViewStack } from "./ko/ui/viewStack";
 import { MediaDisplay } from "./workshops/media/ko/mediaDisplay";
+import { CalendlyButtonEditorModule } from "./calendly/ko/calendlyButtonEditor.module";
+import { CalendlyButtonModule } from "./calendly/ko";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -71,7 +73,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindSingleton("tray", Tray);
         injector.bindSingleton("viewStack", ViewStack);
         injector.bind("mediaDisplay", MediaDisplay);
-        
+
         injector.bind("mediaHyperlinkProvider", MediaHyperlinkProvider);
         injector.bind("urlHyperlinkProvider", UrlHyperlinkProvider);
         injector.bind("gridEditor", GridEditor);
@@ -134,5 +136,9 @@ export class CoreDesignModule implements IInjectorModule {
         const userService = new DesignerUserService();
         injector.bindInstance("userService", userService);
         injector.bindInstance("designerUserService", userService);
+
+
+        injector.bindModule(new CalendlyButtonModule());
+        injector.bindModule(new CalendlyButtonEditorModule());
     }
 }
