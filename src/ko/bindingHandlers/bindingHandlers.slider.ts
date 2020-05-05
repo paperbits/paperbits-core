@@ -54,8 +54,13 @@ ko.bindingHandlers["slider"] = {
             }
 
             const position = x - initialOffset;
-            element.style.left = position + "px";
             percentage = Math.floor((position + offset) / parentWidth * 100);
+
+            if (percentage < 0) {
+                return;
+            }
+            
+            element.style.left = position + "px";
 
             if (config.onChange) {
                 config.onChange(data, percentage);
