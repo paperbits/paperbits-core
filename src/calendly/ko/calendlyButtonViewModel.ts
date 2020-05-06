@@ -12,13 +12,13 @@ import { StyleModel } from "@paperbits/common/styles";
 export class CalendlyButton {
     public readonly label: ko.Observable<string>;
     public readonly styles: ko.Observable<StyleModel>;
-    public readonly hyperlink: ko.Observable<HyperlinkModel>;
+    public readonly calendlyLink: ko.Observable<string>;
     public readonly roles: ko.ObservableArray<string>;
 
     constructor() {
-        this.label = ko.observable<string>("CalendlyButton");
+        this.label = ko.observable<string>("Schedule");
         this.styles = ko.observable<StyleModel>();
-        this.hyperlink = ko.observable<HyperlinkModel>();
+        this.calendlyLink = ko.observable<string>();
         this.roles = ko.observableArray<string>();
     }
 }

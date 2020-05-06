@@ -23,12 +23,8 @@ export class CalendlyButtonModelBinder implements IModelBinder<CalendlyButtonMod
     public async contractToModel(contract: CalendlyButtonContract): Promise<CalendlyButtonModel> {
         const model = new CalendlyButtonModel();
         model.label = contract.label;
-        model.roles = contract.roles || [BuiltInRoles.everyone.key];
         model.styles = contract.styles || { appearance: "components/calendlyButton/default" };
-
-        if (contract.hyperlink) {
-            model.hyperlink = await this.permalinkResolver.getHyperlinkFromContract(contract.hyperlink);
-        }
+        model.calendlyLink = contract.calendlyLink;
 
         return model;
     }
@@ -44,15 +40,8 @@ export class CalendlyButtonModelBinder implements IModelBinder<CalendlyButtonMod
             type: "calendlyButton",
             label: model.label,
             styles: model.styles,
-            roles: roles
+            calendlyLink: model.calendlyLink
         };
-
-        if (model.hyperlink) {
-            calendlyButtonConfig.hyperlink = {
-                target: model.hyperlink.target,
-                targetKey: model.hyperlink.targetKey
-            };
-        }
 
         return calendlyButtonConfig;
     }

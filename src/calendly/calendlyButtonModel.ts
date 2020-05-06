@@ -1,4 +1,3 @@
-import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { LocalStyles } from "@paperbits/common/styles";
 
 /**
@@ -13,7 +12,7 @@ export class CalendlyButtonModel {
     /**
      * Assigned hyperlink.
      */
-    public hyperlink: HyperlinkModel;
+    public calendlyLink: string;
 
     /**
      * CalendlyButton local styles.
@@ -26,7 +25,7 @@ export class CalendlyButtonModel {
     public roles?: string[];
 
     constructor() {
-        this.label = "CalendlyButton";
-        this.styles = { appearance: "components/calendlyButton/default" };
+        this.label = "Schedule";
+        this.styles = { appearance: "components/button/default" };
     }
 }

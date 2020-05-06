@@ -4,6 +4,7 @@ import { CalendlyButtonModel } from "../calendlyButtonModel";
 import { EventManager } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
+
  export class CalendlyButtonViewModelBinder implements ViewModelBinder<CalendlyButtonModel, CalendlyButton>  {
     constructor(
         private readonly eventManager: EventManager,
@@ -16,7 +17,7 @@ import { Bag } from "@paperbits/common";
         }
 
         viewModel.label(model.label);
-        viewModel.hyperlink(model.hyperlink);
+        viewModel.calendlyLink(model.calendlyLink);
         viewModel.roles(model.roles);
 
         if (model.styles) {
@@ -29,7 +30,7 @@ import { Bag } from "@paperbits/common";
             model: model,
             draggable: true,
             flow: "inline",
-            editor: "calendlyButton-editor",
+            editor: "calendly-button-editor",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");

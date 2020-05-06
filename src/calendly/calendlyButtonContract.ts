@@ -17,12 +17,7 @@ export interface CalendlyButtonContract extends Contract {
     styles?: any;
 
     /**
-     * Keys of user roles.
-     */
-    roles?: string[];
-    
-    /**
      * Assigned hyperlink.
      */
-    hyperlink?: HyperlinkContract;
+    calendlyLink?: string;
 }

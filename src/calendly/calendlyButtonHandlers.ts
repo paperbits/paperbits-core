@@ -5,9 +5,9 @@ import { CalendlyButtonModel } from "./calendlyButtonModel";
 export class CalendlyButtonHandlers implements IWidgetHandler {
     public async getWidgetOrder(): Promise<IWidgetOrder> {
         const widgetOrder: IWidgetOrder = {
-            name: "calendlyButton",
-            displayName: "CalendlyButton",
-            iconClass: "paperbits-calendlyButton-2",
+            name: "calendly-button",
+            displayName: "Calendly button",
+            iconClass: "paperbits-button-2",
             requires: [],
             createModel: async () => {
                 return new CalendlyButtonModel();
