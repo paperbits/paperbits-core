@@ -8,6 +8,7 @@ import { IInjector, IInjectorModule } from "@paperbits/common/injection";
 import { LayoutService } from "@paperbits/common/layouts/layoutService";
 import { LocaleService } from "@paperbits/common/localization";
 import { MediaService } from "@paperbits/common/media";
+import { DefaultChangeCommitter } from "@paperbits/common/persistence";
 import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkResolver";
 import { NavigationService } from "@paperbits/common/navigation";
 import { PageService } from "@paperbits/common/pages";
@@ -63,6 +64,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("eventManager", DefaultEventManager);
         injector.bindSingleton("globalEventHandler", GlobalEventHandler);
         injector.bindSingleton("localCache", LocalCache);
+        injector.bindSingleton("changeCommitter", DefaultChangeCommitter);
 
         /*** Services ***/
         injector.bindSingleton("widgetService", WidgetService);

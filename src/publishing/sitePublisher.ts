@@ -1,7 +1,7 @@
 import * as Utils from "@paperbits/common/utils";
 import { IPublisher, SitemapBuilder, SearchIndexBuilder } from "@paperbits/common/publishing";
 import { Logger } from "@paperbits/common/logging";
-import { IBlobStorage } from "@paperbits/common/persistence";
+import { IBlobStorage, ChangeCommitter } from "@paperbits/common/persistence";
 
 
 export class SitePublisher implements IPublisher {
@@ -10,7 +10,8 @@ export class SitePublisher implements IPublisher {
         private readonly logger: Logger,
         private readonly sitemapBuilder: SitemapBuilder,
         private readonly searchIndexBuilder: SearchIndexBuilder,
-        private readonly outputBlobStorage: IBlobStorage
+        private readonly outputBlobStorage: IBlobStorage,
+        private readonly changeCommitter: ChangeCommitter
     ) { }
 
     public async publish(): Promise<void> {
@@ -28,6 +29,8 @@ export class SitePublisher implements IPublisher {
             const searchIndex = await this.searchIndexBuilder.buildIndex();
             const searchIndexBytes = Utils.stringToUnit8Array(searchIndex);
             await this.outputBlobStorage.uploadBlob("search-index.json", searchIndexBytes, "application/json");
+
+            this.changeCommitter.commit();
 
             this.logger.traceEvent("Website published successfully.");
         }
