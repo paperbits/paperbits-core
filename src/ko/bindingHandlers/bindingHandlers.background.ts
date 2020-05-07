@@ -31,7 +31,7 @@ export class BackgroundBindingHandler {
                         styleObservable({
                             "background-image": `url("${ko.unwrap(backgroundModel.sourceUrl)}")`,
                             "background-repeat": "no-repeat",
-                            "background-size": "contain",
+                            "background-size": "cover",
                             "background-position": "center",
                             "background-color": backgroundModel.color
                         });

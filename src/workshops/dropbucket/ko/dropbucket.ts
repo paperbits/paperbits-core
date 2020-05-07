@@ -80,8 +80,8 @@ export class DropBucket {
     }
 
     private onDragDrop(event: DragEvent): void {
-    
-        if (this.viewManager.mode == ViewManagerMode.preview){
+
+        if (this.viewManager.mode === ViewManagerMode.preview) {
             return;
         }
         if (!this.canHandleDrop(event)) {
@@ -186,7 +186,7 @@ export class DropBucket {
     }
 
     public onDragStart(item: DropBucketItem): HTMLElement {
-        if (this.viewManager.mode == ViewManagerMode.preview){
+        if (this.viewManager.mode == ViewManagerMode.preview) {
             return;
         }
         item.widgetFactoryResult = item.widgetOrder().createWidget();
@@ -206,7 +206,7 @@ export class DropBucket {
     }
 
     public async onDragEnd(dropbucketItem: DropBucketItem): Promise<void> {
-        if (this.viewManager.mode == ViewManagerMode.preview){
+        if (this.viewManager.mode === ViewManagerMode.preview) {
             return;
         }
         dropbucketItem.widgetFactoryResult.element.remove();
@@ -230,7 +230,7 @@ export class DropBucket {
         this.eventManager.dispatchEvent("virtualDragEnd");
     }
 
-    public uploadContentAsMedia(dropbucketItem: DropBucketItem): void {
+    public async uploadContentAsMedia(dropbucketItem: DropBucketItem): Promise<void> {
         const uploadables = dropbucketItem.uploadables();
 
         this.droppedItems.remove(dropbucketItem);
@@ -248,13 +248,6 @@ export class DropBucket {
                 const content = await Utils.readFileAsByteArray(uploadable);
                 uploadPromise = this.mediaService.createMedia(uploadable.name, content, uploadable.type);
                 this.viewManager.notifyProgress(uploadPromise, "Media library", `Uploading ${uploadable.name}...`);
-            }
-
-            const onMediaUploadedCallback = dropbucketItem.widgetFactoryResult.onMediaUploadedCallback;
-
-            if (onMediaUploadedCallback && typeof onMediaUploadedCallback === "function") {
-                // VK: Called by KO binding, so 2nd argument may be an event
-                uploadPromise.then(createdMedia => onMediaUploadedCallback(createdMedia));
             }
         });
     }
