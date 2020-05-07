@@ -30,7 +30,7 @@ export class SitePublisher implements IPublisher {
             const searchIndexBytes = Utils.stringToUnit8Array(searchIndex);
             await this.outputBlobStorage.uploadBlob("search-index.json", searchIndexBytes, "application/json");
 
-            this.changeCommitter.commit();
+            await this.changeCommitter.commit();
 
             this.logger.traceEvent("Website published successfully.");
         }
