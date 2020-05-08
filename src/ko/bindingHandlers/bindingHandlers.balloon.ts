@@ -1,5 +1,4 @@
 ﻿import * as ko from "knockout";
-import { EventManager } from "@paperbits/common/events";
 import { Keys } from "@paperbits/common/keyboard";
 import { IComponent, ITemplate, View } from "@paperbits/common/ui";
 import { ViewStack } from "../ui/viewStack";
@@ -20,8 +19,7 @@ export interface BalloonOptions {
 }
 
 export class BalloonBindingHandler {
-    constructor(viewStack: ViewStack, eventManager?: EventManager) {
-
+    constructor(viewStack: ViewStack) {
         ko.bindingHandlers["balloon"] = {
             init: (toggleElement: HTMLElement, valueAccessor: () => BalloonOptions) => {
 
@@ -455,12 +453,7 @@ export class BalloonBindingHandler {
                 }
                 window.addEventListener("scroll", onScroll, true);
 
-                if (eventManager) {
-                    eventManager.addEventListener("onPointerDown", onPointerDown);
-                }
-                else {
-                    document.addEventListener("pointerdown", onPointerDown, true);
-                }
+                document.addEventListener("pointerdown", onPointerDown, true);
 
                 ko.utils.domNodeDisposal.addDisposeCallback(toggleElement, () => {
                     toggleElement.removeEventListener("keydown", onKeyDown);
@@ -470,16 +463,10 @@ export class BalloonBindingHandler {
                         toggleElement.removeEventListener("mouseenter", onMouseEnter);
                         toggleElement.removeEventListener("mouseleave", onMouseLeave);
                     }
-                    window.removeEventListener("scroll", onScroll, true);
 
                     removeBalloon();
-
-                    if (eventManager) {
-                        eventManager.removeEventListener("onPointerDown", onPointerDown);
-                    }
-                    else {
-                        window.removeEventListener("pointerdown", onPointerDown, true);
-                    }
+                    window.removeEventListener("scroll", onScroll, true);
+                    window.removeEventListener("pointerdown", onPointerDown, true);
                 });
             }
         };
