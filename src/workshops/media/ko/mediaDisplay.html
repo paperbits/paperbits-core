@@ -1,9 +1,8 @@
 <div class="flex flex-column">
-    <div class="form flex-item flex-item-grow media-preview-box">
+    <div class="flex flex-item flex-item-grow media-preview-box">
         <!-- ko if: item -->
-        <a href="#" data-bind="lightbox: { url: item.thumbnailUrl, fileName: item.fileName }">
-            <img class="lightbox-image" data-bind="attr: { src: item.thumbnailUrl }" />
-        </a>
+        <img class="lightbox-image"
+            data-bind="attr: { src: item.thumbnailUrl }, lightbox: { url: item.thumbnailUrl, fileName: item.fileName }" />
         <!-- /ko -->
     </div>
     <div class="flex-item text-center text-overflow btn-group" data-bind="text: item.fileName"></div>

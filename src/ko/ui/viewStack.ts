@@ -15,8 +15,6 @@ export class ViewStack {
         const tagetElement = <HTMLElement>event.target;
         const views = [...this.stack]; // clone array
 
-        console.log(views);
-
         for (const view of views.reverse()) {
             let hit: boolean;
 

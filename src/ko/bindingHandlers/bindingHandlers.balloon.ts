@@ -142,8 +142,6 @@ export class BalloonBindingHandler {
                         }
                     }
 
-
-
                     if (balloonRect.height > availableSpaceY) {
                         balloonHeight = availableSpaceY;
                     }
@@ -315,11 +313,22 @@ export class BalloonBindingHandler {
 
                         balloonElement.classList.add("balloon-is-active");
                         requestAnimationFrame(updatePosition);
-    
+
                         balloonIsOpen = true;
-    
+
                         if (options.onOpen) {
                             options.onOpen();
+                        }
+
+                        if (options.displayOnEnter) {
+                            balloonElement.addEventListener("mouseenter", () => {
+                                inBalloon = true;
+                            });
+
+                            balloonElement.addEventListener("mouseleave", () => {
+                                inBalloon = false;
+                                checkCloseHoverBalloon();
+                            });
                         }
                     });
                 };
@@ -383,34 +392,22 @@ export class BalloonBindingHandler {
                     }
 
                     const targetElement = <HTMLElement>event.target;
-
                     const element = closest(targetElement, (node) => node === toggleElement);
 
                     if (element) {
-                        // event.preventDefault();
-                        // event.stopPropagation();
                         toggle();
-                        return;
-                    }
-                    else {
-                        // close();
                     }
                 };
 
                 const onMouseEnter = async (event: MouseEvent): Promise<void> => {
                     isHoverOver = true;
+
                     setTimeout(() => {
                         if (!isHoverOver) {
                             return;
                         }
+
                         open(toggleElement);
-                        balloonElement.addEventListener("mouseenter", () => {
-                            inBalloon = true;
-                        });
-                        balloonElement.addEventListener("mouseleave", () => {
-                            inBalloon = false;
-                            checkCloseHoverBalloon();
-                        });
                     }, options.offsetOnEnter || 0);
                 };
 
@@ -424,7 +421,7 @@ export class BalloonBindingHandler {
                         if (!isHoverOver && !inBalloon) {
                             close();
                         }
-                    }, 20);
+                    }, 50);
                 };
 
                 const onKeyDown = async (event: KeyboardEvent): Promise<void> => {
@@ -463,6 +460,7 @@ export class BalloonBindingHandler {
                 }
 
                 window.addEventListener("scroll", onScroll, true);
+
                 document.addEventListener("pointerdown", onPointerDown, true);
 
                 ko.utils.domNodeDisposal.addDisposeCallback(toggleElement, () => {

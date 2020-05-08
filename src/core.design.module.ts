@@ -26,7 +26,7 @@ import { ViewportSelector } from "./workshops/viewports/ko/viewport-selector";
 import { LocaleSelector, LocaleEditor } from "./workshops/localization/ko";
 import { HostBindingHandler, BalloonBindingHandler, ResizableBindingHandler } from "./ko/bindingHandlers";
 import { MediaHandlers, HtmlEditorProvider } from "@paperbits/common/editing";
-import { LityLightbox, View } from "@paperbits/common/ui";
+import { View } from "@paperbits/common/ui";
 import { HyperlinkSelector } from "./workshops/hyperlinks/ko/hyperlinkSelector";
 import { WidgetSelector } from "./workshops/widgets/ko/widgetSelector";
 import { UrlSelector } from "./workshops/urls/ko/urlSelector";
@@ -57,6 +57,7 @@ import "./ko/bindingHandlers/bindingHandlers.activate";
 import { ContentEditorModule } from "./content/ko";
 import { ViewStack } from "./ko/ui/viewStack";
 import { MediaDisplay } from "./workshops/media/ko/mediaDisplay";
+import { Lightbox } from "./workshops/media/ko/lightbox";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -82,7 +83,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindToCollection("autostart", UnhandledErrorHandler);
         injector.bind("tooltip", Tooltip);
         injector.bindSingleton("dragManager", DragManager);
-        injector.bindSingleton("lightbox", LityLightbox);
+        injector.bindSingleton("lightbox", Lightbox);
         injector.bind("placeholderWidget", PlaceholderViewModel);
         injector.bindSingleton("htmlEditorProvider", HtmlEditorProvider);
         injector.bindSingleton("mediaHandler", MediaHandlers);
