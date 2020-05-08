@@ -1,6 +1,6 @@
-import { EventManager } from "@paperbits/common/events";
-import { View, ViewManager } from "@paperbits/common/ui";
 import * as Utils from "@paperbits/common/utils";
+import { EventManager } from "@paperbits/common/events";
+import { View } from "@paperbits/common/ui";
 
 export class ViewStack {
     private stack: View[];
@@ -14,6 +14,8 @@ export class ViewStack {
     private onPointerDown(event: MouseEvent): void {
         const tagetElement = <HTMLElement>event.target;
         const views = [...this.stack]; // clone array
+
+        console.log(views);
 
         for (const view of views.reverse()) {
             let hit: boolean;
@@ -46,10 +48,6 @@ export class ViewStack {
         }
         else {
             this.eventManager.dispatchEvent("onTopLevelEscape");
-
-            // if (!this.getOpenView() && this.journey().length === 0 && host && host.name !== "page-host") {
-            //     this.setHost({ name: "page-host" }); // TODO: Get host type by current route.
-            // }
         }
     }
 

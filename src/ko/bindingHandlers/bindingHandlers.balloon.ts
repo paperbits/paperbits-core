@@ -295,29 +295,33 @@ export class BalloonBindingHandler {
                         return;
                     }
 
-                    createBalloonElement();
-                    createBalloonTip();
-
                     view = {
                         close: close,
                         element: balloonElement,
                         returnFocusTo: returnFocusTo,
                         hitTest: (targetElement) => {
-                            const element = closest(targetElement, x => x === balloonElement) || closest(targetElement, x => x === toggleElement);
+                            const element =
+                                closest(targetElement, x => x === balloonElement) ||
+                                closest(targetElement, x => x === toggleElement);
+
                             return !!element;
                         }
                     };
 
-                    viewStack.pushView(view);
+                    setImmediate(() => { // give chance to view stack to clear unrelated views
+                        createBalloonElement();
+                        createBalloonTip();
+                        viewStack.pushView(view);
 
-                    balloonElement.classList.add("balloon-is-active");
-                    requestAnimationFrame(updatePosition);
-
-                    balloonIsOpen = true;
-
-                    if (options.onOpen) {
-                        options.onOpen();
-                    }
+                        balloonElement.classList.add("balloon-is-active");
+                        requestAnimationFrame(updatePosition);
+    
+                        balloonIsOpen = true;
+    
+                        if (options.onOpen) {
+                            options.onOpen();
+                        }
+                    });
                 };
 
                 const close = (): void => {
@@ -367,8 +371,10 @@ export class BalloonBindingHandler {
                         if (predicate(node)) {
                             return node;
                         }
+
+                        node = node.parentNode;
                     }
-                    while (node = node && node.parentNode);
+                    while (node);
                 };
 
                 const onPointerDown = async (event: MouseEvent): Promise<void> => {
@@ -381,10 +387,13 @@ export class BalloonBindingHandler {
                     const element = closest(targetElement, (node) => node === toggleElement);
 
                     if (element) {
-                        event.preventDefault();
-                        event.stopPropagation();
+                        // event.preventDefault();
+                        // event.stopPropagation();
                         toggle();
                         return;
+                    }
+                    else {
+                        // close();
                     }
                 };
 
@@ -447,12 +456,13 @@ export class BalloonBindingHandler {
 
                 toggleElement.addEventListener("keydown", onKeyDown);
                 toggleElement.addEventListener("click", onClick);
+
                 if (options.displayOnEnter) {
                     toggleElement.addEventListener("mouseenter", onMouseEnter);
                     toggleElement.addEventListener("mouseleave", onMouseLeave);
                 }
-                window.addEventListener("scroll", onScroll, true);
 
+                window.addEventListener("scroll", onScroll, true);
                 document.addEventListener("pointerdown", onPointerDown, true);
 
                 ko.utils.domNodeDisposal.addDisposeCallback(toggleElement, () => {
