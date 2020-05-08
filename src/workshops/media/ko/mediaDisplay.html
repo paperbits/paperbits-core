@@ -1,9 +1,11 @@
-<div class="flex flex-column">
-    <div class="flex flex-item flex-item-grow media-preview-box">
+<div class="flex flex-column media-preview-box">
+    <div class="flex flex-item flex-item-grow">
         <!-- ko if: item -->
-        <img class="lightbox-image"
+        <img id="pictureThumbnail" class="lightbox-image"
             data-bind="attr: { src: item.thumbnailUrl }, lightbox: { url: item.thumbnailUrl, fileName: item.fileName }" />
         <!-- /ko -->
     </div>
-    <div class="flex-item text-center text-overflow btn-group" data-bind="text: item.fileName"></div>
+    <div class="flex-item  btn-group">
+        <label for="pictureThumbnail" class="text-center text-overflow" data-bind="text: item.fileName"></label>
+    </div>
 </div>

@@ -46,14 +46,15 @@ export class HyperlinkEditor {
 
     private async onSelectionChange(): Promise<void> {
         const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
-        let hyperlink = htmlEditor.getHyperlink();
+        const hyperlinkContract = htmlEditor.getHyperlink();
 
-        if (hyperlink) {
-            const newLink = await this.permalinkResolver.getHyperlinkByTargetKey(hyperlink.targetKey);
-            hyperlink = { ...hyperlink, ...newLink };
+        if (hyperlinkContract) {
+            const hyperlinkModel = await this.permalinkResolver.getHyperlinkFromContract(hyperlinkContract);
+            this.hyperlink(hyperlinkModel);
         }
-
-        this.hyperlink(hyperlink);
+        else {
+            this.hyperlink(null);
+        }
     }
 
     public onClick(): void {
