@@ -13,6 +13,7 @@ import {
     SitemapBuilder,
     SearchIndexBuilder
 } from "@paperbits/common/publishing";
+import { MemoryCache } from "@paperbits/common/caching";
 
 
 export class CorePublishModule implements IInjectorModule {
@@ -32,5 +33,6 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindToCollection("htmlPagePublisherPlugins", LinkedDataHtmlPagePublisherPlugin);
         injector.bindToCollection("htmlPagePublisherPlugins", OpenGraphHtmlPagePublisherPlugin);
         injector.bindToCollection("htmlPagePublisherPlugins", SocialShareDataHtmlPagePublisherPlugin);
+        injector.bindInstance("changesCache", new MemoryCache());
     }
 }

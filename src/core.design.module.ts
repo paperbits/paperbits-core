@@ -26,7 +26,6 @@ import { ViewportSelector } from "./workshops/viewports/ko/viewport-selector";
 import { LocaleSelector, LocaleEditor } from "./workshops/localization/ko";
 import { HostBindingHandler, BalloonBindingHandler, ResizableBindingHandler } from "./ko/bindingHandlers";
 import { MediaHandlers, HtmlEditorProvider } from "@paperbits/common/editing";
-import { View } from "@paperbits/common/ui";
 import { HyperlinkSelector } from "./workshops/hyperlinks/ko/hyperlinkSelector";
 import { WidgetSelector } from "./workshops/widgets/ko/widgetSelector";
 import { UrlSelector } from "./workshops/urls/ko/urlSelector";
@@ -58,6 +57,7 @@ import { ContentEditorModule } from "./content/ko";
 import { ViewStack } from "./ko/ui/viewStack";
 import { MediaDisplay } from "./workshops/media/ko/mediaDisplay";
 import { Lightbox } from "./workshops/media/ko/lightbox";
+import { LocalStorageCache } from "@paperbits/common/caching";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -72,7 +72,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindSingleton("tray", Tray);
         injector.bindSingleton("viewStack", ViewStack);
         injector.bind("mediaDisplay", MediaDisplay);
-        
+        injector.bindInstance("changesCache", new LocalStorageCache());
         injector.bind("mediaHyperlinkProvider", MediaHyperlinkProvider);
         injector.bind("urlHyperlinkProvider", UrlHyperlinkProvider);
         injector.bind("gridEditor", GridEditor);

@@ -1,6 +1,5 @@
 import { BlockService } from "@paperbits/common/blocks";
 import { BlogService } from "@paperbits/common/blogs";
-import { LocalCache } from "@paperbits/common/caching";
 import { SettingsProvider } from "@paperbits/common/configuration";
 import { DefaultEventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { XmlHttpRequestClient } from "@paperbits/common/http";
@@ -63,7 +62,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("httpClient", XmlHttpRequestClient);
         injector.bindSingleton("eventManager", DefaultEventManager);
         injector.bindSingleton("globalEventHandler", GlobalEventHandler);
-        injector.bindSingleton("localCache", LocalCache);
         injector.bindSingleton("changeCommitter", DefaultChangeCommitter);
 
         /*** Services ***/
