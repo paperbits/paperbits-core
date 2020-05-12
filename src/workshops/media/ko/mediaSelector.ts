@@ -9,6 +9,7 @@ import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorat
 import { IWidgetService } from "@paperbits/common/widgets";
 import { HyperlinkModel } from "@paperbits/common/permalinks/hyperlinkModel";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
+import { Style, StyleRule, StyleSheet } from "@paperbits/common/styles";
 
 @Component({
     selector: "media-selector",
@@ -18,6 +19,9 @@ export class MediaSelector {
     public readonly searchPattern: ko.Observable<string>;
     public readonly mediaItems: ko.ObservableArray<MediaItem>;
     public readonly working: ko.Observable<boolean>;
+    public readonly expandable: ko.Observable<Object>;
+    public readonly isExpanded: ko.Observable<boolean>;
+
     private preSelectedModel: HyperlinkModel;
 
     @Param()
@@ -43,16 +47,36 @@ export class MediaSelector {
         this.selectedMedia = ko.observable<MediaItem>();
         this.searchPattern = ko.observable<string>();
         this.working = ko.observable(true);
+        this.expandable = ko.observable();
+        this.isExpanded = ko.observable();
+
     }
 
     @OnMounted()
     public async initialize(): Promise<void> {
+        this.isExpanded(false);
         await this.searchMedia();
+
+        this.implementExpend(300, 400);
 
         this.searchPattern
             .extend(ChangeRateLimit)
             .subscribe(this.searchMedia);
     }
+
+    private implementExpend(width: number, height: number): void {
+        const style = new Style("expandable");
+        style.addRules([new StyleRule("width", width + "px"), new StyleRule("height", height + "px")]);
+
+        const styleSheet = new StyleSheet();
+        styleSheet.styles.push(style);
+        this.expandable(styleSheet);
+    }
+
+    public toggleExpand(): void {
+        this.isExpanded(!this.isExpanded());
+    }
+
 
     public async searchMedia(searchPattern: string = ""): Promise<void> {
         this.working(true);

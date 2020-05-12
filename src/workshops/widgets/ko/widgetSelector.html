@@ -3,13 +3,24 @@
         Add widget
     </h1>
     <hr />
+    <button class="btn btn-dismiss" id="expandButton" aria-label="Close" data-bind="expand: {isExpanded: isExpanded}, click: $component.toggleExpand">
+        <!-- ko if: !isExpanded() -->
+            <i class="paperbits-icon paperbits-zoom-in"></i>
+        <!-- /ko -->
+        
+        <!-- ko if: isExpanded() -->
+            <i class="paperbits-icon paperbits-zoom-out"></i>
+        <!-- /ko -->
+
+    </button>
 
     <!-- ko if: working() -->
     <spinner></spinner>
     <!-- /ko -->
 
     <!-- ko ifnot: working() -->
-    <div role="list" class="flex flex-column list"
+    <style data-bind="jss: expandable"></style>
+    <div role="list" class="flex flex-column expandable"
         data-bind="scrollable: true, focus: { childSelector: '.list-item' }">
         <!-- ko foreach: { data: categories, as: 'category'  } -->
         <!-- ko if: category.name -->

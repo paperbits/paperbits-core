@@ -3,6 +3,16 @@
         Media
     </h1>
     <hr />
+    <button class="btn btn-dismiss" id="expandButton" aria-label="Close" data-bind="expand: {isExpanded: isExpanded}, click: $component.toggleExpand">
+        <!-- ko if: !isExpanded() -->
+            <i class="paperbits-icon paperbits-zoom-in"></i>
+        <!-- /ko -->
+        
+        <!-- ko if: isExpanded() -->
+            <i class="paperbits-icon paperbits-zoom-out"></i>
+        <!-- /ko -->
+
+    </button>
 
     <fieldset class="flex-item form">
         <div class="form-group">
@@ -33,8 +43,9 @@
     <!-- ko if: $component.working() -->
     <spinner></spinner>
     <!-- /ko -->
+    <style data-bind="jss: expandable"></style>
 
-    <div class="list flex flex-column">
+    <div class="flex flex-column expandable">
         <div role="list" class="flex flex-row flex-item flex-item-grow flex-wrap"
             data-bind="foreach: { data: mediaItems, as: 'media' }, scrollable: true">
             <a href="#" role="listitem" class="list-item list-item-image"

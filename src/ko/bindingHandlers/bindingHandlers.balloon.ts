@@ -16,6 +16,7 @@ export interface BalloonOptions {
     closeTimeout?: number;
     displayOnEnter?: boolean;
     offsetOnEnter?: number;
+    expandable?: boolean;
 }
 
 export class BalloonBindingHandler {
@@ -284,6 +285,17 @@ export class BalloonBindingHandler {
 
                     balloonTipElement.style.top = `${balloonTipY}px`;
                     balloonTipElement.style.left = `${balloonTipX}px`;
+
+                    const expandButton = balloonElement.querySelector("#expandButton");
+                    
+                    if (expandButton) {
+                        expandButton.addEventListener("click", () => {
+                            if (!balloonElement) {
+                                return;
+                            }
+                            requestAnimationFrame(updatePosition);
+                        })
+                    }
                 };
 
                 const open = (returnFocusTo: HTMLElement): void => {
