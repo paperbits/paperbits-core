@@ -36,7 +36,7 @@ export class WidgetSelector {
     @OnMounted()
     public onMounted(): void {
         this.isExpanded(false);
-        this.implementExpend(300, 400);
+        this.implementExpand(300, 400);
         this.loadWidgetOrders();
     }
 
@@ -77,7 +77,7 @@ export class WidgetSelector {
         this.onSelect(model);
     }
 
-    private implementExpend(width: number, height: number): void {
+    private implementExpand(width: number, height: number): void {
         const style = new Style("expandable");
         style.addRules([new StyleRule("width", width + "px"), new StyleRule("height", height + "px")]);
 

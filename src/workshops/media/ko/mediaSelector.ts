@@ -57,14 +57,14 @@ export class MediaSelector {
         this.isExpanded(false);
         await this.searchMedia();
 
-        this.implementExpend(300, 400);
+        this.implementExpand(300, 400);
 
         this.searchPattern
             .extend(ChangeRateLimit)
             .subscribe(this.searchMedia);
     }
 
-    private implementExpend(width: number, height: number): void {
+    private implementExpand(width: number, height: number): void {
         const style = new Style("expandable");
         style.addRules([new StyleRule("width", width + "px"), new StyleRule("height", height + "px")]);
 
