@@ -28,7 +28,7 @@ export class ResizableBindingHandler {
                         onResizeCallback = updatedOptions.onresize;
                     }
 
-                    if (directions.contains("suspended")) {
+                    if (directions.includes("suspended")) {
                         element.classList.add("resize-suspended");
 
                         element.style.width = null;
@@ -183,7 +183,7 @@ export class ResizableBindingHandler {
                     eventManager.dispatchEvent("onEditorResize");
                 };
 
-                if (directions.contains("vertically")) {
+                if (directions.includes("vertically")) {
                     const topResizeHandle = element.ownerDocument.createElement("div");
                     topResizeHandle.classList.add("resize-handle", "resize-handle-top");
                     element.appendChild(topResizeHandle);
@@ -195,7 +195,7 @@ export class ResizableBindingHandler {
                     bottomResizeHandle.addEventListener("mousedown", (e) => onPointerDown(e, "bottom"));
                 }
 
-                if (directions.contains("horizontally")) {
+                if (directions.includes("horizontally")) {
                     const rightResizeHandle = element.ownerDocument.createElement("div");
                     rightResizeHandle.classList.add("resize-handle", "resize-handle-right");
                     element.appendChild(rightResizeHandle);

@@ -85,11 +85,11 @@ ko.bindingHandlers["surface"] = {
                         settings = JSON.parse(settingsString);
                     }
 
-                    if (view.resize.contains("horizontally")) {
+                    if (view.resize.includes("horizontally")) {
                         Objects.setValueWithCompensation(`${view.component.name}/width`, settings, element.clientWidth);
                     }
 
-                    if (view.resize.contains("vertically")) {
+                    if (view.resize.includes("vertically")) {
                         Objects.setValueWithCompensation(`${view.component.name}/height`, settings, element.clientHeight);
                     }
 
