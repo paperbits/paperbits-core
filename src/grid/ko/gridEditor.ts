@@ -2,9 +2,7 @@ import * as _ from "lodash";
 import * as Utils from "@paperbits/common/utils";
 import { ViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet as IContextCommandSet } from "@paperbits/common/ui";
 import { IWidgetBinding, GridHelper, WidgetContext, WidgetStackItem } from "@paperbits/common/editing";
-import { Keys } from "@paperbits/common/keyboard";
 import { IWidgetService } from "@paperbits/common/widgets";
-import { Router } from "@paperbits/common/routing";
 import { EventManager } from "@paperbits/common/events";
 import { ContentModel } from "../../content";
 
@@ -22,7 +20,6 @@ export class GridEditor {
     constructor(
         private readonly viewManager: ViewManager,
         private readonly widgetService: IWidgetService,
-        private readonly router: Router,
         private readonly eventManager: EventManager
     ) {
         this.rerenderEditors = this.rerenderEditors.bind(this);
@@ -169,13 +166,9 @@ export class GridEditor {
         const bindings = GridHelper.getParentWidgetBindings(element);
         const windgetIsInContent = bindings.some(x => x.model instanceof ContentModel || x.name === "email-layout");
 
-        let layoutEditing = false;
-
-        const metadata = this.router.getCurrentUrlMetadata();
-
-        if (metadata && metadata["routeKind"]) {
-            layoutEditing = metadata["routeKind"] === "layout";
-        }
+        /* TODO: This is temporary solution */
+        const host = this.viewManager.getHost();
+        const layoutEditing = host.name === "layout-host";
 
         if ((!windgetIsInContent && !layoutEditing)) {
             event.preventDefault();
@@ -377,7 +370,7 @@ export class GridEditor {
     }
 
     private onDelete(): void {
-        if (this.viewManager.mode === ViewManagerMode.selected  && this.selectedContextualEditor && this.selectedContextualEditor.deleteCommand) {
+        if (this.viewManager.mode === ViewManagerMode.selected && this.selectedContextualEditor && this.selectedContextualEditor.deleteCommand) {
             this.selectedContextualEditor.deleteCommand.callback();
         }
     }
