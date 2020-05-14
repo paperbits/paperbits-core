@@ -24,28 +24,29 @@ export class InlineModelBinder {
         model.text = contract.text;
 
         if (contract.marks && contract.marks.length > 0) {
-            const modelPromises = contract.marks.map(async (mark) => {
-                const markModel = new MarkModel(mark.type);
+            const modelPromises = contract.marks.map(async (markContract: MarkContract) => {
+                const markModel = new MarkModel(markContract.type);
 
-                switch (mark.type) {
+                switch (markContract.type) {
                     case "hyperlink":
-                        const targetKey = mark.attrs["targetKey"];
+                        const targetKey = markContract.attrs["targetKey"];
 
-                        if (targetKey) {
-                            const hyperlink = await this.permalinkResolver.getHyperlinkByTargetKey(targetKey, bindingContent?.locale);
-                            markModel.attrs = hyperlink;
-                            const anchor = mark?.attrs["anchor"];
+                        const href = targetKey
+                            ? await this.permalinkResolver.getUrlByTargetKey(targetKey, bindingContent?.locale)
+                            : "#";
 
-                            if (anchor) {
-                                markModel.attrs.anchor = anchor;
-                                markModel.attrs.anchorName = mark.attrs["anchorName"];
-                            }
-                        }
-                        markModel.attrs["target"] = mark.attrs["target"];
+                        markModel.attrs = <any>{
+                            href: href,
+                            target: markContract["target"],
+                            targetKey: markContract.attrs["targetKey"],
+                            anchor: markContract["anchor"],
+                            anchorName: markContract.attrs["anchorName"]
+                        };
+
                         break;
 
                     case "color":
-                        const contract = <ColorModel>mark.attrs;
+                        const contract = <ColorModel>markContract.attrs;
 
                         if (contract && contract.colorKey) {
                             // TODO: check is it required async resolution
@@ -75,22 +76,22 @@ export class InlineModelBinder {
         };
 
         if (inlineModel.marks && inlineModel.marks.length > 0) {
-            textContract.marks = inlineModel.marks.map(mark => {
-                const contract = <MarkContract>{ type: mark.type };
+            textContract.marks = inlineModel.marks.map(markModel => {
+                const contract = <MarkContract>{ type: markModel.type };
 
-                if (mark.type === "hyperlink") {
-                    const model = <HyperlinkModel>mark.attrs;
+                if (markModel.type === "hyperlink") {
+                    const model = markModel.attrs;
 
                     contract.attrs = {
-                        anchor: model.anchor,
-                        anchorName: model.anchorName,
-                        target: model.target,
-                        targetKey: model.targetKey
+                        anchor: model["anchor"],
+                        anchorName: model["anchorName"],
+                        target: model["target"],
+                        targetKey: model["targetKey"]
                     };
                 }
                 else {
-                    if (mark.type === "color") {
-                        const model = <ColorModel>mark.attrs;
+                    if (markModel.type === "color") {
+                        const model = <ColorModel>markModel.attrs;
 
                         if (model && model.colorKey) {
                             contract.attrs = {

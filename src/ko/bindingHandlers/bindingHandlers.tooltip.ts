@@ -16,7 +16,7 @@ ko.bindingHandlers["tooltip"] = {
         }
 
         if (!tooltipMessage) {
-            console.warn("No tooltip text specified for element: " + triggerElement.nodeType);
+            // console.warn("No tooltip text specified for element: " + triggerElement.nodeName);
             return;
         }
 
