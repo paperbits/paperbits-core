@@ -33,10 +33,10 @@ export class InlineModelBinder {
 
                         const href = targetKey
                             ? await this.permalinkResolver.getUrlByTargetKey(targetKey, bindingContent?.locale)
-                            : "#";
+                            : null;
 
                         markModel.attrs = <any>{
-                            href: href,
+                            href: href || "#",
                             target: markContract["target"],
                             targetKey: markContract.attrs["targetKey"],
                             anchor: markContract["anchor"],
