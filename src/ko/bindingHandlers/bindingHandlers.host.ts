@@ -149,11 +149,11 @@ export class HostBindingHandler {
 
             const settings = await this.siteService.getSiteSettings();
 
-            if (!settings || !settings.site.faviconSourceKey) {
+            if (!settings || !settings.faviconSourceKey) {
                 return;
             }
 
-            const mediaContract = await this.mediaService.getMediaByKey(settings.site.faviconSourceKey);
+            const mediaContract = await this.mediaService.getMediaByKey(settings.faviconSourceKey);
 
             if (!mediaContract || !mediaContract.permalink) {
                 return;

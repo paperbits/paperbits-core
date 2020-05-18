@@ -7,6 +7,10 @@ export class DesignerUserService implements UserService {
         this.currentViewRoles = [BuiltInRoles.anonymous.key];
     }
 
+    public async getUserName(): Promise<string> {
+        return null;
+    }
+
     public async getUserPhotoUrl(): Promise<string> {
         return null;
     }

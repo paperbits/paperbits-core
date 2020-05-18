@@ -1,11 +1,9 @@
-import * as ko from "knockout";
 import * as Utils from "@paperbits/common/utils";
 import { IBlogService, BlogPostContract } from "@paperbits/common/blogs";
 import { IPublisher } from "@paperbits/common/publishing";
 import { IBlobStorage } from "@paperbits/common/persistence";
-import { SettingsContract, ISiteService } from "@paperbits/common/sites";
+import { ISiteService, SiteSettingsContract } from "@paperbits/common/sites";
 import { IMediaService, MediaContract } from "@paperbits/common/media";
-import { ISettingsProvider } from "@paperbits/common/configuration";
 
 export class BlogPublisher implements IPublisher {
     constructor(
@@ -18,7 +16,7 @@ export class BlogPublisher implements IPublisher {
         this.renderBlogPost = this.renderBlogPost.bind(this);
     }
 
-    private async renderBlogPost(post: BlogPostContract, settings: SettingsContract, iconFile: MediaContract): Promise<{ name, bytes }> {
+    private async renderBlogPost(post: BlogPostContract, settings: SiteSettingsContract, iconFile: MediaContract): Promise<{ name, bytes }> {
         console.log(`Publishing blog post ${post.title}...`);
         const templateDocument = null; // createDocument(template);
 
@@ -59,8 +57,8 @@ export class BlogPublisher implements IPublisher {
 
         let iconFile;
 
-        if (settings && settings.site.faviconSourceKey) {
-            iconFile = await this.mediaService.getMediaByKey(settings.site.faviconSourceKey);
+        if (settings && settings.faviconSourceKey) {
+            iconFile = await this.mediaService.getMediaByKey(settings.faviconSourceKey);
         }
 
         const renderAndUpload = async (post): Promise<void> => {

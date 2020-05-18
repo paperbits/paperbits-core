@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./settings.html";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
-import { ISiteService, SettingsContract } from "@paperbits/common/sites";
+import { ISiteService, SiteSettingsContract } from "@paperbits/common/sites";
 import { IMediaService, MediaContract } from "@paperbits/common/media";
 import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
@@ -17,10 +17,6 @@ export class SettingsWorkshop {
     public readonly keywords: ko.Observable<string>;
     public readonly hostname: ko.Observable<string>;
     public readonly author: ko.Observable<string>;
-    public readonly gmapsApiKey: ko.Observable<string>;
-    public readonly googleFontsApiKey: ko.Observable<string>;
-    public readonly gtmContainerId: ko.Observable<string>;
-    public readonly intercomAppId: ko.Observable<string>;
     public readonly faviconSourceKey: ko.Observable<string>;
     public readonly faviconFileName: ko.Observable<string>;
     public readonly favicon: ko.Observable<BackgroundModel>;
@@ -36,10 +32,6 @@ export class SettingsWorkshop {
         this.keywords = ko.observable<string>();
         this.hostname = ko.observable<string>();
         this.author = ko.observable<string>();
-        this.gmapsApiKey = ko.observable<string>();
-        this.googleFontsApiKey = ko.observable<string>();
-        this.gtmContainerId = ko.observable<string>();
-        this.intercomAppId = ko.observable<string>();
         this.faviconSourceKey = ko.observable<string>();
         this.faviconFileName = ko.observable<string>();
         this.favicon = ko.observable<BackgroundModel>();
@@ -52,28 +44,13 @@ export class SettingsWorkshop {
         const settings = await this.siteService.getSiteSettings();
 
         if (settings) {
-            this.title(settings.site.title);
-            this.description(settings.site.description);
-            this.keywords(settings.site.keywords);
-            this.hostname(settings.site.hostname);
-            this.author(settings.site.author);
-            this.faviconSourceKey(settings.site.faviconSourceKey);
-            this.setFaviconUri(settings.site.faviconSourceKey);
-
-            if (settings.integration) {
-                if (settings.integration.googleMaps) {
-                    this.gmapsApiKey(settings.integration.googleMaps.apiKey);
-                }
-                if (settings.integration.googleTagManager) {
-                    this.gtmContainerId(settings.integration.googleTagManager.containerId);
-                }
-                if (settings.integration.intercom) {
-                    this.intercomAppId(settings.integration.intercom.appId);
-                }
-                if (settings.integration.googleFonts) {
-                    this.googleFontsApiKey(settings.integration.googleFonts.apiKey);
-                }
-            }
+            this.title(settings.title);
+            this.description(settings.description);
+            this.keywords(settings.keywords);
+            this.hostname(settings.hostname);
+            this.author(settings.author);
+            this.faviconSourceKey(settings.faviconSourceKey);
+            this.setFaviconUri(settings.faviconSourceKey);
         }
         this.working(false);
 
@@ -82,38 +59,17 @@ export class SettingsWorkshop {
         this.keywords.subscribe(this.onSettingChange);
         this.hostname.subscribe(this.onSettingChange);
         this.author.subscribe(this.onSettingChange);
-        this.gmapsApiKey.subscribe(this.onSettingChange);
-        this.googleFontsApiKey.subscribe(this.onSettingChange);
-        this.gtmContainerId.subscribe(this.onSettingChange);
-        this.intercomAppId.subscribe(this.onSettingChange);
         this.faviconSourceKey.subscribe(this.onSettingChange);
     }
 
     private async onSettingChange(): Promise<void> {
-        const config: SettingsContract = {
-            site: {
-                title: this.title(),
-                description: this.description(),
-                keywords: this.keywords(),
-                hostname: this.hostname(),
-                faviconSourceKey: this.faviconSourceKey(),
-                author: this.author()
-            },
-            integration: {
-                intercom: {
-                    appId: this.intercomAppId()
-                },
-                googleTagManager: {
-                    containerId: this.gtmContainerId(),
-                    dataLayerName: this.gtmContainerId()
-                },
-                googleMaps: {
-                    apiKey: this.gmapsApiKey()
-                },
-                googleFonts: {
-                    apiKey: this.googleFontsApiKey()
-                }
-            }
+        const config: SiteSettingsContract = {
+            title: this.title(),
+            description: this.description(),
+            keywords: this.keywords(),
+            hostname: this.hostname(),
+            faviconSourceKey: this.faviconSourceKey(),
+            author: this.author()
         };
 
         await this.siteService.setSiteSettings(config);
