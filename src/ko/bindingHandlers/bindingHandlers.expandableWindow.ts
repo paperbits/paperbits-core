@@ -19,9 +19,6 @@ export class ExpandableWindowHandler {
                     component: config.component,
                     resize: "vertically horizontally"
                 }
-                // const onExpand = (isExpand: boolean) => {
-                //     console.log(isExpand)
-                // }
                 ko.applyBindingsToNode(element, {
                     balloon: {
                         component: config.component,
@@ -32,7 +29,6 @@ export class ExpandableWindowHandler {
                 }, null);
 
                 const onExpand = (isExpand: boolean) => {
-                    console.log("ABC")
                     if (isExpand) {
                         balloonHandler.close()
                         viewManager.openViewAsPopup(view);
