@@ -24,7 +24,7 @@ import { TextblockEditorModule } from "./textblock/ko/textblockEditor.module";
 import { DropbucketModule } from "./workshops/dropbucket/ko/dropbucket.module";
 import { ViewportSelector } from "./workshops/viewports/ko/viewport-selector";
 import { LocaleSelector, LocaleEditor } from "./workshops/localization/ko";
-import { HostBindingHandler, BalloonBindingHandler, ResizableBindingHandler } from "./ko/bindingHandlers";
+import { HostBindingHandler, BalloonBindingHandler, ResizableBindingHandler, ExpandableWindowHandler } from "./ko/bindingHandlers";
 import { MediaHandlers, HtmlEditorProvider } from "@paperbits/common/editing";
 import { HyperlinkSelector } from "./workshops/hyperlinks/ko/hyperlinkSelector";
 import { WidgetSelector } from "./workshops/widgets/ko/widgetSelector";
@@ -81,6 +81,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindToCollection("autostart", CropperBindingHandler);
         injector.bindToCollection("autostart", BalloonBindingHandler);
         injector.bindToCollection("autostart", UnhandledErrorHandler);
+        injector.bindToCollection("autostart", ExpandableWindowHandler);
         injector.bind("tooltip", Tooltip);
         injector.bindSingleton("dragManager", DragManager);
         injector.bindSingleton("lightbox", Lightbox);

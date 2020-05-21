@@ -24,3 +24,4 @@ export * from "./bindingHandlers.validationMessageToggle";
 export * from "./bindingHandlers.tooltip";
 export * from "./bindingHandlers.widget";
 export * from "./bindingHandlers.selectItem";
+export * from "./bindingHandlers.expandableWindow"

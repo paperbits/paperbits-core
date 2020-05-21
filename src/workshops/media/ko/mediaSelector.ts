@@ -19,6 +19,7 @@ export class MediaSelector {
     public readonly mediaItems: ko.ObservableArray<MediaItem>;
     public readonly working: ko.Observable<boolean>;
     private preSelectedModel: HyperlinkModel;
+    private isExpand: boolean;
 
     @Param()
     public selectedMedia: ko.Observable<MediaItem>;
@@ -28,6 +29,9 @@ export class MediaSelector {
 
     @Event()
     public onSelect: (media: MediaContract) => void;
+
+    @Event()
+    public onExpand: (isExpand: boolean) => void;
 
     @Event()
     public onHyperlinkSelect: (selection: HyperlinkModel) => void;
@@ -43,6 +47,7 @@ export class MediaSelector {
         this.selectedMedia = ko.observable<MediaItem>();
         this.searchPattern = ko.observable<string>();
         this.working = ko.observable(true);
+        this.isExpand = false;
     }
 
     @OnMounted()
@@ -52,6 +57,14 @@ export class MediaSelector {
         this.searchPattern
             .extend(ChangeRateLimit)
             .subscribe(this.searchMedia);
+    }
+
+    public toggleExpand(): void {
+        this.isExpand = !this.isExpand;
+        if (this.onExpand) {
+            console.log(this.isExpand);
+            this.onExpand(this.isExpand);
+        }
     }
 
     public async searchMedia(searchPattern: string = ""): Promise<void> {
