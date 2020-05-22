@@ -1,11 +1,13 @@
 import * as ko from "knockout";
-import * as Objects from "@paperbits/common/objects";
 import template from "./youtubePlayerEditor.html";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
+import { StyleHelper } from "@paperbits/common/styles";
 import { YoutubePlayerModel } from "../youtubePlayerModel";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { WidgetEditor } from "@paperbits/common/widgets";
 import { SizeStylePluginConfig } from "@paperbits/styles/contracts";
+import { ViewManager } from "@paperbits/common/ui";
+import { EventManager, CommonEvents } from "@paperbits/common/events";
 
 @Component({
     selector: "youtube-player-editor",
@@ -18,7 +20,10 @@ export class YoutubePlayerEditor implements WidgetEditor<YoutubePlayerModel> {
     public readonly loop: ko.Observable<boolean>;
     public readonly sizeConfig: ko.Observable<SizeStylePluginConfig>;
 
-    constructor() {
+    constructor(
+        private readonly viewManager: ViewManager,
+        private readonly eventManager: EventManager
+    ) {
         this.videoId = ko.observable<string>();
         this.controls = ko.observable<boolean>();
         this.autoplay = ko.observable<boolean>();
@@ -34,13 +39,9 @@ export class YoutubePlayerEditor implements WidgetEditor<YoutubePlayerModel> {
 
     @OnMounted()
     public initialize(): void {
-        this.videoId(this.model.videoId);
-        this.controls(this.model.controls);
-        this.autoplay(this.model.autoplay);
-        this.loop(this.model.loop);
+        this.updateObservables();
 
-        const sizeConfig: SizeStylePluginConfig = this.model?.styles?.instance?.size;
-        this.sizeConfig(sizeConfig);
+        this.eventManager.addEventListener(CommonEvents.onViewportChange, this.updateObservables);
 
         this.videoId
             .extend(ChangeRateLimit)
@@ -59,8 +60,22 @@ export class YoutubePlayerEditor implements WidgetEditor<YoutubePlayerModel> {
             .subscribe(this.applyChanges);
     }
 
+    private updateObservables(): void {
+        const viewport = this.viewManager.getViewport();
+        
+        const sizeStyles = StyleHelper.getPluginConfig(this.model.styles, "size", viewport);
+        this.sizeConfig(sizeStyles);
+
+        this.videoId(this.model.videoId);
+        this.controls(this.model.controls);
+        this.autoplay(this.model.autoplay);
+        this.loop(this.model.loop);
+    }
+
     public onSizeChange(pluginConfig: SizeStylePluginConfig): void {
-        Objects.setValue(`styles/instance/size`, this.model, pluginConfig);
+        const viewport = this.viewManager.getViewport();
+        StyleHelper.setPluginConfig(this.model.styles, "size", pluginConfig, viewport);
+
         this.applyChanges();
     }
 

@@ -5,4 +5,8 @@ export class VideoPlayerModel {
     public controls?: boolean;
     public autoplay?: boolean;
     public styles: LocalStyles;
+
+    constructor() {
+        this.styles = {};
+    }
 }

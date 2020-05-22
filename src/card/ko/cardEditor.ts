@@ -1,6 +1,5 @@
 import * as ko from "knockout";
 import * as Objects from "@paperbits/common/objects";
-import * as Utils from "@paperbits/common/utils";
 import template from "./cardEditor.html";
 import { ViewManager } from "@paperbits/common/ui";
 import { WidgetEditor } from "@paperbits/common/widgets";
@@ -9,6 +8,7 @@ import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorat
 import { CardModel } from "../cardModel";
 import { BackgroundStylePluginConfig, TypographyStylePluginConfig, ContainerStylePluginConfig } from "@paperbits/styles/contracts";
 import { EventManager } from "@paperbits/common/events";
+import { StyleHelper } from "@paperbits/common/styles";
 
 
 @Component({
@@ -51,42 +51,26 @@ export class CardEditor implements WidgetEditor<CardModel> {
     }
 
     private updateObservables(): void {
-        if (!this.model.styles) {
-            return;
-        }
+        const viewport = this.viewManager.getViewport();
 
-        const containerStyleConfig = <any>Objects.getObjectAt(`styles/instance/container`, this.model);
+        const containerStyleConfig = StyleHelper.getPluginConfig(this.model.styles, "container", viewport);
+        this.containerConfig(containerStyleConfig);
 
-        if (containerStyleConfig) {
-            const viewport = this.viewManager.getViewport();
-            const breakpoint = Utils.getClosestBreakpoint(containerStyleConfig, viewport);
-            const styleConfig = containerStyleConfig[breakpoint];
-
-            if (styleConfig) {
-                const containerConfig: ContainerStylePluginConfig = {
-                    alignment: styleConfig.alignment,
-                    overflow: styleConfig.overflow
-                };
-
-                this.containerConfig(containerConfig);
-
-                this.background(styleConfig.background);
-            }
-        }
+        const backgroundStyleConfig = StyleHelper.getPluginConfig(this.model.styles, "background", viewport);
+        this.background(backgroundStyleConfig);
 
         this.appearanceStyle(this.model.styles.appearance);
     }
 
-    public onContainerChange(config: ContainerStylePluginConfig): void {
+    public onContainerChange(pluginConfig: ContainerStylePluginConfig): void {
         const viewport = this.viewManager.getViewport();
-        Objects.setValue(`instance/container/${viewport}/alignment`, this.model.styles, config.alignment);
-        Objects.setValue(`instance/container/${viewport}/overflow`, this.model.styles, config.overflow);
+        StyleHelper.setPluginConfig(this.model.styles, "container", pluginConfig, viewport);
 
         this.onChange(this.model);
     }
 
-    public onBackgroundUpdate(background: BackgroundStylePluginConfig): void {
-        Objects.setValue("instance/background", this.model.styles, background);
+    public onBackgroundChange(pluginConfig: BackgroundStylePluginConfig): void {
+        StyleHelper.setPluginConfig(this.model.styles, "background", pluginConfig);
         this.onChange(this.model);
     }
 

@@ -6,9 +6,9 @@ export class YoutubePlayerModel {
     public controls?: boolean;
     public autoplay?: boolean;
     public loop?: boolean;
-
-    /**
-     * Picture styles.
-     */
     public styles: LocalStyles;
+
+    constructor() {
+        this.styles = {};
+    }
 }

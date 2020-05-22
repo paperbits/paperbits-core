@@ -8,6 +8,9 @@ import { StyleService } from "@paperbits/styles/styleService";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { SizeStylePluginConfig } from "@paperbits/styles/contracts";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
+import { StyleHelper } from "@paperbits/common/styles";
+import { EventManager, CommonEvents } from "@paperbits/common/events";
+import { ViewManager } from "@paperbits/common/ui";
 
 @Component({
     selector: "video-player-editor",
@@ -23,6 +26,8 @@ export class VideoPlayerEditor {
     public readonly sizeConfig: ko.Observable<SizeStylePluginConfig>;
 
     constructor(
+        private readonly viewManager: ViewManager,
+        private readonly eventManager: EventManager,
         private readonly styleService: StyleService,
         private readonly mediaPermalinkResolver: IPermalinkResolver
     ) {
@@ -50,16 +55,13 @@ export class VideoPlayerEditor {
         }
 
         this.sourceUrl(sourceUrl);
-        this.controls(this.model.controls);
-        this.autoplay(this.model.autoplay);
-
-        const sizeConfig: SizeStylePluginConfig = this.model?.styles?.instance?.size;
-        this.sizeConfig(sizeConfig);
 
         const variations = await this.styleService.getComponentVariations("videoPlayer");
-
         this.appearanceStyles(variations.filter(x => x.category === "appearance"));
-        this.appearanceStyle(this.model?.styles?.appearance);
+
+        this.updateObservables();
+
+        this.eventManager.addEventListener(CommonEvents.onViewportChange, this.updateObservables);
 
         this.controls
             .extend(ChangeRateLimit)
@@ -72,6 +74,18 @@ export class VideoPlayerEditor {
         this.appearanceStyle
             .extend(ChangeRateLimit)
             .subscribe(this.onAppearanceChange);
+    }
+
+    private updateObservables(): void {
+        const viewport = this.viewManager.getViewport();
+
+        this.controls(this.model.controls);
+        this.autoplay(this.model.autoplay);
+
+        const sizeStyles = StyleHelper.getPluginConfig(this.model.styles, "size", viewport);
+        this.sizeConfig(sizeStyles);
+
+        this.appearanceStyle(this.model?.styles?.appearance);
     }
 
     public onMediaSelected(media: MediaContract): void {
@@ -88,18 +102,22 @@ export class VideoPlayerEditor {
     }
 
     public onSizeChange(pluginConfig: SizeStylePluginConfig): void {
-        Objects.setValue(`styles/instance/size`, this.model, pluginConfig);
+        const viewport = this.viewManager.getViewport();
+        StyleHelper.setPluginConfig(this.model.styles, "size", pluginConfig, viewport);
+
         this.onChange(this.model);
     }
 
     public onAppearanceChange(variationKey: string): void {
         Objects.setValue(`styles/appearance`, this.model, variationKey);
+        
         this.onChange(this.model);
     }
 
     public applyChanges(): void {
         this.model.controls = this.controls();
         this.model.autoplay = this.autoplay();
+
         this.onChange(this.model);
     }
 }
