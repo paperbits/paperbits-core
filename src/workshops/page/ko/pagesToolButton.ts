@@ -1,7 +1,7 @@
 import { ToolButton, ViewManager, View } from "@paperbits/common/ui";
 
 export class PagesToolButton implements ToolButton {
-    public iconClass: string = "paperbits-icon paperbits-menu-left";
+    public iconClass: string = "paperbits-icon paperbits-menu-4";
     public title: string = "Pages";
 
     constructor(private readonly viewManager: ViewManager) { }

@@ -29,7 +29,10 @@ export class InlineModelBinder {
 
                 switch (markContract.type) {
                     case "hyperlink":
-                        const targetKey = markContract.attrs["targetKey"];
+                        const target: string = markContract["target"];
+                        const targetKey: string = markContract.attrs?.targetKey;
+                        const anchor: string = markContract["anchor"];
+                        const anchorName: string = markContract.attrs?.anchorName;
 
                         const href = targetKey
                             ? await this.permalinkResolver.getUrlByTargetKey(targetKey, bindingContent?.locale)
@@ -37,23 +40,23 @@ export class InlineModelBinder {
 
                         markModel.attrs = <any>{
                             href: href || "#",
-                            target: markContract["target"],
-                            targetKey: markContract.attrs["targetKey"],
-                            anchor: markContract["anchor"],
-                            anchorName: markContract.attrs["anchorName"]
+                            target: target,
+                            targetKey: targetKey,
+                            anchor: anchor,
+                            anchorName: anchorName
                         };
 
                         break;
 
                     case "color":
-                        const contract = <ColorModel>markContract.attrs;
+                        const colorModel = <ColorModel>markContract.attrs;
 
-                        if (contract && contract.colorKey) {
+                        if (colorModel?.colorKey) {
                             // TODO: check is it required async resolution
-                            const colorClass = this.styleCompiler.getClassNameByColorKey(contract.colorKey);
+                            const colorClass = this.styleCompiler.getClassNameByColorKey(colorModel.colorKey);
 
                             markModel.attrs = {
-                                colorKey: contract.colorKey,
+                                colorKey: colorModel.colorKey,
                                 colorClass: colorClass
                             };
                         }

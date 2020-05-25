@@ -7,5 +7,5 @@ export interface MarkContract extends Contract {
     /**
      * Data associated with an instance of the mark.
      */
-    attrs?: object;
+    attrs?: any;
 }

@@ -13,7 +13,9 @@ import { StyleService } from "@paperbits/styles/styleService";
     template: template
 })
 export class FormattingTools {
-    private textStyles: {}[];
+    private textStyles: ko.ObservableArray<any>;
+    private orderedListStyles: ko.ObservableArray<any>;
+    private unorderedListStyles: ko.ObservableArray<any>;
 
     public readonly bold: ko.Observable<boolean>;
     public readonly italic: ko.Observable<boolean>;
@@ -60,6 +62,10 @@ export class FormattingTools {
         this.pre = ko.observable<boolean>();
         this.alignment = ko.observable<string>();
         this.anchored = ko.observable<boolean>();
+
+        this.textStyles = ko.observableArray();
+        this.orderedListStyles = ko.observableArray();
+        this.unorderedListStyles = ko.observableArray();
     }
 
     @OnMounted()
@@ -70,15 +76,18 @@ export class FormattingTools {
     }
 
     private async loadTextStyles(): Promise<void> {
-        this.textStyles = await this.styleService.getVariations("globals", "body");
+        this.textStyles(await this.styleService.getVariations("globals", "body"));
+        this.orderedListStyles(await this.styleService.getVariations("globals", "ol"));
+        this.unorderedListStyles(await this.styleService.getVariations("globals", "ul"));
     }
 
     private updateFormattingState(): void {
         const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
 
         if (!htmlEditor) {
-            if (this.textStyles) {
-                const appearance = this.textStyles[0]["displayName"];
+            if (this.textStyles()) {
+                const defaultStyle = this.textStyles().find(x => x.key === "globals/body/default");
+                const appearance = defaultStyle.displayName;
                 this.appearance(appearance);
                 this.style("Normal");
             }
@@ -120,23 +129,23 @@ export class FormattingTools {
                     console.warn(`Unknown alignment style key: ${alignmentStyleKey}`);
             }
         }
+
         this.alignment(alignment);
-        if (this.textStyles) {
-            let appearance = this.textStyles[0]["displayName"];
+
+        if (this.textStyles()) {
+            let appearance = this.textStyles()[0]["displayName"];
 
             if (selectionState.appearance) {
                 // const breakpoint = Utils.getClosestBreakpoint(selectionState.appearance, this.viewManager.getViewport());
                 // const styleKey = selectionState.appearance[breakpoint];
                 const styleKey = selectionState.appearance;
 
-                const textStyle = this.textStyles.find(item => item["key"] === styleKey);
+                const textStyle = this.textStyles().find(item => item["key"] === styleKey);
                 appearance = textStyle && textStyle["displayName"];
             }
 
             this.appearance(appearance);
         }
-
-
 
         this.anchored(!!selectionState.anchorKey);
 
@@ -200,7 +209,7 @@ export class FormattingTools {
         if (!htmlEditor) {
             return;
         }
-        
+
         htmlEditor.toggleItalic();
     }
 
@@ -282,6 +291,16 @@ export class FormattingTools {
         }
 
         htmlEditor.toggleUnorderedList();
+    }
+
+    public onUnorderedListStyleSelected(style: any): void {
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleUnorderedList(style.key);
     }
 
     public incIndent(): void {
@@ -391,7 +410,7 @@ export class FormattingTools {
         if (!htmlEditor) {
             return;
         }
-        
+
         htmlEditor.alignLeft(this.viewManager.getViewport());
     }
 
@@ -448,6 +467,17 @@ export class FormattingTools {
         else {
             htmlEditor.removeColor();
         }
+    }
+
+    public onTextStyleSelected(style: any): void {
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        this.htmlEditorProvider.getCurrentHtmlEditor().setTextStyle(style.key, this.viewManager.getViewport());
+        this.appearance(style.displayName);
     }
 
     @OnDestroyed()

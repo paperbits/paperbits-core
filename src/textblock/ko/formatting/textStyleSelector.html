@@ -1,6 +1,6 @@
 <div id="textStyleSelector" role="menu" class="tools-paragraphstyle" data-bind="scrollable: true, focus: { childSelector: '.tools-paragraph-style' }">
-    <!--ko foreach: { data: textStyles, as: 'textStyle' } -->
+    <!--ko foreach: { data: styles, as: 'style' } -->
     <a href="#" role="menuitem" class="tools-paragraph-style tools-paragraph-style-normal"
-        data-bind="text: textStyle.displayName, click: $parent.setTextStyle"></a>
+        data-bind="text: style.displayName, click: $parent.setTextStyle"></a>
     <!--/ko-->
 </div>

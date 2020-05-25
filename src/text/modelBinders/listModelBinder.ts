@@ -23,23 +23,17 @@ export class ListModelBinder {
     public async contractToModel(contract: ListContract, bindingContext?: Bag<any>): Promise<ListModel> {
         const model = new ListModel(contract.type);
 
-        if (contract.attrs) {
-            model.attrs = {};
+        const localStyles = contract.styles || contract.attrs?.styles;
+        let className: string;
 
-            if (contract.attrs.styles) {
-                model.attrs.styles = contract.attrs.styles;
-
-                const className = await this.styleCompiler.getClassNamesForLocalStylesAsync(contract.attrs.styles);
-
-                if (className) {
-                    model.attrs.className = className;
-                }
-            }
-
-            // if (contract.attrs.order) {
-            //     model.attrs.order = contract.attrs.order;
-            // }
+        if (localStyles) {
+            className = await this.styleCompiler.getClassNamesForLocalStylesAsync(localStyles);
         }
+
+        model.attrs = {
+            styles: localStyles,
+            className: className
+        };
 
         if (contract.nodes && contract.nodes.length > 0) {
             const modelPromises = contract.nodes.map(async (contract: Contract) => {
@@ -53,23 +47,12 @@ export class ListModelBinder {
         return model;
     }
 
-    public modelToContract(model: ListModel): Contract {
+    public modelToContract(model: ListModel): ListContract {
         const contract: ListContract = {
             nodes: [],
-            type: model.type
+            type: model.type,
+            styles: model.attrs?.styles
         };
-
-        // if (model.attrs) {
-        //     contract.attrs = {};
-
-        //     if (model.attrs.styles) {
-        //         contract.attrs.styles = model.attrs.styles;
-        //     }
-
-        //     if (model.attrs.order) {
-        //         model.attrs.order = model.attrs.order;
-        //     }
-        // }
 
         if (model.nodes && model.nodes.length > 0) {
             model.nodes.forEach(contentItem => {

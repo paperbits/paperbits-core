@@ -9,4 +9,9 @@ export interface ListContract extends BlockContract {
      * Collection of list items.
      */
     nodes: ListItemContract[];
+
+    /**
+     * List local styles.
+     */
+    styles?: any;
 }

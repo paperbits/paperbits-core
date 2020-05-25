@@ -1,12 +1,24 @@
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': ol() }">
     <a href="#" title="Toggle ordered list" role="button" data-bind="click: toggleOrderedList">
         <i class="paperbits-icon paperbits-list-numbers"></i>
+
+        <!-- ko if: orderedListStyles().length > 1 -->
+        <span class="paperbits-icon paperbits-small-down toolbox-btn-addon"
+            data-bind="balloon: { component: { name: 'text-style-selector', params: { styles: orderedListStyles, onSelect: onOrderedListStyleSelected } } }">
+        </span>
+        <!-- /ko -->
     </a>
 </div>
 
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': ul() }">
     <a href="#" title="Toggle unordered list" role="button" data-bind="click: toggleUnorderedList">
         <i class="paperbits-icon paperbits-list-bullet"></i>
+
+        <!-- ko if: unorderedListStyles().length > 1 -->
+        <span class="paperbits-icon paperbits-small-down toolbox-btn-addon"
+            data-bind="balloon: { component: { name: 'text-style-selector', params: { styles: unorderedListStyles, onSelect: onUnorderedListStyleSelected } } }">
+        </span>
+        <!-- /ko -->
     </a>
 </div>
 
@@ -50,10 +62,13 @@
     <a href="#" title="Change block type" role="menu" aria-haspopup="true"
         data-bind="text: style, balloon: { component: { name: 'block-style-selector' } }"></a>
 </div>
+
+<!-- ko if: textStyles().length > 1 -->
 <div class="toolbox-btn toolbox-dropdown">
     <a href="#" title="Change block style" role="button" aria-haspopup="true"
-        data-bind="text: appearance, balloon: { component: { name: 'text-style-selector' } }"></a>
+        data-bind="text: appearance, balloon: { component: { name: 'text-style-selector', params: { styles: textStyles, onSelect: onTextStyleSelected } } }"></a>
 </div>
+<!-- /ko -->
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active':  alignment() == 'left' }">
     <a href="#" title="Align left" role="button" role="button" data-bind="click: toggleAlignLeft">
         <i class="paperbits-icon paperbits-align-left-2"></i>

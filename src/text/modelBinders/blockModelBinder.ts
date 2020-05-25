@@ -14,6 +14,10 @@ export class BlockModelBinder {
     ) {
     }
 
+    private isHeading(type: string): boolean {
+        return /^heading\d$/gm.test(type);
+    }
+
     public canHandleContract(contract: Contract): boolean {
         return this.blockTypes.includes(contract.type);
     }
@@ -25,24 +29,23 @@ export class BlockModelBinder {
     public async contractToModel(contract: BlockContract, bindingContext?: Bag<any>): Promise<BlockModel> {
         const model = new BlockModel(contract.type);
 
-        if (contract.attrs) {
-            if (contract.attrs.styles) {
-                model.attrs = { styles: contract.attrs.styles };
-                const className = await this.styleCompiler.getClassNamesForLocalStylesAsync(contract.attrs.styles);
-                if (className) {
-                    model.attrs.className = className;
-                }
-            }
-            if (contract.attrs.id || contract.attrs.key) {
-                model.attrs = model.attrs || {};
-                model.attrs.id = contract.attrs.id || contract.attrs.key;
-            }
+        let identifier = contract.identifier || contract.attrs?.id || contract.attrs?.key;
+        const localStyles = contract.styles || contract.attrs?.styles;
+        let className: string;
+
+        if (localStyles) {
+            className = await this.styleCompiler.getClassNamesForLocalStylesAsync(localStyles);
         }
 
-        if (/^heading\d$/gm.test(contract.type) && (!model.attrs || !model.attrs.id)) {
-            model.attrs = model.attrs || {};
-            model.attrs.id = Utils.identifier();
+        if (!identifier && this.isHeading(contract.type)) {
+            identifier = Utils.identifier();
         }
+
+        model.attrs = {
+            id: identifier,
+            styles: localStyles,
+            className: className
+        };
 
         if (contract.nodes && contract.nodes.length > 0) {
             const modelPromises = contract.nodes.map(async (contract: Contract) => {
@@ -56,16 +59,15 @@ export class BlockModelBinder {
         return model;
     }
 
-    public modelToContract(model: BlockModel): Contract {
+    public modelToContract(model: BlockModel): BlockContract {
         const contract: BlockContract = {
-            type: model.type
+            type: model.type,
+            styles: model.attrs?.styles,
+            identifier: model.attrs?.id
         };
 
-        contract.attrs = model.attrs;
-
-        if (/^heading\d$/gm.test(contract.type) && (!contract.attrs || !contract.attrs.id)) {
-            contract.attrs = contract.attrs || {};
-            contract.attrs.id = Utils.identifier();
+        if (!contract.identifier && this.isHeading(contract.type)) {
+            contract.identifier = Utils.identifier();
         }
 
         if (model.nodes && model.nodes.length > 0) {

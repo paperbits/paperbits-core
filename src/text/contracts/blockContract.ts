@@ -16,4 +16,14 @@ export interface BlockContract extends Contract {
      * Child nodes.
      */
     nodes?: InlineContract[];
+
+    /**
+     * Block local styles.
+     */
+    styles?: any;
+
+    /**
+     * Block identifier. Can be used for multiple purposes, e.g. for assigning anchors.
+     */
+    identifier?: string;
 }
