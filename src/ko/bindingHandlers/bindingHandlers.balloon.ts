@@ -461,7 +461,7 @@ export class BalloonBindingHandler {
 
                 window.addEventListener("scroll", onScroll, true);
 
-                document.addEventListener("pointerdown", onPointerDown, true);
+                document.addEventListener("mousedown", onPointerDown, true);
 
                 ko.utils.domNodeDisposal.addDisposeCallback(toggleElement, () => {
                     toggleElement.removeEventListener("keydown", onKeyDown);
@@ -474,7 +474,7 @@ export class BalloonBindingHandler {
 
                     removeBalloon();
                     window.removeEventListener("scroll", onScroll, true);
-                    window.removeEventListener("pointerdown", onPointerDown, true);
+                    window.removeEventListener("mousedown", onPointerDown, true);
                 });
             }
         };
