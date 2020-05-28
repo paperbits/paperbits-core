@@ -37,11 +37,11 @@ export class MediaItem {
     }
 
     private async getThumbnail(mediaContract: MediaContract): Promise<void> {
-        if (mediaContract.mimeType.startsWith("video")) {
+        if (mediaContract.mimeType?.startsWith("video")) {
             const dataUrl = await MediaUtils.getVideoThumbnailAsDataUrlFromUrl(mediaContract.downloadUrl);
             this.thumbnailUrl(dataUrl);
         }
-        else if (mediaContract.mimeType.startsWith("image")) {
+        else if (mediaContract.mimeType?.startsWith("image")) {
             this.thumbnailUrl(mediaContract.downloadUrl);
         }
         else {
