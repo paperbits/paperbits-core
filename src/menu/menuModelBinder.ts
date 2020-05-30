@@ -133,9 +133,11 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
                 }
             }
 
-            menuModel.items = root.nodes;
-            menuModel.navigationItem = root;
-            menuModel.navigationItem.key = contract.navigationItemKey;
+            if (root) {
+                menuModel.items = root.nodes;
+                menuModel.navigationItem = root;
+                menuModel.navigationItem.key = contract.navigationItemKey;
+            }
         }
 
         if (menuModel.items.length === 0 && menuModel.minHeading && menuModel.maxHeading) {
