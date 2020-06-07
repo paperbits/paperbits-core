@@ -41,16 +41,17 @@ export class SettingsWorkshop {
     public async initialize(): Promise<void> {
         this.working(true);
 
-        const settings = await this.siteService.getSiteSettings();
+        const settings = await this.siteService.getSettings<any>();
+        const siteSettings: SiteSettingsContract = settings.site;
 
-        if (settings) {
-            this.title(settings.title);
-            this.description(settings.description);
-            this.keywords(settings.keywords);
-            this.hostname(settings.hostname);
-            this.author(settings.author);
-            this.faviconSourceKey(settings.faviconSourceKey);
-            this.setFaviconUri(settings.faviconSourceKey);
+        if (siteSettings) {
+            this.title(siteSettings.title);
+            this.description(siteSettings.description);
+            this.keywords(siteSettings.keywords);
+            this.hostname(siteSettings.hostname);
+            this.author(siteSettings.author);
+            this.faviconSourceKey(siteSettings.faviconSourceKey);
+            this.setFaviconUri(siteSettings.faviconSourceKey);
         }
         this.working(false);
 
@@ -63,7 +64,9 @@ export class SettingsWorkshop {
     }
 
     private async onSettingChange(): Promise<void> {
-        const config: SiteSettingsContract = {
+        const settings = await this.siteService.getSettings<any>();
+
+        const siteSettings: SiteSettingsContract = {
             title: this.title(),
             description: this.description(),
             keywords: this.keywords(),
@@ -72,7 +75,9 @@ export class SettingsWorkshop {
             author: this.author()
         };
 
-        await this.siteService.setSiteSettings(config);
+        settings.site = siteSettings;
+
+        await this.siteService.setSettings(settings);
     }
 
     public onMediaSelected(media: MediaContract): void {

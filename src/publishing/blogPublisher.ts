@@ -53,16 +53,17 @@ export class BlogPublisher implements IPublisher {
     public async publish(): Promise<void> {
         const posts = await this.blogService.search("");
         const results = [];
-        const settings = await this.siteService.getSiteSettings();
+        const settings = await this.siteService.getSettings<any>();
+        const siteSettings: SiteSettingsContract = settings.site;
 
         let iconFile;
 
-        if (settings && settings.faviconSourceKey) {
-            iconFile = await this.mediaService.getMediaByKey(settings.faviconSourceKey);
+        if (siteSettings && siteSettings.faviconSourceKey) {
+            iconFile = await this.mediaService.getMediaByKey(siteSettings.faviconSourceKey);
         }
 
         const renderAndUpload = async (post): Promise<void> => {
-            const pageRenderResult = await this.renderBlogPost(post, settings, iconFile);
+            const pageRenderResult = await this.renderBlogPost(post, siteSettings, iconFile);
             await this.outputBlobStorage.uploadBlob(pageRenderResult.name, pageRenderResult.bytes, "text/html");
         };
 

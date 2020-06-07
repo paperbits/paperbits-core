@@ -3,7 +3,7 @@ import { GlobalEventHandler } from "@paperbits/common/events";
 import { ViewManager, ViewManagerMode } from "@paperbits/common/ui";
 import { Router, Route } from "@paperbits/common/routing";
 import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
-import { SiteService } from "@paperbits/common/sites";
+import { SiteService, SiteSettingsContract } from "@paperbits/common/sites";
 import { IMediaService } from "@paperbits/common/media";
 import { StyleCompiler } from "@paperbits/common/styles";
 
@@ -147,13 +147,14 @@ export class HostBindingHandler {
                 window.history.pushState(route, route.title, route.url);
             };
 
-            const settings = await this.siteService.getSiteSettings();
-
-            if (!settings || !settings.faviconSourceKey) {
+            const settings =  await this.siteService.getSettings<any>();
+            const siteSettings: SiteSettingsContract = settings.site;
+            
+            if (!siteSettings?.faviconSourceKey) {
                 return;
             }
 
-            const mediaContract = await this.mediaService.getMediaByKey(settings.faviconSourceKey);
+            const mediaContract = await this.mediaService.getMediaByKey(siteSettings.faviconSourceKey);
 
             if (!mediaContract || !mediaContract.permalink) {
                 return;
