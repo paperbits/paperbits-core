@@ -27,7 +27,13 @@ export class MediaPublisher implements IPublisher {
 
             if (mediaFile.downloadUrl) { // if blob doesn't exit check if direct download URL is specifed:
                 const response = await this.httpClient.send({ url: mediaFile.downloadUrl });
-                await this.outputBlobStorage.uploadBlob(mediaFile.permalink, response.toByteArray(), mediaFile.mimeType);
+
+                if (response?.statusCode === 200) {
+                    await this.outputBlobStorage.uploadBlob(mediaFile.permalink, response.toByteArray(), mediaFile.mimeType);
+                }
+                else {
+                    this.logger.traceEvent(`Could not download media ${mediaFile.fileName}`);
+                }
             }
         }
         catch (error) {
