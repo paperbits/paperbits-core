@@ -36,6 +36,7 @@ export class SitePublisher implements IPublisher {
         }
         catch (error) {
             this.logger.traceError(error, "SitePublisher");
+            throw error;
         }
     }
 }
