@@ -148,7 +148,7 @@ export class HostBindingHandler {
             };
 
             const settings =  await this.siteService.getSettings<any>();
-            const siteSettings: SiteSettingsContract = settings.site;
+            const siteSettings: SiteSettingsContract = settings?.site;
             
             if (!siteSettings?.faviconSourceKey) {
                 return;
