@@ -58,6 +58,8 @@ import { ViewStack } from "./ko/ui/viewStack";
 import { MediaDisplay } from "./workshops/media/ko/mediaDisplay";
 import { Lightbox } from "./workshops/media/ko/lightbox";
 import { LocalStorageCache } from "@paperbits/common/caching";
+import { HistoryService } from "@paperbits/common/persistence/historyService";
+
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -129,6 +131,8 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindToCollection("autostart", LightboxBindingHandler);
         injector.bindToCollection("autostart", HistoryRouteHandler);
         injector.bindToCollection("autostart", Hinter);
+        injector.bindToCollection("autostart", HistoryService);
+        
         injector.bindInstance("reservedPermalinks", ["/", "/404", "/500"]);
         injector.resolve("workshopSections");
 
