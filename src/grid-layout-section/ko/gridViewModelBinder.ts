@@ -42,13 +42,12 @@ export class GridViewModelBinder implements ViewModelBinder<GridModel, GridViewM
         }
 
         const binding: IWidgetBinding<GridModel> = {
-            name: "gridLayoutGrid",
+            name: "grid",
             displayName: "Grid",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: false,
             flow: "block",
-            editor: "grid-layout-grid-editor",
             handler: GridHandlers,
             applyChanges: async (changes) => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
