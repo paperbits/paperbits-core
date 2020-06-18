@@ -10,40 +10,94 @@ export class BlockStyleSelector {
     constructor(
         private readonly htmlEditorProvider: IHtmlEditorProvider
     ) { }
-
+ 
     public resetToNormal(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleParagraph();
-    }
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
 
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleParagraph();
+    }
+  
     public toggleH1(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleH1();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleH1();
     }
 
     public toggleH2(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleH2();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleH2();
     }
 
     public toggleH3(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleH3();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleH3();
     }
 
     public toggleH4(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleH4();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleH4();
     }
 
     public toggleH5(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleH5();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleH5();
     }
 
     public toggleH6(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleH6();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleH6();
     }
 
     public toggleQuote(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleQuote();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleQuote();
     }
 
     public toggleFormatted(): void {
-        this.htmlEditorProvider.getCurrentHtmlEditor().toggleFormatted();
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleFormatted();
     }
 }
