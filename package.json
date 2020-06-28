@@ -31,7 +31,6 @@
         "html2plaintext": "^2.1.2",
         "knockout": "^3.5.1",
         "knockout.validation": "^2.0.4",
-        "lity": "^2.4.0",
         "lodash": "^4.17.15",
         "lunr": "^2.3.8",
         "perfect-scrollbar": "^1.4.0",
