@@ -10,7 +10,7 @@ import { PagesToolButton } from "./pagesToolButton";
 
 export class PageDesignModule implements IInjectorModule {
     public register(injector: IInjector): void {
-        injector.bind("invalidBrowser", BrowserNotSupported);
+        injector.bind("browserNotSupported", BrowserNotSupported);
         injector.bind("pageHost", PageHost);
         injector.bind("pagesWorkshop", PagesWorkshop);
         injector.bind("pageDetailsWorkshop", PageDetailsWorkshop);
