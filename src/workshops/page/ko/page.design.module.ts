@@ -3,12 +3,14 @@ import { PagesWorkshop } from "./pages";
 import { PageDetailsWorkshop } from "./pageDetails";
 import { PageSelector } from "./pageSelector";
 import { PageHyperlinkProvider } from "@paperbits/common/pages";
+import { BrowserNotSupported } from "./browserNotSupported";
 import { PageHost } from "./pageHost";
 import { PagesToolButton } from "./pagesToolButton";
 
 
 export class PageDesignModule implements IInjectorModule {
     public register(injector: IInjector): void {
+        injector.bind("browserNotSupported", BrowserNotSupported);
         injector.bind("pageHost", PageHost);
         injector.bind("pagesWorkshop", PagesWorkshop);
         injector.bind("pageDetailsWorkshop", PageDetailsWorkshop);
