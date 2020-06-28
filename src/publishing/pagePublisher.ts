@@ -1,4 +1,5 @@
 import * as Utils from "@paperbits/common/utils";
+import parallel from "await-parallel-limit";
 import template from "./page.html";
 import { minify } from "html-minifier-terser";
 import {
@@ -127,7 +128,7 @@ export class PagePublisher implements IPublisher {
                 htmlPage.linkedData = structuredData;
             }
             catch (error) {
-                console.log("Unable to parse page linked data: ", error);
+                console.log("Unable to parse page linked data.");
             }
         }
 
@@ -177,7 +178,7 @@ export class PagePublisher implements IPublisher {
         this.localStyleBuilder.buildGlobalStyle(globalStyleSheet);
 
         try {
-            const results = [];
+            const tasks = [];
             const settings = await this.siteService.getSettings<any>();
             const siteSettings: SiteSettingsContract = settings.site;
 
@@ -190,7 +191,7 @@ export class PagePublisher implements IPublisher {
                     const pages = await this.pageService.search("", localeCode);
 
                     for (const page of pages) {
-                        results.push(this.renderAndUpload(siteSettings, page, localeCode));
+                        tasks.push(() => this.renderAndUpload(siteSettings, page, localeCode));
                     }
                 }
             }
@@ -198,11 +199,11 @@ export class PagePublisher implements IPublisher {
                 const pages = await this.pageService.search("");
 
                 for (const page of pages) {
-                    results.push(this.renderAndUpload(siteSettings, page));
+                    tasks.push(() => this.renderAndUpload(siteSettings, page));
                 }
             }
 
-            await Promise.all(results);
+            await parallel(tasks, 7);
         }
         catch (error) {
             this.logger.traceError(error, "Page publisher");
