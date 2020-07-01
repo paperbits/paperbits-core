@@ -18,7 +18,7 @@ export class ColumnHandlers implements IWidgetHandler {
     public getContextualEditor(context: WidgetContext): IContextCommandSet {
         const columnContextualEditor: IContextCommandSet = {
             color: "#9C27B0",
-            hoverCommand: null,
+            hoverCommands: [],
             deleteCommand: null,
             selectCommands: [{
                 tooltip: "Edit column",
@@ -31,7 +31,7 @@ export class ColumnHandlers implements IWidgetHandler {
 
 
         if (context.model.widgets.length === 0) {
-            columnContextualEditor.hoverCommand = {
+            columnContextualEditor.hoverCommands.push({
                 color: "#607d8b",
                 position: "center",
                 tooltip: "Add widget",
@@ -47,7 +47,7 @@ export class ColumnHandlers implements IWidgetHandler {
                         }
                     }
                 }
-            };
+            });
         }
 
         return columnContextualEditor;

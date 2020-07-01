@@ -52,9 +52,9 @@
 <!-- ko if: $component.designTime -->
 
 <!-- ko foreach: { data: contextualEditors, as: 'contextualEditor' } -->
-<!-- ko if: contextualEditor.hoverCommand -->
+<!-- ko foreach: { data: contextualEditor.hoverCommands, as: 'command' } -->
 <button class="fixed btn-standalone"
-    data-bind="stickTo: { target: contextualEditor.element, position: contextualEditor.hoverCommand.position }, balloon: { component: contextualEditor.hoverCommand.component, onOpen: $component.onHoverCommandActivate, onClose: $component.onHoverCommandDeactivate }, background: { color: contextualEditor.hoverCommand.color }, attr: { title: contextualEditor.hoverCommand.tooltip }">
+    data-bind="stickTo: { target: contextualEditor.element, position: command.position }, balloon: { component: command.component, onOpen: $component.onHoverCommandActivate, onClose: $component.onHoverCommandDeactivate }, background: { color: command.color }, attr: { title: command.tooltip }">
     <i class="paperbits-icon paperbits-simple-add"></i>
 </button>
 <!-- /ko -->

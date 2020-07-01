@@ -20,7 +20,29 @@ export class CardHandlers implements IWidgetHandler {
     public getContextualEditor(context: WidgetContext): IContextCommandSet {
         const cardContextualEditor: IContextCommandSet = {
             color: "#4c5866",
-            hoverCommand: null,
+            hoverCommands: [{
+                color: "#607d8b",
+                position: context.half,
+                tooltip: "Add widget",
+                component: {
+                    name: "widget-selector",
+                    params: {
+                        onRequest: () => context.providers,
+                        onSelect: (newWidgetModel: any) => {
+                            let index = context.parentModel.widgets.indexOf(context.model);
+
+                            if (context.half === "bottom") {
+                                index++;
+                            }
+
+                            context.parentBinding.model.widgets.splice(index, 0, newWidgetModel);
+                            context.parentBinding.applyChanges();
+
+                            this.viewManager.clearContextualEditors();
+                        }
+                    }
+                }
+            }],
             deleteCommand: {
                 tooltip: "Delete card",
                 color: "#4c5866",
@@ -41,7 +63,7 @@ export class CardHandlers implements IWidgetHandler {
         };
 
         if (context.model.widgets.length === 0) {
-            cardContextualEditor.hoverCommand = {
+            cardContextualEditor.hoverCommands.push({
                 color: "#607d8b",
                 position: "center",
                 tooltip: "Add widget",
@@ -57,7 +79,7 @@ export class CardHandlers implements IWidgetHandler {
                         }
                     }
                 }
-            };
+            });
         }
 
         return cardContextualEditor;

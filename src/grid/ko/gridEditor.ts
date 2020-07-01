@@ -63,7 +63,6 @@ export class GridEditor {
             binding = GridHelper.getWidgetBinding(element);
         }
 
-
         let parentModel;
         const parentBinding = GridHelper.getParentWidgetBinding(element);
 
@@ -119,7 +118,7 @@ export class GridEditor {
 
         contextualEditor.element = element;
         contextualEditor.selectCommands = contextualEditor.selectCommands || null;
-        contextualEditor.hoverCommand = contextualEditor.hoverCommand || null;
+        contextualEditor.hoverCommands = contextualEditor.hoverCommands || null;
         contextualEditor.deleteCommand = contextualEditor.deleteCommand || null;
 
         return contextualEditor;
@@ -433,7 +432,7 @@ export class GridEditor {
     private getWidgetContextualEditor(context: WidgetContext): IContextCommandSet {
         const widgetContextualEditor: IContextCommandSet = {
             color: "#607d8b",
-            hoverCommand: {
+            hoverCommands: [{
                 color: "#607d8b",
                 position: context.half,
                 tooltip: "Add widget",
@@ -455,7 +454,7 @@ export class GridEditor {
                         }
                     }
                 }
-            },
+            }],
             deleteCommand: {
                 tooltip: "Delete widget",
                 color: "#607d8b",
@@ -488,6 +487,16 @@ export class GridEditor {
         for (let i = elements.length - 1; i >= 0; i--) {
             const element = elements[i];
             const widgetBinding = GridHelper.getWidgetBinding(element);
+
+
+            // if (element.classList.contains("card")) {
+            //     debugger;
+            // }
+
+            // if (element.tagName === "SECTION") {
+            //     debugger;
+            // }
+
 
             if (!widgetBinding) {
                 continue;

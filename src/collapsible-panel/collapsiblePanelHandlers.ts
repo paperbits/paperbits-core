@@ -33,7 +33,29 @@ export class CollapsiblePanelHandlers implements IWidgetHandler {
     public getContextualEditor(context: WidgetContext): IContextCommandSet {
         const gridCellContextualEditor: IContextCommandSet = {
             color: "#9C27B0",
-            hoverCommand: null,
+            hoverCommands: [{
+                color: "#607d8b",
+                position: context.half,
+                tooltip: "Add widget",
+                component: {
+                    name: "widget-selector",
+                    params: {
+                        onRequest: () => context.providers,
+                        onSelect: (newWidgetModel: any) => {
+                            let index = context.parentModel.widgets.indexOf(context.model);
+
+                            if (context.half === "bottom") {
+                                index++;
+                            }
+
+                            context.parentBinding.model.widgets.splice(index, 0, newWidgetModel);
+                            context.parentBinding.applyChanges();
+
+                            this.viewManager.clearContextualEditors();
+                        }
+                    }
+                }
+            }],
             deleteCommand: {
                 tooltip: "Delete widget",
                 color: "#607d8b",
@@ -54,7 +76,7 @@ export class CollapsiblePanelHandlers implements IWidgetHandler {
 
 
         if (context.model.widgets.length === 0) {
-            gridCellContextualEditor.hoverCommand = {
+            gridCellContextualEditor.hoverCommands.push({
                 color: "#607d8b",
                 position: "center",
                 tooltip: "Add widget",
@@ -70,7 +92,7 @@ export class CollapsiblePanelHandlers implements IWidgetHandler {
                         }
                     }
                 }
-            };
+            });
         }
 
         return gridCellContextualEditor;

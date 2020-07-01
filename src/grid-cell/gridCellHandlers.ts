@@ -20,7 +20,7 @@ export class GridCellHandlers implements IWidgetHandler {
     public getContextualEditor(context: WidgetContext): IContextCommandSet {
         const gridCellContextualEditor: IContextCommandSet = {
             color: "#9C27B0",
-            hoverCommand: null,
+            hoverCommands: [],
             deleteCommand: null,
             selectCommands: [{
                 tooltip: "Edit grid cell",
@@ -44,7 +44,7 @@ export class GridCellHandlers implements IWidgetHandler {
             return gridCellContextualEditor;
         }
 
-        gridCellContextualEditor.hoverCommand = {
+        gridCellContextualEditor.hoverCommands.push({
             color: "#607d8b",
             position: "center",
             tooltip: "Add widget",
@@ -60,7 +60,7 @@ export class GridCellHandlers implements IWidgetHandler {
                     }
                 }
             }
-        };
+        });
 
         return gridCellContextualEditor;
     }
