@@ -8,7 +8,7 @@ export interface BalloonOptions {
     selector?: string;
     component?: IComponent;
     template?: ITemplate;
-    onCreated?: (handle) => void;
+    onCreated?: (handle: BalloonHandle) => void;
     isOpen: any;
     onOpen?: () => void;
     onClose?: () => void;
@@ -16,6 +16,13 @@ export interface BalloonOptions {
     closeTimeout?: number;
     displayOnEnter?: boolean;
     offsetOnEnter?: number;
+}
+
+export interface BalloonHandle {
+    open: (returnFocusTo?: HTMLElement) => void;
+    close: () => void;
+    toggle: () => void;
+    updatePosition: () => void;
 }
 
 export class BalloonBindingHandler {
@@ -286,7 +293,7 @@ export class BalloonBindingHandler {
                     balloonTipElement.style.left = `${balloonTipX}px`;
                 };
 
-                const open = (returnFocusTo: HTMLElement): void => {
+                const open = (returnFocusTo?: HTMLElement): void => {
                     resetCloseTimeout();
 
                     if (balloonIsOpen) {
@@ -365,10 +372,11 @@ export class BalloonBindingHandler {
                     }
                 };
 
-                const ballonHandle = {
+                const ballonHandle: BalloonHandle = {
                     open: open,
                     close: close,
-                    toggle: toggle
+                    toggle: toggle,
+                    updatePosition: () => requestAnimationFrame(updatePosition)
                 };
 
                 if (options.onCreated) {

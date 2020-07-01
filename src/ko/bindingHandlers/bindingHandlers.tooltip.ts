@@ -1,4 +1,5 @@
 import * as ko from "knockout";
+import { BalloonHandle } from "./bindingHandlers.balloon";
 
 ko.bindingHandlers["tooltip"] = {
     init: (triggerElement: HTMLElement, valueAccessor) => {
@@ -6,6 +7,7 @@ ko.bindingHandlers["tooltip"] = {
 
         let tooltipMessage: any;
         let tooltipPosition: string = "top";
+        let balloonHandle: BalloonHandle;
 
         if (typeof options === "string" || ko.isObservable(options)) {
             tooltipMessage = options;
@@ -19,7 +21,7 @@ ko.bindingHandlers["tooltip"] = {
             // console.warn("No tooltip text specified for element: " + triggerElement.nodeName);
             return;
         }
-
+     
         const isOpen = ko.observable();
         const textParams: any = {};
         let closeTimeout = 0;
@@ -28,6 +30,12 @@ ko.bindingHandlers["tooltip"] = {
             textParams.observableText = tooltipMessage;
             closeTimeout = 5000; // close after 5 sec
             triggerElement.setAttribute("aria-label", tooltipMessage());
+
+            tooltipMessage.subscribe(() => {
+                if (balloonHandle) {
+                    balloonHandle.updatePosition();
+                }
+            });
         }
         else {
             textParams.text = tooltipMessage;
@@ -36,8 +44,6 @@ ko.bindingHandlers["tooltip"] = {
 
         triggerElement.setAttribute("role", "tooltip");
         triggerElement.setAttribute("aria-live", "polite");
-
-        let balloonHandle;
 
         ko.applyBindingsToNode(triggerElement, {
             balloon: {
