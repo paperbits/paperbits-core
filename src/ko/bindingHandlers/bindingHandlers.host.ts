@@ -5,7 +5,6 @@ import { Router, Route } from "@paperbits/common/routing";
 import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
 import { SiteService, SiteSettingsContract } from "@paperbits/common/sites";
 import { IMediaService } from "@paperbits/common/media";
-import { StyleCompiler } from "@paperbits/common/styles";
 
 
 export class HostBindingHandler {

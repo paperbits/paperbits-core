@@ -8,7 +8,7 @@ import { StyleService } from "@paperbits/styles/styleService";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { SizeStylePluginConfig } from "@paperbits/styles/contracts";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
-import { StyleHelper } from "@paperbits/common/styles";
+import { StyleHelper } from "@paperbits/styles";
 import { EventManager, CommonEvents } from "@paperbits/common/events";
 import { ViewManager } from "@paperbits/common/ui";
 
@@ -82,7 +82,7 @@ export class VideoPlayerEditor {
         this.controls(this.model.controls);
         this.autoplay(this.model.autoplay);
 
-        const sizeStyles = StyleHelper.getPluginConfig(this.model.styles, "size", viewport);
+        const sizeStyles = StyleHelper.getPluginConfigForLocalStyles(this.model.styles, "size", viewport);
         this.sizeConfig(sizeStyles);
 
         this.appearanceStyle(this.model?.styles?.appearance);
@@ -103,7 +103,7 @@ export class VideoPlayerEditor {
 
     public onSizeChange(pluginConfig: SizeStylePluginConfig): void {
         const viewport = this.viewManager.getViewport();
-        StyleHelper.setPluginConfig(this.model.styles, "size", pluginConfig, viewport);
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "size", pluginConfig, viewport);
 
         this.onChange(this.model);
     }

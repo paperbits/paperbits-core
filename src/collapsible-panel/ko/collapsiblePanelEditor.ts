@@ -5,7 +5,7 @@ import { Component, OnMounted, Param, Event, OnDestroyed } from "@paperbits/comm
 import { ContainerStylePluginConfig, BackgroundStylePluginConfig, SizeStylePluginConfig } from "@paperbits/styles/contracts";
 import { ViewManager } from "@paperbits/common/ui";
 import { EventManager, CommonEvents } from "@paperbits/common/events";
-import { StyleHelper } from "@paperbits/common/styles";
+import { StyleHelper } from "@paperbits/styles";
 
 @Component({
     selector: "collapsible-panel-editor",
@@ -40,33 +40,33 @@ export class CollapsiblePanelEditor {
     private updateObservables(): void {
         const viewport = this.viewManager.getViewport();
 
-        const containerStyleConfig = StyleHelper.getPluginConfig(this.model.styles, "container", viewport);
+        const containerStyleConfig = StyleHelper.getPluginConfigForLocalStyles(this.model.styles, "container", viewport);
         this.containerConfig(containerStyleConfig);
 
-        const backgroundStyleConfig = StyleHelper.getPluginConfig(this.model.styles, "background", viewport);
+        const backgroundStyleConfig = StyleHelper.getPluginConfigForLocalStyles(this.model.styles, "background", viewport);
         this.backgroundConfig(backgroundStyleConfig);
 
-        const sizeStyleConfig = StyleHelper.getPluginConfig(this.model.styles, "size", viewport);
+        const sizeStyleConfig = StyleHelper.getPluginConfigForLocalStyles(this.model.styles, "size", viewport);
         this.sizeConfig(sizeStyleConfig);
     }
 
     public onContainerChange(pluginConfig: ContainerStylePluginConfig): void {
         const viewport = this.viewManager.getViewport();
-        StyleHelper.setPluginConfig(this.model.styles, "container", pluginConfig, viewport);
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "container", pluginConfig, viewport);
 
         this.onChange(this.model);
     }
 
     public onBackgroundChange(pluginConfig: BackgroundStylePluginConfig): void {
         const viewport = this.viewManager.getViewport();
-        StyleHelper.setPluginConfig(this.model.styles, "background", pluginConfig, viewport);
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "background", pluginConfig, viewport);
 
         this.onChange(this.model);
     }
 
     public onSizeChange(pluginConfig: SizeStylePluginConfig): void {
         const viewport = this.viewManager.getViewport();
-        StyleHelper.setPluginConfig(this.model.styles, "size", pluginConfig, viewport);
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "size", pluginConfig, viewport);
 
         this.onChange(this.model);
     }

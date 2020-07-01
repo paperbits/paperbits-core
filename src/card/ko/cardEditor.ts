@@ -3,12 +3,11 @@ import * as Objects from "@paperbits/common/objects";
 import template from "./cardEditor.html";
 import { ViewManager } from "@paperbits/common/ui";
 import { WidgetEditor } from "@paperbits/common/widgets";
-import { StyleService } from "@paperbits/styles";
+import { StyleService, StyleHelper } from "@paperbits/styles";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { CardModel } from "../cardModel";
 import { BackgroundStylePluginConfig, TypographyStylePluginConfig, ContainerStylePluginConfig } from "@paperbits/styles/contracts";
 import { EventManager } from "@paperbits/common/events";
-import { StyleHelper } from "@paperbits/common/styles";
 
 
 @Component({
@@ -53,10 +52,10 @@ export class CardEditor implements WidgetEditor<CardModel> {
     private updateObservables(): void {
         const viewport = this.viewManager.getViewport();
 
-        const containerStyleConfig = StyleHelper.getPluginConfig(this.model.styles, "container", viewport);
+        const containerStyleConfig = StyleHelper.getPluginConfigForLocalStyles(this.model.styles, "container", viewport);
         this.containerConfig(containerStyleConfig);
 
-        const backgroundStyleConfig = StyleHelper.getPluginConfig(this.model.styles, "background", viewport);
+        const backgroundStyleConfig = StyleHelper.getPluginConfigForLocalStyles(this.model.styles, "background", viewport);
         this.background(backgroundStyleConfig);
 
         this.appearanceStyle(this.model.styles.appearance);
@@ -64,13 +63,13 @@ export class CardEditor implements WidgetEditor<CardModel> {
 
     public onContainerChange(pluginConfig: ContainerStylePluginConfig): void {
         const viewport = this.viewManager.getViewport();
-        StyleHelper.setPluginConfig(this.model.styles, "container", pluginConfig, viewport);
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "container", pluginConfig, viewport);
 
         this.onChange(this.model);
     }
 
     public onBackgroundChange(pluginConfig: BackgroundStylePluginConfig): void {
-        StyleHelper.setPluginConfig(this.model.styles, "background", pluginConfig);
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "background", pluginConfig);
         this.onChange(this.model);
     }
 

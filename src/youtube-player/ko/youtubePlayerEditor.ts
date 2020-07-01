@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import template from "./youtubePlayerEditor.html";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
-import { StyleHelper } from "@paperbits/common/styles";
+import { StyleHelper } from "@paperbits/styles";
 import { YoutubePlayerModel } from "../youtubePlayerModel";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { WidgetEditor } from "@paperbits/common/widgets";
@@ -63,7 +63,7 @@ export class YoutubePlayerEditor implements WidgetEditor<YoutubePlayerModel> {
     private updateObservables(): void {
         const viewport = this.viewManager.getViewport();
         
-        const sizeStyles = StyleHelper.getPluginConfig(this.model.styles, "size", viewport);
+        const sizeStyles = StyleHelper.getPluginConfigForLocalStyles(this.model.styles, "size", viewport);
         this.sizeConfig(sizeStyles);
 
         this.videoId(this.model.videoId);
@@ -74,7 +74,7 @@ export class YoutubePlayerEditor implements WidgetEditor<YoutubePlayerModel> {
 
     public onSizeChange(pluginConfig: SizeStylePluginConfig): void {
         const viewport = this.viewManager.getViewport();
-        StyleHelper.setPluginConfig(this.model.styles, "size", pluginConfig, viewport);
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "size", pluginConfig, viewport);
 
         this.applyChanges();
     }
