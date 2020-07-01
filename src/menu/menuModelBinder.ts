@@ -99,7 +99,7 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
         return children.map((item: BlockContract) => {
             const itemModel = new NavigationItemModel();
             itemModel.label = item.nodes[0].text;
-            itemModel.targetUrl = `#${item.attrs.id || item.attrs.key}`;
+            itemModel.targetUrl = `#${item.identifier || item.attrs?.id || item.attrs?.key}`;
             return itemModel;
         });
     }

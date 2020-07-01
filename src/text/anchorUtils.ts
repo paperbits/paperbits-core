@@ -53,6 +53,6 @@ export class AnchorUtils {
             }
         );
 
-        return children.filter(item => item.attrs && (item.attrs.id || item.attrs.key));
+        return children.filter(item => item.identifier || item.attrs?.id || item.attrs?.key);
     }
 }
