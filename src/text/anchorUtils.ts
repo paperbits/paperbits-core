@@ -25,6 +25,10 @@ export class AnchorUtils {
     }
 
     public static getHeadingNodes(pageContent: Contract, minHeading: number = 1, maxHeading: number = 1): BlockContract[] {
+        if (!pageContent) {
+            throw new Error(`Parameter "pageContent" not specified.`);
+        }
+
         const children = AnchorUtils.findNodesRecursively(pageContent,
             node => node["type"] && node["type"].startsWith("heading"),
             (node) => {
