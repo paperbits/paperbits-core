@@ -10,6 +10,11 @@ ko.bindingHandlers["collapse"] = {
         setTimeout(() => {
             const targetSelector = ko.unwrap(valueAccessor());
             const targetElement = document.querySelector(targetSelector);
+
+            if (!targetElement) {
+                return;
+            }
+
             const visibleObservable = ko.observable(expanded);
 
             triggerElement.setAttribute("role", "button");
