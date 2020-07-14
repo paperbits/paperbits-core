@@ -38,7 +38,7 @@ export class PagePublisher implements IPublisher {
     }
 
     public async renderPage(page: HtmlPage): Promise<string> {
-        this.logger.trackEvent(`Publishing page ${page.title}...`);
+        this.logger.trackEvent("Publishing", { message: `Publishing page ${page.title}...` });
 
         try {
             const htmlContent = await this.htmlPagePublisher.renderHtml(page);
@@ -141,7 +141,7 @@ export class PagePublisher implements IPublisher {
                 }
             }
             catch (error) {
-                this.logger.trackError("Could not retrieve favicon.", error);
+                this.logger.trackEvent("Publishing", { message: "Could not retrieve favicon." });
             }
         }
 
@@ -206,7 +206,7 @@ export class PagePublisher implements IPublisher {
             await parallel(tasks, 7);
         }
         catch (error) {
-            this.logger.trackError(`Unable to complete pages publishing.`, error);
+            throw new Error(`Unable to complete pages publishing. ${error}`);
         }
     }
 }

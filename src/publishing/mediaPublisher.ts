@@ -32,12 +32,12 @@ export class MediaPublisher implements IPublisher {
                     await this.outputBlobStorage.uploadBlob(mediaFile.permalink, response.toByteArray(), mediaFile.mimeType);
                 }
                 else {
-                    this.logger.trackEvent(`Could not download media ${mediaFile.fileName}`);
+                    this.logger.trackEvent("Publishing", { message: `Could not download media ${mediaFile.fileName}` });
                 }
             }
         }
         catch (error) {
-            this.logger.trackError("Unable to render media file.", error);
+            throw new Error(`Unable to render media file. ${error}`);
         }
     }
 
@@ -45,7 +45,7 @@ export class MediaPublisher implements IPublisher {
         const mediaPromises = new Array<Promise<void>>();
 
         mediaFiles.forEach(mediaFile => {
-            this.logger.trackEvent(`Publishing media ${mediaFile.fileName}...`);
+            this.logger.trackEvent("Publishing", { message: `Publishing media ${mediaFile.fileName}...` });
             mediaPromises.push(this.renderMediaFile(mediaFile));
         });
 

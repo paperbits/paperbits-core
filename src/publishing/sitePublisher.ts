@@ -16,7 +16,7 @@ export class SitePublisher implements IPublisher {
 
     public async publish(): Promise<void> {
         try {
-            this.logger.trackEvent("Publishing website...");
+            this.logger.trackEvent("Publishing", { message: `Publishing website...` });
 
             for (const publisher of this.publishers) {
                 await publisher.publish();
@@ -32,11 +32,10 @@ export class SitePublisher implements IPublisher {
 
             await this.changeCommitter.commit();
 
-            this.logger.trackEvent("Website published successfully.");
+            this.logger.trackEvent("Publishing", { message: `Website published successfully.` });
         }
         catch (error) {
-            this.logger.trackError("Unable to complete publishing.", error);
-            throw error;
+            throw new Error(`Unable to complete publishing. ${error}`);
         }
     }
 }
