@@ -28,6 +28,11 @@ ko.bindingHandlers["collapse"] = {
                 const newValue = !visibleObservable();
                 visibleObservable(newValue);
                 triggerElement.setAttribute("aria-expanded", newValue.toString());
+
+                if (!targetElement) {
+                    return;
+                }
+
                 targetElement.setAttribute("aria-hidden", (!newValue).toString());
             };
 
