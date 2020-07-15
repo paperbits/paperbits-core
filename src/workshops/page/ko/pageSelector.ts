@@ -131,7 +131,7 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
             .map(item => {
                 const anchor = new AnchorItem();
                 anchor.shortTitle = item.nodes[0]?.text;
-                anchor.elementId = item.attrs.id;
+                anchor.elementId = item.attrs?.id;
 
                 return anchor;
             });
