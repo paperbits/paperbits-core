@@ -15,6 +15,11 @@ export class MediaPublisher implements IPublisher {
     ) { }
 
     private async renderMediaFile(mediaFile: MediaContract): Promise<void> {
+        if (!mediaFile.permalink) {
+            this.logger.trackEvent("Publishing", { message: `Skipping media with no permalink specified: "${mediaFile.fileName}".` });
+            return;
+        }
+
         try {
             if (mediaFile.blobKey) {
                 const blob = await this.blobStorage.downloadBlob(mediaFile.blobKey);

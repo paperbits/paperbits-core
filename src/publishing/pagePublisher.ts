@@ -62,7 +62,7 @@ export class PagePublisher implements IPublisher {
             });
         }
         catch (error) {
-            throw new Error(`Unable to reneder page ${page.title}: ${error.stack || error.message}`);
+            throw new Error(`Unable to render page "${page.title}": ${error.stack || error.message}`);
         }
     }
 
@@ -72,105 +72,108 @@ export class PagePublisher implements IPublisher {
             return;
         }
 
-        const siteAuthor = settings?.author;
-        const siteTitle = settings?.title;
-        const siteDescription = settings?.description;
-        const siteKeywords = settings?.keywords;
-        const siteHostname = settings?.hostname;
-        const faviconSourceKey = settings?.faviconSourceKey;
+        try {
+            const siteAuthor = settings?.author;
+            const siteTitle = settings?.title;
+            const siteDescription = settings?.description;
+            const siteKeywords = settings?.keywords;
+            const siteHostname = settings?.hostname;
+            const faviconSourceKey = settings?.faviconSourceKey;
+            const localePrefix = locale ? `/${locale}` : "";
+            const pagePermalink = `${localePrefix}${page.permalink}`;
+            const pageContent = await this.pageService.getPageContent(page.key, locale);
+            const pageUrl = siteHostname
+                ? `https://${settings?.hostname}${pagePermalink}`
+                : pagePermalink;
 
-        const localePrefix = locale ? `/${locale}` : "";
+            const styleManager = new StyleManager();
 
-        const pagePermalink = `${localePrefix}${page.permalink}`;
-        const pageContent = await this.pageService.getPageContent(page.key, locale);
-        const pageUrl = siteHostname
-            ? `https://${settings?.hostname}${pagePermalink}`
-            : pagePermalink;
-
-        const styleManager = new StyleManager();
-
-        const htmlPage: HtmlPage = {
-            title: [page.title, siteTitle].join(" - "),
-            description: page.description || siteDescription,
-            keywords: page.keywords || siteKeywords,
-            permalink: pagePermalink,
-            url: pageUrl,
-            siteHostName: siteHostname,
-            content: pageContent,
-            template: template,
-            styleReferences: [
-                `/styles/styles.css`, // global style reference
-                pagePermalink === "/" // local style reference
-                    ? `/styles.css`   // home page style reference
-                    : `${pagePermalink}/styles.css`
-            ],
-            author: siteAuthor,
-            socialShareData: page.socialShareData,
-            openGraph: {
-                type: page.permalink === "/" ? "website" : "article",
-                title: page.title || siteTitle,
+            const htmlPage: HtmlPage = {
+                title: [page.title, siteTitle].join(" - "),
                 description: page.description || siteDescription,
-                siteName: siteTitle
-            },
-            bindingContext: {
-                contentItemKey: page.key,
-                styleManager: styleManager,
-                navigationPath: pagePermalink,
-                locale: locale,
-                template: {
-                    page: {
-                        value: pageContent,
+                keywords: page.keywords || siteKeywords,
+                permalink: pagePermalink,
+                url: pageUrl,
+                siteHostName: siteHostname,
+                content: pageContent,
+                template: template,
+                styleReferences: [
+                    `/styles/styles.css`, // global style reference
+                    pagePermalink === "/" // local style reference
+                        ? `/styles.css`   // home page style reference
+                        : `${pagePermalink}/styles.css`
+                ],
+                author: siteAuthor,
+                socialShareData: page.socialShareData,
+                openGraph: {
+                    type: page.permalink === "/" ? "website" : "article",
+                    title: page.title || siteTitle,
+                    description: page.description || siteDescription,
+                    siteName: siteTitle
+                },
+                bindingContext: {
+                    contentItemKey: page.key,
+                    styleManager: styleManager,
+                    navigationPath: pagePermalink,
+                    locale: locale,
+                    template: {
+                        page: {
+                            value: pageContent,
+                        }
                     }
                 }
-            }
-        };
+            };
 
-        if (page.jsonLd) {
-            let structuredData: any;
+            if (page.jsonLd) {
+                let structuredData: any;
 
-            try {
-                structuredData = JSON.parse(page.jsonLd);
-                htmlPage.linkedData = structuredData;
-            }
-            catch (error) {
-                console.log("Unable to parse page linked data.");
-            }
-        }
-
-        if (faviconSourceKey) {
-            try {
-                const media = await this.mediaService.getMediaByKey(faviconSourceKey);
-
-                if (media) {
-                    htmlPage.faviconPermalink = media.permalink;
+                try {
+                    structuredData = JSON.parse(page.jsonLd);
+                    htmlPage.linkedData = structuredData;
+                }
+                catch (error) {
+                    console.log("Unable to parse page linked data.");
                 }
             }
-            catch (error) {
-                this.logger.trackEvent("Publishing", { message: "Could not retrieve favicon." });
+
+            if (faviconSourceKey) {
+                try {
+                    const media = await this.mediaService.getMediaByKey(faviconSourceKey);
+
+                    if (media) {
+                        htmlPage.faviconPermalink = media.permalink;
+                    }
+                }
+                catch (error) {
+                    this.logger.trackEvent("Publishing", { message: "Could not retrieve favicon." });
+                }
             }
+
+            const htmlContent = await this.renderPage(htmlPage);
+
+            // Building local styles
+            const styleSheets = styleManager.getAllStyleSheets();
+            this.localStyleBuilder.buildLocalStyle(pagePermalink, styleSheets);
+
+            this.sitemapBuilder.appendPermalink(pagePermalink);
+            this.searchIndexBuilder.appendPage(pagePermalink, htmlPage.title, htmlPage.description, htmlContent);
+
+            let permalink = pagePermalink;
+
+            if (!permalink.endsWith("/")) {
+                permalink += "/";
+            }
+
+            permalink = `${permalink}index.html`;
+
+            const uploadPath = permalink;
+            const contentBytes = Utils.stringToUnit8Array(htmlContent);
+
+            await this.outputBlobStorage.uploadBlob(uploadPath, contentBytes, "text/html");
         }
-
-        const htmlContent = await this.renderPage(htmlPage);
-
-        // Building local styles
-        const styleSheets = styleManager.getAllStyleSheets();
-        this.localStyleBuilder.buildLocalStyle(pagePermalink, styleSheets);
-
-        this.sitemapBuilder.appendPermalink(pagePermalink);
-        this.searchIndexBuilder.appendPage(pagePermalink, htmlPage.title, htmlPage.description, htmlContent);
-
-        let permalink = pagePermalink;
-
-        if (!permalink.endsWith("/")) {
-            permalink += "/";
+        catch (error) {
+            throw new Error(`Unable to publish page "${page.title}": ${error.stack | error.message}`);
         }
-
-        permalink = `${permalink}index.html`;
-
-        const uploadPath = permalink;
-        const contentBytes = Utils.stringToUnit8Array(htmlContent);
-
-        await this.outputBlobStorage.uploadBlob(uploadPath, contentBytes, "text/html");
     }
 
     public async publish(): Promise<void> {
