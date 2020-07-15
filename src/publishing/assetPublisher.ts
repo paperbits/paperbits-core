@@ -80,7 +80,7 @@ export class AssetPublisher implements IPublisher {
             });
         }
         catch (error) {
-            console.error(`Unable to list files :${error}`);
+            console.error(`Unable to list files :${error.stack || error.message}`);
         }
 
         return results;

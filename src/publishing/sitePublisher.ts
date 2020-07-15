@@ -35,7 +35,7 @@ export class SitePublisher implements IPublisher {
             this.logger.trackEvent("Publishing", { message: `Website published successfully.` });
         }
         catch (error) {
-            throw new Error(`Unable to complete publishing. ${error}`);
+            throw new Error(`Unable to complete publishing. ${error.stack || error.message}`);
         }
     }
 }

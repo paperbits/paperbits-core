@@ -37,7 +37,7 @@ export class MediaPublisher implements IPublisher {
             }
         }
         catch (error) {
-            throw new Error(`Unable to render media file. ${error}`);
+            throw new Error(`Unable to render media file. ${error.stack || error.message}`);
         }
     }
 

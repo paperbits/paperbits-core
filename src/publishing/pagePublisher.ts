@@ -62,11 +62,16 @@ export class PagePublisher implements IPublisher {
             });
         }
         catch (error) {
-            throw new Error(`Unable to reneder page ${page.title}: ${error.message}`);
+            throw new Error(`Unable to reneder page ${page.title}: ${error.stack || error.message}`);
         }
     }
 
     private async renderAndUpload(settings: SiteSettingsContract, page: PageContract, locale?: string): Promise<void> {
+        if (!page.permalink) {
+            this.logger.trackEvent("Publishing", { message: `Skipping page with no permalink specified: "${page.title}".` });
+            return;
+        }
+
         const siteAuthor = settings?.author;
         const siteTitle = settings?.title;
         const siteDescription = settings?.description;
@@ -206,7 +211,7 @@ export class PagePublisher implements IPublisher {
             await parallel(tasks, 7);
         }
         catch (error) {
-            throw new Error(`Unable to complete pages publishing. ${error}`);
+            throw new Error(`Unable to complete pages publishing. ${error.stack || error.message}`);
         }
     }
 }

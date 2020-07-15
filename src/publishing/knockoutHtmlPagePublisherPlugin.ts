@@ -24,7 +24,7 @@ export class KnockoutHtmlPagePublisherPlugin implements HtmlPagePublisherPlugin 
                 setTimeout(resolve, 500);
             }
             catch (error) {
-                reject(`Unable to apply knockout bindings to a template: ${error}`);
+                reject(`Unable to apply knockout bindings to a template: ${error.stack || error.message}`);
             }
         });
     }
