@@ -83,7 +83,6 @@ export class MediaDetailsWorkshop {
     }
 
     public async deleteMedia(): Promise<void> {
-        // TODO: Show confirmation dialog according to mockup
         await this.mediaService.deleteMedia(this.mediaItem.toMedia());
         this.viewManager.notifySuccess("Media library", `File "${this.mediaItem.fileName()}" was deleted.`);
         this.viewManager.closeWorkshop("media-details-workshop");
