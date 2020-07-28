@@ -2,12 +2,13 @@
 import * as ko from "knockout";
 import * as validation from "knockout.validation";
 import { ILayoutService } from "@paperbits/common/layouts/ILayoutService";
-import { IPermalinkResolver } from "@paperbits/common/permalinks";
+import { IPermalinkResolver, PermalinkService } from "@paperbits/common/permalinks";
 
 const errorClassName = "is-invalid";
 
 export class KnockoutValidation {
     constructor(
+        private readonly permalinkService: PermalinkService,
         private readonly permalinkResolver: IPermalinkResolver,
         private readonly layoutService: ILayoutService,
         private readonly reservedPermalinks: string[]
@@ -43,20 +44,15 @@ export class KnockoutValidation {
 
         validation.rules["validPermalink"] = {
             async: true,
-            validator: async (permalink: string, contentItemKey: string, callback: (isInUse: boolean) => void) => {
+            validator: async (permalink: string, targetKey: string, callback: (valid: boolean) => void) => {
                 if (!permalink) {
                     return false;
                 }
 
-                if (this.reservedPermalinks.includes(permalink)) {
-                    callback(false);
-                    return;
-                }
+                const permalinkContract = await this.permalinkService.getPermalink(permalink);
+                const inUseByAnoterResource = !!permalinkContract && permalinkContract.targetKey !== targetKey;
 
-                const contentItem = await this.permalinkResolver.getContentItemByPermalink(permalink);
-                const conflict = contentItem && contentItem.key !== contentItemKey;
-
-                callback(!conflict);
+                callback(!inUseByAnoterResource);
             },
             message: "This permalink is reserved or already in use."
         };

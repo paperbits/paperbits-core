@@ -12,7 +12,7 @@ import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkRe
 import { NavigationService } from "@paperbits/common/navigation";
 import { PageService } from "@paperbits/common/pages";
 import { PagePermalinkResolver } from "@paperbits/common/pages/pagePermalinkResolver";
-import { PermalinkResolver } from "@paperbits/common/permalinks";
+import { DefaultPermalinkService, PermalinkResolver } from "@paperbits/common/permalinks";
 import { DefaultRouteGuard, DefaultRouter } from "@paperbits/common/routing";
 import { SiteService } from "@paperbits/common/sites";
 import { UrlService } from "@paperbits/common/urls";
@@ -66,6 +66,7 @@ export class CoreModule implements IInjectorModule {
 
         /*** Services ***/
         injector.bindSingleton("widgetService", WidgetService);
+        injector.bindSingleton("permalinkService", DefaultPermalinkService);
         injector.bindSingleton("layoutService", LayoutService);
         injector.bindSingleton("pageService", PageService);
         injector.bindSingleton("blogService", BlogService);

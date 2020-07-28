@@ -26,7 +26,7 @@ export class MediaDetailsWorkshop {
         "video/x-msvideo",
         "video/x-flv",
         "video/webm",
-    ]
+    ];
 
     @Param()
     public readonly mediaItem: MediaItem;
@@ -37,13 +37,7 @@ export class MediaDetailsWorkshop {
     constructor(
         private readonly mediaService: IMediaService,
         private readonly viewManager: ViewManager
-    ) {
-        // rebinding...
-        this.onMounted = this.onMounted.bind(this);
-        this.deleteMedia = this.deleteMedia.bind(this);
-        this.updateMedia = this.updateMedia.bind(this);
-        this.openCropper = this.openCropper.bind(this);
-    }
+    ) { }
 
     @OnMounted()
     public async onMounted(): Promise<void> {
@@ -72,12 +66,8 @@ export class MediaDetailsWorkshop {
 
         this.mediaItem.permalink
             .extend(ChangeRateLimit)
-            .extend(<any>{ validPermalink: this.mediaItem.key, onlyValid: true })
+            .extend(<any>{ required: true, validPermalink: this.mediaItem.key, onlyValid: true })
             .subscribe(this.updateMedia);
-
-        const mediaContract = await this.mediaService.getMediaByKey(this.mediaItem.key);
-
-        this.mediaItem.permalink(mediaContract.permalink);
     }
 
     private async updateMediaUrl(): Promise<void> {
