@@ -38,7 +38,7 @@
                 <i class="paperbits-icon paperbits-circle-delete"
                     data-bind="css: { 'paperbits-circle-add': node.collapsed }"></i>
             </button>
-            <div tabindex="0" role="listitem" class="list-item" data-bind="keydown: onKeyDown, activate: $component.selectNavigationItem, attr: { 'aria-expanded': (!node.collapsed()).toString() }">
+            <div tabindex="0" role="listitem" class="list-item" data-bind="keydown: onKeyDown, css: { selected: $component.isSelected(node) }, activate: $component.selectNavigationItem, attr: { 'aria-expanded': (!node.collapsed()).toString() }">
                 <!-- <i class="paperbits-icon paperbits-menu-34"></i> -->
                 <span data-bind="text: node.label"></span>
             </div>
@@ -46,7 +46,7 @@
         <!-- /ko -->
 
         <!-- ko ifnot: node.nodes().length > 0 -->
-        <div tabindex="0" role="listitem" class="list-item" data-bind="activate: $component.selectNavigationItem">
+        <div tabindex="0" role="listitem" class="list-item" data-bind="css: { selected: $component.isSelected(node) }, activate: $component.selectNavigationItem">
             <!-- <i class="paperbits-icon paperbits-menu-34"></i> -->
             <span data-bind="text: node.label"></span>
         </div>

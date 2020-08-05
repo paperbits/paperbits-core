@@ -46,29 +46,11 @@ export class PagesWorkshop {
         const pageItems = pages.map(page => new PageItem(page));
 
         this.pages(pageItems);
-
-        if (!this.selectedPage()) {
-            const currentPermalink = this.router.getPath();
-            const current = pageItems.find(item => item.permalink() === currentPermalink);
-
-            if (current) {
-                this.selectedPage(current);
-                current.isSelected(true);
-            }
-        }
         this.working(false);
     }
 
-
     public selectPage(pageItem: PageItem): void {
-        const prev = this.selectedPage();
-
-        if (prev) {
-            prev.isSelected(false);
-        }
-
         this.selectedPage(pageItem);
-        pageItem.isSelected(true);
 
         const view: View = {
             heading: "Page",
@@ -94,7 +76,7 @@ export class PagesWorkshop {
         this.working(true);
 
         const pageUrl = "/new";
-        
+
         const pageContract = await this.pageService.createPage(pageUrl, "New page", "", "");
         const pageItem = new PageItem(pageContract);
 
@@ -102,5 +84,10 @@ export class PagesWorkshop {
         this.selectPage(pageItem);
 
         this.working(false);
+    }
+
+    public isSelected(page: PageItem): boolean {
+        const selectedPage = this.selectedPage();
+        return selectedPage?.key === page.key;
     }
 }

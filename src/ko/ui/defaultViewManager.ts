@@ -521,7 +521,7 @@ export class DefaultViewManager implements ViewManager {
         this.previousMode = this.mode;
         this.clearJourney();
         this.hideToolboxes();
-        this.designTime(false)
+        this.designTime(false);
         this.toasts().forEach(toast => {
             this.removeToast(toast);
         });

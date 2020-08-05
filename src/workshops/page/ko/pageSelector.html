@@ -33,10 +33,10 @@
     </div>
     <!-- /ko -->
 
-    <div class="flex flex-column flex-item flex-item-grow list" data-bind="foreach: pages, scrollable: true">
+    <div class="flex flex-column flex-item flex-item-grow list" data-bind="foreach: { data: pages, as: 'page' }, scrollable: true">
         <div class="list-item-group">
             <a href="#" role="listitem" class="list-item"
-                data-bind="css: { selected: isSelected }, click: $component.selectPage, attr: { title: title }, selectItem: isSelected">
+                data-bind="css: { selected: $component.isSelected(page) }, click: $component.selectPage, attr: { title: page.title }">
                 <i class="paperbits-icon paperbits-single-content-03"></i>
                 <span class="list-item-label" data-bind="text: title"></span>
             </a>
@@ -44,7 +44,7 @@
             <!-- ko if: anchors() && anchors().length > 0 -->
             <div class="list-item-group" data-bind="foreach: anchors" role="list">
                 <a href="#" role="listitem" class="list-item"
-                    data-bind="click: $component.selectAnchor, attr: { title: shortTitle }, css: { selected: isSelected }, selectItem: isSelected">
+                    data-bind="click: $component.selectAnchor, attr: { title: shortTitle }">
                     <i class="paperbits-icon paperbits-anchor"></i>
                     <span class="list-item-label" data-bind="text: shortTitle"></span>
                 </a>

@@ -74,18 +74,7 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
     }
 
     public async selectPage(page: PageItem): Promise<void> {
-        const prev = this.selectedPage();
-
-        if (prev) {
-            prev.isSelected(false);
-
-            if (prev.selectedAnchor) {
-                prev.selectedAnchor.isSelected(false);
-            }
-        }
-
         this.selectedPage(page);
-        page.isSelected(true);
 
         if (!page.anchorsLoaded()) { // expand anchors on first click
             const anchors = await this.getAnchors(page);
@@ -137,5 +126,10 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
             });
 
         return anchors;
+    }
+
+    public isSelected(page: PageItem): boolean {
+        const selectedPage = this.selectedPage();
+        return selectedPage?.key === page.key;
     }
 }

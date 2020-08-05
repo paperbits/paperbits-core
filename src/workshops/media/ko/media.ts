@@ -172,4 +172,9 @@ export class MediaWorkshop {
             this.deleteSelectedMedia();
         }
     }
+
+    public isSelected(media: MediaItem): boolean {
+        const selectedMedia = this.selectedMediaItem();
+        return selectedMedia?.key === media.key;
+    }
 }

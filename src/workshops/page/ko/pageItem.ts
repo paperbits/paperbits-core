@@ -22,11 +22,9 @@ export class PageItem {
     public readonly description: ko.Observable<string>;
     public readonly keywords: ko.Observable<string>;
     public readonly jsonLd: ko.Observable<string>;
-    public readonly isSelected: ko.Observable<boolean>;
     public readonly socialShareData: ko.Observable<SocialShareData>;
     public readonly anchorsLoaded: ko.Observable<boolean>;
-
-    public anchors: ko.ObservableArray<AnchorItem>;
+    public readonly anchors: ko.ObservableArray<AnchorItem>;
     public selectedAnchor?: AnchorItem;
 
     constructor(page: PageContract) {
@@ -37,7 +35,6 @@ export class PageItem {
         this.keywords = ko.observable<string>(page.keywords);
         this.jsonLd = ko.observable<string>(page.jsonLd);
         this.permalink = ko.observable<string>(page.permalink);
-        this.isSelected = ko.observable<boolean>();
         this.anchors = ko.observableArray<AnchorItem>();
         this.socialShareData = ko.observable<SocialShareData>(page.socialShareData);
         this.anchorsLoaded = ko.observable(false);

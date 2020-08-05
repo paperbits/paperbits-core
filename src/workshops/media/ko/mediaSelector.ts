@@ -74,13 +74,7 @@ export class MediaSelector {
     }
 
     public selectMedia(media: MediaItem): void {
-        const prev = this.selectedMedia();
-        if (prev) {
-            prev.isSelected(false);
-        }
-
         this.selectedMedia(media);
-        media.isSelected(true);
 
         if (this.onSelect) {
             this.onSelect(media.toMedia());
@@ -156,5 +150,10 @@ export class MediaSelector {
         }
 
         this.eventManager.dispatchEvent("virtualDragEnd");
+    }
+
+    public isSelected(media: MediaItem): boolean {
+        const selectedMedia = this.selectedMedia();
+        return selectedMedia?.key === media.key;
     }
 }

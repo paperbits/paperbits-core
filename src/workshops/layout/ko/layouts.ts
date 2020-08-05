@@ -81,4 +81,9 @@ export class LayoutsWorkshop {
 
         this.working(false);
     }
+
+    public isSelected(page: LayoutItem): boolean {
+        const selectedPage = this.selectedLayout();
+        return selectedPage?.key === page.key;
+    }
 }

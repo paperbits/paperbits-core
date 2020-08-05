@@ -157,4 +157,9 @@ export class NavigationWorkshop {
     public dispose(): void {
         document.removeEventListener("keydown", this.onKeyDown.bind(this), false);
     }
+
+    public isSelected(page: NavigationItemViewModel): boolean {
+        const selectedNavItem = this.selection();
+        return selectedNavItem?.key === page.key;
+    }
 }
