@@ -1,13 +1,13 @@
 <div class="toolbox-btn">
-    <a href="#" data-bind="balloon: { component: { name: 'viewport-selector' }, position: 'top' }"
-        title="Viewport selection" aria-label="Viewport selection">
+    <a href="#" data-bind="tooltip: 'Viewport selection', balloon: { component: { name: 'viewport-selector' }, position: 'top' }"
+        aria-label="Viewport selection">
         <i class="paperbits-icon paperbits-mirror-2"></i>
     </a>
 </div>
 
 <!-- ko if: localizationEnabled -->
 <div class="toolbox-btn">
-    <a href="#" data-bind="balloon: { component: { name: 'locale-selector' }, position: 'top' }"
+    <a href="#" data-bind="balloon: { component: { name: 'locale-selector' }, position: 'top' }, tooltip: 'Locale selection'"
         title="Locale selection" aria-label="Locale selection">
         <i class="paperbits-icon paperbits-world"></i>
     </a>
@@ -16,15 +16,15 @@
 
 <div class="toolbox-btn">
     <a href="#" role="button"
-        data-bind="balloon: { component: { name: 'role-selector', params: { availableRoles: availableRoles, selectedRoles: selectedRoles, onSelect: onRoleSelect } }, position: 'top' }"
-        title="Role selection" aria-label="Role selection">
+        data-bind="tooltip: 'Role selection', balloon: { component: { name: 'role-selector', params: { availableRoles: availableRoles, selectedRoles: selectedRoles, onSelect: onRoleSelect } }, position: 'top' }"
+        aria-label="Role selection">
         <i class="paperbits-icon paperbits-single-02"></i>
     </a>
 </div>
 
 <!-- ko foreach: { data: buttons, as: 'button' } -->
 <button class="toolbox-btn"
-    data-bind="attr: { title: button.title, 'aria-label': button.title }, click: button.onActivate, disable: button.disabled">
+    data-bind="attr: { 'aria-label': button.title }, tooltip: button.tooltip, click: button.onActivate, disable: button.disabled">
     <i data-bind="css: button.iconClass"></i>
 </button>
 <!-- /ko -->

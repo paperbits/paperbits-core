@@ -1,9 +1,14 @@
 import * as ko from "knockout";
-import { BalloonHandle } from "./bindingHandlers.balloon";
+import { BalloonHandle, BalloonActivationOptions } from "./bindingHandlers.balloon";
+
 
 ko.bindingHandlers["tooltip"] = {
     init: (triggerElement: HTMLElement, valueAccessor) => {
         const options = valueAccessor();
+
+        if (!options) {
+            return;
+        }
 
         let tooltipMessage: any;
         let tooltipPosition: string = "top";
@@ -21,7 +26,7 @@ ko.bindingHandlers["tooltip"] = {
             // console.warn("No tooltip text specified for element: " + triggerElement.nodeName);
             return;
         }
-     
+
         const isOpen = ko.observable();
         const textParams: any = {};
         let closeTimeout = 0;
@@ -53,19 +58,10 @@ ko.bindingHandlers["tooltip"] = {
                 },
                 position: tooltipPosition,
                 isOpen: isOpen,
+                activateOn: BalloonActivationOptions.hoverOrFocus,
                 closeTimeout: closeTimeout,
                 onCreated: (handle) => {
                     balloonHandle = handle;
-                }
-            },
-            event: {
-                mouseenter: () => {
-                    balloonHandle.open();
-                },
-                mouseleave: () => {
-                    setTimeout(() => {
-                        balloonHandle.close();
-                    }, 300);
                 }
             }
         }, null);
