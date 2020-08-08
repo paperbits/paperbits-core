@@ -2,6 +2,9 @@ import * as ko from "knockout";
 import { BalloonHandle, BalloonActivationOptions } from "./bindingHandlers.balloon";
 
 
+const defaultTooltipDelayMs = 0;
+
+
 ko.bindingHandlers["tooltip"] = {
     init: (triggerElement: HTMLElement, valueAccessor) => {
         const options = valueAccessor();
@@ -12,6 +15,7 @@ ko.bindingHandlers["tooltip"] = {
 
         let tooltipMessage: any;
         let tooltipPosition: string = "top";
+        let tooltipDelayMs: number;
         let balloonHandle: BalloonHandle;
 
         if (typeof options === "string" || ko.isObservable(options)) {
@@ -20,6 +24,7 @@ ko.bindingHandlers["tooltip"] = {
         else {
             tooltipMessage = options.message;
             tooltipPosition = options.position || "top";
+            tooltipDelayMs = options.delay;
         }
 
         if (!tooltipMessage) {
@@ -57,6 +62,7 @@ ko.bindingHandlers["tooltip"] = {
                     params: textParams
                 },
                 position: tooltipPosition,
+                delay: tooltipDelayMs || defaultTooltipDelayMs,
                 isOpen: isOpen,
                 activateOn: BalloonActivationOptions.hoverOrFocus,
                 closeTimeout: closeTimeout,

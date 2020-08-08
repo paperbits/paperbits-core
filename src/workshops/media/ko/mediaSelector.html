@@ -39,7 +39,7 @@
             data-bind="foreach: { data: mediaItems, as: 'media' }, scrollable: true">
             <a href="#" role="listitem" class="list-item list-item-image"
                 data-bind="click: $component.selectMedia, css: { selected: $component.isSelected(media) }, attr: { 'aria-label': media.fileName() },
-                balloon: { activateOn: 'hoverOrFocus', activateDelay: 800, position: 'left', component: { name: 'media-display', params: { item: media }}}">
+                balloon: { activateOn: 'hoverOrFocus', delay: 800, position: 'left', component: { name: 'media-display', params: { item: media }}}">
                 <span class="thumbnail"
                     data-bind="style: { 'background-image': 'url('+media.thumbnailUrl()+')' }, attr: { title: media.fileName() }, event: { keydown: $component.onKeyDown }">
                 </span>

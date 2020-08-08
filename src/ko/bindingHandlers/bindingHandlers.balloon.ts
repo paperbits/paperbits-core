@@ -19,7 +19,7 @@ export interface BalloonOptions {
     onClose?: () => void;
     closeOn: ko.Subscribable;
     closeTimeout?: number;
-    activateDelay?: number;
+    delay?: number;
     activateOn: BalloonActivationOptions;
 }
 
@@ -46,7 +46,6 @@ export class BalloonBindingHandler {
                 let balloonIsOpen = false;
                 let closeTimeout;
                 let createBalloonElement: () => void;
-                let activationImmediate = null;
 
                 if (options.component) {
                     createBalloonElement = () => {
@@ -114,6 +113,7 @@ export class BalloonBindingHandler {
 
                     const balloonTipSize = 10;
                     const egdeGap = 10;
+                    const padding = 10;
 
                     let balloonLeft;
                     let balloonRight;
@@ -134,24 +134,21 @@ export class BalloonBindingHandler {
                     if (preferredDirection === "vertical") {
                         if (spaceTop > spaceBottom) {
                             positionY = "top";
-                            availableSpaceY = spaceTop - egdeGap;
+                            availableSpaceY = spaceTop - egdeGap - padding;
                         }
                         else {
                             positionY = "bottom";
-                            availableSpaceY = spaceBottom - egdeGap;
-
+                            availableSpaceY = spaceBottom - egdeGap - padding;
                         }
                     }
                     else {
                         if (spaceLeft > spaceRight) {
                             positionX = "left";
                             availableSpaceX = spaceLeft - egdeGap;
-
                         }
                         else {
                             positionX = "right";
                             availableSpaceX = spaceRight - egdeGap;
-
                         }
                     }
 
@@ -207,19 +204,19 @@ export class BalloonBindingHandler {
                     if (preferredDirection === "vertical") {
                         switch (positionY) {
                             case "top":
-                                balloonTop = triggerRect.top - balloonHeight - 5;
-                                balloonLeft = triggerRect.left + (triggerRect.width / 2) - (balloonWidth / 2);
-                                balloonTipX = triggerRect.left + Math.floor(triggerRect.width / 2) - (balloonTipSize / 2);
-                                balloonTipY = triggerRect.top - balloonTipSize;
+                                balloonTop = triggerRect.top - balloonHeight - padding;
+                                balloonLeft = triggerRect.left + Math.floor(triggerRect.width / 2) - Math.floor(balloonWidth / 2);
+                                balloonTipX = triggerRect.left + Math.floor(triggerRect.width / 2) - Math.floor(balloonTipSize / 2);
+                                balloonTipY = triggerRect.top - Math.floor(balloonTipSize / 2) - padding;
                                 balloonTipElement.classList.add("balloon-top");
                                 selectedPosition = "top";
                                 break;
 
                             case "bottom":
-                                balloonTop = triggerRect.top + triggerRect.height + 5;
-                                balloonLeft = triggerRect.left + (triggerRect.width / 2) - (balloonWidth / 2);
-                                balloonTipX = triggerRect.left + Math.floor(triggerRect.width / 2) - (balloonTipSize / 2);
-                                balloonTipY = triggerRect.bottom;
+                                balloonTop = triggerRect.top + triggerRect.height + padding;
+                                balloonLeft = triggerRect.left + Math.floor(triggerRect.width / 2) - Math.floor(balloonWidth / 2);
+                                balloonTipX = triggerRect.left + Math.floor(triggerRect.width / 2) - Math.floor(balloonTipSize / 2);
+                                balloonTipY = triggerRect.bottom - Math.floor(balloonTipSize / 2) + padding;
                                 balloonTipElement.classList.add("balloon-bottom");
                                 selectedPosition = "bottom";
                                 break;
@@ -228,19 +225,19 @@ export class BalloonBindingHandler {
                     else {
                         switch (positionX) {
                             case "left":
-                                balloonTop = triggerRect.top + (triggerRect.height / 2) - (balloonHeight / 2);
-                                balloonLeft = triggerRect.left - balloonWidth - balloonTipSize;
-                                balloonTipX = triggerRect.left - balloonTipSize - (balloonTipSize / 2);
-                                balloonTipY = triggerRect.top + Math.floor(triggerRect.height / 2) - (balloonTipSize / 2);
+                                balloonTop = triggerRect.top + Math.floor(triggerRect.height / 2) - Math.floor(balloonHeight / 2);
+                                balloonLeft = triggerRect.left - balloonWidth - padding;
+                                balloonTipX = triggerRect.left - Math.floor(balloonTipSize / 2) - padding;
+                                balloonTipY = triggerRect.top + Math.floor(triggerRect.height / 2) - Math.floor(balloonTipSize / 2);
                                 balloonTipElement.classList.add("balloon-left");
                                 selectedPosition = "left";
                                 break;
 
                             case "right":
-                                balloonTop = triggerRect.top + (triggerRect.height / 2) - (balloonHeight / 2);
-                                balloonLeft = triggerRect.right + balloonTipSize;
-                                balloonTipX = triggerRect.right + (balloonTipSize / 2);
-                                balloonTipY = triggerRect.top + Math.floor(triggerRect.height / 2) - (balloonTipSize / 2);
+                                balloonTop = triggerRect.top + Math.floor(triggerRect.height / 2) - Math.floor(balloonHeight / 2);
+                                balloonLeft = triggerRect.right + padding;
+                                balloonTipX = triggerRect.right - Math.floor(balloonTipSize / 2) + padding;
+                                balloonTipY = triggerRect.top + Math.floor(triggerRect.height / 2) - Math.floor(balloonTipSize / 2);
                                 balloonTipElement.classList.add("balloon-right");
                                 selectedPosition = "right";
                                 break;
@@ -261,6 +258,7 @@ export class BalloonBindingHandler {
                     if (balloonLeft < egdeGap) {
                         balloonLeft = egdeGap;
                     }
+
 
                     delete balloonElement.style.top;
                     delete balloonElement.style.bottom;
@@ -309,6 +307,7 @@ export class BalloonBindingHandler {
                     if (activateOn === BalloonActivationOptions.hoverOrFocus && toggleElement["activeBalloon"]) {
                         return;
                     }
+                    toggleElement["activeBalloon"] = ballonHandle;
 
                     view = {
                         close: close,
@@ -334,7 +333,6 @@ export class BalloonBindingHandler {
 
                         balloonElement.classList.add("balloon-is-active");
                         requestAnimationFrame(updatePosition);
-
                         balloonIsOpen = true;
 
                         if (options.onOpen) {
@@ -393,8 +391,6 @@ export class BalloonBindingHandler {
                     updatePosition: () => requestAnimationFrame(updatePosition)
                 };
 
-
-
                 if (options.onCreated) {
                     options.onCreated(ballonHandle);
                 }
@@ -442,7 +438,7 @@ export class BalloonBindingHandler {
                         }
 
                         open();
-                    }, options.activateDelay || 0);
+                    }, options.delay || 0);
                 };
 
                 const onMouseLeave = async (event: MouseEvent): Promise<void> => {

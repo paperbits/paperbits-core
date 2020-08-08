@@ -1,5 +1,5 @@
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': ol() }">
-    <a href="#" title="Toggle ordered list" role="button" data-bind="click: toggleOrderedList">
+    <a href="#" role="button" data-bind="click: toggleOrderedList, tooltip: { message: 'Toggle ordered list', delay: 700 }">
         <i class="paperbits-icon paperbits-list-numbers"></i>
 
         <!-- ko if: orderedListStyles().length > 1 -->
@@ -11,7 +11,7 @@
 </div>
 
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': ul() }">
-    <a href="#" title="Toggle unordered list" role="button" data-bind="click: toggleUnorderedList">
+    <a href="#" role="button" data-bind="click: toggleUnorderedList, tooltip: { message: 'Toggle unordered list', delay: 700 }">
         <i class="paperbits-icon paperbits-list-bullet"></i>
 
         <!-- ko if: unorderedListStyles().length > 1 -->
@@ -23,80 +23,80 @@
 </div>
 
 <!-- <div class="toolbox-btn" >
-    <a href="#" title="Decrease Indentation" role="button" data-bind="click: decIndent">
+    <a href="#" role="button" data-bind="click: decIndent, tooltip: { message: 'Decrease Indentation', delay: 700 }">
         <i class="paperbits-icon paperbits-margin-right"></i>
     </a>
 </div>
-<div class="toolbox-btn" title="Increase Indentation">
-    <a href="#" title="Increase Indentation" role="button" data-bind="click: incIndent">
+<div class="toolbox-btn">
+    <a href="#" role="button" data-bind="click: incIndent, tooltip: { message: 'Increase Indentation', delay: 700 }">
         <i class="paperbits-icon paperbits-margin-left"></i>
     </a>
 </div> -->
 
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': bold() }">
-    <a href="#" title="Toggle bold" role="button" data-bind="click: toggleBold">
+    <a href="#" role="button" data-bind="click: toggleBold, tooltip: { message: 'Toggle bold', delay: 700 }">
         <i class="paperbits-icon paperbits-bold"></i>
     </a>
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': italic() }">
-    <a href="#" title="Toggle italic" role="button" data-bind="click: toggleItalic">
+    <a href="#" role="button" data-bind="click: toggleItalic, tooltip: { message: 'Toggle italic', delay: 700 }">
         <i class="paperbits-icon paperbits-italic"></i>
     </a>
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': underlined() }">
-    <a href="#" title="Toggle underline" role="button" data-bind="click: toggleUnderlined">
+    <a href="#" role="button" data-bind="click: toggleUnderlined, tooltip: { message: 'Toggle underlined', delay: 700 }">
         <i class="paperbits-icon paperbits-underline"></i>
     </a>
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': striked() }">
-    <a href="#" title="Toggle strike-through" role="button" data-bind="click: toggleStriked">
+    <a href="#" role="button" data-bind="click: toggleStriked, tooltip: { message: 'Toggle strike-through', delay: 700 }">
         <i class="paperbits-icon paperbits-strikethrough"></i>
     </a>
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': highlighted() }">
-    <a href="#" title="Toggle highlight" role="button" data-bind="click: toggleHighlighted">
+    <a href="#" role="button" data-bind="click: toggleHighlighted, tooltip: { message: 'Toggle highlighted', delay: 700 }">
         <i class="paperbits-icon paperbits-marker-2"></i>
     </a>
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': code() }">
-    <a href="#" title="Toggle code" role="button" data-bind="click: toggleCode">
+    <a href="#" role="button" data-bind="click: toggleCode, tooltip: { message: 'Toggle code', delay: 700 }">
         <i class="paperbits-icon paperbits-code"></i>
     </a>
 </div>
 <div class="toolbox-btn toolbox-dropdown">
-    <a href="#" title="Change block type" role="menu" aria-haspopup="true"
-        data-bind="text: style, balloon: { component: { name: 'block-style-selector' } }"></a>
+    <a href="#" role="menu" aria-haspopup="true"
+        data-bind="text: style, balloon: { component: { name: 'block-style-selector' } }, tooltip: { message: 'Change block type', delay: 700 }"></a>
 </div>
 
 <!-- ko if: textStyles().length > 1 -->
 <div class="toolbox-btn toolbox-dropdown">
-    <a href="#" title="Change block style" role="button" aria-haspopup="true"
-        data-bind="text: appearance, balloon: { component: { name: 'text-style-selector', params: { styles: textStyles, onSelect: onTextStyleSelected } } }"></a>
+    <a href="#" role="button" aria-haspopup="true"
+        data-bind="text: appearance, balloon: { component: { name: 'text-style-selector', params: { styles: textStyles, onSelect: onTextStyleSelected } } }, tooltip: { message: 'Change block style', delay: 700 }"></a>
 </div>
 <!-- /ko -->
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active':  alignment() == 'left' }">
-    <a href="#" title="Align left" role="button" role="button" data-bind="click: toggleAlignLeft">
+    <a href="#" role="button" role="button" data-bind="click: toggleAlignLeft, tooltip: { message: 'Align left', delay: 700 }">
         <i class="paperbits-icon paperbits-align-left-2"></i>
     </a>
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': alignment() == 'center' }">
-    <a href="#" title="Align center" role="button" data-bind="click: toggleAlignCenter">
+    <a href="#" role="button" data-bind="click: toggleAlignCenter, tooltip: { message: 'Align center', delay: 700 }">
         <i class="paperbits-icon paperbits-align-center"></i>
     </a>
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active':  alignment() == 'right' }">
-    <a href="#" title="Align right" role="button" data-bind="click: toggleAlignRight">
+    <a href="#" role="button" data-bind="click: toggleAlignRight, tooltip: { message: 'Align right', delay: 700 }">
         <i class="paperbits-icon paperbits-align-right-2"></i>
     </a>
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active':  alignment() == 'justify' }">
-    <a href="#" title="Justify" role="button" data-bind="click: toggleJustify">
+    <a href="#" role="button" data-bind="click: toggleJustify, tooltip: { message: 'Justify', delay: 700 }">
         <i class="paperbits-icon paperbits-align-justify"></i>
     </a>
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': colored() }">
-    <a href="#" title="Change text color" role="button" aria-haspopup="true"
-        data-bind="balloon: { component: { name: 'color-selector', params: { initColorKey: $component.selectedColorKey, onSelect: $component.onColorSelected } } }">
+    <a href="#" role="button" aria-haspopup="true"
+        data-bind="balloon: { component: { name: 'color-selector', params: { initColorKey: $component.selectedColorKey, onSelect: $component.onColorSelected } } }, tooltip: { message: 'Change text color', delay: 700 }">
         <i class="paperbits-icon paperbits-color"></i>
     </a>
 </div>

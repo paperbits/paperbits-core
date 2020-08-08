@@ -1,6 +1,6 @@
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': hyperlink() }">
-    <a href="#" title="Set hyperlink" role="button" aria-haspopup="true"
-        data-bind="balloon: { component: { name: 'hyperlink-selector', params: { hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange } } }">
+    <a href="#" role="button" aria-haspopup="true"
+        data-bind="balloon: { component: { name: 'hyperlink-selector', params: { hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange } } }, tooltip: { message: 'Set hyperlink', delay: 700 }">
         <i class="paperbits-icon paperbits-link-69-2"></i>
     </a>
 </div>
