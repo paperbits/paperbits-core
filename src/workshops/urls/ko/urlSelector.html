@@ -37,7 +37,7 @@
     <div class="list flex flex-column flex-item flex-item-grow ">
         <div class="flex-item flex-item-grow" role="list" data-bind="foreach: urls, scrollable: true">
             <a href="#" role="listitem" class="list-item"
-                data-bind="css: { selected: hasFocus }, click: $component.selectUrl, event: { keydown: $component.keydown }, attr: { title: title }, selectItem: hasFocus">
+                data-bind="css: { selected: hasFocus }, click: $component.selectUrl, event: { keydown: $component.keydown }, attr: { title: title }">
                 <i class="paperbits-icon paperbits-link-69-2"></i>
                 <span class="list-item-label" data-bind="text: title"></span>
             </a>

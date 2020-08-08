@@ -23,7 +23,7 @@ import "./bindingHandlers/bindingHandlers.angle";
 import "./bindingHandlers/bindingHandlers.confirm";
 import "./bindingHandlers/bindingHandlers.gridCell";
 import "./bindingExtenders/bindingExtenders.max";
-import "./bindingHandlers/bindingHandlers.selectItem";
+import "./bindingHandlers/bindingHandlers.selectable";
 
 export class KoModule implements IInjectorModule {
     public register(injector: IInjector): void {
