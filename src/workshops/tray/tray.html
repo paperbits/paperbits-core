@@ -1,14 +1,14 @@
 <div class="toolbox-btn">
-    <a href="#" data-bind="tooltip: 'Viewport selection', balloon: { component: { name: 'viewport-selector' }, position: 'top' }"
-        aria-label="Viewport selection">
+    <a href="#" data-bind="tooltip: '<h1>Form factors</h1><p>See and adjust the content for<br/> devices of different sizes.</p>', balloon: { component: { name: 'viewport-selector' }, position: 'top' }"
+        aria-label="Form factors">
         <i class="paperbits-icon paperbits-mirror-2"></i>
     </a>
 </div>
 
 <!-- ko if: localizationEnabled -->
 <div class="toolbox-btn">
-    <a href="#" data-bind="tooltip: 'Locale selection', balloon: { component: { name: 'locale-selector' }, position: 'top' }"
-        title="Locale selection" aria-label="Locale selection">
+    <a href="#" data-bind="tooltip: '<h1>Locales</h1><p>See and adjust the content for<br/> specific languages and locales.</p>', balloon: { component: { name: 'locale-selector' }, position: 'top' }"
+        aria-label="Locale selection">
         <i class="paperbits-icon paperbits-world"></i>
     </a>
 </div>
@@ -16,8 +16,8 @@
 
 <div class="toolbox-btn">
     <a href="#" role="button"
-        data-bind="tooltip: 'Role selection', balloon: { component: { name: 'role-selector', params: { availableRoles: availableRoles, selectedRoles: selectedRoles, onSelect: onRoleSelect } }, position: 'top' }"
-        aria-label="Role selection">
+        data-bind="tooltip: '<h1>Roles</h1><p>See how the content looks like<br/> for users in a particular role.</p>', balloon: { component: { name: 'role-selector', params: { availableRoles: availableRoles, selectedRoles: selectedRoles, onSelect: onRoleSelect } }, position: 'top' }"
+        aria-label="Roles">
         <i class="paperbits-icon paperbits-single-02"></i>
     </a>
 </div>

@@ -11,7 +11,7 @@ export class NavigationToolButton implements ToolButton {
 
         const view: View = {
             heading: this.title,
-            helpText: "Add or edit navigation menus.",
+            helpText: "<h1>Navigation</h1><p>Add or edit navigation menus.</p>",
             component: { name: "navigation" }
         };
 

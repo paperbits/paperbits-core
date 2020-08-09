@@ -11,7 +11,7 @@ export class LayoutsToolButton implements ToolButton {
 
         const view: View = {
             heading: this.title,
-            helpText: "Add or edit layouts. Layouts let you centralize common content (e.g., navigation bar, footer), which will be applied to pages. Each page is automatically matched with a layout based on the URL template.",
+            helpText: "<h1>Layouts</h1><p>Add or edit layouts. Layouts let you centralize common content (e.g., navigation bar, footer), which will be applied to pages. Each page is automatically matched with a layout based on the URL template.</p>",
             component: { name: "layouts" }
         };
 

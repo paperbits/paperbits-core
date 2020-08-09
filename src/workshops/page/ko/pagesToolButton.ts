@@ -11,7 +11,7 @@ export class PagesToolButton implements ToolButton {
 
         const view: View = {
             heading: this.title,
-            helpText: "Add or edit pages of your website. Each page has a unique URL, which also automatically defines the layout it is part of.",
+            helpText: "<h1>Pages</h1><p>Add or edit pages of your website. Each page has a unique URL, which also automatically defines the layout it is part of.</p>",
             component: { name: "pages" }
         };
 

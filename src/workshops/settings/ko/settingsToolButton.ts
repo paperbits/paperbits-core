@@ -11,7 +11,7 @@ export class SettingsToolButton implements ToolButton {
 
         const view: View = {
             heading: this.title,
-            helpText: "Edit your website metadata.",
+            helpText: "<h1>Site settings</h1><p>Edit your website metadata.</p>",
             component: { name: "settings" }
         };
 

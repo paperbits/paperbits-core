@@ -11,7 +11,7 @@ export class MediaToolButton implements ToolButton {
 
         const view: View = {
             heading: this.title,
-            helpText: "Upload or edit files in the media library.",
+            helpText: "<h1>Media library</h1><p>Upload or edit files in the media library.</p>",
             component: { name: "media" }
         };
 
