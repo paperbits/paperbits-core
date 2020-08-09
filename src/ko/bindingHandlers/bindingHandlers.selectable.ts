@@ -4,7 +4,7 @@ ko.bindingHandlers["selectable"] = {
     init: (element: HTMLElement, valueAccessor) => {
         setImmediate(() => {
             if (element.classList.contains("selected")) {
-                element.scrollIntoView();
+                element.scrollIntoView({ block: "center" });
             }
         });
     }
