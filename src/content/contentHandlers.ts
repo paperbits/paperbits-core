@@ -15,7 +15,7 @@ export class ContentHandlers implements IWidgetHandler {
         const contextualEditor: IContextCommandSet = {};
 
         if (context.model.widgets.length === 0) {
-            contextualEditor.hoverCommands.push({
+            contextualEditor.hoverCommands = [{
                 color: "#2b87da",
                 position: "center",
                 tooltip: "Add section",
@@ -29,7 +29,7 @@ export class ContentHandlers implements IWidgetHandler {
                         }
                     }
                 }
-            });
+            }];
         }
 
         return contextualEditor;
