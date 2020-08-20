@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import { BalloonHandle, BalloonActivationOptions } from "./bindingHandlers.balloon";
 
 
-const defaultTooltipDelayMs = 0;
+const defaultTooltipDelayMs = 700;
 
 
 ko.bindingHandlers["tooltip"] = {
