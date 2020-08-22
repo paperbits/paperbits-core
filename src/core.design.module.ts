@@ -127,7 +127,6 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindToCollection("autostart", DraggablesBindingHandler);
         injector.bindToCollection("autostart", GridBindingHandler);
         injector.bindToCollection("autostart", LightboxBindingHandler);
-        injector.bindToCollection("autostart", HistoryRouteHandler);
         injector.bindToCollection("autostart", Hinter);
         injector.bindInstance("reservedPermalinks", ["/", "/404", "/500"]);
         injector.resolve("workshopSections");
