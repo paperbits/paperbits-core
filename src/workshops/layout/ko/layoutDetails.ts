@@ -1,6 +1,5 @@
 ﻿import * as ko from "knockout";
 import template from "./layoutDetails.html";
-import { Router } from "@paperbits/common/routing";
 import { ViewManager } from "@paperbits/common/ui";
 import { ILayoutService } from "@paperbits/common/layouts/";
 import { LayoutItem } from "./layoutItem";
@@ -13,12 +12,14 @@ import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorat
 export class LayoutDetails {
     public isDefaultLayout: ko.Computed<boolean>;
     public canDelete: ko.Computed<boolean>;
+    public readonly permalinkTemplate: ko.Observable<string>;
 
     constructor(
         private readonly layoutService: ILayoutService,
-        private readonly router: Router,
         private readonly viewManager: ViewManager
-    ) { }
+    ) {
+        this.permalinkTemplate = ko.observable();
+    }
 
     @Param()
     public readonly layoutItem: LayoutItem;
@@ -35,7 +36,9 @@ export class LayoutDetails {
             .extend(<any>{ required: true, onlyValid: true })
             .subscribe(this.updateLayout);
 
-        const validPermalinkTemplate = this.layoutItem.permalinkTemplate
+        this.permalinkTemplate(this.layoutItem.permalinkTemplate());
+
+        const validPermalinkTemplate = this.permalinkTemplate
             .extend(<any>{ uniqueLayoutUri: this.layoutItem.key, required: true, onlyValid: true });
 
         validPermalinkTemplate.subscribe(this.updateLayout);
@@ -55,6 +58,7 @@ export class LayoutDetails {
     }
 
     private async updateLayout(): Promise<void> {
+        this.layoutItem.permalinkTemplate(this.permalinkTemplate());
         await this.layoutService.updateLayout(this.layoutItem.toContract());
     }
 
