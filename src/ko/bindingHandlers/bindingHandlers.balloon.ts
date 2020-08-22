@@ -28,6 +28,7 @@ export interface BalloonHandle {
     close: () => void;
     toggle: () => void;
     updatePosition: () => void;
+    activateOn: BalloonActivationOptions;
 }
 
 export class BalloonBindingHandler {
@@ -304,27 +305,44 @@ export class BalloonBindingHandler {
                         return;
                     }
 
-                    if (activateOn === BalloonActivationOptions.hoverOrFocus && toggleElement["activeBalloon"]) {
-                        return;
-                    }
-                    toggleElement["activeBalloon"] = ballonHandle;
+                    const existingBalloonHandle: BalloonHandle = toggleElement["activeBalloon"];
 
-                    view = {
-                        close: close,
-                        element: balloonElement,
-                        returnFocusTo: returnFocusTo,
-                        hitTest: (targetElement) => {
-                            const element =
-                                closest(targetElement, x => x === balloonElement) ||
-                                closest(targetElement, x => x === toggleElement);
-
-                            return !!element;
+                    if (existingBalloonHandle) {
+                        if (activateOn === BalloonActivationOptions.hoverOrFocus) {
+                            return;
                         }
-                    };
+                        else {
+                            existingBalloonHandle.close();
+                        }
+                    }
 
                     setImmediate(() => { // give chance to view stack to clear unrelated views
+                        const activeBalloonHandle: BalloonHandle = toggleElement["activeBalloon"];
+
+                        if (activeBalloonHandle) {
+                            if (activateOn === BalloonActivationOptions.hoverOrFocus) {
+                                return;
+                            }
+                            else {
+                                activeBalloonHandle.close();
+                            }
+                        }
+
                         createBalloonElement();
                         createBalloonTip();
+
+                        view = {
+                            close: close,
+                            element: balloonElement,
+                            returnFocusTo: returnFocusTo,
+                            hitTest: (targetElement) => {
+                                const element =
+                                    closest(targetElement, x => x === balloonElement) ||
+                                    closest(targetElement, x => x === toggleElement);
+    
+                                return !!element;
+                            }
+                        };
 
                         viewStack.runHitTest(toggleElement);
                         viewStack.pushView(view);
@@ -388,7 +406,8 @@ export class BalloonBindingHandler {
                     open: open,
                     close: close,
                     toggle: toggle,
-                    updatePosition: () => requestAnimationFrame(updatePosition)
+                    updatePosition: () => requestAnimationFrame(updatePosition),
+                    activateOn: activateOn
                 };
 
                 if (options.onCreated) {
