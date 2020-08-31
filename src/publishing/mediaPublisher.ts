@@ -1,3 +1,4 @@
+import parallel from "await-parallel-limit";
 import { HttpClient } from "@paperbits/common/http";
 import { IPublisher } from "@paperbits/common/publishing";
 import { IBlobStorage } from "@paperbits/common/persistence";
@@ -19,6 +20,8 @@ export class MediaPublisher implements IPublisher {
             this.logger.trackEvent("Publishing", { message: `Skipping media with no permalink specified: "${mediaFile.fileName}".` });
             return;
         }
+
+        this.logger.trackEvent("Publishing", { message: `Publishing media ${mediaFile.fileName}...` });
 
         try {
             if (mediaFile.blobKey) {
@@ -47,14 +50,14 @@ export class MediaPublisher implements IPublisher {
     }
 
     private async renderMedia(mediaFiles: MediaContract[]): Promise<void> {
-        const mediaPromises = new Array<Promise<void>>();
+        const tasks = [];
 
         mediaFiles.forEach(mediaFile => {
-            this.logger.trackEvent("Publishing", { message: `Publishing media ${mediaFile.fileName}...` });
-            mediaPromises.push(this.renderMediaFile(mediaFile));
+           
+            tasks.push(() => this.renderMediaFile(mediaFile));
         });
 
-        await Promise.all(mediaPromises);
+        await parallel(tasks, 10);
     }
 
     public async publish(): Promise<void> {
