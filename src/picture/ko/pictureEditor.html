@@ -9,21 +9,19 @@
             <div class="dropzone">
                 <label for="source" class="form-label">
                     Source
-                    <button class="btn btn-info" type="button" aria-label="Error" aria-haspopup="true"
-                        aria-hidden="true"
+                    <button class="btn btn-info" type="button" aria-label="Picture source"
                         data-bind="tooltip: 'Source of the picture. To change, click on preview area below and select a picture from media libaray.'"></button>
                 </label>
-                <a href="#" id="source" role="img" class="dropzone-showbox"
+                <a href="#" aria-labelledby="source" role="button" class="dropzone-showbox"
                     data-bind="balloon: { position: 'right', component: { name: 'media-selector', params: { mimeType: 'image/', onSelect: $component.onMediaSelected } } }, focus: true">
-                    <div class="fit" role="presentation" data-bind="background: background"></div>
+                    <div class="fit" role="button" data-bind="background: background"></div>
                 </a>
             </div>
 
             <div class="form-group">
                 <label for="caption" class="form-label">
                     Caption
-                    <button class="btn btn-info" type="button" aria-label="Error" aria-haspopup="true"
-                        aria-hidden="true"
+                    <button class="btn btn-info" type="button" aria-label="Caption"
                         data-bind="tooltip: 'An alternate text for an image'"></button>
                 </label>
                 <input type="text" id="caption" class="form-control" data-bind="textInput: caption" maxlength="256" />
