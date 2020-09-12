@@ -1,6 +1,6 @@
 <div class="toolbox">
-    <div class="list-checkboxes" data-bind="foreach: { data: availableRoles, as: 'role'  }">
-        <a href="#" role="listitem" class="list-item" data-bind="text: role.name, click: $component.selectRole, css: { 'list-item-checked': $component.isSelected(role) }">
+    <div role="listbox" class="list-checkboxes" data-bind="foreach: { data: availableRoles, as: 'role'  }, scrollable: true, focus: { childSelector: '.list-item' }">
+        <a href="#" role="option" class="list-item" data-bind="text: role.name, click: $component.selectRole, css: { 'list-item-checked': $component.isSelected(role) }">
         </a>
     </div>
 </div>

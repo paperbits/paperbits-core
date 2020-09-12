@@ -39,7 +39,6 @@ ko.bindingHandlers["tooltip"] = {
         if (ko.isObservable(tooltipMessage)) {
             textParams.observableText = tooltipMessage;
             closeTimeout = 5000; // close after 5 sec
-            triggerElement.setAttribute("aria-label", tooltipMessage());
 
             tooltipMessage.subscribe(() => {
                 if (balloonHandle) {
@@ -49,11 +48,7 @@ ko.bindingHandlers["tooltip"] = {
         }
         else {
             textParams.text = tooltipMessage;
-            triggerElement.setAttribute("aria-label", tooltipMessage);
         }
-
-        triggerElement.setAttribute("role", "tooltip");
-        triggerElement.setAttribute("aria-live", "polite");
 
         ko.applyBindingsToNode(triggerElement, {
             balloon: {

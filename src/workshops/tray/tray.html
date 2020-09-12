@@ -1,5 +1,5 @@
 <div class="toolbox-btn">
-    <a href="#" data-bind="tooltip: '<h1>Form factors</h1><p>See and adjust the content for<br/> devices of different sizes.</p>', balloon: { component: { name: 'viewport-selector' }, position: 'top' }"
+    <a href="#" role="button" data-bind="tooltip: '<h1>Form factors</h1><p>See and adjust the content for<br/> devices of different sizes.</p>', balloon: { component: { name: 'viewport-selector' }, position: 'top' }"
         aria-label="Form factors">
         <i class="paperbits-icon paperbits-mirror-2"></i>
     </a>
@@ -7,7 +7,7 @@
 
 <!-- ko if: localizationEnabled -->
 <div class="toolbox-btn">
-    <a href="#" data-bind="tooltip: '<h1>Locales</h1><p>See and adjust the content for<br/> specific languages and locales.</p>', balloon: { component: { name: 'locale-selector' }, position: 'top' }"
+    <a href="#" role="button" data-bind="tooltip: '<h1>Locales</h1><p>See and adjust the content for<br/> specific languages and locales.</p>', balloon: { component: { name: 'locale-selector' }, position: 'top' }"
         aria-label="Locale selection">
         <i class="paperbits-icon paperbits-world"></i>
     </a>
@@ -23,7 +23,7 @@
 </div>
 
 <!-- ko foreach: { data: buttons, as: 'button' } -->
-<button class="toolbox-btn"
+<button role="button" class="toolbox-btn"
     data-bind="attr: { 'aria-label': button.title }, tooltip: button.tooltip, click: button.onActivate, disable: button.disabled">
     <i data-bind="css: button.iconClass"></i>
 </button>
