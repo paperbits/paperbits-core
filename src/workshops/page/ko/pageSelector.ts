@@ -7,17 +7,19 @@ import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorat
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { AnchorUtils } from "../../../text/anchorUtils";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
+import { Query, Operator, Page } from "@paperbits/common/persistence";
 
 @Component({
     selector: "page-selector",
     template: template
 })
 export class PageSelector implements IResourceSelector<HyperlinkModel> {
+    private preSelectedModel: HyperlinkModel;
+    private currentPage: Page<PageContract>;
+
     public readonly searchPattern: ko.Observable<string>;
     public readonly pages: ko.ObservableArray<PageItem>;
     public readonly working: ko.Observable<boolean>;
-
-    private preSelectedModel: HyperlinkModel;
 
     @Param()
     public selectedPage: ko.Observable<PageItem>;
@@ -47,10 +49,36 @@ export class PageSelector implements IResourceSelector<HyperlinkModel> {
     public async searchPages(searchPattern: string = ""): Promise<void> {
         this.working(true);
 
-        const pages = await this.pageService.search(searchPattern);
-        const pageItems = pages.map(page => new PageItem(page));
+        this.pages([]);
 
-        this.pages(pageItems);
+        const query = Query
+            .from<PageContract>()
+            .orderBy(`title`);
+
+        if (searchPattern) {
+            query.where(`title`, Operator.contains, searchPattern);
+        }
+
+        const pageOfResults = await this.pageService.search(query);
+        this.currentPage = pageOfResults;
+
+        const pageItems = pageOfResults.value.map(page => new PageItem(page));
+        this.pages.push(...pageItems);
+
+        this.working(false);
+    }
+
+    public async loadNextPage(): Promise<void> {
+        if (!this.currentPage?.takeNext) {
+            return;
+        }
+
+        this.working(true);
+
+        this.currentPage = await this.currentPage.takeNext();
+
+        const pageItems = this.currentPage.value.map(page => new PageItem(page));
+        this.pages.push(...pageItems);
 
         if (!this.selectedPage() && this.preSelectedModel) {
             const currentPermalink = this.preSelectedModel.href;

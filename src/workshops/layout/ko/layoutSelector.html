@@ -1,9 +1,15 @@
-
-<!--ko if: working()-->
-<spinner></spinner>
-<!--/ko-->
-<ul class="list" data-bind="foreach: layouts, scrollable: true">
-    <li class="list-item" data-bind="css: { selected: hasFocus }">
-        <a href="#" class="list-item-label" data-bind="click: $component.selectLayout, text: title, hasFocus: hasFocus, event: { keydown: $component.keydown }"></a>
-    </li>
-</ul>
+<div class="flex flex-column flex-item flex-item-grow" data-bind="scrollable: true" role="list">
+    <!-- ko foreach: { data: layouts, as: 'layout' } -->
+    <a href="#" role="listitem" class="list-item"
+        data-bind="css: { selected:  $component.isSelected(layout) }, attr: { title: layout.title }, activate: $component.selectLayout, selectable: true">
+        <i class="paperbits-icon paperbits-layout-11-2"></i>
+        <span data-bind="text: layout.title"></span>
+    </a>
+    <!--/ko-->
+    <!--ko if: $component.working()-->
+    <spinner></spinner>
+    <!--/ko-->
+    <!-- ko ifnot: $component.working -->
+    <div class="list-edge" data-bind="whenInView: $component.loadNextPage"></div>
+    <!-- /ko -->
+</div>

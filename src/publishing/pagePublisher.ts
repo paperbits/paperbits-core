@@ -9,11 +9,11 @@ import {
     SitemapBuilder,
     SearchIndexBuilder
 } from "@paperbits/common/publishing";
-import { IBlobStorage } from "@paperbits/common/persistence";
+import { IBlobStorage, Query, Page } from "@paperbits/common/persistence";
 import { IPageService, PageContract } from "@paperbits/common/pages";
 import { ISiteService, SiteSettingsContract } from "@paperbits/common/sites";
 import { Logger } from "@paperbits/common/logging";
-import { ILocaleService } from "@paperbits/common/localization";
+import { ILocaleService, LocaleModel } from "@paperbits/common/localization";
 import { IMediaService } from "@paperbits/common/media";
 import { StyleCompiler, StyleManager } from "@paperbits/common/styles";
 import { LocalStyleBuilder } from "./localStyleBuilder";
@@ -172,13 +172,69 @@ export class PagePublisher implements IPublisher {
             await this.outputBlobStorage.uploadBlob(uploadPath, contentBytes, "text/html");
         }
         catch (error) {
-            throw new Error(`Unable to publish page "${page.title}": ${error.stack | error.message}`);
+            throw new Error(`Unable to publish page "${page.title}": ${error.stack || error.message}`);
+        }
+    }
+
+    private async publishNonLocalized(siteSettings: SiteSettingsContract): Promise<void> {
+        const query: Query<PageContract> = Query.from<PageContract>();
+        let pagesOfResults = await this.pageService.search(query);
+
+        do {
+            const tasks = [];
+            const pages = pagesOfResults.value;
+
+            for (const page of pages) {
+                tasks.push(() => this.renderAndUpload(siteSettings, page));
+            }
+
+            await parallel(tasks, 7);
+
+            if (pagesOfResults.takeNext) {
+                pagesOfResults = await pagesOfResults.takeNext();
+            }
+            else {
+                pagesOfResults = null;
+            }
+        }
+        while (pagesOfResults);
+    }
+
+    private async publishLocalized(locales: LocaleModel[], siteSettings: SiteSettingsContract): Promise<void> {
+        const defaultLocale = await this.localeService.getDefaultLocale();
+
+        for (const locale of locales) {
+            const localeCode = locale.code === defaultLocale
+                ? null
+                : locale.code;
+
+            const query: Query<PageContract> = Query.from<PageContract>();
+            let pagesOfResults = await this.pageService.search(query, localeCode);
+
+            do {
+                const tasks = [];
+                const pages = pagesOfResults.value;
+
+                for (const page of pages) {
+                    tasks.push(() => this.renderAndUpload(siteSettings, page, localeCode));
+                }
+
+                await parallel(tasks, 7);
+
+                if (pagesOfResults.takeNext) {
+                    pagesOfResults = await pagesOfResults.takeNext();
+                }
+                else {
+                    pagesOfResults = null;
+                }
+            }
+            while (pagesOfResults);
         }
     }
 
     public async publish(): Promise<void> {
         const locales = await this.localeService.getLocales();
-        const defaultLocale = await this.localeService.getDefaultLocale();
+
         const localizationEnabled = locales.length > 0;
         const globalStyleSheet = await this.styleCompiler.getStyleSheet();
 
@@ -186,32 +242,15 @@ export class PagePublisher implements IPublisher {
         this.localStyleBuilder.buildGlobalStyle(globalStyleSheet);
 
         try {
-            const tasks = [];
             const settings = await this.siteService.getSettings<any>();
             const siteSettings: SiteSettingsContract = settings.site;
 
             if (localizationEnabled) {
-                for (const locale of locales) {
-                    const localeCode = locale.code === defaultLocale
-                        ? null
-                        : locale.code;
-
-                    const pages = await this.pageService.search("", localeCode);
-
-                    for (const page of pages) {
-                        tasks.push(() => this.renderAndUpload(siteSettings, page, localeCode));
-                    }
-                }
+                await this.publishLocalized(locales, siteSettings);
             }
             else {
-                const pages = await this.pageService.search("");
-
-                for (const page of pages) {
-                    tasks.push(() => this.renderAndUpload(siteSettings, page));
-                }
+                await this.publishNonLocalized(siteSettings);
             }
-
-            await parallel(tasks, 7);
         }
         catch (error) {
             throw new Error(`Unable to complete pages publishing. ${error.stack || error.message}`);

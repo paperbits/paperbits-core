@@ -1,6 +1,6 @@
 import * as ko from "knockout";
-import template from "./mediaSelector.html";
 import * as Utils from "@paperbits/common/utils";
+import template from "./mediaSelector.html";
 import { MediaItem } from "./mediaItem";
 import { IMediaService, MediaContract } from "@paperbits/common/media";
 import { ViewManager } from "@paperbits/common/ui";
@@ -9,16 +9,17 @@ import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorat
 import { IWidgetService } from "@paperbits/common/widgets";
 import { HyperlinkModel } from "@paperbits/common/permalinks/hyperlinkModel";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
+import { Query, Operator, Page } from "@paperbits/common/persistence";
 
 @Component({
     selector: "media-selector",
     template: template
 })
 export class MediaSelector {
+    private currentPage: Page<MediaContract>;
     public readonly searchPattern: ko.Observable<string>;
     public readonly mediaItems: ko.ObservableArray<MediaItem>;
     public readonly working: ko.Observable<boolean>;
-    private preSelectedModel: HyperlinkModel;
 
     @Param()
     public selectedMedia: ko.Observable<MediaItem>;
@@ -38,11 +39,10 @@ export class MediaSelector {
         private readonly viewManager: ViewManager,
         private readonly widgetService: IWidgetService
     ) {
-        // setting up...
         this.mediaItems = ko.observableArray<MediaItem>();
         this.selectedMedia = ko.observable<MediaItem>();
         this.searchPattern = ko.observable<string>();
-        this.working = ko.observable(true);
+        this.working = ko.observable(false);
     }
 
     @OnMounted()
@@ -56,19 +56,36 @@ export class MediaSelector {
 
     public async searchMedia(searchPattern: string = ""): Promise<void> {
         this.working(true);
+        this.mediaItems([]);
 
-        const mediaFiles = await this.mediaService.search(searchPattern, this.mimeType);
-        const mediaItems = mediaFiles.map(media => new MediaItem(media));
-        this.mediaItems(mediaItems);
+        const query = Query
+            .from<MediaContract>()
+            .orderBy(`fileName`);
 
-        if (!this.selectedMedia() && this.preSelectedModel) {
-            const currentPermalink = this.preSelectedModel.href;
-            const current = mediaItems.find(item => item.permalink() === currentPermalink);
-
-            if (current) {
-                this.selectMedia(current);
-            }
+        if (searchPattern) {
+            query.where(`fileName`, Operator.contains, searchPattern);
         }
+
+        const mediaOfResults = await this.mediaService.search(query);
+        this.currentPage = mediaOfResults;
+
+        const mediaItems = mediaOfResults.value.map(media => new MediaItem(media));
+        this.mediaItems.push(...mediaItems);
+
+        this.working(false);
+    }
+
+    public async loadNextPage(): Promise<void> {
+        if (!this.currentPage?.takeNext || this.working()) {
+            return;
+        }
+
+        this.working(true);
+
+        this.currentPage = await this.currentPage.takeNext();
+
+        const mediaItems = this.currentPage.value.map(page => new MediaItem(page));
+        this.mediaItems.push(...mediaItems);
 
         this.working(false);
     }
@@ -83,10 +100,6 @@ export class MediaSelector {
         if (this.onHyperlinkSelect) {
             this.onHyperlinkSelect(media.getHyperlink());
         }
-    }
-
-    public selectResource(resource: HyperlinkModel): void {
-        this.preSelectedModel = resource;
     }
 
     public selectNone(): void {

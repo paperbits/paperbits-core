@@ -1,9 +1,10 @@
 ﻿import * as ko from "knockout";
 import template from "./layouts.html";
 import { ViewManager, View } from "@paperbits/common/ui";
-import { ILayoutService } from "@paperbits/common/layouts";
+import { ILayoutService, LayoutContract } from "@paperbits/common/layouts";
 import { LayoutItem } from "./layoutItem";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
+import { Query, Operator, Page } from "@paperbits/common/persistence";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
@@ -11,6 +12,7 @@ import { ChangeRateLimit } from "@paperbits/common/ko/consts";
     template: template
 })
 export class LayoutsWorkshop {
+    private currentPage: Page<LayoutContract>;
     public readonly searchPattern: ko.Observable<string>;
     public readonly layouts: ko.ObservableArray<LayoutItem>;
     public readonly working: ko.Observable<boolean>;
@@ -36,13 +38,36 @@ export class LayoutsWorkshop {
     }
 
     public async searchLayouts(searchPattern: string = ""): Promise<void> {
-        this.working(true);
         this.layouts([]);
 
-        const layouts = await this.layoutService.search(searchPattern);
-        const layoutItems = layouts.map(layout => new LayoutItem(layout));
+        const query = Query
+            .from<LayoutContract>()
+            .orderBy(`title`);
 
-        this.layouts(layoutItems);
+        if (searchPattern) {
+            query.where(`title`, Operator.contains, searchPattern);
+        }
+
+        const pageOfResults = await this.layoutService.search(query);
+        this.currentPage = pageOfResults;
+
+        const pageItems = pageOfResults.value.map(page => new LayoutItem(page));
+        this.layouts.push(...pageItems);
+    }
+
+    public async loadNextPage(): Promise<void> {
+        if (!this.currentPage?.takeNext || this.working()) {
+            this.loadNextPage = null;
+            return;
+        }
+
+        this.working(true);
+
+        this.currentPage = await this.currentPage.takeNext();
+
+        const layoutItems = this.currentPage.value.map(page => new LayoutItem(page));
+        this.layouts.push(...layoutItems);
+
         this.working(false);
     }
 

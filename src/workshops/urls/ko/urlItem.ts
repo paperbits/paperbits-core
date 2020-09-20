@@ -2,6 +2,9 @@ import * as ko from "knockout";
 import { UrlContract } from "@paperbits/common/urls/urlContract";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 
+/**
+ * URL view model.
+ */
 export class UrlItem {
     public key: string;
     public title: ko.Observable<string>;

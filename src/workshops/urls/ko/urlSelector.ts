@@ -3,28 +3,27 @@ import template from "./urlSelector.html";
 import { UrlItem } from "./urlItem";
 import { IUrlService, UrlContract } from "@paperbits/common/urls";
 import { Component, Event, OnMounted } from "@paperbits/common/ko/decorators";
-import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
+import { Query, Operator, Page } from "@paperbits/common/persistence";
 
 @Component({
     selector: "url-selector",
     template: template
 })
 export class UrlSelector {
+    private currentPage: Page<UrlContract>;
     public readonly searchPattern: ko.Observable<string>;
     public readonly urls: ko.ObservableArray<UrlItem>;
     public readonly uri: ko.Observable<string>;
     public readonly working: ko.Observable<boolean>;
     public readonly selectedUrl: ko.Observable<UrlItem>;
 
-    private preSelectedModel: HyperlinkModel;
-
     constructor(private readonly urlService: IUrlService) {
         this.uri = ko.observable<string>("https://");
         this.urls = ko.observableArray();
         this.selectedUrl = ko.observable();
         this.searchPattern = ko.observable();
-        this.working = ko.observable();
+        this.working = ko.observable(false);
     }
 
     @Event()
@@ -41,22 +40,39 @@ export class UrlSelector {
             .extend(ChangeRateLimit)
             .subscribe(this.searchUrls);
     }
-
+    
     public async searchUrls(searchPattern: string = ""): Promise<void> {
         this.working(true);
+        this.urls([]);
 
-        const urls = await this.urlService.search(searchPattern);
-        const urlItems = urls.map(url => new UrlItem(url));
+        const query = Query
+            .from<UrlContract>()
+            .orderBy(`title`);
 
-        this.urls(urlItems);
-
-        if (!this.selectedUrl() && this.preSelectedModel) {
-            const currentPermalink = this.preSelectedModel.href;
-            const current = urlItems.find(item => item.permalink() === currentPermalink);
-            if (current) {
-                await this.selectUrl(current);
-            }
+        if (searchPattern) {
+            query.where(`title`, Operator.contains, searchPattern);
         }
+
+        const pageOfResults = await this.urlService.search(query);
+        this.currentPage = pageOfResults;
+
+        const urlItems = pageOfResults.value.map(media => new UrlItem(media));
+        this.urls.push(...urlItems);
+
+        this.working(false);
+    }
+
+    public async loadNextPage(): Promise<void> {
+        if (!this.currentPage?.takeNext || this.working()) {
+            return;
+        }
+
+        this.working(true);
+
+        this.currentPage = await this.currentPage.takeNext();
+
+        const urlItems = this.currentPage.value.map(page => new UrlItem(page));
+        this.urls.push(...urlItems);
 
         this.working(false);
     }
@@ -79,14 +95,10 @@ export class UrlSelector {
         }
     }
 
-    public selectResource(resource: HyperlinkModel): void {
-        this.preSelectedModel = resource;
-    }
-
     public async createUrl(): Promise<void> {
         const newUri = this.uri();
         const urlContract = await this.urlService.createUrl(newUri, newUri);
-        const urlItem =  new UrlItem(urlContract);
+        const urlItem = new UrlItem(urlContract);
 
         if (this.onHyperlinkSelect) {
             this.onHyperlinkSelect(urlItem.getHyperlink());

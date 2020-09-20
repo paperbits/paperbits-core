@@ -90,6 +90,12 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
 
     private async processAnchorItems(permalink: string, locale: string, minHeading: number, maxHeading?: number): Promise<NavigationItemModel[]> {
         const content = await this.permalinkResolver.getContentByPermalink(permalink, locale);
+
+        if (!content) {
+            // throw new Error(`Unable to fetch content for permalink ${permalink}.`);
+            return [];
+        }
+
         const children = AnchorUtils.getHeadingNodes(content, minHeading, maxHeading);
 
         if (children.length === 0) {

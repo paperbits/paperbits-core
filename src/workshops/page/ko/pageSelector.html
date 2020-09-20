@@ -14,10 +14,6 @@
         </div>
     </fieldset>
 
-    <!-- ko if: $component.working() -->
-    <spinner></spinner>
-    <!-- /ko -->
-
     <!-- ko if: !working() && pages().length === 0 -->
     <div class="flex flex-column flex-item flex-item-grow list">
         <!-- ko if: searchPattern() === "" -->
@@ -33,7 +29,8 @@
     </div>
     <!-- /ko -->
 
-    <div class="flex flex-column flex-item flex-item-grow list" data-bind="foreach: { data: pages, as: 'page' }, scrollable: true">
+    <div class="flex flex-column flex-item flex-item-grow list" data-bind="scrollable: true">
+        <!-- ko foreach: { data: pages, as: 'page' } -->
         <div class="list-item-group">
             <a href="#" role="listitem" class="list-item"
                 data-bind="css: { selected: $component.isSelected(page) }, click: $component.selectPage, attr: { title: page.title }">
@@ -51,5 +48,12 @@
             </div>
             <!-- /ko -->
         </div>
+        <!-- /ko -->
+        <!-- ko if: $component.working() -->
+        <spinner></spinner>
+        <!-- /ko -->
+        <!-- ko ifnot: $component.working -->
+        <div class="list-edge" data-bind="whenInView: $component.loadNextPage"></div>
+        <!-- /ko -->
     </div>
 </div>

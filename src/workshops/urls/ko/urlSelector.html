@@ -14,11 +14,6 @@
         </div>
     </fieldset>
 
-
-    <!-- ko if: $component.working() -->
-    <spinner></spinner>
-    <!-- /ko -->
-
     <!-- ko if: !working() && urls().length === 0 -->
     <div class="flex flex-column flex-item flex-item-grow list">
         <!-- ko if: searchPattern() === "" -->
@@ -35,14 +30,22 @@
     <!-- /ko -->
 
     <div class="list flex flex-column flex-item flex-item-grow ">
-        <div class="flex-item flex-item-grow" role="list" data-bind="foreach: urls, scrollable: true">
+        <div class="flex-item flex-item-grow" role="list" data-bind="scrollable: true">
+            <!-- ko foreach: { data: urls, as: 'url' } -->
             <a href="#" role="listitem" class="list-item"
-                data-bind="css: { selected: hasFocus }, click: $component.selectUrl, event: { keydown: $component.keydown }, attr: { title: title }">
+                data-bind="click: $component.selectUrl, event: { keydown: $component.keydown }, attr: { title: url.title }">
                 <i class="paperbits-icon paperbits-link-69-2"></i>
-                <span class="list-item-label" data-bind="text: title"></span>
+                <span class="list-item-label" data-bind="text: url.title"></span>
             </a>
+            <!-- /ko -->
+            <!-- ko if: $component.working -->
+            <spinner></spinner>
+            <!-- /ko -->
+            <!-- ko ifnot: $component.working -->
+            <div class="list-edge" data-bind="whenInView: $component.loadNextPage"></div>
+            <!-- /ko -->
         </div>
-        
+
         <div class="flex-item btn-group">
             <div class="input-group">
                 <input type="text" class="form-control" data-bind="textInput: $component.uri"

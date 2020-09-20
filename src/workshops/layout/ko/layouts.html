@@ -31,16 +31,20 @@
 
     <!-- /ko -->
 
-    <!--ko if: $component.working()-->
-    <spinner></spinner>
-    <!--/ko-->
-
-    <div class="flex flex-column flex-item flex-item-grow" role="list" data-bind="foreach: { data: layouts, as: 'layout' }, scrollable: true">
+    <div class="flex flex-column flex-item flex-item-grow" role="list" data-bind="scrollable: true">
+        <!-- ko foreach: { data: layouts, as: 'layout' } -->
         <a href="#" role="listitem" class="list-item"
             data-bind="css: { selected:  $component.isSelected(layout) }, attr: { title: layout.title }, activate: $component.selectLayout, selectable: true">
             <i class="paperbits-icon paperbits-layout-11-2"></i>
             <span data-bind="text: layout.title"></span>
         </a>
+        <!--/ko-->
+        <!--ko if: $component.working()-->
+        <spinner></spinner>
+        <!--/ko-->
+        <!-- ko ifnot: $component.working -->
+        <div class="list-edge" data-bind="whenInView: $component.loadNextPage"></div>
+        <!-- /ko -->
     </div>
 
     <div class="flex-item btn-group">

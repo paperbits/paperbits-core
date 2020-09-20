@@ -1,9 +1,8 @@
 ﻿import * as ko from "knockout";
-import template from "./media.html";
 import * as Utils from "@paperbits/common/utils";
+import template from "./media.html";
 import { IMediaService } from "@paperbits/common/media";
 import { ViewManager, View } from "@paperbits/common/ui";
-import { IContentDropHandler, IContentDescriptor } from "@paperbits/common/editing";
 import { MediaItem, defaultFileName, defaultURL } from "./mediaItem";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { Keys } from "@paperbits/common/keyboard";
@@ -11,12 +10,14 @@ import { EventManager } from "@paperbits/common/events";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { IWidgetService } from "@paperbits/common/widgets";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
+import { Query, Operator, Page } from "@paperbits/common/persistence";
 
 @Component({
     selector: "media",
     template: template
 })
 export class MediaWorkshop {
+    private currentPage: Page<MediaContract>;
     public readonly searchPattern: ko.Observable<string>;
     public readonly mediaItems: ko.ObservableArray<MediaItem>;
     public readonly selectedMediaItem: ko.Observable<MediaItem>;
@@ -26,10 +27,9 @@ export class MediaWorkshop {
         private readonly eventManager: EventManager,
         private readonly mediaService: IMediaService,
         private readonly viewManager: ViewManager,
-        private readonly dropHandlers: IContentDropHandler[],
         private readonly widgetService: IWidgetService
     ) {
-        this.working = ko.observable(true);
+        this.working = ko.observable(false);
         this.mediaItems = ko.observableArray<MediaItem>();
         this.searchPattern = ko.observable<string>("");
         this.selectedMediaItem = ko.observable<MediaItem>();
@@ -44,43 +44,40 @@ export class MediaWorkshop {
             .subscribe(this.searchMedia);
     }
 
-    private async searchMedia(searchPattern: string = ""): Promise<void> {
+    public async searchMedia(searchPattern: string = ""): Promise<void> {
         this.working(true);
         this.mediaItems([]);
 
-        const mediaFiles = await this.mediaService.search(searchPattern);
+        const query = Query
+            .from<MediaContract>()
+            .orderBy(`fileName`);
 
-        mediaFiles.forEach(async media => {
-            const mediaItem = new MediaItem(media);
-            const descriptor = this.findContentDescriptor(media);
+        if (searchPattern) {
+            query.where(`fileName`, Operator.contains, searchPattern);
+        }
 
-            if (descriptor && descriptor.getWidgetOrder) {
-                const order = await descriptor.getWidgetOrder();
-                mediaItem.widgetOrder = order;
-            }
+        const mediaOfResults = await this.mediaService.search(query);
+        this.currentPage = mediaOfResults;
 
-            this.mediaItems.push(mediaItem);
-        });
+        const mediaItems = mediaOfResults.value.map(media => new MediaItem(media));
+        this.mediaItems.push(...mediaItems);
 
         this.working(false);
     }
 
-    private findContentDescriptor(media: MediaContract): IContentDescriptor {
-        let result: IContentDescriptor;
-
-        for (const handler of this.dropHandlers) {
-            if (!handler.getContentDescriptorFromMedia) {
-                continue;
-            }
-
-            result = handler.getContentDescriptorFromMedia(media);
-
-            if (result) {
-                return result;
-            }
+    public async loadNextPage(): Promise<void> {
+        if (!this.currentPage?.takeNext || this.working()) {
+            return;
         }
 
-        return result;
+        this.working(true);
+
+        this.currentPage = await this.currentPage.takeNext();
+
+        const mediaItems = this.currentPage.value.map(page => new MediaItem(page));
+        this.mediaItems.push(...mediaItems);
+
+        this.working(false);
     }
 
     public async uploadMedia(): Promise<void> {
