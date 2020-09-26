@@ -1,6 +1,6 @@
 import { BlockService } from "@paperbits/common/blocks";
 import { BlogService } from "@paperbits/common/blogs";
-import { SettingsProvider } from "@paperbits/common/configuration";
+import { DefaultSettingsProvider } from "@paperbits/common/configuration";
 import { DefaultEventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { XmlHttpRequestClient } from "@paperbits/common/http";
 import { IInjector, IInjectorModule } from "@paperbits/common/injection";
@@ -57,7 +57,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindCollectionLazily("permalinkResolvers");
         
         /*** Core ***/
-        injector.bindSingleton("settingsProvider", SettingsProvider);
+        injector.bindSingleton("settingsProvider", DefaultSettingsProvider);
         injector.bindSingleton("router", DefaultRouter);
         injector.bindSingleton("httpClient", XmlHttpRequestClient);
         injector.bindSingleton("eventManager", DefaultEventManager);

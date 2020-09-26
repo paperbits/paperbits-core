@@ -3,14 +3,18 @@ import template from "./widgetSelector.html";
 import { WidgetItem } from "./widgetItem";
 import { IWidgetService, WidgetModel } from "@paperbits/common/widgets";
 import { Component, Event, OnMounted } from "@paperbits/common/ko/decorators";
+import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 
 @Component({
     selector: "widget-selector",
     template: template
 })
 export class WidgetSelector {
-    public readonly categories: ko.Observable<{name: string, items: WidgetItem[]}[]>;
+    private originalCategories: any;
+    public readonly filteredCategories: ko.Observable<{ name: string, items: WidgetItem[] }[]>;
+    public readonly categories: ko.Observable<{ name: string, items: WidgetItem[] }[]>;
     public readonly working: ko.Observable<boolean>;
+    public readonly searchPattern: ko.Observable<string>;
 
     @Event()
     public onSelect: (widgetModel: WidgetModel) => void;
@@ -19,19 +23,33 @@ export class WidgetSelector {
     public onRequest: () => string[];
 
     constructor(private readonly widgetService: IWidgetService) {
-        // rebinding...
-        this.onMounted = this.onMounted.bind(this);
-        this.selectWidget = this.selectWidget.bind(this);
-
-        // setting up...
         this.working = ko.observable(true);
-        this.categories = ko.observable<{name: string, items: WidgetItem[]}[]>();
+        this.searchPattern = ko.observable<string>();
+        this.categories = ko.observable<{ name: string, items: WidgetItem[] }[]>();
     }
 
     @OnMounted()
     public onMounted(): void {
         this.loadWidgetOrders();
+
+        this.searchPattern
+            .extend(ChangeRateLimit)
+            .subscribe(this.searchWidgets);
     }
+
+    public async searchWidgets(pattern: string): Promise<void> {
+        pattern = pattern.toLowerCase();
+
+        const filteredCategories = this.originalCategories
+            .map(x => ({
+                name: x.name,
+                items: x.items.filter(w => w.displayName.toLowerCase().includes(pattern))
+            }))
+            .filter(x => x.items.length > 0);
+
+        this.categories(filteredCategories);
+    }
+
 
     private async loadWidgetOrders(): Promise<void> {
         this.working(true);
@@ -52,16 +70,19 @@ export class WidgetSelector {
 
                 items.push(widgetItem);
             });
+
         const groupsObj = items.reduce((result, item) => {
             (result[item["category"]] = result[item["category"]] || []).push(item);
             return result;
-          }, {});
+        }, {});
 
         const groups = Object.keys(groupsObj).map(category => {
-            return {name: category, items: groupsObj[category]};
+            return { name: category, items: groupsObj[category] };
         });
-        
-        this.categories(groups);
+
+        this.originalCategories = groups;
+
+        this.categories(this.originalCategories);
         this.working(false);
     }
 
