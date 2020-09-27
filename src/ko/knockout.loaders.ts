@@ -105,28 +105,29 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                 ko.components.defaultLoader.loadViewModel(name, viewModelConstructor, callback);
             },
 
-            loadTemplate(name: string, templateHtml: any, callback: (result: Node[]) => void): void {
-                const parseHtmlFragment = <any>ko.utils.parseHtmlFragment;
+            loadTemplate(name: string, templateHtml: any, callback: (resolvedTemplate: Node[]) => void): void {
+                const parseHtmlFragment = ko.utils.parseHtmlFragment;
                 const nodes = parseHtmlFragment(templateHtml, document);
 
-                (<any>ko.components.defaultLoader).loadTemplate(name, nodes, callback);
+                ko.components.defaultLoader.loadTemplate(name, nodes, callback);
             },
 
-            loadComponent(componentName: string, config: ComponentConfig, callback: (definition: KnockoutComponentTypes.Definition) => void): void {
-                const callbackWrapper: (result: KnockoutComponentTypes.Definition) => void = (resultWrapper: KnockoutComponentTypes.Definition) => {
+            loadComponent(componentName: string, config: ComponentConfig, callback: (definition: ko.components.Component) => void): void {
+                const callbackWrapper: (result: ko.components.Component) => void = (resultWrapper: ko.components.Component) => {
 
-                    const createViewModelWrapper: (params: any, options: { element: Node; }) => any = (params: any, options: { element: Node; }) => {
+                    const createViewModelWrapper = (params: any, options: any) => {
                         const attrs: NamedNodeMap = options.element["attributes"];
+
                         if (attrs && attrs.length > 0) {
                             const runtimeParams = {};
 
-                            for (let i = 0; i < attrs.length; i++) {
-                                const attr: Attr = attrs[i];
+                            for (const attr of Array.prototype.slice.call(attrs)) {
                                 if (attr.name.startsWith("runtime-")) {
                                     const paramName = attr.name.split("-")[1];
                                     runtimeParams[paramName] = attr.value;
                                 }
                             }
+
                             if (Object.keys(runtimeParams).length > 0) {
                                 params = { ...runtimeParams, ...params };
                             }
@@ -145,7 +146,7 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                     callback(definitionWrapper);
                 };
 
-                (<any>ko.components.defaultLoader).loadComponent(componentName, config, callbackWrapper);
+                ko.components.defaultLoader.loadComponent(componentName, config, callbackWrapper);
             },
         };
 
