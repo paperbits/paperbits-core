@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as mime from "mime-types";
+import * as mime from "mime";
 import { IPublisher } from "@paperbits/common/publishing";
 import { IBlobStorage } from "@paperbits/common/persistence";
 
@@ -14,7 +14,7 @@ export class AssetPublisher implements IPublisher {
         try {
             const byteArray = await this.downloadBlob(assetPath);
             const fileName = assetPath.split("/").pop();
-            const contentType = mime.lookup(fileName) || "application/octet-stream";
+            const contentType = mime.getType(fileName) || "application/octet-stream";
 
             await this.outputBlobStorage.uploadBlob(assetPath, byteArray, contentType);
         }
