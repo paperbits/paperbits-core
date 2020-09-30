@@ -312,7 +312,14 @@ export class DefaultViewManager implements ViewManager {
         };
 
         view.close = () => this.closeView();
-        view.component.params.onClose = () => this.closeView();
+
+        if (view.component.params) {
+            view.component.params.onClose = () => this.closeView();
+        }
+
+        if (!view.resize) {
+            view.resize = "vertically horizontally";
+        }
 
         this.clearContextualEditors();
         this.closeView();
