@@ -25,30 +25,59 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
         return model instanceof MenuModel;
     }
 
-    private async getLanguageNavigationMenu(bindingContext: Bag<any>): Promise<NavigationItemModel> {
+    private async getLanguageNavigationMenu(bindingContext: Bag<any>, layout: string): Promise<NavigationItemModel> {
         const locales = await this.localeService.getLocales();
         const defaultLocale = await this.localeService.getDefaultLocale();
         const requestedLocaleCode = bindingContext?.locale || defaultLocale;
         const requestedLocale = locales.find(x => x.code === requestedLocaleCode);
-        const languageNavItems = [];
+        const languageNavItems: NavigationItemModel[] = [];
 
         for (const locale of locales) {
             const targetUrl = bindingContext?.contentItemKey
                 ? await this.permalinkResolver.getUrlByTargetKey(bindingContext.contentItemKey, locale.code)
                 : "/";
 
-            languageNavItems.push({
-                label: locale.displayName,
-                targetUrl: targetUrl
-            });
+            let isActive = false;
+
+            if (locale.code === requestedLocale.code) {
+                if (layout === "horizontal") {
+                    continue; // excluding current locale from list in horizontal layout.
+                }
+
+                isActive = true;
+            }
+
+            const languageNavItem = new NavigationItemModel();
+            languageNavItem.label = locale.displayName;
+            languageNavItem.targetUrl = targetUrl;
+            languageNavItem.isActive = isActive;
+
+            languageNavItems.push(languageNavItem);
         }
 
-        const currentLanguageNavItem: NavigationItemModel = {
-            label: requestedLocale?.displayName,
-            nodes: languageNavItems
-        };
+        let topLevelChildren;
 
-        return currentLanguageNavItem;
+        switch (layout) {
+            case "horizontal":
+                topLevelChildren = [{
+                    label: requestedLocale?.displayName,
+                    nodes: languageNavItems
+                }];
+                break;
+
+            case "vertical":
+                topLevelChildren = languageNavItems;
+                break;
+
+            default:
+                throw new Error(`Unsupported menu widget layout: ${layout}`);
+        }
+
+        const topLevelNavItem = new NavigationItemModel();
+        topLevelNavItem.label = "Languages";
+        topLevelNavItem.nodes = topLevelChildren;
+
+        return topLevelNavItem;
     }
 
     private async processNavigationItem(locale: string, contract: NavigationItemContract, permalink: string, minHeading: number, maxHeading: number, level: number = 0): Promise<NavigationItemModel> {
@@ -129,7 +158,7 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
             let root: NavigationItemModel;
 
             if (contract.navigationItemKey === "@locales") {
-                root = await this.getLanguageNavigationMenu(bindingContext);
+                root = await this.getLanguageNavigationMenu(bindingContext, menuModel.layout);
             }
             else {
                 const rootNavigationItem = await this.navigationService.getNavigationItem(contract.navigationItemKey);
