@@ -44,5 +44,6 @@ export class MenuModel {
         this.items = [];
         this.roles = null;
         this.layout = "vertical";
+        this.styles = { appearance: "components/menu/default" };
     }
 }
