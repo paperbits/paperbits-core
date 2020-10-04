@@ -69,9 +69,18 @@ ko.bindingHandlers["surface"] = {
             }
         }, null);
 
+        let resizeDirections;
+
+        if (typeof view.resize === "string") {
+            resizeDirections = view.resize;
+        }
+        else {
+            resizeDirections = view.resize.directions;
+        }
+
         ko.applyBindingsToNode(element, {
             resizable: {
-                directions: view.resize,
+                directions: resizeDirections,
                 onresize: () => {
                     if (!view || !view.component) {
                         return;
@@ -85,11 +94,11 @@ ko.bindingHandlers["surface"] = {
                         settings = JSON.parse(settingsString);
                     }
 
-                    if (view.resize.includes("horizontally")) {
+                    if (resizeDirections.includes("horizontally")) {
                         Objects.setValueWithCompensation(`${view.component.name}/width`, settings, element.clientWidth);
                     }
 
-                    if (view.resize.includes("vertically")) {
+                    if (resizeDirections.includes("vertically")) {
                         Objects.setValueWithCompensation(`${view.component.name}/height`, settings, element.clientHeight);
                     }
 

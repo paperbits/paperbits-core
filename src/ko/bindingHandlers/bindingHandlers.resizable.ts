@@ -1,14 +1,7 @@
 import * as ko from "knockout";
 import { EventManager } from "@paperbits/common/events";
 import { isNumber } from "util";
-
-interface ResizableOptions {
-    /**
-     * Allowed values: "none", "vertically", "horizontally".
-     */
-    directions: string;
-    onresize: () => void;
-}
+import { ResizableOptions } from "@paperbits/common/ui/resizableOptions";
 
 export class ResizableBindingHandler {
     constructor(eventManager: EventManager) {
@@ -18,6 +11,7 @@ export class ResizableBindingHandler {
 
                 let directions;
                 let onResizeCallback;
+                let initialOffsetX, initialOffsetY, initialWidth, initialHeight, initialEdge, initialLeft, initialRight, initialTop, initialBottom;
 
                 const setOptions = (updatedOptions: string | ResizableOptions) => {
                     if (typeof updatedOptions === "string") {
@@ -26,6 +20,18 @@ export class ResizableBindingHandler {
                     else {
                         directions = updatedOptions.directions;
                         onResizeCallback = updatedOptions.onresize;
+
+                        initialWidth = updatedOptions.initialWidth;
+
+                        if (initialWidth) {
+                            element.style.width = initialWidth + "px";
+                        }
+
+                        initialHeight = updatedOptions.initialHeight;
+
+                        if (initialHeight) {
+                            element.style.height = initialHeight + "px";
+                        }
                     }
 
                     if (directions.includes("suspended")) {
@@ -46,7 +52,7 @@ export class ResizableBindingHandler {
                 }
 
                 let resizing = false;
-                let initialOffsetX, initialOffsetY, initialWidth, initialHeight, initialEdge, initialLeft, initialRight, initialTop, initialBottom;
+
 
                 const style = window.getComputedStyle(element);
                 const minWidth = style.minWidth;
@@ -104,7 +110,7 @@ export class ResizableBindingHandler {
                             element.style.height = initialHeight + "px";
                             break;
                     }
-                  
+
                     element.style.position = "fixed";
                 };
 
