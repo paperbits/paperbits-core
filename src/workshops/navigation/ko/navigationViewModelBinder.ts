@@ -36,6 +36,7 @@ export class NavigationViewModelBinder implements ViewModelBinder<NavigationItem
             label: viewModel.label(),
             targetKey: viewModel.targetKey(),
             targetUrl: viewModel.targetUrl(),
+            targetWindow: viewModel.targetWindow(),
             nodes: viewModel.nodes().map(x => this.viewModelToModel(x))
         };
 

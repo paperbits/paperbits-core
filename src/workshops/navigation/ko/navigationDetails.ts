@@ -23,11 +23,8 @@ export class NavigationDetailsWorkshop {
         private readonly permalinkResolver: IPermalinkResolver,
         private readonly viewManager: ViewManager
     ) {
-        // rebinding...
-        this.onMounted = this.onMounted.bind(this);
         this.deleteNavigationItem = this.deleteNavigationItem.bind(this);
         this.onHyperlinkChange = this.onHyperlinkChange.bind(this);
-
         this.hyperlink = ko.observable<HyperlinkModel>();
 
         this.hyperlinkTitle = ko.pureComputed<string>(() => {
@@ -51,6 +48,7 @@ export class NavigationDetailsWorkshop {
 
     private async init(targetKey: string): Promise<void> {
         const hyperlink = await this.permalinkResolver.getHyperlinkByTargetKey(targetKey);
+        hyperlink.target = this.navigationItem.targetWindow();
 
         this.hyperlink(hyperlink);
     }
@@ -61,6 +59,7 @@ export class NavigationDetailsWorkshop {
         const targetKey = hyperlink ? hyperlink.targetKey : null;
 
         this.navigationItem.targetKey(targetKey);
+        this.navigationItem.targetWindow(hyperlink.target);
     }
 
     public deleteNavigationItem(): void {

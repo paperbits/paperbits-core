@@ -60,6 +60,7 @@ export class NavigationModelBinder implements IModelBinder<NavigationItemModel> 
             key: model.key,
             label: model.label,
             targetKey: model.targetKey,
+            targetWindow: model.targetWindow,
             navigationItems: model.nodes.map(x => this.modelToContract(x))
         };
 

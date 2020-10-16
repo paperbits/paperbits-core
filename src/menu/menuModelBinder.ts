@@ -104,6 +104,7 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
 
         const targetUrl = await this.permalinkResolver.getUrlByTargetKey(contract.targetKey, locale);
         navitemModel.targetUrl = targetUrl;
+        navitemModel.targetWindow = contract.targetWindow;
 
         if (targetUrl === permalink) {
             navitemModel.isActive = true;

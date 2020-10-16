@@ -2,7 +2,7 @@
     <!-- ko if: item.nodes().length > 0 -->
     <li class="nav-item collapsible" data-bind="css: { 'expanded': expanded }">
         <a href="#" class="nav-link" data-toggle="collapsible"
-            data-bind="text: item.label, attr: { href: item.url }, css: { 'nav-link-active': item.isActive }"></a>
+            data-bind="text: item.label, attr: { href: item.targetUrl, target: item.targetWindow }, css: { 'nav-link-active': item.isActive }"></a>
         <!--ko if: item.nodes().length > 0 -->
         <div class="dropdown collapsible-content">
             <!-- ko template: { name: 'horizontalMenu', data: item } -->
@@ -15,7 +15,7 @@
     <!-- ko ifnot: item.nodes().length > 0 -->
     <li class="nav-item">
         <a href="#" class="nav-link"
-            data-bind="text: item.label, attr: { href: item.url }, css: { 'nav-link-active': item.isActive }"></a>
+            data-bind="text: item.label, attr: { href: item.targetUrl, target: item.targetWindow }, css: { 'nav-link-active': item.isActive }"></a>
     </li>
     <!-- /ko -->
 </ul>

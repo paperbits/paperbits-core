@@ -8,6 +8,7 @@ export class NavigationItemViewModel {
     public label: ko.Observable<string>;
     public targetKey: ko.Observable<string>;
     public targetUrl: ko.Observable<string>;
+    public targetWindow: ko.Observable<string>;
     public parent: NavigationItemViewModel;
     public nodes: ko.ObservableArray<NavigationItemViewModel>;
     public collapsed: ko.Observable<boolean>;
@@ -32,6 +33,8 @@ export class NavigationItemViewModel {
         this.targetKey = ko.observable<string>(navitem.targetKey);
         this.targetKey.subscribe(() => this.notify());
         this.targetUrl = ko.observable<string>(navitem.targetUrl);
+        this.targetWindow = ko.observable<string>(navitem.targetWindow);
+        this.targetWindow.subscribe(() => this.notify());
     }
 
     private isSiblingNode(node: NavigationItemViewModel): boolean {
