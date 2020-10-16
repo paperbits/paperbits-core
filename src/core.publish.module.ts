@@ -14,10 +14,12 @@ import {
     SearchIndexBuilder
 } from "@paperbits/common/publishing";
 import { MemoryCache } from "@paperbits/common/caching";
+import { DividerPublishModule } from "./divider/divider.publish.module";
 
 
 export class CorePublishModule implements IInjectorModule {
     public register(injector: IInjector): void {
+        injector.bindModule(new DividerPublishModule());
         injector.bindCollection("publishers");
         injector.bindToCollection("publishers", AssetPublisher);
         injector.bindToCollection("publishers", MediaPublisher);
