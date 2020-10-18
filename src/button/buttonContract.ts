@@ -25,4 +25,9 @@ export interface ButtonContract extends Contract {
      * Assigned hyperlink.
      */
     hyperlink?: HyperlinkContract;
+
+    /**
+     * Icon key.
+     */
+    iconKey: string;
 }

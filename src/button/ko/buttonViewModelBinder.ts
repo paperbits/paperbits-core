@@ -1,4 +1,5 @@
 import { Button } from "./buttonViewModel";
+import * as Utils from "@paperbits/common/utils";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { ButtonModel } from "../buttonModel";
 import { EventManager } from "@paperbits/common/events";
@@ -19,6 +20,16 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
         viewModel.label(model.label);
         viewModel.hyperlink(model.hyperlink);
         viewModel.roles(model.roles);
+
+        if (model.iconKey) {
+            // TODO: Refactor
+            const segments = model.iconKey.split("/");
+            const name = segments[1];
+            viewModel.icon(`icon icon-${Utils.camelCaseToKebabCase(name.replace("/", "-"))}`);
+        }
+        else {
+            viewModel.icon(null);
+        }
 
         if (model.styles) {
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));

@@ -2,7 +2,8 @@
     <div class="form-group">
         <label for="label" class="form-label">
             Label
-            <button class="btn btn-info" type="button" aria-hidden="true" role="tooltip" data-bind="tooltip: 'Text on the button'"></button>
+            <button class="btn btn-info" type="button" aria-hidden="true" role="tooltip"
+                data-bind="tooltip: 'Text on the button'"></button>
         </label>
         <input id="label" type="text" class="form-control" data-bind="textInput: label" maxlength="256" />
     </div>
@@ -44,6 +45,8 @@
         </label>
         <select id="sizeStyle" class="form-control" data-bind="options: sizeStyles, value: sizeStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
     </div> -->
+
+    <glyph-input params="{ selection: model.iconKey, onChange: onIconSelect }"></glyph-input>
 
     <role-input params="{ selection: model.roles, onChange: onRoleSelect }"></role-input>
 </fieldset>

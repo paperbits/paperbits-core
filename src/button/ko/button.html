@@ -1,1 +1,6 @@
-<a role="button" data-bind="text: label, hyperlink: hyperlink, secured: roles, styled: styles"></a>
+<a role="button" data-bind="hyperlink: hyperlink, secured: roles, styled: styles">
+    <!-- ko if: icon -->
+    <i data-bind="css: icon"></i>
+    <!-- /ko -->
+    <span data-bind="text: label"></span>
+</a>

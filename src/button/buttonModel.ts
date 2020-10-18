@@ -25,6 +25,11 @@ export class ButtonModel {
      */
     public roles?: string[];
 
+    /**
+     * Icon key.
+     */
+    public iconKey?: string;
+
     constructor() {
         this.label = "Button";
         this.styles = { appearance: "components/button/default" };

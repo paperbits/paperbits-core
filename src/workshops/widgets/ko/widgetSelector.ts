@@ -29,7 +29,7 @@ export class WidgetSelector {
     }
 
     @OnMounted()
-    public onMounted(): void {
+    public initialize(): void {
         this.loadWidgetOrders();
 
         this.searchPattern
@@ -49,7 +49,6 @@ export class WidgetSelector {
 
         this.categories(filteredCategories);
     }
-
 
     private async loadWidgetOrders(): Promise<void> {
         this.working(true);
