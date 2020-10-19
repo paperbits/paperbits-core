@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 import * as Utils from "@paperbits/common";
+import * as Constants from "@paperbits/common/constants";
 import { GridModel } from "../../grid-layout-section/gridModel";
 import template from "./gridLayoutSelector.html";
 import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
@@ -10,7 +11,6 @@ import { SectionModel } from "../../section";
 import { GridViewModelBinder } from ".";
 import { BlockService } from "@paperbits/common/blocks";
 import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelector";
-import { ISettingsProvider } from "@paperbits/common/configuration/ISettingsProvider";
 import { UpdateBlock } from "../../workshops/block/ko/blockSelector";
 
 @Component({
@@ -29,8 +29,7 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         private readonly gridModelBinder: GridModelBinder,
         private readonly gridViewModelBinder: GridViewModelBinder,
         private readonly modelBinderSelector: ModelBinderSelector,
-        private readonly blockService: BlockService,
-        private readonly settingsProvider: ISettingsProvider
+        private readonly blockService: BlockService
     ) {
         this.selectLayout = this.selectLayout.bind(this);
         this.snippets = ko.observableArray();
@@ -50,7 +49,7 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         }
         this.snippets(snippets);
 
-        const blocksUrl = await this.settingsProvider.getSetting<string>("blockSnippetsUrl");
+        const blocksUrl = Constants.blockSnippetsLibraryUrl;
         this.isBlocksEnabled(blocksUrl ? true : false);
     }
 
