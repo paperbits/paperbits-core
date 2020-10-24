@@ -8,7 +8,6 @@ import { LayoutService } from "@paperbits/common/layouts/layoutService";
 import { LocaleService } from "@paperbits/common/localization";
 import { MediaService } from "@paperbits/common/media";
 import { DefaultChangeCommitter } from "@paperbits/common/persistence";
-import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkResolver";
 import { NavigationService } from "@paperbits/common/navigation";
 import { PageService } from "@paperbits/common/pages";
 import { PagePermalinkResolver } from "@paperbits/common/pages/pagePermalinkResolver";
@@ -77,7 +76,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("urlService", UrlService);
         injector.bindSingleton("localeService", LocaleService);
         injector.bindSingleton("permalinkResolver", PermalinkResolver);
-        injector.bindToCollection("permalinkResolvers", MediaPermalinkResolver, "mediaPermalinkResolver");
         injector.bindToCollection("permalinkResolvers", PagePermalinkResolver, "pagePermalinkResolver");
         injector.bindToCollection("permalinkResolvers", UrlPermalinkResolver, "urlPermalinkResolver");
 

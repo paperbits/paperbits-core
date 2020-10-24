@@ -3,6 +3,7 @@ import { AssetPublisher } from "./publishing/assetPublisher";
 import { PagePublisher } from "./publishing/pagePublisher";
 import { SitePublisher } from "./publishing/sitePublisher";
 import { MediaPublisher } from "./publishing/mediaPublisher";
+import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkResolver.publish";
 import { KnockoutHtmlPagePublisherPlugin } from "./publishing/knockoutHtmlPagePublisherPlugin";
 import {
     HtmlPagePublisher,
@@ -31,6 +32,7 @@ export class CorePublishModule implements IInjectorModule {
         injector.bind("htmlPagePublisher", HtmlPagePublisher);
         injector.bind("htmlDocumentProvider", DominoHtmlDocumentProvider);
         injector.bindCollection("htmlPagePublisherPlugins");
+        injector.bindToCollection("permalinkResolvers", MediaPermalinkResolver, "mediaPermalinkResolver");
         injector.bindToCollection("htmlPagePublisherPlugins", KnockoutHtmlPagePublisherPlugin);
         injector.bindToCollection("htmlPagePublisherPlugins", LinkedDataHtmlPagePublisherPlugin);
         injector.bindToCollection("htmlPagePublisherPlugins", OpenGraphHtmlPagePublisherPlugin);
