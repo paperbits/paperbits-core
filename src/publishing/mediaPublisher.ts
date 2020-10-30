@@ -1,7 +1,7 @@
 import parallel from "await-parallel-limit";
-import { HttpClient } from "@paperbits/common/http";
+import { HttpClient, HttpResponse } from "@paperbits/common/http";
 import { IPublisher } from "@paperbits/common/publishing";
-import { IBlobStorage, Query, Page } from "@paperbits/common/persistence";
+import { IBlobStorage, Query } from "@paperbits/common/persistence";
 import { IMediaService, MediaContract } from "@paperbits/common/media";
 import { Logger } from "@paperbits/common/logging";
 
@@ -15,37 +15,77 @@ export class MediaPublisher implements IPublisher {
         private readonly logger: Logger
     ) { }
 
+    private async publishFromUrl(mediaFile: MediaContract): Promise<void> {
+        this.logger.trackEvent("Publishing", { message: `Publishing media ${mediaFile.fileName} from URL...` });
+
+        let response: HttpResponse<any>;
+
+        try {
+            response = await this.httpClient.send({ url: mediaFile.downloadUrl });
+        }
+        catch (error) {
+            this.logger.trackEvent("Publishing", { message: `Could not download media from URL ${mediaFile.downloadUrl}. ${error.stack || error.message}` });
+            return null;
+        }
+
+        if (response?.statusCode !== 200) {
+            this.logger.trackEvent("Publishing", { message: `Could not download media from URL ${mediaFile.downloadUrl}. Status code: ${response?.statusCode}` });
+            return null;
+        }
+
+        const content = response.toByteArray();
+        await this.uploadToStorage(mediaFile.permalink, content, mediaFile.mimeType);
+    }
+
+    private async publishFromStorage(mediaFile: MediaContract): Promise<void> {
+        this.logger.trackEvent("Publishing", { message: `Publishing media ${mediaFile.fileName} from storage...` });
+
+        let content: Uint8Array;
+
+        try {
+            content = await this.blobStorage.downloadBlob(mediaFile.blobKey);
+        }
+        catch (error) {
+            this.logger.trackEvent("Publishing", { message: `Could not download media ${mediaFile.blobKey} from source storage. ${error.stack || error.message}` });
+            return null;
+        }
+
+        if (!content) {
+            this.logger.trackEvent("Publishing", { message: `Blob with key ${mediaFile.blobKey} not found in source storage.` });
+            return null;
+        }
+
+        await this.uploadToStorage(mediaFile.permalink, content, mediaFile.mimeType);
+    }
+
+    private async uploadToStorage(key: string, content: Uint8Array, mimeType: string): Promise<void> {
+        try {
+            await this.outputBlobStorage.uploadBlob(key, content, mimeType);
+        }
+        catch (error) {
+            throw new Error(`Unable to upload media file to destination storage. ${error.stack || error.message}`);
+        }
+    }
+
     private async renderMediaFile(mediaFile: MediaContract): Promise<void> {
         if (!mediaFile.permalink) {
             this.logger.trackEvent("Publishing", { message: `Skipping media with no permalink specified: "${mediaFile.fileName}".` });
             return;
         }
 
-        this.logger.trackEvent("Publishing", { message: `Publishing media ${mediaFile.fileName}...` });
-
-        try {
-            if (mediaFile.blobKey) {
-                const blob = await this.blobStorage.downloadBlob(mediaFile.blobKey);
-
-                if (blob) {
-                    await this.outputBlobStorage.uploadBlob(mediaFile.permalink, blob, mediaFile.mimeType);
-                    return;
-                }
-            }
-
-            if (mediaFile.downloadUrl) { // if blob doesn't exit check if direct download URL is specifed:
-                const response = await this.httpClient.send({ url: mediaFile.downloadUrl });
-
-                if (response?.statusCode === 200) {
-                    await this.outputBlobStorage.uploadBlob(mediaFile.permalink, response.toByteArray(), mediaFile.mimeType);
-                }
-                else {
-                    this.logger.trackEvent("Publishing", { message: `Could not download media ${mediaFile.fileName}` });
-                }
-            }
+        if (!mediaFile.blobKey && !mediaFile.downloadUrl) {
+            this.logger.trackEvent("Publishing", { message: `Skipping media with no blob key or download URL specified: ${mediaFile.fileName}.` });
+            return;
         }
-        catch (error) {
-            throw new Error(`Unable to render media file. ${error.stack || error.message}`);
+
+        if (mediaFile.blobKey) {
+            await this.publishFromStorage(mediaFile);
+            return;
+        }
+
+        if (mediaFile.downloadUrl) {
+            await this.publishFromUrl(mediaFile);
+            return;
         }
     }
 
