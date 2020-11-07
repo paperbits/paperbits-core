@@ -20,8 +20,12 @@ export class KnockoutHtmlPagePublisherPlugin implements HtmlPagePublisherPlugin 
                 const layoutContentContract = await this.layoutService.getLayoutContent(layoutContract.key, page.bindingContext?.locale);
                 const layoutContentViewModel = await this.contentViewModelBinder.getContentViewModelByKey(layoutContentContract, page.bindingContext);
 
-                ko.applyBindingsToNode(document.body, { widget: layoutContentViewModel }, null);
-                setTimeout(resolve, 500);
+                const onDescendantsComplete = () => {
+                    ko.cleanNode(document.body);
+                    resolve();
+                };
+
+                ko.applyBindingsToNode(document.body, { widget: layoutContentViewModel, descendantsComplete: onDescendantsComplete }, null);
             }
             catch (error) {
                 reject(`Unable to apply knockout bindings to a template: ${error.stack || error.message}`);

@@ -7,6 +7,7 @@ import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkRe
 import { KnockoutHtmlPagePublisherPlugin } from "./publishing/knockoutHtmlPagePublisherPlugin";
 import {
     HtmlPagePublisher,
+    HtmlPageOptimizer,
     OpenGraphHtmlPagePublisherPlugin,
     LinkedDataHtmlPagePublisherPlugin,
     SocialShareDataHtmlPagePublisherPlugin,
@@ -29,8 +30,9 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindSingleton("sitePublisher", SitePublisher);
         injector.bindSingleton("sitemapBuilder", SitemapBuilder);
         injector.bindSingleton("searchIndexBuilder", SearchIndexBuilder);
-        injector.bind("htmlPagePublisher", HtmlPagePublisher);
-        injector.bind("htmlDocumentProvider", DominoHtmlDocumentProvider);
+        injector.bindSingleton("htmlPagePublisher", HtmlPagePublisher);
+        injector.bindSingleton("htmlPageOptimizer",  HtmlPageOptimizer);
+        injector.bindSingleton("htmlDocumentProvider", DominoHtmlDocumentProvider);
         injector.bindCollection("htmlPagePublisherPlugins");
         injector.bindToCollection("permalinkResolvers", MediaPermalinkResolver, "mediaPermalinkResolver");
         injector.bindToCollection("htmlPagePublisherPlugins", KnockoutHtmlPagePublisherPlugin);

@@ -81,7 +81,6 @@ export class BalloonBindingHandler {
                     ko.cleanNode(balloonElement);
                     balloonElement.remove();
                     balloonElement = null;
-
                     balloonTipElement.remove();
                     balloonTipElement = null;
 
