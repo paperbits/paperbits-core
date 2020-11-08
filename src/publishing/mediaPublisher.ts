@@ -1,4 +1,5 @@
 import parallel from "await-parallel-limit";
+import { maxParallelPublisingTasks } from "@paperbits/common/constants";
 import { HttpClient, HttpResponse } from "@paperbits/common/http";
 import { IPublisher } from "@paperbits/common/publishing";
 import { IBlobStorage, Query } from "@paperbits/common/persistence";
@@ -101,7 +102,7 @@ export class MediaPublisher implements IPublisher {
                 tasks.push(() => this.renderMediaFile(mediaFile));
             }
 
-            await parallel(tasks, 7);
+            await parallel(tasks, maxParallelPublisingTasks);
 
             if (pagesOfResults.takeNext) {
                 pagesOfResults = await pagesOfResults.takeNext();

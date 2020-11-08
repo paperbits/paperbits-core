@@ -8,6 +8,7 @@ import {
     SitemapBuilder,
     SearchIndexBuilder
 } from "@paperbits/common/publishing";
+import { maxParallelPublisingTasks } from "@paperbits/common/constants";
 import { IBlobStorage, Query } from "@paperbits/common/persistence";
 import { IPageService, PageContract } from "@paperbits/common/pages";
 import { ISiteService, SiteSettingsContract } from "@paperbits/common/sites";
@@ -17,7 +18,6 @@ import { IMediaService } from "@paperbits/common/media";
 import { StyleCompiler, StyleManager } from "@paperbits/common/styles";
 import { LocalStyleBuilder } from "./localStyleBuilder";
 
-const maxParallelTasks = 30;
 
 export class PagePublisher implements IPublisher {
     private localStyleBuilder: LocalStyleBuilder;
@@ -171,7 +171,7 @@ export class PagePublisher implements IPublisher {
                 tasks.push(() => this.renderAndUpload(siteSettings, page));
             }
 
-            await parallel(tasks, maxParallelTasks);
+            await parallel(tasks, maxParallelPublisingTasks);
 
             if (pagesOfResults.takeNext) {
                 pagesOfResults = await pagesOfResults.takeNext();
@@ -202,7 +202,7 @@ export class PagePublisher implements IPublisher {
                     tasks.push(() => this.renderAndUpload(siteSettings, page, localeCode));
                 }
 
-                await parallel(tasks, maxParallelTasks);
+                await parallel(tasks, maxParallelPublisingTasks);
 
                 if (pagesOfResults.takeNext) {
                     pagesOfResults = await pagesOfResults.takeNext();
