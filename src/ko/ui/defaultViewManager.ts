@@ -286,7 +286,8 @@ export class DefaultViewManager implements ViewManager {
         }, 8000);
     }
 
-    public openUploadDialog(): Promise<File[]> {
+    public openUploadDialog(...accept: string[]): Promise<File[]> {
+        uploadDialog.accept = accept?.join(",");
         uploadDialog.click();
 
         return new Promise<File[]>((resolve) => {
