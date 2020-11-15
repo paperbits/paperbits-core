@@ -14,9 +14,7 @@ export class SectionModelBinder implements IModelBinder<SectionModel> {
         return model instanceof SectionModel;
     }
 
-    constructor(
-        private readonly modelBinderSelector: ModelBinderSelector
-    ) { }
+    constructor(private readonly modelBinderSelector: ModelBinderSelector) { }
 
     public async contractToModel(contract: SectionContract, bindingContext?: Bag<any>): Promise<SectionModel> {
         const model = new SectionModel();

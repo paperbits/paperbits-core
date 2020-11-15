@@ -470,6 +470,15 @@ export class GridEditor {
                 position: "top right",
                 color: "#607d8b",
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
+            },
+            {
+                tooltip: "Switch to parent",
+                iconClass: "paperbits-enlarge-vertical",
+                position: "top right",
+                color: "#607d8b",
+                callback: () => {
+                    context.switchToParent(context.parentBinding.model.constructor);
+                }
             }]
         };
 

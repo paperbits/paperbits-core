@@ -9,8 +9,7 @@ import { SectionModel } from "../section";
 export class GridCellHandlers implements IWidgetHandler {
     constructor(
         private readonly viewManager: ViewManager,
-        private readonly eventManager: EventManager,
-        private readonly widgetService: WidgetService
+        private readonly eventManager: EventManager
     ) { }
 
     public canAccept(dragSession: DragSession): boolean {

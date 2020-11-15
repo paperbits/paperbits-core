@@ -1,5 +1,4 @@
 import { IContextCommandSet, View, ViewManager } from "@paperbits/common/ui";
-import { DragSession } from "@paperbits/common/ui/draggables";
 import { WidgetContext } from "@paperbits/common/editing";
 import { SectionModel } from "./sectionModel";
 import { RowModel } from "../row/rowModel";
