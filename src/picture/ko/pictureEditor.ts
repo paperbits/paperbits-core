@@ -9,6 +9,7 @@ import { StyleService } from "@paperbits/styles/styleService";
 import { LocalStyles } from "@paperbits/common/styles";
 import { SizeStylePluginConfig } from "@paperbits/styles/plugins/size/sizeStylePluginConfig";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
+import { resolve } from "path";
 
 
 @Component({
@@ -90,7 +91,7 @@ export class PictureEditor {
         this.onChange(this.model);
     }
 
-    public onMediaSelected(media: MediaContract): void {
+    public async onMediaSelected(media: MediaContract): Promise<void> {
         if (!media) {
             this.background(null);
             this.sourceKey(null);
@@ -105,25 +106,37 @@ export class PictureEditor {
             background.position = "center center";
             this.background(background);
 
-            if (!this.model.width && !this.model.height) {
-                this.updateSizeConfigForSelectedMedia(media); // TODO: Set size to media itself on upload
-            }
+            await this.updateSizeConfigForSelectedMedia(media); // TODO: Set size to media itself on upload
         }
 
         this.applyChanges();
     }
 
-    public updateSizeConfigForSelectedMedia(media: MediaContract): void {
+    public updateSizeConfigForSelectedMedia(media: MediaContract): Promise<void> {
         if (!media.downloadUrl) {
             return;
         }
 
-        const selectedMedia = new Image();
-        selectedMedia.src = media.downloadUrl;
+        return new Promise<void>(resolve => {
+            const selectedMedia = new Image();
+            selectedMedia.src = media.downloadUrl;
 
-        this.sizeConfig({
-            width: selectedMedia.width,
-            height: selectedMedia.height
+            selectedMedia.onload = () => {
+                let width = selectedMedia.width;
+                let height = selectedMedia.height;
+
+                if (!media.mimeType.startsWith("image/svg")) {
+                    const pixelRatio = devicePixelRatio || 1;
+                    width = selectedMedia.width / pixelRatio;
+                    height = selectedMedia.height / pixelRatio;
+                }
+
+                this.model.width = width;
+                this.model.height = height;
+                this.sizeConfig({ width: width, height: height });
+
+                resolve();
+            };
         });
     }
 
