@@ -16,7 +16,7 @@ import { Logger } from "@paperbits/common/logging";
 import { ILocaleService, LocaleModel } from "@paperbits/common/localization";
 import { IMediaService } from "@paperbits/common/media";
 import { StyleCompiler, StyleManager } from "@paperbits/common/styles";
-import { LocalStyleBuilder } from "./localStyleBuilder";
+import { LocalStyleBuilder } from "@paperbits/styles";
 
 
 export class PagePublisher implements IPublisher {
