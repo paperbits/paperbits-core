@@ -1,5 +1,5 @@
 <div class="flex flex-column fit">
-    <fieldset class="flex-item flex-item-grow form" data-bind="scrollable: true">
+    <div class="flex-item flex-item-grow form" data-bind="scrollable: true">
         <div class="form-group">
             <label for="title" class="form-label">Title</label>
             <div class="input-group">
@@ -28,7 +28,7 @@
             <input type="text" id="keywords" class="form-control" data-bind="textInput: blogPostItem.keywords" placeholder="e.g. blog" maxlength="256"
             />
         </div>
-    </fieldset>
+    </div>
 
     <div class="flex-item btn-group">
         <button class="btn" data-bind="click: deleteBlogPost">

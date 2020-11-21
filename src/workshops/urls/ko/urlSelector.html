@@ -3,7 +3,7 @@
         URLs
     </h1>
     <hr />
-    <fieldset class="flex-item form">
+    <div class="flex-item form">
         <div class="form-group">
             <input class="form-control" type="search" role="searchbox"
                 data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: true" placeholder="Search URLs..."
@@ -12,7 +12,7 @@
                 data-bind="text: `URLs found: ${urls().length}`">
             </p>
         </div>
-    </fieldset>
+    </div>
 
     <!-- ko if: !working() && urls().length === 0 -->
     <div class="flex flex-column flex-item flex-item-grow list">

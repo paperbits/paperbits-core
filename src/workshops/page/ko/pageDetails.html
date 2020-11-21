@@ -1,5 +1,5 @@
 <div class="flex flex-column fit">
-    <fieldset class="flex-item flex-item-grow form" data-bind="scrollable: true">
+    <div class="flex-item flex-item-grow form" data-bind="scrollable: true">
         <div class="form-group">
             <label for="title" class="form-label">Title</label>
             <div class="input-group">
@@ -49,7 +49,7 @@
             <textarea id="jsonLd" class="form-control" data-bind="textInput: pageItem.jsonLd"></textarea>
         </div>
         <!-- /ko -->
-    </fieldset>
+    </div>
 
     <!-- ko ifnot: $component.isReserved -->
     <div class="flex-item btn-group">

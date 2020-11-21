@@ -1,5 +1,5 @@
 <div class="flex flex-column fit">
-    <fieldset class="flex-item flex-item-grow form" data-bind="scrollable: true">
+    <div class="flex-item flex-item-grow form" data-bind="scrollable: true">
         <div class="form-group">
             <label for="fileName" class="form-label">
                 Name
@@ -55,7 +55,7 @@
             </label>
             <input type="text" id="keywords" class="form-control" data-bind="textInput: mediaItem.keywords" maxlength="256" />
         </div>
-    </fieldset>
+    </div>
 
     <div class="flex-item btn-group">
         <!-- ko if: mediaItem.blobKey  -->

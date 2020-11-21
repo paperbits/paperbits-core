@@ -1,5 +1,5 @@
 <div class="flex flex-column fit">
-    <fieldset class="flex-item form">
+    <div class="flex-item form">
         <div class="form-group">
             <input class="form-control" type="search" role="searchbox"
                 data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: true" placeholder="Search pages..."
@@ -8,7 +8,7 @@
                 data-bind="text: `Pages found: ${pages().length}`">
             </p>
         </div>
-    </fieldset>
+    </div>
 
     <!-- ko if: !working() && pages().length === 0 -->
 

@@ -4,7 +4,7 @@
     </h1>
     <hr />
 
-    <fieldset class="flex-item form">
+    <div class="flex-item form">
         <div class="form-group">
             <input class="form-control" type="search" role="searchbox"
                 data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: true" placeholder="Search widgets..."
@@ -13,7 +13,7 @@
                 data-bind="text: `Pages found: ${categories().length}`">
             </p> -->
         </div>
-    </fieldset>
+    </div>
 
     <!-- ko if: working() -->
     <spinner></spinner>

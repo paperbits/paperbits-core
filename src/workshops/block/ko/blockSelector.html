@@ -1,4 +1,4 @@
-<fieldset class="flex-item form">
+<div class="flex-item form">
     <div class="form-group">
         <input class="form-control" type="search" role="searchbox"
             data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: true" placeholder="Search item..."
@@ -7,7 +7,7 @@
             data-bind="text: `Items found: ${blocks().length}`">
         </p>
     </div>
-</fieldset>
+</div>
 
 <!--ko if: working()-->
 <spinner></spinner>
