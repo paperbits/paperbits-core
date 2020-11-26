@@ -2,12 +2,15 @@
 import { Loader, LoaderOptions } from "google-maps";
 import { MapRuntimeConfig } from "./runtime/mapRuntimeConfig";
 
+
+const apiKey = "AIzaSyC7eT_xRPt3EjX3GuzSvlaZzJmlyFxvFFs"; // TODO: Allow users to specify their own key.
+
 export class GooglmapsBindingHandler {
     private readonly googlePromise: Promise<any>;
 
     constructor() {
         const options: LoaderOptions = {/* todo */ };
-        const loader = new Loader("AIzaSyC7eT_xRPt3EjX3GuzSvlaZzJmlyFxvFFs", options);
+        const loader = new Loader(apiKey, options);
         this.googlePromise = loader.load();
 
         const attach = this.attach.bind(this);
