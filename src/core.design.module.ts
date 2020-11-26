@@ -58,6 +58,7 @@ import { ContentEditorModule } from "./content/ko";
 import { ViewStack } from "./ko/ui/viewStack";
 import { MediaDisplay } from "./workshops/media/ko/mediaDisplay";
 import { Lightbox } from "./workshops/media/ko/lightbox";
+import { MapDesignModule } from "./map/ko/map.design.module";
 import { MemoryCache } from "@paperbits/common/caching";
 import { DividerDesignModule } from "./divider/divider.design.module";
 
@@ -100,6 +101,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bind("roleSelector", RoleSelector);
         injector.bind("roleInput", RoleInput);
         injector.bind("spinner", Spinner);
+        injector.bindModule(new MapDesignModule());
         injector.bindToCollection("permalinkResolvers", MediaPermalinkResolver, "mediaPermalinkResolver");
         injector.bindModule(new TextblockEditorModule());
         injector.bindModule(new PictureDesignModule());
@@ -133,6 +135,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindToCollection("autostart", Hinter);
         injector.bindInstance("reservedPermalinks", ["/", "/404", "/500"]);
         injector.resolve("workshopSections");
+
 
         const userService = new DesignerUserService();
         injector.bindInstance("userService", userService);

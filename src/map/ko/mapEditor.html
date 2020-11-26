@@ -1,11 +1,35 @@
-﻿<div class="form">
-    <label for="location" class="form-label">Location</label>
-    <input type="text" id="location" class="form-control" placeholder="e.g. 400 Broad St, Seattle, WA 98109" data-bind="textInput: location"
-    />
+﻿<div class="form" data-bind="scrollable: true">
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#mapSettingsCollapse'"
+                aria-label="Toggle 'Map settings' section"></a>
+            <b>Map settings</b>
+        </label>
+        <div id="mapSettingsCollapse" class="collapse form-group-collapse">
+            <div class="form-group">
+                <label for="location" class="form-label">Location</label>
+                <input type="text" id="location" class="form-control" placeholder="e.g. 400 Broad St, Seattle, WA 98109"
+                    data-bind="textInput: location" />
+            </div>
 
-    <label for="caption" class="form-label">Pin caption</label>
-    <input type="text" id="caption" class="form-control" placeholder="e.g. Space Needle" data-bind="textInput: caption" maxlength="256" />
+            <div class="form-group">
+                <label for="caption" class="form-label">Pin caption</label>
+                <input type="text" id="caption" class="form-control" placeholder="e.g. Space Needle"
+                    data-bind="textInput: caption" maxlength="1000" />
+            </div>
 
-    <label id="zoomControl" class="form-label">Enable zoom control</label>
-    <input type="checkbox" id="zoomControl" data-bind="checked: zoomControl" />
+            <div class="form-group">
+                <label for="zoom" class="form-label">Zoom</label>
+                <input id="zoom" type="range" class="form-control" min="1" max="22" data-bind="textInput: zoom" />
+            </div>
+
+            <div class="form-group">
+                <label for="mapType" class="form-label">Map type</label>
+                <select id="mapType" class="form-control"
+                    data-bind="options: mapTypeOptions, value: mapType, optionsText: 'label', optionsValue: 'value'"></select>
+            </div>
+        </div>
+    </div>
+
+    <size-editor params="{ features: 'height,width', sizeConfig: sizeConfig, onUpdate: onSizeChange }"></size-editor>
 </div>

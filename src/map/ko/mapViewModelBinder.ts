@@ -1,24 +1,30 @@
 import { MapViewModel } from "./mapViewModel";
-import { MapService } from "../mapService";
 import { MapModel } from "../mapModel";
 import { EventManager } from "@paperbits/common/events";
 import { Bag } from "@paperbits/common";
+import { StyleCompiler } from "@paperbits/common/styles";
 
 export class MapViewModelBinder {
     constructor(
-        private readonly mapService: MapService,
-        private readonly eventManager: EventManager
+        private readonly eventManager: EventManager,
+        private readonly styleCompiler: StyleCompiler
     ) { }
 
     public async modelToViewModel(model: MapModel, viewModel?: MapViewModel, bindingContext?: Bag<any>): Promise<MapViewModel> {
         if (!viewModel) {
-            viewModel = new MapViewModel(this.mapService);
+            viewModel = new MapViewModel();
         }
 
-        viewModel.caption(model.caption);
-        viewModel.layout(model.layout);
-        viewModel.location(model.location);
-        viewModel.zoomControl(model.zoomControl);
+        viewModel.runtimeConfig(JSON.stringify({
+            caption: model.caption,
+            location: model.location,
+            zoom: model.zoom,
+            mapType: model.mapType
+        }));
+
+        if (model.styles) {
+            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
+        }
 
         viewModel["widgetBinding"] = {
             displayName: "Map",

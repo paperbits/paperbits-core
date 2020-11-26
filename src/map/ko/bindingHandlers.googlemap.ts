@@ -1,37 +1,56 @@
 ﻿import * as ko from "knockout";
+import { Loader, LoaderOptions } from "google-maps";
+import { MapRuntimeConfig } from "./runtime/mapRuntimeConfig";
 
-ko.bindingHandlers["googlemap"] = {
-    init(element: Element, valueAccessor: () => any): void {
-        const configuration = valueAccessor();
+export class GooglmapsBindingHandler {
+    private readonly googlePromise: Promise<any>;
+
+    constructor() {
+        const options: LoaderOptions = {/* todo */ };
+        const loader = new Loader("AIzaSyC7eT_xRPt3EjX3GuzSvlaZzJmlyFxvFFs", options);
+        this.googlePromise = loader.load();
+
+        const attach = this.attach.bind(this);
+
+        ko.bindingHandlers["googlemap"] = {
+            init(element: Element, valueAccessor: () => MapRuntimeConfig): void {
+                const configuration = valueAccessor();
+                attach(element, ko.unwrap(configuration));
+            }
+        };
+    }
+
+    private async attach(element: Element, configuration: any): Promise<void> {
+        const google = await this.googlePromise;
 
         const geocoder = new google.maps.Geocoder();
-        const mapOptions: google.maps.MapOptions = { zoom: 17 };
+        const mapOptions: google.maps.MapOptions = {};
         const map = new google.maps.Map(element, mapOptions);
 
         map.setOptions({
             streetViewControl: false,
             mapTypeControl: false,
-            zoomControl: false,
-            scaleControl: false,
+            scaleControl: true,
             rotateControl: false,
             scrollwheel: false,
             disableDoubleClickZoom: true,
             draggable: false,
+            disableDefaultUI: true,
+            mapTypeId: ko.unwrap(configuration.mapType),
+            zoom: parseInt(ko.unwrap(configuration.zoom) || 17)
         });
-
-        // TODO: Think of how to recenter on resize; map.setCenter(marker.getPosition());
 
         const marker = new google.maps.Marker();
         marker.setMap(map);
 
         const setLocation = (location: string) => {
             const request: google.maps.GeocoderRequest = {};
-            const isCoordinates = new RegExp("(-?\\d+\(?:.\\d+)?),(-?\\d+\(?:.\\d+)?)").exec(location);
+            const coordinates = new RegExp("(-?\\d+\(?:.\\d+)?),(-?\\d+\(?:.\\d+)?)").exec(location);
 
-            if (isCoordinates) {
+            if (coordinates) {
                 request.location = {
-                    lat: <any>isCoordinates[1] * 1,
-                    lng: <any>isCoordinates[2] * 1,
+                    lat: <any>coordinates[1] * 1,
+                    lng: <any>coordinates[2] * 1,
                 };
             } else {
                 request.address = location;
@@ -55,26 +74,10 @@ ko.bindingHandlers["googlemap"] = {
             else {
                 infowindow.close();
             }
-        }
+        };
 
-        const setZoomControl = (state: string): void => {
-            map.setOptions({ zoomControl: state === "show" });
-        }
-
-        if (ko.isObservable(configuration.location)) {
-            configuration.location.subscribe(setLocation);
-        }
-
-        if (ko.isObservable(configuration.caption)) {
-            configuration.caption.subscribe(setCaption);
-        }
-
-        if (ko.isObservable(configuration.zoomControl)) {
-            configuration.zoomControl.subscribe(setZoomControl);
-        }
-
-        setLocation(ko.unwrap(configuration.location));
-        setCaption(ko.unwrap(configuration.caption));
-        setZoomControl(ko.unwrap(configuration.zoomControl));
+        setLocation(configuration.location());
+        setCaption(configuration.caption());
     }
 }
+

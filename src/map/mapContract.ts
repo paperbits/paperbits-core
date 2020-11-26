@@ -2,23 +2,27 @@ import { Contract } from "@paperbits/common";
 
 export interface MapContract extends Contract {
     /**
-     * 
+     * Location shown on the map, e.g. "Seattle, WA"
      */
     location: string;
 
-
     /**
-     * 
-     */
-    layout?: string;
-
-    /**
-     * Pin caption.
+     * Location pin caption, e.g. "Space needle".
      */
     caption?: string;
 
     /**
-     * Indicates, whether zoom controls need to be displayed.
+     * Map zoom level.
      */
-    zoomControl?: string;
+    zoom?: number;
+
+    /**
+     * Map type, e.g. "terrain", "satellite" or "hybrid".
+     */
+    mapType?: string;
+
+    /**
+     * Widget local styles.
+     */
+    styles?: any;
 }

@@ -1,7 +1,7 @@
 ﻿import { MapModel } from "./mapModel";
 import { IContentDropHandler, IContentDescriptor, IDataTransfer, IWidgetOrder, IWidgetHandler } from "@paperbits/common/editing";
 import { MapContract } from "./mapContract";
-// import * as GoogleMapsLoader from "google-maps";
+
 
 export class MapHandlers implements IWidgetHandler, IContentDropHandler {
     private async prepareWidgetOrder(config: MapContract): Promise<IWidgetOrder> {
@@ -12,11 +12,10 @@ export class MapHandlers implements IWidgetHandler, IContentDropHandler {
             requires: ["html", "js"],
             createModel: async () => {
                 const model = new MapModel();
-                model.caption = config.caption;
-                model.layout = config.layout;
                 model.location = config.location;
-                model.zoomControl = config.zoomControl;
-
+                model.caption = config.caption;
+                model.location = config.location;
+                model.mapType = config.mapType;
                 return model;
             }
         };
@@ -24,7 +23,7 @@ export class MapHandlers implements IWidgetHandler, IContentDropHandler {
         return widgetOrder;
     }
 
-    private async  getWidgetOrderByConfig(location: string, caption: string): Promise<IWidgetOrder> {
+    private async getWidgetOrderByConfig(location: string, caption: string): Promise<IWidgetOrder> {
         const config: MapContract = {
             type: "map",
             location: location,

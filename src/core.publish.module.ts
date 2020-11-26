@@ -16,6 +16,7 @@ import {
     SearchIndexBuilder
 } from "@paperbits/common/publishing";
 import { MemoryCache } from "@paperbits/common/caching";
+import { MapPublishModule } from "./map/ko";
 import { DividerPublishModule } from "./divider/divider.publish.module";
 
 
@@ -40,5 +41,6 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindToCollection("htmlPagePublisherPlugins", OpenGraphHtmlPagePublisherPlugin);
         injector.bindToCollection("htmlPagePublisherPlugins", SocialShareDataHtmlPagePublisherPlugin);
         injector.bindInstance("changesCache", new MemoryCache());
+        injector.bindModule(new MapPublishModule());
     }
 }

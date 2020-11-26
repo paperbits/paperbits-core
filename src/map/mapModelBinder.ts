@@ -12,12 +12,13 @@ export class MapModelBinder implements IModelBinder<MapModel> {
         return model instanceof MapModel;
     }
 
-    public async contractToModel(mapNode: MapContract): Promise<MapModel> {
+    public async contractToModel(contract: MapContract): Promise<MapModel> {
         const model = new MapModel();
-        model.caption = mapNode.caption;
-        model.layout = mapNode.layout;
-        model.location = mapNode.location;
-        model.zoomControl = mapNode.zoomControl;
+        model.location = contract.location;
+        model.caption = contract.caption;
+        model.zoom = contract.zoom;
+        model.mapType = contract.mapType;
+        model.styles = contract.styles; // || { appearance: "components/map/default" };
 
         return model;
     }
@@ -26,9 +27,10 @@ export class MapModelBinder implements IModelBinder<MapModel> {
         const contract: MapContract = {
             type: "map",
             caption: model.caption,
-            layout: model.layout,
             location: model.location,
-            zoomControl: model.zoomControl
+            zoom: model.zoom,
+            mapType: model.mapType,
+            styles: model.styles
         };
 
         return contract;
