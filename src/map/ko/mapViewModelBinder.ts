@@ -30,6 +30,7 @@ export class MapViewModelBinder {
             displayName: "Map",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
+            flow: "inline",
             draggable: true,
             editor: "paperbits-map-editor",
             applyChanges: async () => {

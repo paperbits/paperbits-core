@@ -50,7 +50,7 @@ export class GridBindingHandler {
             placeholderElement.style.width = placeholderWidth;
             placeholderElement.classList.add("dragged-origin");
             sourceElement.parentNode.insertBefore(placeholderElement, sourceElement.nextSibling);
-            
+
             viewManager.beginDrag({
                 sourceElement: sourceElement,
                 sourceModel: sourceModel,

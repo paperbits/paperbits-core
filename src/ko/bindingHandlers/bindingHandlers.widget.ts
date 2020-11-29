@@ -1,17 +1,82 @@
 ﻿import * as ko from "knockout";
-import { IWidgetBinding } from "@paperbits/common/editing";
+import { IWidgetBinding, WidgetBinding } from "@paperbits/common/editing";
+import { ReactComponentBinder } from "@paperbits/common/react/reactComponentBinder";
+// import { KnockoutComponentBinder } from "@paperbits/common/ko/knockoutComponentBinder";
+import { ComponentBinder } from "@paperbits/common/editing/componentBinder";
+
+
+const makeArray = (arrayLikeObject) => {
+    const result = [];
+    for (let i = 0, j = arrayLikeObject.length; i < j; i++) {
+        result.push(arrayLikeObject[i]);
+    }
+    return result;
+};
+
+const cloneNodes = (nodesArray, shouldCleanNodes) => {
+    const newNodesArray = [];
+
+    for (let i = 0, j = nodesArray.length; i < j; i++) {
+        const clonedNode = nodesArray[i].cloneNode(true);
+        newNodesArray.push(shouldCleanNodes ? ko.cleanNode(clonedNode) : clonedNode);
+    }
+    return newNodesArray;
+};
+
+const cloneTemplateIntoElement = (componentDefinition: any, element: any): HTMLElement => {
+    const template = componentDefinition["template"];
+
+    if (!template) {
+        return element;
+    }
+
+    const clonedNodesArray = cloneNodes(template, false);
+    ko.virtualElements.setDomNodeChildren(element, clonedNodesArray);
+    return element;
+};
+
 
 export class WidgetBindingHandler {
     public constructor() {
         let componentLoadingOperationUniqueId = 0;
 
         ko.bindingHandlers["widget"] = {
-            init(element: any, valueAccessor: any, ignored1: any, ignored2: any, bindingContext: ko.BindingContext): any {
-                const widgetConfig = ko.utils.unwrapObservable(valueAccessor());
+            init(element: Element, valueAccessor: any, ignored1: any, ignored2: any, bindingContext: ko.BindingContext): any {
+                const bindingConfig = ko.utils.unwrapObservable(valueAccessor());
 
-                if (!widgetConfig) {
+                if (!bindingConfig) {
                     return;
                 }
+
+                /* New  binding logic */
+                if (bindingConfig instanceof WidgetBinding) {
+                    const binding = <WidgetBinding>bindingConfig;
+
+                    let componentBinder: ComponentBinder;
+
+                    switch (binding.framework) {
+                        case "react":
+                            componentBinder = new ReactComponentBinder();
+                            break;
+                    }
+
+                    componentBinder.init(<HTMLElement>element, binding);
+
+                    if (binding.draggable) {
+                        ko.applyBindingsToNode(element, { draggable: {} }, null);
+                    }
+
+                    return;
+                }
+
+                /* Legacy binding logic */
+                const registration = Reflect.getMetadata("paperbits-component", bindingConfig.constructor);
+
+                if (!registration) {
+                    throw new Error(`Could not find component registration for view model: ${bindingConfig}`);
+                }
+
+                const componentName = registration.name;
 
                 let currentViewModel;
                 let currentLoadingOperationId;
@@ -46,20 +111,11 @@ export class WidgetBindingHandler {
                     }
 
                     const loadingOperationId = currentLoadingOperationId = ++componentLoadingOperationUniqueId;
-
-                    const registration = Reflect.getMetadata("knockout-component", componentViewModel.constructor);
-
-                    if (!registration) {
-                        throw new Error(`Could not find component registration for view model: ${componentViewModel}`);
-                    }
-
                     const binding: IWidgetBinding<any> = componentViewModel["widgetBinding"];
 
                     if (binding && binding.onCreate) {
                         binding.onCreate();
                     }
-
-                    const componentName = registration.name;
 
                     ko.components.get(componentName, componentDefinition => {
                         // If this is not the current load operation for this element, ignore it.
@@ -84,13 +140,13 @@ export class WidgetBindingHandler {
                         currentViewModel = componentViewModel;
                         ko.applyBindingsToDescendants(childBindingContext, root);
 
-                        let nonVirtualElement = element;
+                        let nonVirtualElement: Node = element;
 
-                        if (nonVirtualElement.nodeName === "#comment") {
+                        if (nonVirtualElement.nodeName.startsWith("#")) {
                             do {
                                 nonVirtualElement = nonVirtualElement.nextSibling;
                             }
-                            while (nonVirtualElement !== null && nonVirtualElement.nodeName === "#comment");
+                            while (nonVirtualElement !== null && nonVirtualElement.nodeName.startsWith("#"));
                         }
 
                         if (nonVirtualElement) {
@@ -98,8 +154,17 @@ export class WidgetBindingHandler {
 
                             const binding: IWidgetBinding<any> = componentViewModel["widgetBinding"];
 
-                            if (binding?.draggable) {
-                                ko.applyBindingsToNode(nonVirtualElement, { draggable: {} }, null);
+                            if (binding) {
+                                ko.applyBindingsToNode(nonVirtualElement, {
+                                    css: {
+                                        "block": binding.flow !== "inline" && binding.flow !== "none",
+                                        "inline-block": binding.flow === "inline"
+                                    }
+                                }, null);
+
+                                if (binding.draggable) {
+                                    ko.applyBindingsToNode(nonVirtualElement, { draggable: {} }, null);
+                                }
                             }
                         }
                     });
@@ -110,35 +175,5 @@ export class WidgetBindingHandler {
         };
 
         ko.virtualElements.allowedBindings["widget"] = true;
-
-        const makeArray = (arrayLikeObject) => {
-            const result = [];
-            for (let i = 0, j = arrayLikeObject.length; i < j; i++) {
-                result.push(arrayLikeObject[i]);
-            }
-            return result;
-        };
-
-        const cloneNodes = (nodesArray, shouldCleanNodes) => {
-            const newNodesArray = [];
-
-            for (let i = 0, j = nodesArray.length; i < j; i++) {
-                const clonedNode = nodesArray[i].cloneNode(true);
-                newNodesArray.push(shouldCleanNodes ? ko.cleanNode(clonedNode) : clonedNode);
-            }
-            return newNodesArray;
-        };
-
-        function cloneTemplateIntoElement(componentDefinition: any, element: any): HTMLElement {
-            const template = componentDefinition["template"];
-
-            if (!template) {
-                return element;
-            }
-
-            const clonedNodesArray = cloneNodes(template, false);
-            ko.virtualElements.setDomNodeChildren(element, clonedNodesArray);
-            return element;
-        }
     }
 }

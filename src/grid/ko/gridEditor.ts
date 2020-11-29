@@ -497,16 +497,6 @@ export class GridEditor {
             const element = elements[i];
             const widgetBinding = GridHelper.getWidgetBinding(element);
 
-
-            // if (element.classList.contains("card")) {
-            //     debugger;
-            // }
-
-            // if (element.tagName === "SECTION") {
-            //     debugger;
-            // }
-
-
             if (!widgetBinding) {
                 continue;
             }

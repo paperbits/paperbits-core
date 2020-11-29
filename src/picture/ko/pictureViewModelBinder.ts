@@ -45,6 +45,7 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: true,
+            flow: "inline",
             editor: "picture-editor",
             applyChanges: async (changes) => {
                 await this.modelToViewModel(model, viewModel, bindingContext);

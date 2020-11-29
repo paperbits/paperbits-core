@@ -1,41 +1,39 @@
-<div class="inline-block">
-    <!-- ko if: hyperlink -->
-    <a data-bind="hyperlink: hyperlink">
-        <!-- ko if: sourceUrl -->
-        <img class="content"
-            data-bind="styled: styles, attr: { src: sourceUrl, alt: caption }, size: { width: width, height: height }" />
-        <!-- /ko-->
-
-        <!-- ko ifnot: sourceUrl -->
-        <div class="empty-picture" data-bind="styled: styles, size: { width: width, height: height }">
-            <svg viewBox="0 0 24 24" width="80px" height="80px">
-                <g fill="#020202">
-                    <path
-                        d="M23,2H1A1,1,0,0,0,0,3V21a1,1,0,0,0,1,1H23a1,1,0,0,0,1-1V3A1,1,0,0,0,23,2ZM22,4V14.3L17.759,9.35A1,1,0,0,0,17.005,9a.879.879,0,0,0-.757.342l-6.3,7.195L6.707,13.293A.988.988,0,0,0,5.955,13a1,1,0,0,0-.723.358L2,17.238V4Z"
-                        fill="#020202" />
-                    <circle data-color="color-2" cx="9" cy="8" r="2" />
-                </g>
-            </svg>
-        </div>
-        <!-- /ko-->
-    </a>
-    <!-- /ko -->
-    <!-- ko ifnot: hyperlink -->
+<!-- ko if: hyperlink -->
+<a data-bind="hyperlink: hyperlink">
     <!-- ko if: sourceUrl -->
     <img class="content"
         data-bind="styled: styles, attr: { src: sourceUrl, alt: caption }, size: { width: width, height: height }" />
     <!-- /ko-->
 
     <!-- ko ifnot: sourceUrl -->
-    <div class="empty-media" data-bind="styled: styles, size: { width: width, height: height }">
-        <svg viewBox="0 0 24 24" width="80" height="80">
-            <g fill="#ccc">
+    <div class="empty-picture" data-bind="styled: styles, size: { width: width, height: height }">
+        <svg viewBox="0 0 24 24" width="80px" height="80px">
+            <g fill="#020202">
                 <path
-                    d="M23,2H1A1,1,0,0,0,0,3V21a1,1,0,0,0,1,1H23a1,1,0,0,0,1-1V3A1,1,0,0,0,23,2ZM22,4V14.3L17.759,9.35A1,1,0,0,0,17.005,9a.879.879,0,0,0-.757.342l-6.3,7.195L6.707,13.293A.988.988,0,0,0,5.955,13a1,1,0,0,0-.723.358L2,17.238V4Z" />
-                <circle cx="9" cy="8" r="2" />
+                    d="M23,2H1A1,1,0,0,0,0,3V21a1,1,0,0,0,1,1H23a1,1,0,0,0,1-1V3A1,1,0,0,0,23,2ZM22,4V14.3L17.759,9.35A1,1,0,0,0,17.005,9a.879.879,0,0,0-.757.342l-6.3,7.195L6.707,13.293A.988.988,0,0,0,5.955,13a1,1,0,0,0-.723.358L2,17.238V4Z"
+                    fill="#020202" />
+                <circle data-color="color-2" cx="9" cy="8" r="2" />
             </g>
         </svg>
     </div>
     <!-- /ko-->
-    <!-- /ko -->
+</a>
+<!-- /ko -->
+<!-- ko ifnot: hyperlink -->
+<!-- ko if: sourceUrl -->
+<img class="content"
+    data-bind="styled: styles, attr: { src: sourceUrl, alt: caption }, size: { width: width, height: height }" />
+<!-- /ko-->
+
+<!-- ko ifnot: sourceUrl -->
+<div class="empty-media" data-bind="styled: styles, size: { width: width, height: height }">
+    <svg viewBox="0 0 24 24" width="80" height="80">
+        <g fill="#ccc">
+            <path
+                d="M23,2H1A1,1,0,0,0,0,3V21a1,1,0,0,0,1,1H23a1,1,0,0,0,1-1V3A1,1,0,0,0,23,2ZM22,4V14.3L17.759,9.35A1,1,0,0,0,17.005,9a.879.879,0,0,0-.757.342l-6.3,7.195L6.707,13.293A.988.988,0,0,0,5.955,13a1,1,0,0,0-.723.358L2,17.238V4Z" />
+            <circle cx="9" cy="8" r="2" />
+        </g>
+    </svg>
 </div>
+<!-- /ko-->
+<!-- /ko -->

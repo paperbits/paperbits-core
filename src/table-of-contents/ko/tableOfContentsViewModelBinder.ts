@@ -23,6 +23,7 @@ export class TableOfContentsViewModelBinder implements ViewModelBinder<TableOfCo
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: true,
+            flow: "block",
             applyChanges: async (updatedModel: TableOfContentsModel) => {
                 const contract: TableOfContentsContract = {
                     type: "table-of-contents",

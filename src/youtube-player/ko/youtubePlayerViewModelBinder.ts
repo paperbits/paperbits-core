@@ -38,6 +38,7 @@ export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlay
             displayName: "Youtube player",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
+            flow: "inline",
             draggable: true,
             editor: "youtube-player-editor",
             applyChanges: async () => {

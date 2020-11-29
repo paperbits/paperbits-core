@@ -52,6 +52,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
             readonly: isReadonly,
             name: "content",
             model: model,
+            flow: "block",
             draggable: true,
             handler: ContentHandlers,
             applyChanges: async () => await this.modelToViewModel(model, viewModel, bindingContext),

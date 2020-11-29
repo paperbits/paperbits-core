@@ -22,6 +22,7 @@ export class TestimonialsViewModelBinder implements ViewModelBinder<Testimonials
             displayName: "Testimonials",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
+            flow: "block",
             draggable: true,
             editor: "testimonials-editor",
             applyChanges: async () => {
