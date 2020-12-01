@@ -71,6 +71,11 @@ export class BlogHost {
         };
 
         const layoutContract = await this.layoutService.getLayoutByPermalink(route.path);
+
+        if (!layoutContract) {
+            throw new Error(`No matching layouts found for page with permalink "${page.permalink}".`);
+        }
+
         const layoutContentContract = await this.layoutService.getLayoutContent(layoutContract.key);
         const contentViewModel = await this.contentViewModelBinder.getContentViewModelByKey(layoutContentContract, bindingContext);
 

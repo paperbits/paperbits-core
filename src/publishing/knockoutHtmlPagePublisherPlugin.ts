@@ -33,6 +33,11 @@ export class KnockoutHtmlPagePublisherPlugin implements HtmlPagePublisherPlugin 
 
     public async apply(doc: Document, page: HtmlPage): Promise<void> {
         const layoutContract = await this.layoutService.getLayoutByPermalink(page.permalink, page.bindingContext?.locale);
+
+        if (!layoutContract) {
+            throw new Error(`No matching layouts found for page with permalink "${page.permalink}".`);
+        }
+
         const layoutContentContract = await this.layoutService.getLayoutContent(layoutContract.key, page.bindingContext?.locale);
         const layoutContentViewModel = await this.contentViewModelBinder.getContentViewModelByKey(layoutContentContract, page.bindingContext);
 
