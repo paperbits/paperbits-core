@@ -2,6 +2,7 @@ import { DragSession } from "@paperbits/common/ui/draggables";
 import { ViewManager, IContextCommandSet } from "@paperbits/common/ui";
 import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { WidgetModel } from "@paperbits/common/widgets";
+import { GridCellModel } from "../grid-cell";
 
 
 export class ContentHandlers implements IWidgetHandler {

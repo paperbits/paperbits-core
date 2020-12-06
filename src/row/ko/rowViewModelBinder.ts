@@ -47,7 +47,6 @@ export class RowViewModelBinder implements ViewModelBinder<RowModel, RowViewMode
             displayName: "Row",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
-            flow: "none",
             draggable: false,
             handler: RowHandlers,
             applyChanges: async () => {

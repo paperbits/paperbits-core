@@ -157,8 +157,9 @@ export class WidgetBindingHandler {
                             if (binding) {
                                 ko.applyBindingsToNode(nonVirtualElement, {
                                     css: {
-                                        "block": binding.flow !== "inline" && binding.flow !== "none",
-                                        "inline-block": binding.flow === "inline"
+                                        "block": binding.flow === "block",
+                                        "inline-block": binding.flow === "inline",
+                                        "fit": binding.flow === "none"
                                     }
                                 }, null);
 

@@ -49,7 +49,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
 
         const binding: IWidgetBinding<ContentModel> = {
             displayName: "Content",
-            readonly: isReadonly,
+            readonly: false,
             name: "content",
             model: model,
             flow: "block",

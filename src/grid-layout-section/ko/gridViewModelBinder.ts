@@ -47,7 +47,6 @@ export class GridViewModelBinder implements ViewModelBinder<GridModel, GridViewM
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: false,
-            flow: "none",
             handler: GridHandlers,
             applyChanges: async (changes) => {
                 await this.modelToViewModel(model, viewModel, bindingContext);

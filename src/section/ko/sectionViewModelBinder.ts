@@ -47,7 +47,7 @@ export class SectionViewModelBinder implements ViewModelBinder<SectionModel, Sec
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: true,
-            flow: "none",
+            flow: "flex",
             editor: "layout-section-editor",
             handler: SectionHandlers,
             applyChanges: async (changes) => {
