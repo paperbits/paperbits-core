@@ -27,7 +27,8 @@ export class MapHandlers implements IWidgetHandler, IContentDropHandler {
         const config: MapContract = {
             type: "map",
             location: location,
-            caption: caption
+            caption: caption,
+            mapType: "terrain"
         };
         return await this.prepareWidgetOrder(config);
     }
