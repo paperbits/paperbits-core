@@ -159,7 +159,7 @@ export class WidgetBindingHandler {
                                     css: {
                                         "block": binding.flow === "block",
                                         "inline-block": binding.flow === "inline",
-                                        "fit": binding.flow === "none"
+                                        "placeholder": binding.flow === "none"
                                     }
                                 }, null);
 
