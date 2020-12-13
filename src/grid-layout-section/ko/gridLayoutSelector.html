@@ -30,6 +30,11 @@
     </div>
     <!-- ko if: !selected() -->
 
+    <!--ko if: $component.working()-->
+    <spinner></spinner>
+    <!--/ko-->
+
+    <!--ko ifnot: $component.working()-->
     <div role="tabpanel" class="flex flex-column flex-grow"
         data-bind="scrollable: true, focus: { childSelector: '.list-item' }">
         <div role="list" data-bind="foreach: { data: $component.snippets, as: 'snippet' }">
@@ -42,6 +47,7 @@
             </a>
         </div>
     </div>
+    <!-- /ko -->
 
     <!-- /ko -->
 

@@ -6,12 +6,12 @@ import template from "./gridLayoutSelector.html";
 import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
 import { Component, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { GridModelBinder } from "../../grid-layout-section";
-import { presets } from "./gridPresets";
 import { SectionModel } from "../../section";
 import { GridViewModelBinder } from ".";
 import { BlockService } from "@paperbits/common/blocks";
 import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelector";
 import { UpdateBlock } from "../../workshops/block/ko/blockSelector";
+import { HttpClient } from "@paperbits/common/http";
 
 @Component({
     selector: "grid-layout-selector",
@@ -20,7 +20,8 @@ import { UpdateBlock } from "../../workshops/block/ko/blockSelector";
 export class GridLayoutSelector implements IResourceSelector<any> {
     public readonly snippets: ko.ObservableArray<GridModel>;
     public readonly selected: ko.Observable<string>;
-    public isBlocksEnabled: ko.Observable<boolean>;
+    public readonly isBlocksEnabled: ko.Observable<boolean>;
+    public readonly working: ko.Observable<boolean>;
 
     @Event()
     public onSelect: (rowModel: any) => void;
@@ -29,17 +30,23 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         private readonly gridModelBinder: GridModelBinder,
         private readonly gridViewModelBinder: GridViewModelBinder,
         private readonly modelBinderSelector: ModelBinderSelector,
-        private readonly blockService: BlockService
+        private readonly blockService: BlockService,
+        private readonly httpClient: HttpClient
     ) {
         this.selectLayout = this.selectLayout.bind(this);
         this.snippets = ko.observableArray();
         this.selected = ko.observable();
+        this.working = ko.observable(true);
         this.isBlocksEnabled = ko.observable();
     }
 
     @OnMounted()
     public async initaialize(): Promise<void> {
+        this.working(true);
         const snippets = [];
+
+        const response = await this.httpClient.send({ method: "GET", url: Constants.gridSnippetsLibraryUrl });
+        const presets = response.toObject();
 
         for (const preset of Utils.clone<any>(presets)) {
             const model = await this.gridModelBinder.contractToModel(preset);
@@ -51,6 +58,8 @@ export class GridLayoutSelector implements IResourceSelector<any> {
 
         const blocksUrl = Constants.blockSnippetsLibraryUrl;
         this.isBlocksEnabled(blocksUrl ? true : false);
+
+        this.working(false);
     }
 
     public selectLayout(viewModel: any): void {
