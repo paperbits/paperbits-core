@@ -18,6 +18,7 @@ export class MapRuntime {
         this.location = ko.observable();
         this.zoom = ko.observable();
         this.mapType = ko.observable();
+        this.apiKey = ko.observable();
     }
 
     @Param()
@@ -34,4 +35,7 @@ export class MapRuntime {
 
     @Param()
     public mapType: ko.Observable<string>;
+
+    @Param()
+    public apiKey: ko.Observable<string>;
 }

@@ -1,25 +1,34 @@
+import { Bag } from "@paperbits/common";
+import { EventManager } from "@paperbits/common/events";
+import { StyleCompiler } from "@paperbits/common/styles";
+import { ISettingsProvider } from "@paperbits/common/configuration";
 import { MapViewModel } from "./mapViewModel";
 import { MapModel } from "../mapModel";
-import { EventManager } from "@paperbits/common/events";
-import { Bag } from "@paperbits/common";
-import { StyleCompiler } from "@paperbits/common/styles";
+import { GoogleMapsSettings } from "./googleMapsSettings";
+
+const defaultApiKey = "AIzaSyC7eT_xRPt3EjX3GuzSvlaZzJmlyFxvFFs";
 
 export class MapViewModelBinder {
     constructor(
         private readonly eventManager: EventManager,
-        private readonly styleCompiler: StyleCompiler
+        private readonly styleCompiler: StyleCompiler,
+        private readonly settingsProvider: ISettingsProvider
     ) { }
 
     public async modelToViewModel(model: MapModel, viewModel?: MapViewModel, bindingContext?: Bag<any>): Promise<MapViewModel> {
         if (!viewModel) {
             viewModel = new MapViewModel();
         }
+        
+      const settings = await this.settingsProvider.getSetting<GoogleMapsSettings>("integration/googleMaps");
+      const apiKey = settings?.apiKey || defaultApiKey;
 
         viewModel.runtimeConfig(JSON.stringify({
             caption: model.caption,
             location: model.location,
             zoom: model.zoom,
-            mapType: model.mapType
+            mapType: model.mapType,
+            apiKey: apiKey
         }));
 
         if (model.styles) {
