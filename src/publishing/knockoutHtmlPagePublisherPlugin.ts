@@ -42,6 +42,6 @@ export class KnockoutHtmlPagePublisherPlugin implements HtmlPagePublisherPlugin 
         const layoutContentViewModel = await this.contentViewModelBinder.getContentViewModelByKey(layoutContentContract, page.bindingContext);
 
         await this.render(doc, layoutContentViewModel);
-        setTimeout(() => ko.cleanNode(doc.body), 400);
+        // setTimeout(() => ko.cleanNode(doc.body), 400);
     }
 }

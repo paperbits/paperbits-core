@@ -23,6 +23,7 @@ export class ContentHandlers implements IWidgetHandler {
                 component: {
                     name: "grid-layout-selector",
                     params: {
+                        heading: "Add section",
                         onSelect: (model: WidgetModel) => {
                             context.model.widgets.push(model);
                             context.binding.applyChanges();

@@ -1,0 +1,34 @@
+<carousel-runtime class="carousel" data-bind="styled: styles, attr: { 'data-active-slide': activeItemIndex }">
+    <div class="carousel-items">
+        <!-- ko foreach: { data: carouselItems, as: 'carouselItem' } -->
+        <div class="carousel-item" data-bind="styled: carouselItem.styles">
+            <!-- ko foreach: { data: carouselItem.widgets, as: 'widget' } -->
+            <!-- ko widget: widget -->
+            <!-- /ko -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+    </div>
+
+    <button class="carousel-control-prev">
+        <span class="carousel-control-prev-icon">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                    d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            </svg>
+        </span>
+    </button>
+    <button class="carousel-control-next">
+        <span class="carousel-control-next-icon">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z">
+                </path>
+            </svg>
+        </span>
+    </button>
+
+    <ol class="carousel-indicators" data-bind="foreach: { data: carouselItems, as: 'carouselItem' }">
+        <li class="carousel-indicator"></li>
+    </ol>
+</carousel-runtime>

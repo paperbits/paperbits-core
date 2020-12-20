@@ -4,7 +4,7 @@ import * as Constants from "@paperbits/common/constants";
 import { GridModel } from "../../grid-layout-section/gridModel";
 import template from "./gridLayoutSelector.html";
 import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
-import { Component, Event, OnMounted } from "@paperbits/common/ko/decorators";
+import { Component, Event, OnMounted, Param } from "@paperbits/common/ko/decorators";
 import { GridModelBinder } from "../../grid-layout-section";
 import { SectionModel } from "../../section";
 import { GridViewModelBinder } from ".";
@@ -23,6 +23,9 @@ export class GridLayoutSelector implements IResourceSelector<any> {
     public readonly isBlocksEnabled: ko.Observable<boolean>;
     public readonly working: ko.Observable<boolean>;
 
+    @Param()
+    public heading: ko.Observable<string>;
+
     @Event()
     public onSelect: (rowModel: any) => void;
 
@@ -33,6 +36,7 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         private readonly blockService: BlockService,
         private readonly httpClient: HttpClient
     ) {
+        this.heading = ko.observable();
         this.selectLayout = this.selectLayout.bind(this);
         this.snippets = ko.observableArray();
         this.selected = ko.observable();

@@ -34,7 +34,7 @@ export class GridCellHandlers implements IWidgetHandler {
                 position: "top right",
                 color: "#9C27B0",
                 callback: () => {
-                    context.switchToParent(SectionModel);
+                    context.switchToParent();
                 }
             }]
         };

@@ -4,7 +4,6 @@ import { IWidgetBinding } from "@paperbits/common/editing";
 import { GridModel } from "../gridModel";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
-import { GridHandlers } from "../gridHandlers";
 import { EventManager } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
@@ -44,10 +43,9 @@ export class GridViewModelBinder implements ViewModelBinder<GridModel, GridViewM
         const binding: IWidgetBinding<GridModel> = {
             name: "grid",
             displayName: "Grid",
-            readonly: bindingContext ? bindingContext.readonly : false,
+            readonly: true, //bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: false,
-            handler: GridHandlers,
             applyChanges: async (changes) => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");

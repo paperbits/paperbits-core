@@ -22,6 +22,7 @@ export class SectionHandlers {
                 component: {
                     name: "grid-layout-selector",
                     params: {
+                        heading: "Add section",
                         onSelect: (section: SectionModel) => {
                             const sectionHalf = context.half;
 
@@ -88,6 +89,7 @@ export class SectionHandlers {
                 component: {
                     name: "grid-layout-selector",
                     params: {
+                        heading: "Add row",
                         onSelect: (newRowModel: RowModel) => {
                             const sectionModel = context.model;
                             const sectionBinding = context.binding;

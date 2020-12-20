@@ -67,7 +67,7 @@ export class CardHandlers implements IWidgetHandler {
                 position: "top right",
                 color: "#4c5866",
                 callback: () => {
-                    context.switchToParent(GridCellModel);
+                    context.switchToParent();
                 }
             }]
         };

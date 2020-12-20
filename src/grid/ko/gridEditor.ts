@@ -77,9 +77,14 @@ export class GridEditor {
             binding: binding,
             half: half,
             providers: providers,
-            switchToParent: (modelType: any) => {
+            switchToParent: () => {
                 const stack = GridHelper.getWidgetStack(element);
-                const stackItem = stack.find(x => x.binding.model instanceof modelType);
+
+                if (stack.length <= 1) {
+                    return;
+                }
+
+                const stackItem = stack[1]; // closest parent
 
                 if (!stackItem) {
                     return;
@@ -477,7 +482,7 @@ export class GridEditor {
                 position: "top right",
                 color: "#607d8b",
                 callback: () => {
-                    context.switchToParent(context.parentBinding.model.constructor);
+                    context.switchToParent();
                 }
             }]
         };
