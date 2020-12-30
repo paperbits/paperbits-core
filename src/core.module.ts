@@ -40,7 +40,6 @@ import { TestimonialsModule } from "./testimonials/ko/testimonials.module";
 import { TextblockModule } from "./textblock/ko/textblock.module";
 import { VideoPlayerModule } from "./video-player/videoPlayer.publish.module";
 import { YoutubePlayerPublishModule } from "./youtube-player/youtubePlayer.publish.module";
-import { CarouselDesignModule } from "./carousel/carousel.design.module";
 
 
 /**

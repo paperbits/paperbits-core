@@ -1,5 +1,5 @@
 import { PlaceholderViewModelBinder } from "../placeholder/ko/placeholderViewModelBinder";
-import { ViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { PlaceholderModel } from "@paperbits/common/widgets/placeholder";
 
 export class ViewModelBinderSelector {
