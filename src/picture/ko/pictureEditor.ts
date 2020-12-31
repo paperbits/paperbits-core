@@ -9,7 +9,6 @@ import { StyleService } from "@paperbits/styles/styleService";
 import { LocalStyles } from "@paperbits/common/styles";
 import { SizeStylePluginConfig } from "@paperbits/styles/plugins/size/sizeStylePluginConfig";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
-import { resolve } from "path";
 
 
 @Component({

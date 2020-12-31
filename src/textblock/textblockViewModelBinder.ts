@@ -1,26 +1,23 @@
-import { TextblockModel } from "./textblockModel";
-import { TextblockViewModel } from "./ko/textblockViewModel";
-import { ViewModelBinder } from "@paperbits/common/widgets";
-import { EventManager } from "@paperbits/common/events";
 import { Bag } from "@paperbits/common";
+import { IWidgetBinding } from "@paperbits/common/editing";
+import { EventManager } from "@paperbits/common/events";
+import { ViewModelBinder } from "@paperbits/common/widgets";
+import { TextblockViewModel } from "./ko/textblockViewModel";
+import { TextblockModel } from "./textblockModel";
+
 
 export class TextblockViewModelBinder implements ViewModelBinder<TextblockModel, TextblockViewModel> {
-    constructor(
-        private readonly htmlEditorFactory,
-        private readonly eventManager: EventManager
-    ) { }
+    constructor(private readonly eventManager: EventManager) { }
 
     public async modelToViewModel(model: TextblockModel, viewModel?: TextblockViewModel, bindingContext?: Bag<any>): Promise<TextblockViewModel> {
         if (!viewModel) {
-            viewModel = new TextblockViewModel(this.htmlEditorFactory.createHtmlEditor());
+            viewModel = new TextblockViewModel();
         }
 
-        model.htmlEditor = viewModel.htmlEditor;
-
         viewModel.state(model.state);
-        // textblockViewModel.readonly(!!model.readonly);
 
-        const widgetBinding /*: IWidgetBinding */ = {
+        const widgetBinding: IWidgetBinding<TextblockModel> = {
+            name: "text-block",
             displayName: "Text",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,

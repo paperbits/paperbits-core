@@ -31,11 +31,7 @@ export class TextblockModelBinder implements IModelBinder<TextblockModel> {
     }
 
     public modelToContract(model: TextblockModel): Contract {
-        let state;
-
-        if (model.htmlEditor) {
-            model.state = <any>model.htmlEditor.getState();
-        }
+        let state: BlockModel[];
 
         const isArray = Array.isArray(model.state);
 
