@@ -60,7 +60,13 @@ export class WidgetBindingHandler {
                             break;
                     }
 
-                    componentBinder.init(<HTMLElement>element, binding);
+                    componentBinder.init(element, binding);
+
+                    if (componentBinder.dispose) {
+                        ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
+                            componentBinder.dispose(element, binding);
+                        });
+                    }
 
                     if (binding.draggable) {
                         ko.applyBindingsToNode(element, { draggable: {} }, null);
