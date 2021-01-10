@@ -17,7 +17,10 @@ export class KnockoutHtmlPagePublisherPlugin implements HtmlPagePublisherPlugin 
         return new Promise((resolve, reject) => {
             try {
                 const onDescendantsComplete = () => {
-                    resolve();
+                    setTimeout(() => {
+                        ko.cleanNode(doc.body);
+                        resolve();
+                    }, 400);
                 };
 
                 ko.applyBindingsToNode(doc.body, {
@@ -42,6 +45,5 @@ export class KnockoutHtmlPagePublisherPlugin implements HtmlPagePublisherPlugin 
         const layoutContentViewModel = await this.contentViewModelBinder.getContentViewModelByKey(layoutContentContract, page.bindingContext);
 
         await this.render(doc, layoutContentViewModel);
-        // setTimeout(() => ko.cleanNode(doc.body), 400);
     }
 }
