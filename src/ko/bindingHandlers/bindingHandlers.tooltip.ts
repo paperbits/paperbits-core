@@ -1,4 +1,5 @@
 import * as ko from "knockout";
+import { has } from "lodash";
 import { BalloonHandle, BalloonActivationOptions } from "./bindingHandlers.balloon";
 
 
@@ -32,7 +33,9 @@ ko.bindingHandlers["tooltip"] = {
             return;
         }
 
-        const isOpen = ko.observable();
+        let hasText: boolean = false;
+        const isDisabled: () => boolean = () => !hasText;
+
         const textParams: any = {};
         let closeTimeout = 0;
 
@@ -40,13 +43,19 @@ ko.bindingHandlers["tooltip"] = {
             textParams.observableText = tooltipMessage;
             closeTimeout = 5000; // close after 5 sec
 
-            tooltipMessage.subscribe(() => {
-                if (balloonHandle) {
+            tooltipMessage.subscribe((message) => {
+                hasText = !!message;
+
+                console.log(message);
+                console.log(hasText);
+
+                if (hasText && balloonHandle) {
                     balloonHandle.updatePosition();
                 }
             });
         }
         else {
+            hasText = !!tooltipMessage;
             textParams.text = tooltipMessage;
         }
 
@@ -58,9 +67,9 @@ ko.bindingHandlers["tooltip"] = {
                 },
                 position: tooltipPosition,
                 delay: tooltipDelayMs || defaultTooltipDelayMs,
-                isOpen: isOpen,
                 activateOn: BalloonActivationOptions.hoverOrFocus,
                 closeTimeout: closeTimeout,
+                // isDisabled: isDisabled,
                 onCreated: (handle) => {
                     balloonHandle = handle;
                 }

@@ -19,6 +19,7 @@ import { MemoryCache } from "@paperbits/common/caching";
 import { MapPublishModule } from "./map/ko";
 import { DividerPublishModule } from "./divider/divider.publish.module";
 import { CarouselPublishModule } from "./carousel/carousel.publish.module";
+import { TabPanelPublishModule } from "./tabs/tabPanel.publish.module";
 
 
 export class CorePublishModule implements IInjectorModule {
@@ -44,5 +45,6 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindInstance("changesCache", new MemoryCache());
         injector.bindModule(new MapPublishModule());
         injector.bindModule(new CarouselPublishModule());
+        injector.bindModule(new TabPanelPublishModule());
     }
 }

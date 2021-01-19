@@ -13,6 +13,7 @@ import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelect
 import { UpdateBlock } from "../../workshops/block/ko/blockSelector";
 import { HttpClient } from "@paperbits/common/http";
 
+
 @Component({
     selector: "grid-layout-selector",
     template: template
@@ -69,58 +70,6 @@ export class GridLayoutSelector implements IResourceSelector<any> {
     public selectLayout(viewModel: any): void {
         const sectionModel = new SectionModel();
         sectionModel.widgets = [viewModel["widgetBinding"].model]; // TODO: Refactor!
-
-        const gridModel = sectionModel.widgets[0];
-        const styles = gridModel.styles.instance;
-
-        styles["size"] = {
-            sm: {
-                maxWidth: 540
-            },
-            md: {
-                maxWidth: 720
-            },
-            lg: {
-                maxWidth: 960
-            },
-            xl: {
-                maxWidth: 1140
-            }
-        };
-
-        styles["margin"] = {
-            xs: {
-                top: 10,
-                left: "auto",
-                right: "auto",
-                bottom: 10
-            },
-            md: {
-                top: 15,
-                bottom: 15
-            },
-            xl: {
-                top: 25,
-                bottom: 25
-            }
-        };
-
-        gridModel.widgets.forEach(x => {
-            x.styles.instance["padding"] = {
-                xs: {
-                    top: 5,
-                    left: 5,
-                    right: 5,
-                    bottom: 5
-                },
-                md: {
-                    top: 15,
-                    left: 15,
-                    right: 15,
-                    bottom: 15
-                }
-            };
-        });
 
         if (this.onSelect) {
             this.onSelect(sectionModel);

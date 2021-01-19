@@ -1,0 +1,20 @@
+<fieldset class="form flex-item flex-item-grow" data-bind="scrollable: true">
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section"
+                data-bind="collapse: '#mainCollapse'"></a>
+            <b>Main</b>
+        </label>
+        <div id="mainCollapse" class="collapse form-group-collapse">
+            <div class="form-group">
+                <button class="btn btn-info" type="button"
+                    data-bind="tooltip: 'Tab label'"></button>
+                <label for="styleName">Tab label</label>
+                <input id="styleName" type="text" class="form-control" spellcheck="false"
+                    data-bind="textInput: tabLabel, focus: true">
+            </div>
+        </div>
+    </div>
+    <background params="{ background: $component.background, onUpdate: onBackgroundUpdate }"></background>
+    <size-editor params="{ features: 'minMaxWidth', sizeConfig: sizeConfig, onUpdate: onSizeUpdate }"></size-editor>
+</fieldset>

@@ -1,0 +1,17 @@
+<tab-panel-runtime class="tab-panel" data-bind="styled: styles">
+    <ul class="nav tab-navs">
+        <!-- ko foreach: { data: tabLinks, as: 'tabLink' } -->
+        <li class="nav-item">
+            <a href="#" class="nav-link" data-bind="attr: { 'data-tab': $index }, text: tabLink" data-tab="$index"></a>
+        </li>
+        <!-- /ko -->
+    </ul>
+    <!-- ko foreach: { data: tabPanelItems, as: 'tabPanelItem' } -->
+    <div class="tab-content" data-bind="styled: tabPanelItem.styles">
+        <!-- ko foreach: { data: tabPanelItem.widgets, as: 'widget' } -->
+        <!-- ko widget: widget -->
+        <!-- /ko -->
+        <!-- /ko -->
+    </div>
+    <!-- /ko -->
+</tab-panel-runtime>

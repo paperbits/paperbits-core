@@ -14,11 +14,11 @@ export class TextblockHandlers implements IWidgetHandler {
                 return new TextblockModel([
                     {
                         type: "heading1",
-                        content: [{ type: "text", text: "Heading" }]
+                        nodes: [{ type: "text", text: "Heading" }]
                     },
                     {
                         type: "paragraph",
-                        content: [{ type: "text", text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." }]
+                        nodes: [{ type: "text", text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." }]
                     }
                 ]);
             }

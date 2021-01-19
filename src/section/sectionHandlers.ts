@@ -4,6 +4,7 @@ import { SectionModel } from "./sectionModel";
 import { RowModel } from "../row/rowModel";
 import { EventManager } from "@paperbits/common/events";
 import { BlockType } from "@paperbits/common/blocks";
+import { StyleHelper } from "@paperbits/styles";
 
 
 export class SectionHandlers {
@@ -24,6 +25,11 @@ export class SectionHandlers {
                     params: {
                         heading: "Add section",
                         onSelect: (section: SectionModel) => {
+                            const gridModel = section.widgets[0];
+                            StyleHelper.setMargins(gridModel);
+                            StyleHelper.setMaxWidth(gridModel);
+                            StyleHelper.setPaddings(gridModel);
+
                             const sectionHalf = context.half;
 
                             let index = context.parentModel.widgets.indexOf(context.model);
@@ -91,6 +97,7 @@ export class SectionHandlers {
                     params: {
                         heading: "Add row",
                         onSelect: (newRowModel: RowModel) => {
+                            debugger;
                             const sectionModel = context.model;
                             const sectionBinding = context.binding;
 

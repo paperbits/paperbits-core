@@ -21,6 +21,7 @@ export interface BalloonOptions {
     closeTimeout?: number;
     delay?: number;
     activateOn: BalloonActivationOptions;
+    isDisabled?: () => boolean;
 }
 
 export interface BalloonHandle {
@@ -298,6 +299,10 @@ export class BalloonBindingHandler {
                 };
 
                 const open = (returnFocusTo?: HTMLElement): void => {
+                    if (options.isDisabled && options.isDisabled()) {
+                        return;
+                    }
+
                     resetCloseTimeout();
 
                     if (balloonIsOpen) {
@@ -338,7 +343,7 @@ export class BalloonBindingHandler {
                                 const element =
                                     closest(targetElement, x => x === balloonElement) ||
                                     closest(targetElement, x => x === toggleElement);
-    
+
                                 return !!element;
                             }
                         };
