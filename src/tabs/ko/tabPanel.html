@@ -2,7 +2,7 @@
     <ul class="nav tab-navs">
         <!-- ko foreach: { data: tabLinks, as: 'tabLink' } -->
         <li class="nav-item">
-            <a href="#" class="nav-link" data-bind="attr: { 'data-tab': $index }, text: tabLink" data-tab="$index"></a>
+            <span tabindex="0" class="nav-link" data-bind="attr: { 'data-tab': $index }, text: tabLink" data-tab="$index"></span>
         </li>
         <!-- /ko -->
     </ul>
