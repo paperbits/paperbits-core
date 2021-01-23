@@ -97,7 +97,6 @@ export class SectionHandlers {
                     params: {
                         heading: "Add row",
                         onSelect: (newRowModel: RowModel) => {
-                            debugger;
                             const sectionModel = context.model;
                             const sectionBinding = context.binding;
 

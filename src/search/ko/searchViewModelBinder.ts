@@ -13,14 +13,14 @@ export class SearchViewModelBinder implements ViewModelBinder<SearchModel, Searc
         if (!viewModel) {
             viewModel = new SearchViewModel();
 
-            const binding: IWidgetBinding<SearchModel> = {
+            const binding: IWidgetBinding<SearchModel, SearchViewModel> = {
                 name: "search",
                 displayName: "Search website",
                 readonly: bindingContext ? bindingContext.readonly : false,
                 model: model,
                 flow: "block",
                 draggable: true,
-                applyChanges: async (changes: SearchModel) => {
+                applyChanges: async () => {
                     await this.modelToViewModel(model, viewModel, bindingContext);
                     this.eventManager.dispatchEvent("onContentUpdate");
                 }

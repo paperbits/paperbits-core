@@ -10,7 +10,7 @@ export class DropBucketItem {
     public widgetOrder: ko.Observable<IWidgetOrder>;
     public uploadables: ko.ObservableArray<File | string>;
     public uploadablesPending: Promise<any>;
-    public widgetFactoryResult: IWidgetFactoryResult<any>;
+    public widgetFactoryResult: IWidgetFactoryResult<any, any>;
     public background: ko.Computed<BackgroundModel>;
 
     constructor() {

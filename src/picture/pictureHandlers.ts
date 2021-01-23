@@ -1,6 +1,6 @@
 ﻿import * as Utils from "@paperbits/common/utils";
 import { MediaContract } from "@paperbits/common/media";
-import { IWidgetOrder, IContentDropHandler, IWidgetHandler, IDataTransfer, IContentDescriptor, IWidgetFactoryResult } from "@paperbits/common/editing";
+import { IWidgetOrder, IContentDropHandler, IWidgetHandler, IDataTransfer, IContentDescriptor } from "@paperbits/common/editing";
 import { PictureModel } from "./pictureModel";
 
 const widgetDisplayName = "Picture";

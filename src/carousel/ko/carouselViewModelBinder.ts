@@ -43,16 +43,16 @@ export class CarouselViewModelBinder implements ViewModelBinder<CarouselModel, C
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }
 
-        const binding: IWidgetBinding<CarouselItemModel> = {
+        const binding: IWidgetBinding<CarouselItemModel, CarouselViewModel> = {
             name: "carousel-item",
             displayName: `Slide ${index + 1}`,
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
-            draggable: true,
+            draggable: false,
             flow: "flex",
             editor: "carousel-item-editor",
             handler: CarouselItemHandlers,
-            applyChanges: async (changes) => {
+            applyChanges: async () => {
                 await this.itemModelToViewModel(model, index, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
@@ -87,7 +87,7 @@ export class CarouselViewModelBinder implements ViewModelBinder<CarouselModel, C
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }
 
-        const binding: IWidgetBinding<CarouselModel> = {
+        const binding: IWidgetBinding<CarouselModel, CarouselViewModel> = {
             name: "carousel",
             displayName: "Carousel",
             readonly: bindingContext ? bindingContext.readonly : false,
@@ -96,7 +96,7 @@ export class CarouselViewModelBinder implements ViewModelBinder<CarouselModel, C
             flow: "block",
             editor: "carousel-editor",
             handler: CarouselHandlers,
-            applyChanges: async (changes) => {
+            applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }

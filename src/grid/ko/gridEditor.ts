@@ -33,7 +33,7 @@ export class GridEditor {
         this.actives = {};
     }
 
-    private isModelBeingEdited(binding: IWidgetBinding<any>): boolean {
+    private isModelBeingEdited(binding: IWidgetBinding<any, any>): boolean {
         const view = this.viewManager.getOpenView();
 
         if (!view) {
@@ -129,7 +129,7 @@ export class GridEditor {
         return contextualEditor;
     }
 
-    private isModelSelected(binding: IWidgetBinding<any>): boolean {
+    private isModelSelected(binding: IWidgetBinding<any, any>): boolean {
         const selectedElement = this.viewManager.getSelectedElement();
 
         if (!selectedElement) {

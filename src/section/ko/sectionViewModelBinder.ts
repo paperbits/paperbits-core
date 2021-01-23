@@ -41,7 +41,7 @@ export class SectionViewModelBinder implements ViewModelBinder<SectionModel, Sec
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }
 
-        const binding: IWidgetBinding<SectionModel> = {
+        const binding: IWidgetBinding<SectionModel, SectionViewModel> = {
             name: "section",
             displayName: "Section",
             readonly: bindingContext ? bindingContext.readonly : false,
@@ -50,7 +50,7 @@ export class SectionViewModelBinder implements ViewModelBinder<SectionModel, Sec
             flow: "flex",
             editor: "layout-section-editor",
             handler: SectionHandlers,
-            applyChanges: async (changes) => {
+            applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }

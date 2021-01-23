@@ -42,7 +42,7 @@ export class RowViewModelBinder implements ViewModelBinder<RowModel, RowViewMode
         viewModel.justifyMd(model.justifyMd);
         viewModel.justifyLg(model.justifyLg);
 
-        const binding: IWidgetBinding<RowModel> = {
+        const binding: IWidgetBinding<RowModel, RowViewModel> = {
             name: "row",
             displayName: "Row",
             readonly: bindingContext ? bindingContext.readonly : false,

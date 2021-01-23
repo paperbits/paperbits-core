@@ -65,7 +65,7 @@ export class LayoutHost {
         const bindingContext = {
             styleManager: styleManager,
             navigationPath: route.path,
-            routeKind: "layout",
+            contentType: "layout",
             template: {
                 layout: {
                     value: layoutContentContract,
@@ -76,7 +76,7 @@ export class LayoutHost {
             }
         };
 
-        const contentViewModel = await this.contentViewModelBinder.getContentViewModelByKey(layoutContentContract, bindingContext);
+        const contentViewModel = await this.contentViewModelBinder.contractToViewModel(layoutContentContract, bindingContext);
 
         contentViewModel["widgetBinding"].provides = ["html", "js", "interaction"];
 

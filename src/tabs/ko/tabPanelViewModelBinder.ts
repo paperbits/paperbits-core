@@ -46,7 +46,7 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }
 
-        const binding: IWidgetBinding<TabPanelItemModel> = {
+        const binding: IWidgetBinding<TabPanelItemModel, TabPanelItemViewModel> = {
             name: "tabPanel-item",
             displayName: defaultLabel,
             readonly: bindingContext ? bindingContext.readonly : false,
@@ -55,7 +55,7 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
             flow: "flex",
             editor: "tabPanel-item-editor",
             handler: TabPanelItemHandlers,
-            applyChanges: async (changes) => {
+            applyChanges: async () => {
                 await this.itemModelToViewModel(model, index, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
@@ -90,7 +90,7 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }
 
-        const binding: IWidgetBinding<TabPanelModel> = {
+        const binding: IWidgetBinding<TabPanelModel, TabPanelViewModel> = {
             name: "tab-panel",
             displayName: "Tab panel",
             readonly: bindingContext ? bindingContext.readonly : false,

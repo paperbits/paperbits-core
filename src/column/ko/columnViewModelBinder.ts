@@ -56,9 +56,6 @@ export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, Colum
             viewModels.push(new PlaceholderViewModel("Column"));
         }
 
-        const styles = {};
-
-
         columnViewModel.widgets(viewModels);
 
         if (model.size) {
@@ -118,11 +115,7 @@ export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, Colum
         columnViewModel.overflowX(model.overflowX);
         columnViewModel.overflowY(model.overflowY);
 
-
-        // columnViewModel.styles(styles); TODO: Enable when all CSS switched to styling system
-
-
-        const binding: IWidgetBinding<ColumnModel> = {
+        const binding: IWidgetBinding<ColumnModel, ColumnViewModel> = {
             name: "column",
             displayName: "Column",
             readonly: bindingContext ? bindingContext.readonly : false,
@@ -138,7 +131,7 @@ export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, Colum
              * type: "inline"
              */
 
-            applyChanges: async (changes) => {
+            applyChanges: async () => {
                 await this.modelToViewModel(model, columnViewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }

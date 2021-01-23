@@ -59,7 +59,7 @@ export class BlogHost {
 
         const bindingContext = {
             navigationPath: route.path,
-            routeKind: "blog-post",
+            contentType: "blog-post",
             template: {
                 page: {
                     value: postContentContract,
@@ -77,7 +77,7 @@ export class BlogHost {
         }
 
         const layoutContentContract = await this.layoutService.getLayoutContent(layoutContract.key);
-        const contentViewModel = await this.contentViewModelBinder.getContentViewModelByKey(layoutContentContract, bindingContext);
+        const contentViewModel = await this.contentViewModelBinder.contractToViewModel(layoutContentContract, bindingContext);
 
         this.contentViewModel(contentViewModel);
 

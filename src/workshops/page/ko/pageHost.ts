@@ -82,7 +82,7 @@ export class PageHost {
             contentItemKey: pageContract.key,
             styleManager: styleManager,
             navigationPath: route.path,
-            routeKind: "page",
+            contentType: "page",
             template: {
                 page: {
                     value: pageContentContract,
@@ -100,7 +100,7 @@ export class PageHost {
         }
 
         const layoutContentContract = await this.layoutService.getLayoutContent(layoutContract.key);
-        const contentViewModel = await this.contentViewModelBinder.getContentViewModelByKey(layoutContentContract, bindingContext);
+        const contentViewModel = await this.contentViewModelBinder.contractToViewModel(layoutContentContract, bindingContext);
 
         contentViewModel["widgetBinding"].provides = ["html", "js", "interaction"];
 

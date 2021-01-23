@@ -4,7 +4,6 @@ import { DragSession } from "@paperbits/common/ui/draggables";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { WidgetModel } from "@paperbits/common/widgets";
 import { CardModel } from "./cardModel";
-import { GridCellModel } from "../grid-cell";
 import { TextblockModel } from "./../textblock/textblockModel";
 
 

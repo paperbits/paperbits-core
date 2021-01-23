@@ -28,7 +28,7 @@ export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, G
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
 
             if (widgetViewModelBinder.createWidgetBinding) {
-                const binding = await widgetViewModelBinder.createWidgetBinding(widgetModel, bindingContext);
+                const binding = await widgetViewModelBinder.createWidgetBinding<GridCellViewModel>(widgetModel, bindingContext);
                 widgetViewModels.push(binding);
             }
             else {
@@ -51,7 +51,7 @@ export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, G
 
         const displayName = model.role.charAt(0).toUpperCase() + model.role.slice(1);
 
-        const binding: IWidgetBinding<GridCellModel> = {
+        const binding: IWidgetBinding<GridCellModel, GridCellViewModel> = {
             name: "grid-cell",
             displayName: displayName,
             readonly: bindingContext ? bindingContext.readonly : false,
@@ -59,7 +59,7 @@ export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, G
             draggable: false,
             editor: "grid-cell-editor",
             handler: GridCellHandlers,
-            applyChanges: async (changes) => {
+            applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }

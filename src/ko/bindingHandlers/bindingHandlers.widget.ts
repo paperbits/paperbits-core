@@ -50,7 +50,7 @@ export class WidgetBindingHandler {
 
                 /* New  binding logic */
                 if (bindingConfig instanceof WidgetBinding) {
-                    const binding = <WidgetBinding>bindingConfig;
+                    const binding = <WidgetBinding<any, any>>bindingConfig;
 
                     let componentBinder: ComponentBinder;
 
@@ -117,7 +117,7 @@ export class WidgetBindingHandler {
                     }
 
                     const loadingOperationId = currentLoadingOperationId = ++componentLoadingOperationUniqueId;
-                    const binding: IWidgetBinding<any> = componentViewModel["widgetBinding"];
+                    const binding: IWidgetBinding<any, any> = componentViewModel["widgetBinding"];
 
                     if (binding && binding.onCreate) {
                         binding.onCreate();
@@ -158,7 +158,7 @@ export class WidgetBindingHandler {
                         if (nonVirtualElement) {
                             nonVirtualElement["attachedViewModel"] = componentViewModel;
 
-                            const binding: IWidgetBinding<any> = componentViewModel["widgetBinding"];
+                            const binding: IWidgetBinding<any, any> = componentViewModel["widgetBinding"];
 
                             if (binding) {
                                 ko.applyBindingsToNode(nonVirtualElement, {

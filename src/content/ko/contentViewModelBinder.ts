@@ -1,14 +1,13 @@
 import * as Objects from "@paperbits/common/objects";
 import { Bag, Contract } from "@paperbits/common";
-import { ContentViewModel } from "./contentViewModel";
-import { ViewModelBinder, ModelBinderSelector } from "@paperbits/common/widgets";
-import { ContentModel } from "../contentModel";
-import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
-import { ContentHandlers } from "../contentHandlers";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { EventManager } from "@paperbits/common/events";
-import { ContentModelBinder } from "..";
-import { PlaceholderModel } from "@paperbits/common/widgets/placeholder";
+import { ModelBinderSelector, ViewModelBinder } from "@paperbits/common/widgets";
+import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
+import { ContentHandlers } from "../contentHandlers";
+import { ContentModel } from "../contentModel";
+import { ContentModelBinder } from "../contentModelBinder";
+import { ContentViewModel } from "./contentViewModel";
 
 
 export class ContentViewModelBinder implements ViewModelBinder<ContentModel, ContentViewModel> {
@@ -42,12 +41,10 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
 
         const scheduleUpdate = async (): Promise<void> => {
             clearTimeout(savingTimeout);
-            savingTimeout = setTimeout(updateContent, 600);
+            savingTimeout = setTimeout(updateContent, 500);
         };
 
-        const isReadonly = model.type !== bindingContext?.routeKind;
-
-        const binding: IWidgetBinding<ContentModel> = {
+        const binding: IWidgetBinding<ContentModel, ContentViewModel> = {
             displayName: "Content",
             readonly: false,
             name: "content",
@@ -57,12 +54,12 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
             handler: ContentHandlers,
             applyChanges: async () => await this.modelToViewModel(model, viewModel, bindingContext),
             onCreate: () => {
-                if (model.type === bindingContext?.routeKind) {
+                if (model.type === bindingContext?.contentType) {
                     this.eventManager.addEventListener("onContentUpdate", scheduleUpdate);
                 }
             },
             onDispose: () => {
-                if (model.type === bindingContext?.routeKind) {
+                if (model.type === bindingContext?.contentType) {
                     this.eventManager.removeEventListener("onContentUpdate", scheduleUpdate);
                 }
             }
@@ -80,7 +77,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
 
         if (bindingContext) {
             childBindingContext = <Bag<any>>Objects.clone(bindingContext);
-            childBindingContext.readonly = model.type !== bindingContext?.routeKind;
+            childBindingContext.readonly = model.type !== bindingContext?.contentType;
             childBindingContext.template = bindingContext.template;
             childBindingContext.styleManager = bindingContext.styleManager;
         }
@@ -107,7 +104,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
         return model instanceof ContentModel;
     }
 
-    public async getContentViewModelByKey(contentContract: Contract, bindingContext: any): Promise<any> {
+    public async contractToViewModel(contentContract: Contract, bindingContext: any): Promise<any> {
         const layoutModel = await this.contentModelBinder.contractToModel(contentContract, bindingContext);
         const layoutViewModel = await this.modelToViewModel(layoutModel, null, bindingContext);
 

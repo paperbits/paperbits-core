@@ -43,7 +43,7 @@ export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerMo
             flow: "inline",
             draggable: true,
             editor: "video-player-editor",
-            applyChanges: async (changes) => {
+            applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }

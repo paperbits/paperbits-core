@@ -41,7 +41,7 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
         viewModel.widgets(widgetViewModels);
 
         if (!viewModel["widgetBinding"]) {
-            const binding: IWidgetBinding<CardModel> = {
+            const binding: IWidgetBinding<CardModel, CardViewModel> = {
                 name: "card",
                 displayName: "Card",
                 readonly: bindingContext ? bindingContext.readonly : false,
@@ -50,7 +50,7 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
                 draggable: true,
                 editor: "card-editor",
                 handler: CardHandlers,
-                applyChanges: async (changes) => {
+                applyChanges: async () => {
                     await this.modelToViewModel(model, viewModel, bindingContext);
                     this.eventManager.dispatchEvent("onContentUpdate");
                 }

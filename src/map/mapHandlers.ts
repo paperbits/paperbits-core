@@ -4,6 +4,9 @@ import { MapContract } from "./mapContract";
 
 
 export class MapHandlers implements IWidgetHandler, IContentDropHandler {
+    public name: string = "map";
+    public displayName: string = "Map";
+
     private async prepareWidgetOrder(config: MapContract): Promise<IWidgetOrder> {
         const widgetOrder: IWidgetOrder = {
             name: "map",

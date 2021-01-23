@@ -49,7 +49,7 @@ export class CollapsiblePanelViewModelBinder implements ViewModelBinder<Collapsi
             flow: "inline",
             editor: "collapsible-panel-editor",
             handler: CollapsiblePanelHandlers,
-            applyChanges: async (changes) => {
+            applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }

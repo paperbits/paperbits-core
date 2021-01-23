@@ -42,7 +42,7 @@ export class KnockoutHtmlPagePublisherPlugin implements HtmlPagePublisherPlugin 
         }
 
         const layoutContentContract = await this.layoutService.getLayoutContent(layoutContract.key, page.bindingContext?.locale);
-        const layoutContentViewModel = await this.contentViewModelBinder.getContentViewModelByKey(layoutContentContract, page.bindingContext);
+        const layoutContentViewModel = await this.contentViewModelBinder.contractToViewModel(layoutContentContract, page.bindingContext);
 
         await this.render(doc, layoutContentViewModel);
     }

@@ -33,7 +33,7 @@ export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlay
             viewModel.styles(st);
         }
 
-        const biding: IWidgetBinding<YoutubePlayerModel> = {
+        const biding: IWidgetBinding<YoutubePlayerModel, YoutubePlayerViewModel> = {
             name: "youtube-player",
             displayName: "Youtube player",
             readonly: bindingContext ? bindingContext.readonly : false,

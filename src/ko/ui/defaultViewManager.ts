@@ -357,7 +357,7 @@ export class DefaultViewManager implements ViewManager {
         this.clearJourney();
     }
 
-    public openWidgetEditor(binding: IWidgetBinding<any>): void {
+    public openWidgetEditor(binding: IWidgetBinding<any, any>): void {
         const view: View = {
             component: {
                 name: binding.editor,

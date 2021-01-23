@@ -40,13 +40,13 @@ export class GridViewModelBinder implements ViewModelBinder<GridModel, GridViewM
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }
 
-        const binding: IWidgetBinding<GridModel> = {
+        const binding: IWidgetBinding<GridModel, GridViewModel> = {
             name: "grid",
             displayName: "Grid",
-            readonly: true, //bindingContext ? bindingContext.readonly : false,
+            readonly: true,
             model: model,
             draggable: false,
-            applyChanges: async (changes) => {
+            applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }

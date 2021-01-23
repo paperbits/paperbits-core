@@ -16,7 +16,7 @@ export class TextblockViewModelBinder implements ViewModelBinder<TextblockModel,
 
         viewModel.state(model.state);
 
-        const widgetBinding: IWidgetBinding<TextblockModel> = {
+        const widgetBinding: IWidgetBinding<TextblockModel, TextblockViewModel> = {
             name: "text-block",
             displayName: "Text",
             readonly: bindingContext ? bindingContext.readonly : false,
@@ -25,7 +25,7 @@ export class TextblockViewModelBinder implements ViewModelBinder<TextblockModel,
             flow: "block",
             editor: "html-editor",
             editorResize: "horizontally",
-            applyChanges: async (changes) => {
+            applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent("onContentUpdate");
             }
