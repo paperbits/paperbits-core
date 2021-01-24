@@ -25,9 +25,15 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
 
         for (const widgetModel of model.widgets) {
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
 
-            widgetViewModels.push(widgetViewModel);
+            if (widgetViewModelBinder.createWidgetBinding) {
+                const binding = await widgetViewModelBinder.createWidgetBinding<any>(widgetModel, bindingContext);
+                widgetViewModels.push(binding);
+            }
+            else {
+                const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+                widgetViewModels.push(widgetViewModel);
+            }
         }
 
         if (widgetViewModels.length === 0) {
