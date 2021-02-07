@@ -38,8 +38,6 @@ export class PagePublisher implements IPublisher {
     }
 
     public async renderPage(page: HtmlPage): Promise<string> {
-        this.logger.trackEvent("Publishing", { message: `Publishing page ${page.title}...` });
-
         try {
             const htmlContent = await this.htmlPagePublisher.renderHtml(page);
             return htmlContent;
@@ -54,6 +52,8 @@ export class PagePublisher implements IPublisher {
             this.logger.trackEvent("Publishing", { message: `Skipping page with no permalink specified: "${page.title}".` });
             return;
         }
+
+        this.logger.trackEvent("Publishing", { message: `Publishing page ${page.title}${locale ? ` (${locale})` : ""}...` });
 
         try {
             const siteAuthor = settings?.author;
