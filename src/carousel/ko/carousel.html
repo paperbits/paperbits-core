@@ -1,4 +1,13 @@
-<carousel-runtime class="carousel" data-bind="styled: styles, attr: { 'data-active-slide': activeItemIndex }">
+<carousel-runtime class="carousel" data-bind="
+    styled: styles,
+    attr: { 
+        'data-active-slide': activeItemIndex, 
+        'data-carousel-autoplay': autoplay,
+        'data-carousel-autoplay-interval': autoplayInterval,
+        'data-carousel-pauseonhover': pauseOnHover
+    }"
+>
+
     <div class="carousel-items">
         <!-- ko foreach: { data: carouselItems, as: 'carouselItem' } -->
         <div class="carousel-item" data-bind="styled: carouselItem.styles">
