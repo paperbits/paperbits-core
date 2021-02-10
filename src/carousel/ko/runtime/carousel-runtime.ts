@@ -61,18 +61,19 @@ export class CarouselHTMLElement extends HTMLElement {
     }
 
     private setActiveItem = (index: number) => {
-        this.style.setProperty("--slide", index.toString());
+        this.style.setProperty('--slide', index.toString());
 
-
-        const activeIndicator = this.querySelector(".carousel-indicator.active");
+        const activeIndicator = this.querySelector('.carousel-indicator.active');
 
         if (activeIndicator) {
-            activeIndicator.classList.remove("active");
+            activeIndicator.classList.remove('active');
         }
 
         setImmediate(() => {
-            const carouselIndicators = coerce<HTMLDListElement>(this.querySelectorAll(".carousel-indicator"));
-            carouselIndicators[index].classList.add("active");
+            const carouselIndicators = coerce<HTMLDListElement>(this.querySelectorAll('.carousel-indicator'));
+            if (carouselIndicators && carouselIndicators.length > 0) {
+                carouselIndicators[index]?.classList.add('active');
+            }
         });
     };
 
