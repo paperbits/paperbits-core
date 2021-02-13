@@ -1,12 +1,12 @@
 <div class="form flex-item flex-item-grow" data-bind="scrollable: true">
     <background params="{ background: $component.background, onUpdate: onBackgroundUpdate }"></background>
 
-    <size-editor params="{ features: 'minMaxHeight,minMaxWidth', sizeConfig: sizeConfig, onUpdate: onSizeUpdate }"></size-editor>
+    <size-editor params="{ features: 'minMaxHeight,minMaxWidth', label: 'Container sizes', sizeConfig: containerSizeStyles, onUpdate: onContainerSizeUpdate }"></size-editor>
 
     <div class="form-group form-group-collapsible">
         <label class="form-label">
             <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#boxCollapse'"></a>
-            <b>Box</b>
+            <b>Container box</b>
         </label>
         <div id="boxCollapse" class="collapse form-group-collapse">
             <box params="{ features: 'margin', box: box, onUpdate: onBoxUpdate }"></box>
@@ -36,17 +36,8 @@
                     <input name="sticking" type="radio" value="bottom" data-bind="checked: stickTo" />Bottom
                 </label>
             </div>
-
-            <label class="form-label">
-                Height
-                <button class="btn btn-info" type="button"
-                    data-bind="tooltip: 'Manage section height'"></button>
-            </label>
-            <div class="form-group">
-                <label for="stretch" class="form-label">
-                    <input type="checkbox" id="stretch" name="stretch" data-bind="checked: stretch" />Stretch
-                </label>
-            </div>
         </div>
     </div>
+
+    <size-editor params="{ features: 'stretch', label: 'Fill available space', sizeConfig: sectionSizeStyles, onUpdate: onSectionSizeUpdate }"></size-editor>
 </div>

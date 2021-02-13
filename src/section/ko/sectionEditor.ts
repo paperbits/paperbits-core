@@ -1,6 +1,5 @@
 
 import * as ko from "knockout";
-import * as Utils from "@paperbits/common";
 import * as Objects from "@paperbits/common/objects";
 import template from "./sectionEditor.html";
 import { ViewManager } from "@paperbits/common/ui";
@@ -17,6 +16,7 @@ import {
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { EventManager } from "@paperbits/common/events/eventManager";
 import { CommonEvents } from "@paperbits/common/events";
+import { StyleHelper } from "@paperbits/styles";
 
 @Component({
     selector: "layout-section-editor",
@@ -27,10 +27,11 @@ export class SectionEditor {
     public readonly background: ko.Observable<BackgroundStylePluginConfig>;
     public readonly typography: ko.Observable<TypographyStylePluginConfig>;
     public readonly box: ko.Observable<BoxStylePluginConfig>;
-    public readonly sizeConfig: ko.Observable<SizeStylePluginConfig>;
+    public readonly containerSizeStyles: ko.Observable<SizeStylePluginConfig>;
+    public readonly sectionSizeStyles: ko.Observable<SizeStylePluginConfig>;
     public readonly stretch: ko.Observable<boolean>;
 
-   
+
     private gridModel: GridModel;
 
     constructor(
@@ -41,7 +42,8 @@ export class SectionEditor {
         this.stretch = ko.observable<boolean>(false);
         this.background = ko.observable<BackgroundStylePluginConfig>();
         this.typography = ko.observable<TypographyStylePluginConfig>();
-        this.sizeConfig = ko.observable<SizeStylePluginConfig>();
+        this.containerSizeStyles = ko.observable<SizeStylePluginConfig>();
+        this.sectionSizeStyles = ko.observable<SizeStylePluginConfig>();
         this.box = ko.observable<BoxStylePluginConfig>();
     }
 
@@ -54,45 +56,66 @@ export class SectionEditor {
     @OnMounted()
     public async initialize(): Promise<void> {
         this.updateObservables();
-        this.stickTo.extend(ChangeRateLimit).subscribe(this.applyChanges);
-        this.stretch.extend(ChangeRateLimit).subscribe(this.applyChanges);
-        this.background.extend(ChangeRateLimit).subscribe(this.applyChanges);
-        this.typography.extend(ChangeRateLimit).subscribe(this.applyChanges);
-        this.box.extend(ChangeRateLimit).subscribe(this.applyChanges);
-        this.sizeConfig.extend(ChangeRateLimit).subscribe(this.applyChanges);
+
+        this.stickTo
+            .extend(ChangeRateLimit)
+            .subscribe(this.applyChanges);
+
+        this.stretch
+            .extend(ChangeRateLimit)
+            .subscribe(this.applyChanges);
+
+        this.background
+            .extend(ChangeRateLimit)
+            .subscribe(this.applyChanges);
+
+        this.typography
+            .extend(ChangeRateLimit)
+            .subscribe(this.applyChanges);
+
+        this.box
+            .extend(ChangeRateLimit)
+            .subscribe(this.applyChanges);
+
+        this.containerSizeStyles
+            .extend(ChangeRateLimit)
+            .subscribe(this.applyChanges);
+
+        this.sectionSizeStyles
+            .extend(ChangeRateLimit)
+            .subscribe(this.applyChanges);
+
         this.eventManager.addEventListener(CommonEvents.onViewportChange, this.updateObservables);
     }
 
     private updateObservables(): void {
         const viewport = this.viewManager.getViewport();
 
-        if (this.model.styles) {
-            if (this.model.styles.instance) {
-                const sectionStyles = this.model.styles.instance;
+        /* Section styles */
+        const localStyles = this.model.styles;
 
-                if (sectionStyles) {
-                    this.background(sectionStyles.background);
-                    this.typography(sectionStyles.typography);
-                }
-            }
+        const typographyStyles = <TypographyStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(localStyles, "typography");
+        this.typography(typographyStyles);
 
-            const stickToStyles = Objects.getObjectAt<string>(`instance/stickTo/${viewport}`, this.model.styles);
+        const backgroundStyles = <BackgroundStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(localStyles, "background");
+        this.background(backgroundStyles);
 
-            if (stickToStyles) {
-                this.stickTo(stickToStyles);
-            }
+        const stickToStyles = <string>StyleHelper.getPluginConfigForLocalStyles(localStyles, "stickTo", viewport);
+        this.stickTo(stickToStyles || "none");
 
-            const stretchStyle = Objects.getObjectAt(`instance/size/${viewport}/stretch`, this.model.styles);
-            this.stretch(!!stretchStyle);
-        }
+        const sectionSizeStyles = <SizeStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(localStyles, "size", viewport);
+        this.stretch(sectionSizeStyles?.stretch);
 
+
+        /* Grid styles */
         this.gridModel = <GridModel>this.model.widgets[0];
-        const gridStyles = this.gridModel.styles;
-        const containerSizeStyles = Objects.getObjectAt<SizeStylePluginConfig>(`instance/size/${viewport}`, gridStyles);
-        const marginStyles = Objects.getObjectAt<MarginStylePluginConfig>(`instance/margin/${viewport}`, gridStyles);
+        const gridLocalStyles = this.gridModel.styles;
+
+        const containerSizeStyles = <SizeStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(gridLocalStyles, "size", viewport);
+        const marginStyles = <MarginStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(gridLocalStyles, "margin", viewport);
 
         this.box({ margin: marginStyles });
-        this.sizeConfig(containerSizeStyles);
+        this.containerSizeStyles(containerSizeStyles);
     }
 
     /**
@@ -100,42 +123,45 @@ export class SectionEditor {
      */
     private applyChanges(): void {
         const viewport = this.viewManager.getViewport();
-        this.model.styles = this.model.styles || {};
 
-        if (this.model.styles.instance && !this.model.styles.instance.key) {
-            this.model.styles.instance.key = Utils.randomClassName();
-        }
+        /* Section styles */
+        const sectionStyles = this.model.styles;
+        StyleHelper.setPluginConfigForLocalStyles(sectionStyles, "stickTo", this.stickTo(), viewport);
+        StyleHelper.setPluginConfigForLocalStyles(sectionStyles, "size", this.sectionSizeStyles(), viewport);
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "stickTo", this.stickTo(), viewport);
 
+        /* Grid styles */
         const gridStyles = this.gridModel.styles;
-
-        const containerSizeStyles: SizeStylePluginConfig = this.sizeConfig();
-        Objects.setValue(`instance/size/${viewport}`, gridStyles, containerSizeStyles);
-
         const marginStyle = this.box().margin;
-
-        Objects.cleanupObject(marginStyle);
-        Objects.setValue(`instance/margin/${viewport}`, gridStyles, marginStyle);
-        Objects.setValue(`instance/stickTo/${viewport}`, this.model.styles, this.stickTo());
-        Objects.setValue(`instance/size/${viewport}/stretch`, this.model.styles, this.stretch());
+        const containerSizeStyles: SizeStylePluginConfig = this.containerSizeStyles();
+        StyleHelper.setPluginConfigForLocalStyles(gridStyles, "size", containerSizeStyles, viewport);
+        StyleHelper.setPluginConfigForLocalStyles(gridStyles, "margin", marginStyle, viewport);
 
         this.onChange(this.model);
     }
 
-    public onBackgroundUpdate(background: BackgroundStylePluginConfig): void {
-        Objects.setValue("instance/background", this.model.styles, background);
-        this.applyChanges();
+    public onBackgroundUpdate(backgroundStyles: BackgroundStylePluginConfig): void {
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "background", backgroundStyles);
+        this.onChange(this.model);
     }
 
-    public onTypographyUpdate(typography: TypographyStylePluginConfig): void {
-        Objects.setValue("instance/typography", this.model.styles, typography);
-        this.applyChanges();
+    public onTypographyUpdate(typographyStyles: TypographyStylePluginConfig): void {
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "typography", typographyStyles);
+        this.onChange(this.model);
     }
 
     public onBoxUpdate(pluginConfig: BoxStylePluginConfig): void {
         this.box(pluginConfig);
+        this.onChange(this.model);
     }
 
-    public onSizeUpdate(sizeConfig: SizeStylePluginConfig): void {
-        this.sizeConfig(sizeConfig);
+    public onContainerSizeUpdate(containerSizeStyles: SizeStylePluginConfig): void {
+        this.containerSizeStyles(containerSizeStyles);
+        this.onChange(this.model);
+    }
+
+    public onSectionSizeUpdate(containerSizeStyles: SizeStylePluginConfig): void {
+        this.sectionSizeStyles(containerSizeStyles);
+        this.onChange(this.model);
     }
 }

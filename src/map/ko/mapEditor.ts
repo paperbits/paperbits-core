@@ -29,8 +29,7 @@ export class MapEditor {
 
     constructor(
         private readonly viewManager: ViewManager,
-        private readonly eventManager: EventManager,
-        private readonly styleService: StyleService,
+        private readonly eventManager: EventManager
     ) {
         this.location = ko.observable<string>();
         this.caption = ko.observable<string>();
