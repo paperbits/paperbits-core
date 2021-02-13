@@ -1,3 +1,4 @@
+import * as Utils from "@paperbits/common/utils";
 import { IContextCommandSet, View, ViewManager } from "@paperbits/common/ui";
 import { WidgetContext } from "@paperbits/common/editing";
 import { SectionModel } from "./sectionModel";
@@ -5,12 +6,14 @@ import { RowModel } from "../row/rowModel";
 import { EventManager } from "@paperbits/common/events";
 import { BlockType } from "@paperbits/common/blocks";
 import { StyleHelper } from "@paperbits/styles";
+import { SectionModelBinder } from "./sectionModelBinder";
 
 
 export class SectionHandlers {
     constructor(
         private readonly viewManager: ViewManager,
-        private readonly eventManager: EventManager
+        private readonly eventManager: EventManager,
+        private readonly sectionModelBinder: SectionModelBinder
     ) { }
 
     public getContextualEditor(context: WidgetContext): IContextCommandSet {
@@ -25,6 +28,12 @@ export class SectionHandlers {
                     params: {
                         heading: "Add section",
                         onSelect: (section: SectionModel) => {
+                            if (!section.styles.instance) {
+                                section.styles.instance = {};
+                            }
+
+                            section.styles.instance.key = Utils.randomClassName();
+
                             const gridModel = section.widgets[0];
                             StyleHelper.setMargins(gridModel);
                             StyleHelper.setMaxWidth(gridModel);
@@ -70,12 +79,14 @@ export class SectionHandlers {
                 position: "top right",
                 color: "#2b87da",
                 callback: () => {
+                    const sectionContract = this.sectionModelBinder.modelToContract(<SectionModel>context.model);
+
                     const view: View = {
                         heading: "Add to library",
                         component: {
                             name: "add-block-dialog",
                             params: {
-                                blockModel: context.model,
+                                blockContract: sectionContract,
                                 blockType: BlockType.saved
                             }
                         },
