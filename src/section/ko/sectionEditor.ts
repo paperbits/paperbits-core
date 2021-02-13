@@ -65,26 +65,6 @@ export class SectionEditor {
             .extend(ChangeRateLimit)
             .subscribe(this.applyChanges);
 
-        this.background
-            .extend(ChangeRateLimit)
-            .subscribe(this.applyChanges);
-
-        this.typography
-            .extend(ChangeRateLimit)
-            .subscribe(this.applyChanges);
-
-        this.box
-            .extend(ChangeRateLimit)
-            .subscribe(this.applyChanges);
-
-        this.containerSizeStyles
-            .extend(ChangeRateLimit)
-            .subscribe(this.applyChanges);
-
-        this.sectionSizeStyles
-            .extend(ChangeRateLimit)
-            .subscribe(this.applyChanges);
-
         this.eventManager.addEventListener(CommonEvents.onViewportChange, this.updateObservables);
     }
 
@@ -105,7 +85,6 @@ export class SectionEditor {
 
         const sectionSizeStyles = <SizeStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(localStyles, "size", viewport);
         this.stretch(sectionSizeStyles?.stretch);
-
 
         /* Grid styles */
         this.gridModel = <GridModel>this.model.widgets[0];
@@ -142,26 +121,26 @@ export class SectionEditor {
 
     public onBackgroundUpdate(backgroundStyles: BackgroundStylePluginConfig): void {
         StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "background", backgroundStyles);
-        this.onChange(this.model);
+        this.applyChanges();
     }
 
     public onTypographyUpdate(typographyStyles: TypographyStylePluginConfig): void {
         StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "typography", typographyStyles);
-        this.onChange(this.model);
+        this.applyChanges();
     }
 
     public onBoxUpdate(pluginConfig: BoxStylePluginConfig): void {
         this.box(pluginConfig);
-        this.onChange(this.model);
+        this.applyChanges();
     }
 
     public onContainerSizeUpdate(containerSizeStyles: SizeStylePluginConfig): void {
         this.containerSizeStyles(containerSizeStyles);
-        this.onChange(this.model);
+        this.applyChanges();
     }
 
     public onSectionSizeUpdate(containerSizeStyles: SizeStylePluginConfig): void {
         this.sectionSizeStyles(containerSizeStyles);
-        this.onChange(this.model);
+        this.applyChanges();
     }
 }
