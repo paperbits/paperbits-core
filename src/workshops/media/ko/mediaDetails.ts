@@ -51,7 +51,7 @@ export class MediaDetailsWorkshop {
             .extend(<any>{ required: true, onlyValid: true })
             .subscribe(this.updateMediaUrl);
 
-        this.mediaItem.contentType
+        this.mediaItem.mimeType
             .extend(ChangeRateLimit)
             .extend(<any>{ required: true, onlyValid: true })
             .subscribe(this.updateMedia);
@@ -93,7 +93,7 @@ export class MediaDetailsWorkshop {
     }
 
     public async downloadMedia(): Promise<void> {
-        FileSaver.saveAs(this.mediaItem.downloadUrl(), this.mediaItem.fileName(), { type: this.mediaItem.contentType() });
+        FileSaver.saveAs(this.mediaItem.downloadUrl(), this.mediaItem.fileName(), { type: this.mediaItem.mimeType() });
     }
 
     public openCropper(): void {

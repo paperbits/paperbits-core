@@ -17,8 +17,9 @@ export class MediaItem {
     public fileName: ko.Observable<string>;
     public description: ko.Observable<string>;
     public keywords: ko.Observable<string>;
-    public contentType: ko.Observable<string>;
+    public mimeType: ko.Observable<string>;
     public widgetFactoryResult: IWidgetFactoryResult<any, any>;
+    public nonPreviewable: ko.Computed<boolean>;
 
 
     constructor(mediaContract: MediaContract) {
@@ -28,7 +29,8 @@ export class MediaItem {
         this.description = ko.observable<string>(mediaContract.description);
         this.keywords = ko.observable<string>(mediaContract.keywords);
         this.permalink = ko.observable<string>(mediaContract.permalink);
-        this.contentType = ko.observable<string>(mediaContract.mimeType);
+        this.mimeType = ko.observable<string>(mediaContract.mimeType);
+        this.nonPreviewable = ko.computed(() => !mediaContract.mimeType?.startsWith("image/") && !mediaContract.mimeType?.startsWith("video/"));
         this.thumbnailUrl = ko.observable<string>();
         this.downloadUrl = ko.observable<string>(mediaContract.downloadUrl);
         this.getThumbnail(mediaContract);
@@ -68,7 +70,7 @@ export class MediaItem {
             fileName: this.fileName(),
             description: this.description(),
             keywords: this.keywords(),
-            mimeType: this.contentType(),
+            mimeType: this.mimeType(),
             downloadUrl: this.downloadUrl(),
             permalink: this.permalink()
         };
