@@ -1,6 +1,8 @@
 <div class="toolbox toolbox-horizontal">
-    <div class="toolbox-btn d-none d-xl-inline-block" data-bind="css: { 'toolbox-btn-is-active': viewport() == 'zoomout' }">
-        <a href="#" data-bind="click: zoomOut, tooltip: 'Zoom out', focus: true" role="button" aria-label="Switch to zoomed out view">
+    <div class="toolbox-btn d-none d-xl-inline-block"
+        data-bind="css: { 'toolbox-btn-is-active': viewport() == 'zoomout' }">
+        <a href="#" data-bind="click: zoomOut, tooltip: 'Zoom out', focus: true" role="button"
+            aria-label="Switch to zoomed out view">
             <i class="paperbits-icon paperbits-zoom-out"></i>
         </a>
     </div>
@@ -11,7 +13,9 @@
     </div>
     <div class="toolbox-btn d-none d-lg-inline-block" data-bind="css: { 'toolbox-btn-is-active': viewport() == 'lg' }">
         <a href="#" data-bind="click: setLg, tooltip: 'Large screen'" role="button" aria-label="Switch to large screen view">
-            𐩒
+            <svg width="10" height="10">
+                <circle r="4" cy="50%" cx="50%" stroke="black" stroke-width="1" fill="none" />
+            </svg>
         </a>
     </div>
     <div class="toolbox-btn d-none d-md-inline-block" data-bind="css: { 'toolbox-btn-is-active': viewport() == 'md' }">
@@ -21,7 +25,9 @@
     </div>
     <div class="toolbox-btn d-none d-sm-inline-block" data-bind="css: { 'toolbox-btn-is-active': viewport() == 'sm' }">
         <a href="#" data-bind="click: setSm, tooltip: 'Small screen'" role="button" aria-label="Switch to small screen view">
-            𐩒
+            <svg width="10" height="10">
+                <circle r="4" cy="50%" cx="50%" stroke="black" stroke-width="1" fill="none" />
+            </svg>
         </a>
     </div>
     <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': viewport() == 'xs' }">
