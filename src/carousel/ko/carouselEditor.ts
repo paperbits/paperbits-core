@@ -17,12 +17,22 @@ import { CommonEvents } from "@paperbits/common/events";
 })
 export class CarouselEditor {
     public readonly sizeConfig: ko.Observable<SizeStylePluginConfig>;
+    public readonly showControls: ko.Observable<boolean>;
+    public readonly showIndicators: ko.Observable<boolean>;
+    public readonly autoplay: ko.Observable<boolean>;
+    public readonly pauseOnHover: ko.Observable<boolean>;
+    public readonly autoplayInterval: ko.Observable<number>;
 
     constructor(
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager
     ) {
         this.sizeConfig = ko.observable<SizeStylePluginConfig>();
+        this.showControls = ko.observable<boolean>();
+        this.showIndicators = ko.observable<boolean>();
+        this.autoplay = ko.observable<boolean>();
+        this.pauseOnHover = ko.observable<boolean>();
+        this.autoplayInterval = ko.observable<number>();
     }
 
     @Param()
@@ -35,6 +45,11 @@ export class CarouselEditor {
     public async initialize(): Promise<void> {
         this.updateObservables();
         this.sizeConfig.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.autoplay.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.pauseOnHover.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.autoplayInterval.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.showControls.extend(ChangeRateLimit).subscribe(this.applyChanges);
+        this.showIndicators.extend(ChangeRateLimit).subscribe(this.applyChanges);
         this.eventManager.addEventListener(CommonEvents.onViewportChange, this.updateObservables);
     }
 
@@ -43,6 +58,12 @@ export class CarouselEditor {
 
         const containerSizeStyles = Objects.getObjectAt<SizeStylePluginConfig>(`instance/size/${viewport}`, this.model.styles);
         this.sizeConfig(containerSizeStyles);
+
+        this.autoplay(this.model.autoplay);
+        this.pauseOnHover(this.model.pauseOnHover);
+        this.autoplayInterval(this.model.autoplayInterval);
+        this.showControls(this.model.showControls);
+        this.showIndicators(this.model.showIndicators);
     }
 
     /**
@@ -58,6 +79,12 @@ export class CarouselEditor {
 
         const containerSizeStyles: SizeStylePluginConfig = this.sizeConfig();
         Objects.setValue(`instance/size/${viewport}`, this.model.styles, containerSizeStyles);
+
+        this.model.autoplay = this.autoplay();
+        this.model.pauseOnHover = this.pauseOnHover();
+        this.model.autoplayInterval = this.autoplayInterval();
+        this.model.showControls = this.showControls();
+        this.model.showIndicators = this.showIndicators();
 
         this.onChange(this.model);
     }

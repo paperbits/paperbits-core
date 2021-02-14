@@ -39,6 +39,11 @@ export class CarouselModelBinder implements IModelBinder<CarouselModel> {
 
         contract.carouselItems = contract.carouselItems || [];
         model.styles = contract.styles || {};
+        model.autoplay = contract.autoplay;
+        model.pauseOnHover = contract.pauseOnHover;
+        model.autoplayInterval = contract.autoplayInterval || 5000;
+        model.showControls = contract.showControls;
+        model.showIndicators = contract.showIndicators;
 
         const modelPromises = contract.carouselItems.map(async (contract: Contract) => {
             return await this.contractItemToModel(contract, bindingContext);
@@ -68,7 +73,12 @@ export class CarouselModelBinder implements IModelBinder<CarouselModel> {
         const carouselContract: CarouselContract = {
             type: "carousel",
             styles: carouselModel.styles,
-            carouselItems: []
+            carouselItems: [],
+            autoplay: carouselModel.autoplay,
+            pauseOnHover: carouselModel.pauseOnHover,
+            autoplayInterval: carouselModel.autoplayInterval,
+            showControls: carouselModel.showControls,
+            showIndicators: carouselModel.showIndicators
         };
 
         carouselModel.carouselItems.forEach(carouselItemModel => {

@@ -83,6 +83,12 @@ export class CarouselViewModelBinder implements ViewModelBinder<CarouselModel, C
         viewModel.activeItemIndex(null);
         viewModel.activeItemIndex(0);
 
+        viewModel.autoplay(model.autoplay);
+        viewModel.pauseOnHover(model.pauseOnHover);
+        viewModel.autoplayInterval(model.autoplayInterval);
+        viewModel.showControls(model.showControls);
+        viewModel.showIndicators(model.showIndicators);
+
         if (model.styles) {
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }
