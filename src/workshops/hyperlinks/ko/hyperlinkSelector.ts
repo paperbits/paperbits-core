@@ -39,15 +39,17 @@ export class HyperlinkSelector {
     @OnMounted()
     public onMounted(): void {
         this.updateHyperlinkState(this.hyperlink());
-        this.hyperlinkProvider.subscribe(this.onResourcePickerChange);
+        this.hyperlinkProvider.subscribe(this.onHyperlinkProviderChange);
         this.target.subscribe(this.targetChanged);
     }
 
-    private onResourcePickerChange(resourcePicker: IHyperlinkProvider): void {
-        if (resourcePicker === null) {
-            this.hyperlink(null);
-            this.onChange(null);
+    private onHyperlinkProviderChange(hyperlinkProvider: IHyperlinkProvider): void {
+        if (hyperlinkProvider !== null) {
+            return;
         }
+
+        this.hyperlink(null);
+        this.onChange(null);
     }
 
     public onHyperlinkSelected(hyperlink: HyperlinkModel): void {

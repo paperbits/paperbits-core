@@ -5,7 +5,6 @@ import "./bindingHandlers/bindingHandlers.columnSizeCfg";
 import "./bindingHandlers/bindingHandlers.component";
 import "./bindingHandlers/bindingHandlers.highlight";
 import "./bindingHandlers/bindingHandlers.splitter";
-import "./bindingHandlers/bindingHandlers.resourcePicker";
 import "./bindingHandlers/bindingHandlers.hyperlink";
 import "./bindingHandlers/bindingHandlers.surface";
 import "./bindingHandlers/bindingHandlers.gridCommand";
