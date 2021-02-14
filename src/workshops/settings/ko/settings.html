@@ -7,9 +7,9 @@
         <div class="form-group">
             <label class="form-label">Favicon</label>
             <div class="flex">
-                <div class="flex-item dropzone-showbox dropzone-square" data-bind="background: favicon, balloon: { component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected, mimeType: 'image/x-icon' } }, position: 'top' }"></div>
+                <div class="flex-item dropzone-showbox dropzone-square" data-bind="background: favicon, balloon: { component: { name: 'media-selector', params: { mimeType: 'image/x-icon', onSelect: $component.onMediaSelected } }, position: 'top' }"></div>
 
-                <button class="flex-item flex-item-grow btn" data-bind="balloon: { component: { name: 'media-selector', params: { onSelect: $component.onMediaSelected, mimeType: $component.mimeType } }, position: 'top' }">
+                <button class="flex-item flex-item-grow btn" data-bind="balloon: { component: { name: 'media-selector', params: { mimeType: 'image/x-icon', onSelect: $component.onMediaSelected } }, position: 'top' }">
                     <i class="paperbits-icon paperbits-square-upload"></i>
                     Setup favicon
                 </button>

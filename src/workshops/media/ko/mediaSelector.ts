@@ -66,6 +66,10 @@ export class MediaSelector {
             query.where(`fileName`, Operator.contains, searchPattern);
         }
 
+        if (this.mimeType) {
+            query.where(`mimeType`, Operator.contains, this.mimeType);
+        }
+
         const mediaOfResults = await this.mediaService.search(query);
         this.currentPage = mediaOfResults;
 
