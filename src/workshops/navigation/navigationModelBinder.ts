@@ -29,6 +29,7 @@ export class NavigationModelBinder implements IModelBinder<NavigationItemModel> 
         model.label = contract.label;
         model.key = contract.key;
         model.targetKey = contract.targetKey;
+        model.anchor = contract.anchor;
         model.isActive = model.targetUrl === this.router.getPath();
 
         if (contract.navigationItems) {
@@ -61,6 +62,7 @@ export class NavigationModelBinder implements IModelBinder<NavigationItemModel> 
             label: model.label,
             targetKey: model.targetKey,
             targetWindow: model.targetWindow,
+            anchor: model.anchor,
             navigationItems: model.nodes.map(x => this.modelToContract(x))
         };
 

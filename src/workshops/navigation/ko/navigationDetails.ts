@@ -49,6 +49,7 @@ export class NavigationDetailsWorkshop {
     private async init(targetKey: string): Promise<void> {
         const hyperlink = await this.permalinkResolver.getHyperlinkByTargetKey(targetKey);
         hyperlink.target = this.navigationItem.targetWindow();
+        hyperlink.anchor = this.navigationItem.anchor();
 
         this.hyperlink(hyperlink);
     }
@@ -60,6 +61,7 @@ export class NavigationDetailsWorkshop {
 
         this.navigationItem.targetKey(targetKey);
         this.navigationItem.targetWindow(hyperlink.target);
+        this.navigationItem.anchor(hyperlink.anchor);
     }
 
     public deleteNavigationItem(): void {

@@ -14,6 +14,7 @@ export class NavigationViewModelBinder implements ViewModelBinder<NavigationItem
         viewModel.label(model.label);
         viewModel.targetKey(model.targetKey);
         viewModel.targetUrl(model.targetUrl);
+        viewModel.anchor(model.anchor);
 
         if (model.nodes) {
             const tasks = [];
@@ -37,6 +38,7 @@ export class NavigationViewModelBinder implements ViewModelBinder<NavigationItem
             targetKey: viewModel.targetKey(),
             targetUrl: viewModel.targetUrl(),
             targetWindow: viewModel.targetWindow(),
+            anchor: viewModel.anchor(),
             nodes: viewModel.nodes().map(x => this.viewModelToModel(x))
         };
 
