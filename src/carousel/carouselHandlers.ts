@@ -21,6 +21,8 @@ export class CarouselHandlers {
                 model.carouselItems.push(new CarouselItemModel());
                 model.carouselItems.push(new CarouselItemModel());
                 model.carouselItems.push(new CarouselItemModel());
+                model.showControls = true;
+                model.showIndicators = true;
 
                 model.styles.instance = {
                     size: {
