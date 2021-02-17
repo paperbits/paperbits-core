@@ -132,7 +132,7 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
             return [];
         }
 
-        return children.map((item: BlockContract) => {
+        return children.filter(item => item.nodes && item.nodes.length > 0).map((item: BlockContract) => {
             const itemModel = new NavigationItemModel();
             itemModel.label = item.nodes[0].text;
             itemModel.targetUrl = `#${item.identifier || item.attrs?.id || item.attrs?.key}`;
