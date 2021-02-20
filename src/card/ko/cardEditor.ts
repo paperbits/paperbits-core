@@ -74,7 +74,8 @@ export class CardEditor implements WidgetEditor<CardModel> {
     }
 
     public onAppearanceChange(): void {
-        Objects.setValue("styles/appearance", this.model, this.appearanceStyle());
+        const styleKey = this.appearanceStyle();
+        Objects.setValue("styles/appearance", this.model, styleKey);
 
         this.onChange(this.model);
     }

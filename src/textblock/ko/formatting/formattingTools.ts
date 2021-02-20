@@ -7,6 +7,7 @@ import { Component, OnMounted, OnDestroyed } from "@paperbits/common/ko/decorato
 import { FontContract, ColorContract } from "@paperbits/styles/contracts";
 import { ViewManager } from "@paperbits/common/ui";
 import { StyleService } from "@paperbits/styles/styleService";
+import { VariationContract } from "@paperbits/common/styles";
 
 @Component({
     selector: "formatting",
@@ -296,17 +297,7 @@ export class FormattingTools {
         htmlEditor.toggleOrderedList();
     }
 
-    public toggleUnorderedList(): void {
-        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
-
-        if (!htmlEditor) {
-            return;
-        }
-
-        htmlEditor.toggleUnorderedList();
-    }
-
-    public onUnorderedListStyleSelected(style: any): void {
+    public toggleUnorderedList(style: VariationContract): void {
         const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
 
         if (!htmlEditor) {
@@ -316,7 +307,17 @@ export class FormattingTools {
         htmlEditor.toggleUnorderedList(style.key);
     }
 
-    public incIndent(): void {
+    public onUnorderedListStyleSelected(style: VariationContract): void {
+        const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
+
+        if (!htmlEditor) {
+            return;
+        }
+
+        htmlEditor.toggleUnorderedList(style.key);
+    }
+
+    public increaseIndentation(): void {
         const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
 
         if (!htmlEditor) {
@@ -327,7 +328,8 @@ export class FormattingTools {
 
         this.updateFormattingState();
     }
-    public decIndent(): void {
+
+    public decreaseIndentation(): void {
         const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
 
         if (!htmlEditor) {
@@ -392,14 +394,14 @@ export class FormattingTools {
         }
     }
 
-    public onTextStyleSelected(style: any): void {
+    public onTextStyleSelected(style: VariationContract): void {
         const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
 
         if (!htmlEditor) {
             return;
         }
 
-        this.htmlEditorProvider.getCurrentHtmlEditor().setTextStyle(style.key, this.viewManager.getViewport());
+        htmlEditor.setTextStyle(style.key, this.viewManager.getViewport());
         this.appearance(style.displayName);
     }
 
