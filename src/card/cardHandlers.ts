@@ -104,11 +104,11 @@ export class CardHandlers implements IWidgetHandler {
                 const textblock: any = new TextblockModel([
                     {
                         type: "heading1",
-                        content: [{ type: "text", text: "Card" }]
+                        nodes: [{ type: "text", text: "Card" }]
                     },
                     {
                         type: "paragraph",
-                        content: [{ type: "text", text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor..." }]
+                        nodes: [{ type: "text", text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor..." }]
                     }
                 ]);
 
