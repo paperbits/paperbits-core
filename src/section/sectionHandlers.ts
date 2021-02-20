@@ -27,17 +27,24 @@ export class SectionHandlers {
                     name: "grid-layout-selector",
                     params: {
                         heading: "Add section",
-                        onSelect: (section: SectionModel) => {
-                            if (!section.styles.instance) {
-                                section.styles.instance = {};
+                        onSelect: (sectionModel: SectionModel) => {
+                            if (!sectionModel.styles.instance) {
+                                sectionModel.styles.instance = {};
                             }
 
-                            section.styles.instance.key = Utils.randomClassName();
+                            sectionModel.styles.instance.key = Utils.randomClassName();
 
-                            const gridModel = section.widgets[0];
-                            StyleHelper.setMargins(gridModel);
-                            StyleHelper.setMaxWidth(gridModel);
-                            StyleHelper.setPaddings(gridModel);
+                            const gridModel = sectionModel.widgets[0];
+
+                            StyleHelper.setPluginConfig(gridModel.styles.instance, "margin", { top: 10, bottom: 10, left: "auto", right: "auto" }, "xs");
+                            StyleHelper.setPluginConfig(gridModel.styles.instance, "margin", { top: 15, bottom: 15 }, "md");
+                            StyleHelper.setPluginConfig(gridModel.styles.instance, "margin", { top: 25, bottom: 25 }, "xl");
+                            StyleHelper.setPluginConfig(gridModel.styles.instance, "padding", { top: 5, bottom: 5, left: 5, right: 5 }, "xs");
+                            StyleHelper.setPluginConfig(gridModel.styles.instance, "padding", { top: 15, bottom: 15, left: 15, right: 15 }, "md");
+                            StyleHelper.setPluginConfig(gridModel.styles.instance, "size", { maxWidth: 540 }, "xs");
+                            StyleHelper.setPluginConfig(gridModel.styles.instance, "size", { maxWidth: 720 }, "md");
+                            StyleHelper.setPluginConfig(gridModel.styles.instance, "size", { maxWidth: 960 }, "lg");
+                            StyleHelper.setPluginConfig(gridModel.styles.instance, "size", { maxWidth: 1140 }, "xl");
 
                             const sectionHalf = context.half;
 
@@ -47,7 +54,7 @@ export class SectionHandlers {
                                 index++;
                             }
 
-                            context.parentModel.widgets.splice(index, 0, section);
+                            context.parentModel.widgets.splice(index, 0, sectionModel);
                             context.parentBinding.applyChanges();
 
                             this.viewManager.clearContextualEditors();
