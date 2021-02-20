@@ -14,10 +14,9 @@ import { VariationContract } from "@paperbits/common/styles";
     template: template
 })
 export class FormattingTools {
-    private textStyles: ko.ObservableArray<any>;
-    private orderedListStyles: ko.ObservableArray<any>;
-    private unorderedListStyles: ko.ObservableArray<any>;
-
+    public readonly textStyles: ko.ObservableArray<VariationContract>;
+    public readonly orderedListStyles: ko.ObservableArray<VariationContract>;
+    public readonly unorderedListStyles: ko.ObservableArray<VariationContract>;
     public readonly bold: ko.Observable<boolean>;
     public readonly italic: ko.Observable<boolean>;
     public readonly underlined: ko.Observable<boolean>;
@@ -79,7 +78,7 @@ export class FormattingTools {
     }
 
     private async loadTextStyles(): Promise<void> {
-        this.textStyles(await this.styleService.getVariations("globals", "body"));
+        this.textStyles(await this.styleService.getTextVariations());
         this.orderedListStyles(await this.styleService.getVariations("globals", "ol"));
         this.unorderedListStyles(await this.styleService.getVariations("globals", "ul"));
     }
