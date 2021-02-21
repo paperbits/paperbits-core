@@ -1,18 +1,25 @@
 import * as ko from "knockout";
 import * as Utils from "@paperbits/common";
+import * as Objects from "@paperbits/common/objects";
 import * as Constants from "@paperbits/common/constants";
 import { GridModel } from "../../grid-layout-section/gridModel";
 import template from "./gridLayoutSelector.html";
 import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
 import { Component, Event, OnMounted, Param } from "@paperbits/common/ko/decorators";
 import { GridModelBinder } from "../../grid-layout-section";
-import { SectionModel } from "../../section";
+import { SectionModelBinder } from "../../section";
 import { GridViewModelBinder } from ".";
 import { BlockService } from "@paperbits/common/blocks";
 import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelector";
 import { UpdateBlock } from "../../workshops/block/ko/blockSelector";
 import { HttpClient } from "@paperbits/common/http";
+import { GridContract } from "../../grid/gridContract";
 
+
+interface GridLayoutSelectorItem {
+    viewModel: any;
+    contract: any;
+}
 
 @Component({
     selector: "grid-layout-selector",
@@ -34,6 +41,7 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         private readonly gridModelBinder: GridModelBinder,
         private readonly gridViewModelBinder: GridViewModelBinder,
         private readonly modelBinderSelector: ModelBinderSelector,
+        private readonly sectionModelBinder: SectionModelBinder,
         private readonly blockService: BlockService,
         private readonly httpClient: HttpClient
     ) {
@@ -53,11 +61,11 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         const response = await this.httpClient.send({ method: "GET", url: Constants.gridSnippetsLibraryUrl });
         const presets = response.toObject();
 
-        for (const preset of Utils.clone<any>(presets)) {
-            const model = await this.gridModelBinder.contractToModel(preset);
+        for (const presetContract of Utils.clone<any>(presets)) {
+            const model = await this.gridModelBinder.contractToModel(presetContract);
             const viewModel = await this.gridViewModelBinder.modelToViewModel(model);
 
-            snippets.push(viewModel);
+            snippets.push({ viewModel: viewModel, contract: presetContract });
         }
         this.snippets(snippets);
 
@@ -67,9 +75,15 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         this.working(false);
     }
 
-    public selectLayout(viewModel: any): void {
-        const sectionModel = new SectionModel();
-        sectionModel.widgets = [viewModel["widgetBinding"].model]; // TODO: Refactor!
+    public async selectLayout(item: GridLayoutSelectorItem): Promise<void> {
+        const blankSections = await this.blockService.search("blank-section", "");
+        const blankSectionContent = await this.blockService.getBlockContent(blankSections[0].key);
+        const blankSectionContentClone: GridContract = blankSectionContent;
+        const sectionGridNode = blankSectionContentClone.nodes[0];
+
+        Objects.mergeDeep(sectionGridNode, Utils.clone(item.contract));
+
+        const sectionModel = await this.sectionModelBinder.contractToModel(blankSectionContent);
 
         if (this.onSelect) {
             this.onSelect(sectionModel);
@@ -77,7 +91,7 @@ export class GridLayoutSelector implements IResourceSelector<any> {
     }
 
     public async onBlockSelected(updateBlock: UpdateBlock): Promise<void> {
-        const contract = await this.blockService.getBlockContent(updateBlock.block.key, updateBlock.blockType);
+        const contract = await this.blockService.getBlockContent(updateBlock.block.key);
         const modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(contract);
         const model = await modelBinder.contractToModel(contract);
 

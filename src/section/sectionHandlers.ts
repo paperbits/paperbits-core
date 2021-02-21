@@ -4,8 +4,6 @@ import { WidgetContext } from "@paperbits/common/editing";
 import { SectionModel } from "./sectionModel";
 import { RowModel } from "../row/rowModel";
 import { EventManager } from "@paperbits/common/events";
-import { BlockType } from "@paperbits/common/blocks";
-import { StyleHelper } from "@paperbits/styles";
 import { SectionModelBinder } from "./sectionModelBinder";
 
 
@@ -33,18 +31,6 @@ export class SectionHandlers {
                             }
 
                             sectionModel.styles.instance.key = Utils.randomClassName();
-
-                            const gridModel = sectionModel.widgets[0];
-
-                            StyleHelper.setPluginConfig(gridModel.styles.instance, "margin", { top: 10, bottom: 10, left: "auto", right: "auto" }, "xs");
-                            StyleHelper.setPluginConfig(gridModel.styles.instance, "margin", { top: 15, bottom: 15 }, "md");
-                            StyleHelper.setPluginConfig(gridModel.styles.instance, "margin", { top: 25, bottom: 25 }, "xl");
-                            StyleHelper.setPluginConfig(gridModel.styles.instance, "padding", { top: 5, bottom: 5, left: 5, right: 5 }, "xs");
-                            StyleHelper.setPluginConfig(gridModel.styles.instance, "padding", { top: 15, bottom: 15, left: 15, right: 15 }, "md");
-                            StyleHelper.setPluginConfig(gridModel.styles.instance, "size", { maxWidth: 540 }, "xs");
-                            StyleHelper.setPluginConfig(gridModel.styles.instance, "size", { maxWidth: 720 }, "md");
-                            StyleHelper.setPluginConfig(gridModel.styles.instance, "size", { maxWidth: 960 }, "lg");
-                            StyleHelper.setPluginConfig(gridModel.styles.instance, "size", { maxWidth: 1140 }, "xl");
 
                             const sectionHalf = context.half;
 
@@ -94,7 +80,7 @@ export class SectionHandlers {
                             name: "add-block-dialog",
                             params: {
                                 blockContract: sectionContract,
-                                blockType: BlockType.saved
+                                blockType: "layout-section"
                             }
                         },
                         resize: "vertically horizontally"

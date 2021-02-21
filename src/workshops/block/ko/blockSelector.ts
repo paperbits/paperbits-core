@@ -3,14 +3,14 @@ import * as ko from "knockout";
 import { IResourceSelector } from "@paperbits/common/ui";
 import { BlockItem } from "./blockItem";
 import { BlockContract } from "@paperbits/common/blocks/blockContract";
-import { IBlockService, BlockType } from "@paperbits/common/blocks";
+import { IBlockService } from "@paperbits/common/blocks";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelector";
 import { ViewModelBinderSelector } from "../../../ko/viewModelBinderSelector";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { StyleManager } from "@paperbits/common/styles";
 
-export interface UpdateBlock { block: BlockContract; blockType: BlockType; }
+export interface UpdateBlock { block: BlockContract; blockType: string; }
 @Component({
     selector: "block-selector",
     template: template
@@ -33,7 +33,7 @@ export class BlockSelector implements IResourceSelector<UpdateBlock> {
     }
 
     @Param()
-    public readonly blockType: BlockType;
+    public readonly blockType: string;
 
     @Event()
     public readonly onSelect: (updateBlock: UpdateBlock) => void;
@@ -54,7 +54,7 @@ export class BlockSelector implements IResourceSelector<UpdateBlock> {
         const blockItems = [];
 
         for (const block of blocks) {
-            const content = await this.blockService.getBlockContent(block.key, this.blockType);
+            const content = await this.blockService.getBlockContent(block.key);
 
             if (!content.type) {
                 content.type = block.type;
@@ -80,15 +80,14 @@ export class BlockSelector implements IResourceSelector<UpdateBlock> {
 
     public async selectBlock(block: BlockItem): Promise<void> {
         if (this.onSelect) {
-            this.onSelect({block: block.toBlock(), blockType: this.blockType});
+            this.onSelect({ block: block.toContract(), blockType: this.blockType });
         }
     }
 
     public async deleteBlock(block: BlockItem, event: any): Promise<void> {
         event.stopImmediatePropagation();
-        if (block && this.blockType === BlockType.saved) {
-            await this.blockService.deleteBlock(block.toBlock());
-            await this.searchBlocks(this.searchPattern());
-        }
+
+        await this.blockService.deleteBlock(block.toContract());
+        await this.searchBlocks(this.searchPattern());
     }
 }

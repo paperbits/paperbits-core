@@ -7,9 +7,9 @@ export class BlockItem {
     public key: string;
     public contentKey: string;
 
-    public hasFocus: ko.Observable<boolean>;
-    public title: ko.Observable<string>;
-    public description: ko.Observable<string>;
+    public readonly hasFocus: ko.Observable<boolean>;
+    public readonly title: ko.Observable<string>;
+    public readonly description: ko.Observable<string>;
     public widget: any;
     public styleManager: StyleManager;
 
@@ -23,7 +23,7 @@ export class BlockItem {
         this.styleManager = styleManager;
     }
 
-    public toBlock(): BlockContract {
+    public toContract(): BlockContract {
         return {
             key: this.key,
             type: "block",

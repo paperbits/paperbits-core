@@ -37,8 +37,8 @@
         data-bind="scrollable: true, focus: { childSelector: '.list-item' }">
         <div role="list" data-bind="foreach: { data: $component.snippets, as: 'snippet' }">
             <a href="#" class="snippet-grid list-item" role="listitem"
-                data-bind="click: $component.selectLayout, styledInPlace: snippet.styles">
-                <!-- ko foreach: { data: snippet.widgets, as: 'widget' } -->
+                data-bind="click: $component.selectLayout, styledInPlace: snippet.viewModel.styles">
+                <!-- ko foreach: { data: snippet.viewModel.widgets, as: 'widget' } -->
                 <div class="snippet-grid-cell" data-bind="styledInPlace: widget.styles, attr: { role: widget.role }">
                 </div>
                 <!-- /ko -->

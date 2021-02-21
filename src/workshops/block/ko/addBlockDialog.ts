@@ -1,8 +1,9 @@
 import template from "./addBlockDialog.html";
 import * as ko from "knockout";
-import { IBlockService, BlockType } from "@paperbits/common/blocks";
+import { IBlockService } from "@paperbits/common/blocks";
 import { Component, Param, Event } from "@paperbits/common/ko/decorators";
 import { ViewManager } from "@paperbits/common/ui";
+import { Contract } from "@paperbits/common";
 
 @Component({
     selector: "add-block-dialog",
@@ -14,10 +15,10 @@ export class AddBlockDialog {
     public readonly description: ko.Observable<string>;
 
     @Param()
-    public readonly blockContract: any;
-    
+    public readonly blockContract: Contract;
+
     @Param()
-    public readonly blockType: BlockType;
+    public readonly blockType: string;
 
     @Event()
     public readonly onClose: () => void;
@@ -40,7 +41,7 @@ export class AddBlockDialog {
         await this.blockService.createBlock(this.name(), this.description() || "", this.blockContract, this.blockType);
         this.viewManager.notifySuccess("Blocks", "Block added to library.");
 
-        if (this.onClose){
+        if (this.onClose) {
             this.onClose();
         }
     }
