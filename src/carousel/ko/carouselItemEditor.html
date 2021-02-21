@@ -1,4 +1,15 @@
 <fieldset class="form flex-item flex-item-grow" data-bind="scrollable: true">
     <background params="{ background: $component.background, onUpdate: onBackgroundUpdate }"></background>
-    <size-editor params="{ features: 'minMaxWidth', sizeConfig: sizeConfig, onUpdate: onSizeUpdate }"></size-editor>
+
+    <size-editor params="{ features: 'minMaxHeight,minMaxWidth', label: 'Container sizes', sizeConfig: containerSizeStyles, onUpdate: onContainerSizeUpdate }"></size-editor>
+
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#boxCollapse'"></a>
+            <b>Container box</b>
+        </label>
+        <div id="boxCollapse" class="collapse form-group-collapse">
+            <box params="{ features: 'margin', box: box, onUpdate: onBoxUpdate }"></box>
+        </div>
+    </div>
 </fieldset>

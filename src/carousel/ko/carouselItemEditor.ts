@@ -1,22 +1,20 @@
 
 import * as ko from "knockout";
 import * as Utils from "@paperbits/common";
-import * as Objects from "@paperbits/common/objects";
 import template from "./carouselItemEditor.html";
 import { ViewManager } from "@paperbits/common/ui";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { CarouselItemModel } from "../carouselModel";
 import {
     BackgroundStylePluginConfig,
-    TypographyStylePluginConfig,
+    BoxStylePluginConfig,
     MarginStylePluginConfig,
-    SizeStylePluginConfig,
-    BoxStylePluginConfig
+    SizeStylePluginConfig
 } from "@paperbits/styles/contracts";
-import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { EventManager } from "@paperbits/common/events/eventManager";
 import { CommonEvents } from "@paperbits/common/events";
 import { GridModel } from "../../grid-layout-section";
+import { StyleHelper } from "@paperbits/styles";
 
 @Component({
     selector: "carousel-item-editor",
@@ -24,16 +22,16 @@ import { GridModel } from "../../grid-layout-section";
 })
 export class CarouselItemEditor {
     public readonly background: ko.Observable<BackgroundStylePluginConfig>;
-    public readonly sizeConfig: ko.Observable<SizeStylePluginConfig>;
-
-    private gridModel: GridModel;
+    public readonly containerSizeStyles: ko.Observable<SizeStylePluginConfig>;
+    public readonly box: ko.Observable<BoxStylePluginConfig>;
 
     constructor(
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager
     ) {
         this.background = ko.observable<BackgroundStylePluginConfig>();
-        this.sizeConfig = ko.observable<SizeStylePluginConfig>();
+        this.containerSizeStyles = ko.observable<SizeStylePluginConfig>();
+        this.box = ko.observable<BoxStylePluginConfig>();
     }
 
     @Param()
@@ -45,25 +43,28 @@ export class CarouselItemEditor {
     @OnMounted()
     public async initialize(): Promise<void> {
         this.updateObservables();
-        this.background.extend(ChangeRateLimit).subscribe(this.applyChanges);
-        this.sizeConfig.extend(ChangeRateLimit).subscribe(this.applyChanges);
         this.eventManager.addEventListener(CommonEvents.onViewportChange, this.updateObservables);
     }
 
     private updateObservables(): void {
         const viewport = this.viewManager.getViewport();
-        const sectionStyles = this.model?.styles?.instance;
 
-        if (sectionStyles) {
-            this.background(sectionStyles.background);
-        }
+        /* Slide styles */
+        const localStyles = this.model.styles;
 
-        this.gridModel = <GridModel>this.model.widgets[0];
-        const gridStyles = this.gridModel?.styles;
+        const backgroundStyles = <BackgroundStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(localStyles, "background");
+        this.background(backgroundStyles);
 
-        if (gridStyles) {
-            const containerSizeStyles = Objects.getObjectAt<SizeStylePluginConfig>(`instance/size/${viewport}`, gridStyles);
-            this.sizeConfig(containerSizeStyles);
+        /* Grid styles */
+        const gridModel = <GridModel>this.model.widgets[0];
+
+        if (gridModel) {
+            const gridLocalStyles = gridModel.styles;
+            const containerSizeStyles = <SizeStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(gridLocalStyles, "size", viewport);
+            const marginStyles = <MarginStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(gridLocalStyles, "margin", viewport);
+
+            this.box({ margin: marginStyles });
+            this.containerSizeStyles(containerSizeStyles);
         }
     }
 
@@ -75,22 +76,31 @@ export class CarouselItemEditor {
             this.model.styles.instance.key = Utils.randomClassName();
         }
 
-        const gridStyles = this.gridModel?.styles;
+        const gridModel = <GridModel>this.model.widgets[0];
 
-        if (gridStyles) {
-            const containerSizeStyles: SizeStylePluginConfig = this.sizeConfig();
-            Objects.setValue(`instance/size/${viewport}`, gridStyles, containerSizeStyles);
+        if (gridModel) {
+            const gridLocalStyles = gridModel.styles;
+            const marginStyle = this.box().margin;
+            const containerSizeStyles: SizeStylePluginConfig = this.containerSizeStyles();
+            StyleHelper.setPluginConfigForLocalStyles(gridLocalStyles, "size", containerSizeStyles, viewport);
+            StyleHelper.setPluginConfigForLocalStyles(gridLocalStyles, "margin", marginStyle, viewport);
         }
 
         this.onChange(this.model);
     }
 
-    public onBackgroundUpdate(background: BackgroundStylePluginConfig): void {
-        Objects.setValue("instance/background", this.model.styles, background);
+    public onBackgroundUpdate(backgroundStyles: BackgroundStylePluginConfig): void {
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "background", backgroundStyles);
         this.applyChanges();
     }
 
-    public onSizeUpdate(sizeConfig: SizeStylePluginConfig): void {
-        this.sizeConfig(sizeConfig);
+    public onBoxUpdate(pluginConfig: BoxStylePluginConfig): void {
+        this.box(pluginConfig);
+        this.applyChanges();
+    }
+
+    public onContainerSizeUpdate(containerSizeStyles: SizeStylePluginConfig): void {
+        this.containerSizeStyles(containerSizeStyles);
+        this.applyChanges();
     }
 }
