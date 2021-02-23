@@ -1,5 +1,5 @@
 ﻿import * as ko from "knockout";
-import { Loader, LoaderOptions } from "google-maps";
+import { Loader, LoaderOptions } from "@googlemaps/js-api-loader";
 import { MapRuntimeConfig } from "./runtime/mapRuntimeConfig";
 
 
@@ -16,9 +16,9 @@ export class GooglmapsBindingHandler {
     }
 
     private async attach(element: Element, configuration: any): Promise<void> {
-        const options: LoaderOptions = {/* todo */ };
-        const loader = new Loader(configuration.apiKey(), options);
-        const google = await loader.load();
+        const options: Partial<LoaderOptions> = {/* todo */ };
+        const loader = new Loader({apiKey: configuration.apiKey(), ...options});
+        await loader.load();
 
         const geocoder = new google.maps.Geocoder();
         const mapOptions: google.maps.MapOptions = {};

@@ -20,13 +20,13 @@
         "not ie < 11"
     ],
     "dependencies": {
+        "@googlemaps/js-api-loader": "^1.11.1",
         "@paperbits/common": "0.1.378",
         "@paperbits/styles": "0.1.378",
         "await-parallel-limit": "^2.1.0",
         "basiclightbox": "^5.0.3",
         "cropperjs": "^1.5.9",
         "file-saver": "^2.0.2",
-        "google-maps": "^4.3.2",
         "html-minifier-terser": "^5.1.1",
         "html2plaintext": "^2.1.2",
         "knockout": "^3.5.1",
@@ -39,7 +39,7 @@
         "xhr2": "^0.2.0"
     },
     "devDependencies": {
-        "@types/google-maps": "^3.2.2",
+        "@types/google.maps": "^3.44.1",
         "@types/knockout.mapping": "^2.0.35",
         "@types/knockout.validation": "0.0.37",
         "@types/lodash": "^4.14.161",
