@@ -4,7 +4,9 @@ import { ViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet as I
 import { IWidgetBinding, GridHelper, WidgetContext, WidgetStackItem } from "@paperbits/common/editing";
 import { IWidgetService } from "@paperbits/common/widgets";
 import { EventManager } from "@paperbits/common/events";
+import { Router } from "@paperbits/common/routing";
 import { ContentModel } from "../../content";
+
 
 export class GridEditor {
     private activeHighlightedElement: HTMLElement;
@@ -20,7 +22,8 @@ export class GridEditor {
     constructor(
         private readonly viewManager: ViewManager,
         private readonly widgetService: IWidgetService,
-        private readonly eventManager: EventManager
+        private readonly eventManager: EventManager,
+        private readonly router: Router
     ) {
         this.rerenderEditors = this.rerenderEditors.bind(this);
         this.onPointerDown = this.onPointerDown.bind(this);
@@ -145,8 +148,22 @@ export class GridEditor {
         return true;
     }
 
-    private onPointerDown(event: MouseEvent): void {
-        if (event.ctrlKey) {
+    private onMouseClick(event: MouseEvent): void {
+        event.preventDefault(); // prevent default event handling for all controls
+    }
+
+    private onPointerDown(event: PointerEvent): void {
+        if (event.ctrlKey || event.metaKey) {
+            const htmlElement = <HTMLElement>event.target;
+            const htmlLinkElement = <HTMLLinkElement>htmlElement.closest("A");
+
+            if (!htmlLinkElement) {
+                return;
+            }
+
+            event.preventDefault();
+
+            this.router.navigateTo(htmlLinkElement.href);
             return;
         }
 
@@ -156,7 +173,7 @@ export class GridEditor {
             return;
         }
 
-        if (event.which !== 1) {
+        if (event.button !== 0) {
             return;
         }
 
@@ -229,7 +246,7 @@ export class GridEditor {
         }
     }
 
-    private onPointerMove(event: MouseEvent): void {
+    private onPointerMove(event: PointerEvent): void {
         if (this.viewManager.mode === ViewManagerMode.pause) {
             event.preventDefault();
             event.stopPropagation();
@@ -553,6 +570,7 @@ export class GridEditor {
         this.ownerDocument.addEventListener("mousemove", this.onPointerMove, true);
         this.ownerDocument.addEventListener("scroll", this.onWindowScroll);
         this.ownerDocument.addEventListener("mousedown", this.onPointerDown, true);
+        this.ownerDocument.addEventListener("click", this.onMouseClick, true);
         this.eventManager.addEventListener("onDelete", this.onDelete);
     }
 
@@ -560,6 +578,7 @@ export class GridEditor {
         this.ownerDocument.removeEventListener("mousemove", this.onPointerMove, true);
         this.ownerDocument.removeEventListener("scroll", this.onWindowScroll);
         this.ownerDocument.removeEventListener("mousedown", this.onPointerDown, true);
+        this.ownerDocument.removeEventListener("click", this.onMouseClick, false);
         this.eventManager.removeEventListener("onDelete", this.onDelete);
     }
 }

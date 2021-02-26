@@ -29,7 +29,7 @@ export class HostBindingHandler {
 
                 config.block.subscribe(this.designTime);
 
-                config.viewport.subscribe((viewport) => {
+                config.viewport.subscribe((viewport: string) => {
                     this.viewManager.mode = ViewManagerMode.selecting;
 
                     switch (viewport) {
@@ -82,27 +82,6 @@ export class HostBindingHandler {
         hostElement.classList.add("host");
         hostElement.title = "Website";
 
-        const onClick = (event: MouseEvent): void => {
-            event.preventDefault(); // prevent default event handling for all controls
-        };
-
-        const onPointerDown = (event: MouseEvent): void => {
-            if (!event.ctrlKey && !event.metaKey && (this.viewManager.mode !== ViewManagerMode.preview)) {
-                return;
-            }
-
-            const htmlElement = <HTMLElement>event.target;
-            const htmlLinkElement = <HTMLLinkElement>htmlElement.closest("A");
-
-            if (!htmlLinkElement) {
-                return;
-            }
-
-            event.preventDefault();
-
-            this.router.navigateTo(htmlLinkElement.href);
-        };
-
         let hostedWindowHistory;
 
         const onRouteChange = (route: Route): void => {
@@ -112,15 +91,9 @@ export class HostBindingHandler {
 
         const onLoad = async (): Promise<void> => {
             const contentDocument = hostElement.contentDocument;
-
+            this.viewManager["hostDocument"] = contentDocument;
             this.globalEventHandler.appendDocument(contentDocument);
             this.setRootElement(contentDocument.body);
-
-            /* TODO: Move these events to grid designer code */
-            contentDocument.addEventListener("mousedown", onPointerDown, true);
-            contentDocument.addEventListener("click", onClick, true);
-
-            this.viewManager["hostDocument"] = contentDocument;
 
             /* intercepting push state of the hosted iframe window */
             hostedWindowHistory = hostElement.contentDocument.defaultView.window.history;
