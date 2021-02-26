@@ -12,7 +12,7 @@ import { NavigationService } from "@paperbits/common/navigation";
 import { PageService } from "@paperbits/common/pages";
 import { PagePermalinkResolver } from "@paperbits/common/pages/pagePermalinkResolver";
 import { DefaultPermalinkService, PermalinkResolver } from "@paperbits/common/permalinks";
-import { DefaultRouteGuard, DefaultRouter } from "@paperbits/common/routing";
+import { DefaultRouteGuard, MailtoRouteGuard, DefaultRouter } from "@paperbits/common/routing";
 import { SiteService } from "@paperbits/common/sites";
 import { UrlService } from "@paperbits/common/urls";
 import { UrlPermalinkResolver } from "@paperbits/common/urls/urlPermalinkResolver";
@@ -104,6 +104,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new CollapsiblePanelModule());
 
         injector.bindToCollection("routeGuards", DefaultRouteGuard);
+        injector.bindToCollection("routeGuards", MailtoRouteGuard);
         injector.bindToCollection("autostart", WidgetBindingHandler);
         injector.bindToCollection("autostart", BackgroundBindingHandler);
         injector.bindToCollection("autostart", SecuredBindingHandler);
