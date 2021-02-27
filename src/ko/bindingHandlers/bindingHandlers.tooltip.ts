@@ -46,9 +46,6 @@ ko.bindingHandlers["tooltip"] = {
             tooltipMessage.subscribe((message) => {
                 hasText = !!message;
 
-                console.log(message);
-                console.log(hasText);
-
                 if (hasText && balloonHandle) {
                     balloonHandle.updatePosition();
                 }

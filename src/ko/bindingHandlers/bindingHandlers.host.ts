@@ -81,6 +81,7 @@ export class HostBindingHandler {
         hostElement.src = "/page.html?designtime=true";
         hostElement.classList.add("host");
         hostElement.title = "Website";
+        hostElement.tabIndex = -1;
 
         let hostedWindowHistory;
 
@@ -119,9 +120,9 @@ export class HostBindingHandler {
                 window.history.pushState(route, route.title, route.url);
             };
 
-            const settings =  await this.siteService.getSettings<any>();
+            const settings = await this.siteService.getSettings<any>();
             const siteSettings: SiteSettingsContract = settings?.site;
-            
+
             if (!siteSettings?.faviconSourceKey) {
                 return;
             }

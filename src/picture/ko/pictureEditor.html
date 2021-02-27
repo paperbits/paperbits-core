@@ -7,12 +7,12 @@
         </label>
         <div id="sourceCollapse" class="collapse form-group-collapse">
             <div class="dropzone">
-                <label for="source" class="form-label">
+                <label for="pictureSource" class="form-label">
                     Source
                     <button class="btn btn-info" type="button" aria-label="Picture source" aria-hidden="true" role="tooltip"
                         data-bind="tooltip: 'Source of the picture. To change, click on preview area below and select a picture from media libaray.'"></button>
                 </label>
-                <a href="#" aria-labelledby="source" role="button" class="dropzone-showbox"
+                <a id="pictureSource" href="#" role="button" class="dropzone-showbox" aria-label="Picture source"
                     data-bind="balloon: { position: 'right', component: { name: 'media-selector', params: { mimeType: 'image/', onSelect: $component.onMediaSelected } } }, focus: true">
                     <div class="fit" role="button" data-bind="background: background"></div>
                 </a>
@@ -21,8 +21,7 @@
             <div class="form-group">
                 <label for="caption" class="form-label">
                     Caption
-                    <button class="btn btn-info" type="button" aria-label="Caption"
-                        data-bind="tooltip: 'An alternate text for an image'"></button>
+                    <button class="btn btn-info" type="button" aria-hidden="true" role="tooltip" data-bind="tooltip: 'An alternate text for an image'"></button>
                 </label>
                 <input type="text" id="caption" class="form-control" data-bind="textInput: caption" maxlength="256" />
             </div>
