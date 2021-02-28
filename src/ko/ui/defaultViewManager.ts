@@ -33,7 +33,7 @@ export class DefaultViewManager implements ViewManager {
     public readonly journeyName: ko.Computed<string>;
     public readonly toasts: ko.ObservableArray<Toast>;
     public readonly primaryToolboxVisible: ko.Observable<boolean>;
-    public readonly widgetEditor: ko.Observable<View>;
+    public readonly activeView: ko.Observable<View>;
     public readonly contextualEditors: ko.ObservableArray<IContextCommandSet>;
     public readonly highlightedElement: ko.Observable<IHighlightConfig>;
     public readonly splitterElement: ko.Observable<ISplitterConfig>;
@@ -77,7 +77,7 @@ export class DefaultViewManager implements ViewManager {
             return this.journey()[0].heading;
         });
 
-        this.widgetEditor = ko.observable<View>();
+        this.activeView = ko.observable<View>();
         this.contextualEditors = ko.observableArray<IContextCommandSet>([]);
         this.highlightedElement = ko.observable<IHighlightConfig>();
         this.splitterElement = ko.observable<ISplitterConfig>();
@@ -114,7 +114,7 @@ export class DefaultViewManager implements ViewManager {
     }
 
     private onKeyDown(event: KeyboardEvent): void {
-        if (this.getOpenView()) {
+        if (this.getActiveView()) {
             return;
         }
 
@@ -126,7 +126,7 @@ export class DefaultViewManager implements ViewManager {
     }
 
     private onKeyUp(event: KeyboardEvent): void {
-        if (this.getOpenView()) {
+        if (this.getActiveView()) {
             return;
         }
 
@@ -238,7 +238,7 @@ export class DefaultViewManager implements ViewManager {
 
     public clearJourney(): void {
         this.journey([]);
-        this.widgetEditor(null);
+        this.activeView(null);
     }
 
     public hideToolboxes(): void {
@@ -307,7 +307,7 @@ export class DefaultViewManager implements ViewManager {
     public openViewAsPopup(view: View): void {
         this.viewStack.clear();
 
-        if (this.widgetEditor() === view) {
+        if (this.activeView() === view) {
             return;
         }
 
@@ -329,7 +329,7 @@ export class DefaultViewManager implements ViewManager {
 
         this.clearContextualEditors();
         this.closeView();
-        this.widgetEditor(view);
+        this.activeView(view);
         this.mode = ViewManagerMode.configure;
 
         this.designTime(false); // Review: It's here for text editor
@@ -337,8 +337,8 @@ export class DefaultViewManager implements ViewManager {
         this.viewStack.pushView(view);
     }
 
-    public getOpenView(): View {
-        return this.widgetEditor();
+    public getActiveView(): View {
+        return this.activeView();
     }
 
     public onEscape(): void {
@@ -352,7 +352,7 @@ export class DefaultViewManager implements ViewManager {
             return;
         }
 
-        if (!this.getOpenView() && this.journey().length === 0 && host && host.name !== "page-host") {
+        if (!this.getActiveView() && this.journey().length === 0 && host && host.name !== "page-host") {
             this.setHost({ name: "page-host" }); // TODO: Get host type by current route.
         }
     }
@@ -376,19 +376,25 @@ export class DefaultViewManager implements ViewManager {
         };
 
         this.openViewAsPopup(view);
+
+        this.eventManager.dispatchEvent("displayHint", {
+            key: "fe7c",
+            content: `You can resize and move almost every editor, and it will remember its size and position.`
+        });
     }
 
     public closeView(): void {
-        if (this.mode === ViewManagerMode.preview) {
+            if(this.mode === ViewManagerMode.preview) {
             return;
         }
-        const view = this.widgetEditor();
+
+        const view = this.activeView();
 
         if (view) {
             this.viewStack.removeView(view);
         }
 
-        this.widgetEditor(null);
+        this.activeView(null);
         this.eventManager.dispatchEvent("onWidgetEditorClose");
         this.clearContextualEditors();
         this.mode = ViewManagerMode.selecting;

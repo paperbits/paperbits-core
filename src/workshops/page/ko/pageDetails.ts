@@ -9,6 +9,7 @@ import { ISettingsProvider } from "@paperbits/common/configuration";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 import { MediaContract, IMediaService } from "@paperbits/common/media";
 import { ILocaleService } from "@paperbits/common/localization";
+import { EventManager } from "@paperbits/common/events";
 
 @Component({
     selector: "page-details-workshop",
@@ -26,7 +27,8 @@ export class PageDetailsWorkshop {
         private readonly reservedPermalinks: string[],
         private readonly settingsProvider: ISettingsProvider,
         private readonly mediaService: IMediaService,
-        private readonly localeService: ILocaleService
+        private readonly localeService: ILocaleService,
+        private readonly eventManager: EventManager
     ) {
         this.isReserved = ko.observable(false);
         this.isSeoEnabled = ko.observable(false);
@@ -94,6 +96,11 @@ export class PageDetailsWorkshop {
 
         await this.router.navigateTo(validPermalink());
         this.viewManager.setHost({ name: "page-host" });
+
+        this.eventManager.dispatchEvent("displayHint", {
+            key: "41d9",
+            content: `If you change the permalink of a page, all hyperlinks pointing to it will be automatically updated everywhere on your website.`
+        });
     }
 
     private async applyChanges(): Promise<void> {

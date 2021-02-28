@@ -81,6 +81,11 @@ export class MediaWorkshop {
     }
 
     public async uploadMedia(): Promise<void> {
+        this.eventManager.dispatchEvent("displayHint", {
+            key: "88d9",
+            content: `You may upload pictures, videos and other files just by dropping them anywhere in editor window and even make respective widget out of them.`
+        });
+
         const files = await this.viewManager.openUploadDialog();
 
         this.working(true);

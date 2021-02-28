@@ -37,13 +37,13 @@ export class GridEditor {
     }
 
     private isModelBeingEdited(binding: IWidgetBinding<any, any>): boolean {
-        const view = this.viewManager.getOpenView();
+        const editorView = this.viewManager.getActiveView();
 
-        if (!view) {
+        if (!editorView) {
             return false;
         }
 
-        if (view.component.name !== binding.editor) {
+        if (editorView.component.name !== binding.editor) {
             return false;
         }
 
@@ -195,7 +195,7 @@ export class GridEditor {
             event.preventDefault();
             event.stopPropagation();
 
-            this.eventManager.dispatchEvent("InactiveLayoutHint");
+            this.eventManager.dispatchEvent("displayInactiveLayoutHint");
             return;
         }
 

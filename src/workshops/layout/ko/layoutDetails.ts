@@ -4,6 +4,7 @@ import { ViewManager } from "@paperbits/common/ui";
 import { ILayoutService } from "@paperbits/common/layouts/";
 import { LayoutItem } from "./layoutItem";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
+import { EventManager } from "@paperbits/common/events";
 
 @Component({
     selector: "layout-details-workshop",
@@ -16,7 +17,8 @@ export class LayoutDetails {
 
     constructor(
         private readonly layoutService: ILayoutService,
-        private readonly viewManager: ViewManager
+        private readonly viewManager: ViewManager,
+        private readonly eventManager: EventManager
     ) {
         this.permalinkTemplate = ko.observable();
     }
@@ -55,6 +57,11 @@ export class LayoutDetails {
         });
 
         this.viewManager.setHost({ name: "layout-host", params: { layoutKey: this.layoutItem.key } });
+
+        this.eventManager.dispatchEvent("displayHint", {
+            key: "48f5",
+            content: `You may have different page layouts for different parts of your website. Which layout gets applied at a given moment is determined by matching its URL template to URL of the current page.`
+        });
     }
 
     private async updateLayout(): Promise<void> {
