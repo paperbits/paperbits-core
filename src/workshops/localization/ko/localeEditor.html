@@ -2,7 +2,6 @@
     <div class="form-group">
         <label class="form-label">
             Language
-            <button class="btn btn-info" type="button" data-bind="tooltip: 'Locale code, e.g. en-us'"></button>
         </label>
         <select id="textTransform" class="form-control"
                     data-bind="options: languages, value: selectedLanguage, optionsText: 'displayName'"></select>
@@ -10,9 +9,7 @@
     <!-- ko if: locales -->
     <div class="form-group">
         <label class="form-label">
-            Display name
-            <button class="btn btn-info" type="button"
-                data-bind="tooltip: 'Locale display name. e.g. English (US)'"></button>
+            Locale
         </label>
         <select id="textTransform" class="form-control"
                     data-bind="options: locales, value: selectedLocale, optionsText: 'displayName'"></select>
