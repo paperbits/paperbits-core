@@ -24,7 +24,7 @@ import { TextblockEditorModule } from "./textblock/ko/textblockEditor.module";
 import { DropbucketModule } from "./workshops/dropbucket/ko/dropbucket.module";
 import { ViewportSelector } from "./workshops/viewports/ko/viewport-selector";
 import { LocaleSelector, LocaleEditor } from "./workshops/localization/ko";
-import { HostBindingHandler, BalloonBindingHandler, ResizableBindingHandler } from "./ko/bindingHandlers";
+import { HostBindingHandler, BalloonBindingHandler, ResizableBindingHandler, SurfaceBindingHandler } from "./ko/bindingHandlers";
 import { MediaHandlers, HtmlEditorProvider } from "@paperbits/common/editing";
 import { HyperlinkSelector } from "./workshops/hyperlinks/ko/hyperlinkSelector";
 import { WidgetSelector } from "./workshops/widgets/ko/widgetSelector";
@@ -63,6 +63,7 @@ import { MemoryCache } from "@paperbits/common/caching";
 import { CarouselDesignModule } from "./carousel/ko";
 import { TabPanelDesignModule } from "./tabs/tabPanel.design.module";
 // import { DividerDesignModule } from "./divider/divider.design.module";
+import { LocalStorageSettingsProvider } from "@paperbits/common/configuration";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -86,6 +87,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindToCollection("autostart", CropperBindingHandler);
         injector.bindToCollection("autostart", BalloonBindingHandler);
         injector.bindToCollection("autostart", UnhandledErrorHandler);
+        injector.bindToCollection("autostart", SurfaceBindingHandler);
         injector.bind("tooltip", Tooltip);
         injector.bindSingleton("dragManager", DragManager);
         injector.bindSingleton("lightbox", Lightbox);
@@ -103,6 +105,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bind("roleSelector", RoleSelector);
         injector.bind("roleInput", RoleInput);
         injector.bind("spinner", Spinner);
+        injector.bind("localSettings", LocalStorageSettingsProvider);
         injector.bindModule(new MapDesignModule());
         injector.bindToCollection("permalinkResolvers", MediaPermalinkResolver, "mediaPermalinkResolver");
         injector.bindModule(new TextblockEditorModule());

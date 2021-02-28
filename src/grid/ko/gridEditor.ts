@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import * as Utils from "@paperbits/common/utils";
-import { ViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet as IContextCommandSet } from "@paperbits/common/ui";
+import { ViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet } from "@paperbits/common/ui";
 import { IWidgetBinding, GridHelper, WidgetContext, WidgetStackItem } from "@paperbits/common/editing";
 import { IWidgetService } from "@paperbits/common/widgets";
 import { EventManager } from "@paperbits/common/events";
@@ -153,7 +153,7 @@ export class GridEditor {
     }
 
     private onPointerDown(event: PointerEvent): void {
-        if (event.ctrlKey || event.metaKey) {
+        if (event.ctrlKey || event.metaKey || this.viewManager.mode === ViewManagerMode.preview) {
             const htmlElement = <HTMLElement>event.target;
             const htmlLinkElement = <HTMLLinkElement>htmlElement.closest("A");
 
@@ -191,7 +191,7 @@ export class GridEditor {
         const host = this.viewManager.getHost();
         const layoutEditing = host.name === "layout-host";
 
-        if ((!windgetIsInContent && !layoutEditing)) {
+        if (!windgetIsInContent && !layoutEditing) {
             event.preventDefault();
             event.stopPropagation();
 
@@ -237,7 +237,7 @@ export class GridEditor {
 
             const config: IHighlightConfig = {
                 element: this.activeHighlightedElement,
-                text: widgetBinding["displayName"],
+                text: widgetBinding.displayName,
                 color: contextualEditor.color
             };
 

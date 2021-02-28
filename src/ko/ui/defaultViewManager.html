@@ -12,16 +12,16 @@
 
 <div class="toasts" data-bind="foreach: toasts">
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-indicator">
+        <!-- <div class="toast-indicator">
             <i data-bind="css: state"></i>
-        </div>
+        </div> -->
         <div class="toast-container">
-            <div class="toast-header" data-bind="text: title"></div>
-            <div class="toast-body" data-bind="html: content"></div>
+            <h1 class="toast-header" data-bind="text: title"></h1>
+            <p class="toast-body" data-bind="html: content"></p>
 
             <!-- ko if: commands().length > 0 -->
             <div class="flex-item btn-group" data-bind="foreach: { data: commands, as: 'command' }">
-                <button class="btn" data-bind="click: command.action">
+                <button class="btn btn-round" data-bind="click: command.action">
                     <!-- ko if: command.iconClass -->
                     <i class="paperbits-icon" data-bind="css: command.iconClass"></i>
                     <!-- /ko -->

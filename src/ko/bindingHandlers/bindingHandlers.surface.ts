@@ -1,42 +1,55 @@
 ﻿import * as ko from "knockout";
-import * as Objects from "@paperbits/common";
 import { View } from "@paperbits/common/ui";
 import "@paperbits/common/extensions";
+import { ISettingsProvider } from "@paperbits/common/configuration";
 
-ko.bindingHandlers["surface"] = {
-    init(element: HTMLElement, valueAccessor?: () => View) {
+
+interface EditorSettings {
+    width: number;
+    height: number;
+    left: number;
+    top: number;
+}
+
+export class SurfaceBindingHandler {
+    constructor(private readonly localSettings: ISettingsProvider) {
+        const initialize = this.initialize.bind(this);
+
+        ko.bindingHandlers["surface"] = {
+            init(element: HTMLElement, valueAccessor?: () => View): void {
+                initialize(element, valueAccessor);
+            }
+        };
+    }
+
+    private async initialize(element: HTMLElement, valueAccessor?: () => View): Promise<void> {
         const view = valueAccessor();
-        const settingsString = localStorage["settings"];
+        const editorSettings = await this.localSettings.getSetting<EditorSettings>(view.component.name);
 
-        if (settingsString) {
-            const settings = JSON.parse(settingsString);
-            const editorSettings = settings[view.component.name];
+        if (editorSettings) {
+            if (Number.isInteger(editorSettings.width)) {
+                element.style.width = editorSettings.width + "px";
+            }
 
-            if (editorSettings) {
-                if (Number.isInteger(editorSettings.width)) {
-                    element.style.width = editorSettings.width + "px";
+            if (Number.isInteger(editorSettings.height)) {
+                element.style.height = editorSettings.height + "px";
+                element.classList.add("resized-vertically");
+            }
+
+            if (Number.isInteger(editorSettings.left)) {
+                if (editorSettings.left + editorSettings.width > document.body.clientWidth) {
+                    editorSettings.left = document.body.clientWidth - editorSettings.width;
                 }
 
-                if (Number.isInteger(editorSettings.height)) {
-                    element.style.height = editorSettings.height + "px";
-                    element.classList.add("resized-vertically");
+                element.style.left = editorSettings.left + "px";
+            }
+
+            if (Number.isInteger(editorSettings.top)) {
+                if (editorSettings.top + editorSettings.height > document.body.clientHeight) {
+                    editorSettings.top = 10;
                 }
 
-                if (Number.isInteger(editorSettings.left)) {
-                    if (editorSettings.left + editorSettings.width > document.body.clientWidth) {
-                        editorSettings.left = document.body.clientWidth - editorSettings.width;
-                    }
-
-                    element.style.left = editorSettings.left + "px";
-                }
-
-                if (Number.isInteger(editorSettings.top)) {
-                    if (editorSettings.top + editorSettings.height > document.body.clientHeight) {
-                        editorSettings.top = 10;
-                    }
-
-                    element.style.top = editorSettings.top + "px";
-                }
+                element.style.top = editorSettings.top + "px";
             }
         }
 
@@ -48,23 +61,14 @@ ko.bindingHandlers["surface"] = {
                 preventDragging: (clickedElement: HTMLElement) => {
                     return clickedElement.closest("a, .form, .btn, .toolbox-btn, .toolbox-dropdown .cropbox") !== null;
                 },
-                ondragend: (): void => {
+                ondragend: async (): Promise<void> => {
                     if (!view || !view.component) {
                         return;
                     }
 
                     const rect = element.getBoundingClientRect();
-                    const settingsString = localStorage["settings"];
-                    let settings = {};
-
-                    if (settingsString) {
-                        settings = JSON.parse(settingsString);
-                    }
-
-                    Objects.setValueWithCompensation(`${view.component.name}/top`, settings, Math.floor(rect.top));
-                    Objects.setValueWithCompensation(`${view.component.name}/left`, settings, Math.floor(rect.left));
-
-                    localStorage["settings"] = JSON.stringify(settings);
+                    await this.localSettings.setSetting(`${view.component.name}/top`, Math.floor(rect.top));
+                    await this.localSettings.setSetting(`${view.component.name}/left`, Math.floor(rect.left));
                 }
             }
         }, null);
@@ -81,30 +85,20 @@ ko.bindingHandlers["surface"] = {
         ko.applyBindingsToNode(element, {
             resizable: {
                 directions: resizeDirections,
-                onresize: () => {
+                onresize: async (): Promise<void> => {
                     if (!view || !view.component) {
                         return;
                     }
 
-                    const settingsString = localStorage["settings"];
-
-                    let settings = {};
-
-                    if (settingsString) {
-                        settings = JSON.parse(settingsString);
-                    }
-
                     if (resizeDirections.includes("horizontally")) {
-                        Objects.setValueWithCompensation(`${view.component.name}/width`, settings, element.clientWidth);
+                        await this.localSettings.setSetting(`${view.component.name}/width`, element.clientWidth);
                     }
 
                     if (resizeDirections.includes("vertically")) {
-                        Objects.setValueWithCompensation(`${view.component.name}/height`, settings, element.clientHeight);
+                        await this.localSettings.setSetting(`${view.component.name}/height`, element.clientHeight);
                     }
-
-                    localStorage["settings"] = JSON.stringify(settings);
                 }
             }
         }, null);
     }
-};
+}

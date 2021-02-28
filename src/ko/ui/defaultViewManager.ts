@@ -181,25 +181,28 @@ export class DefaultViewManager implements ViewManager {
         this.toasts.splice(this.toasts().indexOf(toast), 1);
     }
 
-    public notifySuccess(title: string, content: string): void {
+    public notifySuccess(title: string, content: string): Toast {
         const toast = new Toast(title, content, "success");
         this.toasts.push(toast);
         this.scheduleToastRemoval(toast);
+        return toast;
     }
 
-    public notifyInfo(title: string, content: string, commands?: ICommand[]): void {
+    public notifyInfo(title: string, content: string, commands?: ICommand[]): Toast {
         const toast = new Toast(title, content, "info", null, commands);
         this.toasts.push(toast);
         this.scheduleToastRemoval(toast);
+        return toast;
     }
 
-    public notifyError(title: string, content: string): void {
+    public notifyError(title: string, content: string): Toast {
         const toast = new Toast(title, content, "error");
         this.toasts.push(toast);
         this.scheduleToastRemoval(toast);
+        return toast;
     }
 
-    public notifyProgress(promise: Promise<any>, title: string, content: string): void {
+    public notifyProgress(promise: Promise<any>, title: string, content: string): Toast {
         const toast = new Toast(title, content);
 
         this.toasts.push(toast);
@@ -215,6 +218,8 @@ export class DefaultViewManager implements ViewManager {
         promise.then(() => {
             this.scheduleToastRemoval(toast);
         });
+
+        return toast;
     }
 
     public updateJourneyComponent(view: View): void {

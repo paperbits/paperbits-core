@@ -136,7 +136,7 @@ export class FormattingTools {
         this.alignment(alignment);
 
         if (this.textStyles()) {
-            let appearance = this.textStyles()[0]["displayName"];
+            let appearance = this.textStyles()[0].displayName;
 
             if (selectionState.appearance) {
                 // const breakpoint = Utils.getClosestBreakpoint(selectionState.appearance, this.viewManager.getViewport());
@@ -144,7 +144,7 @@ export class FormattingTools {
                 const styleKey = selectionState.appearance;
 
                 const textStyle = this.textStyles().find(item => item["key"] === styleKey);
-                appearance = textStyle && textStyle["displayName"];
+                appearance = textStyle && textStyle.displayName;
             }
 
             this.appearance(appearance);
