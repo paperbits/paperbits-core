@@ -7,6 +7,6 @@ export class SectionModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("section", SectionViewModel);
         injector.bindToCollection("modelBinders", SectionModelBinder, "sectionModelBinder");
-        injector.bindToCollection("viewModelBinders", SectionViewModelBinder);
+        injector.bindToCollection("viewModelBinders", SectionViewModelBinder, "sectionViewModelBinder");
     }
 }

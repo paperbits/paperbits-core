@@ -3,18 +3,19 @@
     <hr />
 
     <div class="tabs" role="tablist">
-        <div class="tab" data-bind="css: { 'tab-is-active': !selected() }, attr: { 'aria-selected': !selected() }">
-            <a href="#" data-bind="click: selected.bind($data,undefined), focus: true" title="New section" role="tab"
+        <div class="tab"
+            data-bind="css: { 'tab-is-active': selected() === 'blank' }, attr: { 'aria-selected':  selected() === 'blank'}">
+            <a href="#" data-bind="click: selected.bind($data,'blank'), focus: true" title="New section" role="tab"
                 aria-label="add empty section">
-                Empty
+                Blank
             </a>
         </div>
         <!-- ko if: isBlocksEnabled -->
         <div class="tab"
-            data-bind="css: { 'tab-is-active': selected() === 'blocks' }, attr: { 'aria-selected': selected() === 'blocks' }">
-            <a href="#" data-bind="click: selected.bind($data,'blocks')" title="Blocks" role="tab"
+            data-bind="css: { 'tab-is-active': selected() === 'library' }, attr: { 'aria-selected': selected() === 'library' }">
+            <a href="#" data-bind="click: selected.bind($data,'library')" title="Blocks" role="tab"
                 aria-label="add from blocks">
-                Blocks
+                Library
             </a>
         </div>
         <!-- /ko -->
@@ -26,7 +27,7 @@
             </a>
         </div>
     </div>
-    <!-- ko if: !selected() -->
+    <!-- ko if: selected() === 'blank' -->
 
     <!--ko if: $component.working()-->
     <spinner></spinner>
@@ -49,18 +50,18 @@
 
     <!-- /ko -->
 
-    <!-- ko if: selected() === 'saved' -->
+    <!-- ko if: selected() === 'library' -->
     <div role="tabpanel" class="flex flex-column add-block-container">
         <block-selector class="flex flex-column"
-            params="{ blockType: 'layout-section', onSelect: $component.onBlockSelected }">
+            params="{ blockType: 'layout-section', blockSource: 'library', onSelect: $component.onBlockSelected }">
         </block-selector>
     </div>
     <!-- /ko -->
 
-    <!-- ko if: selected() === 'blocks' -->
+    <!-- ko if: selected() === 'saved' -->
     <div role="tabpanel" class="flex flex-column add-block-container">
         <block-selector class="flex flex-column"
-            params="{ blockType: 'blocks-section', onSelect: $component.onBlockSelected }">
+            params="{ blockType: 'layout-section', blockSource: 'saved', onSelect: $component.onBlockSelected }">
         </block-selector>
     </div>
     <!-- /ko -->

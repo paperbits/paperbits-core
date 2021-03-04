@@ -4,7 +4,7 @@
             data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: true" placeholder="Search item..."
             aria-label="Search items" aria-controls="searchResult" />
         <p id="searchResult" class="text-hide" role="region" aria-live="polite"
-            data-bind="text: `Items found: ${blocks().length}`">
+            data-bind="text: `Items found: ${$component.blocks().length}`">
         </p>
     </div>
 </div>
@@ -22,7 +22,7 @@
 <!-- ko if: blocks().length > 0 -->
 <div role="list" data-bind="foreach: blocks, scrollable: true">
     <div class="list-item" data-bind="css: { selected: hasFocus }, click: $component.selectBlock">
-        <!-- ko if: $component.blockType !== 'blocks-section' -->
+        <!-- ko if: $component.blockSource === 'saved' -->
         <button class="btn-standalone remove-block" data-bind="click: $component.deleteBlock">
             <i class="paperbits-icon paperbits-trash-simple"></i>
         </button>
