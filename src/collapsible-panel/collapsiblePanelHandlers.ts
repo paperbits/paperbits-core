@@ -1,7 +1,7 @@
 ﻿import { IWidgetOrder, IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { CollapsiblePanelModel } from "./collapsiblePanelModel";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
-import { WidgetModel } from "@paperbits/common/widgets";
+import { ModelBinderSelector, WidgetModel } from "@paperbits/common/widgets";
 import { EventManager } from "@paperbits/common/events";
 import { DragSession } from "@paperbits/common/ui/draggables";
 
@@ -23,7 +23,9 @@ export class CollapsiblePanelHandlers implements IWidgetHandler {
             iconClass: "paperbits-menu-34",
             requires: ["html", "js"],
             createModel: async () => {
-                return new CollapsiblePanelModel();
+                const model = new CollapsiblePanelModel();
+                model.version = "1.1.0";
+                return model;
             }
         };
 

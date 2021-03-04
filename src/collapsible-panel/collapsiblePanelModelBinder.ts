@@ -41,6 +41,7 @@ export class CollapsiblePanelModelBinder implements IModelBinder<CollapsiblePane
         const contract: CollapsiblePanelContract = {
             type: "collapsible-panel",
             styles: model.styles,
+            version: model.version,
             nodes: []
         };
 

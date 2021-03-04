@@ -165,6 +165,7 @@ export class WidgetBindingHandler {
                                     css: {
                                         "block": binding.flow === "block",
                                         "inline-block": binding.flow === "inline",
+                                        "legacy": binding.flow === "legacy",
                                         "placeholder": binding.flow === "none"
                                     }
                                 }, null);
