@@ -538,7 +538,6 @@ export class GridEditor {
             const quadrant = Utils.pointerToClientQuadrant(pointerX, pointerY, element);
             const half = quadrant.vertical;
             const active = this.actives[widgetBinding.name];
-
             const contextualEditor = this.getContextualEditor(element, half);
 
             highlightColor = contextualEditor.color;

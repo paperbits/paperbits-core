@@ -186,7 +186,7 @@ export class DropBucket {
     }
 
     public onDragStart(item: DropBucketItem): HTMLElement {
-        if (this.viewManager.mode == ViewManagerMode.preview) {
+        if (this.viewManager.mode === ViewManagerMode.preview) {
             return;
         }
         item.widgetFactoryResult = item.widgetOrder().createWidget();

@@ -1,5 +1,4 @@
 import * as ko from "knockout";
-import * as validation from "knockout.validation";
 
 ko.bindingHandlers["validationMessageToggle"] = {
     init: (triggerElement: HTMLElement, valueAccessor) => {
@@ -17,8 +16,7 @@ ko.bindingHandlers["validationMessageToggle"] = {
                     name: "tooltip",
                     params: { text: (<any>observable).error }
                 },
-                position: "top",
-                isOpen: ko.observable()
+                position: "top"
             }
         }, null);
     }

@@ -23,8 +23,8 @@ export class HtmlEditorBindingHandler {
                 const onEscapeKeyPressed = () => htmlEditor.detachFromElement();
                 eventManager.addEventListener("onEscape", onEscapeKeyPressed);
 
-                const onWidgetEditorClose = () => htmlEditor.detachFromElement();
-                eventManager.addEventListener("onWidgetEditorClose", onWidgetEditorClose);
+                const onViewClose = () => htmlEditor.detachFromElement();
+                eventManager.addEventListener("onViewClose", onViewClose);
 
                 const onHtmlEditorRequested = () => htmlEditor.enable();
 
@@ -35,7 +35,7 @@ export class HtmlEditorBindingHandler {
 
                 ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
                     eventManager.removeEventListener("onEscape", onEscapeKeyPressed);
-                    eventManager.removeEventListener("onWidgetEditorClose", onWidgetEditorClose);
+                    eventManager.removeEventListener("onViewClose", onViewClose);
                     eventManager.removeEventListener("enableHtmlEditor", onHtmlEditorRequested);
                     htmlEditor.detachFromElement();
                 });

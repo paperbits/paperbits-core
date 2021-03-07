@@ -1,7 +1,7 @@
 ﻿import * as _ from "lodash";
 import * as ko from "knockout";
 import * as Arrays from "@paperbits/common/arrays";
-import * as Utils from "@paperbits/common/utils";
+import * as Html from "@paperbits/common/html";
 import template from "./defaultViewManager.html";
 import "@paperbits/common/extensions";
 import { Bag } from "@paperbits/common";
@@ -13,7 +13,7 @@ import { IWidgetBinding } from "@paperbits/common/editing";
 import { Component, OnMounted, OnDestroyed } from "@paperbits/common/ko/decorators";
 import { RoleModel, BuiltInRoles } from "@paperbits/common/user";
 import { DesignerUserService } from "./designerUserService";
-import { ViewStack } from "./viewStack";
+import { ViewStack } from "@paperbits/common/ui/viewStack";
 import { ISettingsProvider } from "@paperbits/common/configuration";
 
 declare let uploadDialog: HTMLInputElement;
@@ -263,23 +263,23 @@ export class DefaultViewManager implements ViewManager {
     }
 
     /**
-     * Deletes specified editors and all editors after.
+     * Deletes specified view and all views after it in the stack.
      * @param view View
      */
-    public closeWorkshop(editor: View | string): void {
+    public closeWorkshop(view: View | string): void {
         const journey = this.journey();
-        let view;
+        let viewToClose;
 
-        if (typeof editor === "string") {
-            view = journey.find(x => x.component.name === editor);
+        if (typeof view === "string") {
+            viewToClose = journey.find(x => x.component.name === view);
         }
         else {
-            view = editor;
+            viewToClose = view;
         }
 
-        const indexOfClosingEditor = journey.indexOf(view);
+        const indexOfClosingView = journey.indexOf(viewToClose);
 
-        journey.splice(indexOfClosingEditor);
+        journey.splice(indexOfClosingView);
 
         this.journey(journey);
         this.mode = ViewManagerMode.selecting;
@@ -312,7 +312,7 @@ export class DefaultViewManager implements ViewManager {
         }
 
         view.hitTest = (el) => { // TODO: Move to bindingHandler
-            return !!Utils.closest(el, (x: HTMLElement) =>
+            return !!Html.closest(el, (x: HTMLElement) =>
                 (x.getAttribute && !!x.getAttribute("contentEditable")) || // TODO: Move hitTest check to text editor
                 (x?.classList && Arrays.coerce(x.classList).includes("toolbox")));
         };
@@ -384,7 +384,7 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public closeView(): void {
-            if(this.mode === ViewManagerMode.preview) {
+        if (this.mode === ViewManagerMode.preview) {
             return;
         }
 
@@ -395,7 +395,7 @@ export class DefaultViewManager implements ViewManager {
         }
 
         this.activeView(null);
-        this.eventManager.dispatchEvent("onWidgetEditorClose");
+        this.eventManager.dispatchEvent("onViewClose");
         this.clearContextualEditors();
         this.mode = ViewManagerMode.selecting;
 

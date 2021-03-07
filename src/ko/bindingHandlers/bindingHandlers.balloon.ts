@@ -1,42 +1,15 @@
 ﻿import * as ko from "knockout";
+import * as Html from "@paperbits/common/html";
 import { Keys } from "@paperbits/common/keyboard";
-import { IComponent, ITemplate, View } from "@paperbits/common/ui";
-import { ViewStack } from "../ui/viewStack";
+import { View } from "@paperbits/common/ui";
+import { BalloonOptions, BalloonActivationOptions, BalloonHandle } from "@paperbits/common/ui/balloons";
+import { ViewStack } from "@paperbits/common/ui/viewStack";
 
-export enum BalloonActivationOptions {
-    click = "click",
-    hoverOrFocus = "hoverOrFocus"
-}
-
-export interface BalloonOptions {
-    position: string;
-    selector?: string;
-    component?: IComponent;
-    template?: ITemplate;
-    onCreated?: (handle: BalloonHandle) => void;
-    isOpen: any;
-    onOpen?: () => void;
-    onClose?: () => void;
-    closeOn: ko.Subscribable;
-    closeTimeout?: number;
-    delay?: number;
-    activateOn: BalloonActivationOptions;
-    isDisabled?: () => boolean;
-}
-
-export interface BalloonHandle {
-    open: (returnFocusTo?: HTMLElement) => void;
-    close: () => void;
-    toggle: () => void;
-    updatePosition: () => void;
-    activateOn: BalloonActivationOptions;
-}
 
 export class BalloonBindingHandler {
     constructor(viewStack: ViewStack) {
         ko.bindingHandlers["balloon"] = {
             init: (toggleElement: HTMLElement, valueAccessor: () => BalloonOptions) => {
-
                 const options = ko.unwrap(valueAccessor());
                 const activateOn = options.activateOn || BalloonActivationOptions.click;
 
@@ -116,11 +89,11 @@ export class BalloonBindingHandler {
                     const egdeGap = 10;
                     const padding = 10;
 
-                    let balloonLeft;
-                    let balloonRight;
-                    let balloonTop;
-                    let balloonBottom;
-                    let selectedPosition;
+                    let balloonLeft: number;
+                    let balloonRight: number;
+                    let balloonTop: number;
+                    let balloonBottom: number;
+                    let selectedPosition: string;
 
                     let positionX: string;
                     let positionY: string;
@@ -129,8 +102,8 @@ export class BalloonBindingHandler {
                     let balloonHeight: number = balloonRect.height;
                     let balloonWidth: number = balloonRect.width;
 
-                    let balloonTipX;
-                    let balloonTipY;
+                    let balloonTipX: number;
+                    let balloonTipY: number;
 
                     if (preferredDirection === "vertical") {
                         if (spaceTop > spaceBottom) {
@@ -341,8 +314,8 @@ export class BalloonBindingHandler {
                             returnFocusTo: returnFocusTo,
                             hitTest: (targetElement) => {
                                 const element =
-                                    closest(targetElement, x => x === balloonElement) ||
-                                    closest(targetElement, x => x === toggleElement);
+                                    Html.closest(targetElement, x => x === balloonElement) ||
+                                    Html.closest(targetElement, x => x === toggleElement);
 
                                 return !!element;
                             }
@@ -386,11 +359,6 @@ export class BalloonBindingHandler {
                     }
 
                     removeBalloon();
-
-                    if (options.isOpen && options.isOpen()) {
-                        // TODO: ViewManager should have stack of open editors, so they need to be closed one by one.
-                        options.isOpen(false);
-                    }
                 };
 
                 const toggle = (): void => {
@@ -410,24 +378,12 @@ export class BalloonBindingHandler {
                     open: open,
                     close: close,
                     toggle: toggle,
-                    updatePosition: () => requestAnimationFrame(updatePosition),
-                    activateOn: activateOn
+                    updatePosition: () => requestAnimationFrame(updatePosition)
                 };
 
                 if (options.onCreated) {
                     options.onCreated(ballonHandle);
                 }
-
-                const closest = (node: Node, predicate: (node: Node) => boolean): Node => {
-                    do {
-                        if (predicate(node)) {
-                            return node;
-                        }
-
-                        node = node.parentNode;
-                    }
-                    while (node);
-                };
 
                 const onPointerDown = async (event: MouseEvent): Promise<void> => {
                     if (!toggleElement) {
@@ -435,7 +391,7 @@ export class BalloonBindingHandler {
                     }
 
                     const targetElement = <HTMLElement>event.target;
-                    const element = closest(targetElement, (node) => node === toggleElement);
+                    const element = Html.closest(targetElement, (node) => node === toggleElement);
 
                     if (!element) {
                         return;
@@ -550,7 +506,6 @@ export class BalloonBindingHandler {
 
                     removeBalloon();
                     window.removeEventListener("scroll", onScroll, true);
-
                 });
             }
         };

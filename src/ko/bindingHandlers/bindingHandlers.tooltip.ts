@@ -1,6 +1,5 @@
 import * as ko from "knockout";
-import { has } from "lodash";
-import { BalloonHandle, BalloonActivationOptions } from "./bindingHandlers.balloon";
+import { BalloonHandle, BalloonActivationOptions } from "@paperbits/common/ui/balloons";
 
 
 const defaultTooltipDelayMs = 700;
