@@ -89,13 +89,10 @@ export class SearchRuntime {
         });
 
         const text = response.toText();
-        const el = document.createElement("div");
-        el.innerHTML = text;
-
-        const titleElement = el.querySelector("title");
-        const title = titleElement.innerText.split("|")[0].trim();
-        const bodyElement = el.querySelector("main");
-        const body = h2p(bodyElement.innerHTML);
+        const parser = new DOMParser();
+        const searchedDocument: Document = parser.parseFromString(text, "text/html");
+        const title = searchedDocument.title;
+        const body = h2p(searchedDocument.body.innerHTML);
         const fragmentSize = 150;
         const index = body.toLowerCase().indexOf(term.toLowerCase());
 

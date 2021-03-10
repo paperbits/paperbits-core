@@ -47,6 +47,20 @@ export class PagePublisher implements IPublisher {
         }
     }
 
+    private getIndexableContent(html: string): string {
+        return html;
+        
+        // const regex = /<main.*>([\s\S]*)<\/main>/g;
+        // const match = regex.exec(html);
+
+        // if (!match || match.length < 1) {
+        //     return null;
+        // }
+
+        // const mainContent = match[1];
+        // return mainContent;
+    }
+
     private async renderAndUpload(settings: SiteSettingsContract, page: PageContract, locale?: string): Promise<void> {
         if (!page.permalink) {
             this.logger.trackEvent("Publishing", { message: `Skipping page with no permalink specified: "${page.title}".` });
@@ -139,7 +153,7 @@ export class PagePublisher implements IPublisher {
             this.localStyleBuilder.buildLocalStyle(pagePermalink, styleSheets);
 
             this.sitemapBuilder.appendPermalink(pagePermalink);
-            this.searchIndexBuilder.appendPage(pagePermalink, htmlPage.title, htmlPage.description, htmlContent);
+            this.searchIndexBuilder.appendHtml(pagePermalink, htmlPage.title, htmlPage.description, this.getIndexableContent(htmlContent));
 
             let permalink = pagePermalink;
 
