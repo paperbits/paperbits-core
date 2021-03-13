@@ -5,7 +5,7 @@
             <div class="input-group">
                 <input type="text" id="title" class="form-control"
                     data-bind="textInput: layoutItem.title, validationElement: layoutItem.title, focus: true"
-                    placeholder="i.e. Orders" maxlength="256" />
+                    placeholder="i.e. Orders" maxlength="256" aria-required="true" />
                 <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: layoutItem.title"
                     type="button">!</button>
             </div>
@@ -20,7 +20,7 @@
             <div class="input-group">
                 <input type="text" id="permalinkTemplate" class="form-control"
                     data-bind="textInput: $component.permalinkTemplate, validationElement: $component.permalinkTemplate, disable: isDefaultLayout"
-                    placeholder="/" maxlength="2000" />
+                    placeholder="/" maxlength="2000" spellcheck="false" aria-required="true" />
                 <button class="btn btn-danger input-group-btn"
                     data-bind="validationMessageToggle: $component.permalinkTemplate" type="button">!</button>
             </div>

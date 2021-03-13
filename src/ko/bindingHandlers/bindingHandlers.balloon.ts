@@ -41,7 +41,6 @@ export class BalloonBindingHandler {
                 }
 
                 if (activateOn === BalloonActivationOptions.clickOrKeyDown) {
-                    toggleElement.setAttribute(Html.AriaAttributes.hasPopup, "true");
                     toggleElement.setAttribute(Html.AriaAttributes.expanded, "false");
                 }
 

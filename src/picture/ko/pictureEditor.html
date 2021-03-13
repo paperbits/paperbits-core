@@ -14,7 +14,7 @@
                 </label>
                 <a id="pictureSource" href="#" role="button" class="dropzone-showbox" aria-label="Picture source"
                     data-bind="balloon: { position: 'right', component: { name: 'media-selector', params: { mimeType: 'image/', onSelect: $component.onMediaSelected } } }, focus: true">
-                    <div class="fit" role="button" data-bind="background: background"></div>
+                    <div class="fit" aria-hidden="true" data-bind="background: background"></div>
                 </a>
             </div>
 

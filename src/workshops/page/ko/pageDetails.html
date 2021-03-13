@@ -5,7 +5,7 @@
             <div class="input-group">
                 <input type="text" id="title" class="form-control"
                     data-bind="textInput: pageItem.title, validationElement: pageItem.title, focus: true"
-                    placeholder="e.g. About" maxlength="256" />
+                    placeholder="e.g. About" maxlength="256" aria-required="true" />
                 <button class="btn btn-danger input-group-btn" type="button"
                     data-bind="validationMessageToggle: pageItem.title">!</button>
             </div>
@@ -15,7 +15,7 @@
             <div class="input-group">
                 <input type="text" id="permalink" class="form-control"
                     data-bind="textInput: pageItem.permalink, validationElement: pageItem.permalink, disable: $component.isReserved"
-                    placeholder="e.g. /about" maxlength="2000" spellcheck="false" />
+                    placeholder="e.g. /about" maxlength="2000" spellcheck="false" aria-required="true" />
                 <!-- ko ifnot: $component.isReserved -->
                 <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: pageItem.permalink"
                     type="button">!</button>
