@@ -24,7 +24,7 @@
     <div class="list-item" data-bind="css: { selected: hasFocus }, click: $component.selectBlock">
         <!-- ko if: $component.blockSource === 'saved' -->
         <button class="btn-standalone remove-block" data-bind="click: $component.deleteBlock">
-            <i class="paperbits-icon paperbits-trash-simple"></i>
+            <i aria-hidden="true" class="paperbits-icon paperbits-trash-simple"></i>
         </button>
         <!-- /ko -->
         <div class="zoom-selector-item">

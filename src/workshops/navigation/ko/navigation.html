@@ -23,7 +23,7 @@
 
     <div class="flex-item btn-group">
         <button class="btn btn-default" data-bind="click: addNavigationItem">
-            <i class="paperbits-icon paperbits-simple-add"></i>
+            <i aria-hidden="true" class="paperbits-icon paperbits-simple-add"></i>
             Add navigation item
         </button>
     </div>
@@ -34,12 +34,12 @@
     <div class="list-item-group" data-bind="dragsource: { sourceData: $data, sticky: true, ondragstart: $component.onNodeDragStart, ondragend: $component.onNodeDragEnd }, dragtarget: { targetData: $data, accept: canAccept, ondropbefore: insertBefore, ondropafter: insertAfter, flow: 'vertical', onacceptbefore: $component.onAcceptNodeBefore, onacceptafter: $component.onAcceptNodeAfter }">
         <!-- ko if: node.nodes().length > 0 -->
         <div class="list-item-collapsible">
-            <button href="#" role="button" aria-label="Toggle nested items" class="list-item-collapse" data-bind="click: node.toggleCollapsed">
-                <i class="paperbits-icon paperbits-circle-delete"
+            <button href="#" role="button" aria-label="Toggle nested items" class="list-item-collapse" data-bind="click: node.toggleCollapsed, attr: { 'aria-expanded': (!node.collapsed()).toString() }">
+                <i aria-hidden="true" class="paperbits-icon paperbits-circle-delete"
                     data-bind="css: { 'paperbits-circle-add': node.collapsed }"></i>
             </button>
-            <div tabindex="0" role="listitem" class="list-item" data-bind="keydown: onKeyDown, css: { selected: $component.isSelected(node) }, attr: { title: node.label,'aria-expanded': (!node.collapsed()).toString() }, activate: $component.selectNavigationItem, selectable: true">
-                <!-- <i class="paperbits-icon paperbits-menu-34"></i> -->
+            <div tabindex="0" role="listitem" class="list-item" data-bind="keydown: onKeyDown, css: { selected: $component.isSelected(node) }, attr: { title: node.label }, activate: $component.selectNavigationItem, selectable: true">
+                <!-- <i aria-hidden="true" class="paperbits-icon paperbits-menu-34"></i> -->
                 <span data-bind="text: node.label"></span>
             </div>
         </div>
@@ -47,7 +47,7 @@
 
         <!-- ko ifnot: node.nodes().length > 0 -->
         <div tabindex="0" role="listitem" class="list-item" data-bind="css: { selected: $component.isSelected(node) }, attr: { title: node.label }, activate: $component.selectNavigationItem, selectable: true">
-            <!-- <i class="paperbits-icon paperbits-menu-34"></i> -->
+            <!-- <i aria-hidden="true" class="paperbits-icon paperbits-menu-34"></i> -->
             <span data-bind="text: node.label"></span>
         </div>
         <!-- /ko -->

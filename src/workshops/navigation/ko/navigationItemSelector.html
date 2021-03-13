@@ -27,7 +27,7 @@
     </div>
     <div class="flex-item btn-group">
         <button class="btn btn-default" data-bind="click: $component.selectNone">
-            <i class="paperbits-icon paperbits-ban"></i>
+            <i aria-hidden="true" class="paperbits-icon paperbits-ban"></i>
             None
         </button>
     </div>
@@ -42,11 +42,11 @@
         <!-- ko if: node.nodes && node.nodes().length > 0 -->
         <div class="list-item-collapsible">
             <button role="button" aria-label="Toggle nested items" class="list-item-collapse" data-bind="click: node.toggleCollapsed">
-                <i class="paperbits-icon paperbits-circle-delete"
+                <i aria-hidden="true" class="paperbits-icon paperbits-circle-delete"
                     data-bind="css: { 'paperbits-circle-add': node.collapsed }"></i>
             </button>
             <div tabindex="0" role="listitem" class="list-item" data-bind="activate: $component.selectNavigationItem, attr: { 'aria-expanded': (!node.collapsed()).toString() }">
-                <!-- <i class="paperbits-icon paperbits-menu-34"></i> -->
+                <!-- <i aria-hidden="true" class="paperbits-icon paperbits-menu-34"></i> -->
                 <span data-bind="text: node.label"></span>
             </div>
         </div>
@@ -54,7 +54,7 @@
 
         <!-- ko ifnot: node.nodes && node.nodes().length > 0 -->
         <div tabindex="0" role="listitem" class="list-item" data-bind="activate: $component.selectNavigationItem">
-            <!-- <i class="paperbits-icon paperbits-menu-34"></i> -->
+            <!-- <i aria-hidden="true" class="paperbits-icon paperbits-menu-34"></i> -->
             <span data-bind="text: node.label"></span>
         </div>
         <!-- /ko -->

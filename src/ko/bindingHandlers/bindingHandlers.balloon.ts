@@ -11,7 +11,7 @@ export class BalloonBindingHandler {
         ko.bindingHandlers["balloon"] = {
             init: (toggleElement: HTMLElement, valueAccessor: () => BalloonOptions) => {
                 const options = ko.unwrap(valueAccessor());
-                const activateOn = options.activateOn || BalloonActivationOptions.click;
+                const activateOn = options.activateOn || BalloonActivationOptions.clickOrKeyDown;
 
                 let inBalloon = false;
                 let isHoverOver = false;
@@ -38,6 +38,11 @@ export class BalloonBindingHandler {
                         ko.applyBindingsToNode(balloonElement, { template: options.template }, null);
                         document.body.appendChild(balloonElement);
                     };
+                }
+
+                if (activateOn === BalloonActivationOptions.clickOrKeyDown) {
+                    toggleElement.setAttribute(Html.AriaAttributes.hasPopup, "true");
+                    toggleElement.setAttribute(Html.AriaAttributes.expanded, "false");
                 }
 
                 const createBalloonTip = () => {
@@ -324,6 +329,10 @@ export class BalloonBindingHandler {
                         viewStack.runHitTest(toggleElement);
                         viewStack.pushView(view);
 
+                        if (activateOn === BalloonActivationOptions.clickOrKeyDown) {
+                            toggleElement.setAttribute("aria-expanded", "true");
+                        }
+
                         toggleElement["activeBalloon"] = ballonHandle;
 
                         balloonElement.classList.add("balloon-is-active");
@@ -359,6 +368,7 @@ export class BalloonBindingHandler {
                     }
 
                     removeBalloon();
+                    toggleElement.setAttribute(Html.AriaAttributes.expanded, "false");
                 };
 
                 const toggle = (): void => {
@@ -465,7 +475,7 @@ export class BalloonBindingHandler {
                 document.addEventListener("mousedown", onPointerDown, true);
 
                 switch (activateOn) {
-                    case BalloonActivationOptions.click:
+                    case BalloonActivationOptions.clickOrKeyDown:
                         toggleElement.addEventListener("keydown", onKeyDown);
                         break;
 
@@ -488,7 +498,7 @@ export class BalloonBindingHandler {
 
 
                     switch (activateOn) {
-                        case BalloonActivationOptions.click:
+                        case BalloonActivationOptions.clickOrKeyDown:
                             toggleElement.removeEventListener("keydown", onKeyDown);
 
                             break;

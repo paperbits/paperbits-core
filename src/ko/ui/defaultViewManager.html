@@ -23,7 +23,7 @@
             <div class="flex-item btn-group" data-bind="foreach: { data: commands, as: 'command' }">
                 <button class="btn btn-round" data-bind="click: command.action">
                     <!-- ko if: command.iconClass -->
-                    <i class="paperbits-icon" data-bind="css: command.iconClass"></i>
+                    <i aria-hidden="true" class="paperbits-icon" data-bind="css: command.iconClass"></i>
                     <!-- /ko -->
                     <span data-bind="text: command.title"></span>
                 </button>
@@ -39,8 +39,8 @@
         <h1>
             <span data-bind="text: heading"></span>
         </h1>
-        <button class="btn btn-dismiss" aria-label="Close" data-bind="click: $component.closeView">
-            <i class="paperbits-icon paperbits-simple-remove"></i>
+        <button class="btn btn-dismiss" title="Close" aria-label="Close" data-bind="click: $component.closeView">
+            <i aria-hidden="true" class="paperbits-icon paperbits-simple-remove"></i>
         </button>
         <hr />
         <!-- ko component: { name: component.name, params: component.params, oncreate: component.oncreate } -->
@@ -55,7 +55,7 @@
 <!-- ko foreach: { data: contextualEditor.hoverCommands, as: 'command' } -->
 <button class="fixed btn-standalone"
     data-bind="stickTo: { target: contextualEditor.element, position: command.position }, balloon: { component: command.component, onOpen: $component.onHoverCommandActivate, onClose: $component.onHoverCommandDeactivate }, background: { color: command.color }, attr: { title: command.tooltip }">
-    <i class="paperbits-icon paperbits-simple-add"></i>
+    <i aria-hidden="true" class="paperbits-icon paperbits-simple-add"></i>
 </button>
 <!-- /ko -->
 <!-- /ko -->
@@ -109,7 +109,7 @@
 <div class="fixed" data-bind="stickTo: { target: element, position: 'top right' }">
     <!-- ko foreach: { data: selectCommands, as: 'command' } -->
     <button class="btn-standalone" data-bind="gridCommand: command">
-        <i class="paperbits-icon" data-bind="css: command.iconClass"></i>
+        <i aria-hidden="true" class="paperbits-icon" data-bind="css: command.iconClass"></i>
     </button>
     <!-- ko if: command.component -->
     <div class="balloon" data-bind="component: command.component"></div>
@@ -118,7 +118,7 @@
 
     <!-- ko if: deleteCommand -->
     <button class="btn-standalone" data-bind="command: deleteCommand">
-        <i class="paperbits-icon paperbits-trash-simple"></i>
+        <i aria-hidden="true" class="paperbits-icon paperbits-trash-simple"></i>
     </button>
     <!-- /ko -->
 </div>
@@ -135,11 +135,11 @@
 <!-- ko if: canPreview -->
 <div class="toolbox toolbox-position-right-top">
     <button class="toolbox-btn" data-bind="visible: primaryToolboxVisible(), click: $component.enablePreviewMode, tooltip: { message: '<h1>Preview</h1><p>See the website live before publishing.<p>', position: 'left' }">
-        <i class="paperbits-icon paperbits-l-search"></i>
+        <i aria-hidden="true" class="paperbits-icon paperbits-l-search"></i>
     </button>
 
     <button class="toolbox-btn" data-bind="visible: !primaryToolboxVisible(), click: $component.disablePreviewMode, tooltip: { message: '<h1>Exit preview</h1><p>Return to editing the content.<p>', position: 'left' }">
-        <i class="paperbits-icon paperbits-ban"></i>
+        <i aria-hidden="true" class="paperbits-icon paperbits-ban"></i>
     </button>
 </div>
 <!-- /ko -->

@@ -35,7 +35,7 @@
         <!-- ko foreach: { data: layouts, as: 'layout' } -->
         <a href="#" role="listitem" class="list-item"
             data-bind="css: { selected:  $component.isSelected(layout) }, attr: { title: layout.title }, activate: $component.selectLayout, selectable: true">
-            <i class="paperbits-icon paperbits-layout-11-2"></i>
+            <i aria-hidden="true" class="paperbits-icon paperbits-layout-11-2"></i>
             <span data-bind="text: layout.title"></span>
         </a>
         <!--/ko-->
@@ -49,7 +49,7 @@
 
     <div class="flex-item btn-group">
         <button class="btn btn-default" data-bind="click: addLayout">
-            <i class="paperbits-icon paperbits-simple-add"></i>
+            <i aria-hidden="true" class="paperbits-icon paperbits-simple-add"></i>
             Add layout
         </button>
     </div>

@@ -34,7 +34,7 @@
             <!-- ko foreach: { data: urls, as: 'url' } -->
             <a href="#" role="listitem" class="list-item"
                 data-bind="click: $component.selectUrl, event: { keydown: $component.keydown }, attr: { title: url.title }">
-                <i class="paperbits-icon paperbits-link-69-2"></i>
+                <i aria-hidden="true" class="paperbits-icon paperbits-link-69-2"></i>
                 <span class="list-item-label" data-bind="text: url.title"></span>
             </a>
             <!-- /ko -->
@@ -52,11 +52,11 @@
                     placeholder="e.g. https://www.example.com" maxlength="2096" spellcheck="false" />
             </div>
             <button class="btn btn-default" data-bind="click: $component.createUrl">
-                <i class="paperbits-icon paperbits-simple-add"></i> Add
+                <i aria-hidden="true" class="paperbits-icon paperbits-simple-add"></i> Add
             </button>
             <!--ko if: selectedUrl()-->
             <button class="btn btn-default" data-bind="click: $component.deleteUrl">
-                <i class="paperbits-icon paperbits-simple-remove"></i> Delete
+                <i aria-hidden="true" class="paperbits-icon paperbits-simple-remove"></i> Delete
             </button>
             <!--/ko-->
         </div>

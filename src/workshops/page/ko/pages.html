@@ -28,7 +28,7 @@
         <!-- ko foreach: { data: pages, as: 'page' } -->
         <a href="#" role="listitem" class="list-item flex-grow"
             data-bind="css: { selected: $component.isSelected(page) }, attr: { title: page.title }, activate: $component.selectPage, selectable: true">
-            <i class="paperbits-icon paperbits-single-content-03"></i>
+            <i aria-hidden="true" class="paperbits-icon paperbits-single-content-03"></i>
             <span class="text-overflow" data-bind="text: page.title"></span>
         </a>
         <!-- /ko -->
@@ -43,7 +43,7 @@
 
     <div class="flex-item btn-group">
         <button class="btn btn-default" data-bind="click: $component.addPage">
-            <i class="paperbits-icon paperbits-simple-add"></i>
+            <i aria-hidden="true" class="paperbits-icon paperbits-simple-add"></i>
             Add page
         </button>
     </div>

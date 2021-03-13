@@ -6,15 +6,15 @@
             <h1>
                 <span data-bind="text: description"></span>
             </h1>
-            <button class="btn btn-dismiss" aria-label="Close" data-bind="click: $component.discardDroppedContent">
-                <i class="paperbits-icon paperbits-simple-remove"></i>
+            <button class="btn btn-dismiss" title="Close" aria-label="Close" data-bind="click: $component.discardDroppedContent">
+                <i aria-hidden="true" class="paperbits-icon paperbits-simple-remove"></i>
             </button>
         </div>
         <div class="droppedcontent-preview" data-bind="background: background, lightbox: { url: previewUrl }">
         </div>
         <!--ko if: uploadables().length > 0 -->
         <button class="btn btn-default" data-bind="click: $component.uploadContentAsMedia">
-            <i class="paperbits-icon paperbits-square-upload"></i>
+            <i aria-hidden="true" class="paperbits-icon paperbits-square-upload"></i>
             Upload to media library
         </button>
         <!--/ko-->

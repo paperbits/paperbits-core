@@ -7,7 +7,7 @@
             data-bind="css: { 'tab-is-active': !hyperlinkProvider() }, attr: { 'aria-selected': !hyperlinkProvider() }">
             <a href="#" data-bind="click: clearProvider, focus: true" title="Clear hyperlink" role="tab"
                 aria-label="Clear hyperlink">
-                <i class="paperbits-icon paperbits-ban"></i>
+                <i aria-hidden="true" class="paperbits-icon paperbits-ban"></i>
             </a>
         </div>
 
@@ -17,7 +17,7 @@
             data-bind="css: { 'tab-is-active': $component.hyperlinkProvider() && hyperlinkProvider.componentName === $component.hyperlinkProvider().componentName }, attr: { 'title': hyperlinkProvider.name, 'aria-selected': $parent.hyperlinkProvider() && hyperlinkProvider.componentName === $parent.hyperlinkProvider().componentName }">
             <a href="#" role="tab"
                 data-bind="balloon: { component: { name: hyperlinkProvider.componentName, params: { onHyperlinkSelect: $component.onHyperlinkSelected } }, closeOn: $component.hyperlink }">
-                <i data-bind="css: hyperlinkProvider.iconClass"></i>
+                <i aria-hidden="true" data-bind="css: hyperlinkProvider.iconClass"></i>
             </a>
         </div>
         <!--/ko-->

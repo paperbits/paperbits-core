@@ -3,12 +3,12 @@
         data-bind="css: { 'toolbox-btn-is-active': viewport() == 'zoomout' }">
         <a href="#" data-bind="click: zoomOut, tooltip: 'Zoom out', focus: true" role="button"
             aria-label="Switch to zoomed out view">
-            <i class="paperbits-icon paperbits-zoom-out"></i>
+            <i aria-hidden="true" class="paperbits-icon paperbits-zoom-out"></i>
         </a>
     </div>
     <div class="toolbox-btn d-none d-xl-inline-block" data-bind="css: { 'toolbox-btn-is-active': viewport() == 'xl' }">
         <a href="#" data-bind="click: setXl, tooltip: 'Extra large screen'" role="button" aria-label="Switch to extra large screen view">
-            <i class="paperbits-icon paperbits-desktop-screen"></i>
+            <i aria-hidden="true" class="paperbits-icon paperbits-desktop-screen"></i>
         </a>
     </div>
     <div class="toolbox-btn d-none d-lg-inline-block" data-bind="css: { 'toolbox-btn-is-active': viewport() == 'lg' }">
@@ -20,7 +20,7 @@
     </div>
     <div class="toolbox-btn d-none d-md-inline-block" data-bind="css: { 'toolbox-btn-is-active': viewport() == 'md' }">
         <a href="#" data-bind="click: setMd, tooltip: 'Medium screen'" role="button" aria-label="Switch to medium screen view">
-            <i class="paperbits-icon paperbits-tablet-2"></i>
+            <i aria-hidden="true" class="paperbits-icon paperbits-tablet-2"></i>
         </a>
     </div>
     <div class="toolbox-btn d-none d-sm-inline-block" data-bind="css: { 'toolbox-btn-is-active': viewport() == 'sm' }">
@@ -32,7 +32,7 @@
     </div>
     <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': viewport() == 'xs' }">
         <a href="#" data-bind="click: setXs, tooltip: 'Extra small screen'" role="button" aria-label="Switch to extra small screen view">
-            <i class="paperbits-icon paperbits-mobile"></i>
+            <i aria-hidden="true" class="paperbits-icon paperbits-mobile"></i>
         </a>
     </div>
 </div>

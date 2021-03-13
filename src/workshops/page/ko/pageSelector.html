@@ -34,7 +34,7 @@
         <div class="list-item-group">
             <a href="#" role="listitem" class="list-item"
                 data-bind="css: { selected: $component.isSelected(page) }, click: $component.selectPage, attr: { title: page.title }">
-                <i class="paperbits-icon paperbits-single-content-03"></i>
+                <i aria-hidden="true" class="paperbits-icon paperbits-single-content-03"></i>
                 <span class="list-item-label" data-bind="text: title"></span>
             </a>
 
@@ -42,7 +42,7 @@
             <div class="list-item-group" data-bind="foreach: anchors" role="list">
                 <a href="#" role="listitem" class="list-item"
                     data-bind="click: $component.selectAnchor, attr: { title: shortTitle }">
-                    <i class="paperbits-icon paperbits-anchor"></i>
+                    <i aria-hidden="true" class="paperbits-icon paperbits-anchor"></i>
                     <span class="list-item-label" data-bind="text: shortTitle"></span>
                 </a>
             </div>
