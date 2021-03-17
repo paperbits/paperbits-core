@@ -25,7 +25,7 @@ export class PictureModelBinder implements IModelBinder<PictureModel> {
 
         if (contract.hyperlink) {
             try {
-                model.hyperlink = await this.permalinkResolver.getHyperlinkByTargetKey(contract.hyperlink.targetKey, bindingContext?.locale);
+                model.hyperlink = await this.permalinkResolver.getHyperlinkFromContract(contract.hyperlink, bindingContext?.locale);
             }
             catch (error) {
                 console.log(error);
