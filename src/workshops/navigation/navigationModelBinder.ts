@@ -29,11 +29,12 @@ export class NavigationModelBinder implements IModelBinder<NavigationItemModel> 
         model.label = contract.label;
         model.key = contract.key;
         model.targetKey = contract.targetKey;
+        model.targetWindow = contract.targetWindow;
         model.anchor = contract.anchor;
         model.isActive = model.targetUrl === this.router.getPath();
 
         if (contract.navigationItems) {
-            const tasks = [];
+            const tasks: Promise<NavigationItemModel>[] = [];
 
             contract.navigationItems.forEach(child => {
                 tasks.push(this.contractToModel(child));

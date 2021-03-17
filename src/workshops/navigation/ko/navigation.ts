@@ -59,7 +59,6 @@ export class NavigationWorkshop {
         const rootViewModel = await this.navigationViewModelBinder.modelToViewModel(rootModel);
 
         this.root(rootViewModel);
-
         this.working(false);
 
         rootViewModel.onUpdate.subscribe(this.onNavigationUpdate);
