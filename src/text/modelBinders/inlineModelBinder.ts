@@ -39,7 +39,7 @@ export class InlineModelBinder {
                             ? await this.permalinkResolver.getUrlByTargetKey(targetKey, bindingContent?.locale)
                             : null;
 
-                        markModel.attrs = <any>{
+                        markModel.attrs = <HyperlinkModel>{
                             href: href || "#",
                             target: target,
                             targetKey: targetKey,
@@ -84,13 +84,13 @@ export class InlineModelBinder {
                 const contract = <MarkContract>{ type: markModel.type };
 
                 if (markModel.type === "hyperlink") {
-                    const model = markModel.attrs;
+                    const model = <HyperlinkModel>markModel.attrs;
 
                     contract.attrs = {
-                        anchor: model["anchor"],
-                        anchorName: model["anchorName"],
-                        target: model["target"],
-                        targetKey: model["targetKey"]
+                        anchor: model.anchor,
+                        anchorName: model.anchorName,
+                        target: model.target,
+                        targetKey: model.targetKey
                     };
                 }
                 else {
