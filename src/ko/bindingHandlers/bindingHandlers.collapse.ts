@@ -17,8 +17,11 @@ ko.bindingHandlers["collapse"] = {
 
             const visibleObservable = ko.observable(expanded);
 
+            if (!triggerElement.hasAttribute("aria-label")) {
+                triggerElement.setAttribute("aria-label", "Toggle section");
+            }
+
             triggerElement.setAttribute("role", "button");
-            triggerElement.setAttribute("aria-label", "Toggle section");
             triggerElement.setAttribute("aria-expanded", expanded.toString());
 
             targetElement.setAttribute("role", "region");

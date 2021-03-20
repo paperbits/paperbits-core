@@ -185,13 +185,13 @@ export class GridEditor {
 
         const element = this.activeHighlightedElement;
         const bindings = GridHelper.getParentWidgetBindings(element);
-        const windgetIsInContent = bindings.some(x => x.model instanceof ContentModel || x.name === "email-layout");
+        const widgetIsInContent = bindings.some(x => x.model instanceof ContentModel || x.name === "email-layout");
 
         /* TODO: This is temporary solution */
         const host = this.viewManager.getHost();
         const layoutEditing = host.name === "layout-host";
 
-        if (!windgetIsInContent && !layoutEditing) {
+        if (!widgetIsInContent && !layoutEditing) {
             event.preventDefault();
             event.stopPropagation();
 
