@@ -29,9 +29,9 @@ export class InlineModelBinder {
 
                 switch (markContract.type) {
                     case "hyperlink":
-                        const target: string = markContract.attrs.target;
+                        const target: string = markContract.attrs?.target;
                         const targetKey: string = markContract.attrs?.targetKey;
-                        const anchor: string = markContract.attrs.anchor;
+                        const anchor: string = markContract.attrs?.anchor;
                         const anchorName: string = markContract.attrs?.anchorName;
                         const download: string = targetKey?.startsWith("uploads/") ? "" : undefined;
 
