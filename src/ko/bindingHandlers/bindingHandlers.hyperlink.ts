@@ -16,7 +16,11 @@ ko.bindingHandlers["hyperlink"] = {
                 ? ""
                 : undefined;
 
-            attributesObservable({ href: hyperlink.href, target: hyperlink.target, download: downloadAttribute });
+            attributesObservable({
+                href: `${hyperlink.href}${hyperlink.anchor ? "#" + hyperlink.anchor : ""}`,
+                target: hyperlink.target,
+                download: downloadAttribute
+            });
         };
 
         if (ko.isObservable(hyperlink)) {

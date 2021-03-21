@@ -52,7 +52,8 @@ export class ButtonModelBinder implements IModelBinder<ButtonModel>  {
         if (model.hyperlink) {
             buttonConfig.hyperlink = {
                 target: model.hyperlink.target,
-                targetKey: model.hyperlink.targetKey
+                targetKey: model.hyperlink.targetKey,
+                anchor: model.hyperlink.anchor
             };
         }
 
