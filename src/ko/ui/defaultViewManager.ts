@@ -279,6 +279,10 @@ export class DefaultViewManager implements ViewManager {
 
         const indexOfClosingView = journey.indexOf(viewToClose);
 
+        if (indexOfClosingView < 0) {
+            return;
+        }
+
         journey.splice(indexOfClosingView);
 
         this.journey(journey);
