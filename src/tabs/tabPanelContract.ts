@@ -1,4 +1,5 @@
 import { Contract } from "@paperbits/common";
+import { LocalStyles } from "@paperbits/common/styles";
 
 /**
  * Tab panel contract.
@@ -7,7 +8,7 @@ export interface TabPanelContract extends Contract {
     /**
      * Local styles.
      */
-    styles?: any;
+    styles?: LocalStyles;
 
     /**
      * Tab items.
@@ -27,5 +28,5 @@ export interface TabPanelItemContract extends Contract {
     /**
      * Local styles.
      */
-    styles?: any;
+    styles?: LocalStyles;
 }

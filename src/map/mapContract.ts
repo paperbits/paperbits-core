@@ -1,4 +1,5 @@
 import { Contract } from "@paperbits/common";
+import { LocalStyles } from "@paperbits/common/styles";
 
 export interface MapContract extends Contract {
     /**
@@ -24,5 +25,5 @@ export interface MapContract extends Contract {
     /**
      * Widget local styles.
      */
-    styles?: any;
+    styles?: LocalStyles;
 }

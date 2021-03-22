@@ -1,4 +1,5 @@
 import { Contract } from "@paperbits/common/contract";
+import { LocalStyles } from "@paperbits/common/styles";
 
 export interface VideoPlayerContract extends Contract {
     /**
@@ -21,5 +22,8 @@ export interface VideoPlayerContract extends Contract {
      */
     autoplay?: boolean;
     
-    styles?: any;
+    /**
+     * Widget styles.
+     */
+    styles?: LocalStyles;
 }

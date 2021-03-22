@@ -1,8 +1,9 @@
 import { Contract } from "@paperbits/common";
+import { LocalStyles } from "@paperbits/common/styles";
 
 export interface CarouselContract {
     type: string;
-    styles?: any;
+    styles?: LocalStyles;
     carouselItems: CarouselItemContract[];
     showControls: boolean;
     showIndicators: boolean;
@@ -12,5 +13,5 @@ export interface CarouselContract {
 }
 
 export interface CarouselItemContract extends Contract {
-    styles?: any;
+    styles?: LocalStyles;
 }

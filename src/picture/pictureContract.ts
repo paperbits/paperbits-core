@@ -1,5 +1,6 @@
 ﻿import { Contract } from "@paperbits/common/contract";
 import { HyperlinkContract } from "@paperbits/common/editing";
+import { LocalStyles } from "@paperbits/common/styles";
 
 /**
  * Picture widget contract.
@@ -33,5 +34,5 @@ export interface PictureContract extends Contract {
     /**
      * Picture styles.
      */
-    styles?: any;
+    styles?: LocalStyles;
 }

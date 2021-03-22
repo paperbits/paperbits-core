@@ -1,4 +1,5 @@
 import { Contract, Breakpoints } from "@paperbits/common";
+import { LocalStyles } from "@paperbits/common/styles";
 
 // export interface GridCellContract extends Contract {
 //     size?: Breakpoints;
@@ -36,5 +37,5 @@ export interface GridCellContract extends Contract {
     span?: Breakpoints<GridCellSpan>;
     alignment?: any;
     nodes?: any[];
-    styles?: any;
+    styles?: LocalStyles;
 }
