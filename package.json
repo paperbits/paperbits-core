@@ -20,30 +20,29 @@
         "not ie < 11"
     ],
     "dependencies": {
-        "@googlemaps/js-api-loader": "^1.11.1",
+        "@googlemaps/js-api-loader": "^1.11.3",
         "@paperbits/common": "0.1.388",
         "@paperbits/styles": "0.1.388",
         "await-parallel-limit": "^2.1.0",
-        "basiclightbox": "^5.0.3",
-        "cropperjs": "^1.5.9",
-        "file-saver": "^2.0.2",
+        "basiclightbox": "^5.0.4",
+        "cropperjs": "^1.5.11",
+        "file-saver": "^2.0.5",
         "html-minifier-terser": "^5.1.1",
         "html2plaintext": "^2.1.2",
         "knockout": "^3.5.1",
         "knockout.validation": "^2.0.4",
-        "lodash": "^4.17.20",
+        "lodash": "^4.17.21",
         "lunr": "^2.3.9",
-        "mime": "^2.4.6",
-        "npm-check-updates": "^9.0.1",
+        "mime": "^2.5.2",
         "perfect-scrollbar": "1.5.0",
-        "xhr2": "^0.2.0"
+        "xhr2": "^0.2.1"
     },
     "devDependencies": {
-        "@types/google.maps": "^3.44.1",
+        "@types/google.maps": "^3.44.2",
         "@types/knockout.mapping": "^2.0.35",
         "@types/knockout.validation": "0.0.37",
-        "@types/lodash": "^4.14.161",
-        "@types/node": "14.11.1",
+        "@types/lodash": "^4.14.168",
+        "@types/node": "14.14.35",
         "@types/signals": "1.0.1"
     }
 }
