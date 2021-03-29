@@ -6,6 +6,7 @@ import { IWidgetService } from "@paperbits/common/widgets";
 import { EventManager } from "@paperbits/common/events";
 import { Router } from "@paperbits/common/routing";
 import { ContentModel } from "../../content";
+import { PopupHostModel } from "../../popup/popupHostModel";
 
 
 export class GridEditor {
@@ -185,7 +186,11 @@ export class GridEditor {
 
         const element = this.activeHighlightedElement;
         const bindings = GridHelper.getParentWidgetBindings(element);
-        const widgetIsInContent = bindings.some(x => x.model instanceof ContentModel || x.name === "email-layout");
+
+        const widgetIsInContent = bindings.some(x =>
+            x.model instanceof ContentModel ||
+            x.model instanceof PopupHostModel ||
+            x.name === "email-layout");
 
         /* TODO: This is temporary solution */
         const host = this.viewManager.getHost();
@@ -422,7 +427,7 @@ export class GridEditor {
     private getUnderlyingElements(): HTMLElement[] {
         const elements = Utils.elementsFromPoint(this.ownerDocument, this.pointerX, this.pointerY);
 
-        const index = elements.findIndex(x => x.classList.contains("backdrop"));
+        const index = elements.findIndex(x => x.classList.contains("backdrop") || x.classList.contains("popup-backdrop"));
 
         if (index >= 0) {
             elements.splice(index);

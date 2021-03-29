@@ -20,9 +20,13 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
     private menuItemModelToViewModel(navitem: NavigationItemModel, level: number = 0): MenuItemViewModel {
         level++;
 
+        const targetUrl = navitem.targetUrl
+            ? `${navitem.targetUrl}${navitem.anchor ? "#" + navitem.anchor : ""}`
+            : "#";
+
         const viewModel = new MenuItemViewModel();
         viewModel.label(navitem.label);
-        viewModel.targetUrl(`${navitem.targetUrl}${navitem.anchor ? "#" + navitem.anchor : ""}`);
+        viewModel.targetUrl(targetUrl);
         viewModel.targetWindow(navitem.targetWindow);
         viewModel.isActive(navitem.isActive);
         viewModel.level(level);

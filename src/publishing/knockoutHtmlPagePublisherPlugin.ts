@@ -3,12 +3,14 @@ import { HtmlPage } from "@paperbits/common/publishing/htmlPage";
 import { HtmlPagePublisherPlugin } from "@paperbits/common/publishing/htmlPagePublisherPlugin";
 import { ContentViewModelBinder } from "../content/ko";
 import { ILayoutService } from "@paperbits/common/layouts";
+import { PopupHostViewModelBinder } from "../popup/ko/popupHostViewModelBinder";
 
 
 export class KnockoutHtmlPagePublisherPlugin implements HtmlPagePublisherPlugin {
     constructor(
         private readonly contentViewModelBinder: ContentViewModelBinder,
-        private readonly layoutService: ILayoutService
+        private readonly layoutService: ILayoutService,
+        private readonly popupHostViewModelBinder: PopupHostViewModelBinder
     ) {
         ko.tasks.scheduler = (callback) => setImmediate(callback);
     }
@@ -43,6 +45,9 @@ export class KnockoutHtmlPagePublisherPlugin implements HtmlPagePublisherPlugin 
 
         const layoutContentContract = await this.layoutService.getLayoutContent(layoutContract.key, page.bindingContext?.locale);
         const layoutContentViewModel = await this.contentViewModelBinder.contractToViewModel(layoutContentContract, page.bindingContext);
+        const popupHostViewModel = await this.popupHostViewModelBinder.contractToViewModel(page.bindingContext);
+
+         layoutContentViewModel.widgets.unshift(popupHostViewModel);
 
         await this.render(doc, layoutContentViewModel);
     }

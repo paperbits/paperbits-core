@@ -5,6 +5,7 @@ import { IUrlService, UrlContract } from "@paperbits/common/urls";
 import { Component, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { Query, Operator, Page } from "@paperbits/common/persistence";
+import { HyperlinkModel } from "@paperbits/common/permalinks";
 
 @Component({
     selector: "url-selector",
@@ -30,7 +31,7 @@ export class UrlSelector {
     public onSelect: (selection: UrlContract) => void;
 
     @Event()
-    public onHyperlinkSelect: (selection: UrlContract) => void;
+    public onHyperlinkSelect: (selection: HyperlinkModel) => void;
 
     @OnMounted()
     public async onMounted(): Promise<void> {

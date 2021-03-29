@@ -15,6 +15,19 @@
             </div>
         </div>
     </div>
-    <background params="{ background: $component.background, onUpdate: onBackgroundUpdate }"></background>
+
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section"
+                data-bind="collapse: '#backgroundCollapse'"></a>
+            <b>Background</b>
+            <button class="btn btn-info" type="button" data-bind="tooltip: 'Manage background'"></button>
+        </label>
+
+        <div id="backgroundCollapse" class="collapse form-group-collapse">
+            <background params="{ background: $component.background, onUpdate: onBackgroundUpdate }"></background>
+        </div>
+    </div>
+
     <size-editor params="{ features: 'minMaxWidth', sizeConfig: sizeConfig, onUpdate: onSizeUpdate }"></size-editor>
 </fieldset>

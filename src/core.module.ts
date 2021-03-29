@@ -16,6 +16,10 @@ import { DefaultRouteGuard, MailtoRouteGuard, DefaultRouter } from "@paperbits/c
 import { SiteService } from "@paperbits/common/sites";
 import { UrlService } from "@paperbits/common/urls";
 import { UrlPermalinkResolver } from "@paperbits/common/urls/urlPermalinkResolver";
+
+import { PopupService } from "@paperbits/common/popups";
+import { PopupPermalinkResolver } from "@paperbits/common/popups/popupPermalinkResolver";
+
 import { ModelBinderSelector, WidgetService } from "@paperbits/common/widgets";
 import { BackgroundModelBinder } from "@paperbits/common/widgets/background";
 import { ButtonModule } from "./button/ko/button.module";
@@ -74,10 +78,12 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("navigationService", NavigationService);
         injector.bindSingleton("siteService", SiteService);
         injector.bindSingleton("urlService", UrlService);
+        injector.bindSingleton("popupService", PopupService);
         injector.bindSingleton("localeService", LocaleService);
         injector.bindSingleton("permalinkResolver", PermalinkResolver);
         injector.bindToCollection("permalinkResolvers", PagePermalinkResolver, "pagePermalinkResolver");
         injector.bindToCollection("permalinkResolvers", UrlPermalinkResolver, "urlPermalinkResolver");
+        injector.bindToCollection("permalinkResolvers", PopupPermalinkResolver, "popupPermalinkResolver");
 
         injector.bind("modelBinderSelector", ModelBinderSelector);
         injector.bind("viewModelBinderSelector", ViewModelBinderSelector);

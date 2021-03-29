@@ -2,7 +2,7 @@
 import { IHighlightConfig } from "@paperbits/common/ui";
 
 ko.bindingHandlers["highlight"] = {
-    init(element: HTMLElement, valueAccessor: () => IHighlightConfig) {
+    init(element: HTMLElement, valueAccessor: () => IHighlightConfig): void {
         const config = valueAccessor();
 
         element["highlightConfig"] = config;
@@ -36,7 +36,7 @@ ko.bindingHandlers["highlight"] = {
         });
     },
 
-    update(element: HTMLElement, valueAccessor: () => IHighlightConfig) {
+    update(element: HTMLElement, valueAccessor: () => IHighlightConfig): void {
         const config = valueAccessor();
 
         element["highlightConfig"] = ko.unwrap(config);

@@ -1,0 +1,79 @@
+<div class="form flex-item flex-item-grow" data-bind="scrollable: true">
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section"
+                data-bind="collapse: '#containerBackgroundCollapse'"></a>
+            <b>Background</b>
+            <button class="btn btn-info" type="button" data-bind="tooltip: 'Manage background'"></button>
+        </label>
+
+        <div id="containerBackgroundCollapse" class="collapse form-group-collapse">
+            <background params="{ background: containerBackground, onUpdate: onContainerBackgroundChange }"></background>
+        </div>
+    </div>
+
+    <container params="{ container: containerConfig, onUpdate: onContainerContainerChange, overflowControls: true  }">
+    </container>
+
+    <size-editor
+        params="{ features: 'minMaxHeight,minMaxWidth', label: 'Container sizes', sizeConfig: containerSizeStyles, onUpdate: onContainerSizeUpdate }">
+    </size-editor>
+
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section"
+                data-bind="collapse: '#miscellaneousCollapse'"></a>
+            <b>Position</b>
+        </label>
+        <div id="miscellaneousCollapse" class="collapse form-group-collapse">
+            <div class="form-group">
+                <label class="form-label">
+                    <input name="position" type="radio" value="center" data-bind="checked: position" />Center
+                </label>
+                <label class="form-label">
+                    <input name="position" type="radio" value="top" data-bind="checked: position" />Top
+                </label>
+                <label class="form-label">
+                    <input name="position" type="radio" value="left" data-bind="checked: position" />Left
+                </label>
+                <label class="form-label">
+                    <input name="position" type="radio" value="right" data-bind="checked: position" />Right
+                </label>
+                <label class="form-label">
+                    <input name="position" type="radio" value="bottom" data-bind="checked: position" />Bottom
+                </label>
+                <label class="form-label">
+                    <input name="position" type="radio" value="attached" data-bind="checked: position" />By trigger
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#backdropCollapse'"></a>
+            <b>Backdrop</b>
+        </label>
+        <div id="backdropCollapse" class="collapse form-group-collapse">
+            <label for="backdrop" class="form-label">
+                <input type="checkbox" id="backdrop" data-bind="checked: backdrop" /> Show backdrop
+            </label>
+        </div>
+    </div>
+
+    <!-- ko if: backdrop -->
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section"
+                data-bind="collapse: '#backdropBackgroundCollapse'"></a>
+            <b>Backdrop background</b>
+            <button class="btn btn-info" type="button" data-bind="tooltip: 'Manage backdrop background'"></button>
+        </label>
+        <div id="backdropBackgroundCollapse" class="collapse form-group-collapse">
+            <background params="{ background: backdropBackground, onUpdate: onBackdropBackgroundChange }"></background>
+        </div>
+    </div>
+    <!-- /ko -->
+
+    
+</div>

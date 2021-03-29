@@ -1,0 +1,13 @@
+<div class="popup" data-bind="styled: styles, attr: { id: identifier }">
+    <!-- ko if: backdrop -->
+    <div class="popup-backdrop" aria-hidden="true" data-bind="if: backdrop"></div>
+    <!-- /ko -->
+    <div class="popup-container">
+        <button class="popup-close" data-dismiss="modal">
+            <i class="icon-emb icon-emb-simple-remove"></i>
+        </button>
+        <!-- ko foreach: { data: widgets, as: 'widget' } -->
+        <div data-bind="widget: widget"></div>
+        <!-- /ko -->
+    </div>
+</div>

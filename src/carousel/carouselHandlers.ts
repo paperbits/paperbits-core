@@ -15,7 +15,7 @@ export class CarouselHandlers {
             name: "carousel",
             displayName: "Carousel",
             iconClass: "paperbits-slider",
-            requires: [],
+            requires: ["js", "interaction"],
             createModel: async () => {
                 const model = new CarouselModel();
                 model.carouselItems.push(new CarouselItemModel());

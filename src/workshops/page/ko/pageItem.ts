@@ -43,9 +43,10 @@ export class PageItem {
     public getHyperlink(): HyperlinkModel {
         const hyperlinkModel = new HyperlinkModel();
         hyperlinkModel.title = this.title();
+        hyperlinkModel.target = "_self";
         hyperlinkModel.targetKey = this.key;
         hyperlinkModel.href = this.permalink();
-        
+
         if (this.selectedAnchor) {
             hyperlinkModel.anchor = this.selectedAnchor.elementId;
             hyperlinkModel.anchorName = this.selectedAnchor.shortTitle;

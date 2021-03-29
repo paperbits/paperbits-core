@@ -20,6 +20,7 @@ import { MapPublishModule } from "./map/ko";
 import { DividerPublishModule } from "./divider/divider.publish.module";
 import { CarouselPublishModule } from "./carousel/carousel.publish.module";
 import { TabPanelPublishModule } from "./tabs/tabPanel.publish.module";
+import { PopupPublishModule } from "./popup/popup.publish.module";
 
 
 export class CorePublishModule implements IInjectorModule {
@@ -46,5 +47,6 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindModule(new MapPublishModule());
         injector.bindModule(new CarouselPublishModule());
         injector.bindModule(new TabPanelPublishModule());
+        injector.bindModule(new PopupPublishModule());
     }
 }

@@ -8,6 +8,7 @@ import { ContentHandlers } from "../contentHandlers";
 import { ContentModel } from "../contentModel";
 import { ContentModelBinder } from "../contentModelBinder";
 import { ContentViewModel } from "./contentViewModel";
+import { PopupModel } from "../../popup";
 
 
 export class ContentViewModelBinder implements ViewModelBinder<ContentModel, ContentViewModel> {
@@ -52,7 +53,9 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
             flow: "block",
             draggable: true,
             handler: ContentHandlers,
-            applyChanges: async () => await this.modelToViewModel(model, viewModel, bindingContext),
+            applyChanges: async () => {
+                await this.modelToViewModel(model, viewModel, bindingContext);
+            },
             onCreate: () => {
                 if (model.type === bindingContext?.contentType) {
                     this.eventManager.addEventListener("onContentUpdate", scheduleUpdate);
@@ -104,7 +107,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
         return model instanceof ContentModel;
     }
 
-    public async contractToViewModel(contentContract: Contract, bindingContext: any): Promise<any> {
+    public async contractToViewModel(contentContract: Contract, bindingContext: Bag<any>): Promise<ContentViewModel> {
         const layoutModel = await this.contentModelBinder.contractToModel(contentContract, bindingContext);
         const layoutViewModel = await this.modelToViewModel(layoutModel, null, bindingContext);
 

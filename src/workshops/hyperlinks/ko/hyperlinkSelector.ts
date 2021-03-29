@@ -4,7 +4,6 @@ import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { IHyperlinkProvider } from "@paperbits/common/ui";
 import { Component, Event, Param, OnMounted } from "@paperbits/common/ko/decorators";
 
-const defaultTarget = "_self";
 
 @Component({
     selector: "hyperlink-selector",
@@ -24,7 +23,6 @@ export class HyperlinkSelector {
     constructor(private readonly hyperlinkProviders: IHyperlinkProvider[]) {
         this.hyperlink = ko.observable<HyperlinkModel>();
         this.hyperlinkProvider = ko.observable<IHyperlinkProvider>(null);
-        this.target = ko.observable<string>(defaultTarget);
         this.selection = ko.computed(() => {
             const hyperlink = ko.unwrap(this.hyperlink);
 
@@ -40,7 +38,6 @@ export class HyperlinkSelector {
     public onMounted(): void {
         this.updateHyperlinkState(this.hyperlink());
         this.hyperlinkProvider.subscribe(this.onHyperlinkProviderChange);
-        this.target.subscribe(this.targetChanged);
     }
 
     private onHyperlinkProviderChange(hyperlinkProvider: IHyperlinkProvider): void {
@@ -56,20 +53,9 @@ export class HyperlinkSelector {
         this.hyperlink(hyperlink);
 
         if (hyperlink) {
-            hyperlink.target = this.target();
             const hyperlinkProvider = this.hyperlinkProviders.find(x => x.canHandleHyperlink(hyperlink.targetKey));
             this.hyperlinkProvider(hyperlinkProvider);
         }
-
-        if (this.onChange) {
-            this.onChange(hyperlink);
-        }
-    }
-
-    public targetChanged(): void {
-        const hyperlink = this.hyperlink();
-        hyperlink.target = this.target();
-        this.hyperlink(hyperlink);
 
         if (this.onChange) {
             this.onChange(hyperlink);
@@ -111,7 +97,6 @@ export class HyperlinkSelector {
         }
 
         this.hyperlink(hyperlink);
-        this.target(hyperlink.target || defaultTarget);
         this.hyperlinkProvider(hyperlinkProvider);
     }
 }

@@ -15,7 +15,7 @@ export class TabPanelHandlers {
             name: "tab-panel",
             displayName: "Tab panel",
             iconClass: "paperbits-puzzle-10",
-            requires: [],
+            requires: ["js", "interaction"],
             createModel: async () => {
                 const model = new TabPanelModel();
                 model.tabPanelItems.push(new TabPanelItemModel("Tab 1"));

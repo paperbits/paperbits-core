@@ -1,24 +1,28 @@
 import * as ko from "knockout";
-import { Component, OnMounted, OnDestroyed, Param } from "@paperbits/common/ko/decorators";
-import { Router, Route } from "@paperbits/common/routing";
+import { Contract } from "@paperbits/common";
 import { EventManager } from "@paperbits/common/events";
-import { ViewManager, ViewManagerMode } from "@paperbits/common/ui";
-import { ContentViewModelBinder, ContentViewModel } from "../../../content/ko";
+import { Component, OnDestroyed, OnMounted, Param } from "@paperbits/common/ko/decorators";
 import { ILayoutService } from "@paperbits/common/layouts";
 import { IPageService } from "@paperbits/common/pages";
-import { Contract } from "@paperbits/common";
+import { Route, Router } from "@paperbits/common/routing";
 import { StyleCompiler, StyleManager } from "@paperbits/common/styles";
+import { ViewManager, ViewManagerMode } from "@paperbits/common/ui";
+import { ContentViewModel, ContentViewModelBinder } from "../../../content/ko";
+import { PopupHostViewModelBinder } from "../../../popup/ko/popupHostViewModelBinder";
+import { PopupHost } from "../../../popup/ko/popupHost";
 
 
 @Component({
     selector: "page-host",
-    template: "<!-- ko if: contentViewModel --><!-- ko widget: contentViewModel, grid: {} --><!-- /ko --><!-- /ko -->"
+    template: "<!-- ko if: popupHostViewModel --><!-- ko widget: popupHostViewModel --><!-- /ko --><!-- /ko -->      <!-- ko if: contentViewModel --><!-- ko widget: contentViewModel, grid: {} --><!-- /ko --><!-- /ko -->"
 })
 export class PageHost {
     public readonly contentViewModel: ko.Observable<ContentViewModel>;
+    public readonly popupHostViewModel: ko.Observable<PopupHost>;
 
     constructor(
         private readonly contentViewModelBinder: ContentViewModelBinder,
+        private readonly popupHostViewModelBinder: PopupHostViewModelBinder,
         private readonly router: Router,
         private readonly eventManager: EventManager,
         private readonly viewManager: ViewManager,
@@ -27,6 +31,7 @@ export class PageHost {
         private readonly styleCompiler: StyleCompiler
     ) {
         this.contentViewModel = ko.observable();
+        this.popupHostViewModel = ko.observable();
         this.pageKey = ko.observable();
     }
 
@@ -78,16 +83,16 @@ export class PageHost {
         const styleSheet = await this.styleCompiler.getStyleSheet();
         styleManager.setStyleSheet(styleSheet);
 
-        const bindingContext = {
+        const pageBindingContext = {
             contentItemKey: pageContract.key,
             styleManager: styleManager,
             navigationPath: route.path,
             contentType: "page",
-            template: {
+            template: { // Template here describes what fields of particular content type.
                 page: {
                     value: pageContentContract,
-                    onValueUpdate: async (updatedPostContract: Contract) => {
-                        await this.pageService.updatePageContent(pageContract.key, updatedPostContract);
+                    onValueUpdate: async (updatedContentContract: Contract) => {
+                        await this.pageService.updatePageContent(pageContract.key, updatedContentContract);
                     }
                 }
             }
@@ -100,11 +105,23 @@ export class PageHost {
         }
 
         const layoutContentContract = await this.layoutService.getLayoutContent(layoutContract.key);
-        const contentViewModel = await this.contentViewModelBinder.contractToViewModel(layoutContentContract, bindingContext);
+        const layoutContentViewModel = await this.contentViewModelBinder.contractToViewModel(layoutContentContract, pageBindingContext);
+        layoutContentViewModel["widgetBinding"].provides = ["html", "js", "interaction"];
 
-        contentViewModel["widgetBinding"].provides = ["html", "js", "interaction"];
+        this.contentViewModel(layoutContentViewModel);
 
-        this.contentViewModel(contentViewModel);
+
+        /* Popups */
+        const popupBindingContext = {
+            styleManager: styleManager,
+            navigationPath: route.path,
+            contentType: "popup"
+        };
+
+        const popupHostViewModel = await this.popupHostViewModelBinder.contractToViewModel(popupBindingContext);
+        popupHostViewModel["widgetBinding"].provides = ["html", "js", "interaction"];
+
+        this.popupHostViewModel(popupHostViewModel);
 
         this.viewManager.removeShutter();
     }

@@ -79,6 +79,7 @@ export class MediaItem {
     public getHyperlink(): HyperlinkModel {
         const hyperlinkModel = new HyperlinkModel();
         hyperlinkModel.title = this.fileName();
+        hyperlinkModel.target = "_download";
         hyperlinkModel.targetKey = this.key;
         hyperlinkModel.href = this.permalink();
 

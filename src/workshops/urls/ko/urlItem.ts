@@ -33,9 +33,10 @@ export class UrlItem {
     public getHyperlink(): HyperlinkModel {
         const hyperlinkModel = new HyperlinkModel();
         hyperlinkModel.title = this.title();
+        hyperlinkModel.target = "_self";
         hyperlinkModel.targetKey = this.key;
         hyperlinkModel.href = this.permalink();
-        
+
         return hyperlinkModel;
     }
 }

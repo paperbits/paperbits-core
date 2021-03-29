@@ -24,30 +24,24 @@
         <!--/ko-->
     </div>
 
-    <!--ko if: hyperlink -->
+    <!-- ko if: hyperlinkProvider -->
+
     <div class="form-group">
-        <label for="hyperlink"> 
+        <label for="hyperlink">
             Link points to:
         </label>
         <div class="max-w300 text-overflow">
             <b id="hyperlink" data-bind="text: $component.selection, attr: { title: selection }"></b>
         </div>
     </div>
-
-    <div class="form-group">
-        <label for="targetValue" class="form-label">
-            Link opens in:
-        </label>
-        <label class="form-label">
-            <input type="radio" name="target" value="_self" data-bind="checked: target" /> Same window
-        </label>
-        <label class="form-label">
-            <input type="radio" name="target" value="_blank" data-bind="checked: target" /> New window
-        </label>
-    </div>
+    <!-- ko if: hyperlinkProvider().hyperlinkDetailsComponentName -->
+    <div data-bind="component: { name: hyperlinkProvider().hyperlinkDetailsComponentName, params: { hyperlink: hyperlink, onHyperlinkChange: $component.onHyperlinkSelected } }"></div>
     <!--/ko-->
 
-    <!-- ko ifnot: hyperlink -->
+    <!--/ko-->
+
+
+    <!-- ko ifnot: hyperlinkProvider -->
     <div class="flex flex-column">
         <div class="flex flex-column flex-item-grow tab-panel" role="tabpanel">
             <label>No link selected.</label>

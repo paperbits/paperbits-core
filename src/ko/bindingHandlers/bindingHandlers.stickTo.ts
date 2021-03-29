@@ -15,7 +15,7 @@ export interface StickToConfig {
 }
 
 ko.bindingHandlers["stickTo"] = {
-    init(element: HTMLElement, valueAccessor: () => StickToConfig) {
+    init(element: HTMLElement, valueAccessor: () => StickToConfig): void {
         const config = valueAccessor();
 
         const updatePosition = () => {

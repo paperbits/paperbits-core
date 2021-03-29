@@ -6,6 +6,7 @@ import { PageHyperlinkProvider } from "@paperbits/common/pages";
 import { BrowserNotSupported } from "./browserNotSupported";
 import { PageHost } from "./pageHost";
 import { PagesToolButton } from "./pagesToolButton";
+import { PageHyperlinkDetails } from "./pageHyperlinkDetails";
 
 
 export class PageDesignModule implements IInjectorModule {
@@ -15,6 +16,7 @@ export class PageDesignModule implements IInjectorModule {
         injector.bind("pagesWorkshop", PagesWorkshop);
         injector.bind("pageDetailsWorkshop", PageDetailsWorkshop);
         injector.bind("pageSelector", PageSelector);
+        injector.bind("pageHyperlinkDetails", PageHyperlinkDetails);
         injector.bindToCollection("hyperlinkProviders", PageHyperlinkProvider);
         injector.bindToCollection("workshopSections", PagesToolButton);
         injector.bind("pageHyperlinkProvider", PageHyperlinkProvider);

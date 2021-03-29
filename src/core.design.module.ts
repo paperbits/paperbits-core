@@ -28,9 +28,8 @@ import { HostBindingHandler, BalloonBindingHandler, ResizableBindingHandler, Sur
 import { MediaHandlers, HtmlEditorProvider } from "@paperbits/common/editing";
 import { HyperlinkSelector } from "./workshops/hyperlinks/ko/hyperlinkSelector";
 import { WidgetSelector } from "./workshops/widgets/ko/widgetSelector";
-import { UrlSelector } from "./workshops/urls/ko/urlSelector";
+import { UrlSelector, UrlHyperlinkDetails } from "./workshops/urls/ko";
 import { LayoutDesignModule } from "./layout/ko/layout.design.module";
-import { HistoryRouteHandler } from "@paperbits/common/routing";
 import { UrlHyperlinkProvider } from "@paperbits/common/urls/urlHyperlinkProvider";
 import { MediaHyperlinkProvider } from "@paperbits/common/media";
 import { DragManager } from "@paperbits/common/ui/draggables";
@@ -64,6 +63,7 @@ import { CarouselDesignModule } from "./carousel/ko";
 import { TabPanelDesignModule } from "./tabs/tabPanel.design.module";
 // import { DividerDesignModule } from "./divider/divider.design.module";
 import { LocalStorageSettingsProvider } from "@paperbits/common/configuration";
+import { PopupDesignModule } from "./popup";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -101,6 +101,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bind("hyperlinkSelector", HyperlinkSelector);
         injector.bind("widgetSelector", WidgetSelector);
         injector.bind("urlSelector", UrlSelector);
+        injector.bind("urlHyperlinkDetails", UrlHyperlinkDetails);
         injector.bind("confirmation", Confirmation);
         injector.bind("roleSelector", RoleSelector);
         injector.bind("roleInput", RoleInput);
@@ -133,6 +134,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new CollapsiblePanelEditorModule());
         injector.bindModule(new CarouselDesignModule());
         injector.bindModule(new TabPanelDesignModule());
+        injector.bindModule(new PopupDesignModule());
         // injector.bindModule(new DividerDesignModule());
         injector.bindToCollection("hyperlinkProviders", UrlHyperlinkProvider);
         injector.bindToCollection("autostart", HostBindingHandler);

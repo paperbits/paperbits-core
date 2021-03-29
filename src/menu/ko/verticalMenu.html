@@ -1,7 +1,7 @@
 <ul class="nav" data-bind="foreach: { data: $data.nodes, as: 'item' }">
     <!-- ko if: item.nodes().length > 0 -->
-    <li class="nav-item collapsible" data-bind="css: { 'expanded': expanded }">
-        <a href="#" class="nav-link" data-toggle="collapsible"
+    <li class="nav-item" data-bind="css: { 'expanded': expanded }">
+        <a href="#" class="nav-link" data-toggle="dropdown"
             data-bind="text: item.label, attr: { href: item.targetUrl, target: item.targetWindow }, css: { 'nav-link-active': item.isActive }"></a>
         <!--ko if: item.nodes().length > 0 -->
         <!-- ko template: { name: 'verticalMenu', data: item } -->
