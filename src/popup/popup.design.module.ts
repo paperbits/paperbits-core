@@ -1,6 +1,5 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { PopupEditor } from "./ko/popupEditor";
-import { IWidgetHandler } from "@paperbits/common/editing";
 import { PopupHandlers } from "./popupHandlers";
 import { PopupViewModel } from "./ko/popup";
 import { PopupModelBinder } from "./popupModelBinder";
