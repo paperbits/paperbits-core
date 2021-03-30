@@ -66,8 +66,7 @@ export class PopupHostViewModelBinder implements ViewModelBinder<PopupHostModel,
         const binding: IWidgetBinding<PopupHostModel, PopupHost> = {
             name: "popup-host",
             displayName: "Popup host",
-            readonly: bindingContext ? bindingContext.readonly : false,
-            flow: "block",
+            readonly: true, // bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: false,
             applyChanges: async () => {

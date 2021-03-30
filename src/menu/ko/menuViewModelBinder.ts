@@ -64,7 +64,7 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
             displayName: "Menu",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
-            flow: "inline",
+            // flow: "inline", // Commented out due do discovered backward compatibility issues.
             draggable: true,
             editor: "menu-editor",
             applyChanges: async (updates: MenuModel) => {
