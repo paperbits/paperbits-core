@@ -1,5 +1,5 @@
 ﻿import * as ko from "knockout";
-import { HyperlinkModel } from "@paperbits/common/permalinks";
+import { HyperlinkModel, HyperlinkTarget } from "@paperbits/common/permalinks";
 
 ko.bindingHandlers["hyperlink"] = {
     init(element: HTMLElement, valueAccessor: () => HyperlinkModel): void {
@@ -12,30 +12,31 @@ ko.bindingHandlers["hyperlink"] = {
                 return;
             }
 
+            let hyperlinkObj;
+
             switch (hyperlink.target) {
-                case "_popup":
-                    attributesObservable({
+                case HyperlinkTarget.popup:
+                    hyperlinkObj = {
                         "data-toggle": "popup",
                         "data-target": `#${hyperlink.targetKey.replace("popups/", "popups")}`,
                         "href": "javascript:void(0)"
-                    });
-                    return;
-
+                    };
                     break;
 
-                case "_download":
-                    attributesObservable({
+                case HyperlinkTarget.download:
+                    hyperlinkObj = {
                         href: hyperlink.href,
                         download: "" // Leave empty unless file name gets specified.
-                    });
+                    };
                     break;
 
                 default:
-                    attributesObservable({
+                    hyperlinkObj = {
                         href: `${hyperlink.href}${hyperlink.anchor ? "#" + hyperlink.anchor : ""}`,
                         target: hyperlink.target
-                    });
+                    };
             }
+            attributesObservable(hyperlinkObj);
         };
 
         if (ko.isObservable(hyperlink)) {

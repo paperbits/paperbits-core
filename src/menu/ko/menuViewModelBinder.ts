@@ -1,13 +1,14 @@
-import { ViewModelBinder } from "@paperbits/common/widgets";
-import { EventManager } from "@paperbits/common/events";
 import { Bag } from "@paperbits/common";
-import { MenuViewModel } from "./menuViewModel";
-import { MenuModel } from "../menuModel";
-import { MenuModelBinder, MenuContract } from "..";
-import { MenuItemViewModel } from "./menuItemViewModel";
-import { NavigationItemModel, NavigationEvents } from "@paperbits/common/navigation";
-import { StyleCompiler } from "@paperbits/common/styles";
 import { IWidgetBinding } from "@paperbits/common/editing";
+import { EventManager } from "@paperbits/common/events";
+import { NavigationEvents, NavigationItemModel } from "@paperbits/common/navigation";
+import { HyperlinkModel } from "@paperbits/common/permalinks";
+import { StyleCompiler } from "@paperbits/common/styles";
+import { ViewModelBinder } from "@paperbits/common/widgets";
+import { MenuContract, MenuModelBinder } from "..";
+import { MenuModel } from "../menuModel";
+import { MenuItemViewModel } from "./menuItemViewModel";
+import { MenuViewModel } from "./menuViewModel";
 
 
 export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewModel> {
@@ -26,13 +27,17 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
 
         const viewModel = new MenuItemViewModel();
         viewModel.label(navitem.label);
-        viewModel.targetUrl(targetUrl);
-        viewModel.targetWindow(navitem.targetWindow);
         viewModel.isActive(navitem.isActive);
         viewModel.level(level);
 
+        const hyperlink = new HyperlinkModel();
+        hyperlink.href = targetUrl;
+        hyperlink.targetKey = navitem.targetKey;
+        hyperlink.target = navitem.targetWindow;
+        viewModel.hyperlink(hyperlink);
+
         if (navitem.nodes) {
-            viewModel.nodes(navitem.nodes.map(x => this.menuItemModelToViewModel(x, level)));
+            viewModel.nodes(navitem.nodes.map(childNavitem => this.menuItemModelToViewModel(childNavitem, level)));
         }
 
         return viewModel;
