@@ -3,6 +3,7 @@ import { CarouselRuntimeModule } from "./carousel/carousel.runtime.module";
 import { TabPanelRuntimeModule } from "./tabs/tabPanel.runtime.module";
 import { MapRuntimeModule } from "./map";
 import { SearchRuntimeModule } from "./search/search.runtime.module";
+import "./togglables";
 
 
 export class CoreRuntimeModule implements IInjectorModule {
