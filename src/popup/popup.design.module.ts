@@ -24,6 +24,6 @@ export class PopupDesignModule implements IInjectorModule {
         injector.bindToCollection("viewModelBinders", PopupViewModelBinder);
         injector.bindToCollection("viewModelBinders", PopupHostViewModelBinder, "popupHostViewModelBinder");
         injector.bindToCollection("widgetHandlers", PopupHandlers);
-        // injector.bindToCollection("hyperlinkProviders", PopupHyperlinkProvider);
+        injector.bindToCollection("hyperlinkProviders", PopupHyperlinkProvider);
     }
 }
