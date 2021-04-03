@@ -49,6 +49,7 @@ export class CarouselItemHandlers {
         if (context.model.widgets.length === 0) {
             contextualEditor.hoverCommands.push({
                 color: "#607d8b",
+                iconClass: "paperbits-simple-add",
                 position: "center",
                 tooltip: "Set slide layout",
                 component: {

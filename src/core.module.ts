@@ -16,10 +16,8 @@ import { DefaultRouteGuard, MailtoRouteGuard, DefaultRouter } from "@paperbits/c
 import { SiteService } from "@paperbits/common/sites";
 import { UrlService } from "@paperbits/common/urls";
 import { UrlPermalinkResolver } from "@paperbits/common/urls/urlPermalinkResolver";
-
 import { PopupService } from "@paperbits/common/popups";
 import { PopupPermalinkResolver } from "@paperbits/common/popups/popupPermalinkResolver";
-
 import { ModelBinderSelector, WidgetService } from "@paperbits/common/widgets";
 import { BackgroundModelBinder } from "@paperbits/common/widgets/background";
 import { ButtonModule } from "./button/ko/button.module";

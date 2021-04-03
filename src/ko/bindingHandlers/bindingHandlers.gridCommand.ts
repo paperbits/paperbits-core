@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import { IContextCommand } from "@paperbits/common/ui/IContextCommandSet";
 
 ko.bindingHandlers["gridCommand"] = {
-    init(element: HTMLElement, valueAccessor: () => IContextCommand) {
+    init(element: HTMLElement, valueAccessor: () => IContextCommand): void {
         const command = valueAccessor();
 
         if (!command) {

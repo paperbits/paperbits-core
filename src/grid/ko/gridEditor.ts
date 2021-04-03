@@ -461,6 +461,7 @@ export class GridEditor {
             color: "#607d8b",
             hoverCommands: [{
                 color: "#607d8b",
+                iconClass: "paperbits-simple-add",
                 position: context.half,
                 tooltip: "Add widget",
                 component: {

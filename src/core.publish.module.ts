@@ -1,9 +1,10 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
+import { MemoryCache } from "@paperbits/common/caching";
+import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkResolver.publish";
 import { AssetPublisher } from "./publishing/assetPublisher";
 import { PagePublisher } from "./publishing/pagePublisher";
 import { SitePublisher } from "./publishing/sitePublisher";
 import { MediaPublisher } from "./publishing/mediaPublisher";
-import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkResolver.publish";
 import { KnockoutHtmlPagePublisherPlugin } from "./publishing/knockoutHtmlPagePublisherPlugin";
 import {
     HtmlPagePublisher,
@@ -15,12 +16,13 @@ import {
     SitemapBuilder,
     SearchIndexBuilder
 } from "@paperbits/common/publishing";
-import { MemoryCache } from "@paperbits/common/caching";
 import { MapPublishModule } from "./map/ko";
 import { DividerPublishModule } from "./divider/divider.publish.module";
 import { CarouselPublishModule } from "./carousel/carousel.publish.module";
 import { TabPanelPublishModule } from "./tabs/tabPanel.publish.module";
 import { PopupPublishModule } from "./popup/popup.publish.module";
+import { TablePublishModule } from "./table/table.publish.module";
+import { TableCellPublishModule } from "./table-cell/tableCell.publish.module";
 
 
 export class CorePublishModule implements IInjectorModule {
@@ -48,5 +50,7 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindModule(new CarouselPublishModule());
         injector.bindModule(new TabPanelPublishModule());
         injector.bindModule(new PopupPublishModule());
+        injector.bindModule(new TablePublishModule());
+        injector.bindModule(new TableCellPublishModule());
     }
 }

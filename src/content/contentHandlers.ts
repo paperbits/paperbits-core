@@ -17,6 +17,7 @@ export class ContentHandlers implements IWidgetHandler {
         if (context.model.widgets.length === 0) {
             contextualEditor.hoverCommands = [{
                 color: "#2b87da",
+                iconClass: "paperbits-simple-add",
                 position: "center",
                 tooltip: "Add section",
                 component: {

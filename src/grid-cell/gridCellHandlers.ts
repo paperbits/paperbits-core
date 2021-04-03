@@ -45,6 +45,7 @@ export class GridCellHandlers implements IWidgetHandler {
 
         gridCellContextualEditor.hoverCommands.push({
             color: "#607d8b",
+            iconClass: "paperbits-simple-add",
             position: "center",
             tooltip: "Add widget",
             component: {

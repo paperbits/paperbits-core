@@ -1,28 +1,39 @@
 import * as ko from "knockout";
 import { IContextCommand } from "@paperbits/common/ui";
 
+interface CommandConfig {
+    element: HTMLElement;
+    command: IContextCommand;
+}
+
 ko.bindingHandlers["command"] = {
-    init(element: HTMLElement, valueAccessor: () => IContextCommand) {
-        const contextCommand = valueAccessor();
+    init(element: HTMLElement, valueAccessor: () => CommandConfig): void {
+        const config = valueAccessor();
+
+        // data-bind="stickTo: { target: contextualEditor.element, position: command.position }, balloon: { component: command.component, onOpen: $component.onHoverCommandActivate, onClose: $component.onHoverCommandDeactivate }, background: { color: command.color }, attr: { title: command.tooltip }">
 
         const bindings = {
             background: {
-                color: contextCommand.color
+                color: config.command.color
             },
             attr: {
-                title: contextCommand.tooltip
+                title: config.command.tooltip
             }
         };
 
-        if (contextCommand.component) {
+        if (config.command.component) {
             bindings["balloon"] = {
-                component: contextCommand.component,
+                component: config.command.component,
                 // onOpen: $component.onHoverCommandActivate,
                 // onClose: $component.onHoverCommandDeactivate
             };
         }
-        else if (contextCommand.callback) {
-            bindings["click"] = contextCommand.callback;
+        else if (config.command.callback) {
+            bindings["click"] = config.command.callback;
+        }
+
+        if (config.command.position) {
+            bindings["stickTo"] = { target: config.element, position: config.command.position }
         }
 
         ko.applyBindingsToNode(element, bindings, null);

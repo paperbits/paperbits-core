@@ -47,7 +47,7 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                         if (typeof params === "object") {
                             parameterDescriptions.forEach(parameterName => {
                                 const instanceValue = instance[parameterName];
-                                const paramerterValue = params[parameterName] || params[parameterName.toLowerCase()];
+                                const paramerterValue = params[parameterName];
 
                                 if (paramerterValue === undefined) {
                                     return;

@@ -19,6 +19,7 @@ export class SectionHandlers {
             color: "#2b87da",
             hoverCommands: [{
                 position: context.half,
+                iconClass: "paperbits-simple-add",
                 tooltip: "Add section",
                 color: "#2b87da",
                 component: {
@@ -94,6 +95,7 @@ export class SectionHandlers {
         if (context.model.widgets.length === 0) {
             sectionContextualEditor.hoverCommands.push({
                 position: "center",
+                iconClass: "paperbits-simple-add",
                 tooltip: "Add row",
                 color: "#29c4a9",
                 component: {

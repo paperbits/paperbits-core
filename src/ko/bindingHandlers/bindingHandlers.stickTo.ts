@@ -23,9 +23,10 @@ ko.bindingHandlers["stickTo"] = {
                 return;
             }
 
-            const parent = config.target.ownerDocument.defaultView.frameElement;
-            const parentRect = parent.getBoundingClientRect();
-            const rect = config.target.getBoundingClientRect();
+            const frameElement = config.target.ownerDocument.defaultView.frameElement;
+            const frameRect = frameElement.getBoundingClientRect();
+            const targetRect = config.target.getBoundingClientRect();
+
             const placement = config.placement || "border";
             let coordX: number;
             let coordY: number;
@@ -33,11 +34,11 @@ ko.bindingHandlers["stickTo"] = {
             element.style.right = null;
             element.style.left = null;
 
-            coordX = rect.left + Math.floor((rect.width) / 2) - Math.floor(element.clientWidth / 2);
-            coordY = rect.top + Math.floor((rect.height) / 2) - Math.floor(element.clientHeight / 2);
+            coordX = targetRect.left + Math.floor((targetRect.width) / 2) - Math.floor(element.clientWidth / 2);
+            coordY = targetRect.top + Math.floor((targetRect.height) / 2) - Math.floor(element.clientHeight / 2);
 
             if (config.position.indexOf("top") >= 0) {
-                coordY = rect.top;
+                coordY = targetRect.top;
 
                 if (placement === "border") {
                     coordY = coordY - Math.floor(element.clientHeight / 2);
@@ -45,24 +46,42 @@ ko.bindingHandlers["stickTo"] = {
             }
 
             if (config.position.indexOf("bottom") >= 0) {
-                coordY = rect.top + rect.height - element.clientHeight;
+                coordY = targetRect.top + targetRect.height - element.clientHeight;
 
                 if (placement === "border") {
                     coordY = coordY + Math.floor(element.clientHeight / 2);
                 }
             }
 
+            element.style.top = frameRect.top + coordY + "px";
+
             if (config.position.indexOf("left") >= 0) {
-                element.style.left = parentRect.left + rect.left + 10 + "px";
+                element.style.left = frameRect.left + targetRect.left + 10 + "px";
             }
             else if (config.position.indexOf("right") >= 0) {
-                element.style.right = parentRect.right - rect.right + 10 + "px";
+                element.style.right = frameRect.right - targetRect.right + 10 + "px";
             }
             else {
-                element.style.left = parentRect.left + coordX + "px";
+                element.style.left = frameRect.left + coordX + "px";
             }
 
-            element.style.top = parentRect.top + coordY + "px";
+            if (config.position.indexOf("parent-left") >= 0) {
+                if (!config.target.parentElement) {
+                    return;
+                }
+
+                const targetParentRect = config.target.parentElement.getBoundingClientRect();
+                element.style.left = targetParentRect.left - Math.floor(element.clientWidth / 2) + "px";
+            }
+
+            if (config.position.indexOf("parent-top") >= 0) {
+                if (!config.target.parentElement) {
+                    return;
+                }
+                
+                const targetParentRect = config.target.parentElement.getBoundingClientRect();
+                element.style.top = targetParentRect.top - Math.floor(element.clientHeight / 2) + "px";
+            }
         };
 
         updatePosition();

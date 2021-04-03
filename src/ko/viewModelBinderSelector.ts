@@ -6,6 +6,10 @@ export class ViewModelBinderSelector {
     constructor(private viewModelBinders: ViewModelBinder<any, any>[]) { }
 
     public getViewModelBinderByModel<TModel>(model: TModel): ViewModelBinder<any, any> {
+        if (!model) {
+            throw new Error(`Parameter "model" not specified.`);
+        }
+
         if (model instanceof PlaceholderModel) {
             return <any>(new PlaceholderViewModelBinder());
         }

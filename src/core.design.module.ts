@@ -61,6 +61,8 @@ import { MapDesignModule } from "./map/ko/map.design.module";
 import { MemoryCache } from "@paperbits/common/caching";
 import { CarouselDesignModule } from "./carousel/ko";
 import { TabPanelDesignModule } from "./tabs/tabPanel.design.module";
+import { TableDesignModule } from "./table/ko";
+import { TableCellDesignModule } from "./table-cell/tableCell.design.module";
 // import { DividerDesignModule } from "./divider/divider.design.module";
 import { LocalStorageSettingsProvider } from "@paperbits/common/configuration";
 import { PopupDesignModule } from "./popup";
@@ -135,6 +137,8 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new CarouselDesignModule());
         injector.bindModule(new TabPanelDesignModule());
         injector.bindModule(new PopupDesignModule());
+        injector.bindModule(new TableDesignModule());
+        injector.bindModule(new TableCellDesignModule());
         // injector.bindModule(new DividerDesignModule());
         injector.bindToCollection("hyperlinkProviders", UrlHyperlinkProvider);
         injector.bindToCollection("autostart", HostBindingHandler);
