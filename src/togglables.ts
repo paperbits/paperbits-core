@@ -82,7 +82,7 @@ const onShowTogglable = (toggleElement: HTMLElement, targetElement: HTMLElement)
         }
     };
 
-    const closeTarget = () => {
+    const closeTarget = (): void => {
         targetElement.classList.remove(showClassName);
         removeEventListener("mousedown", clickOutside);
         toggleElement.setAttribute(AriaAttributes.expanded, "false");
@@ -120,7 +120,7 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement): vo
 
     const popupContainerElement: HTMLElement = targetElement.querySelector(popupContainerClass);
 
-    const repositionPopup = () => {
+    const repositionPopup = (): void => {
         const computedStyles = getComputedStyle(popupContainerElement);
 
         if (computedStyles.position === "absolute") {
@@ -154,13 +154,14 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement): vo
         closeTarget();
     };
 
-    const closeTarget = () => {
+    const closeTarget = (): void => {
         dismissElement.removeEventListener("mousedown", closeTarget);
         targetElement.ownerDocument.removeEventListener("mousedown", clickOutside);
         targetElement.classList.remove(showClassName);
         toggleElement.setAttribute(AriaAttributes.expanded, "false");
 
-        removeEventListener(onPopupRepositionRequestedEvent, repositionPopup);
+        // Temporary hack to reposition popup:
+        document.removeEventListener(onPopupRepositionRequestedEvent, repositionPopup);
     };
 
     const openTarget = (): void => {
@@ -170,7 +171,7 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement): vo
         setImmediate(() => targetElement.ownerDocument.addEventListener("mousedown", clickOutside));
 
         // Temporary hack to reposition popup:
-        addEventListener(onPopupRepositionRequestedEvent, () => setImmediate(() => repositionPopup()));
+        document.addEventListener(onPopupRepositionRequestedEvent, repositionPopup);
     };
 
     if (!targetElement.classList.contains(showClassName)) {

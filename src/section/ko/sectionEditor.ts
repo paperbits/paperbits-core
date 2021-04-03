@@ -1,6 +1,5 @@
 
 import * as ko from "knockout";
-import * as Objects from "@paperbits/common/objects";
 import template from "./sectionEditor.html";
 import { ViewManager } from "@paperbits/common/ui";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";

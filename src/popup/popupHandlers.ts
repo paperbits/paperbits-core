@@ -18,7 +18,7 @@ export class PopupHandlers implements IWidgetHandler {
     public getContextualEditor(context: WidgetContext): IContextCommandSet {
         const popupContextualEditor: IContextCommandSet = {
             color: "#4c5866",
-            hoverCommands: null,
+            hoverCommands: [],
             selectCommands: [{
                 tooltip: "Edit popup",
                 iconClass: "paperbits-edit-72",

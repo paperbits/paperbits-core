@@ -1,9 +1,8 @@
 import * as ko from "knockout";
-import * as Objects from "@paperbits/common/objects";
 import template from "./popupEditor.html";
 import { ViewManager } from "@paperbits/common/ui";
 import { WidgetEditor } from "@paperbits/common/widgets";
-import { StyleService, StyleHelper } from "@paperbits/styles";
+import { StyleHelper } from "@paperbits/styles";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { PopupModel } from "../popupModel";
 import { BackgroundStylePluginConfig, TypographyStylePluginConfig, ContainerStylePluginConfig, SizeStylePluginConfig } from "@paperbits/styles/contracts";
@@ -20,25 +19,22 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
     public readonly containerBackground: ko.Observable<BackgroundStylePluginConfig>;
     public readonly backdropBackground: ko.Observable<BackgroundStylePluginConfig>;
     public readonly typography: ko.Observable<TypographyStylePluginConfig>;
-    public readonly appearanceStyles: ko.ObservableArray<any>;
-    public readonly appearanceStyle: ko.Observable<any>;
     public readonly containerConfig: ko.Observable<ContainerStylePluginConfig>;
     public readonly containerSizeStyles: ko.Observable<SizeStylePluginConfig>;
+    public readonly containerSizeStylesResponsive: ko.Observable<boolean>;
     public readonly backdrop: ko.Observable<boolean>;
     public readonly position: ko.Observable<string>;
 
     constructor(
         private readonly viewManager: ViewManager,
-        private readonly styleService: StyleService,
         private readonly eventManager: EventManager,
     ) {
-        this.appearanceStyles = ko.observableArray<any>();
-        this.appearanceStyle = ko.observable<any>();
         this.containerConfig = ko.observable<ContainerStylePluginConfig>();
         this.containerBackground = ko.observable<BackgroundStylePluginConfig>();
         this.backdropBackground = ko.observable<BackgroundStylePluginConfig>();
 
         this.containerSizeStyles = ko.observable<SizeStylePluginConfig>();
+        this.containerSizeStylesResponsive = ko.observable<boolean>();
         this.position = ko.observable();
         this.backdrop = ko.observable(true);
     }
@@ -53,12 +49,7 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
     public async initialize(): Promise<void> {
         this.backdrop(this.model.backdrop);
 
-        const variations = await this.styleService.getComponentVariations("popup");
-
-        this.appearanceStyles(variations.filter(x => x.category === "appearance"));
         this.updateObservables();
-
-        this.appearanceStyle.subscribe(this.onAppearanceChange);
         this.eventManager.addEventListener("onViewportChange", this.updateObservables);
 
         this.position.subscribe(this.onPositionChange);
@@ -68,48 +59,72 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
     private updateObservables(): void {
         this.determinePosition();
 
-        const containerStyleConfig = StyleHelper.getPluginConfigForLocalStyles(this.model.styles, "container");
+        const popupContainerStyles = StyleHelper
+            .style(this.model.styles)
+            .component("popupContainer")
+            .variation("default");
+
+        const containerStyleConfig = popupContainerStyles.plugin("container").getConfig<ContainerStylePluginConfig>();
         this.containerConfig(containerStyleConfig);
 
-        const containerBackgroundStyleConfig = Objects.getObjectAt<BackgroundStylePluginConfig>("components/popupContainer/default/background", this.model.styles.instance);
+        const containerBackgroundStyleConfig = popupContainerStyles.plugin("background").getConfig<BackgroundStylePluginConfig>();
         this.containerBackground(containerBackgroundStyleConfig);
 
-        const backdropBackgroundStyleConfig = Objects.getObjectAt<BackgroundStylePluginConfig>("components/popupBackdrop/default/background", this.model.styles.instance);
-        this.backdropBackground(backdropBackgroundStyleConfig);
-
-        const containerSizeStyles = Objects.getObjectAt<SizeStylePluginConfig>("components/popupContainer/default/size", this.model.styles.instance);
+        const containerSizeStyles = popupContainerStyles.plugin("size").getConfig<SizeStylePluginConfig>();
         this.containerSizeStyles(containerSizeStyles);
 
-        this.appearanceStyle(this.model.styles.appearance);
+        const backdropBackgroundStyleConfig = StyleHelper
+            .style(this.model.styles)
+            .component("popupBackdrop")
+            .variation("default")
+            .plugin("background")
+            .getConfig<BackgroundStylePluginConfig>();
+
+        this.backdropBackground(backdropBackgroundStyleConfig);
     }
 
     public onContainerContainerChange(pluginConfig: ContainerStylePluginConfig): void {
-        Objects.setValue("components/popupContainer/default/container", this.model.styles.instance, pluginConfig);
+        StyleHelper
+            .style(this.model.styles)
+            .component("popupContainer")
+            .variation("default")
+            .plugin("container")
+            .setConfig(pluginConfig);
+
         this.onChange(this.model);
     }
 
     public onContainerBackgroundChange(pluginConfig: BackgroundStylePluginConfig): void {
-        Objects.setValue("components/popupContainer/default/background", this.model.styles.instance, pluginConfig);
+        StyleHelper
+            .style(this.model.styles)
+            .component("popupContainer")
+            .variation("default")
+            .plugin("background")
+            .setConfig(pluginConfig);
+
         this.onChange(this.model);
     }
 
     public onBackdropBackgroundChange(pluginConfig: BackgroundStylePluginConfig): void {
-        Objects.setValue("components/popupBackdrop/default/background", this.model.styles.instance, pluginConfig);
+        StyleHelper
+            .style(this.model.styles)
+            .component("popupBackdrop")
+            .variation("default")
+            .plugin("background")
+            .setConfig(pluginConfig);
+
         this.onChange(this.model);
     }
 
     public onContainerSizeUpdate(containerSizeStyles: SizeStylePluginConfig): void {
-        // containerSizeStyles.width = "100%";
-        // containerSizeStyles.height = "100%";
-
         this.containerSizeStyles(containerSizeStyles);
-        Objects.setValue("components/popupContainer/default/size", this.model.styles.instance, containerSizeStyles);
-        this.onChange(this.model);
-    }
 
-    public onAppearanceChange(): void {
-        const styleKey = this.appearanceStyle();
-        Objects.setValue("styles/appearance", this.model, styleKey);
+        StyleHelper
+            .style(this.model.styles)
+            .component("popupContainer")
+            .variation("default")
+            .plugin("size")
+            .setConfig(containerSizeStyles);
 
         this.onChange(this.model);
     }
@@ -120,7 +135,12 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
     }
 
     private determinePosition(): void {
-        const positionStyles = Objects.getObjectAt<PositionStylePluginConfig>("components/popupContainer/default/position", this.model.styles.instance);
+        const positionStyles = StyleHelper
+            .style(this.model.styles)
+            .component("popupContainer")
+            .variation("default")
+            .plugin("position")
+            .getConfig<PositionStylePluginConfig>();
 
         if (positionStyles.position === "absolute") {
             this.position("attached");
@@ -219,13 +239,25 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
                 break;
         }
 
-        Objects.setValue("components/popupContainer/default/position", this.model.styles.instance, positionPluginConfig);
-        Objects.setValue("components/popupContainer/default/transform", this.model.styles.instance, transform);
+        StyleHelper
+            .style(this.model.styles)
+            .component("popupContainer")
+            .variation("default")
+            .plugin("position")
+            .setConfig(positionPluginConfig);
+
+        StyleHelper
+            .style(this.model.styles)
+            .component("popupContainer")
+            .variation("default")
+            .plugin("transform")
+            .setConfig(transform);
 
         this.onChange(this.model);
 
-        // Temporary hack to reposition popup:
-        const hostDocument = this.viewManager.getHostDocument();
-        hostDocument.dispatchEvent(new CustomEvent("onPopupRepositionRequested"));
+        setTimeout(() => {    // Temporary hack to reposition popup:
+            const hostDocument = this.viewManager.getHostDocument();
+            hostDocument.dispatchEvent(new CustomEvent("onPopupRepositionRequested"));
+        }, 10);
     }
 }
