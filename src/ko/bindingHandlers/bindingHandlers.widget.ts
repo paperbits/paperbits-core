@@ -1,8 +1,8 @@
 ﻿import * as ko from "knockout";
 import { IWidgetBinding, WidgetBinding } from "@paperbits/common/editing";
-import { ReactComponentBinder } from "@paperbits/common/react/reactComponentBinder";
 // import { KnockoutComponentBinder } from "@paperbits/common/ko/knockoutComponentBinder";
 import { ComponentBinder } from "@paperbits/common/editing/componentBinder";
+import { Bag } from "@paperbits/common";
 
 
 const makeArray = (arrayLikeObject) => {
@@ -37,7 +37,8 @@ const cloneTemplateIntoElement = (componentDefinition: any, element: any): HTMLE
 
 
 export class WidgetBindingHandler {
-    public constructor() {
+    constructor(componentBinders: Bag<ComponentBinder>) {
+
         let componentLoadingOperationUniqueId = 0;
 
         ko.bindingHandlers["widget"] = {
@@ -51,13 +52,10 @@ export class WidgetBindingHandler {
                 /* New  binding logic */
                 if (bindingConfig instanceof WidgetBinding) {
                     const binding = <WidgetBinding<any, any>>bindingConfig;
+                    const componentBinder = componentBinders[binding.framework];
 
-                    let componentBinder: ComponentBinder;
-
-                    switch (binding.framework) {
-                        case "react":
-                            componentBinder = new ReactComponentBinder();
-                            break;
+                    if (!componentBinder) {
+                        throw new Error(`No component binders registered for ${binding.framework} framework.`);
                     }
 
                     componentBinder.init(element, binding);

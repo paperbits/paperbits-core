@@ -66,6 +66,8 @@ import { TableCellDesignModule } from "./table-cell/tableCell.design.module";
 // import { DividerDesignModule } from "./divider/divider.design.module";
 import { LocalStorageSettingsProvider } from "@paperbits/common/configuration";
 import { PopupDesignModule } from "./popup";
+import { Bag } from "@paperbits/common";
+import { ComponentBinder } from "@paperbits/common/editing/componentBinder";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -76,6 +78,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindCollectionLazily("workshopSections");
         injector.bindCollection("trayCommands");
         injector.bindCollection("hyperlinkProviders");
+        injector.bindInstance<Bag<ComponentBinder>>("componentBinders", {});
         injector.bindSingleton("viewManager", DefaultViewManager);
         injector.bindSingleton("tray", Tray);
         injector.bindSingleton("viewStack", ViewStack);
