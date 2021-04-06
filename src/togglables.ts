@@ -7,6 +7,7 @@ const dismissAttributeName = "data-dismiss";
 const showClassName = "show";
 const popupContainerClass = ".popup-container";
 const onPopupRepositionRequestedEvent = "onPopupRepositionRequested";
+const onPopupRequestedEvent = "onPopupRequested";
 
 
 const onClick = (event: MouseEvent): void => {
@@ -179,5 +180,16 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement): vo
     }
 };
 
+const onPopupRequest = (event: CustomEvent): void => {
+    const popupKey = event.detail;
+    const targetSelector = `#${popupKey.replace("popups/", "popups")}`;
+    const targetElement = <HTMLElement>document.querySelector(targetSelector);
+    const triggerSelector = `[data-target="${targetSelector}"]`;
+    const triggerElement = <HTMLElement>document.querySelector(triggerSelector);
+
+    onShowPopup(triggerElement, targetElement);
+};
+
 addEventListener("mousedown", onClick, true);
 addEventListener("keydown", onKeyDown, true);
+document.addEventListener(onPopupRequestedEvent, onPopupRequest);

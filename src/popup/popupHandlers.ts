@@ -32,6 +32,7 @@ export class PopupHandlers implements IWidgetHandler {
             popupContextualEditor.hoverCommands.push({
                 color: "#607d8b",
                 position: "center",
+                iconClass: "paperbits-simple-add",
                 tooltip: "Add widget",
                 component: {
                     name: "widget-selector",
