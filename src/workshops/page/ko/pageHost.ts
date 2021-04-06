@@ -124,6 +124,12 @@ export class PageHost {
         this.popupHostViewModel(popupHostViewModel);
 
         this.viewManager.removeShutter();
+
+        if (!location.hash) {
+            return;
+        }
+
+        this.jumpToAnchor();
     }
 
     private async onRouteChange(route: Route): Promise<void> {
@@ -132,6 +138,16 @@ export class PageHost {
         }
 
         await this.refreshContent();
+    }
+
+    private jumpToAnchor(): void {
+        const hostDocument = this.viewManager.getHostDocument();
+        const anchorElementSelector = location.hash;
+        const anchorElement = hostDocument.querySelector(anchorElementSelector);
+
+        if (anchorElement) {
+            anchorElement.scrollIntoView();
+        }
     }
 
     @OnDestroyed()
