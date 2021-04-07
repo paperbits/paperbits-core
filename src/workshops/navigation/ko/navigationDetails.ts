@@ -49,6 +49,7 @@ export class NavigationDetailsWorkshop {
     private async init(targetKey: string): Promise<void> {
         const hyperlink = await this.permalinkResolver.getHyperlinkByTargetKey(targetKey);
         hyperlink.target = this.navigationItem.targetWindow();
+        hyperlink.targetKey = targetKey;
         hyperlink.anchor = this.navigationItem.anchor();
 
         this.hyperlink(hyperlink);
