@@ -23,10 +23,13 @@ import { TabPanelPublishModule } from "./tabs/tabPanel.publish.module";
 import { PopupPublishModule } from "./popup/popup.publish.module";
 import { TablePublishModule } from "./table/table.publish.module";
 import { TableCellPublishModule } from "./table-cell/tableCell.publish.module";
+import { Bag } from "@paperbits/common";
+import { ComponentBinder } from "@paperbits/common/editing/componentBinder";
 
 
 export class CorePublishModule implements IInjectorModule {
     public register(injector: IInjector): void {
+        injector.bindInstance<Bag<ComponentBinder>>("componentBinders", {});
         injector.bindModule(new DividerPublishModule());
         injector.bindCollection("publishers");
         injector.bindToCollection("publishers", AssetPublisher);
