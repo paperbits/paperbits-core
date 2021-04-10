@@ -27,8 +27,15 @@
         <!-- /ko -->
         <div data-bind="foreach: category.items">
             <a href="#" role="listitem" class="list-item list-item-large" data-bind="click: $component.selectWidget">
-                <i aria-hidden="true" class="paperbits-icon" data-bind="css: css"></i>
-                <span data-bind="text: displayName"></span>
+                <!-- ko if: iconUrl -->
+                <div>
+                    <img class="list-item-widget-icon" data-bind="attr: { src: iconUrl }">
+                </div>
+                <!-- /ko -->
+                <!-- ko ifnot: iconUrl -->
+                <i aria-hidden="true" data-bind="css: css"></i>
+                <!-- /ko -->
+                <div data-bind="text: displayName"></div>
             </a>
         </div>
         <!-- /ko -->

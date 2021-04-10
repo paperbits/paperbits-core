@@ -6,7 +6,7 @@ export class MenuHandlers implements IWidgetHandler {
         const widgetOrder: IWidgetOrder = {
             name: "menu",
             displayName: "Menu",
-            iconClass: "paperbits-menu-34",
+            iconClass: "widget-icon widget-icon-menu",
             requires: ["js"],
             createModel: async () => new MenuModel()
         };

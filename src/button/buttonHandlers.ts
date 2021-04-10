@@ -7,7 +7,7 @@ export class ButtonHandlers implements IWidgetHandler {
         const widgetOrder: IWidgetOrder = {
             name: "button",
             displayName: "Button",
-            iconClass: "paperbits-button-2",
+            iconClass: "widget-icon widget-icon-button",
             requires: [],
             createModel: async () => {
                 return new ButtonModel();

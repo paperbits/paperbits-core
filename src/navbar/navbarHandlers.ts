@@ -6,7 +6,7 @@ export class NavbarHandlers implements IWidgetHandler {
         const widgetOrder: IWidgetOrder = {
             name: "navbar",
             displayName: "Navigation bar",
-            iconClass: "paperbits-menu-34",
+            iconClass: "paperbits-icon paperbits-menu-34",
             requires: ["html", "js"],
             createModel: async () => {
                 return new NavbarModel();

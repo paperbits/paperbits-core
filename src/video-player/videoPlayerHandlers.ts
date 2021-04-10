@@ -35,7 +35,7 @@ export class VideoPlayerHandlers implements IWidgetHandler, IContentDropHandler 
             name: "video-player",
             displayName: "Video player",
             category: "Media",
-            iconClass: "paperbits-action-74",
+            iconClass: "widget-icon widget-icon-video-player ",
             requires: ["html", "js"],
             createModel: async () => {
                 return new VideoPlayerModel();

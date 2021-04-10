@@ -63,6 +63,7 @@ export class WidgetSelector {
                 const widgetItem = new WidgetItem();
 
                 widgetItem.css = `${widgetOrder.iconClass}`;
+                widgetItem.iconUrl = widgetOrder.iconUrl;
                 widgetItem.displayName = widgetOrder.displayName;
                 widgetItem.category = widgetOrder.category || "";
                 widgetItem.widgetOrder = widgetOrder;

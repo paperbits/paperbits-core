@@ -7,7 +7,7 @@ export class DividerHandlers implements IWidgetHandler {
         const widgetOrder: IWidgetOrder = {
             name: "divider",
             displayName: "Divider",
-            iconClass: "paperbits-divider-2",
+            iconClass: "paperbits-icon paperbits-divider-2",
             requires: [],
             createModel: async () => {
                 return new DividerModel();

@@ -14,7 +14,7 @@ export class TabPanelHandlers {
         const widgetOrder: IWidgetOrder = {
             name: "tab-panel",
             displayName: "Tab panel",
-            iconClass: "paperbits-puzzle-10",
+            iconClass: "widget-icon widget-icon-tab-panel",
             requires: ["js", "interaction"],
             createModel: async () => {
                 const model = new TabPanelModel();
@@ -44,7 +44,7 @@ export class TabPanelHandlers {
             },
             selectCommands: [{
                 tooltip: "Add tab",
-                iconClass: "paperbits-circle-add",
+                iconClass: "paperbits-icon paperbits-circle-add",
                 position: "top right",
                 color: "#607d8b",
                 callback: () => {
@@ -56,14 +56,14 @@ export class TabPanelHandlers {
             },
             // {
             //     tooltip: "Edit tabPanel",
-            //     iconClass: "paperbits-edit-72",
+            //     iconClass: "paperbits-icon paperbits-edit-72",
             //     position: "top right",
             //     color: "#607d8b",
             //     callback: () => this.viewManager.openWidgetEditor(context.binding)
             // },
             {
                 tooltip: "Switch to parent",
-                iconClass: "paperbits-enlarge-vertical",
+                iconClass: "paperbits-icon paperbits-enlarge-vertical",
                 position: "top right",
                 color: "#607d8b",
                 callback: () => context.switchToParent()

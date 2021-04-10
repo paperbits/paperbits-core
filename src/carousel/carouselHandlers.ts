@@ -14,7 +14,7 @@ export class CarouselHandlers {
         const widgetOrder: IWidgetOrder = {
             name: "carousel",
             displayName: "Carousel",
-            iconClass: "paperbits-slider",
+            iconClass: "widget-icon widget-icon-carousel",
             requires: ["js", "interaction"],
             createModel: async () => {
                 const model = new CarouselModel();
@@ -67,7 +67,7 @@ export class CarouselHandlers {
             },
             selectCommands: [{
                 tooltip: "Add slide",
-                iconClass: "paperbits-circle-add",
+                iconClass: "paperbits-icon paperbits-circle-add",
                 position: "top right",
                 color: "#607d8b",
                 callback: () => {
@@ -79,14 +79,14 @@ export class CarouselHandlers {
             },
             {
                 tooltip: "Edit carousel",
-                iconClass: "paperbits-edit-72",
+                iconClass: "paperbits-icon paperbits-edit-72",
                 position: "top right",
                 color: "#607d8b",
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
             },
             {
                 tooltip: "Switch to parent",
-                iconClass: "paperbits-enlarge-vertical",
+                iconClass: "paperbits-icon paperbits-enlarge-vertical",
                 position: "top right",
                 color: "#607d8b",
                 callback: () => context.switchToParent()

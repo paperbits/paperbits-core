@@ -8,7 +8,7 @@ export class TableHandlers implements IWidgetHandler {
         const widgetOrder: IWidgetOrder = {
             name: "table",
             displayName: "Table",
-            iconClass: "paperbits-puzzle-10",
+            iconClass: "widget-icon widget-icon-table",
             requires: [],
             createModel: async () => {
                 const table = new TableModel();

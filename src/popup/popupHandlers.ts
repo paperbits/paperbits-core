@@ -21,7 +21,7 @@ export class PopupHandlers implements IWidgetHandler {
             hoverCommands: [],
             selectCommands: [{
                 tooltip: "Edit popup",
-                iconClass: "paperbits-edit-72",
+                iconClass: "paperbits-icon paperbits-edit-72",
                 position: "top right",
                 color: "#4c5866",
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
@@ -32,7 +32,7 @@ export class PopupHandlers implements IWidgetHandler {
             popupContextualEditor.hoverCommands.push({
                 color: "#607d8b",
                 position: "center",
-                iconClass: "paperbits-simple-add",
+                iconClass: "paperbits-icon paperbits-simple-add",
                 tooltip: "Add widget",
                 component: {
                     name: "widget-selector",

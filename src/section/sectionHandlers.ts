@@ -19,7 +19,7 @@ export class SectionHandlers {
             color: "#2b87da",
             hoverCommands: [{
                 position: context.half,
-                iconClass: "paperbits-simple-add",
+                iconClass: "paperbits-icon paperbits-simple-add",
                 tooltip: "Add section",
                 color: "#2b87da",
                 component: {
@@ -62,14 +62,14 @@ export class SectionHandlers {
             },
             selectCommands: [{
                 tooltip: "Edit section",
-                iconClass: "paperbits-edit-72",
+                iconClass: "paperbits-icon paperbits-edit-72",
                 position: "top right",
                 color: "#2b87da",
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
             },
             {
                 tooltip: "Add to library",
-                iconClass: "paperbits-simple-add",
+                iconClass: "paperbits-icon paperbits-simple-add",
                 position: "top right",
                 color: "#2b87da",
                 callback: () => {
@@ -95,7 +95,7 @@ export class SectionHandlers {
         if (context.model.widgets.length === 0) {
             sectionContextualEditor.hoverCommands.push({
                 position: "center",
-                iconClass: "paperbits-simple-add",
+                iconClass: "paperbits-icon paperbits-simple-add",
                 tooltip: "Add row",
                 color: "#29c4a9",
                 component: {

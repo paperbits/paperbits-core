@@ -11,7 +11,7 @@ export class MapHandlers implements IWidgetHandler, IContentDropHandler {
         const widgetOrder: IWidgetOrder = {
             name: "map",
             displayName: "Map",
-            iconClass: "paperbits-m-location",
+            iconClass: "widget-icon widget-icon-map",
             requires: ["html", "js"],
             createModel: async () => {
                 const model = new MapModel();

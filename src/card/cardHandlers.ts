@@ -22,7 +22,7 @@ export class CardHandlers implements IWidgetHandler {
             color: "#4c5866",
             hoverCommands: [{
                 color: "#607d8b",
-                iconClass: "paperbits-simple-add",
+                iconClass: "paperbits-icon paperbits-simple-add",
                 position: context.half,
                 tooltip: "Add widget",
                 component: {
@@ -56,14 +56,14 @@ export class CardHandlers implements IWidgetHandler {
             },
             selectCommands: [{
                 tooltip: "Edit card",
-                iconClass: "paperbits-edit-72",
+                iconClass: "paperbits-icon paperbits-edit-72",
                 position: "top right",
                 color: "#4c5866",
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
             },
             {
                 tooltip: "Switch to parent",
-                iconClass: "paperbits-enlarge-vertical",
+                iconClass: "paperbits-icon paperbits-enlarge-vertical",
                 position: "top right",
                 color: "#4c5866",
                 callback: () => {
@@ -75,7 +75,7 @@ export class CardHandlers implements IWidgetHandler {
         if (context.model.widgets.length === 0) {
             cardContextualEditor.hoverCommands.push({
                 color: "#607d8b",
-                iconClass: "paperbits-simple-add",
+                iconClass: "paperbits-icon paperbits-simple-add",
                 position: "center",
                 tooltip: "Add widget",
                 component: {
@@ -100,7 +100,7 @@ export class CardHandlers implements IWidgetHandler {
         const widgetOrder: IWidgetOrder = {
             name: "card",
             displayName: "Card",
-            iconClass: "paperbits-polaroid",
+            iconClass: "widget-icon widget-icon-card",
             requires: ["html"],
             createModel: async () => {
                 const textblock: any = new TextblockModel([

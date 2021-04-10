@@ -23,14 +23,14 @@ export class TableCellHandlers implements IWidgetHandler {
             deleteCommand: null,
             selectCommands: [{
                 tooltip: "Edit table cell",
-                iconClass: "paperbits-edit-72",
+                iconClass: "paperbits-icon paperbits-edit-72",
                 position: "top right",
                 color: "#9C27B0",
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
             },
             {
                 tooltip: "Switch to parent",
-                iconClass: "paperbits-enlarge-vertical",
+                iconClass: "paperbits-icon paperbits-enlarge-vertical",
                 position: "top right",
                 color: "#9C27B0",
                 callback: () => {
@@ -45,7 +45,7 @@ export class TableCellHandlers implements IWidgetHandler {
 
         tableCellContextualEditor.hoverCommands.push({
             color: "#607d8b",
-            iconClass: "paperbits-simple-add",
+            iconClass: "paperbits-icon paperbits-simple-add",
             position: "center",
             tooltip: "Add widget",
             component: {
@@ -64,7 +64,7 @@ export class TableCellHandlers implements IWidgetHandler {
 
         tableCellContextualEditor.hoverCommands.push({
             color: "#607d8b",
-            iconClass: "paperbits-edit-72",
+            iconClass: "paperbits-icon paperbits-edit-72",
             position: "parent-left",
             tooltip: "Edit row",
             callback: () => {
@@ -90,7 +90,7 @@ export class TableCellHandlers implements IWidgetHandler {
 
         tableCellContextualEditor.hoverCommands.push({
             color: "#607d8b",
-            iconClass: "paperbits-edit-72",
+            iconClass: "paperbits-icon paperbits-edit-72",
             position: "parent-top",
             tooltip: "Edit column",
             callback: () => {

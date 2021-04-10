@@ -22,7 +22,7 @@ export class ColumnHandlers implements IWidgetHandler {
             deleteCommand: null,
             selectCommands: [{
                 tooltip: "Edit column",
-                iconClass: "paperbits-edit-72",
+                iconClass: "paperbits-icon paperbits-edit-72",
                 position: "top right",
                 color: "#9C27B0",
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
@@ -33,7 +33,7 @@ export class ColumnHandlers implements IWidgetHandler {
         if (context.model.widgets.length === 0) {
             columnContextualEditor.hoverCommands.push({
                 color: "#607d8b",
-                iconClass: "paperbits-simple-add",
+                iconClass: "paperbits-icon paperbits-simple-add",
                 position: "center",
                 tooltip: "Add widget",
                 component: {

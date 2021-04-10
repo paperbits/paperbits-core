@@ -23,7 +23,7 @@
             <div class="flex-item btn-group" data-bind="foreach: { data: commands, as: 'command' }">
                 <button class="btn btn-round" data-bind="click: command.action">
                     <!-- ko if: command.iconClass -->
-                    <i aria-hidden="true" class="paperbits-icon" data-bind="css: command.iconClass"></i>
+                    <i aria-hidden="true" data-bind="css: command.iconClass"></i>
                     <!-- /ko -->
                     <span data-bind="text: command.title"></span>
                 </button>
@@ -57,7 +57,7 @@
 <!-- ko foreach: { data: contextualEditor.hoverCommands, as: 'command' } -->
 <button class="fixed btn-standalone"
     data-bind="command: { element: contextualEditor.element, command: command }">
-    <i aria-hidden="true" class="paperbits-icon" data-bind="css: command.iconClass"></i>
+    <i aria-hidden="true" data-bind="css: command.iconClass"></i>
 </button>
 <!-- /ko -->
 <!-- /ko -->
@@ -111,7 +111,7 @@
 <div class="fixed" data-bind="stickTo: { target: element, position: 'top right' }">
     <!-- ko foreach: { data: selectCommands, as: 'command' } -->
     <button class="btn-standalone" data-bind="gridCommand: command">
-        <i aria-hidden="true" class="paperbits-icon" data-bind="css: command.iconClass"></i>
+        <i aria-hidden="true" data-bind="css: command.iconClass"></i>
     </button>
     <!-- ko if: command.component -->
     <div class="balloon" data-bind="component: command.component"></div>

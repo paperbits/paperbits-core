@@ -461,7 +461,7 @@ export class GridEditor {
             color: "#607d8b",
             hoverCommands: [{
                 color: "#607d8b",
-                iconClass: "paperbits-simple-add",
+                iconClass: "paperbits-icon paperbits-simple-add",
                 position: context.half,
                 tooltip: "Add widget",
                 component: {
@@ -494,14 +494,14 @@ export class GridEditor {
             },
             selectCommands: context.binding.editor && context.binding.applyChanges && [{
                 tooltip: "Edit widget",
-                iconClass: "paperbits-edit-72",
+                iconClass: "paperbits-icon paperbits-edit-72",
                 position: "top right",
                 color: "#607d8b",
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
             },
             {
                 tooltip: "Switch to parent",
-                iconClass: "paperbits-enlarge-vertical",
+                iconClass: "paperbits-icon paperbits-enlarge-vertical",
                 position: "top right",
                 color: "#607d8b",
                 callback: () => {

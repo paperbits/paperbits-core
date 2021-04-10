@@ -6,7 +6,7 @@ export class TestimonialsHandlers implements IWidgetHandler {
         const widgetOrder: IWidgetOrder = {
             name: "testimonials",
             displayName: "Testimonials",
-            iconClass: "paperbits-favourite-31",
+            iconClass: "widget-icon widget-icon-testimonials",
             requires: ["html", "js"],
             createModel: async () => {
                 const model = new TestimonialsModel();

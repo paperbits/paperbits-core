@@ -6,7 +6,7 @@ export class SearchHandlers implements IWidgetHandler {
         const widgetOrder: IWidgetOrder = {
             name: "search",
             displayName: "Search website",
-            iconClass: "paperbits-cheque-3",
+            iconClass: "widget-icon widget-icon-search-box",
             requires: ["html", "js"],
             createModel: async () => new SearchModel()
         };

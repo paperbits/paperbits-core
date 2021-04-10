@@ -8,7 +8,7 @@ export class TextblockHandlers implements IWidgetHandler {
         const widgetOrder: IWidgetOrder = {
             name: "text-block",
             displayName: "Text block",
-            iconClass: "paperbits-edit-2",
+            iconClass: "widget-icon widget-icon-text-block",
             requires: [],
             createModel: async () => {
                 return new TextblockModel([
