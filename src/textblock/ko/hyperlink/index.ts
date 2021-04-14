@@ -1,1 +1,1 @@
-export * from "./hyperlinkEditor";
+export * from "./hyperlinkTools";

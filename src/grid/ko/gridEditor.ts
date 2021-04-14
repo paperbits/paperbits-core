@@ -214,7 +214,7 @@ export class GridEditor {
             return;
         }
 
-        if (widgetBinding.editor !== "html-editor") {
+        if (widgetBinding.editor !== "text-block-editor") {
             event.preventDefault();
         }
 

@@ -4,16 +4,16 @@ import template from "./formattingTools.html";
 import { EventManager } from "@paperbits/common/events";
 import { IHtmlEditorProvider, HtmlEditorEvents, alignmentStyleKeys } from "@paperbits/common/editing";
 import { Component, OnMounted, OnDestroyed } from "@paperbits/common/ko/decorators";
-import { FontContract, ColorContract } from "@paperbits/styles/contracts";
+import { ColorContract } from "@paperbits/styles/contracts";
 import { ViewManager } from "@paperbits/common/ui";
 import { StyleService } from "@paperbits/styles/styleService";
 import { VariationContract } from "@paperbits/common/styles";
 
 @Component({
-    selector: "formatting",
+    selector: "text-block-editor-formatting",
     template: template
 })
-export class FormattingTools {
+export class TextBlockEditorFormattingTools {
     public readonly textStyles: ko.ObservableArray<VariationContract>;
     public readonly orderedListStyles: ko.ObservableArray<VariationContract>;
     public readonly unorderedListStyles: ko.ObservableArray<VariationContract>;

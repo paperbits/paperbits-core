@@ -1,16 +1,15 @@
 ﻿import * as ko from "knockout";
-import template from "./hyperlinkEditor.html";
-import { IHtmlEditorProvider } from "@paperbits/common/editing/htmlEditorProvider";
+import template from "./hyperlinkTools.html";
+import { IHtmlEditorProvider } from "@paperbits/common/editing";
 import { EventManager } from "@paperbits/common/events";
-import { HyperlinkModel } from "@paperbits/common/permalinks";
-import { PermalinkResolver } from "@paperbits/common/permalinks/permalinkResolver";
+import { HyperlinkModel, PermalinkResolver } from "@paperbits/common/permalinks";
 import { Component, OnDestroyed } from "@paperbits/common/ko/decorators";
 
 @Component({
-    selector: "hyperlink-editor",
+    selector: "text-block-editor-hyperlinks",
     template: template
 })
-export class HyperlinkEditor {
+export class TextBlockEditorHyperlinkTools {
     public readonly hyperlink: ko.Observable<HyperlinkModel>;
 
     constructor(

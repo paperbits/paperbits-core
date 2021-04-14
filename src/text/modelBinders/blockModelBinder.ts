@@ -6,7 +6,7 @@ import { BlockModel } from "@paperbits/common/text/models/blockModel";
 import { BlockContract } from "../contracts/blockContract";
 
 export class BlockModelBinder {
-    private blockTypes = ["paragraph", "list-item", "break", "formatted", "quote", "heading1", "heading2", "heading3", "heading4", "heading5", "heading6"];
+    private blockTypes: string[] = ["paragraph", "list-item", "break", "formatted", "quote", "heading1", "heading2", "heading3", "heading4", "heading5", "heading6", "property"];
 
     constructor(
         private readonly modelBinderSelector: ModelBinderSelector,
@@ -44,7 +44,9 @@ export class BlockModelBinder {
         model.attrs = {
             id: identifier,
             styles: localStyles,
-            className: className
+            className: className,
+            name: contract.name,
+            placeholder: contract.placeholder
         };
 
         if (contract.nodes && contract.nodes.length > 0) {
@@ -63,7 +65,9 @@ export class BlockModelBinder {
         const contract: BlockContract = {
             type: model.type,
             styles: model.attrs?.styles,
-            identifier: model.attrs?.id
+            identifier: model.attrs?.id,
+            name: model.attrs?.["name"], // TODO: Quick fix, needs to be refactored.
+            placeholder: model.attrs?.["placeholder"], // TODO: Quick fix, needs to be refactored.
         };
 
         if (!contract.identifier && this.isHeading(contract.type)) {

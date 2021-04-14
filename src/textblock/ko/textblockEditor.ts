@@ -5,16 +5,17 @@ import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorat
 import { TextblockModel } from "..";
 
 @Component({
-    selector: "html-editor",
+    selector: "text-block-editor",
     template: template
 })
 export class TextblockEditor {
     public pluginNames: ko.ObservableArray<string>;
 
-    constructor(private readonly eventManager: EventManager) {
+    constructor(
+        private readonly eventManager: EventManager,
+        private readonly textblockEditorPlugins: string[]
+    ) {
         this.pluginNames = ko.observableArray<string>();
-        this.pluginNames.push("formatting");
-        this.pluginNames.push("hyperlink-editor");
     }
 
     @Param()
@@ -25,6 +26,7 @@ export class TextblockEditor {
 
     @OnMounted()
     public initialize(): void {
+        this.pluginNames.push(...this.textblockEditorPlugins);
         this.eventManager.dispatchEvent("enableHtmlEditor");
     }
 }

@@ -26,4 +26,14 @@ export interface BlockContract extends Contract {
      * Block identifier. Can be used for multiple purposes, e.g. for assigning anchors.
      */
     identifier?: string;
+
+    /**
+     * TODO: Quick fix, needs to be refactored.
+     */
+    name?: string;
+
+    /**
+     * TODO: Quick fix, needs to be refactored.
+     */
+    placeholder?: string;
 }

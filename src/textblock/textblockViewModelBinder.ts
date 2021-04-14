@@ -23,7 +23,7 @@ export class TextblockViewModelBinder implements ViewModelBinder<TextblockModel,
             model: model,
             draggable: true,
             flow: "block",
-            editor: "html-editor",
+            editor: "text-block-editor",
             editorResize: "horizontally",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);

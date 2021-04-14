@@ -4,7 +4,6 @@ import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { IHyperlinkProvider } from "@paperbits/common/ui";
 import { Component, Event, Param, OnMounted } from "@paperbits/common/ko/decorators";
 
-
 @Component({
     selector: "hyperlink-selector",
     template: template
