@@ -18,6 +18,7 @@ export class MapModelBinder implements IModelBinder<MapModel> {
         model.caption = contract.caption;
         model.zoom = contract.zoom;
         model.mapType = contract.mapType;
+        model.markerSourceKey = contract.markerSourceKey;
         model.styles = contract.styles; // || { appearance: "components/map/default" };
 
         return model;
@@ -30,6 +31,7 @@ export class MapModelBinder implements IModelBinder<MapModel> {
             location: model.location,
             zoom: model.zoom,
             mapType: model.mapType,
+            markerSourceKey: model.markerSourceKey,
             styles: model.styles
         };
 

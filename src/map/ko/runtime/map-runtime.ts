@@ -1,7 +1,6 @@
 import * as ko from "knockout";
 import template from "./map-runtime.html";
 import { Component, Param, RuntimeComponent, OnMounted } from "@paperbits/common/ko/decorators";
-import { timeStamp } from "console";
 
 
 @RuntimeComponent({
@@ -19,6 +18,7 @@ export class MapRuntime {
         this.zoom = ko.observable();
         this.mapType = ko.observable();
         this.apiKey = ko.observable();
+        this.markerIcon = ko.observable();
     }
 
     @Param()
@@ -38,4 +38,7 @@ export class MapRuntime {
 
     @Param()
     public apiKey: ko.Observable<string>;
+
+    @Param()
+    public markerIcon: ko.Observable<string>;
 }

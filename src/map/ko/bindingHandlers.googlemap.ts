@@ -10,19 +10,26 @@ export class GooglmapsBindingHandler {
         ko.bindingHandlers["googlemap"] = {
             init(element: Element, valueAccessor: () => MapRuntimeConfig): void {
                 const configuration = valueAccessor();
-                attach(element, ko.unwrap(configuration));
+                attach(element, ko.toJS(configuration));
             }
         };
     }
 
-    private async attach(element: Element, configuration: any): Promise<void> {
+    private async attach(element: Element, configuration: MapRuntimeConfig): Promise<void> {
         const options: Partial<LoaderOptions> = {/* todo */ };
-        const loader = new Loader({apiKey: configuration.apiKey(), ...options});
+        const loader = new Loader({ apiKey: configuration.apiKey, ...options });
         await loader.load();
 
         const geocoder = new google.maps.Geocoder();
         const mapOptions: google.maps.MapOptions = {};
         const map = new google.maps.Map(element, mapOptions);
+
+        if (!configuration.zoom) {
+            configuration.zoom = 17;
+        }
+        else if (typeof configuration.zoom === "string") {
+            configuration.zoom = parseInt(configuration.zoom);
+        }
 
         map.setOptions({
             streetViewControl: false,
@@ -33,12 +40,21 @@ export class GooglmapsBindingHandler {
             disableDoubleClickZoom: true,
             draggable: false,
             disableDefaultUI: true,
-            mapTypeId: ko.unwrap(configuration.mapType),
-            zoom: parseInt(ko.unwrap(configuration.zoom) || 17)
+            mapTypeId: configuration.mapType,
+            zoom: configuration.zoom
         });
 
         const marker = new google.maps.Marker();
         marker.setMap(map);
+
+        if (configuration.markerIcon) {
+            const icon: google.maps.Icon = {
+                url: configuration.markerIcon,
+                scaledSize: new google.maps.Size(50, 50)
+            };
+
+            marker.setIcon(icon);
+        }
 
         const setLocation = (location: string) => {
             const request: google.maps.GeocoderRequest = {};
@@ -73,8 +89,8 @@ export class GooglmapsBindingHandler {
             }
         };
 
-        setLocation(configuration.location());
-        setCaption(configuration.caption());
+        setLocation(configuration.location);
+        setCaption(configuration.caption);
     }
 }
 

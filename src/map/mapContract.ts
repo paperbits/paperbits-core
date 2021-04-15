@@ -3,7 +3,7 @@ import { LocalStyles } from "@paperbits/common/styles";
 
 export interface MapContract extends Contract {
     /**
-     * Location shown on the map, e.g. "Seattle, WA"
+     * Location shown on the map, e.g. "Seattle, WA".
      */
     location: string;
 
@@ -13,7 +13,7 @@ export interface MapContract extends Contract {
     caption?: string;
 
     /**
-     * Map zoom level.
+     * Map zoom level (min 1, max 22).
      */
     zoom?: number;
 
@@ -21,6 +21,11 @@ export interface MapContract extends Contract {
      * Map type, e.g. "terrain", "satellite" or "hybrid".
      */
     mapType?: string;
+
+    /**
+     * Marker icon source key.
+     */
+    markerSourceKey?: string;
 
     /**
      * Widget local styles.

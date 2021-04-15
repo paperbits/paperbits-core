@@ -5,6 +5,7 @@ import { ISettingsProvider } from "@paperbits/common/configuration";
 import { MapViewModel } from "./mapViewModel";
 import { MapModel } from "../mapModel";
 import { GoogleMapsSettings } from "./googleMapsSettings";
+import { IPermalinkResolver } from "@paperbits/common/permalinks";
 
 const defaultApiKey = "AIzaSyC7eT_xRPt3EjX3GuzSvlaZzJmlyFxvFFs";
 
@@ -12,23 +13,30 @@ export class MapViewModelBinder {
     constructor(
         private readonly eventManager: EventManager,
         private readonly styleCompiler: StyleCompiler,
-        private readonly settingsProvider: ISettingsProvider
+        private readonly settingsProvider: ISettingsProvider,
+        private readonly mediaPermalinkResolver: IPermalinkResolver
     ) { }
 
     public async modelToViewModel(model: MapModel, viewModel?: MapViewModel, bindingContext?: Bag<any>): Promise<MapViewModel> {
         if (!viewModel) {
             viewModel = new MapViewModel();
         }
-        
-      const settings = await this.settingsProvider.getSetting<GoogleMapsSettings>("integration/googleMaps");
-      const apiKey = settings?.apiKey || defaultApiKey;
+
+        const settings = await this.settingsProvider.getSetting<GoogleMapsSettings>("integration/googleMaps");
+        const apiKey = settings?.apiKey || defaultApiKey;
+
+        const markerIconUrl =
+            model.markerSourceKey
+                ? await this.mediaPermalinkResolver.getUrlByTargetKey(model.markerSourceKey)
+                : null;
 
         viewModel.runtimeConfig(JSON.stringify({
+            apiKey: apiKey,
             caption: model.caption,
             location: model.location,
             zoom: model.zoom,
             mapType: model.mapType,
-            apiKey: apiKey
+            markerIcon: markerIconUrl
         }));
 
         if (model.styles) {

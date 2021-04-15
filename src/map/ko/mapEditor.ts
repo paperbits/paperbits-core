@@ -4,9 +4,12 @@ import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorat
 import { MapModel } from "../mapModel";
 import { SizeStylePluginConfig } from "@paperbits/styles/contracts";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
-import { StyleHelper, StyleService } from "@paperbits/styles";
+import { StyleHelper } from "@paperbits/styles";
 import { ViewManager } from "@paperbits/common/ui";
 import { CommonEvents, EventManager } from "@paperbits/common/events";
+import { MediaContract } from "@paperbits/common/media";
+import { BackgroundModel } from "@paperbits/common/widgets/background";
+import { IPermalinkResolver } from "@paperbits/common/permalinks";
 
 
 interface MapTypeOption {
@@ -26,10 +29,12 @@ export class MapEditor {
     public readonly mapType: ko.Observable<string>;
     public readonly mapTypeOptions: ko.ObservableArray<MapTypeOption>;
     public readonly sizeConfig: ko.Observable<SizeStylePluginConfig>;
+    public readonly background: ko.Observable<BackgroundModel>;
 
     constructor(
         private readonly viewManager: ViewManager,
-        private readonly eventManager: EventManager
+        private readonly eventManager: EventManager,
+        private readonly mediaPermalinkResolver: IPermalinkResolver
     ) {
         this.location = ko.observable<string>();
         this.caption = ko.observable<string>();
@@ -37,6 +42,7 @@ export class MapEditor {
         this.layout = ko.observable<string>();
         this.mapType = ko.observable<string>("terrain");
         this.sizeConfig = ko.observable();
+        this.background = ko.observable();
 
         this.mapTypeOptions = ko.observableArray<MapTypeOption>([
             { label: "Terrain", value: "terrain" },
@@ -77,12 +83,19 @@ export class MapEditor {
             .extend(ChangeRateLimit)
             .subscribe(this.applyChanges);
     }
-    
-    private updateObservables(): void {
+
+    private async updateObservables(): Promise<void> {
         const viewport = this.viewManager.getViewport();
 
         const sizeStyles = StyleHelper.getPluginConfigForLocalStyles(this.model.styles, "size", viewport);
         this.sizeConfig(sizeStyles);
+
+        if (this.model.markerSourceKey) {
+            const background = new BackgroundModel();
+            background.sourceKey = this.model.markerSourceKey;
+            background.sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(this.model.markerSourceKey);
+            this.background(background);
+        }
     }
 
     private applyChanges(): void {
@@ -98,6 +111,23 @@ export class MapEditor {
         StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "size", pluginConfig, viewport);
 
         this.onChange(this.model);
-        console.log(this.model);
+    }
+
+    public onMarkerIconChange(media: MediaContract): void {
+        this.model.markerSourceKey = media?.key;
+
+        if (!media) {
+            this.background(null);
+        }
+        else {
+            const background = new BackgroundModel(); // TODO: Let's use proper model here
+            background.sourceKey = media.key;
+            background.sourceUrl = media.downloadUrl;
+            background.size = "contain";
+            background.position = "center center";
+            this.background(background);
+        }
+
+        this.onChange(this.model);
     }
 }

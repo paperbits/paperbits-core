@@ -20,7 +20,7 @@
 
             <div class="form-group">
                 <label for="zoom" class="form-label">Zoom</label>
-                <input id="zoom" type="range" class="form-control" min="1" max="22" data-bind="textInput: zoom" />
+                <input id="zoom" type="range" class="form-control" min="1" max="22" data-bind="value: zoom" />
             </div>
 
             <div class="form-group">
@@ -31,5 +31,28 @@
         </div>
     </div>
 
-    <size-editor params="{ features: 'height,width', sizeConfig: sizeConfig, onUpdate: onSizeChange }"></size-editor>
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#markerIconCollapse'"
+                aria-label="Toggle 'Marker icon' section"></a>
+            <b>Marker icon</b>
+        </label>
+        <div id="markerIconCollapse" class="collapse form-group-collapse">
+            <div class="dropzone">
+                <label for="source" class="form-label">
+                    Source
+                    <button class="btn btn-info" type="button" aria-label="Error" aria-haspopup="true"
+                        aria-hidden="true"
+                        data-bind="tooltip: 'Source of the picture. To change, click on preview area below and select a picture from media libaray.'"></button>
+                </label>
+                <a href="#" id="source" role="img" class="dropzone-showbox"
+                    data-bind="balloon: { position: 'right', component: { name: 'media-selector', params: { mimeType: 'image/', onSelect: $component.onMarkerIconChange } } }, focus: true">
+                    <div class="fit" role="presentation" data-bind="background: background"></div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <size-editor params="{ features: 'height,width', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
+    </size-editor>
 </div>

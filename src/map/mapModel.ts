@@ -22,6 +22,11 @@ export class MapModel {
     public mapType?: string;
 
     /**
+     * Marker icon source key.
+     */
+    public markerSourceKey: string;
+
+    /**
      * Widget local styles.
      */
     public styles: LocalStyles;
