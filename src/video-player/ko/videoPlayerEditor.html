@@ -23,6 +23,29 @@
             <b>Miscellaneous</b>
         </label>
         <div id="miscellaneousCollapse" class="collapse form-group-collapse">
+           
+            <label for="controls" class="form-label">
+                <input type="checkbox" id="controls" data-bind="checked: controls" />Controls
+            </label>
+            <label for="autoplay" class="form-label">
+                <input type="checkbox" id="autoplay" data-bind="checked: autoplay" />Autoplay
+            </label>
+
+            <!-- ko if: sourceUrl -->
+            <div class="dropzone">
+                <label for="source" class="form-label">
+                    Poster
+                    <button class="btn btn-info" type="button" aria-label="Error" aria-haspopup="true"
+                        aria-hidden="true"
+                        data-bind="tooltip: 'Source of the picture. To change, click on preview area below and select a picture from media libaray.'"></button>
+                </label>
+                <a href="#" id="source" role="img" class="dropzone-showbox"
+                    data-bind="balloon: { position: 'right', component: { name: 'media-selector', params: { mimeType: 'image/', onSelect: $component.onPosterSelected } } }, focus: true">
+                    <div class="fit" role="presentation" data-bind="background: background"></div>
+                </a>
+            </div>
+            <!-- /ko -->
+
             <div class="form-group">
                 <label for="appearanceStyle" class="form-label">
                     Appearance
@@ -30,12 +53,6 @@
                 </label>
                 <select id="appearanceStyle" class="form-control" data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
             </div>
-            <label for="controls" class="form-label">
-                <input type="checkbox" id="controls" data-bind="checked: controls" />Controls
-            </label>
-            <label for="autoplay" class="form-label">
-                <input type="checkbox" id="autoplay" data-bind="checked: autoplay" />Autoplay
-            </label>
         </div>
     </div>
     <size-editor params="{ features: 'height,width', sizeConfig: sizeConfig, onUpdate: onSizeChange }"></size-editor>

@@ -12,11 +12,13 @@ export class VideoPlayer {
     public controls: ko.Observable<boolean>;
     public autoplay: ko.Observable<boolean>;
     public styles: ko.Observable<StyleModel>;
+    public posterUrl: ko.Observable<string>;
 
     constructor() {
         this.sourceUrl = ko.observable<string>();
         this.controls = ko.observable<boolean>();
         this.autoplay = ko.observable<boolean>();
+        this.posterUrl = ko.observable<string>();
         this.styles = ko.observable<StyleModel>();
     }
 }

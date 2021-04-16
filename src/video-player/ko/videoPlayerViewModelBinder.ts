@@ -32,6 +32,14 @@ export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerMo
         viewModel.controls(model.controls);
         viewModel.autoplay(model.autoplay);
 
+        if (model.posterSourceKey) {
+            const posterUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(model.posterSourceKey);
+            viewModel.posterUrl(posterUrl);
+        }
+        else {
+            viewModel.posterUrl(null);
+        }
+
         if (model.styles) {
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }

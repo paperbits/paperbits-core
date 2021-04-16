@@ -21,6 +21,11 @@ export interface VideoPlayerContract extends Contract {
      * Specifies if video should play at start.
      */
     autoplay?: boolean;
+
+    /**
+     * Specifies an image to be shown while the video is downloading, or until the user hits the play button.
+     */
+    posterSourceKey?: string;
     
     /**
      * Widget styles.

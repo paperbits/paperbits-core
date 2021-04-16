@@ -11,6 +11,7 @@ import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { StyleHelper } from "@paperbits/styles";
 import { EventManager, CommonEvents } from "@paperbits/common/events";
 import { ViewManager } from "@paperbits/common/ui";
+import { BackgroundModel } from "@paperbits/common/widgets/background";
 
 @Component({
     selector: "video-player-editor",
@@ -20,6 +21,7 @@ export class VideoPlayerEditor {
     public readonly sourceUrl: ko.Observable<string>;
     public readonly controls: ko.Observable<boolean>;
     public readonly autoplay: ko.Observable<boolean>;
+    public readonly background: ko.Observable<BackgroundModel>;
     public readonly appearanceStyles: ko.ObservableArray<any>;
     public readonly appearanceStyle: ko.Observable<any>;
     public readonly mimeType: string;
@@ -34,6 +36,7 @@ export class VideoPlayerEditor {
         this.sourceUrl = ko.observable<string>();
         this.controls = ko.observable<boolean>(true);
         this.autoplay = ko.observable<boolean>(false);
+        this.background = ko.observable<BackgroundModel>();
         this.appearanceStyles = ko.observableArray<any>();
         this.appearanceStyle = ko.observable();
         this.sizeConfig = ko.observable();
@@ -96,6 +99,25 @@ export class VideoPlayerEditor {
         else {
             this.model.sourceKey = undefined;
             this.sourceUrl(null);
+        }
+
+        this.onChange(this.model);
+    }
+
+    public onPosterSelected(media: MediaContract): void {
+        if (!media) {
+            this.background(null);
+            this.model.posterSourceKey = null;
+        }
+        else {
+            this.model.posterSourceKey = media.key;
+
+            const background = new BackgroundModel(); // TODO: Let's use proper model here
+            background.sourceKey = media.key;
+            background.sourceUrl = media.downloadUrl;
+            background.size = "contain";
+            background.position = "center center";
+            this.background(background);
         }
 
         this.onChange(this.model);

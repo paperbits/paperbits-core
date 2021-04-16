@@ -5,6 +5,7 @@ export class VideoPlayerModel {
     public controls?: boolean;
     public autoplay?: boolean;
     public styles: LocalStyles;
+    public posterSourceKey?: string;
 
     constructor() {
         this.styles = {};
