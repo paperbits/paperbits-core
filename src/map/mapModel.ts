@@ -1,5 +1,15 @@
 import { LocalStyles } from "@paperbits/common/styles";
 
+export class MarkerModel {
+    public sourceKey: string;
+    public width: string;
+    public height: string;
+
+    constructor(sourceKey?: string) {
+        this.sourceKey = sourceKey;
+    }
+}
+
 export class MapModel {
     /**
      * Location shown on the map, e.g. "Seattle, WA"
@@ -22,9 +32,9 @@ export class MapModel {
     public mapType?: string;
 
     /**
-     * Marker icon source key.
+     * Marker icon.
      */
-    public markerSourceKey: string;
+    public marker: MarkerModel;
 
     /**
      * Widget local styles.

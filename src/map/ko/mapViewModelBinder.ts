@@ -26,8 +26,8 @@ export class MapViewModelBinder {
         const apiKey = settings?.apiKey || defaultApiKey;
 
         const markerIconUrl =
-            model.markerSourceKey
-                ? await this.mediaPermalinkResolver.getUrlByTargetKey(model.markerSourceKey)
+            model.marker?.sourceKey
+                ? await this.mediaPermalinkResolver.getUrlByTargetKey(model.marker.sourceKey)
                 : null;
 
         viewModel.runtimeConfig(JSON.stringify({

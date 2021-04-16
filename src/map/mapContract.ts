@@ -1,6 +1,12 @@
 import { Contract } from "@paperbits/common";
 import { LocalStyles } from "@paperbits/common/styles";
 
+export interface MapMarkerContract {
+    sourceKey: string;
+    width: string;
+    height: string;
+}
+
 export interface MapContract extends Contract {
     /**
      * Location shown on the map, e.g. "Seattle, WA".
@@ -23,9 +29,9 @@ export interface MapContract extends Contract {
     mapType?: string;
 
     /**
-     * Marker icon source key.
+     * Marker icon.
      */
-    markerSourceKey?: string;
+    marker?: MapMarkerContract;
 
     /**
      * Widget local styles.

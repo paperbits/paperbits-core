@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./mapEditor.html";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
-import { MapModel } from "../mapModel";
+import { MapModel, MarkerModel } from "../mapModel";
 import { SizeStylePluginConfig } from "@paperbits/styles/contracts";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { StyleHelper } from "@paperbits/styles";
@@ -90,10 +90,10 @@ export class MapEditor {
         const sizeStyles = StyleHelper.getPluginConfigForLocalStyles(this.model.styles, "size", viewport);
         this.sizeConfig(sizeStyles);
 
-        if (this.model.markerSourceKey) {
+        if (this.model.marker?.sourceKey) {
             const background = new BackgroundModel();
-            background.sourceKey = this.model.markerSourceKey;
-            background.sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(this.model.markerSourceKey);
+            background.sourceKey = this.model.marker.sourceKey;
+            background.sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(this.model.marker.sourceKey);
             this.background(background);
         }
     }
@@ -114,12 +114,13 @@ export class MapEditor {
     }
 
     public onMarkerIconChange(media: MediaContract): void {
-        this.model.markerSourceKey = media?.key;
-
         if (!media) {
             this.background(null);
+            this.model.marker = null;
         }
         else {
+            this.model.marker = new MarkerModel(media.key);
+
             const background = new BackgroundModel(); // TODO: Let's use proper model here
             background.sourceKey = media.key;
             background.sourceUrl = media.downloadUrl;

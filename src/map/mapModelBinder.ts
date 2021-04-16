@@ -1,4 +1,4 @@
-import { MapModel } from "./mapModel";
+import { MapModel, MarkerModel } from "./mapModel";
 import { MapContract } from "./mapContract";
 import { IModelBinder } from "@paperbits/common/editing";
 import { Contract } from "@paperbits/common";
@@ -18,8 +18,15 @@ export class MapModelBinder implements IModelBinder<MapModel> {
         model.caption = contract.caption;
         model.zoom = contract.zoom;
         model.mapType = contract.mapType;
-        model.markerSourceKey = contract.markerSourceKey;
-        model.styles = contract.styles; // || { appearance: "components/map/default" };
+        model.styles = contract.styles;
+
+        if (contract.marker) {
+            const markerModel = new MarkerModel();
+            markerModel.sourceKey = contract.marker.sourceKey;
+            markerModel.width = contract.marker.width;
+            markerModel.height = contract.marker.height;
+            model.marker = markerModel;
+        }
 
         return model;
     }
@@ -31,9 +38,16 @@ export class MapModelBinder implements IModelBinder<MapModel> {
             location: model.location,
             zoom: model.zoom,
             mapType: model.mapType,
-            markerSourceKey: model.markerSourceKey,
             styles: model.styles
         };
+
+        if (model.marker) {
+            contract.marker = {
+                sourceKey: model.marker.sourceKey,
+                width: model.marker.width,
+                height: model.marker.height
+            }
+        }
 
         return contract;
     }
