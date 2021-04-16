@@ -5,7 +5,7 @@ import { WidgetEditor } from "@paperbits/common/widgets";
 import { StyleHelper } from "@paperbits/styles";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { PopupModel } from "../popupModel";
-import { BackgroundStylePluginConfig, TypographyStylePluginConfig, ContainerStylePluginConfig, SizeStylePluginConfig } from "@paperbits/styles/contracts";
+import { BackgroundStylePluginConfig, TypographyStylePluginConfig, ContainerStylePluginConfig, SizeStylePluginConfig, BoxStylePluginConfig } from "@paperbits/styles/contracts";
 import { EventManager } from "@paperbits/common/events";
 import { PositionStylePluginConfig } from "@paperbits/styles/plugins/position";
 import { TransformStylePluginConfig } from "@paperbits/styles/plugins/transform";
@@ -24,6 +24,8 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
     public readonly containerSizeStylesResponsive: ko.Observable<boolean>;
     public readonly backdrop: ko.Observable<boolean>;
     public readonly position: ko.Observable<string>;
+    public readonly containerBox: ko.Observable<BoxStylePluginConfig>;
+
 
     constructor(
         private readonly viewManager: ViewManager,
@@ -32,7 +34,7 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
         this.containerConfig = ko.observable<ContainerStylePluginConfig>();
         this.containerBackground = ko.observable<BackgroundStylePluginConfig>();
         this.backdropBackground = ko.observable<BackgroundStylePluginConfig>();
-
+        this.containerBox = ko.observable<BoxStylePluginConfig>();
         this.containerSizeStyles = ko.observable<SizeStylePluginConfig>();
         this.containerSizeStylesResponsive = ko.observable<boolean>();
         this.position = ko.observable();
@@ -259,5 +261,25 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
             const hostDocument = this.viewManager.getHostDocument();
             hostDocument.dispatchEvent(new CustomEvent("onPopupRepositionRequested"));
         }, 10);
+    }
+
+    public onBoxUpdate(pluginConfig: BoxStylePluginConfig): void {
+        this.containerBox(pluginConfig);
+
+        StyleHelper
+            .style(this.model.styles)
+            .component("popupContainer")
+            .variation("default")
+            .plugin("padding")
+            .setConfig(pluginConfig.padding);
+
+        StyleHelper
+            .style(this.model.styles)
+            .component("popupContainer")
+            .variation("default")
+            .plugin("border")
+            .setConfig(pluginConfig.border);
+
+        this.onChange(this.model);
     }
 }

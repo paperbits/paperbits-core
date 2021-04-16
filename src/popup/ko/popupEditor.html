@@ -51,6 +51,16 @@
 
     <div class="form-group form-group-collapsible">
         <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#boxCollapse'"></a>
+            <b>Box</b>
+        </label>
+        <div id="boxCollapse" class="collapse form-group-collapse">
+            <box params="{ features: 'padding,border', box: containerBox, onUpdate: onBoxUpdate }"></box>
+        </div>
+    </div>
+
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
             <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#backdropCollapse'"></a>
             <b>Backdrop</b>
         </label>
