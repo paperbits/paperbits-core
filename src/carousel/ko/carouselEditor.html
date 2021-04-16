@@ -11,7 +11,8 @@
 
             <label for="autoplayInterval" class="form-label">Autoplay Interval (ms)</label>
             <div class="input-group">
-                <input type="number" id="autoplayInterval" class="form-control" data-bind="value: autoplayInterval" placeholder="5000" min="0"/>
+                <input type="number" id="autoplayInterval" class="form-control" data-bind="value: autoplayInterval"
+                    placeholder="5000" min="0" />
             </div>
 
             <label for="pauseOnHover" class="form-label">
@@ -27,5 +28,16 @@
             </label>
         </div>
     </div>
-    <size-editor params="{ features: 'minMaxHeight', sizeConfig: sizeConfig, onUpdate: onSizeUpdate }"></size-editor>
+
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
+                aria-label="Toggle 'Size' section"></a>
+            <b>Size</b>
+        </label>
+        <div id="sizeCollapse" class="collapse form-group-collapse">
+            <size-editor params="{ features: 'minMaxHeight', sizeConfig: sizeConfig, onUpdate: onSizeUpdate }">
+            </size-editor>
+        </div>
+    </div>
 </fieldset>

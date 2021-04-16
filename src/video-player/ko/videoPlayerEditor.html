@@ -6,7 +6,8 @@
         </label>
         <div id="sourceCollapse" class="collapse form-group-collapse">
             <div class="dropzone">
-                <a href="#" class="dropzone-showbox" data-bind="balloon: { component: { name: 'media-selector', params: { mimeType: 'video/', onSelect: $component.onMediaSelected, mimeType: $component.mimeType } }, position: 'right' }">
+                <a href="#" class="dropzone-showbox"
+                    data-bind="balloon: { component: { name: 'media-selector', params: { mimeType: 'video/', onSelect: $component.onMediaSelected, mimeType: $component.mimeType } }, position: 'right' }">
                     <!-- ko if: sourceUrl -->
                     <video class="fit" controls>
                         <source data-bind="attr: { src: sourceUrl }" />
@@ -19,11 +20,12 @@
 
     <div class="form-group form-group-collapsible">
         <label class="form-label">
-            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#miscellaneousCollapse'"></a>
+            <a href="#" class="form-group-toggle" title="Toggle section"
+                data-bind="collapse: '#miscellaneousCollapse'"></a>
             <b>Miscellaneous</b>
         </label>
         <div id="miscellaneousCollapse" class="collapse form-group-collapse">
-           
+
             <label for="controls" class="form-label">
                 <input type="checkbox" id="controls" data-bind="checked: controls" />Controls
             </label>
@@ -49,11 +51,23 @@
             <div class="form-group">
                 <label for="appearanceStyle" class="form-label">
                     Appearance
-                    <button class="btn btn-info" type="button" data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
+                    <button class="btn btn-info" type="button"
+                        data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
                 </label>
-                <select id="appearanceStyle" class="form-control" data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
+                <select id="appearanceStyle" class="form-control"
+                    data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
             </div>
         </div>
     </div>
-    <size-editor params="{ features: 'height,width', sizeConfig: sizeConfig, onUpdate: onSizeChange }"></size-editor>
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
+                aria-label="Toggle 'Size' section"></a>
+            <b>Size</b>
+        </label>
+        <div id="sizeCollapse" class="collapse form-group-collapse">
+            <size-editor params="{ features: 'height,width', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
+            </size-editor>
+        </div>
+    </div>
 </div>

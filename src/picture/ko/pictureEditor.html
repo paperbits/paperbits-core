@@ -9,7 +9,8 @@
             <div class="dropzone">
                 <label for="pictureSource" class="form-label">
                     Source
-                    <button class="btn btn-info" type="button" aria-label="Picture source" aria-hidden="true" role="tooltip"
+                    <button class="btn btn-info" type="button" aria-label="Picture source" aria-hidden="true"
+                        role="tooltip"
                         data-bind="tooltip: 'Source of the picture. To change, click on preview area below and select a picture from media libaray.'"></button>
                 </label>
                 <a id="pictureSource" href="#" role="button" class="dropzone-showbox" aria-label="Picture source"
@@ -21,7 +22,8 @@
             <div class="form-group">
                 <label for="caption" class="form-label">
                     Caption
-                    <button class="btn btn-info" type="button" aria-hidden="true" role="tooltip" data-bind="tooltip: 'An alternate text for an image'"></button>
+                    <button class="btn btn-info" type="button" aria-hidden="true" role="tooltip"
+                        data-bind="tooltip: 'An alternate text for an image'"></button>
                 </label>
                 <input type="text" id="caption" class="form-control" data-bind="textInput: caption" maxlength="256" />
             </div>
@@ -43,7 +45,17 @@
         </div>
     </div>
 
-    <size-editor params="{ features: 'height,width', sizeConfig: sizeConfig, onUpdate: onSizeChange }"></size-editor>
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
+                aria-label="Toggle 'Size' section"></a>
+            <b>Size</b>
+        </label>
+        <div id="sizeCollapse" class="collapse form-group-collapse">
+            <size-editor params="{ features: 'height,width', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
+            </size-editor>
+        </div>
+    </div>
 
     <div class="form-group form-group-collapsible">
         <label class="form-label">
@@ -55,14 +67,15 @@
             <div class="form-group">
                 <label for="appearanceStyle" class="form-label">
                     Appearance
-                    <button class="btn btn-info" type="button" data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
+                    <button class="btn btn-info" type="button"
+                        data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
                 </label>
                 <!-- <div class="input-group">
                     <a href="#" class="form-control" data-bind="text: appearanceStyle() && appearanceStyle().displayName, balloon: { component: { name: 'style-variation-selector', params: { snippetType: 'components/picture', onSelect: $component.onVariationSelected } } }">
                     </a>
                 </div> -->
                 <select id="appearanceStyle" class="form-control"
-                    data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select> 
+                    data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
             </div>
         </div>
     </div>

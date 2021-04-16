@@ -7,13 +7,15 @@
         <div id="sourceCollapse" class="collapse form-group-collapse">
             <label for="videoId" class="form-label">Video ID</label>
             <div class="input-group">
-                <input type="text" id="videoId" class="form-control" data-bind="textInput: videoId" maxlength="500" placeholder="e.g. ScMzIvxBSi4" />
+                <input type="text" id="videoId" class="form-control" data-bind="textInput: videoId" maxlength="500"
+                    placeholder="e.g. ScMzIvxBSi4" />
             </div>
         </div>
     </div>
     <div class="form-group form-group-collapsible">
         <label class="form-label">
-            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#miscellaneousCollapse'"></a>
+            <a href="#" class="form-group-toggle" title="Toggle section"
+                data-bind="collapse: '#miscellaneousCollapse'"></a>
             <b>Miscellaneous</b>
         </label>
         <div id="miscellaneousCollapse" class="collapse form-group-collapse">
@@ -28,5 +30,16 @@
             </label>
         </div>
     </div>
-    <size-editor params="{ features: 'height,width', sizeConfig: sizeConfig, onUpdate: onSizeChange }"></size-editor>
+
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
+                aria-label="Toggle 'Size' section"></a>
+            <b>Size</b>
+        </label>
+        <div id="sizeCollapse" class="collapse form-group-collapse">
+            <size-editor params="{ features: 'height,width', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
+            </size-editor>
+        </div>
+    </div>
 </div>

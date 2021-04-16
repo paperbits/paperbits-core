@@ -12,9 +12,17 @@
         </div>
     </div>
 
-    <size-editor
-        params="{ features: 'minMaxHeight,minMaxWidth', label: 'Container sizes', sizeConfig: containerSizeStyles, onUpdate: onContainerSizeUpdate }">
-    </size-editor>
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
+                aria-label="Toggle 'Container size' section"></a>
+            <b>Container size</b>
+        </label>
+        <div id="sizeCollapse" class="collapse form-group-collapse">
+            <size-editor params="{ features: 'minMaxHeight,minMaxWidth', sizeConfig: containerSizeStyles, onUpdate: onContainerSizeUpdate }">
+            </size-editor>
+        </div>
+    </div>
 
     <div class="form-group form-group-collapsible">
         <label class="form-label">

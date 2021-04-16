@@ -1,14 +1,12 @@
 <fieldset class="form flex-item flex-item-grow" data-bind="scrollable: true">
     <div class="form-group form-group-collapsible">
         <label class="form-label">
-            <a href="#" class="form-group-toggle" title="Toggle section"
-                data-bind="collapse: '#mainCollapse'"></a>
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#mainCollapse'"></a>
             <b>Main</b>
         </label>
         <div id="mainCollapse" class="collapse form-group-collapse">
             <div class="form-group">
-                <button class="btn btn-info" type="button"
-                    data-bind="tooltip: 'Tab label'"></button>
+                <button class="btn btn-info" type="button" data-bind="tooltip: 'Tab label'"></button>
                 <label for="styleName">Tab label</label>
                 <input id="styleName" type="text" class="form-control" spellcheck="false"
                     data-bind="textInput: tabLabel, focus: true">
@@ -29,5 +27,15 @@
         </div>
     </div>
 
-    <size-editor params="{ features: 'minMaxWidth', sizeConfig: sizeConfig, onUpdate: onSizeUpdate }"></size-editor>
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
+                aria-label="Toggle 'Size' section"></a>
+            <b>Size</b>
+        </label>
+        <div id="sizeCollapse" class="collapse form-group-collapse">
+            <size-editor params="{ features: 'minMaxWidth', sizeConfig: sizeConfig, onUpdate: onSizeUpdate }">
+            </size-editor>
+        </div>
+    </div>
 </fieldset>
