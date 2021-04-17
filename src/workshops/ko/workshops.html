@@ -24,7 +24,7 @@
     <!-- ko if: viewManager.journey().length > 0 -->
     <div role="tabpanel" class="flex flex-item flex-item-grow workshop"
         data-bind="foreach: viewManager.journey()">
-        <div class="flex-item flex flex-column workshop-journey-step">
+        <div class="flex-item flex flex-column workshop-journey-step" data-bind="dialog: {}">
             <h1>
                 <span data-bind="text: heading"></span>
                 <!-- ko if: $data.helpText -->
@@ -38,7 +38,7 @@
             </button>
             <hr />
             <div class="flex-item flex-item-grow"
-                data-bind="component: { name: component.name, params: component.params }, dialog: {}"></div>
+                data-bind="component: { name: component.name, params: component.params }"></div>
         </div>
     </div>
     <!-- /ko -->
