@@ -26,7 +26,7 @@ export class BalloonBindingHandler {
                     createBalloonElement = () => {
                         balloonElement = document.createElement("div");
                         balloonElement.classList.add("balloon");
-                        ko.applyBindingsToNode(balloonElement, { component: options.component }, null);
+                        ko.applyBindingsToNode(balloonElement, { component: options.component, dialog: {} }, null);
                         document.body.appendChild(balloonElement);
                     };
                 }
@@ -35,7 +35,7 @@ export class BalloonBindingHandler {
                     createBalloonElement = () => {
                         balloonElement = document.createElement("div");
                         balloonElement.classList.add("balloon");
-                        ko.applyBindingsToNode(balloonElement, { template: options.template }, null);
+                        ko.applyBindingsToNode(balloonElement, { template: options.template, dialog: {} }, null);
                         document.body.appendChild(balloonElement);
                     };
                 }
@@ -488,8 +488,6 @@ export class BalloonBindingHandler {
                     default:
                         throw new Error(`Unknown balloon trigger event: ${activateOn}`);
                 }
-
-
 
                 ko.utils.domNodeDisposal.addDisposeCallback(toggleElement, () => {
                     window.removeEventListener("mousedown", onPointerDown, true);

@@ -4,7 +4,7 @@ import { Keys } from "@paperbits/common";
 ko.bindingHandlers["dialog"] = {
     init(element: HTMLElement): void {
         setTimeout(() => {
-            const focusables = `a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])`;
+            const focusables = `a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled])`;
             const focusableElements = element.querySelectorAll(focusables);
             const firstFocusableElement = <HTMLElement>focusableElements[0];
             const lastFocusableElement = <HTMLElement>focusableElements[focusableElements.length - 1];
