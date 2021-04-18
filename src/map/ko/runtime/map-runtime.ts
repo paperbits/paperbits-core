@@ -19,6 +19,7 @@ export class MapRuntime {
         this.mapType = ko.observable();
         this.apiKey = ko.observable();
         this.markerIcon = ko.observable();
+        this.markerPopupKey = ko.observable();
     }
 
     @Param()
@@ -41,4 +42,7 @@ export class MapRuntime {
 
     @Param()
     public markerIcon: ko.Observable<string>;
+
+    @Param()
+    public markerPopupKey: ko.Observable<string>;
 }

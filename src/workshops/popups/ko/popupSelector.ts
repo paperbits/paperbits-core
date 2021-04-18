@@ -7,7 +7,6 @@ import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { Query, Operator, Page } from "@paperbits/common/persistence";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { EventManager } from "@paperbits/common/events";
-import { identifier } from "@paperbits/common/utils";
 
 @Component({
     selector: "popup-selector",
@@ -111,6 +110,8 @@ export class PopupSelector {
         }
 
         this.eventManager.dispatchEvent("onPopupCreate", popupContract.key);
+
+        this.searchPopups();
     }
 
     public async deletePopup(): Promise<void> {

@@ -30,9 +30,9 @@ export class PictureEditor {
         private readonly mediaPermalinkResolver: IPermalinkResolver,
     ) {
         this.caption = ko.observable<string>();
-        this.hyperlink = ko.observable<HyperlinkModel>();
         this.sourceKey = ko.observable<string>();
         this.background = ko.observable();
+        this.hyperlink = ko.observable<HyperlinkModel>();
         this.hyperlinkTitle = ko.computed<string>(() => this.hyperlink() ? this.hyperlink().title : "Add a link...");
         this.sizeConfig = ko.observable();
         this.appearanceStyles = ko.observableArray();

@@ -14,23 +14,20 @@
         </div>
     </div>
 
-    <!-- ko if: !working() && popups().length === 0 -->
-    <div class="flex flex-column flex-item flex-item-grow list">
-        <!-- ko if: searchPattern() === "" -->
-        <p class="flex-item flex-item-grow text-center">
-            It seems that you don't have popups yet.
-        </p>
-        <!-- /ko -->
-
-        <!-- ko if: searchPattern() !== ""  -->
-        <p class="flex-item flex-item-grow text-center">
-            Could not find anything. Try to change search criteria.</p>
-        <!-- /ko -->
-    </div>
-    <!-- /ko -->
-
-    <div class="list flex flex-column flex-item flex-item-grow ">
+    <div class="list flex flex-column flex-item flex-item-grow">
         <div class="flex-item flex-item-grow" role="list" data-bind="scrollable: true">
+            <!-- ko if: !working() && popups().length === 0 -->
+            <!-- ko if: searchPattern() === "" -->
+            <p class="text-center">
+                It seems that you don't have popups yet.
+            </p>
+            <!-- /ko -->
+            <!-- ko if: searchPattern() !== ""  -->
+            <p class="text-center">
+                Could not find anything. Try to change search criteria.</p>
+            <!-- /ko -->
+            <!-- /ko -->
+
             <!-- ko foreach: { data: popups, as: 'popup' } -->
             <a href="#" role="listitem" class="list-item"
                 data-bind="click: $component.selectPopup, event: { keydown: $component.keydown }, attr: { title: popup.title }">
@@ -48,8 +45,8 @@
 
         <div class="flex-item btn-group">
             <div class="input-group">
-                <input type="text" class="form-control" data-bind="textInput: $component.title"
-                    placeholder="e.g. Popup" maxlength="2096" />
+                <input type="text" class="form-control" data-bind="textInput: $component.title" placeholder="e.g. Popup"
+                    maxlength="2096" />
             </div>
             <button class="btn btn-default" data-bind="click: $component.createPopup">
                 <i aria-hidden="true" class="paperbits-icon paperbits-simple-add"></i> Add

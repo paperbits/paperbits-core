@@ -11,18 +11,10 @@
                 <input type="text" id="location" class="form-control" placeholder="e.g. 400 Broad St, Seattle, WA 98109"
                     data-bind="textInput: location" />
             </div>
-
-            <div class="form-group">
-                <label for="caption" class="form-label">Pin caption</label>
-                <input type="text" id="caption" class="form-control" placeholder="e.g. Space Needle"
-                    data-bind="textInput: caption" maxlength="1000" />
-            </div>
-
             <div class="form-group">
                 <label for="zoom" class="form-label">Zoom</label>
                 <input id="zoom" type="range" class="form-control" min="1" max="22" data-bind="value: zoom" />
             </div>
-
             <div class="form-group">
                 <label for="mapType" class="form-label">Map type</label>
                 <select id="mapType" class="form-control"
@@ -35,12 +27,12 @@
         <label class="form-label">
             <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#markerIconCollapse'"
                 aria-label="Toggle 'Marker icon' section"></a>
-            <b>Marker icon</b>
+            <b>Marker</b>
         </label>
         <div id="markerIconCollapse" class="collapse form-group-collapse">
             <div class="dropzone">
                 <label for="source" class="form-label">
-                    Source
+                    Icon
                     <button class="btn btn-info" type="button" aria-label="Error" aria-haspopup="true"
                         aria-hidden="true"
                         data-bind="tooltip: 'Source of the picture. To change, click on preview area below and select a picture from media libaray.'"></button>
@@ -49,6 +41,27 @@
                     data-bind="balloon: { position: 'right', component: { name: 'media-selector', params: { mimeType: 'image/', onSelect: $component.onMarkerIconChange } } }, focus: true">
                     <div class="fit" role="presentation" data-bind="background: background"></div>
                 </a>
+            </div>
+
+            <div class="form-group">
+                <label for="caption" class="form-label">Caption</label>
+                <input type="text" id="caption" class="form-control" placeholder="e.g. Space Needle"
+                    data-bind="textInput: caption" maxlength="1000" />
+            </div>
+
+            <div class="form-group">
+                <label id="linkToLabel" class="form-label">
+                    Popup
+                    <button class="btn btn-info" type="button" aria-hidden="true" role="tooltip"
+                        data-bind="tooltip: 'Popup associated with the marker. When specified, the marker caption gets ignored.'"></button>
+                </label>
+                <div class="input-group">
+                    <input id="hyperlink" class="form-control" readonly data-bind="value: hyperlinkTitle" />
+                    <button class="btn input-group-btn"
+                        data-bind="balloon: { position: 'right', component: { name: 'popup-selector', params: { hyperlink: $component.hyperlink, onHyperlinkSelect: $component.onHyperlinkChange } } }">
+                        <i aria-hidden="true" class="paperbits-icon paperbits-link-69-2"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

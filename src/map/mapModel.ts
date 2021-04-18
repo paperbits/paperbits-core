@@ -4,6 +4,7 @@ export class MarkerModel {
     public sourceKey: string;
     public width: string;
     public height: string;
+    public popupKey: string;
 
     constructor(sourceKey?: string) {
         this.sourceKey = sourceKey;

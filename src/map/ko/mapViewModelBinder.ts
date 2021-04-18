@@ -36,7 +36,8 @@ export class MapViewModelBinder {
             location: model.location,
             zoom: model.zoom,
             mapType: model.mapType,
-            markerIcon: markerIconUrl
+            markerIcon: markerIconUrl,
+            markerPopupKey: model.marker?.popupKey
         }));
 
         if (model.styles) {

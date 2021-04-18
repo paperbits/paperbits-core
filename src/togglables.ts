@@ -121,21 +121,43 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement): vo
 
     const popupContainerElement: HTMLElement = targetElement.querySelector(popupContainerClass);
 
-    const repositionPopup = (): void => {
+    const repositionPopup = (event?: CustomEvent): void => {
         const computedStyles = getComputedStyle(popupContainerElement);
 
         if (computedStyles.position === "absolute") {
-            const toggleElementRect = toggleElement.getBoundingClientRect();
+            const actualToggleElement: HTMLElement = event?.detail?.element || toggleElement;
+            const toggleElementRect = actualToggleElement.getBoundingClientRect();
             const popupContainerElement: HTMLElement = targetElement.querySelector(popupContainerClass);
-            popupContainerElement.style.top = window.scrollY + toggleElementRect.bottom + "px";
-            popupContainerElement.style.left = toggleElementRect.left + "px";
+            const popupContainerElementRect = popupContainerElement.getBoundingClientRect();
+            const position = actualToggleElement.getAttribute("data-position") || "bottom";
+
+            const triggerHalfWidth = Math.floor(toggleElementRect.width / 2);
+            const triggerHalfHeight =  Math.floor(toggleElementRect.height / 2);
+            const popupHalfWidth = Math.floor(popupContainerElementRect.width / 2);
+            const popupHalfHeight = Math.floor(popupContainerElementRect.height / 2);
+
+            switch (position) {
+                case "top":
+                    popupContainerElement.style.top = window.scrollY + toggleElementRect.top - popupContainerElementRect.height - triggerHalfHeight + "px";
+                    popupContainerElement.style.left = toggleElementRect.left + triggerHalfWidth - popupHalfWidth + "px";
+                    break;
+                case "left":
+                    break;
+                case "right":
+                    break;
+                case "bottom":
+                    popupContainerElement.style.top = window.scrollY + toggleElementRect.bottom + "px";
+                    popupContainerElement.style.left = toggleElementRect.left + triggerHalfWidth - popupHalfWidth + "px";
+                    break;
+            }
+
+            return;
         }
-        else {
-            popupContainerElement.removeAttribute("style");
-        }
+
+        popupContainerElement.removeAttribute("style");
     };
 
-    repositionPopup();
+
 
     const dismissElement: HTMLElement = targetElement.querySelector(`[${dismissAttributeName}]`);
 
@@ -169,7 +191,11 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement): vo
         dismissElement.addEventListener("mousedown", closeTarget);
         targetElement.classList.add(showClassName);
         toggleElement.setAttribute(AriaAttributes.expanded, "true");
-        setImmediate(() => targetElement.ownerDocument.addEventListener("mousedown", clickOutside));
+
+        setImmediate(() => {
+            targetElement.ownerDocument.addEventListener("mousedown", clickOutside);
+            repositionPopup();
+        });
 
         // Temporary hack to reposition popup:
         document.addEventListener(onPopupRepositionRequestedEvent, repositionPopup);
@@ -186,6 +212,16 @@ const onPopupRequest = (event: CustomEvent): void => {
     const targetElement = <HTMLElement>document.querySelector(targetSelector);
     const triggerSelector = `[data-target="${targetSelector}"]`;
     const triggerElement = <HTMLElement>document.querySelector(triggerSelector);
+
+    if (targetElement.classList.contains(showClassName)) {
+        return;
+    }
+
+    const openTargetElement = document.querySelector(`.${showClassName}`);
+
+    if (openTargetElement) {
+        openTargetElement.classList.remove(showClassName);
+    }
 
     onShowPopup(triggerElement, targetElement);
 };

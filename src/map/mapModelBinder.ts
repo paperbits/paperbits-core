@@ -25,6 +25,7 @@ export class MapModelBinder implements IModelBinder<MapModel> {
             markerModel.sourceKey = contract.marker.sourceKey;
             markerModel.width = contract.marker.width;
             markerModel.height = contract.marker.height;
+            markerModel.popupKey = contract.marker.popupKey;
             model.marker = markerModel;
         }
 
@@ -45,8 +46,9 @@ export class MapModelBinder implements IModelBinder<MapModel> {
             contract.marker = {
                 sourceKey: model.marker.sourceKey,
                 width: model.marker.width,
-                height: model.marker.height
-            }
+                height: model.marker.height,
+                popupKey: model.marker.popupKey
+            };
         }
 
         return contract;

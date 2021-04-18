@@ -28,4 +28,9 @@ export interface MapRuntimeConfig {
      * Marker icon URL.
      */
     markerIcon: string;
+
+    /**
+     * Marker popup key.
+     */
+    markerPopupKey?: string;
 }

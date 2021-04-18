@@ -3,8 +3,9 @@ import { LocalStyles } from "@paperbits/common/styles";
 
 export interface MapMarkerContract {
     sourceKey: string;
-    width: string;
-    height: string;
+    width?: string;
+    height?: string;
+    popupKey?: string;
 }
 
 export interface MapContract extends Contract {

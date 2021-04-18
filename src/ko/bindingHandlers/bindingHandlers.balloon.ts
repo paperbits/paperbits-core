@@ -123,10 +123,12 @@ export class BalloonBindingHandler {
                         if (spaceLeft > spaceRight) {
                             positionX = "left";
                             availableSpaceX = spaceLeft - egdeGap;
+                            availableSpaceY = window.innerHeight - egdeGap - padding;
                         }
                         else {
                             positionX = "right";
                             availableSpaceX = spaceRight - egdeGap;
+                            availableSpaceY = window.innerHeight - egdeGap - padding;
                         }
                     }
 
@@ -237,11 +239,15 @@ export class BalloonBindingHandler {
                         balloonLeft = egdeGap;
                     }
 
-
                     delete balloonElement.style.top;
                     delete balloonElement.style.bottom;
                     delete balloonElement.style.left;
                     delete balloonElement.style.right;
+
+                    if (balloonTop + balloonHeight > window.innerHeight) {
+                        const overflowCorrection = (balloonTop + balloonHeight) - window.innerHeight;
+                        balloonTop = balloonTop - overflowCorrection;
+                    }
 
                     switch (selectedPosition) {
                         case "top":
