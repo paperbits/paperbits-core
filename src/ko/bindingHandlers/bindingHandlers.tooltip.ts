@@ -66,7 +66,7 @@ ko.bindingHandlers["tooltip"] = {
                 activateOn: BalloonActivationOptions.hoverOrFocus,
                 closeTimeout: closeTimeout,
                 // isDisabled: isDisabled,
-                onCreated: (handle) => {
+                onCreated: (handle: BalloonHandle): void => {
                     balloonHandle = handle;
                 }
             }
