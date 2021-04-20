@@ -18,6 +18,7 @@ ko.bindingHandlers["confirm"] = {
                         },
                         onConfirm: async () => {
                             onConfirm();
+                            balloon.close();
                         },
                         onDecline: () => {
                             balloon.close();
