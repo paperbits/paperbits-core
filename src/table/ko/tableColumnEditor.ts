@@ -53,7 +53,6 @@ export class TableColumnEditor {
                 .plugin(pluginName)
                 .getConfig() || {};
 
-            Objects.cleanupObject(config);
             Objects.mergeDeep(currentConfig, config);
 
             StyleHelper
@@ -63,9 +62,9 @@ export class TableColumnEditor {
         }
     }
 
-    public onBoxUpdate(config: BoxStylePluginConfig): void {
-        this.applyColumnStyles("border", config.border);
-        this.applyColumnStyles("padding", config.padding);
+    public onBoxUpdate(newConfig: BoxStylePluginConfig, changeset: BoxStylePluginConfig): void {
+        this.applyColumnStyles("border", changeset.border);
+        this.applyColumnStyles("padding", changeset.padding);
 
         this.onChange(this.model);
     }

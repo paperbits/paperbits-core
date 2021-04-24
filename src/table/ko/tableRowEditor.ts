@@ -45,7 +45,7 @@ export class TableRowEditor {
 
     private applyRowStyles(pluginName: string, config: StylePluginConfig): void {
         for (let columnIndex = 0; columnIndex < this.model.numOfCols; columnIndex++) {
-            const cellIndex = (this.rowIndex * this.model.numOfRows) + columnIndex;
+            const cellIndex = (this.rowIndex * this.model.numOfCols) + columnIndex;
             const cellModel = this.model.widgets[cellIndex];
 
             const currentConfig = StyleHelper

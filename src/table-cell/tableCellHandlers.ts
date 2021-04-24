@@ -75,7 +75,7 @@ export class TableCellHandlers implements IWidgetHandler {
                         params: {
                             model: context.parentModel,
                             cellModel: context.model,
-                            rowIndex: Math.floor(context.parentModel.widgets.indexOf(context.model) / context.parentModel["numOfRows"]),
+                            rowIndex: Math.floor(context.parentModel.widgets.indexOf(context.model) / context.parentModel["numOfCols"]),
                             onChange: (model: TableModel) => {
                                 context.parentBinding.applyChanges();
                                 this.eventManager.dispatchEvent("onContentUpdate");
