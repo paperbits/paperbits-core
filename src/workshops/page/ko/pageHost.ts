@@ -125,11 +125,7 @@ export class PageHost {
 
         this.viewManager.removeShutter();
 
-        if (!location.hash) {
-            return;
-        }
-
-        this.jumpToAnchor();
+        this.jumpToAnchor(route);
     }
 
     private async onRouteChange(route: Route): Promise<void> {
@@ -140,9 +136,13 @@ export class PageHost {
         await this.refreshContent();
     }
 
-    private jumpToAnchor(): void {
+    private jumpToAnchor(route: Route): void {
+        if (!route.hash) {
+            return;
+        }
+
         const hostDocument = this.viewManager.getHostDocument();
-        const anchorElementSelector = location.hash;
+        const anchorElementSelector = `[id="${route.hash}"]`; // Hash may not be proper "id" selector.
         const anchorElement = hostDocument.querySelector(anchorElementSelector);
 
         if (anchorElement) {
