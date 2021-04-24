@@ -1,10 +1,13 @@
 import * as ko from "knockout";
+import * as Objects from "@paperbits/common/objects";
 import template from "./tableColumnEditor.html";
 import { StyleHelper, StyleService } from "@paperbits/styles";
 import { SizeUnits, StyleSizeValue } from "@paperbits/styles/plugins";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { TableModel } from "../tableModel";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
+import { BoxStylePluginConfig } from "@paperbits/styles/contracts";
+import { StylePluginConfig } from "@paperbits/common/styles";
 
 
 @Component({
@@ -40,11 +43,34 @@ export class TableColumnEditor {
             .subscribe(this.applyChanges);
     }
 
-    private applyChanges(): void {
-        const numOfColumns = 3;
-        const columnIndex = this.columnIndex;
-        // const columnWidthValue = this.model.styles.instance.grid.xs.cols[columnIndex];
+    private applyColumnStyles(pluginName: string, config: StylePluginConfig): void {
+        for (let rowIndex = 0; rowIndex < this.model.numOfRows; rowIndex++) {
+            const cellIndex = (rowIndex * this.model.numOfCols) + this.columnIndex;
+            const cellModel = this.model.widgets[cellIndex];
 
+            const currentConfig = StyleHelper
+                .style(cellModel.styles)
+                .plugin(pluginName)
+                .getConfig() || {};
+
+            Objects.cleanupObject(config);
+            Objects.mergeDeep(currentConfig, config);
+
+            StyleHelper
+                .style(cellModel.styles)
+                .plugin(pluginName)
+                .setConfig(currentConfig);
+        }
+    }
+
+    public onBoxUpdate(config: BoxStylePluginConfig): void {
+        this.applyColumnStyles("border", config.border);
+        this.applyColumnStyles("padding", config.padding);
+
+        this.onChange(this.model);
+    }
+
+    private applyChanges(): void {
         if (!this.columnIndex) {
             this.columnIndex = 0;
         }

@@ -1,11 +1,13 @@
 import * as ko from "knockout";
+import * as Objects from "@paperbits/common/objects";
 import template from "./tableRowEditor.html";
 import { StyleHelper, StyleService } from "@paperbits/styles";
 import { SizeUnits, StyleSizeValue } from "@paperbits/styles/plugins";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { TableModel } from "../tableModel";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
-import { TableCellModel } from "../../table-cell";
+import { StylePluginConfig } from "@paperbits/common/styles";
+import { BoxStylePluginConfig } from "@paperbits/styles/contracts";
 
 
 @Component({
@@ -40,6 +42,34 @@ export class TableRowEditor {
             .extend(ChangeRateLimit)
             .subscribe(this.applyChanges);
     }
+
+    private applyRowStyles(pluginName: string, config: StylePluginConfig): void {
+        for (let columnIndex = 0; columnIndex < this.model.numOfCols; columnIndex++) {
+            const cellIndex = (this.rowIndex * this.model.numOfRows) + columnIndex;
+            const cellModel = this.model.widgets[cellIndex];
+
+            const currentConfig = StyleHelper
+                .style(cellModel.styles)
+                .plugin(pluginName)
+                .getConfig() || {};
+
+            Objects.cleanupObject(config);
+            Objects.mergeDeep(currentConfig, config);
+
+            StyleHelper
+                .style(cellModel.styles)
+                .plugin(pluginName)
+                .setConfig(currentConfig);
+        }
+    }
+
+    public onBoxUpdate(config: BoxStylePluginConfig): void {
+        this.applyRowStyles("border", config.border);
+        this.applyRowStyles("padding", config.padding);
+
+        this.onChange(this.model);
+    }
+
 
     private applyChanges(): void {
         if (!this.rowIndex) {

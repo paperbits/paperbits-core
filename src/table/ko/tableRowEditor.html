@@ -1,11 +1,21 @@
-<div class="editor">
-    <div class="form" data-bind="scrollable: true">
-        <div class="form-group">
-            <label for="height" class="form-label">
-                Height
-            </label>
+<div class="form" data-bind="scrollable: true">
+    <div class="form-group">
+        <label id="linkToLabel" class="form-label">
+            Height
+        </label>
+        <div class="input-group">
             <input type="number" min="50" id="height" class="form-control" placeholder="(Not set)"
                 data-bind="textInput: height" />
+        </div>
+    </div>
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#boxCollapse'"
+                aria-label="Toggle 'Container box' section"></a>
+            <b>Container box</b>
+        </label>
+        <div id="boxCollapse" class="collapse form-group-collapse">
+            <box params="{ features: 'border,padding', onUpdate: onBoxUpdate }"></box>
         </div>
     </div>
 </div>
