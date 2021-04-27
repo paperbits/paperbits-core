@@ -65,9 +65,15 @@ import { TableDesignModule } from "./table/ko";
 import { TableCellDesignModule } from "./table-cell/tableCell.design.module";
 // import { DividerDesignModule } from "./divider/divider.design.module";
 import { LocalStorageSettingsProvider } from "@paperbits/common/configuration";
-import { PopupDesignModule } from "./popup";
+import { PopupDesignModule, PopupHandlers, PopupModelBinder } from "./popup";
 import { Bag } from "@paperbits/common";
 import { ComponentBinder } from "@paperbits/common/editing/componentBinder";
+import { PopupHostViewModelBinder } from "./popup/ko/popupHostViewModelBinder";
+import { PopupEditor, PopupViewModel, PopupViewModelBinder } from "./popup/ko";
+import { PopupHost } from "./popup/ko/popupHost";
+import { PopupSelector } from "./workshops/popups/ko";
+import { PopupPermalinkResolver, PopupService } from "@paperbits/common/popups";
+import { PopupHostModelBinder } from "./popup/popupHostModelBinder";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -139,9 +145,21 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new CollapsiblePanelEditorModule());
         injector.bindModule(new CarouselDesignModule());
         injector.bindModule(new TabPanelDesignModule());
-        injector.bindModule(new PopupDesignModule());
         injector.bindModule(new TableDesignModule());
         injector.bindModule(new TableCellDesignModule());
+
+        injector.bind("popup", PopupViewModel);
+        injector.bind("popupHost", PopupHost);
+        injector.bind("popupEditor", PopupEditor);
+        injector.bind("popupSelector", PopupSelector);
+        injector.bindSingleton("popupService", PopupService);
+        injector.bindToCollection("modelBinders", PopupHostModelBinder, "popupHostModelBinder");
+        injector.bindToCollection("viewModelBinders", PopupViewModelBinder);
+        injector.bindToCollection("widgetHandlers", PopupHandlers);
+        injector.bindToCollection("permalinkResolvers", PopupPermalinkResolver, "popupPermalinkResolver");
+        injector.bindToCollection("modelBinders", PopupModelBinder, "popupModelBinder");
+        injector.bindToCollection("viewModelBinders", PopupHostViewModelBinder, "popupHostViewModelBinder");
+
         // injector.bindModule(new DividerDesignModule());
         injector.bindToCollection("hyperlinkProviders", UrlHyperlinkProvider);
         injector.bindToCollection("autostart", HostBindingHandler);
