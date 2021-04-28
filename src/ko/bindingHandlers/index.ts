@@ -23,3 +23,4 @@ export * from "./bindingHandlers.validationMessageToggle";
 export * from "./bindingHandlers.tooltip";
 export * from "./bindingHandlers.widget";
 export * from "./bindingHandlers.selectable";
+export * from "./bindingHandlers.contextualCommand";

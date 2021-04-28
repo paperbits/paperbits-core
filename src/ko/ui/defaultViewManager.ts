@@ -513,13 +513,13 @@ export class DefaultViewManager implements ViewManager {
         this.shutter(false);
     }
 
-    public onHoverCommandActivate(): void {
+    public pauseContextualEditors(): void {
         this.mode = ViewManagerMode.pause;
         this.highlightedElement(null);
         this.selectedElement(null);
     }
 
-    public onHoverCommandDeactivate(): void {
+    public resumeContextualEditors(): void {
         this.mode = ViewManagerMode.selecting;
     }
 

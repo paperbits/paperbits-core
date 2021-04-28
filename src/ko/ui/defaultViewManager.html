@@ -56,7 +56,7 @@
 <!-- ko foreach: { data: contextualEditors, as: 'contextualEditor' } -->
 <!-- ko foreach: { data: contextualEditor.hoverCommands, as: 'command' } -->
 <button class="fixed btn-standalone"
-    data-bind="command: { element: contextualEditor.element, command: command }">
+    data-bind="contextualCommand: { element: contextualEditor.element, command: command }">
     <i aria-hidden="true" data-bind="css: command.iconClass"></i>
 </button>
 <!-- /ko -->
@@ -119,7 +119,7 @@
     <!-- /ko -->
 
     <!-- ko if: deleteCommand -->
-    <button class="btn-standalone" data-bind="command: { command: deleteCommand }">
+    <button class="btn-standalone" data-bind="contextualCommand: { command: deleteCommand }">
         <i aria-hidden="true" class="paperbits-icon paperbits-trash-simple"></i>
     </button>
     <!-- /ko -->
