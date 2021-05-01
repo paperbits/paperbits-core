@@ -14,7 +14,7 @@ export class SectionHandlers {
         private readonly sectionModelBinder: SectionModelBinder
     ) { }
 
-    public getContextualEditor(context: WidgetContext): IContextCommandSet {
+    public getContextCommands(context: WidgetContext): IContextCommandSet {
         const sectionContextualEditor: IContextCommandSet = {
             color: "#2b87da",
             hoverCommands: [{

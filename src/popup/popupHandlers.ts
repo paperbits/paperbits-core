@@ -15,7 +15,7 @@ export class PopupHandlers implements IWidgetHandler {
         return !["section", "row", "column", "popup"].includes(dragSession.sourceBinding.name);
     }
 
-    public getContextualEditor(context: WidgetContext): IContextCommandSet {
+    public getContextCommands(context: WidgetContext): IContextCommandSet {
         const popupContextualEditor: IContextCommandSet = {
             color: "#4c5866",
             hoverCommands: [],

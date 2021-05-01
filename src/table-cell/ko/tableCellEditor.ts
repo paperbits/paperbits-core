@@ -72,6 +72,11 @@ export class TableCellEditor {
     public onBoxUpdate(boxConfig: BoxStylePluginConfig): void {
         StyleHelper
             .style(this.model.styles)
+            .plugin("border")
+            .setConfig(boxConfig.border);
+
+        StyleHelper
+            .style(this.model.styles)
             .plugin("padding")
             .setConfig(boxConfig.padding);
 

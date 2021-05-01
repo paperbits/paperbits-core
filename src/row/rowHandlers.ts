@@ -8,7 +8,7 @@ import { RowModel } from "../row/rowModel";
 export class RowHandlers implements IWidgetHandler {
     constructor(private readonly viewManager: ViewManager) { }
 
-    public getContextualEditor(context: WidgetContext): IContextCommandSet {
+    public getContextCommands(context: WidgetContext): IContextCommandSet {
         const rowContextualEditor: IContextCommandSet = {
             color: "#29c4a9",
             hoverCommands: [{

@@ -32,7 +32,7 @@ export class CollapsiblePanelHandlers implements IWidgetHandler {
         return widgetOrder;
     }
 
-    public getContextualEditor(context: WidgetContext): IContextCommandSet {
+    public getContextCommands(context: WidgetContext): IContextCommandSet {
         const gridCellContextualEditor: IContextCommandSet = {
             color: "#9C27B0",
             hoverCommands: [{

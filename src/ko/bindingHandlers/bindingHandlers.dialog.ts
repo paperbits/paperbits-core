@@ -8,14 +8,14 @@ ko.bindingHandlers["dialog"] = {
             const focusableElements = element.querySelectorAll(focusables);
             const firstFocusableElement = <HTMLElement>focusableElements[0];
             const lastFocusableElement = <HTMLElement>focusableElements[focusableElements.length - 1];
-    
+
             const onKeyDown = (event: KeyboardEvent): void => {
                 const isTabPressed = event.keyCode === Keys.Tab;
-    
+
                 if (!isTabPressed) {
                     return;
                 }
-    
+
                 if (event.shiftKey) {
                     if (document.activeElement === firstFocusableElement) {
                         lastFocusableElement.focus();
@@ -29,9 +29,13 @@ ko.bindingHandlers["dialog"] = {
                     }
                 }
             };
-    
+
+            if (firstFocusableElement) {
+                firstFocusableElement.focus();
+            }
+
             element.addEventListener("keydown", onKeyDown);
-    
+
             ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
                 element.removeEventListener("keydown", onKeyDown);
             });

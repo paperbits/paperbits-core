@@ -16,7 +16,7 @@ export class TableCellHandlers implements IWidgetHandler {
         return !["section", "row", "column"].includes(dragSession.sourceBinding.name);
     }
 
-    public getContextualEditor(context: WidgetContext): IContextCommandSet {
+    public getContextCommands(context: WidgetContext): IContextCommandSet {
         const tableCellContextualEditor: IContextCommandSet = {
             color: "#9C27B0",
             hoverCommands: [],

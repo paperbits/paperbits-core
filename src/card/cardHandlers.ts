@@ -17,7 +17,7 @@ export class CardHandlers implements IWidgetHandler {
         return !["section", "row", "column", "card"].includes(dragSession.sourceBinding.name);
     }
 
-    public getContextualEditor(context: WidgetContext): IContextCommandSet {
+    public getContextCommands(context: WidgetContext): IContextCommandSet {
         const cardContextualEditor: IContextCommandSet = {
             color: "#4c5866",
             hoverCommands: [{

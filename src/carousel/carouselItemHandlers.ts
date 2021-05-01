@@ -10,7 +10,7 @@ export class CarouselItemHandlers {
         private readonly eventManager: EventManager
     ) { }
 
-    public getContextualEditor(context: WidgetContext): IContextCommandSet {
+    public getContextCommands(context: WidgetContext): IContextCommandSet {
         const contextualEditor: IContextCommandSet = {
             color: "#2b87da",
             hoverCommands: [],

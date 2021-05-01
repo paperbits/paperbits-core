@@ -11,7 +11,7 @@ export class ContentHandlers implements IWidgetHandler {
         return dragSession.sourceBinding.name === "section";
     }
 
-    public getContextualEditor(context: WidgetContext): IContextCommandSet {
+    public getContextCommands(context: WidgetContext): IContextCommandSet {
         const contextualEditor: IContextCommandSet = {};
 
         if (context.model.widgets.length === 0) {

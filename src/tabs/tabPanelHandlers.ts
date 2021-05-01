@@ -28,7 +28,7 @@ export class TabPanelHandlers {
         return widgetOrder;
     }
 
-    public getContextualEditor(context: WidgetContext): IContextCommandSet {
+    public getContextCommands(context: WidgetContext): IContextCommandSet {
         const tabPanelContextualEditor: IContextCommandSet = {
             color: "#2b87da",
             hoverCommands: null,
