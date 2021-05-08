@@ -81,8 +81,8 @@ export class PageDetailsWorkshop {
             }
         }
 
-        const locale = await this.localeService.getCurrentLocale();
-        const defaultLocale = await this.localeService.getDefaultLocale();
+        const locale = await this.localeService.getCurrentLocaleCode();
+        const defaultLocale = await this.localeService.getDefaultLocaleCode();
 
         if (locale !== defaultLocale) {
             this.isReserved(true);

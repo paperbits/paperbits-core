@@ -31,7 +31,7 @@ export class LocaleSelector {
 
     private async refreshLocales(): Promise<void> {
         const locales = await this.localeService.getLocales();
-        const currentLocaleCode = await this.localeService.getCurrentLocale();
+        const currentLocaleCode = await this.localeService.getCurrentLocaleCode();
 
         this.locales(locales);
         this.selectedLocale(locales.find(x => x.code === currentLocaleCode));
@@ -50,8 +50,12 @@ export class LocaleSelector {
             component: {
                 name: "locale-editor",
                 params: {
-                    onLocaleAdded: () => {
+                    onLocaleAdded: async (locale: LocaleModel) => {
+                        await this.localeService.setCurrentLocale(locale.code);
+                        await this.refreshLocales();
                         this.viewManager.closeView();
+
+                        this.eventManager.dispatchEvent("onLocaleChange");
                     }
                 }
             },

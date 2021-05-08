@@ -27,8 +27,9 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
 
     private async getLanguageNavigationMenu(bindingContext: Bag<any>, layout: string): Promise<NavigationItemModel> {
         const locales = await this.localeService.getLocales();
-        const defaultLocale = await this.localeService.getDefaultLocale();
-        const requestedLocaleCode = bindingContext?.locale || defaultLocale;
+        const currentLocale = await this.localeService.getCurrentLocaleCode();
+        const defaultLocale = await this.localeService.getDefaultLocaleCode();
+        const requestedLocaleCode = bindingContext?.locale || currentLocale || defaultLocale;
         const requestedLocale = locales.find(x => x.code === requestedLocaleCode);
         const languageNavItems: NavigationItemModel[] = [];
 
@@ -60,7 +61,7 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
         switch (layout) {
             case "horizontal":
                 topLevelChildren = [{
-                    label: requestedLocale?.displayName,
+                    label: requestedLocale.displayName,
                     nodes: languageNavItems
                 }];
                 break;

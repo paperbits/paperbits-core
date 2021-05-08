@@ -11,7 +11,8 @@ export const builtInLocales = {
     },
     ar: {
         nameNative: "العربية",
-        nameEnglish: "Arabic"
+        nameEnglish: "Arabic",
+        direction: "rtl"
     },
     bg: {
         nameNative: "Български",

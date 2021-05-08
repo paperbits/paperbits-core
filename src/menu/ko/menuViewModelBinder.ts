@@ -10,7 +10,6 @@ import { MenuModel } from "../menuModel";
 import { MenuItemViewModel } from "./menuItemViewModel";
 import { MenuViewModel } from "./menuViewModel";
 
-
 export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewModel> {
     constructor(
         private readonly eventManager: EventManager,

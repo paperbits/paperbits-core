@@ -61,13 +61,13 @@ export class PagePublisher implements IPublisher {
         // return mainContent;
     }
 
-    private async renderAndUpload(settings: SiteSettingsContract, page: PageContract, locale?: string): Promise<void> {
+    private async renderAndUpload(settings: SiteSettingsContract, page: PageContract, locale?: LocaleModel): Promise<void> {
         if (!page.permalink) {
             this.logger.trackEvent("Publishing", { message: `Skipping page with no permalink specified: "${page.title}".` });
             return;
         }
 
-        this.logger.trackEvent("Publishing", { message: `Publishing page ${page.title}${locale ? ` (${locale})` : ""}...` });
+        this.logger.trackEvent("Publishing", { message: `Publishing page ${page.title}${locale ? ` (${locale.code})` : ""}...` });
 
         try {
             const siteAuthor = settings?.author;
@@ -76,9 +76,9 @@ export class PagePublisher implements IPublisher {
             const siteKeywords = settings?.keywords;
             const siteHostname = settings?.hostname;
             const faviconSourceKey = settings?.faviconSourceKey;
-            const localePrefix = locale ? `/${locale}` : "";
+            const localePrefix = locale ? `/${locale.code}` : "";
             const pagePermalink = `${localePrefix}${page.permalink}`;
-            const pageContent = await this.pageService.getPageContent(page.key, locale);
+            const pageContent = await this.pageService.getPageContent(page.key, locale?.code);
             const pageUrl = siteHostname
                 ? `https://${settings?.hostname}${pagePermalink}`
                 : pagePermalink;
@@ -92,6 +92,7 @@ export class PagePublisher implements IPublisher {
                 permalink: pagePermalink,
                 url: pageUrl,
                 siteHostName: siteHostname,
+                locale: locale,
                 content: pageContent,
                 template: template,
                 styleReferences: [
@@ -112,7 +113,7 @@ export class PagePublisher implements IPublisher {
                     contentItemKey: page.key,
                     styleManager: styleManager,
                     navigationPath: pagePermalink,
-                    locale: locale,
+                    locale: locale?.code,
                     template: {
                         page: {
                             value: pageContent,
@@ -198,22 +199,22 @@ export class PagePublisher implements IPublisher {
     }
 
     private async publishLocalized(locales: LocaleModel[], siteSettings: SiteSettingsContract): Promise<void> {
-        const defaultLocale = await this.localeService.getDefaultLocale();
+        const defaultLocale = await this.localeService.getDefaultLocaleCode();
 
         for (const locale of locales) {
-            const localeCode = locale.code === defaultLocale
+            const requestedLocale = locale.code === defaultLocale
                 ? null
-                : locale.code;
+                : locale;
 
             const query: Query<PageContract> = Query.from<PageContract>();
-            let pagesOfResults = await this.pageService.search(query, localeCode);
+            let pagesOfResults = await this.pageService.search(query, requestedLocale?.code);
 
             do {
                 const tasks = [];
                 const pages = pagesOfResults.value;
 
                 for (const page of pages) {
-                    tasks.push(() => this.renderAndUpload(siteSettings, page, localeCode));
+                    tasks.push(() => this.renderAndUpload(siteSettings, page, requestedLocale));
                 }
 
                 await parallel(tasks, maxParallelPublisingTasks);

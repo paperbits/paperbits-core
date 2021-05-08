@@ -6,16 +6,29 @@ import { builtInLocales } from "../locales";
 import { EventManager } from "@paperbits/common/events";
 import { ViewManager } from "@paperbits/common/ui";
 
+
+interface LocaleContract {
+    code: string;
+    displayName: string;
+}
+
+interface LanguageContract {
+    code: string;
+    locales: LocaleContract[];
+    direction: string;
+    displayName: string;
+}
+
 @Component({
     selector: "locale-editor",
     template: template,
     injectable: "localeEditor"
 })
 export class LocaleEditor {
-    public readonly languages: ko.Observable<any>;
-    public readonly selectedLanguage: ko.Observable<any>;
-    public readonly locales: ko.Observable<any>;
-    public readonly selectedLocale: ko.Observable<any>;
+    public readonly languages: ko.Observable<LanguageContract>;
+    public readonly selectedLanguage: ko.Observable<LanguageContract>;
+    public readonly locales: ko.Observable<LocaleContract[]>;
+    public readonly selectedLocale: ko.Observable<LocaleContract>;
 
     constructor(
         private readonly localeService: LocaleService,
@@ -26,11 +39,14 @@ export class LocaleEditor {
         this.selectedLocale = ko.observable();
 
         this.locales = ko.observableArray();
-        this.languages = ko.observable<any>(Object.keys(builtInLocales).map(code => {
+        this.languages = ko.observable<any>(Object.keys(builtInLocales).map<LanguageContract>(code => {
+            const builtInLocale = builtInLocales[code];
+
             return {
                 code: code,
-                locales: builtInLocales[code].locales,
-                displayName: builtInLocales[code].nameNative
+                locales: builtInLocale.locales,
+                direction: builtInLocale.direction,
+                displayName: builtInLocale.nameNative
             };
         }));
     }
@@ -62,23 +78,24 @@ export class LocaleEditor {
 
     public async addLocale(): Promise<void> {
         const language = this.selectedLanguage();
-        const locale = this.selectedLocale();
+        const location = this.selectedLocale();
 
         let code = language.code;
         let displayName = language.displayName;
+        const direction = language.direction;
 
-        if (locale) {
-            code += "-" + locale.code;
-            displayName += ` (${locale.displayName})`;
+        if (location) {
+            code += "-" + location.code;
+            displayName += ` (${location.displayName})`;
         }
 
-        await this.localeService.createLocale(code, displayName);
-
-        this.eventManager.dispatchEvent("onLocalesChange");
+        const locale = await this.localeService.createLocale(code, displayName, direction);
 
         if (this.onLocaleAdded) {
             this.onLocaleAdded(locale);
         }
+
+        this.eventManager.dispatchEvent("onLocalesChange");
 
         this.viewManager.notifySuccess("Content localization", `Locale "${displayName}" was  added.`);
     }
