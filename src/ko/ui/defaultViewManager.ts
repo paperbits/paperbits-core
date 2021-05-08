@@ -479,6 +479,10 @@ export class DefaultViewManager implements ViewManager {
         this.clearJourney();
     }
 
+    public clearSelection(): void {
+        this.selectedElement(null);
+    }
+
     public getSelectedElement(): IHighlightConfig {
         return this.selectedElement();
     }
@@ -516,7 +520,6 @@ export class DefaultViewManager implements ViewManager {
     public pauseContextualEditors(): void {
         this.mode = ViewManagerMode.pause;
         this.highlightedElement(null);
-        this.selectedElement(null);
     }
 
     public resumeContextualEditors(): void {
