@@ -178,7 +178,7 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
             }
         }
 
-        if (menuModel.items.length === 0 && menuModel.minHeading && menuModel.maxHeading) {
+        if (!!currentPageUrl && menuModel.items.length === 0 && menuModel.minHeading && menuModel.maxHeading) {
             const localNavItems = await this.processAnchorItems(currentPageUrl, bindingContext?.locale, menuModel.minHeading, menuModel.maxHeading);
             menuModel.items.push(...localNavItems);
         }
