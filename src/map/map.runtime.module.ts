@@ -1,6 +1,6 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { MapRuntime } from "./runtime/map-runtime";
-import { GooglmapsBindingHandler } from "./bindingHandlers.googlemap";
+import { MapRuntime } from "./ko/runtime/map-runtime";
+import { GooglmapsBindingHandler } from "./ko/bindingHandlers.googlemap";
 
 
 export class MapRuntimeModule implements IInjectorModule {

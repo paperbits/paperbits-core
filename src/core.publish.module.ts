@@ -16,7 +16,7 @@ import {
     SitemapBuilder,
     SearchIndexBuilder
 } from "@paperbits/common/publishing";
-import { MapPublishModule } from "./map/ko";
+import { MapPublishModule } from "./map/map.publish.module";
 import { DividerPublishModule } from "./divider/divider.publish.module";
 import { CarouselPublishModule } from "./carousel/carousel.publish.module";
 import { TabPanelPublishModule } from "./tabs/tabPanel.publish.module";
@@ -24,12 +24,6 @@ import { TablePublishModule } from "./table/table.publish.module";
 import { TableCellPublishModule } from "./table-cell/tableCell.publish.module";
 import { Bag } from "@paperbits/common";
 import { ComponentBinder } from "@paperbits/common/editing/componentBinder";
-import { PopupModelBinder } from "./popup";
-import { PopupHostViewModelBinder } from "./popup/ko/popupHostViewModelBinder";
-import { PopupViewModel, PopupViewModelBinder } from "./popup/ko";
-import { PopupHost } from "./popup/ko/popupHost";
-import { PopupPermalinkResolver, PopupService } from "@paperbits/common/popups";
-import { PopupHostModelBinder } from "./popup/popupHostModelBinder";
 import { PopupPublishModule } from "./popup/popup.publish.module";
 
 

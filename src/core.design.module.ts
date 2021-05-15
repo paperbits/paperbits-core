@@ -56,7 +56,7 @@ import { ContentEditorModule } from "./content/ko";
 import { ViewStack } from "@paperbits/common/ui/viewStack";
 import { MediaDisplay } from "./workshops/media/ko/mediaDisplay";
 import { Lightbox } from "./workshops/media/ko/lightbox";
-import { MapDesignModule } from "./map/ko/map.design.module";
+import { MapDesignModule } from "./map/map.design.module";
 import { MemoryCache } from "@paperbits/common/caching";
 import { CarouselDesignModule } from "./carousel/ko";
 import { TabPanelDesignModule } from "./tabs/tabPanel.design.module";
