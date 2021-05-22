@@ -1,4 +1,5 @@
 import { Keys } from "@paperbits/common";
+import * as Arrays from "@paperbits/common/arrays";
 import { AriaAttributes } from "@paperbits/common/html";
 
 const toggleAtributeName = "data-toggle";
@@ -132,7 +133,7 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement): vo
             const position = actualToggleElement.getAttribute("data-position") || "bottom";
 
             const triggerHalfWidth = Math.floor(toggleElementRect.width / 2);
-            const triggerHalfHeight =  Math.floor(toggleElementRect.height / 2);
+            const triggerHalfHeight = Math.floor(toggleElementRect.height / 2);
             const popupHalfWidth = Math.floor(popupContainerElementRect.width / 2);
             const popupHalfHeight = Math.floor(popupContainerElementRect.height / 2);
 
@@ -157,9 +158,7 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement): vo
         popupContainerElement.removeAttribute("style");
     };
 
-
-
-    const dismissElement: HTMLElement = targetElement.querySelector(`[${dismissAttributeName}]`);
+    const dismissElements: HTMLElement[] = Arrays.coerce(targetElement.querySelectorAll(`[${dismissAttributeName}]`));
 
     const clickOutside = (event: MouseEvent) => {
         const clickTarget = <HTMLElement>event.target;
@@ -174,11 +173,19 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement): vo
             return;
         }
 
-        closeTarget();
+        closeTarget(event);
     };
 
-    const closeTarget = (): void => {
-        dismissElement.removeEventListener("mousedown", closeTarget);
+    const closeTarget = (event: Event): void => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        console.log(dismissElements);
+
+        for (const dismissElement of dismissElements) {
+            dismissElement.removeEventListener("mousedown", closeTarget);
+        }
+
         targetElement.ownerDocument.removeEventListener("mousedown", clickOutside);
         targetElement.classList.remove(showClassName);
         toggleElement.setAttribute(AriaAttributes.expanded, "false");
@@ -188,7 +195,10 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement): vo
     };
 
     const openTarget = (): void => {
-        dismissElement.addEventListener("mousedown", closeTarget);
+        for (const dismissElement of dismissElements) {
+            dismissElement.addEventListener("mousedown", closeTarget);
+        }
+
         targetElement.classList.add(showClassName);
         toggleElement.setAttribute(AriaAttributes.expanded, "true");
 

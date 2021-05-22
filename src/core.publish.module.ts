@@ -25,6 +25,7 @@ import { TableCellPublishModule } from "./table-cell/tableCell.publish.module";
 import { Bag } from "@paperbits/common";
 import { ComponentBinder } from "@paperbits/common/editing/componentBinder";
 import { PopupPublishModule } from "./popup/popup.publish.module";
+import { DismissButtonPublishModule } from "./dismiss-button/dismissButton.publish.module";
 
 
 export class CorePublishModule implements IInjectorModule {
@@ -55,5 +56,6 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindModule(new TablePublishModule());
         injector.bindModule(new TableCellPublishModule());
         injector.bindModule(new PopupPublishModule());
+        injector.bindModule(new DismissButtonPublishModule());
     }
 }

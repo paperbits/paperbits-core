@@ -57,6 +57,7 @@ export class PopupViewModelBinder implements ViewModelBinder<PopupModel, PopupVi
                 model: model,
                 draggable: true,
                 editor: "popup-editor",
+                provides: ["popup"],
                 handler: PopupHandlers,
                 applyChanges: async () => {
                     await this.modelToViewModel(model, viewModel, bindingContext);

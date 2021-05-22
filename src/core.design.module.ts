@@ -73,6 +73,7 @@ import { PopupHost } from "./popup/ko/popupHost";
 import { PopupSelector } from "./workshops/popups/ko";
 import { PopupPermalinkResolver, PopupService } from "@paperbits/common/popups";
 import { PopupHostModelBinder } from "./popup/popupHostModelBinder";
+import { DismissButtonDesignModule } from "./dismiss-button/dismissButton.design.module";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -147,6 +148,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new TabPanelDesignModule());
         injector.bindModule(new TableDesignModule());
         injector.bindModule(new TableCellDesignModule());
+        injector.bindModule(new DismissButtonDesignModule());
 
         injector.bind("popup", PopupViewModel);
         injector.bind("popupHost", PopupHost);
