@@ -130,26 +130,33 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement): vo
             const toggleElementRect = actualToggleElement.getBoundingClientRect();
             const popupContainerElement: HTMLElement = targetElement.querySelector(popupContainerClass);
             const popupContainerElementRect = popupContainerElement.getBoundingClientRect();
-            const position = actualToggleElement.getAttribute("data-position") || "bottom";
+            const requestedPosition = actualToggleElement.getAttribute("data-position") || "bottom";
 
             const triggerHalfWidth = Math.floor(toggleElementRect.width / 2);
             const triggerHalfHeight = Math.floor(toggleElementRect.height / 2);
             const popupHalfWidth = Math.floor(popupContainerElementRect.width / 2);
             const popupHalfHeight = Math.floor(popupContainerElementRect.height / 2);
 
-            switch (position) {
-                case "top":
-                    popupContainerElement.style.top = window.scrollY + toggleElementRect.top - popupContainerElementRect.height - triggerHalfHeight + "px";
-                    popupContainerElement.style.left = toggleElementRect.left + triggerHalfWidth - popupHalfWidth + "px";
-                    break;
-                case "left":
-                    break;
-                case "right":
-                    break;
-                case "bottom":
-                    popupContainerElement.style.top = window.scrollY + toggleElementRect.bottom + "px";
-                    popupContainerElement.style.left = toggleElementRect.left + triggerHalfWidth - popupHalfWidth + "px";
-                    break;
+            const position = requestedPosition.split(" ");
+
+            // Default assignments
+            popupContainerElement.style.left = toggleElementRect.left + triggerHalfWidth - popupHalfWidth + "px";
+            popupContainerElement.style.top = window.scrollY + toggleElementRect.top + triggerHalfHeight - popupHalfHeight + "px";
+
+            if (position.includes("top")) {
+                popupContainerElement.style.top = window.scrollY + toggleElementRect.top - popupContainerElementRect.height - triggerHalfHeight + "px";
+            }
+
+            if (position.includes("bottom")) {
+                popupContainerElement.style.top = window.scrollY + toggleElementRect.bottom + "px";
+            }
+
+            if (position.includes("left")) {
+                popupContainerElement.style.left = toggleElementRect.left + "px";
+            }
+
+            if (position.includes("right")) {
+                popupContainerElement.style.left = toggleElementRect.right - popupContainerElementRect.width + "px";
             }
 
             return;

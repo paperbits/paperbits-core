@@ -9,6 +9,7 @@ import { BackgroundStylePluginConfig, TypographyStylePluginConfig, ContainerStyl
 import { EventManager } from "@paperbits/common/events";
 import { PositionStylePluginConfig } from "@paperbits/styles/plugins/position";
 import { TransformStylePluginConfig } from "@paperbits/styles/plugins/transform";
+import { SizeUnits, Size } from "@paperbits/styles/plugins";
 
 
 @Component({
@@ -25,6 +26,8 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
     public readonly backdrop: ko.Observable<boolean>;
     public readonly position: ko.Observable<string>;
     public readonly containerBox: ko.Observable<BoxStylePluginConfig>;
+    public readonly offsetX: ko.Observable<number>;
+    public readonly offsetY: ko.Observable<number>;
 
 
     constructor(
@@ -39,6 +42,8 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
         this.containerSizeStylesResponsive = ko.observable<boolean>();
         this.position = ko.observable();
         this.backdrop = ko.observable(true);
+        this.offsetX = ko.observable(0);
+        this.offsetY = ko.observable(0);
     }
 
     @Param()
@@ -176,13 +181,19 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
         let positionPluginConfig: PositionStylePluginConfig;
         let transform: TransformStylePluginConfig;
 
+        const offsetX = new Size(this.offsetX());
+        const offsetY = new Size(this.offsetY());
+
         switch (position) {
             case "attached":
                 positionPluginConfig = {
                     position: "absolute"
                 };
                 transform = {
-                    translate: { x: 0, y: 0 }
+                    translate: {
+                        x: offsetX.toString(),
+                        y: offsetY.toString()
+                    }
                 };
                 break;
             case "center":
@@ -192,7 +203,10 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
                     left: "50%"
                 };
                 transform = {
-                    translate: { x: "-50%", y: "-50%" }
+                    translate: {
+                        x: StyleHelper.calculate(new Size(-50, SizeUnits.percents), offsetX),
+                        y: StyleHelper.calculate(new Size(-50, SizeUnits.percents), offsetY),
+                    }
                 };
                 break;
 
@@ -203,7 +217,10 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
                     left: "50%"
                 };
                 transform = {
-                    translate: { x: "-50%" }
+                    translate: {
+                        x: StyleHelper.calculate(new Size(-50, SizeUnits.percents), offsetX),
+                        y: offsetY.toString(),
+                    }
                 };
 
                 break;
@@ -214,7 +231,10 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
                     left: 0
                 };
                 transform = {
-                    translate: { y: "-50%" }
+                    translate: {
+                        x: offsetX.toString(),
+                        y: StyleHelper.calculate(new Size(-50, SizeUnits.percents), offsetY),
+                    }
                 };
                 break;
 
@@ -225,7 +245,10 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
                     right: 0
                 };
                 transform = {
-                    translate: { y: "-50%" }
+                    translate: {
+                        x: offsetX.toString(),
+                        y: StyleHelper.calculate(new Size(-50, SizeUnits.percents), offsetY),
+                    }
                 };
                 break;
 
@@ -236,7 +259,10 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
                     bottom: 0
                 };
                 transform = {
-                    translate: { x: "-50%" }
+                    translate: {
+                        x: StyleHelper.calculate(new Size(-50, SizeUnits.percents), offsetX),
+                        y: offsetY.toString()
+                    }
                 };
                 break;
         }

@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import * as Objects from "@paperbits/common/objects";
 import template from "./tableColumnEditor.html";
 import { StyleHelper, StyleService } from "@paperbits/styles";
-import { SizeUnits, StyleSizeValue } from "@paperbits/styles/plugins";
+import { SizeUnits, Size } from "@paperbits/styles/plugins";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { TableModel } from "../tableModel";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
@@ -32,7 +32,7 @@ export class TableColumnEditor {
 
     @OnMounted()
     public async initialize(): Promise<void> {
-        const width = StyleSizeValue.parse(this.model.styles.instance.grid.xs.cols[this.columnIndex]);
+        const width = Size.parse(this.model.styles.instance.grid.xs.cols[this.columnIndex]);
 
         if (width.units === SizeUnits.pixels) {
             this.width(width.value);
