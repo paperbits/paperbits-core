@@ -520,6 +520,13 @@ export class DefaultViewManager implements ViewManager {
     public pauseContextualEditors(): void {
         this.mode = ViewManagerMode.pause;
         this.highlightedElement(null);
+        
+        this.contextualEditorsBag = {};
+        this.contextualEditors([]);
+        this.highlightedElement(null);
+        this.setSplitter(null);
+        this.selectedElement(null);
+        this.selectedElementContextualEditor(null);
     }
 
     public resumeContextualEditors(): void {

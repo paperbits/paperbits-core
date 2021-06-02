@@ -28,6 +28,7 @@ import { GridModule } from "./grid-layout-section/ko/grid.module";
 import { BackgroundBindingHandler } from "./ko/bindingHandlers/bindingHandlers.background";
 import { SecuredBindingHandler } from "./ko/bindingHandlers/bindingHandlers.secured";
 import { WidgetBindingHandler } from "./ko/bindingHandlers/bindingHandlers.widget";
+import { StickToBindingHandler } from "./ko/bindingHandlers/bindingHandlers.stickTo";
 import { KnockoutRegistrationLoaders } from "./ko/knockout.loaders";
 import { KoModule } from "./ko/ko.module";
 import { ViewModelBinderSelector } from "./ko/viewModelBinderSelector";
@@ -109,5 +110,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindToCollection("autostart", WidgetBindingHandler);
         injector.bindToCollection("autostart", BackgroundBindingHandler);
         injector.bindToCollection("autostart", SecuredBindingHandler);
+        injector.bindToCollection("autostart", StickToBindingHandler);
     }
 }
