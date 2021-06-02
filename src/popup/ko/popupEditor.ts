@@ -9,7 +9,7 @@ import { BackgroundStylePluginConfig, TypographyStylePluginConfig, ContainerStyl
 import { EventManager } from "@paperbits/common/events";
 import { PositionStylePluginConfig } from "@paperbits/styles/plugins/position";
 import { TransformStylePluginConfig } from "@paperbits/styles/plugins/transform";
-import { SizeUnits, Size } from "@paperbits/styles/plugins";
+import { SizeUnits, Size, CalcExpression } from "@paperbits/styles/plugins";
 
 
 @Component({
@@ -28,7 +28,6 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
     public readonly containerBox: ko.Observable<BoxStylePluginConfig>;
     public readonly offsetX: ko.Observable<number>;
     public readonly offsetY: ko.Observable<number>;
-
 
     constructor(
         private readonly viewManager: ViewManager,
@@ -60,11 +59,14 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
         this.eventManager.addEventListener("onViewportChange", this.updateObservables);
 
         this.position.subscribe(this.onPositionChange);
+        this.offsetX.subscribe(this.onOffsetChange);
+        this.offsetY.subscribe(this.onOffsetChange);
         this.backdrop.subscribe(this.onBackdropChange);
     }
 
     private updateObservables(): void {
         this.determinePosition();
+        this.determineOffset();
 
         const popupContainerStyles = StyleHelper
             .style(this.model.styles)
@@ -177,12 +179,67 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
         this.position("center");
     }
 
-    public onPositionChange(position: string): void {
+    private determineOffset(): void {
+        const transformPluginConfig = StyleHelper
+            .style(this.model.styles)
+            .component("popupContainer")
+            .variation("default")
+            .plugin("transform")
+            .getConfig<TransformStylePluginConfig>();
+
+        let offsetX = new Size(0);
+        let offsetY = new Size(0);
+
+        if (CalcExpression.isExpr(transformPluginConfig.translate.x)) {
+            const parsed = CalcExpression.parse(transformPluginConfig.translate.x);
+
+            if (parsed && parsed.members.length > 1) {
+                offsetX = parsed.members[1]; // second expression member is offsetX
+            }
+        }
+        else if (Size.isSizeExpr(transformPluginConfig.translate.x)) {
+            offsetX = Size.parse(transformPluginConfig.translate.x);
+        }
+
+        if (CalcExpression.isExpr(transformPluginConfig.translate.y)) {
+            const result = CalcExpression.parse(transformPluginConfig.translate.y);
+
+            if (result && result.members.length > 1) {
+                offsetY = result.members[1]; // second expression member is offsetY
+            }
+        }
+        else if (Size.isSizeExpr(transformPluginConfig.translate.y)) {
+            offsetY = Size.parse(transformPluginConfig.translate.y);
+        }
+
+        if (this.position() === "right") {
+            offsetX.value = -offsetX.value;
+        }
+
+        if (this.position() === "bottom") {
+            offsetY.value = -offsetY.value;
+        }
+
+        this.offsetX(offsetX.value);
+        this.offsetY(offsetY.value);
+
+        this.recalculateStyles();
+    }
+
+    private onOffsetChange(): void {
+        this.recalculateStyles();
+    }
+
+    private recalculateStyles(): void {
+        const position = this.position();
+        const offsetXString = this.offsetX();
+        const offsetYString = this.offsetY();
+
         let positionPluginConfig: PositionStylePluginConfig;
         let transform: TransformStylePluginConfig;
 
-        const offsetX = new Size(this.offsetX());
-        const offsetY = new Size(this.offsetY());
+        const offsetX = new Size(offsetXString || 0);
+        const offsetY = new Size(offsetYString || 0);
 
         switch (position) {
             case "attached":
@@ -196,6 +253,7 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
                     }
                 };
                 break;
+
             case "center":
                 positionPluginConfig = {
                     position: "fixed",
@@ -222,8 +280,8 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
                         y: offsetY.toString(),
                     }
                 };
-
                 break;
+
             case "left":
                 positionPluginConfig = {
                     position: "fixed",
@@ -239,6 +297,8 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
                 break;
 
             case "right":
+                offsetX.value = -offsetX.value;
+
                 positionPluginConfig = {
                     position: "fixed",
                     top: "50%",
@@ -253,6 +313,8 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
                 break;
 
             case "bottom":
+                offsetY.value = -offsetY.value;
+
                 positionPluginConfig = {
                     position: "fixed",
                     left: "50%",
@@ -287,6 +349,11 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
             const hostDocument = this.viewManager.getHostDocument();
             hostDocument.dispatchEvent(new CustomEvent("onPopupRepositionRequested"));
         }, 10);
+    }
+
+    public onPositionChange(position: string): void {
+        this.position(position);
+        this.recalculateStyles();
     }
 
     public onBoxUpdate(pluginConfig: BoxStylePluginConfig): void {

@@ -187,8 +187,6 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement): vo
         event.preventDefault();
         event.stopImmediatePropagation();
 
-        console.log(dismissElements);
-
         for (const dismissElement of dismissElements) {
             dismissElement.removeEventListener("mousedown", closeTarget);
         }
