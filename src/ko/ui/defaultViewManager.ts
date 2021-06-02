@@ -520,7 +520,7 @@ export class DefaultViewManager implements ViewManager {
     public pauseContextualEditors(): void {
         this.mode = ViewManagerMode.pause;
         this.highlightedElement(null);
-        
+
         this.contextualEditorsBag = {};
         this.contextualEditors([]);
         this.highlightedElement(null);
@@ -531,6 +531,8 @@ export class DefaultViewManager implements ViewManager {
 
     public resumeContextualEditors(): void {
         this.mode = ViewManagerMode.selecting;
+        this.designTime(true);
+        this.clearContextualEditors();
     }
 
     public beginDrag(session: DragSession): void {
