@@ -197,9 +197,6 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
                 offsetX = parsed.members[1]; // second expression member is offsetX
             }
         }
-        else if (Size.isSizeExpr(transformPluginConfig.translate.x)) {
-            offsetX = Size.parse(transformPluginConfig.translate.x);
-        }
 
         if (CalcExpression.isExpr(transformPluginConfig.translate.y)) {
             const result = CalcExpression.parse(transformPluginConfig.translate.y);
@@ -207,9 +204,6 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
             if (result && result.members.length > 1) {
                 offsetY = result.members[1]; // second expression member is offsetY
             }
-        }
-        else if (Size.isSizeExpr(transformPluginConfig.translate.y)) {
-            offsetY = Size.parse(transformPluginConfig.translate.y);
         }
 
         if (this.position() === "right") {
