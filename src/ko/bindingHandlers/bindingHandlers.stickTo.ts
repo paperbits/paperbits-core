@@ -26,7 +26,7 @@ export class StickToBindingHandler {
                         return;
                     }
 
-                    if (viewManager.mode !== ViewManagerMode.selecting) {
+                    if (viewManager.mode !== ViewManagerMode.selecting && viewManager.mode !== ViewManagerMode.selected) {
                         return;
                     }
 

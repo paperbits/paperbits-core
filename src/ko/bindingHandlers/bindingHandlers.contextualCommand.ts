@@ -26,7 +26,7 @@ export class ContextualCommandBindingHandler {
                     bindings["balloon"] = {
                         component: config.command.component,
                         onOpen: () => {
-                            viewManager.pauseContextualEditors();
+                            viewManager.pauseContextualCommands();
 
                             if (!!config.command.doNotClearSelection) {
                                 return;

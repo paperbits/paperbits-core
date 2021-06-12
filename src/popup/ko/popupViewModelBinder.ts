@@ -61,6 +61,8 @@ export class PopupViewModelBinder implements ViewModelBinder<PopupModel, PopupVi
                 handler: PopupHandlers,
                 applyChanges: async () => {
                     await this.modelToViewModel(model, viewModel, bindingContext);
+
+                    debugger;
                     this.eventManager.dispatchEvent("onContentUpdate", model.key.replace("files/", "popups/"));
                 }
             };

@@ -61,7 +61,7 @@ export class CarouselHandlers {
                 callback: () => {
                     context.parentModel.widgets.remove(context.model);
                     context.parentBinding.applyChanges();
-                    this.viewManager.clearContextualEditors();
+                    this.viewManager.clearContextualCommands();
                     this.eventManager.dispatchEvent("onContentUpdate");
                 }
             },
@@ -73,7 +73,7 @@ export class CarouselHandlers {
                 callback: () => {
                     context.model["carouselItems"].push(new CarouselItemModel());
                     context.parentBinding.applyChanges();
-                    this.viewManager.clearContextualEditors();
+                    this.viewManager.clearContextualCommands();
                     this.eventManager.dispatchEvent("onContentUpdate");
                 }
             },

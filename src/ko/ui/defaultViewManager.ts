@@ -6,7 +6,7 @@ import template from "./defaultViewManager.html";
 import "@paperbits/common/extensions";
 import { Bag } from "@paperbits/common";
 import { EventManager, GlobalEventHandler } from "@paperbits/common/events";
-import { IComponent, View, ViewManager, ICommand, ViewManagerMode, IHighlightConfig, IContextCommandSet, ISplitterConfig, Toast } from "@paperbits/common/ui";
+import { IComponent, View, ViewManager, ICommand, ViewManagerMode, IHighlightConfig, IContextCommandSet, ISplitterConfig, Toast, IContextCommand } from "@paperbits/common/ui";
 import { Router } from "@paperbits/common/routing";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
@@ -24,7 +24,7 @@ declare let uploadDialog: HTMLInputElement;
     template: template
 })
 export class DefaultViewManager implements ViewManager {
-    private contextualEditorsBag: Bag<IContextCommandSet> = {};
+    private contextualCommandsBag: Bag<IContextCommandSet> = {};
 
     public readonly designTime: ko.Observable<boolean>;
     public readonly previewable: ko.Observable<boolean>;
@@ -34,7 +34,7 @@ export class DefaultViewManager implements ViewManager {
     public readonly toasts: ko.ObservableArray<Toast>;
     public readonly primaryToolboxVisible: ko.Observable<boolean>;
     public readonly activeView: ko.Observable<View>;
-    public readonly contextualEditors: ko.ObservableArray<IContextCommandSet>;
+    public readonly contextualCommands: ko.ObservableArray<IContextCommandSet>;
     public readonly highlightedElement: ko.Observable<IHighlightConfig>;
     public readonly splitterElement: ko.Observable<ISplitterConfig>;
     public readonly selectedElement: ko.Observable<IHighlightConfig>;
@@ -78,7 +78,7 @@ export class DefaultViewManager implements ViewManager {
         });
 
         this.activeView = ko.observable<View>();
-        this.contextualEditors = ko.observableArray<IContextCommandSet>([]);
+        this.contextualCommands = ko.observableArray<IContextCommandSet>([]);
         this.highlightedElement = ko.observable<IHighlightConfig>();
         this.splitterElement = ko.observable<ISplitterConfig>();
         this.selectedElement = ko.observable<IHighlightConfig>();
@@ -148,7 +148,7 @@ export class DefaultViewManager implements ViewManager {
             return;
         }
 
-        this.clearContextualEditors();
+        this.clearContextualCommands();
         this.host(component);
         this.previewable(component.name !== "style-guide");
     }
@@ -162,7 +162,7 @@ export class DefaultViewManager implements ViewManager {
     }
 
     private onRouteChange(): void {
-        this.clearContextualEditors();
+        this.clearContextualCommands();
         this.closeView();
     }
 
@@ -247,7 +247,7 @@ export class DefaultViewManager implements ViewManager {
         if (this.mode !== ViewManagerMode.preview) {
             this.mode = ViewManagerMode.dragging;
         }
-        this.clearContextualEditors();
+        this.clearContextualCommands();
     }
 
     public showToolboxes(): void {
@@ -257,7 +257,7 @@ export class DefaultViewManager implements ViewManager {
 
     public openViewAsWorkshop(view: View): void {
         this.viewStack.clear();
-        this.clearContextualEditors();
+        this.clearContextualCommands();
         this.updateJourneyComponent(view);
         this.mode = ViewManagerMode.configure;
     }
@@ -331,7 +331,7 @@ export class DefaultViewManager implements ViewManager {
             view.resize = "vertically horizontally";
         }
 
-        this.clearContextualEditors();
+        this.clearContextualCommands();
         this.closeView();
         this.activeView(view);
         this.mode = ViewManagerMode.configure;
@@ -400,40 +400,40 @@ export class DefaultViewManager implements ViewManager {
 
         this.activeView(null);
         this.eventManager.dispatchEvent("onViewClose");
-        this.clearContextualEditors();
+        this.clearContextualCommands();
         this.mode = ViewManagerMode.selecting;
 
         this.primaryToolboxVisible(true);
         this.designTime(true);
     }
 
-    public setContextualEditor(editorName: string, contextualEditor: IContextCommandSet): void {
-        this.contextualEditorsBag[editorName] = contextualEditor;
+    public setContextualCommands(widgetName: string, contextualCommandSet: IContextCommandSet): void {
+        this.contextualCommandsBag[widgetName] = contextualCommandSet;
 
-        const editors = Object.keys(this.contextualEditorsBag).map(key => this.contextualEditorsBag[key]);
+        const commands = Object.keys(this.contextualCommandsBag).map(key => this.contextualCommandsBag[key]);
 
-        this.contextualEditors(editors);
+        this.contextualCommands(commands);
     }
 
-    public removeContextualEditor(editorName: string): void {
-        if (!this.contextualEditorsBag[editorName]) {
+    public removeContextualCommands(editorName: string): void {
+        if (!this.contextualCommandsBag[editorName]) {
             return;
         }
 
-        delete this.contextualEditorsBag[editorName];
+        delete this.contextualCommandsBag[editorName];
 
-        const editors = Object.keys(this.contextualEditorsBag).map(key => this.contextualEditorsBag[key]);
+        const editors = Object.keys(this.contextualCommandsBag).map(key => this.contextualCommandsBag[key]);
 
-        this.contextualEditors(editors);
+        this.contextualCommands(editors);
     }
 
-    public clearContextualEditors(): void {
+    public clearContextualCommands(): void {
         if (this.mode === ViewManagerMode.configure) {
             return;
         }
 
-        this.contextualEditorsBag = {};
-        this.contextualEditors([]);
+        this.contextualCommandsBag = {};
+        this.contextualCommands([]);
         this.highlightedElement(null);
         this.setSplitter(null);
         this.selectedElement(null);
@@ -462,15 +462,15 @@ export class DefaultViewManager implements ViewManager {
         this.splitterElement(config);
     }
 
-    public setSelectedElement(config: IHighlightConfig, contextualEditor: IContextCommandSet): void {
+    public setSelectedElement(config: IHighlightConfig, contextualCommand: IContextCommandSet): void {
         if (this.mode === ViewManagerMode.preview) {
             return;
         }
-        this.clearContextualEditors();
+        this.clearContextualCommands();
         this.closeView();
         this.selectedElement(null);
         this.selectedElement(config);
-        this.selectedElementContextualEditor(contextualEditor);
+        this.selectedElementContextualEditor(contextualCommand);
 
         if (this.mode !== ViewManagerMode.configure) {
             this.mode = ViewManagerMode.selected;
@@ -488,7 +488,7 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public setViewport(viewport: string): void {
-        this.clearContextualEditors();
+        this.clearContextualCommands();
         this.viewport(viewport);
     }
 
@@ -517,26 +517,27 @@ export class DefaultViewManager implements ViewManager {
         this.shutter(false);
     }
 
-    public pauseContextualEditors(): void {
+    public pauseContextualCommands(...except: IContextCommand[]): void {
         this.mode = ViewManagerMode.pause;
         this.highlightedElement(null);
 
-        this.contextualEditorsBag = {};
-        this.contextualEditors([]);
-        this.highlightedElement(null);
-        this.setSplitter(null);
-        this.selectedElement(null);
-        this.selectedElementContextualEditor(null);
+
+        // this.contextualCommandsBag = {};
+        //    this.contextualCommands([]);
+        // this.highlightedElement(null);
+        // this.setSplitter(null);
+        // this.selectedElement(null);
+        // this.selectedElementContextualEditor(null);
     }
 
     public resumeContextualEditors(): void {
         this.mode = ViewManagerMode.selecting;
         this.designTime(true);
-        this.clearContextualEditors();
+        this.clearContextualCommands();
     }
 
     public beginDrag(session: DragSession): void {
-        this.clearContextualEditors();
+        this.clearContextualCommands();
         this.closeView();
         this.dragSession(session);
         this.hideToolboxes();

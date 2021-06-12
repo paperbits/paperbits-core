@@ -14,7 +14,7 @@ import { PopupHost } from "../../../popup/ko/popupHost";
 
 @Component({
     selector: "page-host",
-    template: "<!-- ko if: popupHostViewModel --><!-- ko widget: popupHostViewModel --><!-- /ko --><!-- /ko -->      <!-- ko if: contentViewModel --><!-- ko widget: contentViewModel, grid: {} --><!-- /ko --><!-- /ko -->"
+    template: "<!-- ko if: popupHostViewModel --><!-- ko widget: popupHostViewModel --><!-- /ko --><!-- /ko --><!-- ko if: contentViewModel --><!-- ko widget: contentViewModel, grid: {} --><!-- /ko --><!-- /ko -->"
 })
 export class PageHost {
     public readonly contentViewModel: ko.Observable<ContentViewModel>;

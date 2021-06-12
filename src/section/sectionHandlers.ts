@@ -44,7 +44,7 @@ export class SectionHandlers {
                             context.parentModel.widgets.splice(index, 0, sectionModel);
                             context.parentBinding.applyChanges();
 
-                            this.viewManager.clearContextualEditors();
+                            this.viewManager.clearContextualCommands();
                             this.eventManager.dispatchEvent("onContentUpdate");
                         }
                     }
@@ -56,7 +56,7 @@ export class SectionHandlers {
                 callback: () => {
                     context.parentModel.widgets.remove(context.model);
                     context.parentBinding.applyChanges();
-                    this.viewManager.clearContextualEditors();
+                    this.viewManager.clearContextualCommands();
                     this.eventManager.dispatchEvent("onContentUpdate");
                 }
             },
@@ -109,7 +109,7 @@ export class SectionHandlers {
                             sectionModel.widgets.push(newRowModel);
                             sectionBinding.applyChanges();
 
-                            this.viewManager.clearContextualEditors();
+                            this.viewManager.clearContextualCommands();
                             this.eventManager.dispatchEvent("onContentUpdate");
                         }
                     }

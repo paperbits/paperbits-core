@@ -1,14 +1,15 @@
-import { PopupHost } from "./popupHost";
-import { ModelBinderSelector, ViewModelBinder } from "@paperbits/common/widgets";
-import { IWidgetBinding } from "@paperbits/common/editing";
-import { PopupHostModel } from "../popupHostModel";
-import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
-import { EventManager } from "@paperbits/common/events";
 import { Bag } from "@paperbits/common";
-import { PopupModelBinder } from "../popupModelBinder";
-import { IPopupService } from "@paperbits/common/popups";
+import { IWidgetBinding } from "@paperbits/common/editing";
+import { EventManager } from "@paperbits/common/events";
 import { Query } from "@paperbits/common/persistence";
+import { IPopupService } from "@paperbits/common/popups";
+import { ViewManager } from "@paperbits/common/ui";
+import { ModelBinderSelector, ViewModelBinder } from "@paperbits/common/widgets";
+import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
+import { PopupHostModel } from "../popupHostModel";
 import { PopupHostModelBinder } from "../popupHostModelBinder";
+import { PopupModelBinder } from "../popupModelBinder";
+import { PopupHost } from "./popupHost";
 
 export class PopupHostViewModelBinder implements ViewModelBinder<PopupHostModel, PopupHost> {
     constructor(
@@ -17,7 +18,8 @@ export class PopupHostViewModelBinder implements ViewModelBinder<PopupHostModel,
         private readonly modelBinderSelector: ModelBinderSelector,
         private readonly popupModelBinder: PopupModelBinder,
         private readonly popupService: IPopupService,
-        private readonly popupHostModelBinder: PopupHostModelBinder
+        private readonly popupHostModelBinder: PopupHostModelBinder,
+        private readonly viewManager: ViewManager
     ) { }
 
     private async createPopup(popupKey: string): Promise<any> {
@@ -31,24 +33,34 @@ export class PopupHostViewModelBinder implements ViewModelBinder<PopupHostModel,
         let savingTimeout;
 
         const updateContent = async (): Promise<void> => {
+            /**
+             * TODO: Temporary hack. With current model it's impossible to tell which content (page or content)
+             * is being modified, so we look for active popup.
+             */
+            const activePopup: HTMLElement = this.viewManager.getHostDocument().querySelector(".popup.show");
+
+            if (!activePopup) {
+                return;
+            }
+
             const contentContract = {
-                // type: model.type,
                 nodes: []
             };
 
-            model.widgets.forEach(section => {
-                const modelBinder = this.modelBinderSelector.getModelBinderByModel(section);
-                contentContract.nodes.push(modelBinder.modelToContract(section));
+            model.widgets.forEach(widget => {
+                const modelBinder = this.modelBinderSelector.getModelBinderByModel(widget);
+                contentContract.nodes.push(modelBinder.modelToContract(widget));
             });
 
             const popupNodes = contentContract.nodes;
+            const popupIdentifier = activePopup.id.replace("popups", "");
+            const popupKey = `popups/${popupIdentifier}`;
+            const popupNode = popupNodes.find(x => x.key.replace("files/", "popups/") === popupKey);
 
-            for (const popupNode of popupNodes) {
-                await this.popupService.updatePopupContent(popupNode["key"].replace("files/", "popups/"), popupNode);
-            }
+            await this.popupService.updatePopupContent(popupKey, popupNode);
         };
 
-        const scheduleUpdate = (): void => {
+        const scheduleUpdate = (key): void => {
             clearTimeout(savingTimeout);
             savingTimeout = setTimeout(updateContent, 500);
         };

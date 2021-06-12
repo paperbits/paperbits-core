@@ -39,7 +39,7 @@ export class CardHandlers implements IWidgetHandler {
                             context.parentBinding.model.widgets.splice(index, 0, newWidgetModel);
                             context.parentBinding.applyChanges();
 
-                            this.viewManager.clearContextualEditors();
+                            this.viewManager.clearContextualCommands();
                         }
                     }
                 }
@@ -50,7 +50,7 @@ export class CardHandlers implements IWidgetHandler {
                 callback: () => {
                     context.parentModel.widgets.remove(context.model);
                     context.parentBinding.applyChanges();
-                    this.viewManager.clearContextualEditors();
+                    this.viewManager.clearContextualCommands();
                     this.eventManager.dispatchEvent("onContentUpdate");
                 }
             },
@@ -86,7 +86,7 @@ export class CardHandlers implements IWidgetHandler {
                             context.model.widgets.push(widget);
                             context.binding.applyChanges();
                             this.eventManager.dispatchEvent("onContentUpdate");
-                            this.viewManager.clearContextualEditors();
+                            this.viewManager.clearContextualCommands();
                         }
                     }
                 }

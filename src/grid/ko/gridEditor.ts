@@ -7,7 +7,6 @@ import { EventManager } from "@paperbits/common/events";
 import { Router } from "@paperbits/common/routing";
 import { ContentModel } from "../../content";
 import { PopupHostModel } from "../../popup/popupHostModel";
-import { GridModel } from "../../grid-layout-section";
 import { SectionModel } from "../../section";
 
 
@@ -17,7 +16,7 @@ export class GridEditor {
     private scrollTimeout: any;
     private pointerX: number;
     private pointerY: number;
-    private selectedContextualEditor: IContextCommandSet;
+    private activeContextualCommands: IContextCommandSet;
     private actives: object;
     private ownerDocument: Document;
 
@@ -28,7 +27,7 @@ export class GridEditor {
         private readonly eventManager: EventManager,
         private readonly router: Router
     ) {
-        this.rerenderEditors = this.rerenderEditors.bind(this);
+        this.renderContextualCommands = this.renderContextualCommands.bind(this);
         this.onPointerDown = this.onPointerDown.bind(this);
         this.initialize = this.initialize.bind(this);
         this.dispose = this.dispose.bind(this);
@@ -92,43 +91,43 @@ export class GridEditor {
                     return;
                 }
 
-                const contextualEditor = this.getContextCommands(parentGridItem.element, "top");
+                const contextualCommands = this.getContextCommands(parentGridItem.element, "top");
 
-                if (!contextualEditor) {
+                if (!contextualCommands) {
                     return;
                 }
 
                 const config: IHighlightConfig = {
                     element: parentGridItem.element,
                     text: parentGridItem.binding.displayName,
-                    color: contextualEditor.color
+                    color: contextualCommands.color
                 };
 
-                this.viewManager.setSelectedElement(config, contextualEditor);
-                this.selectedContextualEditor = contextualEditor;
+                this.viewManager.setSelectedElement(config, contextualCommands);
+                this.activeContextualCommands = contextualCommands;
             }
         };
 
-        let contextualEditor: IContextCommandSet;
+        let contextualCommands: IContextCommandSet;
 
         if (context.binding.handler) {
             const handler = this.widgetService.getWidgetHandler(context.binding.handler);
 
             if (handler.getContextCommands) {
-                contextualEditor = handler.getContextCommands(context);
+                contextualCommands = handler.getContextCommands(context);
             }
         }
 
-        if (!contextualEditor) {
-            contextualEditor = this.getDefaultContextCommands(context);
+        if (!contextualCommands) {
+            contextualCommands = this.getDefaultContextCommands(context);
         }
 
-        contextualEditor.element = element;
-        contextualEditor.selectCommands = contextualEditor.selectCommands || null;
-        contextualEditor.hoverCommands = contextualEditor.hoverCommands || null;
-        contextualEditor.deleteCommand = contextualEditor.deleteCommand || null;
+        contextualCommands.element = element;
+        contextualCommands.selectCommands = contextualCommands.selectCommands || null;
+        contextualCommands.hoverCommands = contextualCommands.hoverCommands || null;
+        contextualCommands.deleteCommand = contextualCommands.deleteCommand || null;
 
-        return contextualEditor;
+        return contextualCommands;
     }
 
     private isModelSelected(binding: IWidgetBinding<any, any>): boolean {
@@ -244,20 +243,20 @@ export class GridEditor {
             throw new Error(`Parameter "item" not specified.`);
         }
 
-        const contextualEditor = this.getContextCommands(item.element, "top");
+        const commandSet = this.getContextCommands(item.element, "top");
 
-        if (!contextualEditor) {
+        if (!commandSet) {
             return;
         }
 
         const config: IHighlightConfig = {
             element: item.element,
             text: item.binding.displayName,
-            color: contextualEditor.color
+            color: commandSet.color
         };
 
-        this.viewManager.setSelectedElement(config, contextualEditor);
-        this.selectedContextualEditor = contextualEditor;
+        this.viewManager.setSelectedElement(config, commandSet);
+        this.activeContextualCommands = commandSet;
     }
 
     private onPointerMove(event: PointerEvent): void {
@@ -471,8 +470,8 @@ export class GridEditor {
     }
 
     private onDelete(): void {
-        if (this.viewManager.mode === ViewManagerMode.selected && this.selectedContextualEditor && this.selectedContextualEditor.deleteCommand) {
-            this.selectedContextualEditor.deleteCommand.callback();
+        if (this.viewManager.mode === ViewManagerMode.selected && this.activeContextualCommands && this.activeContextualCommands.deleteCommand) {
+            this.activeContextualCommands.deleteCommand.callback();
         }
     }
 
@@ -482,7 +481,7 @@ export class GridEditor {
         }
 
         if (!this.scrolling) {
-            this.viewManager.clearContextualEditors();
+            this.viewManager.clearContextualCommands();
         }
 
         this.scrolling = true;
@@ -528,7 +527,7 @@ export class GridEditor {
             }
         }
 
-        this.rerenderEditors(this.pointerX, this.pointerY, elements);
+        this.renderContextualCommands(this.pointerX, this.pointerY, elements);
     }
 
     private getDefaultContextCommands(context: WidgetContext): IContextCommandSet {
@@ -553,7 +552,7 @@ export class GridEditor {
                             context.parentBinding.model.widgets.splice(index, 0, newWidgetModel);
                             context.parentBinding.applyChanges();
 
-                            this.viewManager.clearContextualEditors();
+                            this.viewManager.clearContextualCommands();
                         }
                     }
                 }
@@ -564,7 +563,7 @@ export class GridEditor {
                 callback: () => {
                     context.parentModel.widgets.remove(context.model);
                     context.parentBinding.applyChanges();
-                    this.viewManager.clearContextualEditors();
+                    this.viewManager.clearContextualCommands();
                 },
             },
             selectCommands: context.binding.editor && context.binding.applyChanges && [{
@@ -588,7 +587,7 @@ export class GridEditor {
         return contextCommands;
     }
 
-    private async rerenderEditors(pointerX: number, pointerY: number, elements: HTMLElement[]): Promise<void> {
+    private async renderContextualCommands(pointerX: number, pointerY: number, elements: HTMLElement[]): Promise<void> {
         let highlightedElement: HTMLElement;
         let highlightedText: string;
         let highlightColor: string;
@@ -608,6 +607,7 @@ export class GridEditor {
                 continue;
             }
 
+     
             const index = tobeDeleted.indexOf(widgetBinding.name);
             tobeDeleted.splice(index, 1);
 
@@ -619,12 +619,12 @@ export class GridEditor {
             const quadrant = Utils.pointerToClientQuadrant(pointerX, pointerY, element);
             const half = quadrant.vertical;
             const active = this.actives[widgetBinding.name];
-            const contextualEditor = this.getContextCommands(element, half);
+            const contextualCommandSet = this.getContextCommands(element, half);
 
-            highlightColor = contextualEditor.color;
+            highlightColor = contextualCommandSet.color;
 
             if (!active || element !== active.element || half !== active.half) {
-                this.viewManager.setContextualEditor(widgetBinding.name, contextualEditor);
+                this.viewManager.setContextualCommands(widgetBinding.name, contextualCommandSet);
 
                 this.actives[widgetBinding.name] = {
                     element: element,
@@ -634,7 +634,7 @@ export class GridEditor {
         }
 
         tobeDeleted.forEach(x => {
-            this.viewManager.removeContextualEditor(x);
+            this.viewManager.removeContextualCommands(x);
             delete this.actives[x];
         });
 
