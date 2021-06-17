@@ -3,7 +3,6 @@ import { IWidgetBinding } from "@paperbits/common/editing";
 import { EventManager } from "@paperbits/common/events";
 import { Query } from "@paperbits/common/persistence";
 import { IPopupService } from "@paperbits/common/popups";
-import { ViewManager } from "@paperbits/common/ui";
 import { ModelBinderSelector, ViewModelBinder } from "@paperbits/common/widgets";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PopupHostModel } from "../popupHostModel";
@@ -18,8 +17,7 @@ export class PopupHostViewModelBinder implements ViewModelBinder<PopupHostModel,
         private readonly modelBinderSelector: ModelBinderSelector,
         private readonly popupModelBinder: PopupModelBinder,
         private readonly popupService: IPopupService,
-        private readonly popupHostModelBinder: PopupHostModelBinder,
-        private readonly viewManager: ViewManager
+        private readonly popupHostModelBinder: PopupHostModelBinder
     ) { }
 
     private async createPopup(popupKey: string): Promise<any> {
@@ -37,7 +35,11 @@ export class PopupHostViewModelBinder implements ViewModelBinder<PopupHostModel,
              * TODO: Temporary hack. With current model it's impossible to tell which content (page or content)
              * is being modified, so we look for active popup.
              */
-            const activePopup: HTMLElement = this.viewManager.getHostDocument().querySelector(".popup.show");
+            if (!bindingContext.getHostDocument) {
+                return;
+            }
+
+            const activePopup: HTMLElement = bindingContext.getHostDocument().querySelector(".popup.show");
 
             if (!activePopup) {
                 return;
@@ -68,11 +70,6 @@ export class PopupHostViewModelBinder implements ViewModelBinder<PopupHostModel,
         const addPopup = async (popupKey: string): Promise<void> => {
             model.widgets.push(await this.createPopup(popupKey));
             binding.applyChanges();
-        };
-
-        const removePopup = () => {
-            // model.widgets.splice(this.createPopup());
-            // binding.applyChanges();
         };
 
         const binding: IWidgetBinding<PopupHostModel, PopupHost> = {

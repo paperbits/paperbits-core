@@ -74,6 +74,7 @@ import { PopupSelector } from "./workshops/popups/ko";
 import { PopupPermalinkResolver, PopupService } from "@paperbits/common/popups";
 import { PopupHostModelBinder } from "./popup/popupHostModelBinder";
 import { DismissButtonDesignModule } from "./dismiss-button/dismissButton.design.module";
+import { StickToBindingHandler } from "./ko/bindingHandlers/bindingHandlers.stickTo";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -168,6 +169,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindToCollection("autostart", DraggablesBindingHandler);
         injector.bindToCollection("autostart", GridBindingHandler);
         injector.bindToCollection("autostart", LightboxBindingHandler);
+        injector.bindToCollection("autostart", StickToBindingHandler);
         injector.bindToCollection("autostart", Hinter);
         injector.bindInstance("reservedPermalinks", ["/", "/404", "/500"]);
         injector.resolve("workshopSections");

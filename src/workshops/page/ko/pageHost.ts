@@ -95,6 +95,9 @@ export class PageHost {
                         await this.pageService.updatePageContent(pageContract.key, updatedContentContract);
                     }
                 }
+            },
+            getHostedDocument: () => {
+                return this.viewManager.getHostDocument();
             }
         };
 

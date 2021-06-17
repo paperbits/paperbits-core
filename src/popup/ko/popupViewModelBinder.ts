@@ -1,13 +1,13 @@
-import { PopupViewModel } from "./popup";
-import { ViewModelBinder } from "@paperbits/common/widgets";
+import { Bag } from "@paperbits/common";
 import { IWidgetBinding } from "@paperbits/common/editing";
-import { PopupModel } from "../popupModel";
+import { EventManager } from "@paperbits/common/events";
+import { StyleCompiler } from "@paperbits/common/styles";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { PopupHandlers } from "../popupHandlers";
-import { EventManager } from "@paperbits/common/events";
-import { StyleCompiler } from "@paperbits/common/styles";
-import { Bag } from "@paperbits/common";
+import { PopupModel } from "../popupModel";
+import { PopupViewModel } from "./popup";
 
 export class PopupViewModelBinder implements ViewModelBinder<PopupModel, PopupViewModel> {
     constructor(
@@ -61,8 +61,6 @@ export class PopupViewModelBinder implements ViewModelBinder<PopupModel, PopupVi
                 handler: PopupHandlers,
                 applyChanges: async () => {
                     await this.modelToViewModel(model, viewModel, bindingContext);
-
-                    debugger;
                     this.eventManager.dispatchEvent("onContentUpdate", model.key.replace("files/", "popups/"));
                 }
             };
