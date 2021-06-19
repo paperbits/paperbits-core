@@ -5,7 +5,7 @@ import template from "./gridCellEditor.html";
 import { ViewManager } from "@paperbits/common/ui";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { GridCellModel } from "../gridCellModel";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { ContainerStylePluginConfig, BoxStylePluginConfig } from "@paperbits/styles/contracts";
 
 
@@ -34,7 +34,7 @@ export class GridCellEditor {
     @OnMounted()
     public initialize(): void {
        this.updateObservables();
-       this.eventManager.addEventListener("onViewportChange", this.updateObservables);
+       this.eventManager.addEventListener(Events.ViewportChange, this.updateObservables);
     }
 
     private updateObservables(): void { 

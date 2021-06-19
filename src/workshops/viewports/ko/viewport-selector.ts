@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import template from "./viewport-selector.html";
 import { ViewManager } from "@paperbits/common/ui";
 import { Component } from "@paperbits/common/ko/decorators";
-import { EventManager, CommonEvents } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 
 @Component({
     selector: "viewport-selector",
@@ -24,31 +24,31 @@ export class ViewportSelector {
     public setXl(): void {
         this.viewport("xl");
         this.viewManager.setViewport("xl");
-        this.eventManager.dispatchEvent(CommonEvents.onViewportChange, "xl");  // TODO: onViewportChange should be triggered by browser resizing as well
+        this.eventManager.dispatchEvent(Events.ViewportChange, "xl");  // TODO: onViewportChange should be triggered by browser resizing as well
     }
 
     public setLg(): void {
         this.viewport("lg");
         this.viewManager.setViewport("lg");
-        this.eventManager.dispatchEvent(CommonEvents.onViewportChange, "lg");
+        this.eventManager.dispatchEvent(Events.ViewportChange, "lg");
     }
 
     public setMd(): void {
         this.viewport("md");
         this.viewManager.setViewport("md");
-        this.eventManager.dispatchEvent(CommonEvents.onViewportChange, "md");
+        this.eventManager.dispatchEvent(Events.ViewportChange, "md");
     }
 
     public setSm(): void {
         this.viewport("sm");
         this.viewManager.setViewport("sm");
-        this.eventManager.dispatchEvent(CommonEvents.onViewportChange, "sm");
+        this.eventManager.dispatchEvent(Events.ViewportChange, "sm");
     }
 
     public setXs(): void {
         this.viewport("xs");
         this.viewManager.setViewport("xs");
-        this.eventManager.dispatchEvent(CommonEvents.onViewportChange, "xs");
+        this.eventManager.dispatchEvent(Events.ViewportChange, "xs");
     }
 
     public zoomOut(): void {

@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import template from "./tableCellEditor.html";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { TableCellModel } from "../tableCellModel";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { ContainerStylePluginConfig, BoxStylePluginConfig } from "@paperbits/styles/contracts";
 import { StyleHelper } from "@paperbits/styles";
 import { GridCellStylePluginConfig } from "@paperbits/styles/plugins/grid/gridCellStylePluginConfig";
@@ -31,7 +31,7 @@ export class TableCellEditor {
     @OnMounted()
     public initialize(): void {
         this.updateObservables();
-        this.eventManager.addEventListener("onViewportChange", this.updateObservables);
+        this.eventManager.addEventListener(Events.ViewportChange, this.updateObservables);
     }
 
     private updateObservables(): void {

@@ -6,7 +6,7 @@ import { SizeStylePluginConfig } from "@paperbits/styles/contracts";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { StyleHelper } from "@paperbits/styles";
 import { ViewManager } from "@paperbits/common/ui";
-import { CommonEvents, EventManager } from "@paperbits/common/events";
+import { Events, EventManager } from "@paperbits/common/events";
 import { MediaContract } from "@paperbits/common/media";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 import { HyperlinkModel, IPermalinkResolver } from "@paperbits/common/permalinks";
@@ -70,7 +70,7 @@ export class MapEditor {
         this.mapType(this.model.mapType);
 
         this.updateObservables();
-        this.eventManager.addEventListener(CommonEvents.onViewportChange, this.updateObservables);
+        this.eventManager.addEventListener(Events.ViewportChange, this.updateObservables);
 
         this.location
             .extend(ChangeRateLimit)

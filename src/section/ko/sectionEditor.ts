@@ -14,7 +14,7 @@ import {
 } from "@paperbits/styles/contracts";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { EventManager } from "@paperbits/common/events/eventManager";
-import { CommonEvents } from "@paperbits/common/events";
+import { Events } from "@paperbits/common/events";
 import { StyleHelper } from "@paperbits/styles";
 
 @Component({
@@ -64,7 +64,7 @@ export class SectionEditor {
             .extend(ChangeRateLimit)
             .subscribe(this.applyChanges);
 
-        this.eventManager.addEventListener(CommonEvents.onViewportChange, this.updateObservables);
+        this.eventManager.addEventListener(Events.ViewportChange, this.updateObservables);
     }
 
     private updateObservables(): void {

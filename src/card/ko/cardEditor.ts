@@ -7,7 +7,7 @@ import { StyleService, StyleHelper } from "@paperbits/styles";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { CardModel } from "../cardModel";
 import { BackgroundStylePluginConfig, TypographyStylePluginConfig, ContainerStylePluginConfig } from "@paperbits/styles/contracts";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 
 
 @Component({
@@ -46,7 +46,7 @@ export class CardEditor implements WidgetEditor<CardModel> {
         this.updateObservables();
 
         this.appearanceStyle.subscribe(this.onAppearanceChange);
-        this.eventManager.addEventListener("onViewportChange", this.updateObservables);
+        this.eventManager.addEventListener(Events.ViewportChange, this.updateObservables);
     }
 
     private updateObservables(): void {
