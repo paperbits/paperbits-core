@@ -1,4 +1,5 @@
 import { coerce } from "@paperbits/common";
+import { Events } from "@paperbits/common/events";
 
 export class TabPanelHTMLElement extends HTMLElement {
     constructor() {
@@ -42,11 +43,11 @@ export class TabPanelHTMLElement extends HTMLElement {
     }
 
     public connectedCallback(): void {
-        this.addEventListener("click", this.onClick, true);
+        this.addEventListener(Events.Click, this.onClick, true);
         setTimeout(() => this.setActiveItem(0), 10);
     }
 
     public disconnectedCallback(): void {
-        this.removeEventListener("click", this.onClick, true);
+        this.removeEventListener(Events.Click, this.onClick, true);
     }
 }

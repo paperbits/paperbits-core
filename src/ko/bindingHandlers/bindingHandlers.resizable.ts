@@ -1,5 +1,5 @@
 import * as ko from "knockout";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { isNumber } from "util";
 import { ResizableOptions } from "@paperbits/common/ui/resizableOptions";
 
@@ -193,24 +193,24 @@ export class ResizableBindingHandler {
                     const topResizeHandle = element.ownerDocument.createElement("div");
                     topResizeHandle.classList.add("resize-handle", "resize-handle-top");
                     element.appendChild(topResizeHandle);
-                    topResizeHandle.addEventListener("mousedown", (e) => onPointerDown(e, "top"));
+                    topResizeHandle.addEventListener(Events.MouseDown, (e) => onPointerDown(e, "top"));
 
                     const bottomResizeHandle = element.ownerDocument.createElement("div");
                     bottomResizeHandle.classList.add("resize-handle", "resize-handle-bottom");
                     element.appendChild(bottomResizeHandle);
-                    bottomResizeHandle.addEventListener("mousedown", (e) => onPointerDown(e, "bottom"));
+                    bottomResizeHandle.addEventListener(Events.MouseDown, (e) => onPointerDown(e, "bottom"));
                 }
 
                 if (directions.includes("horizontally")) {
                     const rightResizeHandle = element.ownerDocument.createElement("div");
                     rightResizeHandle.classList.add("resize-handle", "resize-handle-right");
                     element.appendChild(rightResizeHandle);
-                    rightResizeHandle.addEventListener("mousedown", (e) => onPointerDown(e, "right"));
+                    rightResizeHandle.addEventListener(Events.MouseDown, (e) => onPointerDown(e, "right"));
 
                     const leftResizeHandle = element.ownerDocument.createElement("div");
                     leftResizeHandle.classList.add("resize-handle", "resize-handle-left");
                     element.appendChild(leftResizeHandle);
-                    leftResizeHandle.addEventListener("mousedown", (e) => onPointerDown(e, "left"));
+                    leftResizeHandle.addEventListener(Events.MouseDown, (e) => onPointerDown(e, "left"));
                 }
 
                 ko.utils.domNodeDisposal.addDisposeCallback(element, () => {

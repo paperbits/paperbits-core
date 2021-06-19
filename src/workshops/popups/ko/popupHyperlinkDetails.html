@@ -1,3 +1,15 @@
+<div class="form-group">
+    <label for="targetValue" class="form-label">
+        Popup opens on:
+    </label>
+    <label class="form-label">
+        <input type="radio" name="triggerEvent" value="click" data-bind="checked: triggerEvent" /> Click
+    </label>
+    <label class="form-label">
+        <input type="radio" name="triggerEvent" value="hover" data-bind="checked: triggerEvent" /> Hover
+    </label>
+</div>
+
 <div class="btn-group">
     <button class="btn btn-round" data-bind="click: openPopup">Open popup</button>
 </div>

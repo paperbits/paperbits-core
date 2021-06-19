@@ -1,26 +1,24 @@
 import { Keys } from "@paperbits/common";
 import * as Arrays from "@paperbits/common/arrays";
-import { Events } from "@paperbits/common/events";
-import { AriaAttributes } from "@paperbits/common/html";
+import { Events, MouseButton } from "@paperbits/common/events";
+import { AriaAttributes, DataAttributes } from "@paperbits/common/html";
+import { TriggerEvent } from "./triggerEvent";
 
-const toggleAtributeName = "data-toggle";
-const targetAttributeName = "data-target";
-const dismissAttributeName = "data-dismiss";
+
 const showClassName = "show";
-const popupContainerClass = ".popup-container";
+const popupContainerClass = "popup-container";
 const onPopupRepositionRequestedEvent = "onPopupRepositionRequested";
 const onPopupRequestedEvent = "onPopupRequested";
-
 
 
 interface ToggleableHandle {
     close(): void;
 }
 
-const openTogglable = (toggleElement: HTMLElement, toggleType: string, toggleMethod: string): void => {
+const openTogglable = (toggleElement: HTMLElement, toggleType: string, triggerEvent: TriggerEvent): void => {
     switch (toggleType) {
         case "popup":
-            const targetSelector = toggleElement.getAttribute(targetAttributeName);
+            const targetSelector = toggleElement.getAttribute(DataAttributes.Target);
 
             if (!targetSelector) {
                 return;
@@ -32,7 +30,7 @@ const openTogglable = (toggleElement: HTMLElement, toggleType: string, toggleMet
                 return;
             }
 
-            onShowPopup(toggleElement, targetElement, toggleMethod);
+            onShowPopup(toggleElement, targetElement, triggerEvent);
             break;
 
         case "dropdown": {
@@ -53,12 +51,12 @@ const openTogglable = (toggleElement: HTMLElement, toggleType: string, toggleMet
 };
 
 const onClick = (event: MouseEvent): void => {
-    if (event.button !== 0) {
+    if (event.button !== MouseButton.Main) {
         return;
     }
 
-    const clickedElement = <HTMLElement>event.target;
-    const toggleElement = <HTMLElement>clickedElement.closest(`[${toggleAtributeName}]`);
+    const eventTarget = <HTMLElement>event.target;
+    const toggleElement = <HTMLElement>eventTarget.closest(`[${DataAttributes.Toggle}]`);
 
     if (!toggleElement) {
         return;
@@ -66,27 +64,30 @@ const onClick = (event: MouseEvent): void => {
 
     event.preventDefault();
 
-    const toggleType = toggleElement.getAttribute(toggleAtributeName);
-    openTogglable(toggleElement, toggleType, "click");
+    const toggleType = toggleElement.getAttribute(DataAttributes.Toggle);
+    openTogglable(toggleElement, toggleType, TriggerEvent.Click);
 };
 
 const onMouseEnter = (event: MouseEvent): void => {
-    const clickedElement = <HTMLElement>event.target;
-    const toggleElement = <HTMLElement>clickedElement.closest(`[${toggleAtributeName}]`);
+    const eventTarget = <HTMLElement>event.target;
+    const toggleElement = <HTMLElement>eventTarget.closest(`[${DataAttributes.Toggle}]`);
 
     if (!toggleElement) {
         return;
     }
 
+    const triggerEvent = toggleElement.getAttribute(DataAttributes.TriggerEvent);
+
+    if (triggerEvent !== TriggerEvent.Hover) {
+        return;
+    }
+
     event.preventDefault();
 
-    const toggleType = toggleElement.getAttribute(toggleAtributeName);
-    openTogglable(toggleElement, toggleType, "hover");
+    const toggleType = toggleElement.getAttribute(DataAttributes.Toggle);
+    openTogglable(toggleElement, toggleType, TriggerEvent.Hover);
 };
 
-const onMouseLeave = (event: MouseEvent): void => {
-    ///
-};
 
 const onKeyDown = (event: KeyboardEvent) => {
     if (event.keyCode !== Keys.Enter && event.keyCode !== Keys.Space) {
@@ -99,26 +100,26 @@ const onShowTogglable = (toggleElement: HTMLElement, targetElement: HTMLElement)
         return;
     }
 
-    const dismissElement = targetElement.querySelector(`[${dismissAttributeName}]`);
+    const dismissElement = targetElement.querySelector(`[${DataAttributes.Dismiss}]`);
 
     const openTarget = (): void => {
         targetElement.classList.add(showClassName);
         toggleElement.setAttribute(AriaAttributes.expanded, "true");
 
-        setImmediate(() => addEventListener("mousedown", clickOutside));
+        setImmediate(() => addEventListener(Events.MouseDown, clickOutside));
 
         if (dismissElement) {
-            dismissElement.addEventListener("mousedown", closeTarget);
+            dismissElement.addEventListener(Events.MouseDown, closeTarget);
         }
     };
 
     const closeTarget = (): void => {
         targetElement.classList.remove(showClassName);
-        removeEventListener("mousedown", clickOutside);
+        removeEventListener(Events.MouseDown, clickOutside);
         toggleElement.setAttribute(AriaAttributes.expanded, "false");
 
         if (dismissElement) {
-            dismissElement.removeEventListener("mousedown", clickOutside);
+            dismissElement.removeEventListener(Events.MouseDown, clickOutside);
         }
     };
 
@@ -149,7 +150,7 @@ const onShowTogglable = (toggleElement: HTMLElement, targetElement: HTMLElement)
     return togglableHandle;
 };
 
-const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement, toggleMethod: string): ToggleableHandle => {
+const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement, triggerEvent: TriggerEvent): ToggleableHandle => {
     if (!toggleElement || !targetElement) {
         return;
     }
@@ -162,7 +163,7 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement, tog
         return;
     }
 
-    const popupContainerElement: HTMLElement = targetElement.querySelector(popupContainerClass);
+    const popupContainerElement: HTMLElement = targetElement.querySelector(`.${popupContainerClass}`);
 
     const repositionPopup = (event?: CustomEvent): void => {
         const computedStyles = getComputedStyle(popupContainerElement);
@@ -170,7 +171,7 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement, tog
         if (computedStyles.position === "absolute") {
             const actualToggleElement: HTMLElement = event?.detail?.element || toggleElement;
             const toggleElementRect = actualToggleElement.getBoundingClientRect();
-            const popupContainerElement: HTMLElement = targetElement.querySelector(popupContainerClass);
+            const popupContainerElement: HTMLElement = targetElement.querySelector(`.${popupContainerClass}`);
             const popupContainerElementRect = popupContainerElement.getBoundingClientRect();
             const requestedPosition = actualToggleElement.getAttribute("data-position") || "bottom";
 
@@ -207,10 +208,10 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement, tog
         popupContainerElement.removeAttribute("style");
     };
 
-    const dismissElements: HTMLElement[] = Arrays.coerce(targetElement.querySelectorAll(`[${dismissAttributeName}]`));
+    const dismissElements: HTMLElement[] = Arrays.coerce(targetElement.querySelectorAll(`[${DataAttributes.Dismiss}]`));
 
 
-    const chechOutsideClick = (event: MouseEvent) => {
+    const checkOutsideClick = (event: MouseEvent) => {
         const eventTarget = <HTMLElement>event.target;
 
         if (eventTarget.nodeName === "BODY") {
@@ -220,6 +221,12 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement, tog
         const isTargetClicked = popupContainerElement.contains(eventTarget);
 
         if (isTargetClicked) {
+            return;
+        }
+
+        const isToggleClicked = toggleElement.contains(eventTarget);
+
+        if (isToggleClicked) {
             return;
         }
 
@@ -255,18 +262,16 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement, tog
     };
 
     const closeTarget = (): void => {
-        console.log("Close");
-
         for (const dismissElement of dismissElements) {
             dismissElement.removeEventListener(Events.MouseDown, closeTarget);
         }
 
-        switch (toggleMethod) {
-            case "click":
-                targetElement.ownerDocument.removeEventListener(Events.MouseDown, chechOutsideClick);
+        switch (triggerEvent) {
+            case TriggerEvent.Click:
+                targetElement.ownerDocument.removeEventListener(Events.MouseDown, checkOutsideClick);
                 break;
 
-            case "hover":
+            case TriggerEvent.Hover:
                 targetElement.ownerDocument.removeEventListener(Events.MouseMove, checkOutsideMove);
                 break;
         }
@@ -279,8 +284,6 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement, tog
     };
 
     const openTarget = (): void => {
-        console.log("Open");
-
         for (const dismissElement of dismissElements) {
             dismissElement.addEventListener(Events.MouseDown, closeTarget);
         }
@@ -289,12 +292,12 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement, tog
         toggleElement.setAttribute(AriaAttributes.expanded, "true");
 
         setImmediate(() => {
-            switch (toggleMethod) {
-                case "click":
-                    targetElement.ownerDocument.addEventListener(Events.MouseDown, chechOutsideClick);
+            switch (triggerEvent) {
+                case TriggerEvent.Click:
+                    targetElement.ownerDocument.addEventListener(Events.MouseDown, checkOutsideClick);
                     break;
 
-                case "hover":
+                case TriggerEvent.Hover:
                     targetElement.ownerDocument.addEventListener(Events.MouseMove, checkOutsideMove);
                     break;
             }
@@ -334,11 +337,10 @@ const onPopupRequest = (event: CustomEvent): void => {
         openTargetElement.classList.remove(showClassName);
     }
 
-    onShowPopup(triggerElement, targetElement, "click");
+    onShowPopup(triggerElement, targetElement, TriggerEvent.Click);
 };
 
-// addEventListener("mousedown", onClick, true);
-// addEventListener("keydown", onKeyDown, true);
-document.documentElement.addEventListener("mouseenter", onMouseEnter, true);
-document.documentElement.addEventListener("mouseleave", onMouseLeave, true);
+addEventListener(Events.Click, onClick, true);
+addEventListener(Events.KeyDown, onKeyDown, true);
+document.documentElement.addEventListener(Events.MouseEnter, onMouseEnter, true);
 document.addEventListener(onPopupRequestedEvent, onPopupRequest);

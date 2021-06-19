@@ -7,7 +7,7 @@ import { NavigationItemViewModel } from "./navigationItemViewModel";
 import { Component, OnMounted, OnDestroyed } from "@paperbits/common/ko/decorators";
 import { NavigationModelBinder } from "../navigationModelBinder";
 import { NavigationViewModelBinder } from "./navigationViewModelBinder";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 
 
 @Component({
@@ -40,7 +40,7 @@ export class NavigationWorkshop {
         this.placeholderElement.className = "placeholder";
         this.placeholderElement.onmousemove = this.onNullPointerMove;
 
-        document.addEventListener("keydown", this.onKeyDown.bind(this), false);
+        document.addEventListener(Events.KeyDown, this.onKeyDown.bind(this), false);
     }
 
     @OnMounted()
@@ -159,7 +159,7 @@ export class NavigationWorkshop {
 
     @OnDestroyed()
     public dispose(): void {
-        document.removeEventListener("keydown", this.onKeyDown.bind(this), false);
+        document.removeEventListener(Events.KeyDown, this.onKeyDown.bind(this), false);
     }
 
     public isSelected(page: NavigationItemViewModel): boolean {

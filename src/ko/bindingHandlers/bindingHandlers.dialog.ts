@@ -1,5 +1,6 @@
 ﻿import * as ko from "knockout";
 import { Keys } from "@paperbits/common";
+import { Events } from "@paperbits/common/events";
 
 ko.bindingHandlers["dialog"] = {
     init(element: HTMLElement): void {
@@ -34,10 +35,10 @@ ko.bindingHandlers["dialog"] = {
                 firstFocusableElement.focus();
             }
 
-            element.addEventListener("keydown", onKeyDown);
+            element.addEventListener(Events.KeyDown, onKeyDown);
 
             ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
-                element.removeEventListener("keydown", onKeyDown);
+                element.removeEventListener(Events.KeyDown, onKeyDown);
             });
         }, 100);
     }

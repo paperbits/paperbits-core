@@ -1,3 +1,4 @@
+import { Events } from "@paperbits/common/events";
 import * as ko from "knockout";
 
 export interface SliderConfig {
@@ -71,14 +72,14 @@ ko.bindingHandlers["slider"] = {
             }
         };
 
-        element.addEventListener("mousedown", onMouseDown);
-        window.addEventListener("mouseup", onMouseUp, true);
-        window.addEventListener("mousemove", onMouseMove, true);
+        element.addEventListener(Events.MouseDown, onMouseDown);
+        window.addEventListener(Events.MouseUp, onMouseUp, true);
+        window.addEventListener(Events.MouseMove, onMouseMove, true);
 
         ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
-            element.removeEventListener("mousedown", onMouseDown);
-            window.removeEventListener("mouseup", onMouseUp, true);
-            window.removeEventListener("mousemove", onMouseMove, true);
+            element.removeEventListener(Events.MouseDown, onMouseDown);
+            window.removeEventListener(Events.MouseUp, onMouseUp, true);
+            window.removeEventListener(Events.MouseMove, onMouseMove, true);
         });
     }
 };

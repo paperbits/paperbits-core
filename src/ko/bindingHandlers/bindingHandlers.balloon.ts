@@ -4,6 +4,7 @@ import { Keys } from "@paperbits/common/keyboard";
 import { View } from "@paperbits/common/ui";
 import { BalloonOptions, BalloonActivationOptions, BalloonHandle } from "@paperbits/common/ui/balloons";
 import { ViewStack } from "@paperbits/common/ui/viewStack";
+import { Events } from "@paperbits/common/events";
 
 
 export class BalloonBindingHandler {
@@ -475,13 +476,13 @@ export class BalloonBindingHandler {
                 }
 
 
-                toggleElement.addEventListener("click", onClick);
-                window.addEventListener("scroll", onScroll, true);
-                document.addEventListener("mousedown", onPointerDown, true);
+                toggleElement.addEventListener(Events.Click, onClick);
+                window.addEventListener(Events.Scroll, onScroll, true);
+                document.addEventListener(Events.MouseDown, onPointerDown, true);
 
                 switch (activateOn) {
                     case BalloonActivationOptions.clickOrKeyDown:
-                        toggleElement.addEventListener("keydown", onKeyDown);
+                        toggleElement.addEventListener(Events.KeyDown, onKeyDown);
                         break;
 
                     case BalloonActivationOptions.hoverOrFocus:
@@ -496,13 +497,13 @@ export class BalloonBindingHandler {
                 }
 
                 ko.utils.domNodeDisposal.addDisposeCallback(toggleElement, () => {
-                    window.removeEventListener("mousedown", onPointerDown, true);
-                    toggleElement.removeEventListener("click", onClick);
+                    window.removeEventListener(Events.MouseDown, onPointerDown, true);
+                    toggleElement.removeEventListener(Events.Click, onClick);
 
 
                     switch (activateOn) {
                         case BalloonActivationOptions.clickOrKeyDown:
-                            toggleElement.removeEventListener("keydown", onKeyDown);
+                            toggleElement.removeEventListener(Events.KeyDown, onKeyDown);
 
                             break;
 
@@ -518,7 +519,7 @@ export class BalloonBindingHandler {
                     }
 
                     removeBalloon();
-                    window.removeEventListener("scroll", onScroll, true);
+                    window.removeEventListener(Events.Scroll, onScroll, true);
                 });
             }
         };

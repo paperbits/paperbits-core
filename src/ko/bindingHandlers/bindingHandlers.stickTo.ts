@@ -1,5 +1,6 @@
 ﻿import * as ko from "knockout";
 import { ViewManager, ViewManagerMode } from "@paperbits/common/ui";
+import { Events } from "@paperbits/common/events";
 
 export interface StickToConfig {
     target: HTMLElement;
@@ -102,10 +103,10 @@ export class StickToBindingHandler {
                     requestAnimationFrame(updatePosition);
                 };
 
-                window.addEventListener("scroll", onScroll, true);
+                window.addEventListener(Events.Scroll, onScroll, true);
 
                 ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
-                    window.removeEventListener("scroll", onScroll, true);
+                    window.removeEventListener(Events.Scroll, onScroll, true);
                 });
             }
         };

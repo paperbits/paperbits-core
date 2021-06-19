@@ -51,7 +51,8 @@ export class PictureModelBinder implements IModelBinder<PictureModel> {
         if (pictureModel.hyperlink) {
             pictureContract.hyperlink = {
                 target: pictureModel.hyperlink.target,
-                targetKey: pictureModel.hyperlink.targetKey
+                targetKey: pictureModel.hyperlink.targetKey,
+                triggerEvent: pictureModel.hyperlink.triggerEvent
             };
         }
 

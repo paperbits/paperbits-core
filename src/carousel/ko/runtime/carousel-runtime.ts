@@ -1,4 +1,5 @@
 import { coerce } from "@paperbits/common";
+import { Events } from "@paperbits/common/events";
 
 export class CarouselHTMLElement extends HTMLElement {
     private currentSlideIndex: number;
@@ -128,7 +129,7 @@ export class CarouselHTMLElement extends HTMLElement {
 
     public connectedCallback(): void {
         const element = <HTMLElement>this;
-        element.addEventListener("click", oEvent => {
+        element.addEventListener(Events.Click, oEvent => {
             const clickElement = oEvent.composedPath()[0] as HTMLElement;
             const prevButton = clickElement.closest(".carousel-control-prev") ? true : false;
             const nextButton = clickElement.closest(".carousel-control-next") ? true : false;
