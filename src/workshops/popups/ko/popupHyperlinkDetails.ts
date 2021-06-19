@@ -51,6 +51,7 @@ export class PopupHyperlinkDetails {
         hostDocument.dispatchEvent(new CustomEvent("onPopupRequested", { detail: this.hyperlink.targetKey }));
 
         this.viewManager.clearContextualCommands();
+        this.viewManager.clearJourney();
         this.viewManager.closeView();
 
         this.eventManager.dispatchEvent("displayHint", {

@@ -23,7 +23,7 @@ export class PageHyperlinkDetails {
 
     @OnMounted()
     public async initialize(): Promise<void> {
-        this.target(this.hyperlink.target);
+        this.target(this.hyperlink.target || "_self");
         this.target.subscribe(this.applyChanges);
     }
 
