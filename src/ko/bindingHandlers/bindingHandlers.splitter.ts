@@ -1,5 +1,6 @@
 ﻿import * as ko from "knockout";
 import { ISplitterConfig } from "@paperbits/common/ui";
+import { Events } from "@paperbits/common/events";
 
 ko.bindingHandlers["splitter"] = {
     init(element: HTMLElement, valueAccessor: () => ISplitterConfig) {
@@ -62,10 +63,10 @@ ko.bindingHandlers["splitter"] = {
 
         updatePosition();
 
-        document.addEventListener("scroll", updatePosition);
+        document.addEventListener(Events.Scroll, updatePosition);
 
         ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
-            document.removeEventListener("scroll", updatePosition);
+            document.removeEventListener(Events.Scroll, updatePosition);
         });
     },
 

@@ -1,4 +1,5 @@
-﻿import * as ko from "knockout";
+﻿import { Events } from "@paperbits/common/events";
+import * as ko from "knockout";
 import PerfectScrollbar from "perfect-scrollbar";
 
 ko.bindingHandlers["scrollable"] = {
@@ -60,12 +61,12 @@ ko.bindingHandlers["scrolledIntoView"] = {
             scrollTimeout = setTimeout(checkInView, 200);
         };
 
-        element.parentElement.addEventListener("scroll", onParentScroll);
+        element.parentElement.addEventListener(Events.Scroll, onParentScroll);
 
         checkInView();
 
         ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
-            element.parentElement.removeEventListener("scroll", onParentScroll);
+            element.parentElement.removeEventListener(Events.Scroll, onParentScroll);
         });
     }
 };

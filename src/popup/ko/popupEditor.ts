@@ -6,7 +6,7 @@ import { StyleHelper } from "@paperbits/styles";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { PopupModel } from "../popupModel";
 import { BackgroundStylePluginConfig, TypographyStylePluginConfig, ContainerStylePluginConfig, SizeStylePluginConfig, BoxStylePluginConfig } from "@paperbits/styles/contracts";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { PositionStylePluginConfig } from "@paperbits/styles/plugins/position";
 import { TransformStylePluginConfig } from "@paperbits/styles/plugins/transform";
 import { SizeUnits, Size, CalcExpression } from "@paperbits/styles/plugins";
@@ -56,7 +56,7 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
         this.backdrop(this.model.backdrop);
 
         this.updateObservables();
-        this.eventManager.addEventListener("onViewportChange", this.updateObservables);
+        this.eventManager.addEventListener(Events.ViewportChange, this.updateObservables);
 
         this.position.subscribe(this.onPositionChange);
         this.offsetX.subscribe(this.onOffsetChange);
@@ -190,6 +190,8 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
         let offsetX = new Size(0);
         let offsetY = new Size(0);
 
+        console.log(JSON.stringify(transformPluginConfig));
+
         if (CalcExpression.isExpr(transformPluginConfig.translate.x)) {
             const parsed = CalcExpression.parse(transformPluginConfig.translate.x);
 
@@ -242,8 +244,10 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
                 };
                 transform = {
                     translate: {
-                        x: offsetX.toString(),
-                        y: offsetY.toString()
+                        // x: offsetX.toString(),
+                        // y: offsetY.toString()
+                        x: StyleHelper.calculate(new Size(0, SizeUnits.pixels), offsetX),
+                        y: StyleHelper.calculate(new Size(0, SizeUnits.pixels), offsetY),
                     }
                 };
                 break;

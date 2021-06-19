@@ -1,5 +1,5 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { Button } from "./buttonViewModel";
+import { Button } from "./button";
 import { ButtonModelBinder } from "../buttonModelBinder";
 import { ButtonViewModelBinder } from "./buttonViewModelBinder";
 

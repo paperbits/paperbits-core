@@ -11,13 +11,15 @@ import { EventManager } from "@paperbits/common/events";
     template: template
 })
 export class PopupHyperlinkDetails {
-    public target: ko.Observable<string>;
+    public readonly target: ko.Observable<string>;
+    public readonly triggerEvent: ko.Observable<string>;
 
     constructor(
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager,
     ) {
         this.target = ko.observable();
+        this.triggerEvent = ko.observable();
     }
 
     @Param()
@@ -29,11 +31,15 @@ export class PopupHyperlinkDetails {
     @OnMounted()
     public async initialize(): Promise<void> {
         this.target(this.hyperlink.target);
+        this.triggerEvent(this.hyperlink.triggerEvent || "click");
+
         this.target.subscribe(this.applyChanges);
+        this.triggerEvent.subscribe(this.applyChanges);
     }
 
     public applyChanges(): void {
         this.hyperlink.target = this.target();
+        this.hyperlink.triggerEvent = this.triggerEvent();
 
         if (this.onHyperlinkChange) {
             this.onHyperlinkChange(this.hyperlink);

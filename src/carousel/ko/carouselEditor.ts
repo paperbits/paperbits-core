@@ -9,7 +9,7 @@ import { CarouselModel } from "../carouselModel";
 import { SizeStylePluginConfig } from "@paperbits/styles/contracts";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { EventManager } from "@paperbits/common/events/eventManager";
-import { CommonEvents } from "@paperbits/common/events";
+import { Events } from "@paperbits/common/events";
 
 @Component({
     selector: "carousel-editor",
@@ -50,7 +50,7 @@ export class CarouselEditor {
         this.autoplayInterval.extend(ChangeRateLimit).subscribe(this.applyChanges);
         this.showControls.extend(ChangeRateLimit).subscribe(this.applyChanges);
         this.showIndicators.extend(ChangeRateLimit).subscribe(this.applyChanges);
-        this.eventManager.addEventListener(CommonEvents.onViewportChange, this.updateObservables);
+        this.eventManager.addEventListener(Events.ViewportChange, this.updateObservables);
     }
 
     private updateObservables(): void {

@@ -336,7 +336,9 @@ export class DefaultViewManager implements ViewManager {
         this.activeView(view);
         this.mode = ViewManagerMode.configure;
 
-        this.designTime(false); // Review: It's here for text editor
+        if (view.component.name === "text-block-editor") {
+            this.designTime(false); // Review: It's here for text editor
+        }
 
         this.viewStack.pushView(view);
     }

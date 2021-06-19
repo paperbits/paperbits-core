@@ -9,7 +9,7 @@ import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { SizeStylePluginConfig } from "@paperbits/styles/contracts";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { StyleHelper } from "@paperbits/styles";
-import { EventManager, CommonEvents } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { ViewManager } from "@paperbits/common/ui";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 
@@ -64,7 +64,7 @@ export class VideoPlayerEditor {
 
         this.updateObservables();
 
-        this.eventManager.addEventListener(CommonEvents.onViewportChange, this.updateObservables);
+        this.eventManager.addEventListener(Events.ViewportChange, this.updateObservables);
 
         this.controls
             .extend(ChangeRateLimit)

@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 import { Keys } from "@paperbits/common";
+import { Events } from "@paperbits/common/events";
 
 
 ko.bindingHandlers["activate"] = {
@@ -23,12 +24,12 @@ ko.bindingHandlers["activate"] = {
             onActivate(data);
         };
 
-        element.addEventListener("keydown", onKeyDown);
-        element.addEventListener("click", onClick);
+        element.addEventListener(Events.KeyDown, onKeyDown);
+        element.addEventListener(Events.Click, onClick);
 
         ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
-            element.removeEventListener("click", onClick);
-            element.removeEventListener("keydown", onKeyDown);
+            element.removeEventListener(Events.Click, onClick);
+            element.removeEventListener(Events.KeyDown, onKeyDown);
         });
     }
 };

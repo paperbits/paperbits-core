@@ -1,4 +1,4 @@
-import { Button } from "./buttonViewModel";
+import { Button } from "./button";
 import * as Utils from "@paperbits/common/utils";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { ButtonModel } from "../buttonModel";

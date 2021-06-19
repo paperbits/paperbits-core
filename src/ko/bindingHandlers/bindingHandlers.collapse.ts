@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 import { Keys } from "@paperbits/common";
+import { Events, MouseButton } from "@paperbits/common/events";
 
 ko.bindingHandlers["collapse"] = {
     init: (triggerElement: HTMLElement, valueAccessor) => {
@@ -40,7 +41,7 @@ ko.bindingHandlers["collapse"] = {
             };
 
             const onPointerDown = (event: MouseEvent): void => {
-                if (event.button !== 0) {
+                if (event.button !== MouseButton.Main) {
                     return;
                 }
                 toggle();
@@ -57,9 +58,9 @@ ko.bindingHandlers["collapse"] = {
                 }
             };
 
-            triggerElement.addEventListener("click", onClick);
-            triggerElement.addEventListener("keydown", onKeyDown);
-            triggerElement.addEventListener("mousedown", onPointerDown);
+            triggerElement.addEventListener(Events.Click, onClick);
+            triggerElement.addEventListener(Events.KeyDown, onKeyDown);
+            triggerElement.addEventListener(Events.MouseDown, onPointerDown);
 
             ko.applyBindingsToNode(targetElement, {
                 css: { collapsed: ko.pureComputed(() => !visibleObservable()) }
@@ -70,9 +71,9 @@ ko.bindingHandlers["collapse"] = {
             }, null);
 
             ko.utils.domNodeDisposal.addDisposeCallback(triggerElement, () => {
-                triggerElement.removeEventListener("click", onClick);
-                triggerElement.removeEventListener("keydown", onKeyDown);
-                triggerElement.removeEventListener("mousedown", onPointerDown);
+                triggerElement.removeEventListener(Events.Click, onClick);
+                triggerElement.removeEventListener(Events.KeyDown, onKeyDown);
+                triggerElement.removeEventListener(Events.MouseDown, onPointerDown);
             });
         }, 100);
     }
