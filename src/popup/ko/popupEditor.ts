@@ -190,6 +190,8 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
         let offsetX = new Size(0);
         let offsetY = new Size(0);
 
+        console.log(JSON.stringify(transformPluginConfig));
+
         if (CalcExpression.isExpr(transformPluginConfig.translate.x)) {
             const parsed = CalcExpression.parse(transformPluginConfig.translate.x);
 
@@ -242,8 +244,10 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
                 };
                 transform = {
                     translate: {
-                        x: offsetX.toString(),
-                        y: offsetY.toString()
+                        // x: offsetX.toString(),
+                        // y: offsetY.toString()
+                        x: StyleHelper.calculate(new Size(0, SizeUnits.pixels), offsetX),
+                        y: StyleHelper.calculate(new Size(0, SizeUnits.pixels), offsetY),
                     }
                 };
                 break;

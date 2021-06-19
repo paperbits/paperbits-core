@@ -33,6 +33,7 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
         hyperlink.href = targetUrl;
         hyperlink.targetKey = navitem.targetKey;
         hyperlink.target = navitem.targetWindow;
+        hyperlink.triggerEvent = navitem.triggerEvent;
         viewModel.hyperlink(hyperlink);
 
         if (navitem.nodes) {

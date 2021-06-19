@@ -9,6 +9,7 @@ export class NavigationItemViewModel {
     public targetKey: ko.Observable<string>;
     public targetUrl: ko.Observable<string>;
     public targetWindow: ko.Observable<string>;
+    public triggerEvent: ko.Observable<string>;
     public anchor: ko.Observable<string>;
     public parent: NavigationItemViewModel;
     public nodes: ko.ObservableArray<NavigationItemViewModel>;
@@ -38,6 +39,8 @@ export class NavigationItemViewModel {
         this.targetWindow.subscribe(() => this.notify());
         this.anchor = ko.observable<string>(navitem.anchor);
         this.anchor.subscribe(() => this.notify());
+        this.triggerEvent = ko.observable<string>(navitem.triggerEvent);
+        this.triggerEvent.subscribe(() => this.notify());
     }
 
     private isSiblingNode(node: NavigationItemViewModel): boolean {

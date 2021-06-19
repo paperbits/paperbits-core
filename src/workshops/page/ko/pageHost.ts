@@ -96,9 +96,9 @@ export class PageHost {
                     }
                 }
             },
-            getHostedDocument: () => {
-                return this.viewManager.getHostDocument();
-            }
+            // getHostedDocument: () => {
+            //     return this.viewManager.getHostDocument();
+            // }
         };
 
         const layoutContract = await this.layoutService.getLayoutByPermalink(route.path);
@@ -118,7 +118,10 @@ export class PageHost {
         const popupBindingContext = {
             styleManager: styleManager,
             navigationPath: route.path,
-            contentType: "popup"
+            contentType: "popup",
+            getHostedDocument: () => {
+                return this.viewManager.getHostDocument();
+            }
         };
 
         const popupHostViewModel = await this.popupHostViewModelBinder.contractToViewModel(popupBindingContext);

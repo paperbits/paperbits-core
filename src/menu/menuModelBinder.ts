@@ -108,6 +108,7 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
         navitemModel.targetWindow = contract.targetWindow;
         navitemModel.targetKey = contract.targetKey;
         navitemModel.anchor = contract.anchor;
+        navitemModel.triggerEvent = contract.triggerEvent;
 
         if (targetUrl === permalink) {
             navitemModel.isActive = true;
