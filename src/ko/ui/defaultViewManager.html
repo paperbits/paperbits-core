@@ -53,11 +53,11 @@
 
 <!-- ko if: $component.designTime -->
 
-<!-- ko foreach: { data: contextualEditors, as: 'contextualEditor' } -->
-<!-- ko foreach: { data: contextualEditor.hoverCommands, as: 'command' } -->
+<!-- ko foreach: { data: contextualCommands, as: 'contextualCommand' } -->
+<!-- ko foreach: { data: contextualCommand.hoverCommands, as: 'hoverCommand' } -->
 <button class="fixed btn-standalone"
-    data-bind="contextualCommand: { element: contextualEditor.element, command: command }">
-    <i aria-hidden="true" data-bind="css: command.iconClass"></i>
+    data-bind="contextualCommand: { element: contextualCommand.element, command: hoverCommand }">
+    <i aria-hidden="true" data-bind="css: hoverCommand.iconClass"></i>
 </button>
 <!-- /ko -->
 <!-- /ko -->

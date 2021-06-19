@@ -36,6 +36,7 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
         }
 
         viewModel["widgetBinding"] = {
+            name: "button",
             displayName: "Button",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,

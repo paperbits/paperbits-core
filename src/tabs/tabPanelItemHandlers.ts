@@ -40,7 +40,7 @@ export class TabPanelItemHandlers {
                 callback: () => {
                     context.parentModel["tabPanelItems"].remove(context.model);
                     context.parentBinding.applyChanges();
-                    this.viewManager.clearContextualEditors();
+                    this.viewManager.clearContextualCommands();
                     this.eventManager.dispatchEvent("onContentUpdate");
                 }
             };
@@ -60,7 +60,7 @@ export class TabPanelItemHandlers {
                             context.model.widgets = section.widgets;
                             context.binding.applyChanges();
 
-                            this.viewManager.clearContextualEditors();
+                            this.viewManager.clearContextualCommands();
                             this.eventManager.dispatchEvent("onContentUpdate");
                         }
                     }

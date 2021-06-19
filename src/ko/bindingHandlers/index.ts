@@ -16,7 +16,6 @@ export * from "./bindingHandlers.resizable";
 export * from "./bindingHandlers.scrollable";
 export * from "./bindingHandlers.size";
 export * from "./bindingHandlers.splitter";
-export * from "./bindingHandlers.stickTo";
 export * from "./bindingHandlers.surface";
 export * from "./bindingHandlers.slider";
 export * from "./bindingHandlers.validationMessageToggle";

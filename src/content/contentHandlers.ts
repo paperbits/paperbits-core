@@ -27,7 +27,7 @@ export class ContentHandlers implements IWidgetHandler {
                         onSelect: (model: WidgetModel) => {
                             context.model.widgets.push(model);
                             context.binding.applyChanges();
-                            this.viewManager.clearContextualEditors();
+                            this.viewManager.clearContextualCommands();
                         }
                     }
                 }

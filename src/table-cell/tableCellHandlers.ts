@@ -56,7 +56,7 @@ export class TableCellHandlers implements IWidgetHandler {
                         context.model.widgets.push(widget);
                         context.binding.applyChanges();
                         this.eventManager.dispatchEvent("onContentUpdate");
-                        this.viewManager.clearContextualEditors();
+                        this.viewManager.clearContextualCommands();
                     }
                 }
             }
@@ -79,7 +79,7 @@ export class TableCellHandlers implements IWidgetHandler {
                             onChange: (model: TableModel) => {
                                 context.parentBinding.applyChanges();
                                 this.eventManager.dispatchEvent("onContentUpdate");
-                                // this.viewManager.clearContextualEditors();
+                                // this.viewManager.clearContextualCommands();
                             }
                         }
                     }
@@ -104,7 +104,7 @@ export class TableCellHandlers implements IWidgetHandler {
                             onChange: (model: TableModel) => {
                                 context.parentBinding.applyChanges();
                                 this.eventManager.dispatchEvent("onContentUpdate");
-                                // this.viewManager.clearContextualEditors();
+                                // this.viewManager.clearContextualCommands();
                             }
                         }
                     }

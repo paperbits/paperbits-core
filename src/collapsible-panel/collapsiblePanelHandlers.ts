@@ -54,7 +54,7 @@ export class CollapsiblePanelHandlers implements IWidgetHandler {
                             context.parentBinding.model.widgets.splice(index, 0, newWidgetModel);
                             context.parentBinding.applyChanges();
 
-                            this.viewManager.clearContextualEditors();
+                            this.viewManager.clearContextualCommands();
                         }
                     }
                 }
@@ -65,7 +65,7 @@ export class CollapsiblePanelHandlers implements IWidgetHandler {
                 callback: () => {
                     context.parentModel.widgets.remove(context.model);
                     context.parentBinding.applyChanges();
-                    this.viewManager.clearContextualEditors();
+                    this.viewManager.clearContextualCommands();
                 },
             },
             selectCommands: [{
@@ -92,7 +92,7 @@ export class CollapsiblePanelHandlers implements IWidgetHandler {
                             context.model.widgets.push(widget);
                             context.binding.applyChanges();
                             this.eventManager.dispatchEvent("onContentUpdate");
-                            this.viewManager.clearContextualEditors();
+                            this.viewManager.clearContextualCommands();
                         }
                     }
                 }

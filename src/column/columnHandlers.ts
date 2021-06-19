@@ -44,7 +44,7 @@ export class ColumnHandlers implements IWidgetHandler {
                             context.model.widgets.push(widget);
                             context.binding.applyChanges();
                             this.eventManager.dispatchEvent("onContentUpdate");
-                            this.viewManager.clearContextualEditors();
+                            this.viewManager.clearContextualCommands();
                         }
                     }
                 }
