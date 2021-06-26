@@ -9,6 +9,7 @@ import { ContentModel } from "../contentModel";
 import { ContentModelBinder } from "../contentModelBinder";
 import { ContentViewModel } from "./contentViewModel";
 import { PopupModel } from "../../popup";
+import { WidgetViewModel } from "../../ko";
 
 
 export class ContentViewModelBinder implements ViewModelBinder<ContentModel, ContentViewModel> {
@@ -85,14 +86,12 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
             childBindingContext.styleManager = bindingContext.styleManager;
         }
 
-        const viewModels = [];
-
-        for (const widgetModel of model.widgets) {
+        const promises = model.widgets.map(widgetModel => {
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, childBindingContext);
+            return widgetViewModelBinder.modelToViewModel(widgetModel, null, childBindingContext);
+        });
 
-            viewModels.push(widgetViewModel);
-        }
+        const viewModels = await Promise.all<WidgetViewModel>(promises);
 
         if (!viewModel["widgetBinding"]) {
             this.createBinding(model, viewModel, bindingContext);
