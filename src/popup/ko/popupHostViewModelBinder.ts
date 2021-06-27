@@ -31,7 +31,6 @@ export class PopupHostViewModelBinder implements ViewModelBinder<PopupHostModel,
         let savingTimeout;
 
         const updateContent = async (): Promise<void> => {
-            console.log("UPD");
             /**
              * TODO: Temporary hack. With current model it's impossible to tell which content (page or content)
              * is being modified, so we look for active popup.
