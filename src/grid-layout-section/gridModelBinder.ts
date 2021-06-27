@@ -23,7 +23,7 @@ export class GridModelBinder implements IModelBinder<GridModel> {
 
         const modelPromises = contract.nodes.map(async (contract: Contract) => {
             const modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(contract);
-            return await modelBinder.contractToModel(contract, bindingContext);
+            return modelBinder.contractToModel(contract, bindingContext);
         });
 
         model.widgets = await Promise.all<any>(modelPromises);
