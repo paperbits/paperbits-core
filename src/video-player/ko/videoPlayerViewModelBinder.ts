@@ -31,6 +31,7 @@ export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerMo
         viewModel.sourceUrl(sourceUrl);
         viewModel.controls(model.controls);
         viewModel.autoplay(model.autoplay);
+        viewModel.muted(model.muted ? "muted" : undefined);
 
         if (model.posterSourceKey) {
             const posterUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(model.posterSourceKey);

@@ -17,6 +17,7 @@ export class VideoPlayerModelBinder implements IModelBinder<VideoPlayerModel> {
         const model = new VideoPlayerModel();
         model.controls = contract.controls;
         model.autoplay = contract.autoplay;
+        model.muted = contract.muted;
         model.styles = contract.styles || { appearance: "components/videoPlayer/default" };
         model.sourceKey = contract.sourceKey;
         model.posterSourceKey = contract.posterSourceKey;
@@ -30,6 +31,7 @@ export class VideoPlayerModelBinder implements IModelBinder<VideoPlayerModel> {
             sourceKey: model.sourceKey,
             controls: model.controls,
             autoplay: model.autoplay,
+            muted: model.muted,
             posterSourceKey: model.posterSourceKey,
             styles: model.styles
         };

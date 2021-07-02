@@ -13,6 +13,7 @@ export class VideoPlayer {
     public autoplay: ko.Observable<boolean>;
     public styles: ko.Observable<StyleModel>;
     public posterUrl: ko.Observable<string>;
+    public muted: ko.Observable<string>;
 
     constructor() {
         this.sourceUrl = ko.observable<string>();
@@ -20,5 +21,6 @@ export class VideoPlayer {
         this.autoplay = ko.observable<boolean>();
         this.posterUrl = ko.observable<string>();
         this.styles = ko.observable<StyleModel>();
+        this.muted = ko.observable<string>();
     }
 }

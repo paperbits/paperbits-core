@@ -20,6 +20,7 @@ import { BackgroundModel } from "@paperbits/common/widgets/background";
 export class VideoPlayerEditor {
     public readonly sourceUrl: ko.Observable<string>;
     public readonly controls: ko.Observable<boolean>;
+    public readonly muted: ko.Observable<boolean>;
     public readonly autoplay: ko.Observable<boolean>;
     public readonly background: ko.Observable<BackgroundModel>;
     public readonly appearanceStyles: ko.ObservableArray<any>;
@@ -35,6 +36,7 @@ export class VideoPlayerEditor {
     ) {
         this.sourceUrl = ko.observable<string>();
         this.controls = ko.observable<boolean>(true);
+        this.muted = ko.observable<boolean>(false);
         this.autoplay = ko.observable<boolean>(false);
         this.background = ko.observable<BackgroundModel>();
         this.appearanceStyles = ko.observableArray<any>();
@@ -74,6 +76,10 @@ export class VideoPlayerEditor {
             .extend(ChangeRateLimit)
             .subscribe(this.applyChanges);
 
+        this.muted
+            .extend(ChangeRateLimit)
+            .subscribe(this.applyChanges);
+
         this.appearanceStyle
             .extend(ChangeRateLimit)
             .subscribe(this.onAppearanceChange);
@@ -83,6 +89,7 @@ export class VideoPlayerEditor {
         const viewport = this.viewManager.getViewport();
 
         this.controls(this.model.controls);
+        this.muted(this.model.muted);
         this.autoplay(this.model.autoplay);
 
         const sizeStyles = StyleHelper.getPluginConfigForLocalStyles(this.model.styles, "size", viewport);
@@ -132,13 +139,14 @@ export class VideoPlayerEditor {
 
     public onAppearanceChange(variationKey: string): void {
         Objects.setValue(`styles/appearance`, this.model, variationKey);
-        
+
         this.onChange(this.model);
     }
 
     public applyChanges(): void {
         this.model.controls = this.controls();
         this.model.autoplay = this.autoplay();
+        this.model.muted = this.muted();
 
         this.onChange(this.model);
     }
