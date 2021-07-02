@@ -29,10 +29,6 @@
             <button class="btn btn-info" type="button" aria-hidden="true" role="tooltip"
                 data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
         </label>
-        <!-- <div class="input-group">
-            <a href="#" class="form-control" data-bind="text: appearanceStyle() && appearanceStyle().displayName, balloon: { component: { name: 'style-variation-selector', params: { snippetType: 'components/button', onSelect: $component.onVariationSelected } } }">
-            </a>
-        </div> -->
         <select id="appearanceStyle" class="form-control"
             data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
     </div>
