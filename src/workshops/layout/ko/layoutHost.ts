@@ -7,17 +7,21 @@ import { ViewManager, ViewManagerMode } from "@paperbits/common/ui";
 import { ILayoutService } from "@paperbits/common/layouts";
 import { Contract } from "@paperbits/common";
 import { StyleManager, StyleCompiler } from "@paperbits/common/styles";
+import { PopupHostViewModelBinder } from "../../../popup/ko/popupHostViewModelBinder";
+import { PopupHost } from "../../../popup/ko/popupHost";
 
 
 @Component({
     selector: "layout-host",
-    template: "<!-- ko if: contentViewModel --><!-- ko widget: contentViewModel, grid: {} --><!-- /ko --><!-- /ko -->"
+    template: "<!-- ko if: popupHostViewModel --><!-- ko widget: popupHostViewModel --><!-- /ko --><!-- /ko --><!-- ko if: contentViewModel --><!-- ko widget: contentViewModel, grid: {} --><!-- /ko --><!-- /ko -->"
 })
 export class LayoutHost {
     public readonly contentViewModel: ko.Observable<ContentViewModel>;
+    public readonly popupHostViewModel: ko.Observable<PopupHost>;
 
     constructor(
         private readonly contentViewModelBinder: ContentViewModelBinder,
+        private readonly popupHostViewModelBinder: PopupHostViewModelBinder,
         private readonly router: Router,
         private readonly eventManager: EventManager,
         private readonly viewManager: ViewManager,
@@ -25,6 +29,7 @@ export class LayoutHost {
         private readonly styleCompiler: StyleCompiler
     ) {
         this.contentViewModel = ko.observable();
+        this.popupHostViewModel = ko.observable();
         this.layoutKey = ko.observable();
     }
 
@@ -57,7 +62,7 @@ export class LayoutHost {
 
         const route = this.router.getCurrentRoute();
         const layoutContentContract = await this.layoutService.getLayoutContent(this.layoutKey());
-        
+
         const styleManager = new StyleManager(this.eventManager);
         const styleSheet = await this.styleCompiler.getStyleSheet();
         styleManager.setStyleSheet(styleSheet);
@@ -78,7 +83,23 @@ export class LayoutHost {
 
         const contentViewModel = await this.contentViewModelBinder.contractToViewModel(layoutContentContract, bindingContext);
 
-        contentViewModel["widgetBinding"].provides = ["html", "js", "interaction"];
+
+        /* Popups */
+        const popupBindingContext = {
+            styleManager: styleManager,
+            navigationPath: route.path,
+            contentType: "popup",
+            getHostedDocument: () => {
+                return this.viewManager.getHostDocument();
+            }
+        };
+
+        const popupHostViewModel = await this.popupHostViewModelBinder.contractToViewModel(popupBindingContext);
+        popupHostViewModel["widgetBinding"].provides = ["html", "js", "interaction"];
+
+        this.popupHostViewModel(popupHostViewModel);
+
+
 
         this.contentViewModel(contentViewModel);
         this.viewManager.removeShutter();
