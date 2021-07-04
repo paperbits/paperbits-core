@@ -30,6 +30,7 @@ ko.bindingHandlers["hyperlink"] = {
                         break;
 
                     default:
+                        toggleType = element.getAttribute("data-toggle");
                         href = `${hyperlink.href}${hyperlink.anchor ? "#" + hyperlink.anchor : ""}`;
                         targetWindow = hyperlink.target;
                 }
