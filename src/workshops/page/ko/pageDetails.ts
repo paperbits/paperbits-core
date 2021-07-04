@@ -128,19 +128,7 @@ export class PageDetailsWorkshop {
     }
 
     public async copyPage(): Promise<void> {
-        const copyPermalink = `${this.pageItem.permalink()} copy`;
-        const pageContract = await this.pageService.createPage(copyPermalink, `${this.pageItem.title()} copy`, this.pageItem.description(), this.pageItem.keywords());
-
-        const copyContract = this.pageItem.toContract();
-        copyContract.key = pageContract.key;
-        copyContract.permalink = pageContract.permalink;
-        copyContract.title = pageContract.title;
-        copyContract.contentKey = pageContract.contentKey;
-
-        await this.pageService.updatePage(copyContract);
-
-        const pageContentContract = await this.pageService.getPageContent(this.pageItem.key);
-        await this.pageService.updatePageContent(copyContract.key, pageContentContract);
+        const copyContract = await this.pageService.copyPage(this.pageItem.key);
 
         if (this.onCopyCallback) {
             this.onCopyCallback(new PageItem(copyContract));
