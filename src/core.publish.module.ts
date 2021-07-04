@@ -49,6 +49,7 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindToCollection("htmlPagePublisherPlugins", LinkedDataHtmlPagePublisherPlugin);
         injector.bindToCollection("htmlPagePublisherPlugins", OpenGraphHtmlPagePublisherPlugin);
         injector.bindToCollection("htmlPagePublisherPlugins", SocialShareDataHtmlPagePublisherPlugin);
+        injector.bindInstance("stateCache", new MemoryCache());
         injector.bindInstance("changesCache", new MemoryCache());
         injector.bindModule(new MapPublishModule());
         injector.bindModule(new CarouselPublishModule());
