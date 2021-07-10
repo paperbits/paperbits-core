@@ -1,9 +1,10 @@
+import * as MediaUtils from "@paperbits/common/media/mediaUtils";
 import parallel from "await-parallel-limit";
 import { maxParallelPublisingTasks } from "@paperbits/common/constants";
 import { HttpClient, HttpResponse } from "@paperbits/common/http";
 import { IPublisher } from "@paperbits/common/publishing";
 import { IBlobStorage, Query } from "@paperbits/common/persistence";
-import { IMediaService, MediaContract } from "@paperbits/common/media";
+import { IMediaService, MediaContract, MediaVariantContract } from "@paperbits/common/media";
 import { Logger } from "@paperbits/common/logging";
 
 
@@ -16,16 +17,14 @@ export class MediaPublisher implements IPublisher {
         private readonly logger: Logger
     ) { }
 
-    private async publishFromUrl(mediaFile: MediaContract): Promise<void> {
-        this.logger.trackEvent("Publishing", { message: `Publishing media ${mediaFile.fileName} from URL...` });
-
+    private async publishFromUrl(permalink: string, mediaFile: MediaVariantContract): Promise<void> {
         let response: HttpResponse<any>;
 
         try {
             response = await this.httpClient.send({ url: mediaFile.downloadUrl });
         }
         catch (error) {
-            this.logger.trackEvent("Publishing", { message: `Could not download media from URL ${mediaFile.downloadUrl}. ${error.stack || error.message}` });
+            this.logger.trackEvent("Publishing", { message: `Could not download media from URL ${mediaFile.downloadUrl}. ${error.message}` });
             return null;
         }
 
@@ -35,19 +34,17 @@ export class MediaPublisher implements IPublisher {
         }
 
         const content = response.toByteArray();
-        await this.uploadToStorage(mediaFile.permalink, content, mediaFile.mimeType);
+        await this.uploadToStorage(permalink, content, mediaFile.mimeType);
     }
 
-    private async publishFromStorage(mediaFile: MediaContract): Promise<void> {
-        this.logger.trackEvent("Publishing", { message: `Publishing media ${mediaFile.fileName} from storage...` });
-
+    private async publishFromStorage(permalink: string, mediaFile: MediaVariantContract): Promise<void> {
         let content: Uint8Array;
 
         try {
             content = await this.blobStorage.downloadBlob(mediaFile.blobKey);
         }
         catch (error) {
-            this.logger.trackEvent("Publishing", { message: `Could not download media ${mediaFile.blobKey} from source storage. ${error.stack || error.message}` });
+            this.logger.trackEvent("Publishing", { message: `Could not download media ${mediaFile.blobKey} from source storage. ${error.message}` });
             return null;
         }
 
@@ -56,7 +53,7 @@ export class MediaPublisher implements IPublisher {
             return null;
         }
 
-        await this.uploadToStorage(mediaFile.permalink, content, mediaFile.mimeType);
+        await this.uploadToStorage(permalink, content, mediaFile.mimeType);
     }
 
     private async uploadToStorage(key: string, content: Uint8Array, mimeType: string): Promise<void> {
@@ -68,24 +65,14 @@ export class MediaPublisher implements IPublisher {
         }
     }
 
-    private async renderMediaFile(mediaFile: MediaContract): Promise<void> {
-        if (!mediaFile.permalink) {
-            this.logger.trackEvent("Publishing", { message: `Skipping media with no permalink specified: "${mediaFile.fileName}".` });
-            return;
-        }
-
-        if (!mediaFile.blobKey && !mediaFile.downloadUrl) {
-            this.logger.trackEvent("Publishing", { message: `Skipping media with no blob key or download URL specified: ${mediaFile.fileName}.` });
-            return;
-        }
-
+    private async renderMediaFile(permalink: string, mediaFile: MediaVariantContract): Promise<void> {
         if (mediaFile.blobKey) {
-            await this.publishFromStorage(mediaFile);
+            await this.publishFromStorage(permalink, mediaFile);
             return;
         }
 
         if (mediaFile.downloadUrl) {
-            await this.publishFromUrl(mediaFile);
+            await this.publishFromUrl(permalink, mediaFile);
             return;
         }
     }
@@ -96,10 +83,40 @@ export class MediaPublisher implements IPublisher {
 
         do {
             const tasks = [];
-            const mediaFiles = pagesOfResults.value;
+            const mediaContracts = pagesOfResults.value;
 
-            for (const mediaFile of mediaFiles) {
-                tasks.push(() => this.renderMediaFile(mediaFile));
+            for (const mediaContract of mediaContracts) {
+                if (!mediaContract.permalink) {
+                    this.logger.trackEvent("Publishing", { message: `Skipping media with no permalink specified: "${mediaContract.fileName}".` });
+                    continue;
+                }
+
+                this.logger.trackEvent("Publishing", { message: `Publishing media ${mediaContract.fileName}...` });
+
+                const original: MediaVariantContract = {
+                    blobKey: mediaContract.blobKey,
+                    downloadUrl: mediaContract.downloadUrl,
+                    mimeType: mediaContract.mimeType
+                };
+
+                if (!mediaContract.blobKey && !mediaContract.downloadUrl) {
+                    this.logger.trackEvent("Publishing", { message: `Skipping media with no blob key or download URL specified: ${mediaContract.fileName}.` });
+                    continue;
+                }
+
+                tasks.push(() => this.renderMediaFile(mediaContract.permalink, original));
+
+                if (mediaContract.variants) {
+                    for (const variant of mediaContract.variants) {
+                        if (!mediaContract.blobKey && !mediaContract.downloadUrl) {
+                            this.logger.trackEvent("Publishing", { message: `Skipping media variant with no blob key or download URL specified: ${mediaContract.fileName}.` });
+                            continue;
+                        }
+
+                        const variantPermalink = MediaUtils.getPermalinkForMediaVariant(mediaContract.permalink, variant);
+                        tasks.push(() => this.renderMediaFile(variantPermalink, variant));
+                    }
+                }
             }
 
             await parallel(tasks, maxParallelPublisingTasks);

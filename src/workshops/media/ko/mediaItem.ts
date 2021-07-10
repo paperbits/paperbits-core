@@ -1,5 +1,4 @@
 ﻿import * as ko from "knockout";
-import * as mime from "mime";
 import * as MediaUtils from "@paperbits/common/media/mediaUtils";
 import { MediaContract, MediaVariantContract } from "@paperbits/common/media/mediaContract";
 import { IWidgetOrder, IWidgetFactoryResult } from "@paperbits/common/editing";
@@ -39,23 +38,21 @@ export class MediaItem {
 
     private async setThumbnail(mediaContract: MediaContract): Promise<void> {
         if (mediaContract.mimeType?.startsWith("video")) {
-            const dataUrl = await MediaUtils.getVideoThumbnailAsDataUrlFromUrl(mediaContract.downloadUrl);
-            this.thumbnailUrl(dataUrl);
+            const thumbnailUrl = await MediaUtils.getVideoThumbnailAsDataUrlFromUrl(mediaContract.downloadUrl);
+            this.thumbnailUrl(thumbnailUrl);
             return;
         }
 
         if (mediaContract.mimeType?.startsWith("image")) {
+            let thumbnailUrl = mediaContract.downloadUrl;
+
             if (mediaContract.variants) {
                 const reducer = (smallest: MediaVariantContract, current: MediaVariantContract) => smallest.width <= current.width ? smallest : current;
                 const smallestImageVariant = mediaContract.variants.reduce(reducer);
-                this.thumbnailUrl(`${mediaContract.blobKey}${smallestImageVariant.width}x${smallestImageVariant.height}`);
+                thumbnailUrl = smallestImageVariant.downloadUrl;
+            }
 
-                // const extension = mime.getExtension(smallestImageVariant.mimeType);
-                // this.thumbnailUrl(`${mediaContract.blobKey}${smallestImageVariant.width}x${smallestImageVariant.height}.${extension}`);
-            }
-            else {
-                this.thumbnailUrl(mediaContract.downloadUrl);
-            }
+            this.thumbnailUrl(thumbnailUrl);
             return;
         }
 
