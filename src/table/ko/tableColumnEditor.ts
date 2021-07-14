@@ -34,7 +34,7 @@ export class TableColumnEditor {
     public async initialize(): Promise<void> {
         const width = Size.parse(this.model.styles.instance.grid.xs.cols[this.columnIndex]);
 
-        if (width.units === SizeUnits.pixels) {
+        if (width?.units === SizeUnits.pixels) {
             this.width(width.value);
         }
 
