@@ -1,4 +1,5 @@
 import { LocalStyles } from "@paperbits/common/styles";
+import { MapCustomizations } from "./mapContract";
 
 export class MarkerModel {
     public sourceKey: string;
@@ -10,7 +11,6 @@ export class MarkerModel {
         this.sourceKey = sourceKey;
     }
 }
-
 export class MapModel {
     /**
      * Location shown on the map, e.g. "Seattle, WA"
@@ -41,6 +41,11 @@ export class MapModel {
      * Widget local styles.
      */
     public styles: LocalStyles;
+
+    /**
+     * Map customizations (depends on map type).
+     */
+    public customizations?: MapCustomizations;
 
     constructor() {
         this.styles = {

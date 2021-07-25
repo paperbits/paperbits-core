@@ -44,7 +44,8 @@ export class GooglmapsBindingHandler {
             draggable: false,
             disableDefaultUI: true,
             mapTypeId: configuration.mapType,
-            zoom: configuration.zoom
+            zoom: configuration.zoom,
+            styles: configuration.customizations
         });
 
         const locationToPosition = async (location: string): Promise<google.maps.LatLng> => {

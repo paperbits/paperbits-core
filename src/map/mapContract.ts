@@ -1,11 +1,16 @@
 import { Contract } from "@paperbits/common";
 import { LocalStyles } from "@paperbits/common/styles";
+import { GoogleMapsCustomization } from "./googleMapCustomization";
 
 export interface MapMarkerContract {
     sourceKey: string;
     width?: string;
     height?: string;
     popupKey?: string;
+}
+
+export interface MapCustomizations {
+    styles: GoogleMapsCustomization[];
 }
 
 export interface MapContract extends Contract {
@@ -38,4 +43,9 @@ export interface MapContract extends Contract {
      * Widget local styles.
      */
     styles?: LocalStyles;
+
+    /**
+     * Map customizations (depends on map type).
+     */
+    customizations?: MapCustomizations;
 }
