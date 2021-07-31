@@ -82,7 +82,7 @@ export class LayoutHost {
         };
 
         const contentViewModel = await this.contentViewModelBinder.contractToViewModel(layoutContentContract, bindingContext);
-
+        contentViewModel["widgetBinding"].provides = ["html", "js", "interaction"];
 
         /* Popups */
         const popupBindingContext = {
@@ -98,8 +98,6 @@ export class LayoutHost {
         popupHostViewModel["widgetBinding"].provides = ["html", "js", "interaction"];
 
         this.popupHostViewModel(popupHostViewModel);
-
-
 
         this.contentViewModel(contentViewModel);
         this.viewManager.removeShutter();
