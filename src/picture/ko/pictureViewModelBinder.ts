@@ -28,17 +28,16 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
             const media = await this.mediaService.getMediaByKey(model.sourceKey);
 
             if (media.variants) {
-                const variants = media.variants.map(x => {
-                    const vm = new MediaVariantModel();
-                    vm.width = x.width;
-                    vm.height = x.height;
-                    vm.mimeType = x.mimeType;
-                    vm.downloadUrl = x.downloadUrl;
-                    return vm;
+                const variants = media.variants.map(variantContract => {
+                    const variantModel = new MediaVariantModel();
+                    variantModel.width = variantContract.width;
+                    variantModel.height = variantContract.height;
+                    variantModel.mimeType = variantContract.mimeType;
+                    variantModel.downloadUrl = variantContract.downloadUrl;
+                    return variantModel;
                 });
 
                 viewModel.variants(variants);
-                console.log(variants);
             }
 
             sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(model.sourceKey);

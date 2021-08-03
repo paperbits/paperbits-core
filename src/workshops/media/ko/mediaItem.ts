@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import * as MediaUtils from "@paperbits/common/media/mediaUtils";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
-import { MediaVariantContract } from "@paperbits/common/media/MediaVariantContract";
+import { MediaVariantContract } from "@paperbits/common/media/mediaVariantContract";
 import { IWidgetOrder, IWidgetFactoryResult } from "@paperbits/common/editing";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 
