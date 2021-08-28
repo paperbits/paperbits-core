@@ -88,7 +88,7 @@ export class PageHost {
             styleManager: styleManager,
             navigationPath: route.path,
             contentType: "page",
-            template: { // Template here describes what fields of particular content type.
+            template: { // Template here describes fields of particular content type.
                 page: {
                     value: pageContentContract,
                     onValueUpdate: async (updatedContentContract: Contract) => {

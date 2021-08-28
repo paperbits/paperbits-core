@@ -1,7 +1,3 @@
-<!--ko if: working()-->
-<spinner></spinner>
-<!--/ko-->
-
 <div class="flex flex-column fit">
     <div class="flex-item form">
         <div class="form-group">
@@ -39,7 +35,7 @@
             <span data-bind="text: layout.title"></span>
         </a>
         <!--/ko-->
-        <!--ko if: $component.working()-->
+        <!-- ko if: $component.working -->
         <spinner></spinner>
         <!--/ko-->
         <!-- ko ifnot: $component.working -->

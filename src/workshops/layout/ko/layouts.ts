@@ -39,6 +39,8 @@ export class LayoutsWorkshop {
     }
 
     public async searchLayouts(searchPattern: string = ""): Promise<void> {
+        this.working(true);
+
         this.layouts([]);
 
         const query = Query
@@ -54,6 +56,8 @@ export class LayoutsWorkshop {
 
         const pageItems = pageOfResults.value.map(page => new LayoutItem(page));
         this.layouts.push(...pageItems);
+
+        this.working(false);
     }
 
     public async loadNextPage(): Promise<void> {
