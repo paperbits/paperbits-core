@@ -1,14 +1,13 @@
-
 <workshops></workshops>
 <dropbucket></dropbucket>
-
-<div class="shutter" data-bind="css: { 'active': shutter }">
-    <spinner class="fit"></spinner>
-</div>
 
 <!-- ko if: host -->
 <div class="viewport" data-bind="host: { viewport: viewport, host: host, block: block }"></div>
 <!-- /ko -->
+
+<div class="shutter" data-bind="css: { 'active': shutter }">
+    <spinner class="fit"></spinner>
+</div>
 
 <div class="toasts" data-bind="foreach: toasts">
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
