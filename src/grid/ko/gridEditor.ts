@@ -147,7 +147,12 @@ export class GridEditor {
     }
 
     private onMouseClick(event: MouseEvent): void {
-        event.preventDefault(); // prevent default event handling for all controls
+        const htmlElement = <HTMLElement>event.target;
+        const htmlLinkElement = <HTMLLinkElement>htmlElement.closest("A");
+
+        if (htmlLinkElement) {
+            event.preventDefault(); // prevent default event handling for hyperlink controls
+        }
     }
 
     private onPointerDown(event: PointerEvent): void {
@@ -607,7 +612,7 @@ export class GridEditor {
                 continue;
             }
 
-     
+
             const index = tobeDeleted.indexOf(widgetBinding.name);
             tobeDeleted.splice(index, 1);
 
