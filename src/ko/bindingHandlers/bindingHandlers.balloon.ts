@@ -336,7 +336,7 @@ export class BalloonBindingHandler {
                         viewStack.pushView(view);
 
                         if (activateOn === BalloonActivationOptions.clickOrKeyDown) {
-                            toggleElement.setAttribute("aria-expanded", "true");
+                            toggleElement.setAttribute(Html.AriaAttributes.expanded, "true");
                         }
 
                         toggleElement["activeBalloon"] = ballonHandle;
