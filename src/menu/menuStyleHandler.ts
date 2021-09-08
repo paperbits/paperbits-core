@@ -9,7 +9,7 @@ const migrate = (style: VariationBagContract): void => { // Temporary migration 
 
     menuVariations.forEach(variationKey => {
         const menuVariation = style[variationKey];
-        const components = menuVariation.components;
+        const components = menuVariation?.components;
 
         if (!components) {
             return;
