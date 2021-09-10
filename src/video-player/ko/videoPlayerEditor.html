@@ -6,7 +6,7 @@
         </label>
         <div id="sourceCollapse" class="collapse form-group-collapse">
             <div class="dropzone">
-                <a href="#" class="dropzone-showbox"
+                <a href="#" class="dropzone-showbox" role="button" aria-label="Video source"
                     data-bind="balloon: { component: { name: 'media-selector', params: { mimeType: 'video/', onSelect: $component.onMediaSelected, mimeType: $component.mimeType } }, position: 'right' }">
                     <!-- ko if: sourceUrl -->
                     <video class="fit" controls>
