@@ -16,6 +16,7 @@ ko.bindingHandlers["scrollable"] = {
         }
 
         const verticalScrollBar = element.querySelector(".ps__thumb-y");
+        verticalScrollBar.setAttribute("role", "scrollbar");
         verticalScrollBar.setAttribute("aria-label", "Vertical scrollbar");
 
         const checkElementSize = (): void => {
