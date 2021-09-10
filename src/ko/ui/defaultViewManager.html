@@ -135,11 +135,11 @@
 
 <!-- ko if: canPreview -->
 <div class="toolbox toolbox-position-right-top">
-    <button class="toolbox-btn" data-bind="visible: primaryToolboxVisible(), click: $component.enablePreviewMode, tooltip: { message: '<h1>Preview</h1><p>See the website live before publishing.<p>', position: 'left' }">
+    <button class="toolbox-btn" data-bind="visible: primaryToolboxVisible(), click: $component.enablePreviewMode, tooltip: { message: '<h1>Preview</h1><p>See the website live before publishing.<p>', position: 'left' }" aria-label="Preview">
         <i aria-hidden="true" class="paperbits-icon paperbits-l-search"></i>
     </button>
 
-    <button class="toolbox-btn" data-bind="visible: !primaryToolboxVisible(), click: $component.disablePreviewMode, tooltip: { message: '<h1>Exit preview</h1><p>Return to editing the content.<p>', position: 'left' }">
+    <button class="toolbox-btn" data-bind="visible: !primaryToolboxVisible(), click: $component.disablePreviewMode, tooltip: { message: '<h1>Exit preview</h1><p>Return to editing the content.<p>', position: 'left' }" aria-label="Exit preview">
         <i aria-hidden="true" class="paperbits-icon paperbits-ban"></i>
     </button>
 </div>
