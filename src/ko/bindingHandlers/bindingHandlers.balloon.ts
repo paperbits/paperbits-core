@@ -475,7 +475,6 @@ export class BalloonBindingHandler {
                     options.closeOn.subscribe(() => close());
                 }
 
-
                 toggleElement.addEventListener(Events.Click, onClick);
                 window.addEventListener(Events.Scroll, onScroll, true);
                 document.addEventListener(Events.MouseDown, onPointerDown, true);
@@ -486,10 +485,14 @@ export class BalloonBindingHandler {
                         break;
 
                     case BalloonActivationOptions.hoverOrFocus:
-                        toggleElement.addEventListener("mouseenter", onMouseEnter);
-                        toggleElement.addEventListener("mouseleave", onMouseLeave);
-                        // toggleElement.addEventListener("focus", onFocus);
-                        // toggleElement.addEventListener("blur", onBlur);
+                        toggleElement.addEventListener(Events.MouseEnter, onMouseEnter);
+                        toggleElement.addEventListener(Events.MouseLeave, onMouseLeave);
+                        break;
+
+                    case BalloonActivationOptions.all:
+                        toggleElement.addEventListener(Events.KeyDown, onKeyDown);
+                        toggleElement.addEventListener(Events.MouseEnter, onMouseEnter);
+                        toggleElement.addEventListener(Events.MouseLeave, onMouseLeave);
                         break;
 
                     default:
@@ -500,18 +503,20 @@ export class BalloonBindingHandler {
                     window.removeEventListener(Events.MouseDown, onPointerDown, true);
                     toggleElement.removeEventListener(Events.Click, onClick);
 
-
                     switch (activateOn) {
                         case BalloonActivationOptions.clickOrKeyDown:
                             toggleElement.removeEventListener(Events.KeyDown, onKeyDown);
-
                             break;
 
                         case BalloonActivationOptions.hoverOrFocus:
-                            toggleElement.removeEventListener("mouseenter", onMouseEnter);
-                            toggleElement.removeEventListener("mouseleave", onMouseLeave);
-                            toggleElement.removeEventListener("focus", onFocus);
-                            toggleElement.removeEventListener("blur", onBlur);
+                            toggleElement.removeEventListener(Events.MouseEnter, onMouseEnter);
+                            toggleElement.removeEventListener(Events.MouseLeave, onMouseLeave);
+                            break;
+
+                        case BalloonActivationOptions.all:
+                            toggleElement.removeEventListener(Events.KeyDown, onKeyDown);
+                            toggleElement.removeEventListener(Events.MouseEnter, onMouseEnter);
+                            toggleElement.removeEventListener(Events.MouseLeave, onMouseLeave);
                             break;
 
                         default:

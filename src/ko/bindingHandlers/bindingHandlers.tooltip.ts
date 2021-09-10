@@ -63,7 +63,7 @@ ko.bindingHandlers["tooltip"] = {
                 },
                 position: tooltipPosition,
                 delay: tooltipDelayMs || defaultTooltipDelayMs,
-                activateOn: BalloonActivationOptions.hoverOrFocus,
+                activateOn: BalloonActivationOptions.all,
                 closeTimeout: closeTimeout,
                 // isDisabled: isDisabled,
                 onCreated: (handle: BalloonHandle): void => {
