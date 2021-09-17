@@ -27,7 +27,7 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
         if (model.sourceKey) {
             const media = await this.mediaService.getMediaByKey(model.sourceKey);
 
-            if (media.variants) {
+            if (media?.variants) {
                 const variants = media.variants.map(variantContract => {
                     const variantModel = new MediaVariantModel();
                     variantModel.width = variantContract.width;
