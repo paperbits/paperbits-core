@@ -9,9 +9,9 @@
             <input class="form-control" type="search" role="searchbox"
                 data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: true" placeholder="Search widgets..."
                 aria-label="Search widgets" aria-controls="searchResult" />
-            <!-- <p id="searchResult" class="text-hide" role="region" aria-live="polite"
-                data-bind="text: `Pages found: ${categories().length}`">
-            </p> -->
+            <p id="searchResult" class="text-hide" role="region" aria-live="polite"
+                data-bind="text: `Widgets found: ${widgetCount()}`">
+            </p>
         </div>
     </div>
 
@@ -20,6 +20,12 @@
     <!-- /ko -->
 
     <!-- ko ifnot: working() -->
+    <!-- ko if: searchPattern() !== "" && widgetCount() === 0 -->
+    <div class="flex flex-column list">
+        <p class="text-center">Could not find anything. Try to change search criteria.</p>
+    </div>
+    <!-- /ko -->
+
     <div role="list" class="flex flex-column list" data-bind="scrollable: true">
         <!-- ko foreach: { data: categories, as: 'category'  } -->
         <!-- ko if: category.name -->

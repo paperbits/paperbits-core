@@ -13,8 +13,10 @@ export class WidgetSelector {
     private originalCategories: any;
     public readonly filteredCategories: ko.Observable<{ name: string, items: WidgetItem[] }[]>;
     public readonly categories: ko.Observable<{ name: string, items: WidgetItem[] }[]>;
+    public readonly widgetCount: ko.Observable<number>;
     public readonly working: ko.Observable<boolean>;
     public readonly searchPattern: ko.Observable<string>;
+
 
     @Event()
     public onSelect: (widgetModel: WidgetModel) => void;
@@ -26,6 +28,7 @@ export class WidgetSelector {
         this.working = ko.observable(true);
         this.searchPattern = ko.observable<string>();
         this.categories = ko.observable<{ name: string, items: WidgetItem[] }[]>();
+        this.widgetCount = ko.observable();
     }
 
     @OnMounted()
@@ -48,6 +51,12 @@ export class WidgetSelector {
             .filter(x => x.items.length > 0);
 
         this.categories(filteredCategories);
+
+        const widgetCount = filteredCategories.length > 0
+            ? filteredCategories.map(x => x.items.length).reduce((x, y) => x += y)
+            : 0;
+
+        this.widgetCount(widgetCount);
     }
 
     private async loadWidgetOrders(): Promise<void> {
