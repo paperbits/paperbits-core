@@ -24,9 +24,9 @@
 
     <!-- /ko -->
 
-    <div role="list" class="flex flex-column flex-item flex-item-grow" data-bind="scrollable: true, list: {}">
+    <div class="flex flex-column flex-item flex-item-grow" role="listbox" data-bind="scrollable: true, listbox: {}">
         <!-- ko foreach: { data: pages, as: 'page' } -->
-        <a href="#" role="option" class="list-item flex-grow"
+        <a role="option" class="list-item flex-grow"
             data-bind="css: { selected: $component.isSelected(page) }, attr: { title: page.title }, activate: $component.selectPage, selectable: true">
             <i aria-hidden="true" class="paperbits-icon paperbits-single-content-03"></i>
             <span class="text-overflow" data-bind="text: page.title"></span>
@@ -39,7 +39,6 @@
         <div class="list-edge" data-bind="whenInView: $component.loadNextPage"></div>
         <!-- /ko -->
     </div>
-
 
     <div class="flex-item btn-group">
         <button class="btn btn-default" data-bind="click: $component.addPage">

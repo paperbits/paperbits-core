@@ -1,5 +1,5 @@
 import * as ko from "knockout";
-import { Keys } from "@paperbits/common";
+import { KeyCodes } from "@paperbits/common/keyboard";
 import { Events, MouseButton } from "@paperbits/common/events";
 
 ko.bindingHandlers["collapse"] = {
@@ -53,7 +53,7 @@ ko.bindingHandlers["collapse"] = {
             };
 
             const onKeyDown = (event: KeyboardEvent): void => {
-                if (event.keyCode === Keys.Enter || event.keyCode === Keys.Space) {
+                if (event.keyCode === KeyCodes.Enter || event.keyCode === KeyCodes.Space) {
                     toggle();
                 }
             };
