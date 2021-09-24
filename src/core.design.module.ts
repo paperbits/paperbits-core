@@ -52,6 +52,7 @@ import { RoleSelector, RoleInput } from "./workshops/roles/ko";
 import "./ko/bindingHandlers/bindingHandlers.dialog";
 import "./ko/bindingHandlers/bindingHandlers.activate";
 import "./ko/bindingHandlers/bindingHandlers.whenInView";
+import "./ko/bindingHandlers/bindingHandlers.listbox";
 import { ContentEditorModule } from "./content/ko";
 import { ViewStack } from "@paperbits/common/ui/viewStack";
 import { MediaDisplay } from "./workshops/media/ko/mediaDisplay";

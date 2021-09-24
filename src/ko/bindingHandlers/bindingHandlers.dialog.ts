@@ -1,5 +1,5 @@
 ﻿import * as ko from "knockout";
-import { Keys } from "@paperbits/common";
+import { KeyCodes } from "@paperbits/common/keyboard";
 import { Events } from "@paperbits/common/events";
 
 ko.bindingHandlers["dialog"] = {
@@ -11,7 +11,7 @@ ko.bindingHandlers["dialog"] = {
             const lastFocusableElement = <HTMLElement>focusableElements[focusableElements.length - 1];
 
             const onKeyDown = (event: KeyboardEvent): void => {
-                const isTabPressed = event.keyCode === Keys.Tab;
+                const isTabPressed = event.keyCode === KeyCodes.Tab;
 
                 if (!isTabPressed) {
                     return;

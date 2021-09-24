@@ -5,7 +5,7 @@ import { IMediaService } from "@paperbits/common/media";
 import { ViewManager, View } from "@paperbits/common/ui";
 import { MediaItem, defaultFileName, defaultURL } from "./mediaItem";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
-import { Keys } from "@paperbits/common/keyboard";
+import { KeyCodes } from "@paperbits/common/keyboard";
 import { EventManager } from "@paperbits/common/events";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { IWidgetService } from "@paperbits/common/widgets";
@@ -167,12 +167,6 @@ export class MediaWorkshop {
         }
 
         this.eventManager.dispatchEvent("virtualDragEnd");
-    }
-
-    public onKeyDown(item: MediaItem, event: KeyboardEvent): void {
-        if (event.keyCode === Keys.Delete) {
-            this.deleteSelectedMedia();
-        }
     }
 
     public isSelected(media: MediaItem): boolean {
