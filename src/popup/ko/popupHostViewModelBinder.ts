@@ -35,11 +35,11 @@ export class PopupHostViewModelBinder implements ViewModelBinder<PopupHostModel,
              * TODO: Temporary hack. With current model it's impossible to tell which content (page or content)
              * is being modified, so we look for active popup.
              */
-            if (!bindingContext.getHostDocument) {
+            if (!bindingContext.getHostedDocument) {
                 return;
             }
 
-            const activePopup: HTMLElement = bindingContext.getHostDocument().querySelector(".popup.show");
+            const activePopup: HTMLElement = bindingContext.getHostedDocument().querySelector(".popup.show");
 
             if (!activePopup) {
                 return;

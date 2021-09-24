@@ -53,11 +53,12 @@ export class ButtonEditor {
     public onHyperlinkChange(hyperlink: HyperlinkModel): void {
         if (hyperlink) {
             this.hyperlinkTitle(hyperlink.title);
-            this.hyperlink(hyperlink);
         }
         else {
             this.hyperlinkTitle("Add a link...");
         }
+
+        this.hyperlink(hyperlink);
     }
 
     public onRoleSelect(roles: string[]): void {

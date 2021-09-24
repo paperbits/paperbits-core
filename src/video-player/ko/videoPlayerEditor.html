@@ -6,7 +6,7 @@
         </label>
         <div id="sourceCollapse" class="collapse form-group-collapse">
             <div class="dropzone">
-                <a href="#" class="dropzone-showbox"
+                <a href="#" class="dropzone-showbox" role="button" aria-label="Video source"
                     data-bind="balloon: { component: { name: 'media-selector', params: { mimeType: 'video/', onSelect: $component.onMediaSelected, mimeType: $component.mimeType } }, position: 'right' }">
                     <!-- ko if: sourceUrl -->
                     <video class="fit" controls>
@@ -29,6 +29,9 @@
             <label for="controls" class="form-label">
                 <input type="checkbox" id="controls" data-bind="checked: controls" />Controls
             </label>
+            <!-- <label for="muted" class="form-label">
+                <input type="checkbox" id="muted" data-bind="checked: muted" />Muted
+            </label> -->
             <label for="autoplay" class="form-label">
                 <input type="checkbox" id="autoplay" data-bind="checked: autoplay" />Autoplay
             </label>
@@ -47,16 +50,6 @@
                 </a>
             </div>
             <!-- /ko -->
-
-            <div class="form-group">
-                <label for="appearanceStyle" class="form-label">
-                    Appearance
-                    <button class="btn btn-info" type="button"
-                        data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
-                </label>
-                <select id="appearanceStyle" class="form-control"
-                    data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
-            </div>
         </div>
     </div>
     <div class="form-group form-group-collapsible">
@@ -68,6 +61,29 @@
         <div id="sizeCollapse" class="collapse form-group-collapse">
             <size-editor params="{ features: 'height,width', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
             </size-editor>
+        </div>
+    </div>
+
+    <div class="form-group form-group-collapsible">
+        <label class="form-label">
+            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#miscellaneousCollapse'"
+                aria-label="Toggle 'Styling' section"></a>
+            <b>Styling</b>
+        </label>
+        <div id="miscellaneousCollapse" class="collapse form-group-collapse">
+            <div class="form-group">
+                <label for="appearanceStyle" class="form-label">
+                    Appearance
+                    <button class="btn btn-info" type="button"
+                        data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
+                </label>
+                <!-- <div class="input-group">
+                    <a href="#" class="form-control" data-bind="text: appearanceStyle() && appearanceStyle().displayName, balloon: { component: { name: 'style-variation-selector', params: { snippetType: 'components/picture', onSelect: $component.onVariationSelected } } }">
+                    </a>
+                </div> -->
+                <select id="appearanceStyle" class="form-control"
+                    data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
+            </div>
         </div>
     </div>
 </div>

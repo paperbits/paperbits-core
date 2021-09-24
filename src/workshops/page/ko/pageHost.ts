@@ -88,16 +88,13 @@ export class PageHost {
             styleManager: styleManager,
             navigationPath: route.path,
             contentType: "page",
-            template: { // Template here describes what fields of particular content type.
+            template: { // Template here describes fields of particular content type.
                 page: {
                     value: pageContentContract,
                     onValueUpdate: async (updatedContentContract: Contract) => {
                         await this.pageService.updatePageContent(pageContract.key, updatedContentContract);
                     }
                 }
-            },
-            getHostedDocument: () => {
-                return this.viewManager.getHostDocument();
             }
         };
 
@@ -118,7 +115,10 @@ export class PageHost {
         const popupBindingContext = {
             styleManager: styleManager,
             navigationPath: route.path,
-            contentType: "popup"
+            contentType: "popup",
+            getHostedDocument: () => {
+                return this.viewManager.getHostDocument();
+            }
         };
 
         const popupHostViewModel = await this.popupHostViewModelBinder.contractToViewModel(popupBindingContext);

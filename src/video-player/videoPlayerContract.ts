@@ -16,7 +16,12 @@ export interface VideoPlayerContract extends Contract {
      * Specifies if video player controls are shown.
      */
     controls?: boolean;
-    
+
+    /**
+     * Specifies if video is muted by default.
+     */
+    muted?: boolean;
+
     /**
      * Specifies if video should play at start.
      */
@@ -26,7 +31,7 @@ export interface VideoPlayerContract extends Contract {
      * Specifies an image to be shown while the video is downloading, or until the user hits the play button.
      */
     posterSourceKey?: string;
-    
+
     /**
      * Widget styles.
      */

@@ -1,4 +1,4 @@
-import { PictureViewModel } from "./pictureViewModel";
+import { PictureViewModel } from "./picture";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { PictureModel } from "../pictureModel";
 import { EventManager } from "@paperbits/common/events";
@@ -6,12 +6,15 @@ import { StyleCompiler } from "@paperbits/common/styles/styleCompiler";
 import { Bag } from "@paperbits/common";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { IWidgetBinding } from "@paperbits/common/editing";
+import { MediaService } from "@paperbits/common/media";
+import { MediaVariantModel } from "../mediaVariantModel";
 
 export class PictureViewModelBinder implements ViewModelBinder<PictureModel, PictureViewModel> {
     constructor(
         private readonly eventManager: EventManager,
         private readonly styleCompiler: StyleCompiler,
         private readonly mediaPermalinkResolver: IPermalinkResolver,
+        private readonly mediaService: MediaService
     ) { }
 
     public async modelToViewModel(model: PictureModel, viewModel?: PictureViewModel, bindingContext?: Bag<any>): Promise<PictureViewModel> {
@@ -22,6 +25,21 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
         let sourceUrl = null;
 
         if (model.sourceKey) {
+            const media = await this.mediaService.getMediaByKey(model.sourceKey);
+
+            if (media?.variants) {
+                const variants = media.variants.map(variantContract => {
+                    const variantModel = new MediaVariantModel();
+                    variantModel.width = variantContract.width;
+                    variantModel.height = variantContract.height;
+                    variantModel.mimeType = variantContract.mimeType;
+                    variantModel.downloadUrl = variantContract.downloadUrl;
+                    return variantModel;
+                });
+
+                viewModel.variants(variants);
+            }
+
             sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(model.sourceKey);
 
             if (!sourceUrl) {

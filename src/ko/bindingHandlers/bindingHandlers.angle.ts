@@ -1,3 +1,4 @@
+import { Events } from "@paperbits/common/events";
 import * as ko from "knockout";
 
 export interface SliderConfig {
@@ -47,14 +48,14 @@ ko.bindingHandlers["angle"] = {
             determineAngle(event.offsetX, event.offsetY);
         };
 
-        element.addEventListener("mousedown", onMouseDown);
-        element.addEventListener("mouseup", onMouseUp, true);
-        element.addEventListener("mousemove", onMouseMove, true);
+        element.addEventListener(Events.MouseDown, onMouseDown);
+        element.addEventListener(Events.MouseUp, onMouseUp, true);
+        element.addEventListener(Events.MouseMove, onMouseMove, true);
 
         ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
-            element.removeEventListener("mousedown", onMouseDown);
-            element.removeEventListener("mouseup", onMouseUp, true);
-            element.removeEventListener("mousemove", onMouseMove, true);
+            element.removeEventListener(Events.MouseDown, onMouseDown);
+            element.removeEventListener(Events.MouseUp, onMouseUp, true);
+            element.removeEventListener(Events.MouseMove, onMouseMove, true);
         });
     }
 };

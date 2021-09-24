@@ -91,6 +91,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindSingleton("tray", Tray);
         injector.bindSingleton("viewStack", ViewStack);
         injector.bind("mediaDisplay", MediaDisplay);
+        injector.bindSingleton("stateCache", MemoryCache);
         injector.bindSingleton("changesCache", MemoryCache);
         injector.bind("mediaHyperlinkProvider", MediaHyperlinkProvider);
         injector.bind("urlHyperlinkProvider", UrlHyperlinkProvider);

@@ -8,6 +8,7 @@ import { SectionHandlers } from "../sectionHandlers";
 import { EventManager } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
+import { WidgetViewModel } from "../../ko";
 
 
 export class SectionViewModelBinder implements ViewModelBinder<SectionModel, SectionViewModel> {
@@ -22,14 +23,12 @@ export class SectionViewModelBinder implements ViewModelBinder<SectionModel, Sec
             viewModel = new SectionViewModel();
         }
 
-        const viewModels = [];
-
-        for (const widgetModel of model.widgets) {
+        const promises = model.widgets.map(widgetModel => {
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+            return widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+        });
 
-            viewModels.push(widgetViewModel);
-        }
+        const viewModels = await Promise.all<WidgetViewModel>(promises);
 
         if (viewModels.length === 0) {
             viewModels.push(<any>new PlaceholderViewModel("Section"));

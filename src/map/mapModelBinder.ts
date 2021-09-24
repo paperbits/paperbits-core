@@ -19,6 +19,7 @@ export class MapModelBinder implements IModelBinder<MapModel> {
         model.zoom = contract.zoom;
         model.mapType = contract.mapType;
         model.styles = contract.styles;
+        model.customizations = contract.customizations;
 
         if (contract.marker) {
             const markerModel = new MarkerModel();
@@ -39,7 +40,8 @@ export class MapModelBinder implements IModelBinder<MapModel> {
             location: model.location,
             zoom: model.zoom,
             mapType: model.mapType,
-            styles: model.styles
+            styles: model.styles,
+            customizations: model.customizations
         };
 
         if (model.marker) {

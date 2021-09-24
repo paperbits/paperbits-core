@@ -7,7 +7,7 @@ import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { WidgetEditor } from "@paperbits/common/widgets";
 import { SizeStylePluginConfig } from "@paperbits/styles/contracts";
 import { ViewManager } from "@paperbits/common/ui";
-import { EventManager, CommonEvents } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 
 @Component({
     selector: "youtube-player-editor",
@@ -41,7 +41,7 @@ export class YoutubePlayerEditor implements WidgetEditor<YoutubePlayerModel> {
     public initialize(): void {
         this.updateObservables();
 
-        this.eventManager.addEventListener(CommonEvents.onViewportChange, this.updateObservables);
+        this.eventManager.addEventListener(Events.ViewportChange, this.updateObservables);
 
         this.videoId
             .extend(ChangeRateLimit)

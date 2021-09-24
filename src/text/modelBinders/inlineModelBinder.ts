@@ -34,6 +34,7 @@ export class InlineModelBinder {
                         const anchor: string = markContract.attrs?.anchor;
                         const anchorName: string = markContract.attrs?.anchorName;
                         const download: string = targetKey?.startsWith("uploads/") ? "" : undefined;
+                        const triggerEvent: string = markContract.attrs?.triggerEvent;
 
                         const href = targetKey
                             ? await this.permalinkResolver.getUrlByTargetKey(targetKey, bindingContent?.locale)
@@ -45,7 +46,8 @@ export class InlineModelBinder {
                             targetKey: targetKey,
                             anchor: anchor,
                             anchorName: anchorName,
-                            download: download
+                            download: download,
+                            triggerEvent: triggerEvent
                         };
                         break;
 
@@ -90,7 +92,8 @@ export class InlineModelBinder {
                         anchor: model.anchor,
                         anchorName: model.anchorName,
                         target: model.target,
-                        targetKey: model.targetKey
+                        targetKey: model.targetKey,
+                        triggerEvent: model.triggerEvent
                     };
                 }
                 else {

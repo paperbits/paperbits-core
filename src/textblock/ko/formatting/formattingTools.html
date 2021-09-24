@@ -70,8 +70,8 @@
 
 <!-- ko if: textStyles().length > 1 -->
 <div class="toolbox-btn toolbox-dropdown">
-    <a href="#" role="button" aria-label="Change block style"
-        data-bind="text: appearance, balloon: { component: { name: 'text-style-selector', params: { styles: textStyles, onSelect: onTextStyleSelected } } }, tooltip: { message: 'Change block style' }"></a>
+    <a href="#" role="button" aria-label="Change text style"
+        data-bind="text: appearance, balloon: { component: { name: 'text-style-selector', params: { styles: textStyles, onSelect: onTextStyleSelected } } }, tooltip: { message: 'Change text style' }"></a>
 </div>
 <!-- /ko -->
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active':  alignment() == 'left' }">

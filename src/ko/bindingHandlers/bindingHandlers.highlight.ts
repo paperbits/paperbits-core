@@ -1,5 +1,6 @@
 ﻿import * as ko from "knockout";
 import { IHighlightConfig } from "@paperbits/common/ui";
+import { Events } from "@paperbits/common/events";
 
 ko.bindingHandlers["highlight"] = {
     init(element: HTMLElement, valueAccessor: () => IHighlightConfig): void {
@@ -29,10 +30,10 @@ ko.bindingHandlers["highlight"] = {
 
         updatePosition();
 
-        document.addEventListener("scroll", updatePosition);
+        document.addEventListener(Events.Scroll, updatePosition);
 
         ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
-            document.removeEventListener("scroll", updatePosition);
+            document.removeEventListener(Events.Scroll, updatePosition);
         });
     },
 

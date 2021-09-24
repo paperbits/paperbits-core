@@ -51,6 +51,7 @@ export class NavigationDetailsWorkshop {
         hyperlink.target = this.navigationItem.targetWindow();
         hyperlink.targetKey = targetKey;
         hyperlink.anchor = this.navigationItem.anchor();
+        hyperlink.triggerEvent = this.navigationItem.triggerEvent();
 
         this.hyperlink(hyperlink);
     }
@@ -60,6 +61,7 @@ export class NavigationDetailsWorkshop {
         this.navigationItem.targetKey(hyperlink?.targetKey);
         this.navigationItem.targetWindow(hyperlink?.target);
         this.navigationItem.anchor(hyperlink?.anchor);
+        this.navigationItem.triggerEvent(hyperlink?.triggerEvent);
     }
 
     public deleteNavigationItem(): void {

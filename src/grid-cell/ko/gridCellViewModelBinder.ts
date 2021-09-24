@@ -1,14 +1,13 @@
-import * as Utils from "@paperbits/common/utils";
-import { GridCellViewModel } from "./gridCellViewModel";
-import { ViewModelBinder } from "@paperbits/common/widgets";
+import { Bag } from "@paperbits/common";
 import { IWidgetBinding } from "@paperbits/common/editing";
-import { GridCellModel } from "../gridCellModel";
+import { EventManager } from "@paperbits/common/events";
+import { StyleCompiler } from "@paperbits/common/styles";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { GridCellHandlers } from "../gridCellHandlers";
-import { EventManager } from "@paperbits/common/events";
-import { StyleCompiler } from "@paperbits/common/styles";
-import { Bag } from "@paperbits/common";
+import { GridCellModel } from "../gridCellModel";
+import { GridCellViewModel } from "./gridCellViewModel";
 
 export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, GridCellViewModel> {
     constructor(
@@ -22,20 +21,15 @@ export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, G
             viewModel = new GridCellViewModel();
         }
 
-        const widgetViewModels = [];
-
-        for (const widgetModel of model.widgets) {
+        const promises = model.widgets.map(widgetModel => {
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
 
-            if (widgetViewModelBinder.createWidgetBinding) {
-                const binding = await widgetViewModelBinder.createWidgetBinding<GridCellViewModel>(widgetModel, bindingContext);
-                widgetViewModels.push(binding);
-            }
-            else {
-                const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
-                widgetViewModels.push(widgetViewModel);
-            }
-        }
+            return widgetViewModelBinder.createWidgetBinding
+                ? widgetViewModelBinder.createWidgetBinding<GridCellViewModel>(widgetModel, bindingContext)
+                : widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+        });
+
+        const widgetViewModels = await Promise.all(promises);
 
         if (widgetViewModels.length === 0) {
             widgetViewModels.push(new PlaceholderViewModel(model.role));

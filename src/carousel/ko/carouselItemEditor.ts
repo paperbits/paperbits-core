@@ -12,7 +12,7 @@ import {
     SizeStylePluginConfig
 } from "@paperbits/styles/contracts";
 import { EventManager } from "@paperbits/common/events/eventManager";
-import { CommonEvents } from "@paperbits/common/events";
+import { Events } from "@paperbits/common/events";
 import { GridModel } from "../../grid-layout-section";
 import { StyleHelper } from "@paperbits/styles";
 
@@ -43,7 +43,7 @@ export class CarouselItemEditor {
     @OnMounted()
     public async initialize(): Promise<void> {
         this.updateObservables();
-        this.eventManager.addEventListener(CommonEvents.onViewportChange, this.updateObservables);
+        this.eventManager.addEventListener(Events.ViewportChange, this.updateObservables);
     }
 
     private updateObservables(): void {

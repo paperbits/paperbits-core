@@ -1,6 +1,7 @@
 ﻿import * as ko from "knockout";
 import { Loader, LoaderOptions } from "@googlemaps/js-api-loader";
 import { MapRuntimeConfig } from "./runtime/mapRuntimeConfig";
+import { Events } from "@paperbits/common/events";
 
 
 export class GooglmapsBindingHandler {
@@ -43,7 +44,8 @@ export class GooglmapsBindingHandler {
             draggable: false,
             disableDefaultUI: true,
             mapTypeId: configuration.mapType,
-            zoom: configuration.zoom
+            zoom: configuration.zoom,
+            styles: configuration.customizations
         });
 
         const locationToPosition = async (location: string): Promise<google.maps.LatLng> => {
@@ -134,7 +136,7 @@ export class GooglmapsBindingHandler {
             const anchor = new PopupAnchor(position);
             anchor.setMap(map);
 
-            marker.addListener("click", () => document.dispatchEvent(new CustomEvent("onPopupRequested", { detail: configuration.markerPopupKey })));
+            marker.addListener(Events.Click, () => document.dispatchEvent(new CustomEvent("onPopupRequested", { detail: configuration.markerPopupKey })));
         }
         else {
             const infowindow = new google.maps.InfoWindow();

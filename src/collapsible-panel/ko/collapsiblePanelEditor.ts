@@ -4,7 +4,7 @@ import { CollapsiblePanelModel } from "../collapsiblePanelModel";
 import { Component, OnMounted, Param, Event, OnDestroyed } from "@paperbits/common/ko/decorators";
 import { ContainerStylePluginConfig, BackgroundStylePluginConfig, SizeStylePluginConfig } from "@paperbits/styles/contracts";
 import { ViewManager } from "@paperbits/common/ui";
-import { EventManager, CommonEvents } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { StyleHelper } from "@paperbits/styles";
 
 @Component({
@@ -34,7 +34,7 @@ export class CollapsiblePanelEditor {
     @OnMounted()
     public initialize(): void {
         this.updateObservables();
-        this.eventManager.addEventListener(CommonEvents.onViewportChange, this.updateObservables);
+        this.eventManager.addEventListener(Events.ViewportChange, this.updateObservables);
     }
 
     private updateObservables(): void {
@@ -73,6 +73,6 @@ export class CollapsiblePanelEditor {
 
     @OnDestroyed()
     public dispose(): void {
-        this.eventManager.removeEventListener(CommonEvents.onViewportChange, this.initialize);
+        this.eventManager.removeEventListener(Events.ViewportChange, this.initialize);
     }
 }

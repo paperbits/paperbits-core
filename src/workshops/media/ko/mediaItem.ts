@@ -1,6 +1,7 @@
 ﻿import * as ko from "knockout";
 import * as MediaUtils from "@paperbits/common/media/mediaUtils";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
+import { MediaVariantContract } from "@paperbits/common/media/mediaVariantContract";
 import { IWidgetOrder, IWidgetFactoryResult } from "@paperbits/common/editing";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 
@@ -33,20 +34,30 @@ export class MediaItem {
         this.nonPreviewable = ko.computed(() => !mediaContract.mimeType?.startsWith("image/") && !mediaContract.mimeType?.startsWith("video/"));
         this.thumbnailUrl = ko.observable<string>();
         this.downloadUrl = ko.observable<string>(mediaContract.downloadUrl);
-        this.getThumbnail(mediaContract);
+        this.setThumbnail(mediaContract);
     }
 
-    private async getThumbnail(mediaContract: MediaContract): Promise<void> {
+    private async setThumbnail(mediaContract: MediaContract): Promise<void> {
         if (mediaContract.mimeType?.startsWith("video")) {
-            const dataUrl = await MediaUtils.getVideoThumbnailAsDataUrlFromUrl(mediaContract.downloadUrl);
-            this.thumbnailUrl(dataUrl);
+            const thumbnailUrl = await MediaUtils.getVideoThumbnailAsDataUrlFromUrl(mediaContract.downloadUrl);
+            this.thumbnailUrl(thumbnailUrl);
+            return;
         }
-        else if (mediaContract.mimeType?.startsWith("image")) {
-            this.thumbnailUrl(mediaContract.downloadUrl);
+
+        if (mediaContract.mimeType?.startsWith("image")) {
+            let thumbnailUrl = mediaContract.downloadUrl;
+
+            if (mediaContract.variants) {
+                const reducer = (smallest: MediaVariantContract, current: MediaVariantContract) => smallest.width <= current.width ? smallest : current;
+                const smallestImageVariant = mediaContract.variants.reduce(reducer);
+                thumbnailUrl = smallestImageVariant.downloadUrl;
+            }
+
+            this.thumbnailUrl(thumbnailUrl);
+            return;
         }
-        else {
-            this.thumbnailUrl(null); // TODO: Placeholder?
-        }
+
+        this.thumbnailUrl(null); // TODO: Placeholder?
     }
 
     public isDefaultFileName(): boolean {

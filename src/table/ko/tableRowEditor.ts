@@ -34,7 +34,7 @@ export class TableRowEditor {
     public async initialize(): Promise<void> {
         const height = Size.parse(this.model.styles.instance.grid.xs.rows[this.rowIndex]);
 
-        if (height.units === SizeUnits.pixels) {
+        if (height?.units === SizeUnits.pixels) {
             this.height(height.value);
         }
 

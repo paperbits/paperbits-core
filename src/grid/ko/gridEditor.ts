@@ -3,7 +3,7 @@ import * as Utils from "@paperbits/common/utils";
 import { ViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet } from "@paperbits/common/ui";
 import { IWidgetBinding, GridHelper, WidgetContext, GridItem } from "@paperbits/common/editing";
 import { IWidgetService } from "@paperbits/common/widgets";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events, MouseButton } from "@paperbits/common/events";
 import { Router } from "@paperbits/common/routing";
 import { ContentModel } from "../../content";
 import { PopupHostModel } from "../../popup/popupHostModel";
@@ -147,7 +147,12 @@ export class GridEditor {
     }
 
     private onMouseClick(event: MouseEvent): void {
-        event.preventDefault(); // prevent default event handling for all controls
+        const htmlElement = <HTMLElement>event.target;
+        const htmlLinkElement = <HTMLLinkElement>htmlElement.closest("A");
+
+        if (htmlLinkElement) {
+            event.preventDefault(); // prevent default event handling for hyperlink controls
+        }
     }
 
     private onPointerDown(event: PointerEvent): void {
@@ -171,7 +176,7 @@ export class GridEditor {
             return;
         }
 
-        if (event.button !== 0) {
+        if (event.button !== MouseButton.Main) {
             return;
         }
 
@@ -607,7 +612,7 @@ export class GridEditor {
                 continue;
             }
 
-     
+
             const index = tobeDeleted.indexOf(widgetBinding.name);
             tobeDeleted.splice(index, 1);
 
@@ -647,19 +652,19 @@ export class GridEditor {
     public initialize(ownerDocument: Document): void {
         this.ownerDocument = ownerDocument;
         // Firefox doesn't fire "pointermove" events by some reason
-        this.ownerDocument.addEventListener("mousemove", this.onPointerMove, true);
-        this.ownerDocument.addEventListener("scroll", this.onWindowScroll);
-        this.ownerDocument.addEventListener("mousedown", this.onPointerDown, true);
-        this.ownerDocument.addEventListener("click", this.onMouseClick, true);
+        this.ownerDocument.addEventListener(Events.MouseMove, this.onPointerMove, true);
+        this.ownerDocument.addEventListener(Events.Scroll, this.onWindowScroll);
+        this.ownerDocument.addEventListener(Events.MouseDown, this.onPointerDown, true);
+        this.ownerDocument.addEventListener(Events.Click, this.onMouseClick, true);
         this.eventManager.addEventListener("onKeyDown", this.onKeyDown);
         this.eventManager.addEventListener("onDelete", this.onDelete);
     }
 
     public dispose(): void {
-        this.ownerDocument.removeEventListener("mousemove", this.onPointerMove, true);
-        this.ownerDocument.removeEventListener("scroll", this.onWindowScroll);
-        this.ownerDocument.removeEventListener("mousedown", this.onPointerDown, true);
-        this.ownerDocument.removeEventListener("click", this.onMouseClick, false);
+        this.ownerDocument.removeEventListener(Events.MouseMove, this.onPointerMove, true);
+        this.ownerDocument.removeEventListener(Events.Scroll, this.onWindowScroll);
+        this.ownerDocument.removeEventListener(Events.MouseDown, this.onPointerDown, true);
+        this.ownerDocument.removeEventListener(Events.Click, this.onMouseClick, false);
         this.eventManager.removeEventListener("onKeyDown", this.onKeyDown);
         this.eventManager.removeEventListener("onDelete", this.onDelete);
 

@@ -33,4 +33,9 @@ export interface MapRuntimeConfig {
      * Marker popup key.
      */
     markerPopupKey?: string;
+
+    /**
+     * Map customizations (depends on map type).
+     */
+    customizations: any;
 }
