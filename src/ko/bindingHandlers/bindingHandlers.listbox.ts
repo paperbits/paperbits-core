@@ -8,19 +8,21 @@ const selectedClassName = "selected";
 const optionElementSelector = "[role=option]";
 
 ko.bindingHandlers["listbox"] = {
-    init: (containerElement: HTMLElement) => {
+    init: (listboxElement: HTMLElement) => {
         let activeItemIndex: number;
         let optionElements: HTMLElement[];
 
-        if (containerElement.getAttribute(Attributes.Role) !== "listbox") {
+        if (listboxElement.getAttribute(Attributes.Role) !== "listbox") {
             console.warn(`List and its child elements should have role="listbox" and role="options" attributes respectively.`);
             return;
         }
 
+        listboxElement.setAttribute(Attributes.TabIndex, "0");
+
         const onKeyDown = (event: KeyboardEvent): void => {
             const eventTarget = <HTMLElement>event.target;
 
-            if (!containerElement.contains(eventTarget)) {
+            if (!listboxElement.contains(eventTarget)) {
                 return;
             }
 
@@ -28,13 +30,15 @@ ko.bindingHandlers["listbox"] = {
                 return;
             }
 
-            optionElements = Array.coerce<HTMLElement>(containerElement.querySelectorAll(optionElementSelector));
+            optionElements = Array.coerce<HTMLElement>(listboxElement.querySelectorAll(optionElementSelector));
 
-            const selectedElement = <HTMLElement>containerElement.querySelector(`[${AriaAttributes.selected}]`);
+            const selectedElement = <HTMLElement>listboxElement.querySelector(`[${AriaAttributes.selected}]`);
             const lastActiveOption = optionElements[activeItemIndex];
 
             switch (event.key) {
                 case Keys.ArrowDown:
+                    event.preventDefault();
+
                     const nextIndex = activeItemIndex + 1;
 
                     if (nextIndex >= optionElements.length) {
@@ -51,11 +55,14 @@ ko.bindingHandlers["listbox"] = {
                     break;
 
                 case Keys.ArrowUp:
+                    event.preventDefault();
+                    
                     const prevIndex = activeItemIndex - 1;
 
                     if (prevIndex < 0) {
                         return;
                     }
+
                     const prevListItem = optionElements[prevIndex];
                     prevListItem.setAttribute(Attributes.TabIndex, "0");
                     prevListItem.focus();
@@ -80,7 +87,7 @@ ko.bindingHandlers["listbox"] = {
         };
 
         const onContainerElementFocus = (): void => {
-            optionElements = Array.coerce<HTMLElement>(containerElement.querySelectorAll(optionElementSelector));
+            optionElements = Array.coerce<HTMLElement>(listboxElement.querySelectorAll(optionElementSelector));
 
             if (optionElements.length === 0) {
                 return;
@@ -102,22 +109,22 @@ ko.bindingHandlers["listbox"] = {
         const onGlobalFocusChange = (event: KeyboardEvent): void => {
             const eventTarget = <HTMLElement>event.target;
 
-            if (containerElement.contains(eventTarget)) {
-                containerElement.removeAttribute(Attributes.TabIndex);
+            if (listboxElement.contains(eventTarget)) {
+                listboxElement.removeAttribute(Attributes.TabIndex);
             }
             else {
-                containerElement.setAttribute(Attributes.TabIndex, "0");
+                listboxElement.setAttribute(Attributes.TabIndex, "0");
             }
         };
 
         document.addEventListener(Events.KeyDown, onKeyDown, true);
         document.addEventListener(Events.Focus, onGlobalFocusChange, true);
-        containerElement.addEventListener(Events.Focus, onContainerElementFocus);
+        listboxElement.addEventListener(Events.Focus, onContainerElementFocus);
 
-        ko.utils.domNodeDisposal.addDisposeCallback(containerElement, (): void => {
+        ko.utils.domNodeDisposal.addDisposeCallback(listboxElement, (): void => {
             document.removeEventListener(Events.KeyDown, onKeyDown, true);
             document.removeEventListener(Events.Focus, onGlobalFocusChange, true);
-            containerElement.removeEventListener(Events.Focus, onContainerElementFocus);
+            listboxElement.removeEventListener(Events.Focus, onContainerElementFocus);
         });
     }
 };
