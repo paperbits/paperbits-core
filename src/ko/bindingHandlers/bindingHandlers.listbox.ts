@@ -1,109 +1,125 @@
+import * as ko from "knockout";
 import * as Array from "@paperbits/common";
 import { Keys } from "@paperbits/common/keyboard";
 import { Events } from "@paperbits/common/events";
-import { AriaAttributes, Attributes } from "@paperbits/common/html";
-import * as ko from "knockout";
+import { AriaAttributes, AriaRoles, Attributes } from "@paperbits/common/html";
+
 
 const selectedClassName = "selected";
 const optionElementSelector = "[role=option]";
+const selectedOptionElementSelector = `[${AriaAttributes.selected}]`;
+const defaultTabIndex = "0";
 
 ko.bindingHandlers["listbox"] = {
     init: (listboxElement: HTMLElement) => {
         let activeItemIndex: number;
-        let optionElements: HTMLElement[];
 
-        if (listboxElement.getAttribute(Attributes.Role) !== "listbox") {
-            console.warn(`List and its child elements should have role="listbox" and role="options" attributes respectively.`);
+        if (listboxElement.getAttribute(Attributes.Role) !== AriaRoles.Listbox) {
+            console.warn(`List and its child elements should have role="listbox" and role="option" attributes respectively.`);
             return;
         }
 
-        listboxElement.setAttribute(Attributes.TabIndex, "0");
+        listboxElement.setAttribute(Attributes.TabIndex, defaultTabIndex);
+
+        const getOptionElements = (): HTMLElement[] => {
+            return Array.coerce<HTMLElement>(listboxElement.querySelectorAll(optionElementSelector));
+        };
+
+        const getActiveOptionElement = (): HTMLElement => {
+            const optionElements = getOptionElements();
+            const activeOptionElement = optionElements.find(x => x.getAttribute(Attributes.TabIndex) === defaultTabIndex);
+
+            return activeOptionElement;
+        };
+
+        const getSelectedOptionElement = (): HTMLElement => {
+            const selectedOptionElement = <HTMLElement>listboxElement.querySelector(selectedOptionElementSelector);
+            return selectedOptionElement;
+        };
+
+        const setActiveOption = (optionIndex: number): void => {
+            const optionElements = getOptionElements();
+            const currentActiveOption = optionElements.find(element => !!element.getAttribute(Attributes.TabIndex));
+
+            if (currentActiveOption) {
+                currentActiveOption.removeAttribute(Attributes.TabIndex);
+            }
+
+            const activeOption = optionElements[optionIndex];
+            activeOption.setAttribute(Attributes.TabIndex, defaultTabIndex);
+            activeOption.focus();
+
+            activeItemIndex = optionIndex;
+        };
 
         const onKeyDown = (event: KeyboardEvent): void => {
             const eventTarget = <HTMLElement>event.target;
 
-            if (!listboxElement.contains(eventTarget)) {
+            if (!listboxElement.contains(eventTarget) || !eventTarget.matches(optionElementSelector)) {
                 return;
             }
-
-            if (eventTarget.getAttribute(Attributes.Role) !== "option") {
-                return;
-            }
-
-            optionElements = Array.coerce<HTMLElement>(listboxElement.querySelectorAll(optionElementSelector));
-
-            const selectedElement = <HTMLElement>listboxElement.querySelector(`[${AriaAttributes.selected}]`);
-            const lastActiveOption = optionElements[activeItemIndex];
 
             switch (event.key) {
                 case Keys.ArrowDown:
                     event.preventDefault();
 
                     const nextIndex = activeItemIndex + 1;
+                    const optionElements = getOptionElements();
 
                     if (nextIndex >= optionElements.length) {
                         return;
                     }
 
-                    const nextListItem = optionElements[nextIndex];
-                    nextListItem.setAttribute(Attributes.TabIndex, "0");
-                    nextListItem.focus();
-                    lastActiveOption.removeAttribute(Attributes.TabIndex);
-
-                    activeItemIndex = nextIndex;
+                    setActiveOption(nextIndex);
 
                     break;
 
                 case Keys.ArrowUp:
                     event.preventDefault();
-                    
+
                     const prevIndex = activeItemIndex - 1;
 
                     if (prevIndex < 0) {
                         return;
                     }
 
-                    const prevListItem = optionElements[prevIndex];
-                    prevListItem.setAttribute(Attributes.TabIndex, "0");
-                    prevListItem.focus();
-                    lastActiveOption.removeAttribute(Attributes.TabIndex);
-
-                    activeItemIndex = prevIndex;
+                    setActiveOption(prevIndex);
 
                     break;
 
                 case Keys.Enter:
                 case Keys.Space:
-                    if (selectedElement) {
-                        selectedElement.removeAttribute(AriaAttributes.selected);
-                        selectedElement.classList.remove(selectedClassName);
+                    const selectedOptionElement = getSelectedOptionElement();
+
+                    if (selectedOptionElement) {
+                        selectedOptionElement.removeAttribute(AriaAttributes.selected);
+                        selectedOptionElement.classList.remove(selectedClassName);
                     }
 
-                    lastActiveOption.setAttribute(AriaAttributes.selected, "true");
-                    lastActiveOption.classList.add(selectedClassName);
+                    const activeOptionElement = getActiveOptionElement();
+                    activeOptionElement.setAttribute(AriaAttributes.selected, "true");
+                    activeOptionElement.classList.add(selectedClassName);
 
                     break;
             }
         };
 
         const onContainerElementFocus = (): void => {
-            optionElements = Array.coerce<HTMLElement>(listboxElement.querySelectorAll(optionElementSelector));
+            const optionElements = getOptionElements();
 
             if (optionElements.length === 0) {
                 return;
             }
 
-            let activeOption = optionElements.find(x => x.getAttribute(Attributes.TabIndex) === "0");
+            const activeOptionElement = optionElements.find(x => x.getAttribute(Attributes.TabIndex) === defaultTabIndex);
 
-            if (activeOption) {
-                activeOption.focus();
+            if (activeOptionElement) {
+                activeOptionElement.focus();
                 return;
             }
 
             activeItemIndex = 0;
-            activeOption = optionElements[activeItemIndex];
-            activeOption.setAttribute(Attributes.TabIndex, "0");
-            activeOption.focus();
+            setActiveOption(activeItemIndex);
         };
 
         const onGlobalFocusChange = (event: KeyboardEvent): void => {
@@ -113,18 +129,33 @@ ko.bindingHandlers["listbox"] = {
                 listboxElement.removeAttribute(Attributes.TabIndex);
             }
             else {
-                listboxElement.setAttribute(Attributes.TabIndex, "0");
+                listboxElement.setAttribute(Attributes.TabIndex, defaultTabIndex);
             }
         };
 
-        document.addEventListener(Events.KeyDown, onKeyDown, true);
-        document.addEventListener(Events.Focus, onGlobalFocusChange, true);
+        const onMouseDown = (event: MouseEvent): void => {
+            const eventTarget = <HTMLElement>event.target;
+            const optionElement = <HTMLElement>eventTarget.closest(optionElementSelector);
+
+            if (!optionElement) {
+                return;
+            }
+
+            const optionElements = Array.coerce<HTMLElement>(listboxElement.querySelectorAll(optionElementSelector));
+            const activeItemIndex = optionElements.indexOf(optionElement);
+            setActiveOption(activeItemIndex);
+        };
+
+        listboxElement.addEventListener(Events.MouseDown, onMouseDown, true);
+        listboxElement.addEventListener(Events.KeyDown, onKeyDown, true);
         listboxElement.addEventListener(Events.Focus, onContainerElementFocus);
+        document.addEventListener(Events.Focus, onGlobalFocusChange, true);
 
         ko.utils.domNodeDisposal.addDisposeCallback(listboxElement, (): void => {
-            document.removeEventListener(Events.KeyDown, onKeyDown, true);
-            document.removeEventListener(Events.Focus, onGlobalFocusChange, true);
+            listboxElement.removeEventListener(Events.MouseDown, onMouseDown, true);
+            listboxElement.removeEventListener(Events.KeyDown, onKeyDown, true);
             listboxElement.removeEventListener(Events.Focus, onContainerElementFocus);
+            document.removeEventListener(Events.Focus, onGlobalFocusChange, true);
         });
     }
 };
