@@ -1,5 +1,5 @@
 ﻿import * as ko from "knockout";
-import { GlobalEventHandler } from "@paperbits/common/events";
+import { EventManager, Events, GlobalEventHandler } from "@paperbits/common/events";
 import { ViewManager, ViewManagerMode } from "@paperbits/common/ui";
 import { Router, Route } from "@paperbits/common/routing";
 import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
@@ -11,12 +11,15 @@ export class HostBindingHandler {
     private readonly hostComponent: ko.Observable<any>;
     private readonly designTime: ko.Observable<boolean>;
 
+    private theElement: any;
+
     constructor(
         private readonly globalEventHandler: GlobalEventHandler,
         private readonly viewManager: ViewManager,
         private readonly router: Router,
         private readonly siteService: SiteService,
-        private readonly mediaService: IMediaService
+        private readonly mediaService: IMediaService,
+        private readonly eventManager: EventManager
     ) {
         this.hostComponent = ko.observable();
         this.designTime = ko.observable(true);
@@ -28,6 +31,8 @@ export class HostBindingHandler {
                 const css = ko.observable<string>("desktop");
 
                 config.block.subscribe(this.designTime);
+
+                this.theElement = element;
 
                 config.viewport.subscribe((viewport: string) => {
                     this.viewManager.mode = ViewManagerMode.selecting;
@@ -82,6 +87,7 @@ export class HostBindingHandler {
         hostElement.classList.add("host");
         hostElement.title = "Website";
         hostElement.tabIndex = -1;
+        hostElement.setAttribute("aria-hidden", "true");
 
         let hostedWindowHistory;
 
@@ -92,6 +98,7 @@ export class HostBindingHandler {
 
         const onLoad = async (): Promise<void> => {
             const contentDocument = hostElement.contentDocument;
+
             this.viewManager["hostDocument"] = contentDocument;
             this.globalEventHandler.appendDocument(contentDocument);
             this.setRootElement(contentDocument.body);
@@ -147,7 +154,7 @@ export class HostBindingHandler {
         return hostElement;
     }
 
-    private async setRootElement(bodyElement: HTMLElement): Promise<void> {
+    private setRootElement(bodyElement: HTMLElement): void {
         const styleElement = document.createElement("style");
         bodyElement.ownerDocument.head.appendChild(styleElement);
 

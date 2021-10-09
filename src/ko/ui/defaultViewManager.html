@@ -2,7 +2,7 @@
 <dropbucket></dropbucket>
 
 <!-- ko if: host -->
-<div class="viewport" data-bind="host: { viewport: viewport, host: host, block: block }"></div>
+<div id="contentEditor" class="viewport" tabindex="0" data-bind="host: { viewport: viewport, host: host, block: block }"></div>
 <!-- /ko -->
 
 <div class="shutter" data-bind="css: { 'active': shutter }">
@@ -20,7 +20,7 @@
 
             <!-- ko if: commands().length > 0 -->
             <div class="flex-item btn-group" data-bind="foreach: { data: commands, as: 'command' }">
-                <button class="btn btn-round" data-bind="click: command.action">
+                <button tabindex="-1" class="btn btn-round" data-bind="click: command.action">
                     <!-- ko if: command.iconClass -->
                     <i aria-hidden="true" data-bind="css: command.iconClass"></i>
                     <!-- /ko -->
@@ -40,7 +40,7 @@
             <span data-bind="text: heading"></span>
         </h1>
         <!-- /ko -->
-        <button class="btn btn-dismiss" title="Close" aria-label="Close" data-bind="click: $component.closeView">
+        <button tabindex="-1" class="btn btn-dismiss" title="Close" aria-label="Close" data-bind="click: $component.closeView">
             <i aria-hidden="true" class="paperbits-icon paperbits-simple-remove"></i>
         </button>
         <hr />
@@ -54,7 +54,7 @@
 
 <!-- ko foreach: { data: contextualCommands, as: 'contextualCommand' } -->
 <!-- ko foreach: { data: contextualCommand.hoverCommands, as: 'hoverCommand' } -->
-<button class="fixed btn-standalone"
+<button tabindex="-1" class="fixed btn-standalone"
     data-bind="contextualCommand: { element: contextualCommand.element, command: hoverCommand }">
     <i aria-hidden="true" data-bind="css: hoverCommand.iconClass"></i>
 </button>
@@ -109,7 +109,7 @@
 <!-- ko with: selectedElementContextualEditor() -->
 <div class="fixed" data-bind="stickTo: { target: element, position: 'top right' }">
     <!-- ko foreach: { data: selectCommands, as: 'command' } -->
-    <button class="btn-standalone" data-bind="gridCommand: command">
+    <button tabindex="-1" class="btn-standalone" data-bind="gridCommand: command">
         <i aria-hidden="true" data-bind="css: command.iconClass"></i>
     </button>
     <!-- ko if: command.component -->
@@ -118,7 +118,7 @@
     <!-- /ko -->
 
     <!-- ko if: deleteCommand -->
-    <button class="btn-standalone" data-bind="contextualCommand: { command: deleteCommand }">
+    <button tabindex="-1" class="btn-standalone" data-bind="contextualCommand: { command: deleteCommand }">
         <i aria-hidden="true" class="paperbits-icon paperbits-trash-simple"></i>
     </button>
     <!-- /ko -->
@@ -135,11 +135,11 @@
 
 <!-- ko if: canPreview -->
 <div class="toolbox toolbox-position-right-top">
-    <button class="toolbox-btn" data-bind="visible: primaryToolboxVisible(), click: $component.enablePreviewMode, tooltip: { message: '<h1>Preview</h1><p>See the website live before publishing.<p>', position: 'left' }" aria-label="Preview">
+    <button tabindex="-1" class="toolbox-btn" data-bind="visible: primaryToolboxVisible(), click: $component.enablePreviewMode, tooltip: { message: '<h1>Preview</h1><p>See the website live before publishing.<p>', position: 'left' }" aria-label="Preview">
         <i aria-hidden="true" class="paperbits-icon paperbits-l-search"></i>
     </button>
 
-    <button class="toolbox-btn" data-bind="visible: !primaryToolboxVisible(), click: $component.disablePreviewMode, tooltip: { message: '<h1>Exit preview</h1><p>Return to editing the content.<p>', position: 'left' }" aria-label="Exit preview">
+    <button tabindex="-1" class="toolbox-btn" data-bind="visible: !primaryToolboxVisible(), click: $component.disablePreviewMode, tooltip: { message: '<h1>Exit preview</h1><p>Return to editing the content.<p>', position: 'left' }" aria-label="Exit preview">
         <i aria-hidden="true" class="paperbits-icon paperbits-ban"></i>
     </button>
 </div>

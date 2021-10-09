@@ -8,6 +8,8 @@ import { Router } from "@paperbits/common/routing";
 import { ContentModel } from "../../content";
 import { PopupHostModel } from "../../popup/popupHostModel";
 import { SectionModel } from "../../section";
+import { Keys } from "@paperbits/common";
+
 
 
 export class GridEditor {
@@ -19,6 +21,7 @@ export class GridEditor {
     private activeContextualCommands: IContextCommandSet;
     private actives: object;
     private ownerDocument: Document;
+    private selection: GridItem;
 
 
     constructor(
@@ -262,6 +265,8 @@ export class GridEditor {
 
         this.viewManager.setSelectedElement(config, commandSet);
         this.activeContextualCommands = commandSet;
+
+        this.selection = item;
     }
 
     private onPointerMove(event: PointerEvent): void {
@@ -303,8 +308,8 @@ export class GridEditor {
         const gridItem = GridHelper.getGridItem(selectedElement.element);
 
         switch (event.key) {
-            case "ArrowDown":
-            case "ArrowRight":
+            case Keys.ArrowDown:
+            case Keys.ArrowRight:
                 const next = gridItem.getNextSibling();
 
                 if (next) {
@@ -313,8 +318,8 @@ export class GridEditor {
 
                 break;
 
-            case "ArrowUp":
-            case "ArrowLeft":
+            case Keys.ArrowUp:
+            case Keys.ArrowLeft:
                 const prev = gridItem.getPrevSibling();
 
                 if (prev) {
@@ -323,7 +328,7 @@ export class GridEditor {
 
                 break;
 
-            case "PageUp":
+            case Keys.PageUp:
                 const parent = gridItem.getParent();
 
                 if (parent && !(parent.binding.model instanceof ContentModel)) {
@@ -331,7 +336,7 @@ export class GridEditor {
                 }
                 break;
 
-            case "PageDown":
+            case Keys.PageDown:
                 let children;
 
                 if (gridItem.binding.model instanceof SectionModel) {
@@ -348,7 +353,7 @@ export class GridEditor {
                 }
                 break;
 
-            case "Enter":
+            case Keys.Enter:
                 if (gridItem.binding.editor) {
                     this.viewManager.openWidgetEditor(gridItem.binding);
                 }
@@ -649,6 +654,22 @@ export class GridEditor {
         }
     }
 
+    private onGlobalFocusChange(event: FocusEvent): void {
+        const target = <HTMLElement>event.target;
+
+        if (target.id === "contentEditor") {
+            if (this.selection) { // also, check for element existance.
+                this.selectElement(this.selection);
+            }
+        }
+        else {
+            console.log(this.viewManager.mode);
+            if (this.viewManager.mode !== ViewManagerMode.selected) {
+                this.viewManager.clearSelection();
+            }
+        }
+    }
+
     public initialize(ownerDocument: Document): void {
         this.ownerDocument = ownerDocument;
         // Firefox doesn't fire "pointermove" events by some reason
@@ -658,6 +679,9 @@ export class GridEditor {
         this.ownerDocument.addEventListener(Events.Click, this.onMouseClick, true);
         this.eventManager.addEventListener("onKeyDown", this.onKeyDown);
         this.eventManager.addEventListener("onDelete", this.onDelete);
+
+        document.addEventListener(Events.Focus, (e) => this.onGlobalFocusChange(e), true);
+
     }
 
     public dispose(): void {
@@ -667,6 +691,7 @@ export class GridEditor {
         this.ownerDocument.removeEventListener(Events.Click, this.onMouseClick, false);
         this.eventManager.removeEventListener("onKeyDown", this.onKeyDown);
         this.eventManager.removeEventListener("onDelete", this.onDelete);
+
 
     }
 }
