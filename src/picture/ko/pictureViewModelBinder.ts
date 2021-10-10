@@ -1,3 +1,4 @@
+import * as MediaUtils from "@paperbits/common/media/mediaUtils";
 import { PictureViewModel } from "./picture";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { PictureModel } from "../pictureModel";
@@ -8,6 +9,7 @@ import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { MediaService } from "@paperbits/common/media";
 import { MediaVariantModel } from "../mediaVariantModel";
+
 
 export class PictureViewModelBinder implements ViewModelBinder<PictureModel, PictureViewModel> {
     constructor(
@@ -38,9 +40,12 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
                 });
 
                 viewModel.variants(variants);
+                
+                sourceUrl = MediaUtils.getThumbnailUrl(media);
             }
-
-            sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(model.sourceKey);
+            else {
+                sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(model.sourceKey);
+            }
 
             if (!sourceUrl) {
                 console.warn(`Unable to set picture. Media with source key ${model.sourceKey} not found.`);

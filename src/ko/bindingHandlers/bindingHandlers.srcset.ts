@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import { MediaVariantModel } from "../../picture/mediaVariantModel";
 
 ko.bindingHandlers["srcset"] = {
-    init: (element: HTMLElement, valueAccessor) => {
+    update: (element: HTMLElement, valueAccessor) => {
         const variants: MediaVariantModel[] = ko.unwrap(valueAccessor());
 
         if (!variants) {

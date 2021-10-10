@@ -92,7 +92,7 @@ export class MediaDetailsWorkshop {
         }
     }
 
-    public async downloadMedia(): Promise<void> {
+    public downloadMedia(): void {
         FileSaver.saveAs(this.mediaItem.downloadUrl(), this.mediaItem.fileName(), { type: this.mediaItem.mimeType() });
     }
 

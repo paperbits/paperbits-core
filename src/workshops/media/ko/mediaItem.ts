@@ -23,6 +23,7 @@ export class MediaItem {
     public nonPreviewable: ko.Computed<boolean>;
 
 
+
     constructor(mediaContract: MediaContract) {
         this.key = mediaContract.key;
         this.blobKey = mediaContract.blobKey;
@@ -48,9 +49,7 @@ export class MediaItem {
             let thumbnailUrl = mediaContract.downloadUrl;
 
             if (mediaContract.variants) {
-                const reducer = (smallest: MediaVariantContract, current: MediaVariantContract) => smallest.width <= current.width ? smallest : current;
-                const smallestImageVariant = mediaContract.variants.reduce(reducer);
-                thumbnailUrl = smallestImageVariant.downloadUrl;
+                thumbnailUrl = MediaUtils.getThumbnailUrl(mediaContract);
             }
 
             this.thumbnailUrl(thumbnailUrl);

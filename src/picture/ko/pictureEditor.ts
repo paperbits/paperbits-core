@@ -1,6 +1,7 @@
 ﻿import * as ko from "knockout";
 import template from "./pictureEditor.html";
-import { MediaContract } from "@paperbits/common/media";
+import * as MediaUtils from "@paperbits/common/media/mediaUtils";
+import { MediaContract, MediaService } from "@paperbits/common/media";
 import { HyperlinkModel, IPermalinkResolver } from "@paperbits/common/permalinks";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
@@ -9,6 +10,7 @@ import { StyleService } from "@paperbits/styles/styleService";
 import { LocalStyles } from "@paperbits/common/styles";
 import { SizeStylePluginConfig } from "@paperbits/styles/plugins/size/sizeStylePluginConfig";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
+import { MediaItem } from "../../workshops/media/ko";
 
 
 @Component({
@@ -28,6 +30,7 @@ export class PictureEditor {
     constructor(
         private readonly styleService: StyleService,
         private readonly mediaPermalinkResolver: IPermalinkResolver,
+        private readonly mediaService: MediaService
     ) {
         this.caption = ko.observable<string>();
         this.sourceKey = ko.observable<string>();
@@ -48,11 +51,15 @@ export class PictureEditor {
     @OnMounted()
     public async initialize(): Promise<void> {
         if (this.model.sourceKey) {
-            const background = new BackgroundModel();
-            background.sourceKey = this.model.sourceKey;
-            background.sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(this.model.sourceKey);
-            this.background(background);
-            this.sourceKey(this.model.sourceKey);
+            const media = await this.mediaService.getMediaByKey(this.model.sourceKey);
+
+            if (media) {
+                const background = new BackgroundModel();
+                background.sourceKey = this.model.sourceKey;
+                background.sourceUrl = MediaUtils.getThumbnailUrl(media);
+                this.background(background);
+                this.sourceKey(this.model.sourceKey);
+            }
         }
 
         this.caption(this.model.caption);
@@ -90,7 +97,7 @@ export class PictureEditor {
         this.onChange(this.model);
     }
 
-    public async onMediaSelected(media: MediaContract): Promise<void> {
+    public async onMediaSelected(media: MediaItem): Promise<void> {
         if (!media) {
             this.background(null);
             this.sourceKey(null);
@@ -100,12 +107,12 @@ export class PictureEditor {
 
             const background = new BackgroundModel(); // TODO: Let's use proper model here
             background.sourceKey = media.key;
-            background.sourceUrl = media.downloadUrl;
+            background.sourceUrl = media.thumbnailUrl();
             background.size = "contain";
             background.position = "center center";
             this.background(background);
 
-            await this.updateSizeConfigForSelectedMedia(media); // TODO: Set size to media itself on upload
+            // await this.updateSizeConfigForSelectedMedia(media); // TODO: Set size to media itself on upload
         }
 
         this.applyChanges();
