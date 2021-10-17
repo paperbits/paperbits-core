@@ -1,6 +1,6 @@
 import * as Objects from "@paperbits/common/objects";
 import { Bag, Contract } from "@paperbits/common";
-import { IWidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { EventManager } from "@paperbits/common/events";
 import { ModelBinderSelector, ViewModelBinder } from "@paperbits/common/widgets";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
@@ -51,7 +51,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
             readonly: false,
             name: "content",
             model: model,
-            flow: "block",
+            flow: ComponentFlow.Block,
             draggable: true,
             handler: ContentHandlers,
             applyChanges: async () => {

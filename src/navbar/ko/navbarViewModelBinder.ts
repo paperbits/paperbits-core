@@ -7,6 +7,7 @@ import { NavbarModel } from "../navbarModel";
 import { NavbarModelBinder } from "../navbarModelBinder";
 import { StyleCompiler } from "@paperbits/common/styles/styleCompiler";
 import { Bag } from "@paperbits/common";
+import { ComponentFlow } from "@paperbits/common/editing";
 
 
 export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, NavbarViewModel> {
@@ -66,7 +67,7 @@ export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, Navba
             displayName: "Navigation bar",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
-            flow: "inline",
+            flow: ComponentFlow.Inline,
             draggable: true,
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);

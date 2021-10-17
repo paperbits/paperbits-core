@@ -5,6 +5,7 @@ import { EventManager } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles/styleCompiler";
 import { Bag } from "@paperbits/common";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
+import { ComponentFlow } from "@paperbits/common/editing";
 
 export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerModel, VideoPlayer> {
     constructor(
@@ -49,7 +50,7 @@ export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerMo
             displayName: "Video player",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
-            flow: "inline",
+            flow: ComponentFlow.Inline,
             draggable: true,
             editor: "video-player-editor",
             applyChanges: async () => {

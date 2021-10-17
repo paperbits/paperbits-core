@@ -6,7 +6,7 @@ import { EventManager } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles/styleCompiler";
 import { Bag } from "@paperbits/common";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
-import { IWidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { MediaService } from "@paperbits/common/media";
 import { MediaVariantModel } from "../mediaVariantModel";
 
@@ -68,7 +68,7 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: true,
-            flow: "inline",
+            flow: ComponentFlow.Inline,
             editor: "picture-editor",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);

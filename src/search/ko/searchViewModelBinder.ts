@@ -1,7 +1,7 @@
 import { Bag } from "@paperbits/common";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { EventManager } from "@paperbits/common/events";
-import { IWidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { SearchViewModel } from "./searchViewModel";
 import { SearchModel } from "../searchModel";
 
@@ -18,7 +18,7 @@ export class SearchViewModelBinder implements ViewModelBinder<SearchModel, Searc
                 displayName: "Search website",
                 readonly: bindingContext ? bindingContext.readonly : false,
                 model: model,
-                flow: "block",
+                flow: ComponentFlow.Block,
                 draggable: true,
                 applyChanges: async () => {
                     await this.modelToViewModel(model, viewModel, bindingContext);

@@ -15,8 +15,8 @@ export class HtmlEditorBindingHandler {
                 const config = valueAccessor();
                 const htmlEditor: IHtmlEditor = htmlEditorFactory.createHtmlEditor();
 
-                htmlEditor.onStateChange = (newState: BlockModel[]) => {
-                    viewModel["widgetBinding"].model.state = newState;
+                htmlEditor.onStateChange = (newContent: BlockModel[]) => {
+                    viewModel["widgetBinding"].model.content = newContent;
                     eventManager.dispatchEvent("onContentUpdate"); // TODO: Move this event emit to TextblockEditor
                 };
 

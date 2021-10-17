@@ -36,7 +36,7 @@ ko.bindingHandlers["hyperlink"] = {
                         href = `${hyperlink.href}${hyperlink.anchor ? "#" + hyperlink.anchor : ""}`;
                         targetWindow = hyperlink.target;
 
-                        if (hyperlink.targetKey.startsWith("urls/")) {
+                        if (hyperlink.targetKey?.startsWith("urls/")) {
                             rels = [HyperlinkRels.NoOpener, HyperlinkRels.NoReferrer].join(" ");
                         }
                 }

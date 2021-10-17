@@ -3,11 +3,12 @@ import { IModelBinder } from "@paperbits/common/editing";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { Contract, Bag } from "@paperbits/common";
 import { TextblockModel } from "./textblockModel";
+import { TextBlockContract } from "./textblockContract";
 
 export class TextblockModelBinder implements IModelBinder<TextblockModel> {
     constructor(private readonly modelBinderSelector: ModelBinderSelector) { }
 
-    public async contractToModel(contract: Contract, bindingContext?: Bag<any>): Promise<TextblockModel> {
+    public async contractToModel(contract: TextBlockContract, bindingContext?: Bag<any>): Promise<TextblockModel> {
         let content: BlockModel[] = [];
 
         if (contract.nodes && contract.nodes.length > 0) {
@@ -19,7 +20,12 @@ export class TextblockModelBinder implements IModelBinder<TextblockModel> {
             content = await Promise.all<BlockModel>(modelPromises);
         }
 
-        return new TextblockModel(content);
+        const model = new TextblockModel(content);
+
+        model.styles = contract.styles;
+        model.roles = contract.roles;
+
+        return model;
     }
 
     public canHandleContract(contract: Contract): boolean {
@@ -31,24 +37,26 @@ export class TextblockModelBinder implements IModelBinder<TextblockModel> {
     }
 
     public modelToContract(model: TextblockModel): Contract {
-        let state: BlockModel[];
+        let content: BlockModel[];
 
-        const isArray = Array.isArray(model.state);
+        const isArray = Array.isArray(model.content);
 
         if (isArray) {
-            const contentItems = model.state as Object[];
+            const contentItems = model.content as Object[];
 
             if (contentItems && contentItems.length > 0) {
-                state = contentItems.map(contentItem => {
+                content = contentItems.map(contentItem => {
                     const modelBinder = this.modelBinderSelector.getModelBinderByModel(contentItem);
                     return modelBinder.modelToContract(contentItem);
                 });
             }
         }
 
-        const contract: Contract = {
+        const contract: TextBlockContract = {
             type: "text-block",
-            nodes: state
+            nodes: content,
+            styles: model.styles,
+            roles: model.roles
         };
 
         return contract;

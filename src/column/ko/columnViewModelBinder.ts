@@ -1,7 +1,7 @@
 import * as Utils from "@paperbits/common/utils";
 import { ColumnViewModel } from "./columnViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
-import { IWidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { ColumnModel } from "../columnModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
@@ -119,7 +119,7 @@ export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, Colum
             name: "column",
             displayName: "Column",
             readonly: bindingContext ? bindingContext.readonly : false,
-            flow: "inline",
+            flow: ComponentFlow.Inline,
             model: model,
             draggable: false,
             editor: "layout-column-editor",

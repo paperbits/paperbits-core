@@ -1,4 +1,4 @@
-import { IWidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { YoutubePlayerViewModel } from "./youtubePlayer";
 import { YoutubePlayerModel } from "../youtubePlayerModel";
@@ -38,7 +38,7 @@ export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlay
             displayName: "Youtube player",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
-            flow: "inline",
+            flow: ComponentFlow.Inline,
             draggable: true,
             editor: "youtube-player-editor",
             applyChanges: async () => {

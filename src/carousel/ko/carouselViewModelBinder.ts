@@ -1,6 +1,6 @@
 import { CarouselViewModel } from "./carousel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
-import { IWidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { CarouselItemModel, CarouselModel } from "../carouselModel";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
@@ -99,7 +99,7 @@ export class CarouselViewModelBinder implements ViewModelBinder<CarouselModel, C
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: true,
-            flow: "block",
+            flow: ComponentFlow.Block,
             editor: "carousel-editor",
             handler: CarouselHandlers,
             applyChanges: async () => {

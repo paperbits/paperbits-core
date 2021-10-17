@@ -1,6 +1,6 @@
 import { CardViewModel } from "./cardViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
-import { IWidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { CardModel } from "../cardModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
@@ -51,7 +51,7 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
                 name: "card",
                 displayName: "Card",
                 readonly: bindingContext ? bindingContext.readonly : false,
-                flow: "block",
+                flow: ComponentFlow.Inline,
                 model: model,
                 draggable: true,
                 editor: "card-editor",

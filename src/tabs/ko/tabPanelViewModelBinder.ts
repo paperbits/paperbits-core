@@ -1,6 +1,6 @@
 import { TabPanelViewModel } from "./tabPanel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
-import { IWidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { TabPanelItemModel, TabPanelModel } from "../tabPanelModel";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
@@ -96,7 +96,7 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: true,
-            flow: "block",
+            flow: ComponentFlow.Block,
             handler: TabPanelHandlers,
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);

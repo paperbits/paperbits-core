@@ -1,5 +1,5 @@
 import { Bag } from "@paperbits/common";
-import { IWidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { EventManager } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { ViewModelBinder } from "@paperbits/common/widgets";
@@ -53,7 +53,7 @@ export class PopupViewModelBinder implements ViewModelBinder<PopupModel, PopupVi
                 name: "popup",
                 displayName: "Popup",
                 readonly: bindingContext ? bindingContext.readonly : false,
-                flow: "block",
+                flow: ComponentFlow.Block,
                 model: model,
                 draggable: true,
                 editor: "popup-editor",
