@@ -3,7 +3,7 @@ import template from "./tableCellEditor.html";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { TableCellModel } from "../tableCellModel";
 import { EventManager, Events } from "@paperbits/common/events";
-import { ContainerStylePluginConfig, BoxStylePluginConfig } from "@paperbits/styles/contracts";
+import { ContainerStylePluginConfig, BoxStylePluginConfig } from "@paperbits/styles/plugins";
 import { StyleHelper } from "@paperbits/styles";
 import { GridCellStylePluginConfig } from "@paperbits/styles/plugins/grid/gridCellStylePluginConfig";
 import { PaddingStylePluginConfig } from "@paperbits/styles/plugins/padding";

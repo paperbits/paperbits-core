@@ -11,7 +11,7 @@ import {
     MarginStylePluginConfig,
     SizeStylePluginConfig,
     BoxStylePluginConfig
-} from "@paperbits/styles/contracts";
+} from "@paperbits/styles/plugins";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { EventManager } from "@paperbits/common/events/eventManager";
 import { Events } from "@paperbits/common/events";
@@ -53,7 +53,7 @@ export class SectionEditor {
     public onChange: (model: SectionModel) => void;
 
     @OnMounted()
-    public async initialize(): Promise<void> {
+    public initialize(): void {
         this.updateObservables();
 
         this.stickTo

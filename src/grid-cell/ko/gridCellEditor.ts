@@ -6,7 +6,8 @@ import { ViewManager } from "@paperbits/common/ui";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { GridCellModel } from "../gridCellModel";
 import { EventManager, Events } from "@paperbits/common/events";
-import { ContainerStylePluginConfig, BoxStylePluginConfig } from "@paperbits/styles/contracts";
+import { BoxStylePluginConfig } from "@paperbits/styles/plugins";
+import { ContainerStylePluginConfig } from "@paperbits/styles/plugins";
 
 
 @Component({
