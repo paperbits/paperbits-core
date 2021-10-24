@@ -1,5 +1,5 @@
 import * as Arrays from "@paperbits/common/arrays";
-import { KeyCodes } from "@paperbits/common/keyboard";
+import { Keys } from "@paperbits/common/keyboard";
 import { Events, MouseButton } from "@paperbits/common/events";
 import { AriaAttributes, DataAttributes } from "@paperbits/common/html";
 import { TriggerEvent } from "./triggerEvent";
@@ -90,7 +90,7 @@ const onMouseEnter = (event: MouseEvent): void => {
 
 
 const onKeyDown = (event: KeyboardEvent) => {
-    if (event.keyCode !== KeyCodes.Enter && event.keyCode !== KeyCodes.Space) {
+    if (event.key !== Keys.Enter && event.key !== Keys.Space) {
         return;
     }
 };

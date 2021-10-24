@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import * as Html from "@paperbits/common/html";
-import { KeyCodes } from "@paperbits/common/keyboard";
+import { Keys } from "@paperbits/common/keyboard";
 import { View } from "@paperbits/common/ui";
 import { BalloonOptions, BalloonActivationOptions, BalloonHandle } from "@paperbits/common/ui/balloons";
 import { ViewStack } from "@paperbits/common/ui/viewStack";
@@ -450,9 +450,9 @@ export class BalloonBindingHandler {
                 };
 
                 const onKeyDown = async (event: KeyboardEvent): Promise<void> => {
-                    switch (event.keyCode) {
-                        case KeyCodes.Enter:
-                        case KeyCodes.Space:
+                    switch (event.key) {
+                        case Keys.Enter:
+                        case Keys.Space:
                             event.preventDefault();
                             toggle();
                             break;
