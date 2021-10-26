@@ -1,14 +1,17 @@
 import * as _ from "lodash";
 import * as Utils from "@paperbits/common/utils";
 import { ViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet } from "@paperbits/common/ui";
-import { IWidgetBinding, GridHelper, WidgetContext, GridItem } from "@paperbits/common/editing";
+import { IWidgetBinding, GridHelper, WidgetContext, GridItem, ComponentFlow } from "@paperbits/common/editing";
 import { IWidgetService } from "@paperbits/common/widgets";
 import { EventManager, Events, MouseButton } from "@paperbits/common/events";
 import { Router } from "@paperbits/common/routing";
 import { ContentModel } from "../../content";
 import { PopupHostModel } from "../../popup/popupHostModel";
 import { SectionModel } from "../../section";
+import { Keys } from "@paperbits/common";
 
+
+const defaultCommandColor = "#607d8b";
 
 export class GridEditor {
     private activeHighlightedElement: HTMLElement;
@@ -303,8 +306,8 @@ export class GridEditor {
         const gridItem = GridHelper.getGridItem(selectedElement.element);
 
         switch (event.key) {
-            case "ArrowDown":
-            case "ArrowRight":
+            case Keys.ArrowDown:
+            case Keys.ArrowRight:
                 const next = gridItem.getNextSibling();
 
                 if (next) {
@@ -313,8 +316,8 @@ export class GridEditor {
 
                 break;
 
-            case "ArrowUp":
-            case "ArrowLeft":
+            case Keys.ArrowUp:
+            case Keys.ArrowLeft:
                 const prev = gridItem.getPrevSibling();
 
                 if (prev) {
@@ -323,7 +326,7 @@ export class GridEditor {
 
                 break;
 
-            case "PageUp":
+            case Keys.PageUp:
                 const parent = gridItem.getParent();
 
                 if (parent && !(parent.binding.model instanceof ContentModel)) {
@@ -331,7 +334,7 @@ export class GridEditor {
                 }
                 break;
 
-            case "PageDown":
+            case Keys.PageDown:
                 let children;
 
                 if (gridItem.binding.model instanceof SectionModel) {
@@ -348,7 +351,7 @@ export class GridEditor {
                 }
                 break;
 
-            case "Enter":
+            case Keys.Enter:
                 if (gridItem.binding.editor) {
                     this.viewManager.openWidgetEditor(gridItem.binding);
                 }
@@ -403,12 +406,12 @@ export class GridEditor {
 
         if (siblingElement) {
             const quadrant = Utils.pointerToClientQuadrant(this.pointerX, this.pointerY, siblingElement.element);
-            const sourceElementFlow = dragSession.sourceBinding.flow || "inline";
+            const sourceElementFlow = dragSession.sourceBinding.flow || ComponentFlow.Inline;
 
             dragSession.insertIndex = acceptingParentElement.binding.model.widgets.indexOf(siblingElement.binding.model);
-            const hoveredElementFlow = siblingElement.binding.flow || "inline";
+            const hoveredElementFlow = siblingElement.binding.flow || ComponentFlow.Inline;
 
-            if (sourceElementFlow === "inline" && hoveredElementFlow === "inline") {
+            if (sourceElementFlow === ComponentFlow.Inline && hoveredElementFlow === ComponentFlow.Inline) {
                 if (quadrant.horizontal === "right") {
                     dragSession.insertIndex++;
                 }
@@ -517,29 +520,19 @@ export class GridEditor {
 
     private renderHighlightedElements(): void {
         if (this.scrolling) {
-            // || (this.viewManager.mode !== ViewManagerMode.selecting && this.viewManager.mode !== ViewManagerMode.selected)) {
             return;
         }
 
         const elements = this.getUnderlyingElements();
-
-        if (elements.length > 0) {
-            if (elements.some(x =>
-                x.classList.contains("editor") ||
-                x.classList.contains("balloon") ||
-                x.nodeName === "BUTTON")) {
-                return;
-            }
-        }
 
         this.renderContextualCommands(this.pointerX, this.pointerY, elements);
     }
 
     private getDefaultContextCommands(context: WidgetContext): IContextCommandSet {
         const contextCommands: IContextCommandSet = {
-            color: "#607d8b",
+            color: defaultCommandColor,
             hoverCommands: [{
-                color: "#607d8b",
+                color: defaultCommandColor,
                 iconClass: "paperbits-icon paperbits-simple-add",
                 position: context.half,
                 tooltip: "Add widget",
@@ -564,7 +557,7 @@ export class GridEditor {
             }],
             deleteCommand: {
                 tooltip: "Delete widget",
-                color: "#607d8b",
+                color: defaultCommandColor,
                 callback: () => {
                     context.parentModel.widgets.remove(context.model);
                     context.parentBinding.applyChanges();
@@ -575,24 +568,22 @@ export class GridEditor {
                 tooltip: "Edit widget",
                 iconClass: "paperbits-icon paperbits-edit-72",
                 position: "top right",
-                color: "#607d8b",
+                color: defaultCommandColor,
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
             },
             {
                 tooltip: "Switch to parent",
                 iconClass: "paperbits-icon paperbits-enlarge-vertical",
                 position: "top right",
-                color: "#607d8b",
-                callback: () => {
-                    context.switchToParent();
-                }
+                color: defaultCommandColor,
+                callback: () => context.switchToParent()
             }]
         };
 
         return contextCommands;
     }
 
-    private async renderContextualCommands(pointerX: number, pointerY: number, elements: HTMLElement[]): Promise<void> {
+    private renderContextualCommands(pointerX: number, pointerY: number, elements: HTMLElement[]): void {
         let highlightedElement: HTMLElement;
         let highlightedText: string;
         let highlightColor: string;
@@ -611,7 +602,6 @@ export class GridEditor {
             if (!widgetBinding || widgetBinding.readonly || widgetBinding === current) {
                 continue;
             }
-
 
             const index = tobeDeleted.indexOf(widgetBinding.name);
             tobeDeleted.splice(index, 1);
@@ -667,6 +657,5 @@ export class GridEditor {
         this.ownerDocument.removeEventListener(Events.Click, this.onMouseClick, false);
         this.eventManager.removeEventListener("onKeyDown", this.onKeyDown);
         this.eventManager.removeEventListener("onDelete", this.onDelete);
-
     }
 }
