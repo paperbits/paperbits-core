@@ -4,7 +4,7 @@ import { IWidgetBinding } from "@paperbits/common/editing";
 import { GridModel } from "../gridModel";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
 import { WidgetViewModel } from "../../ko";
@@ -47,7 +47,7 @@ export class GridViewModelBinder implements ViewModelBinder<GridModel, GridViewM
             draggable: false,
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 

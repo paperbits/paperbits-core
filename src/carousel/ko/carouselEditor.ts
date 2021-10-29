@@ -6,7 +6,7 @@ import template from "./carouselEditor.html";
 import { ViewManager } from "@paperbits/common/ui";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { CarouselModel } from "../carouselModel";
-import { SizeStylePluginConfig } from "@paperbits/styles/contracts";
+import { SizeStylePluginConfig } from "@paperbits/styles/plugins";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { EventManager } from "@paperbits/common/events/eventManager";
 import { Events } from "@paperbits/common/events";

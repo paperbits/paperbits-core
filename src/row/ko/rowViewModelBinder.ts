@@ -5,7 +5,7 @@ import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel"
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { RowHandlers } from "../rowHandlers";
 import { IWidgetBinding } from "@paperbits/common/editing";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { Bag } from "@paperbits/common";
 
 export class RowViewModelBinder implements ViewModelBinder<RowModel, RowViewModel> {
@@ -51,7 +51,7 @@ export class RowViewModelBinder implements ViewModelBinder<RowModel, RowViewMode
             handler: RowHandlers,
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 

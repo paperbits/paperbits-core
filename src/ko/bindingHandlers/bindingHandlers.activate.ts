@@ -1,5 +1,5 @@
 import * as ko from "knockout";
-import { KeyCodes } from "@paperbits/common";
+import { Keys } from "@paperbits/common";
 import { Events } from "@paperbits/common/events";
 
 
@@ -15,7 +15,7 @@ ko.bindingHandlers["activate"] = {
         };
 
         const onKeyDown = (event: KeyboardEvent) => {
-            if (event.keyCode !== KeyCodes.Enter && event.keyCode !== KeyCodes.Space) {
+            if (event.key !== Keys.Enter && event.key !== Keys.Space) {
                 return;
             }
 

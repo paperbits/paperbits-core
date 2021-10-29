@@ -2,7 +2,7 @@
 import template from "./mapEditor.html";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { MapModel, MarkerModel } from "../mapModel";
-import { SizeStylePluginConfig } from "@paperbits/styles/contracts";
+import { SizeStylePluginConfig } from "@paperbits/styles/plugins";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { StyleHelper } from "@paperbits/styles";
 import { ViewManager } from "@paperbits/common/ui";

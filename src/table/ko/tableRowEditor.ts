@@ -2,12 +2,12 @@ import * as ko from "knockout";
 import * as Objects from "@paperbits/common/objects";
 import template from "./tableRowEditor.html";
 import { StyleHelper, StyleService } from "@paperbits/styles";
-import { SizeUnits, Size } from "@paperbits/styles/plugins";
+import { SizeUnits, Size } from "@paperbits/styles/size";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { TableModel } from "../tableModel";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { StylePluginConfig } from "@paperbits/common/styles";
-import { BoxStylePluginConfig } from "@paperbits/styles/contracts";
+import { BoxStylePluginConfig } from "@paperbits/styles/plugins";
 
 
 @Component({

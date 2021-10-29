@@ -1,6 +1,6 @@
 import { Bag } from "@paperbits/common";
 import { IWidgetBinding } from "@paperbits/common/editing";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
@@ -55,7 +55,7 @@ export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, G
             handler: GridCellHandlers,
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 

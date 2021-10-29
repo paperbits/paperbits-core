@@ -1,11 +1,11 @@
 import { CardViewModel } from "./cardViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
-import { IWidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { CardModel } from "../cardModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { CardHandlers } from "../cardHandlers";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
 
@@ -51,14 +51,14 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
                 name: "card",
                 displayName: "Card",
                 readonly: bindingContext ? bindingContext.readonly : false,
-                flow: "block",
+                flow: ComponentFlow.Inline,
                 model: model,
                 draggable: true,
                 editor: "card-editor",
                 handler: CardHandlers,
                 applyChanges: async () => {
                     await this.modelToViewModel(model, viewModel, bindingContext);
-                    this.eventManager.dispatchEvent("onContentUpdate");
+                    this.eventManager.dispatchEvent(Events.ContentUpdate);
                 }
             };
 

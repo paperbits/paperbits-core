@@ -10,7 +10,7 @@ import {
     BoxStylePluginConfig,
     MarginStylePluginConfig,
     SizeStylePluginConfig
-} from "@paperbits/styles/contracts";
+} from "@paperbits/styles/plugins";
 import { EventManager } from "@paperbits/common/events/eventManager";
 import { Events } from "@paperbits/common/events";
 import { GridModel } from "../../grid-layout-section";

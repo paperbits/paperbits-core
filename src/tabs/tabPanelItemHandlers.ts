@@ -1,6 +1,6 @@
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { WidgetContext } from "@paperbits/common/editing";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { SectionModel } from "../section";
 
 
@@ -41,7 +41,7 @@ export class TabPanelItemHandlers {
                     context.parentModel["tabPanelItems"].remove(context.model);
                     context.parentBinding.applyChanges();
                     this.viewManager.clearContextualCommands();
-                    this.eventManager.dispatchEvent("onContentUpdate");
+                    this.eventManager.dispatchEvent(Events.ContentUpdate);
                 }
             };
         }
@@ -61,7 +61,7 @@ export class TabPanelItemHandlers {
                             context.binding.applyChanges();
 
                             this.viewManager.clearContextualCommands();
-                            this.eventManager.dispatchEvent("onContentUpdate");
+                            this.eventManager.dispatchEvent(Events.ContentUpdate);
                         }
                     }
                 }

@@ -2,7 +2,7 @@
 import { CollapsiblePanelModel } from "./collapsiblePanelModel";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { ModelBinderSelector, WidgetModel } from "@paperbits/common/widgets";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { DragSession } from "@paperbits/common/ui/draggables";
 
 
@@ -91,7 +91,7 @@ export class CollapsiblePanelHandlers implements IWidgetHandler {
                         onSelect: (widget: WidgetModel) => {
                             context.model.widgets.push(widget);
                             context.binding.applyChanges();
-                            this.eventManager.dispatchEvent("onContentUpdate");
+                            this.eventManager.dispatchEvent(Events.ContentUpdate);
                             this.viewManager.clearContextualCommands();
                         }
                     }

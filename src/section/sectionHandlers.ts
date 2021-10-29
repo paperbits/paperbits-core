@@ -3,7 +3,7 @@ import { IContextCommandSet, View, ViewManager } from "@paperbits/common/ui";
 import { WidgetContext } from "@paperbits/common/editing";
 import { SectionModel } from "./sectionModel";
 import { RowModel } from "../row/rowModel";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { SectionModelBinder } from "./sectionModelBinder";
 
 
@@ -45,7 +45,7 @@ export class SectionHandlers {
                             context.parentBinding.applyChanges();
 
                             this.viewManager.clearContextualCommands();
-                            this.eventManager.dispatchEvent("onContentUpdate");
+                            this.eventManager.dispatchEvent(Events.ContentUpdate);
                         }
                     }
                 }
@@ -57,7 +57,7 @@ export class SectionHandlers {
                     context.parentModel.widgets.remove(context.model);
                     context.parentBinding.applyChanges();
                     this.viewManager.clearContextualCommands();
-                    this.eventManager.dispatchEvent("onContentUpdate");
+                    this.eventManager.dispatchEvent(Events.ContentUpdate);
                 }
             },
             selectCommands: [{
@@ -110,7 +110,7 @@ export class SectionHandlers {
                             sectionBinding.applyChanges();
 
                             this.viewManager.clearContextualCommands();
-                            this.eventManager.dispatchEvent("onContentUpdate");
+                            this.eventManager.dispatchEvent(Events.ContentUpdate);
                         }
                     }
                 }

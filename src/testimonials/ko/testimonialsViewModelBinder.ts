@@ -1,8 +1,9 @@
 import { TestimonialsViewModel } from "./testimonialsViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
 import { TestimonialsModel } from "../testimonialsModel";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { Bag } from "@paperbits/common";
+import { ComponentFlow } from "@paperbits/common/editing";
 
 export class TestimonialsViewModelBinder implements ViewModelBinder<TestimonialsModel, TestimonialsViewModel>  {
     constructor(private readonly eventManager: EventManager) { }
@@ -22,12 +23,12 @@ export class TestimonialsViewModelBinder implements ViewModelBinder<Testimonials
             displayName: "Testimonials",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
-            flow: "block",
+            flow: ComponentFlow.Block,
             draggable: true,
             editor: "testimonials-editor",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 

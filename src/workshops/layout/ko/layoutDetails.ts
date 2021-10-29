@@ -60,7 +60,7 @@ export class LayoutDetails {
 
         this.eventManager.dispatchEvent("displayHint", {
             key: "48f5",
-            content: `You may have different page layouts for different parts of your website. Which layout gets applied at a given moment is determined by matching its URL template to URL of the current page.`
+            content: `<p>You may have different page layouts for different parts of your website. Which layout gets applied at a given moment is determined by matching its URL template to URL of the current page.</p><p>Press Escape button to get back to the page editing.</p>`
         });
     }
 

@@ -5,7 +5,7 @@ import { StyleHelper } from "@paperbits/styles";
 import { YoutubePlayerModel } from "../youtubePlayerModel";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { WidgetEditor } from "@paperbits/common/widgets";
-import { SizeStylePluginConfig } from "@paperbits/styles/contracts";
+import { SizeStylePluginConfig } from "@paperbits/styles/plugins";
 import { ViewManager } from "@paperbits/common/ui";
 import { EventManager, Events } from "@paperbits/common/events";
 

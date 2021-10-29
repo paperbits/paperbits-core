@@ -1,11 +1,11 @@
 import { CarouselViewModel } from "./carousel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
-import { IWidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { CarouselItemModel, CarouselModel } from "../carouselModel";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { CarouselHandlers } from "../carouselHandlers";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
 import { CarouselItemViewModel } from "./carouselItemViewModel";
@@ -54,7 +54,7 @@ export class CarouselViewModelBinder implements ViewModelBinder<CarouselModel, C
             handler: CarouselItemHandlers,
             applyChanges: async () => {
                 await this.itemModelToViewModel(model, index, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 
@@ -99,12 +99,12 @@ export class CarouselViewModelBinder implements ViewModelBinder<CarouselModel, C
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: true,
-            flow: "block",
+            flow: ComponentFlow.Block,
             editor: "carousel-editor",
             handler: CarouselHandlers,
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 

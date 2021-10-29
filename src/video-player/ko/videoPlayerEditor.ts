@@ -6,7 +6,7 @@ import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorat
 import { VideoPlayerModel } from "../videoPlayerModel";
 import { StyleService } from "@paperbits/styles/styleService";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
-import { SizeStylePluginConfig } from "@paperbits/styles/contracts";
+import { SizeStylePluginConfig } from "@paperbits/styles/plugins";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { StyleHelper } from "@paperbits/styles";
 import { EventManager, Events } from "@paperbits/common/events";

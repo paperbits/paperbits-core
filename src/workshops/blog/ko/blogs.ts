@@ -3,7 +3,7 @@ import template from "./blogs.html";
 import { IBlogService } from "@paperbits/common/blogs";
 import { Router } from "@paperbits/common/routing";
 import { ViewManager, View } from "@paperbits/common/ui";
-import { KeyCodes } from "@paperbits/common/keyboard";
+import { Keys } from "@paperbits/common/keyboard";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { BlogPostItem } from "./blogPostItem";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
@@ -96,7 +96,7 @@ export class BlogWorkshop {
     }
 
     public keydown(item: BlogPostItem, event: KeyboardEvent): void {
-        if (event.keyCode === KeyCodes.Delete) {
+        if (event.key === Keys.Delete) {
             this.deleteSelectedBlogPost();
         }
     }

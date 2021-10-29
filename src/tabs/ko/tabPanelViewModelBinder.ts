@@ -1,11 +1,11 @@
 import { TabPanelViewModel } from "./tabPanel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
-import { IWidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { TabPanelItemModel, TabPanelModel } from "../tabPanelModel";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { TabPanelHandlers } from "../tabPanelHandlers";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
 import { TabPanelItemViewModel } from "./tabPanelItemViewModel";
@@ -57,7 +57,7 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
             handler: TabPanelItemHandlers,
             applyChanges: async () => {
                 await this.itemModelToViewModel(model, index, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 
@@ -96,11 +96,11 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: true,
-            flow: "block",
+            flow: ComponentFlow.Block,
             handler: TabPanelHandlers,
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 

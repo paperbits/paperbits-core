@@ -1,11 +1,12 @@
 import { Bag } from "@paperbits/common";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { ISettingsProvider } from "@paperbits/common/configuration";
 import { MapViewModel } from "./mapViewModel";
 import { MapModel } from "../mapModel";
 import { GoogleMapsSettings } from "./googleMapsSettings";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
+import { ComponentFlow } from "@paperbits/common/editing";
 
 const defaultApiKey = "AIzaSyC7eT_xRPt3EjX3GuzSvlaZzJmlyFxvFFs";
 
@@ -49,12 +50,12 @@ export class MapViewModelBinder {
             displayName: "Map",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
-            flow: "inline",
+            flow: ComponentFlow.Inline,
             draggable: true,
             editor: "paperbits-map-editor",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 

@@ -1,6 +1,6 @@
 import { Bag } from "@paperbits/common";
 import { IWidgetBinding } from "@paperbits/common/editing";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { NavigationEvents, NavigationItemModel } from "@paperbits/common/navigation";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { StyleCompiler } from "@paperbits/common/styles";
@@ -69,7 +69,7 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
             displayName: "Menu",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
-            // flow: "inline", // Commented out due do discovered backward compatibility issues.
+            // flow: ComponentFlow.Inline, // Commented out due do discovered backward compatibility issues.
             draggable: true,
             editor: "menu-editor",
             applyChanges: async (updates: MenuModel) => {
@@ -94,7 +94,7 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
 
                 await this.modelToViewModel(model, viewModel, bindingContext);
 
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             },
             onCreate: () => {
                 this.eventManager.addEventListener(NavigationEvents.onNavigationItemUpdate, onUpdate);

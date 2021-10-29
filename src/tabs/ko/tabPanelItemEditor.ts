@@ -12,7 +12,7 @@ import {
     MarginStylePluginConfig,
     SizeStylePluginConfig,
     BoxStylePluginConfig
-} from "@paperbits/styles/contracts";
+} from "@paperbits/styles/plugins";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { EventManager } from "@paperbits/common/events/eventManager";
 import { Events } from "@paperbits/common/events";

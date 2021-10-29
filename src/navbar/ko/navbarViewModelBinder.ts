@@ -1,12 +1,13 @@
 import { NavbarViewModel } from "./navbarViewModel";
 import { NavbarItemViewModel } from "./navbarItemViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { NavigationItemContract, NavigationItemModel, NavigationEvents } from "@paperbits/common/navigation";
 import { NavbarModel } from "../navbarModel";
 import { NavbarModelBinder } from "../navbarModelBinder";
 import { StyleCompiler } from "@paperbits/common/styles/styleCompiler";
 import { Bag } from "@paperbits/common";
+import { ComponentFlow } from "@paperbits/common/editing";
 
 
 export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, NavbarViewModel> {
@@ -66,11 +67,11 @@ export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, Navba
             displayName: "Navigation bar",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
-            flow: "inline",
+            flow: ComponentFlow.Inline,
             draggable: true,
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             },
             onCreate: () => {
                 this.eventManager.addEventListener(NavigationEvents.onNavigationItemUpdate, onUpdate);

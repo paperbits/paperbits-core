@@ -4,10 +4,12 @@ import template from "./cardEditor.html";
 import { ViewManager } from "@paperbits/common/ui";
 import { WidgetEditor } from "@paperbits/common/widgets";
 import { StyleService, StyleHelper } from "@paperbits/styles";
+import { ContainerStylePluginConfig } from "@paperbits/styles/plugins";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { CardModel } from "../cardModel";
-import { BackgroundStylePluginConfig, TypographyStylePluginConfig, ContainerStylePluginConfig } from "@paperbits/styles/contracts";
+import { BackgroundStylePluginConfig, TypographyStylePluginConfig } from "@paperbits/styles/plugins";
 import { EventManager, Events } from "@paperbits/common/events";
+
 
 
 @Component({

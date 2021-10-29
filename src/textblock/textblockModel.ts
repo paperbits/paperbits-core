@@ -1,9 +1,24 @@
+import { LocalStyles } from "@paperbits/common/styles";
 import { BlockModel } from "@paperbits/common/text/models";
 
 export class TextblockModel {
-    public state: BlockModel[];
+    /**
+     * Content.
+     */
+    public content: BlockModel[];
 
-    constructor(state: any) {
-        this.state = state;
+    /**
+     * Button local styles.
+     */
+    public styles: LocalStyles;
+
+    /**
+     * Keys of user roles.
+     */
+     public roles?: string[];
+
+    constructor(content: BlockModel[]) {
+        this.content = content;
+        this.styles = {};
     }
 }

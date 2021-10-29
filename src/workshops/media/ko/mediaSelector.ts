@@ -28,7 +28,7 @@ export class MediaSelector {
     public mimeType: string;
 
     @Event()
-    public onSelect: (media: MediaContract) => void;
+    public onSelect: (media: MediaItem) => void;
 
     @Event()
     public onHyperlinkSelect: (selection: HyperlinkModel) => void;
@@ -98,7 +98,7 @@ export class MediaSelector {
         this.selectedMedia(media);
 
         if (this.onSelect) {
-            this.onSelect(media.toMedia());
+            this.onSelect(media);
         }
 
         if (this.onHyperlinkSelect) {

@@ -2,9 +2,10 @@ import { DismissButton } from "./dismissButtonViewModel";
 import * as Utils from "@paperbits/common/utils";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { DismissButtonModel } from "../dismissButtonModel";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
+import { ComponentFlow } from "@paperbits/common/editing";
 
 export class DismissButtonViewModelBinder implements ViewModelBinder<DismissButtonModel, DismissButton>  {
     constructor(
@@ -38,12 +39,12 @@ export class DismissButtonViewModelBinder implements ViewModelBinder<DismissButt
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: true,
-            flow: "inline",
+            flow: ComponentFlow.Inline,
             requires: ["popup"],
             editor: "dismiss-button-editor",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 

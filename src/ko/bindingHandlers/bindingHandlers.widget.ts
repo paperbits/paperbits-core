@@ -1,5 +1,5 @@
 ﻿import * as ko from "knockout";
-import { IWidgetBinding, WidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding, WidgetBinding } from "@paperbits/common/editing";
 // import { KnockoutComponentBinder } from "@paperbits/common/ko/knockoutComponentBinder";
 import { ComponentBinder } from "@paperbits/common/editing/componentBinder";
 import { Bag } from "@paperbits/common";
@@ -49,7 +49,7 @@ export class WidgetBindingHandler {
                     return;
                 }
 
-                /* New  binding logic */
+                /* New binding logic */
                 if (bindingConfig instanceof WidgetBinding) {
                     const binding = <WidgetBinding<any, any>>bindingConfig;
                     const componentBinder = componentBinders[binding.framework];
@@ -154,17 +154,15 @@ export class WidgetBindingHandler {
                         }
 
                         if (nonVirtualElement) {
-                            nonVirtualElement["attachedViewModel"] = componentViewModel;
-
                             const binding: IWidgetBinding<any, any> = componentViewModel["widgetBinding"];
 
                             if (binding) {
                                 ko.applyBindingsToNode(nonVirtualElement, {
                                     css: {
-                                        "block": binding.flow === "block",
-                                        "inline-block": binding.flow === "inline",
-                                        "legacy": binding.flow === "legacy",
-                                        "placeholder": binding.flow === "none"
+                                        "block": binding.flow === ComponentFlow.Block,
+                                        "inline-block": binding.flow === ComponentFlow.Inline,
+                                        "legacy": binding.flow === ComponentFlow.Legacy,
+                                        "placeholder": binding.flow === ComponentFlow.None
                                     }
                                 }, null);
 

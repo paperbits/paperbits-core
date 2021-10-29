@@ -1,7 +1,7 @@
 import { IContextCommandSet, View, ViewManager } from "@paperbits/common/ui";
 import { IWidgetOrder, WidgetContext } from "@paperbits/common/editing";
 import { CarouselItemModel, CarouselModel } from "./carouselModel";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 
 
 export class CarouselHandlers {
@@ -62,7 +62,7 @@ export class CarouselHandlers {
                     context.parentModel.widgets.remove(context.model);
                     context.parentBinding.applyChanges();
                     this.viewManager.clearContextualCommands();
-                    this.eventManager.dispatchEvent("onContentUpdate");
+                    this.eventManager.dispatchEvent(Events.ContentUpdate);
                 }
             },
             selectCommands: [{
@@ -74,7 +74,7 @@ export class CarouselHandlers {
                     context.model["carouselItems"].push(new CarouselItemModel());
                     context.parentBinding.applyChanges();
                     this.viewManager.clearContextualCommands();
-                    this.eventManager.dispatchEvent("onContentUpdate");
+                    this.eventManager.dispatchEvent(Events.ContentUpdate);
                 }
             },
             {

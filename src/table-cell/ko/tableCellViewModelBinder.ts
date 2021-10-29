@@ -6,7 +6,7 @@ import { TableCellModel } from "../tableCellModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { TableCellHandlers } from "../tableCellHandlers";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
 
@@ -61,7 +61,7 @@ export class TableCellViewModelBinder implements ViewModelBinder<TableCellModel,
             handler: TableCellHandlers,
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 

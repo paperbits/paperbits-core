@@ -34,11 +34,11 @@
     </div>
 
     <!-- <div class="form-group">
-        <label for="sizeStyle" class="form-label">
-            Size
-            <button class="btn btn-info" type="button" data-bind="tooltip: 'Predefined size from style guide.'"></button>
+        <label for="displayStyle" class="form-label">
+            Visibility
         </label>
-        <select id="sizeStyle" class="form-control" data-bind="options: sizeStyles, value: sizeStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
+        <select id="displayStyle" class="form-control"
+            data-bind="options: displayOptions, value: displayStyle, optionsText: 'text', optionsValue: 'value', event: { change: onDisplayChange }"></select>
     </div> -->
 
     <glyph-input params="{ selection: model.iconKey, onChange: onIconSelect }"></glyph-input>

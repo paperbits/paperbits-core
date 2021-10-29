@@ -1,13 +1,15 @@
+import * as MediaUtils from "@paperbits/common/media/mediaUtils";
 import { PictureViewModel } from "./picture";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { PictureModel } from "../pictureModel";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles/styleCompiler";
 import { Bag } from "@paperbits/common";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
-import { IWidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { MediaService } from "@paperbits/common/media";
 import { MediaVariantModel } from "../mediaVariantModel";
+
 
 export class PictureViewModelBinder implements ViewModelBinder<PictureModel, PictureViewModel> {
     constructor(
@@ -38,9 +40,12 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
                 });
 
                 viewModel.variants(variants);
+                
+                sourceUrl = MediaUtils.getThumbnailUrl(media);
             }
-
-            sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(model.sourceKey);
+            else {
+                sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(model.sourceKey);
+            }
 
             if (!sourceUrl) {
                 console.warn(`Unable to set picture. Media with source key ${model.sourceKey} not found.`);
@@ -63,11 +68,11 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: true,
-            flow: "inline",
+            flow: ComponentFlow.Inline,
             editor: "picture-editor",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 

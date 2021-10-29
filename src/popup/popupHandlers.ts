@@ -1,5 +1,5 @@
 import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { WidgetModel } from "@paperbits/common/widgets";
@@ -41,7 +41,7 @@ export class PopupHandlers implements IWidgetHandler {
                         onSelect: (widget: WidgetModel) => {
                             context.model.widgets.push(widget);
                             context.binding.applyChanges();
-                            this.eventManager.dispatchEvent("onContentUpdate");
+                            this.eventManager.dispatchEvent(Events.ContentUpdate);
                             this.viewManager.clearContextualCommands();
                         }
                     }

@@ -1,6 +1,7 @@
 import * as ko from "knockout";
 import template from "./placeholder.html";
 import { Component } from "@paperbits/common/ko/decorators";
+import { ComponentFlow } from "@paperbits/common/editing";
 
 @Component({
     selector: "paperbits-placeholder",
@@ -12,6 +13,6 @@ export class PlaceholderViewModel {
 
     constructor(title: string) {
         this.title = ko.observable<string>(title);
-        this.widgetBinding = { displayName: title, flow: "none", readonly: true };
+        this.widgetBinding = { displayName: title, flow: ComponentFlow.None, readonly: true };
     }
 }
