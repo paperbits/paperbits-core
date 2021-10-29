@@ -651,8 +651,9 @@ export class GridEditor {
             }
         }
         else {
-            console.log(this.viewManager.mode);
-            if (this.viewManager.mode !== ViewManagerMode.selected) {
+            const designerDocument = this.viewManager["getDesignerDocument"]();
+
+            if (designerDocument.body.contains(target)) { // means focus is in toolboxes
                 this.viewManager.clearSelection();
             }
         }
@@ -669,7 +670,6 @@ export class GridEditor {
         this.eventManager.addEventListener("onDelete", this.onDelete);
 
         document.addEventListener(Events.Focus, (e) => this.onGlobalFocusChange(e), true);
-
     }
 
     public dispose(): void {

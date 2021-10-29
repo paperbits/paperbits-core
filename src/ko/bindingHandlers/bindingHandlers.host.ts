@@ -11,15 +11,12 @@ export class HostBindingHandler {
     private readonly hostComponent: ko.Observable<any>;
     private readonly designTime: ko.Observable<boolean>;
 
-    private theElement: any;
-
     constructor(
         private readonly globalEventHandler: GlobalEventHandler,
         private readonly viewManager: ViewManager,
         private readonly router: Router,
         private readonly siteService: SiteService,
-        private readonly mediaService: IMediaService,
-        private readonly eventManager: EventManager
+        private readonly mediaService: IMediaService
     ) {
         this.hostComponent = ko.observable();
         this.designTime = ko.observable(true);
@@ -31,8 +28,6 @@ export class HostBindingHandler {
                 const css = ko.observable<string>("desktop");
 
                 config.block.subscribe(this.designTime);
-
-                this.theElement = element;
 
                 config.viewport.subscribe((viewport: string) => {
                     this.viewManager.mode = ViewManagerMode.selecting;

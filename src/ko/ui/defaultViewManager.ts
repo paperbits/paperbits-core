@@ -157,6 +157,10 @@ export class DefaultViewManager implements ViewManager {
         return this.host();
     }
 
+    public getDesignerDocument(): Document {
+        return document;
+    }
+
     public getHostDocument(): Document {
         return this.hostDocument;
     }
@@ -339,6 +343,9 @@ export class DefaultViewManager implements ViewManager {
         if (view.component.name === "text-block-editor") {
             this.designTime(false); // Review: It's here for text editor
         }
+
+        const contentEditorElement = document.getElementById("contentEditor");
+        view.returnFocusTo = <HTMLElement>contentEditorElement;
 
         this.viewStack.pushView(view);
     }
