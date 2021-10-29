@@ -114,7 +114,7 @@ export class GridEditor {
 
         let contextualCommands: IContextCommandSet;
 
-        if (context.binding.handler) {
+        if (context.binding?.handler) {
             const handler = this.widgetService.getWidgetHandler(context.binding.handler);
 
             if (handler.getContextCommands) {
@@ -247,7 +247,7 @@ export class GridEditor {
         }
     }
 
-    private selectElement(item: GridItem): void {
+    private selectElement(item: GridItem, scrollIntoView: boolean = true): void {
         if (!item) {
             throw new Error(`Parameter "item" not specified.`);
         }
@@ -268,6 +268,10 @@ export class GridEditor {
         this.activeContextualCommands = commandSet;
 
         this.selection = item;
+
+        if (scrollIntoView) {
+            item.element.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
     }
 
     private onPointerMove(event: PointerEvent): void {
@@ -501,12 +505,16 @@ export class GridEditor {
             clearTimeout(this.scrollTimeout);
         }
 
-        this.scrollTimeout = setTimeout(this.resetScrolling.bind(this), 400);
+        this.scrollTimeout = setTimeout(this.resetScrolling.bind(this), 100);
     }
 
     private resetScrolling(): void {
         this.scrolling = false;
         this.renderHighlightedElements();
+
+        if (this.selection) { // also, check for element existence.
+            this.selectElement(this.selection, false);
+        }
     }
 
     private getUnderlyingElements(): HTMLElement[] {
@@ -638,6 +646,7 @@ export class GridEditor {
 
         if (this.activeHighlightedElement !== highlightedElement) {
             this.activeHighlightedElement = highlightedElement;
+
             this.viewManager.setHighlight({ element: highlightedElement, text: highlightedText, color: highlightColor });
         }
     }
@@ -646,8 +655,8 @@ export class GridEditor {
         const target = <HTMLElement>event.target;
 
         if (target.id === "contentEditor") {
-            if (this.selection) { // also, check for element existance.
-                this.selectElement(this.selection);
+            if (this.selection) { // also, check for element existence.
+                this.selectElement(this.selection, false);
             }
         }
         else {
