@@ -5,7 +5,7 @@ import { TabPanelItemModel, TabPanelModel } from "../tabPanelModel";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { TabPanelHandlers } from "../tabPanelHandlers";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
 import { TabPanelItemViewModel } from "./tabPanelItemViewModel";
@@ -57,7 +57,7 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
             handler: TabPanelItemHandlers,
             applyChanges: async () => {
                 await this.itemModelToViewModel(model, index, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 
@@ -100,7 +100,7 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
             handler: TabPanelHandlers,
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 

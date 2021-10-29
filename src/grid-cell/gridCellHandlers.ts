@@ -1,5 +1,5 @@
 import { IWidgetHandler, WidgetContext, GridHelper } from "@paperbits/common/editing";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IContextCommandSet, ViewManager, IHighlightConfig } from "@paperbits/common/ui";
 import { WidgetModel, WidgetService } from "@paperbits/common/widgets";
@@ -55,7 +55,7 @@ export class GridCellHandlers implements IWidgetHandler {
                     onSelect: (widget: WidgetModel) => {
                         context.model.widgets.push(widget);
                         context.binding.applyChanges();
-                        this.eventManager.dispatchEvent("onContentUpdate");
+                        this.eventManager.dispatchEvent(Events.ContentUpdate);
                         this.viewManager.clearContextualCommands();
                     }
                 }

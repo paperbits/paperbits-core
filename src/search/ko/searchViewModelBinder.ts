@@ -1,6 +1,6 @@
 import { Bag } from "@paperbits/common";
 import { ViewModelBinder } from "@paperbits/common/widgets";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { SearchViewModel } from "./searchViewModel";
 import { SearchModel } from "../searchModel";
@@ -22,7 +22,7 @@ export class SearchViewModelBinder implements ViewModelBinder<SearchModel, Searc
                 draggable: true,
                 applyChanges: async () => {
                     await this.modelToViewModel(model, viewModel, bindingContext);
-                    this.eventManager.dispatchEvent("onContentUpdate");
+                    this.eventManager.dispatchEvent(Events.ContentUpdate);
                 }
             };
 

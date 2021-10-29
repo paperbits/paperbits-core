@@ -2,7 +2,7 @@ import { Button } from "./button";
 import * as Utils from "@paperbits/common/utils";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { ButtonModel } from "../buttonModel";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
 import { ComponentFlow } from "@paperbits/common/editing";
@@ -46,7 +46,7 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
             editor: "button-editor",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 

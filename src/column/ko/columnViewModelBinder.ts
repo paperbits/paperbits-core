@@ -6,7 +6,7 @@ import { ColumnModel } from "../columnModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { ColumnHandlers } from "../columnHandlers";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { Bag } from "@paperbits/common";
 
 export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, ColumnViewModel> {
@@ -133,7 +133,7 @@ export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, Colum
 
             applyChanges: async () => {
                 await this.modelToViewModel(model, columnViewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 

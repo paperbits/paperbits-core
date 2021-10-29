@@ -1,7 +1,7 @@
 import * as Objects from "@paperbits/common/objects";
 import { Bag, Contract } from "@paperbits/common";
 import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { ModelBinderSelector, ViewModelBinder } from "@paperbits/common/widgets";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { ContentHandlers } from "../contentHandlers";
@@ -59,12 +59,12 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
             },
             onCreate: () => {
                 if (model.type === bindingContext?.contentType) {
-                    this.eventManager.addEventListener("onContentUpdate", scheduleUpdate);
+                    this.eventManager.addEventListener(Events.ContentUpdate, scheduleUpdate);
                 }
             },
             onDispose: () => {
                 if (model.type === bindingContext?.contentType) {
-                    this.eventManager.removeEventListener("onContentUpdate", scheduleUpdate);
+                    this.eventManager.removeEventListener(Events.ContentUpdate, scheduleUpdate);
                 }
             }
         };

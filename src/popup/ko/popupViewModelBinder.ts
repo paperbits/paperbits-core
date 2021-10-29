@@ -1,6 +1,6 @@
 import { Bag } from "@paperbits/common";
 import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
@@ -61,7 +61,7 @@ export class PopupViewModelBinder implements ViewModelBinder<PopupModel, PopupVi
                 handler: PopupHandlers,
                 applyChanges: async () => {
                     await this.modelToViewModel(model, viewModel, bindingContext);
-                    this.eventManager.dispatchEvent("onContentUpdate", model.key.replace("files/", "popups/"));
+                    this.eventManager.dispatchEvent(Events.ContentUpdate, model.key.replace("files/", "popups/"));
                 }
             };
 

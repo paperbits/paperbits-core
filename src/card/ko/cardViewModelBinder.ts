@@ -5,7 +5,7 @@ import { CardModel } from "../cardModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { CardHandlers } from "../cardHandlers";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
 
@@ -58,7 +58,7 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
                 handler: CardHandlers,
                 applyChanges: async () => {
                     await this.modelToViewModel(model, viewModel, bindingContext);
-                    this.eventManager.dispatchEvent("onContentUpdate");
+                    this.eventManager.dispatchEvent(Events.ContentUpdate);
                 }
             };
 

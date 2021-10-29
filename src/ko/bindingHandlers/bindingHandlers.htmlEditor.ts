@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import { IHtmlEditor } from "@paperbits/common/editing/IHtmlEditor";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { BlockModel } from "@paperbits/common/text/models";
 import { TextblockViewModel } from "../../textblock/ko/textblockViewModel";
 
@@ -17,7 +17,7 @@ export class HtmlEditorBindingHandler {
 
                 htmlEditor.onStateChange = (newContent: BlockModel[]) => {
                     viewModel["widgetBinding"].model.content = newContent;
-                    eventManager.dispatchEvent("onContentUpdate"); // TODO: Move this event emit to TextblockEditor
+                    eventManager.dispatchEvent(Events.ContentUpdate); // TODO: Move this event emit to TextblockEditor
                 };
 
                 const onEscapeKeyPressed = () => htmlEditor.detachFromElement();

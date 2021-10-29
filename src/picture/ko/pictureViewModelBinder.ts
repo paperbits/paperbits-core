@@ -2,7 +2,7 @@ import * as MediaUtils from "@paperbits/common/media/mediaUtils";
 import { PictureViewModel } from "./picture";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { PictureModel } from "../pictureModel";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles/styleCompiler";
 import { Bag } from "@paperbits/common";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
@@ -72,7 +72,7 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
             editor: "picture-editor",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 

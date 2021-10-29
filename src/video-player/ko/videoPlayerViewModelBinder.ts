@@ -1,7 +1,7 @@
 import { VideoPlayer } from "./videoPlayer";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { VideoPlayerModel } from "../videoPlayerModel";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles/styleCompiler";
 import { Bag } from "@paperbits/common";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
@@ -55,7 +55,7 @@ export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerMo
             editor: "video-player-editor",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 

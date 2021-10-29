@@ -1,6 +1,6 @@
 import { Bag } from "@paperbits/common";
 import { IWidgetBinding } from "@paperbits/common/editing";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { NavigationEvents, NavigationItemModel } from "@paperbits/common/navigation";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { StyleCompiler } from "@paperbits/common/styles";
@@ -94,7 +94,7 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
 
                 await this.modelToViewModel(model, viewModel, bindingContext);
 
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             },
             onCreate: () => {
                 this.eventManager.addEventListener(NavigationEvents.onNavigationItemUpdate, onUpdate);

@@ -2,7 +2,7 @@ import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { YoutubePlayerViewModel } from "./youtubePlayer";
 import { YoutubePlayerModel } from "../youtubePlayerModel";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { Bag } from "@paperbits/common";
 import { StyleCompiler } from "@paperbits/common/styles";
 
@@ -43,7 +43,7 @@ export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlay
             editor: "youtube-player-editor",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 

@@ -1,5 +1,5 @@
 import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IContextCommandSet, View, ViewManager } from "@paperbits/common/ui";
 import { WidgetModel } from "@paperbits/common/widgets";
@@ -55,7 +55,7 @@ export class TableCellHandlers implements IWidgetHandler {
                     onSelect: (widget: WidgetModel) => {
                         context.model.widgets.push(widget);
                         context.binding.applyChanges();
-                        this.eventManager.dispatchEvent("onContentUpdate");
+                        this.eventManager.dispatchEvent(Events.ContentUpdate);
                         this.viewManager.clearContextualCommands();
                     }
                 }
@@ -78,7 +78,7 @@ export class TableCellHandlers implements IWidgetHandler {
                             rowIndex: Math.floor(context.parentModel.widgets.indexOf(context.model) / context.parentModel["numOfCols"]),
                             onChange: (model: TableModel) => {
                                 context.parentBinding.applyChanges();
-                                this.eventManager.dispatchEvent("onContentUpdate");
+                                this.eventManager.dispatchEvent(Events.ContentUpdate);
                                 // this.viewManager.clearContextualCommands();
                             }
                         }
@@ -103,7 +103,7 @@ export class TableCellHandlers implements IWidgetHandler {
                             columnIndex: context.parentModel.widgets.indexOf(context.model),
                             onChange: (model: TableModel) => {
                                 context.parentBinding.applyChanges();
-                                this.eventManager.dispatchEvent("onContentUpdate");
+                                this.eventManager.dispatchEvent(Events.ContentUpdate);
                                 // this.viewManager.clearContextualCommands();
                             }
                         }

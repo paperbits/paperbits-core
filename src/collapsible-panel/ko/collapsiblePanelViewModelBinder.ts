@@ -1,7 +1,7 @@
 import { CollapsiblePanel } from "./collapsiblePanelViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { CollapsiblePanelModel } from "../collapsiblePanelModel";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
 import { PlaceholderViewModel } from "../../placeholder/ko";
@@ -51,7 +51,7 @@ export class CollapsiblePanelViewModelBinder implements ViewModelBinder<Collapsi
             handler: CollapsiblePanelHandlers,
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent("onContentUpdate");
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 
