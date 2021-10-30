@@ -1,5 +1,5 @@
 ﻿import * as ko from "knockout";
-import { GlobalEventHandler } from "@paperbits/common/events";
+import { EventManager, Events, GlobalEventHandler } from "@paperbits/common/events";
 import { ViewManager, ViewManagerMode } from "@paperbits/common/ui";
 import { Router, Route } from "@paperbits/common/routing";
 import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
@@ -82,6 +82,7 @@ export class HostBindingHandler {
         hostElement.classList.add("host");
         hostElement.title = "Website";
         hostElement.tabIndex = -1;
+        hostElement.setAttribute("aria-hidden", "true");
 
         let hostedWindowHistory;
 
@@ -92,6 +93,7 @@ export class HostBindingHandler {
 
         const onLoad = async (): Promise<void> => {
             const contentDocument = hostElement.contentDocument;
+
             this.viewManager["hostDocument"] = contentDocument;
             this.globalEventHandler.appendDocument(contentDocument);
             this.setRootElement(contentDocument.body);
@@ -147,7 +149,7 @@ export class HostBindingHandler {
         return hostElement;
     }
 
-    private async setRootElement(bodyElement: HTMLElement): Promise<void> {
+    private setRootElement(bodyElement: HTMLElement): void {
         const styleElement = document.createElement("style");
         bodyElement.ownerDocument.head.appendChild(styleElement);
 

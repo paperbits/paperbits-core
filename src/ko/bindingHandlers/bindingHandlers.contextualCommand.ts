@@ -6,7 +6,6 @@ interface CommandConfig {
     command: IContextCommand;
 }
 
-
 export class ContextualCommandBindingHandler {
     constructor(viewManager: ViewManager) {
         ko.bindingHandlers["contextualCommand"] = {
@@ -35,7 +34,7 @@ export class ContextualCommandBindingHandler {
                             viewManager.clearSelection();
                         },
                         onClose: () => {
-                            viewManager.resumeContextualEditors();
+                            viewManager.resumeContextualCommands();
                         }
                     };
                 }

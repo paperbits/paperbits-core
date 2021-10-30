@@ -157,6 +157,10 @@ export class DefaultViewManager implements ViewManager {
         return this.host();
     }
 
+    public getDesignerDocument(): Document {
+        return document;
+    }
+
     public getHostDocument(): Document {
         return this.hostDocument;
     }
@@ -378,7 +382,8 @@ export class DefaultViewManager implements ViewManager {
                 }
             },
             heading: binding.displayName,
-            resize: binding.editorResize || "vertically horizontally"
+            resize: binding.editorResize || "vertically horizontally",
+            returnFocusTo: document.getElementById("contentEditor")
         };
 
         this.openViewAsPopup(view);
@@ -522,17 +527,9 @@ export class DefaultViewManager implements ViewManager {
     public pauseContextualCommands(...except: IContextCommand[]): void {
         this.mode = ViewManagerMode.pause;
         this.highlightedElement(null);
-
-
-        // this.contextualCommandsBag = {};
-        //    this.contextualCommands([]);
-        // this.highlightedElement(null);
-        // this.setSplitter(null);
-        // this.selectedElement(null);
-        // this.selectedElementContextualEditor(null);
     }
 
-    public resumeContextualEditors(): void {
+    public resumeContextualCommands(): void {
         this.mode = ViewManagerMode.selecting;
         this.designTime(true);
         this.clearContextualCommands();

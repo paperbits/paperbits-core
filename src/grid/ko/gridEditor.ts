@@ -1,5 +1,6 @@
 import * as _ from "lodash";
 import * as Utils from "@paperbits/common/utils";
+import * as Html from "@paperbits/common/html";
 import { ViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet } from "@paperbits/common/ui";
 import { IWidgetBinding, GridHelper, WidgetContext, GridItem, ComponentFlow } from "@paperbits/common/editing";
 import { IWidgetService } from "@paperbits/common/widgets";
@@ -22,6 +23,7 @@ export class GridEditor {
     private activeContextualCommands: IContextCommandSet;
     private actives: object;
     private ownerDocument: Document;
+    private selection: GridItem;
 
 
     constructor(
@@ -113,7 +115,7 @@ export class GridEditor {
 
         let contextualCommands: IContextCommandSet;
 
-        if (context.binding.handler) {
+        if (context.binding?.handler) {
             const handler = this.widgetService.getWidgetHandler(context.binding.handler);
 
             if (handler.getContextCommands) {
@@ -246,7 +248,7 @@ export class GridEditor {
         }
     }
 
-    private selectElement(item: GridItem): void {
+    private selectElement(item: GridItem, scrollIntoView: boolean = true): void {
         if (!item) {
             throw new Error(`Parameter "item" not specified.`);
         }
@@ -265,6 +267,12 @@ export class GridEditor {
 
         this.viewManager.setSelectedElement(config, commandSet);
         this.activeContextualCommands = commandSet;
+
+        this.selection = item;
+
+        if (scrollIntoView) {
+            item.element.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
     }
 
     private onPointerMove(event: PointerEvent): void {
@@ -304,6 +312,10 @@ export class GridEditor {
         }
 
         const gridItem = GridHelper.getGridItem(selectedElement.element);
+
+        if (!gridItem) {
+            return;
+        }
 
         switch (event.key) {
             case Keys.ArrowDown:
@@ -498,12 +510,16 @@ export class GridEditor {
             clearTimeout(this.scrollTimeout);
         }
 
-        this.scrollTimeout = setTimeout(this.resetScrolling.bind(this), 400);
+        this.scrollTimeout = setTimeout(this.resetScrolling.bind(this), 100);
     }
 
     private resetScrolling(): void {
         this.scrolling = false;
         this.renderHighlightedElements();
+
+        if (this.selection) { // also, check for element existence.
+            this.selectElement(this.selection, false);
+        }
     }
 
     private getUnderlyingElements(): HTMLElement[] {
@@ -564,7 +580,7 @@ export class GridEditor {
                     this.viewManager.clearContextualCommands();
                 },
             },
-            selectCommands: context.binding.editor && context.binding.applyChanges && [{
+            selectCommands: context.binding?.editor && context.binding?.applyChanges && [{
                 tooltip: "Edit widget",
                 iconClass: "paperbits-icon paperbits-edit-72",
                 position: "top right",
@@ -635,7 +651,43 @@ export class GridEditor {
 
         if (this.activeHighlightedElement !== highlightedElement) {
             this.activeHighlightedElement = highlightedElement;
+
             this.viewManager.setHighlight({ element: highlightedElement, text: highlightedText, color: highlightColor });
+        }
+    }
+
+    private findFocusableElement(): GridItem {
+        const element = <HTMLElement>Html.findFirst(this.ownerDocument.body,
+            node => node.nodeName === "SECTION" && !!GridHelper.getGridItem(<HTMLElement>node));
+
+        if (!element) {
+            return null;
+        }
+
+        return GridHelper.getGridItem(element);
+    }
+
+    private onGlobalFocusChange(event: FocusEvent): void {
+        const target = <HTMLElement>event.target;
+
+        if (target.id === "contentEditor") {
+            if (this.selection) { // also, check for element existence.
+                this.selectElement(this.selection, false);
+            }
+            else {
+                const focusableElement = this.findFocusableElement();
+
+                if (focusableElement) {
+                    this.selectElement(focusableElement);
+                }
+            }
+        }
+        else {
+            const designerDocument = this.viewManager.getDesignerDocument();
+
+            if (designerDocument.body.contains(target)) { // means focus is in toolboxes
+                this.viewManager.clearSelection();
+            }
         }
     }
 
@@ -648,6 +700,8 @@ export class GridEditor {
         this.ownerDocument.addEventListener(Events.Click, this.onMouseClick, true);
         this.eventManager.addEventListener("onKeyDown", this.onKeyDown);
         this.eventManager.addEventListener("onDelete", this.onDelete);
+
+        document.addEventListener(Events.Focus, (e) => this.onGlobalFocusChange(e), true);
     }
 
     public dispose(): void {
