@@ -1,12 +1,12 @@
 <div class="flex flex-column">
-    <div role="listbox" class="list-checkboxes" data-bind="foreach: { data: locales, as: 'locale' }, scrollable: true, focus: { childSelector: '.list-item' }">
-        <a href="#" role="option" class="list-item"
-            data-bind="text: locale.displayName, click: $component.selectLocale, css: { 'list-item-checked': locale === $component.selectedLocale() }">
+    <div role="listbox" class="list-checkboxes" data-bind="foreach: { data: locales, as: 'locale' }, scrollable: true, listbox: {}">
+        <a role="option" class="list-item"
+            data-bind="text: locale.displayName, activate: $component.selectLocale, css: { 'list-item-checked': locale === $component.selectedLocale() }">
         </a>
     </div>
     <div class="flex-item btn-group">
         <button class="btn btn-default"
-            data-bind="click: $component.addLocale">
+            data-bind="activate: $component.addLocale">
             <i aria-hidden="true" class="paperbits-icon paperbits-simple-add"></i>
             Add locale
         </button>

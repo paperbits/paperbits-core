@@ -1,5 +1,6 @@
 import * as _ from "lodash";
 import * as Utils from "@paperbits/common/utils";
+import * as Html from "@paperbits/common/html";
 import { ViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet } from "@paperbits/common/ui";
 import { IWidgetBinding, GridHelper, WidgetContext, GridItem, ComponentFlow } from "@paperbits/common/editing";
 import { IWidgetService } from "@paperbits/common/widgets";
@@ -312,6 +313,10 @@ export class GridEditor {
 
         const gridItem = GridHelper.getGridItem(selectedElement.element);
 
+        if (!gridItem) {
+            return;
+        }
+
         switch (event.key) {
             case Keys.ArrowDown:
             case Keys.ArrowRight:
@@ -575,7 +580,7 @@ export class GridEditor {
                     this.viewManager.clearContextualCommands();
                 },
             },
-            selectCommands: context.binding.editor && context.binding.applyChanges && [{
+            selectCommands: context.binding?.editor && context.binding?.applyChanges && [{
                 tooltip: "Edit widget",
                 iconClass: "paperbits-icon paperbits-edit-72",
                 position: "top right",
@@ -651,12 +656,30 @@ export class GridEditor {
         }
     }
 
+    private findFocusableElement(): GridItem {
+        const element = <HTMLElement>Html.findFirst(this.ownerDocument.body,
+            node => node.nodeName === "SECTION" && !!GridHelper.getGridItem(<HTMLElement>node));
+
+        if (!element) {
+            return null;
+        }
+
+        return GridHelper.getGridItem(element);
+    }
+
     private onGlobalFocusChange(event: FocusEvent): void {
         const target = <HTMLElement>event.target;
 
         if (target.id === "contentEditor") {
             if (this.selection) { // also, check for element existence.
                 this.selectElement(this.selection, false);
+            }
+            else {
+                const focusableElement = this.findFocusableElement();
+
+                if (focusableElement) {
+                    this.selectElement(focusableElement);
+                }
             }
         }
         else {
