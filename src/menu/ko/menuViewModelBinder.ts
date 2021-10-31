@@ -25,7 +25,7 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
             : "#";
 
         const viewModel = new MenuItemViewModel();
-        viewModel.label(navitem.label);
+        viewModel.label(navitem.label || "< No label >");
         viewModel.isActive(navitem.isActive);
         viewModel.level(level);
 
