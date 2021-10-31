@@ -30,9 +30,9 @@
     <!-- /ko -->
 
     <div class="list flex flex-column flex-item flex-item-grow ">
-        <div class="flex-item flex-item-grow" role="list" data-bind="scrollable: true">
+        <div class="flex-item flex-item-grow" role="listbox" data-bind="scrollable: true, listbox: {}">
             <!-- ko foreach: { data: urls, as: 'url' } -->
-            <a href="#" role="listitem" class="list-item"
+            <a href="#" role="option" class="list-item"
                 data-bind="click: $component.selectUrl, event: { keydown: $component.keydown }, attr: { title: url.title }">
                 <i aria-hidden="true" class="paperbits-icon paperbits-link-69-2"></i>
                 <span class="list-item-label" data-bind="text: url.title"></span>

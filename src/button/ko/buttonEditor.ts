@@ -8,13 +8,7 @@ import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorat
 import { Display } from "@paperbits/styles/plugins";
 import { ViewManager } from "@paperbits/common/ui";
 import { EventManager, Events } from "@paperbits/common/events";
-import { BreakpointValues, distinct } from "@paperbits/common";
-
-
-interface SelectOption {
-    value: string;
-    text: string;
-}
+import { SelectOption } from "@paperbits/common/ui/selectOption";
 
 @Component({
     selector: "button-editor",

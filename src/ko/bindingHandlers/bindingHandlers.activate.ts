@@ -6,6 +6,12 @@ import { Events } from "@paperbits/common/events";
 ko.bindingHandlers["activate"] = {
     init: (element: HTMLElement, valueAccessor: () => (data: any) => void) => {
         const onActivate = valueAccessor();
+
+        if (!onActivate) {
+            console.warn(`Callback function for binding handler "activate" in undefined.`);
+            return;
+        }
+
         const data = ko.dataFor(element);
 
         const onClick = (event: PointerEvent) => {

@@ -449,7 +449,7 @@ export class BalloonBindingHandler {
                     }, 50);
                 };
 
-                const onKeyDown = async (event: KeyboardEvent): Promise<void> => {
+                const onKeyDown = (event: KeyboardEvent): void => {
                     switch (event.key) {
                         case Keys.Enter:
                         case Keys.Space:

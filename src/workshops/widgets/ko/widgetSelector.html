@@ -26,13 +26,13 @@
     </div>
     <!-- /ko -->
 
-    <div role="list" class="flex flex-column list" data-bind="scrollable: true">
+    <div role="listbox" class="flex flex-column list" data-bind="scrollable: true, listbox: {}">
         <!-- ko foreach: { data: categories, as: 'category'  } -->
         <!-- ko if: category.name -->
         <h2 class="text-center" data-bind="text: category.name"></h2>
         <!-- /ko -->
         <div data-bind="foreach: category.items">
-            <a href="#" role="listitem" class="list-item list-item-large" data-bind="click: $component.selectWidget">
+            <a href="#" role="option" class="list-item list-item-large" data-bind="click: $component.selectWidget">
                 <!-- ko if: iconUrl -->
                 <div>
                     <img class="list-item-widget-icon" data-bind="attr: { src: iconUrl }">

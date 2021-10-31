@@ -80,6 +80,7 @@ export class PagesWorkshop {
 
         const view: View = {
             heading: "Page",
+            // returnFocusTo: ???
             component: {
                 name: "page-details-workshop",
                 params: {

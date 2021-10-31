@@ -82,7 +82,7 @@ export class PopupSelector {
         this.working(false);
     }
 
-    public async selectPopup(popupItem: PopupItem): Promise<void> {
+    public selectPopup(popupItem: PopupItem): void {
         const uri = this.selectedPopup();
 
         if (uri) {

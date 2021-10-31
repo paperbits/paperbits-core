@@ -29,7 +29,6 @@ export class PictureEditor {
 
     constructor(
         private readonly styleService: StyleService,
-        private readonly mediaPermalinkResolver: IPermalinkResolver,
         private readonly mediaService: MediaService
     ) {
         this.caption = ko.observable<string>();

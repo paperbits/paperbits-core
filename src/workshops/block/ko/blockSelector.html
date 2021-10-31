@@ -13,17 +13,17 @@
 <spinner></spinner>
 <!--/ko-->
 
-<!--ko ifnot: working()-->
+<!-- ko ifnot: working() -->
 
 <!-- ko if: blocks().length === 0 -->
 <p class="flex-item flex-item-grow text-center">It seems that you don't have anything in your library yet.</p>
 <!-- /ko -->
 
 <!-- ko if: blocks().length > 0 -->
-<div role="list" data-bind="foreach: blocks, scrollable: true">
-    <div class="list-item" data-bind="css: { selected: hasFocus }, click: $component.selectBlock">
+<div role="listbox" data-bind="foreach: blocks, scrollable: true, listbox: {}">
+    <div role="option" class="list-item" data-bind="css: { selected: hasFocus }, activate: $component.selectBlock">
         <!-- ko if: $component.blockSource === 'saved' -->
-        <button class="btn-standalone remove-block" data-bind="click: $component.deleteBlock">
+        <button class="btn-standalone remove-block" data-bind="activate: $component.deleteBlock">
             <i aria-hidden="true" class="paperbits-icon paperbits-trash-simple"></i>
         </button>
         <!-- /ko -->

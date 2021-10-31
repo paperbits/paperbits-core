@@ -15,7 +15,7 @@
     </div>
 
     <div class="list flex flex-column flex-item flex-item-grow">
-        <div class="flex-item flex-item-grow" role="list" data-bind="scrollable: true">
+        <div class="flex-item flex-item-grow" role="listbox" data-bind="scrollable: true, listbox: {}">
             <!-- ko if: !working() && popups().length === 0 -->
             <!-- ko if: searchPattern() === "" -->
             <p class="text-center">
@@ -29,8 +29,7 @@
             <!-- /ko -->
 
             <!-- ko foreach: { data: popups, as: 'popup' } -->
-            <a href="#" role="listitem" class="list-item"
-                data-bind="click: $component.selectPopup, event: { keydown: $component.keydown }, attr: { title: popup.title }">
+            <a role="option" class="list-item" data-bind="activate: $component.selectPopup, attr: { title: popup.title }">
                 <i aria-hidden="true" class="paperbits-icon paperbits-polaroid"></i>
                 <span class="list-item-label" data-bind="text: popup.title"></span>
             </a>

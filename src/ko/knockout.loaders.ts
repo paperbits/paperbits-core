@@ -58,9 +58,28 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                                         // Assigning initial value
                                         instanceValue(paramerterValue());
 
+                                        let holdInstanceUpdate = false;
+                                        let holdParameterUpdates = false;
+
                                         // Subscribing for all future changes
                                         paramerterValue.subscribe((value) => {
+                                            if (holdInstanceUpdate) {
+                                                return;
+                                            }
+
+                                            holdParameterUpdates = true;
                                             instanceValue(value);
+                                            holdParameterUpdates = false;
+                                        });
+
+                                        instanceValue.subscribe(value => {
+                                            if (holdParameterUpdates) {
+                                                return;
+                                            }
+
+                                            holdInstanceUpdate = true;
+                                            paramerterValue(value);
+                                            holdInstanceUpdate = false;
                                         });
                                     }
                                     else {

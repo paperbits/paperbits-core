@@ -19,7 +19,7 @@ import { PageDesignModule } from "./workshops/page/ko/page.design.module";
 import { MediaWorkshopModule } from "./workshops/media/ko/media.module";
 import { NavigationWorkshopModule } from "./workshops/navigation/ko/navigation.module";
 import { SettingsWorkshopModule } from "./workshops/settings/ko/settings.module";
-import { Workshops } from "./workshops/ko/workshops";
+import { Workshops } from "./workshops/workshops";
 import { TextblockEditorModule } from "./textblock/ko/textblockEditor.module";
 import { DropbucketModule } from "./workshops/dropbucket/ko/dropbucket.module";
 import { ViewportSelector } from "./workshops/viewports/ko/viewport-selector";

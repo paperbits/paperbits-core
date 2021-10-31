@@ -1,0 +1,45 @@
+<div class="toolbox toolbox-position-left workshops-container flex flex-row"
+    data-bind="visible: viewManager.primaryToolboxVisible, resizable: resizing">
+    <ul role="tablist" class="flex-item toolbox-btn-group toolbox-btn-group-vertical">
+        <!-- ko foreach: { data: sections, as: 'section' } -->
+        <li role="presentation" class="toolbox-btn"
+            data-bind="css: { 'toolbox-btn-is-active': $component.viewManager.journeyName() == section.title }">
+            <a href="#" role="tab"
+                data-bind="attr: { title: section.title, 'aria-label': section.title, 'aria-selected': ($component.viewManager.journeyName() == section.title).toString() }, click: section.onActivate, tooltip: { message: section.tooltip, position: 'right' }">
+                <i data-bind="css: section.iconClass"></i>
+            </a>
+        </li>
+        <!-- /ko -->
+        
+        <!-- ko if: userPhotoUrl -->
+        <li role="presentation" class="toolbox-btn pull-down">
+            <a href="#" role="tab" title="Account" aria-label="Account">
+                <div class="photo" data-bind="style: { 'background-image': 'url('+userPhotoUrl()+')' }">
+                </div>
+            </a>
+        </li>
+        <!-- /ko -->
+    </ul>
+
+    <!-- ko if: viewManager.journey().length > 0 -->
+    <div role="tabpanel" class="flex flex-item flex-item-grow workshop"
+        data-bind="foreach: viewManager.journey()">
+        <div class="flex-item flex flex-column workshop-journey-step" data-bind="dialog: {}">
+            <h1>
+                <span data-bind="text: heading"></span>
+                <!-- ko if: $data.helpText -->
+                <button class="btn-help" role="tooltip" aria-label="Help" data-bind="tooltip: { message: $data.helpText, position: 'right' }">
+                    <i aria-hidden="true" class="paperbits-icon paperbits-c-question"></i>
+                </button>
+                <!--/ko -->
+            </h1>
+            <button class="btn btn-dismiss" title="Close" aria-label="Close" data-bind="click: $component.closeWorkshop">
+                <i aria-hidden="true" class="paperbits-icon paperbits-simple-remove"></i>
+            </button>
+            <hr />
+            <div class="flex-item flex-item-grow"
+                data-bind="component: { name: component.name, params: component.params }"></div>
+        </div>
+    </div>
+    <!-- /ko -->
+</div>
