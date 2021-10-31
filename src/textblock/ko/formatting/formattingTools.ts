@@ -73,6 +73,7 @@ export class TextBlockEditorFormattingTools {
     @OnMounted()
     public async init(): Promise<void> {
         await this.loadTextStyles();
+
         this.updateFormattingState();
         this.eventManager.addEventListener(HtmlEditorEvents.onSelectionChange, this.updateFormattingState);
     }
@@ -86,17 +87,26 @@ export class TextBlockEditorFormattingTools {
     private updateFormattingState(): void {
         const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
 
-        if (!htmlEditor) {
-            if (this.textStyles()) {
-                const defaultStyle = this.textStyles().find(x => x.key === "globals/body/default");
-                const appearance = defaultStyle.displayName;
-                this.appearance(appearance);
-                this.style("Normal");
-            }
-            return;
-        }
+        let selectionState = htmlEditor?.getSelectionState();
 
-        const selectionState = htmlEditor.getSelectionState();
+        if (!selectionState) {
+            selectionState = {
+                block: "paragraph",
+                bold: false,
+                italic: false,
+                striked: false,
+                underlined: false,
+                highlighted: false,
+                code: false,
+                hyperlink: false,
+                colorKey: null,
+                anchorKey: null,
+                orderedList: false,
+                bulletedList: false,
+                alignment: null,
+                appearance: "globals/body/default"
+            };
+        }
 
         this.bold(selectionState.bold);
         this.italic(selectionState.italic);
@@ -135,20 +145,9 @@ export class TextBlockEditorFormattingTools {
 
         this.alignment(alignment);
 
-        if (this.textStyles()) {
-            let appearance = this.textStyles()[0].displayName;
-
-            if (selectionState.appearance) {
-                // const breakpoint = Utils.getClosestBreakpoint(selectionState.appearance, this.viewManager.getViewport());
-                // const styleKey = selectionState.appearance[breakpoint];
-                const styleKey = selectionState.appearance;
-
-                const textStyle = this.textStyles().find(item => item["key"] === styleKey);
-                appearance = textStyle && textStyle.displayName;
-            }
-
-            this.appearance(appearance);
-        }
+        const textStyleKey = selectionState.appearance || "globals/body/default";
+        const textStyle = this.textStyles().find(item => item.key === textStyleKey);
+        this.appearance(textStyle.displayName);
 
         this.anchored(!!selectionState.anchorKey);
 

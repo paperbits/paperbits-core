@@ -7,10 +7,8 @@ import { Component } from "@paperbits/common/ko/decorators";
     template: template
 })
 export class BlockStyleSelector {
-    constructor(
-        private readonly htmlEditorProvider: IHtmlEditorProvider
-    ) { }
- 
+    constructor(private readonly htmlEditorProvider: IHtmlEditorProvider) { }
+
     public resetToNormal(): void {
         const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
 
@@ -20,7 +18,7 @@ export class BlockStyleSelector {
 
         htmlEditor.toggleParagraph();
     }
-  
+
     public toggleH1(): void {
         const htmlEditor = this.htmlEditorProvider.getCurrentHtmlEditor();
 
