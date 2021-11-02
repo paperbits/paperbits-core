@@ -683,10 +683,12 @@ export class GridEditor {
             }
         }
         else {
-            const designerDocument = this.viewManager.getDesignerDocument();
+            if (this.selection) {
+                const toolbox = target.closest(".toolbox");
 
-            if (designerDocument.body.contains(target)) { // means focus is in toolboxes
-                this.viewManager.clearSelection();
+                if (toolbox) {
+                    this.viewManager.clearSelection();
+                }
             }
         }
     }
