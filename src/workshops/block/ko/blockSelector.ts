@@ -2,7 +2,6 @@ import template from "./blockSelector.html";
 import * as ko from "knockout";
 import * as Constants from "@paperbits/common/constants";
 import * as Objects from "@paperbits/common/objects";
-import { IResourceSelector } from "@paperbits/common/ui";
 import { BlockItem } from "./blockItem";
 import { BlockContract } from "@paperbits/common/blocks/blockContract";
 import { IBlockService } from "@paperbits/common/blocks";
@@ -12,12 +11,11 @@ import { ViewModelBinderSelector } from "../../../ko/viewModelBinderSelector";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { StyleManager } from "@paperbits/common/styles";
 import { HttpClient } from "@paperbits/common/http";
-import { Bag, Contract } from "@paperbits/common";
+import { Bag } from "@paperbits/common";
 
 export interface UpdateBlock { block: BlockContract; blockType: string; }
 
 const blockPath = "blocks";
-const documentsPath = "files";
 
 
 @Component({
@@ -159,15 +157,13 @@ export class BlockSelector {
         this.working(false);
     }
 
-    public async selectBlock(block: BlockItem): Promise<void> {
+    public selectBlock(block: BlockItem): void {
         if (this.onSelect) {
             this.onSelect(block);
         }
     }
 
-    public async deleteBlock(block: BlockItem, event: any): Promise<void> {
-        event.stopImmediatePropagation();
-
+    public async deleteBlock(block: BlockItem): Promise<void> {
         await this.blockService.deleteBlock(block.toContract());
         await this.searchBlocks(this.searchPattern());
     }
