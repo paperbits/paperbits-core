@@ -5,7 +5,7 @@ import { WidgetEditor } from "@paperbits/common/widgets";
 import { StyleHelper } from "@paperbits/styles";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { PopupModel } from "../popupModel";
-import { BackgroundStylePluginConfig, TypographyStylePluginConfig, ContainerStylePluginConfig, SizeStylePluginConfig, BoxStylePluginConfig } from "@paperbits/styles/plugins";
+import { BackgroundStylePluginConfig, TypographyStylePluginConfig, ContainerStylePluginConfig, SizeStylePluginConfig, BoxStylePluginConfig, BorderStylePluginConfig, PaddingStylePluginConfig, BorderRadiusStylePluginConfig } from "@paperbits/styles/plugins";
 import { EventManager, Events } from "@paperbits/common/events";
 import { PositionStylePluginConfig } from "@paperbits/styles/plugins/position";
 import { TransformStylePluginConfig } from "@paperbits/styles/plugins/transform";
@@ -90,6 +90,18 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
             .getConfig<BackgroundStylePluginConfig>();
 
         this.backdropBackground(backdropBackgroundStyleConfig);
+
+        const containerPaddingStyles = popupContainerStyles.plugin("padding").getConfig<PaddingStylePluginConfig>();
+        const containerBorderStyles = popupContainerStyles.plugin("border").getConfig<BorderStylePluginConfig>();
+        const containerBorderRadiusStyles = popupContainerStyles.plugin("borderRadius").getConfig<BorderRadiusStylePluginConfig>();
+
+        const containerBox: BoxStylePluginConfig = {
+            padding: containerPaddingStyles,
+            border: containerBorderStyles,
+            borderRadius: containerBorderRadiusStyles
+        };
+
+        this.containerBox(containerBox);
     }
 
     public onContainerContainerChange(pluginConfig: ContainerStylePluginConfig): void {
@@ -189,8 +201,6 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
 
         let offsetX = new Size(0);
         let offsetY = new Size(0);
-
-        console.log(JSON.stringify(transformPluginConfig));
 
         if (CalcExpression.isExpr(transformPluginConfig.translate.x)) {
             const parsed = CalcExpression.parse(transformPluginConfig.translate.x);
@@ -370,6 +380,13 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
             .variation("default")
             .plugin("border")
             .setConfig(pluginConfig.border);
+
+        StyleHelper
+            .style(this.model.styles)
+            .component("popupContainer")
+            .variation("default")
+            .plugin("borderRadius")
+            .setConfig(pluginConfig.borderRadius);
 
         this.onChange(this.model);
     }
