@@ -102,25 +102,9 @@ export class ButtonEditor {
 
     public onDisplayChange(): void {
         const viewport = this.viewManager.getViewport();
-        const displayStyle = this.model.styles?.instance?.display;
         const newViewportValue = this.displayStyle();
 
-        let otherValues = [];
-
-        const newState = displayStyle ? Objects.clone(displayStyle) : {};
-        newState[viewport] = newViewportValue;
-
-        otherValues = Object.values(newState);
-
-        const optionText = this.displayOptions.find(x => x.value === newViewportValue).text;
-
-        if (otherValues.includes(Display.None) && !otherValues.includes(Display.Inline) && !otherValues.includes(Display.Block)) {
-            this.viewManager.notifyError("Button: Visibility", `Button should be set "Visible" on at least one other screen size, before you can set "${optionText}" on current one.`);
-            return;
-        }
-
-        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "display", this.displayStyle(), viewport);
-
+        StyleHelper.setVisibility(this.model.styles, newViewportValue, viewport, this.viewManager);
         this.onChange(this.model);
     }
 

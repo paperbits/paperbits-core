@@ -1,19 +1,13 @@
 ﻿import * as ko from "knockout";
 import template from "./menuEditor.html";
-import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
+import { Component, Event, OnMounted, Param } from "@paperbits/common/ko/decorators";
 import { NavigationItemModel } from "@paperbits/common/navigation";
-import { StyleService } from "@paperbits/styles";
+import { ViewManager } from "@paperbits/common/ui";
+import { SelectOption } from "@paperbits/common/ui/selectOption";
+import { StyleHelper, StyleService } from "@paperbits/styles";
+import { Display } from "@paperbits/styles/plugins";
 import { MenuModel } from "../menuModel";
 
-interface HeadingOption {
-    label: string;
-    value: number;
-}
-
-interface LayoutOption {
-    label: string;
-    value: string;
-}
 
 const emptySelectionLabel = "Click to select navigation item...";
 
@@ -24,15 +18,25 @@ const emptySelectionLabel = "Click to select navigation item...";
 export class MenuEditor {
     public readonly navigationItemTitle: ko.Observable<string>;
     public readonly showHeadings: ko.Observable<boolean>;
-    public readonly headingLevelOptions: ko.ObservableArray<HeadingOption>;
+    public readonly headingLevelOptions: ko.ObservableArray<SelectOption>;
     public readonly minHeadingLevel: ko.Observable<number>;
     public readonly maxHeadingLevel: ko.Observable<number>;
     public readonly layout: ko.Observable<string>;
-    public readonly layoutOptions: ko.ObservableArray<LayoutOption>;
+    public readonly layoutOptions: ko.ObservableArray<SelectOption>;
     public readonly appearanceStyles: ko.ObservableArray<any>;
     public readonly appearanceStyle: ko.Observable<any>;
+    public readonly displayStyle: ko.Observable<string>;
 
-    constructor(private readonly styleService: StyleService) {
+    public displayOptions: SelectOption[] = [
+        { value: null, text: "(Inherit)" },
+        { value: Display.Inline, text: "Visible" },
+        { value: Display.None, text: "Hidden" }
+    ];
+
+    constructor(
+        private readonly styleService: StyleService,
+        private readonly viewManager: ViewManager
+    ) {
         this.showHeadings = ko.observable();
         this.minHeadingLevel = ko.observable();
         this.maxHeadingLevel = ko.observable();
@@ -40,22 +44,22 @@ export class MenuEditor {
         this.appearanceStyles = ko.observableArray<any>();
         this.appearanceStyle = ko.observable<any>();
 
-        this.headingLevelOptions = ko.observableArray<HeadingOption>([
-            { label: "Heading 1", value: 1 },
-            { label: "Heading 2", value: 2 },
-            { label: "Heading 3", value: 3 },
-            { label: "Heading 4", value: 4 },
-            { label: "Heading 5", value: 5 },
-            { label: "Heading 6", value: 6 }
+        this.headingLevelOptions = ko.observableArray<SelectOption>([
+            { text: "Heading 1", value: 1 },
+            { text: "Heading 2", value: 2 },
+            { text: "Heading 3", value: 3 },
+            { text: "Heading 4", value: 4 },
+            { text: "Heading 5", value: 5 },
+            { text: "Heading 6", value: 6 }
         ]);
 
-        this.layoutOptions = ko.observableArray<LayoutOption>([
-            { label: "Horizontal menu", value: "horizontal" },
-            { label: "Vertical menu", value: "vertical" }
-            // { label: "Site map", value: "sitemap" }
+        this.layoutOptions = ko.observableArray<SelectOption>([
+            { text: "Horizontal menu", value: "horizontal" },
+            { text: "Vertical menu", value: "vertical" }
         ]);
 
         this.navigationItemTitle = ko.observable();
+        this.displayStyle = ko.observable<string>();
     }
 
     @Param()
@@ -85,10 +89,18 @@ export class MenuEditor {
         this.appearanceStyle.subscribe(this.applyChanges);
     }
 
-    public async onNavigationItemChange(navigationItem: NavigationItemModel): Promise<void> {
+    public onNavigationItemChange(navigationItem: NavigationItemModel): void {
         this.model.navigationItem = navigationItem;
         this.navigationItemTitle(navigationItem?.label || emptySelectionLabel);
         this.applyChanges();
+    }
+
+    public onDisplayChange(): void {
+        const viewport = this.viewManager.getViewport();
+        const newViewportValue = this.displayStyle();
+
+        StyleHelper.setVisibility(this.model.styles, newViewportValue, viewport, this.viewManager);
+        this.onChange(this.model);
     }
 
     public applyChanges(): void {
