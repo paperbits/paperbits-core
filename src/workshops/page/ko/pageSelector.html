@@ -39,7 +39,7 @@
             </a>
 
             <!-- ko if: anchors() && anchors().length > 0 -->
-            <div class="list-item-group" data-bind="foreach: anchors" role="list">
+            <div class="list-item-group list-item-group-collapsible" data-bind="foreach: anchors" role="list">
                 <a href="#" role="listitem" class="list-item"
                     data-bind="click: $component.selectAnchor, attr: { title: shortTitle }">
                     <i aria-hidden="true" class="paperbits-icon paperbits-anchor"></i>

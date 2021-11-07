@@ -31,7 +31,7 @@
 
 
 <script id="node" type="text/html">
-    <div class="list-item-group" data-bind="dragsource: { sourceData: $data, sticky: true, ondragstart: $component.onNodeDragStart, ondragend: $component.onNodeDragEnd }, dragtarget: { targetData: $data, accept: canAccept, ondropbefore: insertBefore, ondropafter: insertAfter, flow: 'vertical', onacceptbefore: $component.onAcceptNodeBefore, onacceptafter: $component.onAcceptNodeAfter }">
+    <div class="list-item-group list-item-group-collapsible" data-bind="dragsource: { sourceData: $data, sticky: true, ondragstart: $component.onNodeDragStart, ondragend: $component.onNodeDragEnd }, dragtarget: { targetData: $data, accept: canAccept, ondropbefore: insertBefore, ondropafter: insertAfter, flow: 'vertical', onacceptbefore: $component.onAcceptNodeBefore, onacceptafter: $component.onAcceptNodeAfter }">
         <!-- ko if: node.nodes().length > 0 -->
         <div class="list-item-collapsible">
             <button href="#" role="button" aria-label="Toggle nested items" class="list-item-collapse" data-bind="click: node.toggleCollapsed, attr: { 'aria-expanded': (!node.collapsed()).toString() }">
