@@ -1,5 +1,5 @@
 import { Bag } from "@paperbits/common";
-import { IWidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { EventManager, Events } from "@paperbits/common/events";
 import { NavigationEvents, NavigationItemModel } from "@paperbits/common/navigation";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
@@ -69,7 +69,7 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
             displayName: "Menu",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
-            // flow: ComponentFlow.Inline, // Commented out due do discovered backward compatibility issues.
+            flow: ComponentFlow.Contents, // Commented out due do discovered backward compatibility issues.
             draggable: true,
             editor: "menu-editor",
             applyChanges: async (updates: MenuModel) => {

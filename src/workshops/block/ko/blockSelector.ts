@@ -75,7 +75,7 @@ export class BlockSelector {
             const blockSnippets = <any>response.toObject();
             const bagOfBlocks: Bag<BlockContract> = blockSnippets[blockPath];
             const blocks = Object.values(bagOfBlocks).filter(block => block.title.includes(pattern) && block.type === this.blockType);
-            const blockItems = [];
+            const blockItems: BlockItem[] = [];
 
             for (const block of blocks) {
                 const content = Objects.getObjectAt<BlockContract>(block.contentKey, blockSnippets);

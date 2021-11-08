@@ -162,7 +162,8 @@ export class WidgetBindingHandler {
                                         "block": binding.flow === ComponentFlow.Block,
                                         "inline-block": binding.flow === ComponentFlow.Inline,
                                         "legacy": binding.flow === ComponentFlow.Legacy,
-                                        "placeholder": binding.flow === ComponentFlow.None
+                                        "placeholder": binding.flow === ComponentFlow.Placeholder,
+                                        "contents": binding.flow === ComponentFlow.Contents
                                     }
                                 }, null);
 

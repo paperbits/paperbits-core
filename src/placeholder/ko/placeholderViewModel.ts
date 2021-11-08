@@ -13,6 +13,6 @@ export class PlaceholderViewModel {
 
     constructor(title: string) {
         this.title = ko.observable<string>(title);
-        this.widgetBinding = { displayName: title, flow: ComponentFlow.None, readonly: true };
+        this.widgetBinding = { displayName: title, flow: ComponentFlow.Placeholder, readonly: true };
     }
 }
