@@ -8,7 +8,6 @@ import { ContentHandlers } from "../contentHandlers";
 import { ContentModel } from "../contentModel";
 import { ContentModelBinder } from "../contentModelBinder";
 import { ContentViewModel } from "./contentViewModel";
-import { PopupModel } from "../../popup";
 import { WidgetViewModel } from "../../ko";
 
 
@@ -23,7 +22,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
     public createBinding(model: ContentModel, viewModel: ContentViewModel, bindingContext: Bag<any>): void {
         let savingTimeout;
 
-        const updateContent = async (): Promise<void> => {
+        const updateContent = (): void => {
             const contentContract = {
                 type: model.type,
                 nodes: []
@@ -41,7 +40,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
             }
         };
 
-        const scheduleUpdate = async (): Promise<void> => {
+        const scheduleUpdate = (): void => {
             clearTimeout(savingTimeout);
             savingTimeout = setTimeout(updateContent, 500);
         };

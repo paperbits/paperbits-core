@@ -11,7 +11,9 @@ const selectedOptionElementSelector = `[${AriaAttributes.selected}]`;
 const defaultTabIndex = "0";
 
 ko.bindingHandlers["listbox"] = {
-    init: (listboxElement: HTMLElement) => {
+    init: (listboxElement: HTMLElement, valueAccessor: () => void) => {
+        const config: any = ko.unwrap(valueAccessor());
+
         let activeItemIndex: number;
 
         if (listboxElement.getAttribute(Attributes.Role) !== AriaRoles.Listbox) {
@@ -100,6 +102,10 @@ ko.bindingHandlers["listbox"] = {
                     activeOptionElement.setAttribute(AriaAttributes.selected, "true");
                     activeOptionElement.classList.add(selectedClassName);
 
+                    if (config.onSelect) {
+                        config.onSelect(ko.dataFor(activeOptionElement));
+                    }
+
                     break;
             }
         };
@@ -144,6 +150,13 @@ ko.bindingHandlers["listbox"] = {
             const optionElements = Array.coerce<HTMLElement>(listboxElement.querySelectorAll(optionElementSelector));
             const activeItemIndex = optionElements.indexOf(optionElement);
             setActiveOption(activeItemIndex);
+
+            if (config.onSelect) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                config.onSelect(ko.dataFor(optionElement));
+            }
         };
 
         listboxElement.addEventListener(Events.MouseDown, onMouseDown, true);
