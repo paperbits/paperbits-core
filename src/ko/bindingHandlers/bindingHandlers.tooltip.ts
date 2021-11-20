@@ -33,7 +33,7 @@ ko.bindingHandlers["tooltip"] = {
         }
 
         let hasText: boolean = false;
-        const isDisabled: () => boolean = () => !hasText;
+        const isDisabled: () => boolean = () => !!options.isDisabled ? options.isDisabled() : false;
 
         const textParams: any = {};
         let closeTimeout = 0;
@@ -65,7 +65,7 @@ ko.bindingHandlers["tooltip"] = {
                 delay: tooltipDelayMs || defaultTooltipDelayMs,
                 activateOn: BalloonActivationOptions.hoverOrFocus,
                 closeTimeout: closeTimeout,
-                // isDisabled: isDisabled,
+                isDisabled: isDisabled,
                 onCreated: (handle: BalloonHandle): void => {
                     balloonHandle = handle;
                 }
