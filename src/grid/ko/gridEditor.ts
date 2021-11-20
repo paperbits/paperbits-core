@@ -202,8 +202,9 @@ export class GridEditor {
         /* TODO: This is temporary solution */
         const host = this.viewManager.getHost();
         const layoutEditing = host.name === "layout-host";
+        const emailEditing = host.name === "email-host";
 
-        if (!widgetIsInContent && !layoutEditing) {
+        if (!widgetIsInContent && !layoutEditing && !emailEditing) {
             event.preventDefault();
             event.stopPropagation();
 

@@ -46,12 +46,14 @@ export class DefaultViewManager implements ViewManager {
     public readonly dragSession: ko.Observable<DragSession>;
     public readonly locale: ko.Observable<string>;
     public readonly canPreview: ko.Computed<boolean>;
+    public readonly canGoBack: ko.Computed<boolean>;
     public readonly websitePreviewEnabled: ko.Observable<boolean>;
 
     public mode: ViewManagerMode;
     public hostDocument: Document;
 
     private previousMode: ViewManagerMode;
+    private previousHost: IComponent;
 
     constructor(
         private readonly eventManager: EventManager,
@@ -92,6 +94,7 @@ export class DefaultViewManager implements ViewManager {
         this.primaryToolboxVisible = ko.observable(false);
         this.websitePreviewEnabled = ko.observable(false);
         this.canPreview = ko.pureComputed<boolean>(() => this.websitePreviewEnabled() && this.host()?.name === "page-host");
+        this.canGoBack = ko.pureComputed<boolean>(() => ["style-guide", "layout-host"].includes(this.host()?.name));
     }
 
     @OnMounted()
@@ -141,8 +144,10 @@ export class DefaultViewManager implements ViewManager {
         this.designTime(true);
     }
 
-    public setHost(component: IComponent): void {
+    public setHost(component: IComponent, canGoBack: boolean = false): void {
         const currentComponent = this.host();
+
+        this.previousHost = canGoBack ? currentComponent : null;
 
         if (currentComponent && currentComponent.name === component.name && !currentComponent.params) {
             return;
@@ -570,6 +575,16 @@ export class DefaultViewManager implements ViewManager {
         this.designTime(true);
         this.mode = this.previousMode;
     }
+
+    public returnToContentEditing(): void {
+        if (this.previousHost) {
+            this.setHost(this.previousHost);
+        }
+
+        this.designTime(true);
+        this.mode = ViewManagerMode.selecting;
+    }
+
 
     @OnDestroyed()
     public dispose(): void {
