@@ -9,14 +9,14 @@ export class GooglmapsBindingHandler {
         const attach = this.attach.bind(this);
 
         ko.bindingHandlers["googlemap"] = {
-            init(element: Element, valueAccessor: () => MapRuntimeConfig): void {
+            init(element: HTMLElement, valueAccessor: () => MapRuntimeConfig): void {
                 const configuration = valueAccessor();
                 attach(element, ko.toJS(configuration));
             }
         };
     }
 
-    private async attach(element: Element, configuration: MapRuntimeConfig): Promise<void> {
+    private async attach(element: HTMLElement, configuration: MapRuntimeConfig): Promise<void> {
         const options: Partial<LoaderOptions> = {/* todo */ };
         const loader = new Loader({ apiKey: configuration.apiKey, ...options });
         await loader.load();

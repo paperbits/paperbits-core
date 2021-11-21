@@ -79,11 +79,11 @@ export class VideoPlayerHandlers implements IWidgetHandler, IContentDropHandler 
 
         const source: any = dataTransfer.source;
 
-        const getThumbnailPromise = async () => {
+        const getThumbnailPromise = async (): Promise<string> => {
             if (dataTransfer.source instanceof File || dataTransfer.source.constructor["name"] === "File") {
                 return await MediaUtils.getVideoThumbnailAsDataUrl(<any>source);
             }
-            return dataTransfer.source;
+            return <string>dataTransfer.source;
         };
 
         const descriptor: IContentDescriptor = {
