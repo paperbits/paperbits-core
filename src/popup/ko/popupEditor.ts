@@ -4,7 +4,7 @@ import { ViewManager } from "@paperbits/common/ui";
 import { WidgetEditor } from "@paperbits/common/widgets";
 import { StyleHelper } from "@paperbits/styles";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
-import { PopupModel } from "../popupModel";
+import { PopupInstanceModel } from "../popupModel";
 import { BackgroundStylePluginConfig, TypographyStylePluginConfig, ContainerStylePluginConfig, SizeStylePluginConfig, BoxStylePluginConfig, BorderStylePluginConfig, PaddingStylePluginConfig, BorderRadiusStylePluginConfig } from "@paperbits/styles/plugins";
 import { EventManager, Events } from "@paperbits/common/events";
 import { PositionStylePluginConfig } from "@paperbits/styles/plugins/position";
@@ -16,7 +16,7 @@ import { SizeUnits, Size, CalcExpression } from "@paperbits/styles/size";
     selector: "popup-editor",
     template: template
 })
-export class PopupEditor implements WidgetEditor<PopupModel> {
+export class PopupEditor implements WidgetEditor<PopupInstanceModel> {
     public readonly containerBackground: ko.Observable<BackgroundStylePluginConfig>;
     public readonly backdropBackground: ko.Observable<BackgroundStylePluginConfig>;
     public readonly typography: ko.Observable<TypographyStylePluginConfig>;
@@ -46,10 +46,10 @@ export class PopupEditor implements WidgetEditor<PopupModel> {
     }
 
     @Param()
-    public model: PopupModel;
+    public model: PopupInstanceModel;
 
     @Event()
-    public onChange: (model: PopupModel) => void;
+    public onChange: (model: PopupInstanceModel) => void;
 
     @OnMounted()
     public async initialize(): Promise<void> {

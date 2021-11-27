@@ -1,12 +1,15 @@
-import * as Utils from "@paperbits/common/utils";
-import { PopupModel } from "./popupModel";
-import { PopupContract } from "./popupContract";
+import { PopupInstanceModel } from "./popupModel";
+import { PopupInstanceContract } from "./popupContract";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { IModelBinder } from "@paperbits/common/editing";
 import { Contract, Bag } from "@paperbits/common";
+import { PopupContract, PopupService } from "@paperbits/common/popups";
 
-export class PopupModelBinder implements IModelBinder<PopupModel> {
-    constructor(private readonly modelBinderSelector: ModelBinderSelector) {
+export class PopupModelBinder implements IModelBinder<PopupInstanceModel> {
+    constructor(
+        private readonly modelBinderSelector: ModelBinderSelector,
+        private readonly popupService: PopupService
+    ) {
         this.contractToModel = this.contractToModel.bind(this);
     }
 
@@ -15,20 +18,18 @@ export class PopupModelBinder implements IModelBinder<PopupModel> {
     }
 
     public canHandleModel(model: Object): boolean {
-        return model instanceof PopupModel;
+        return model instanceof PopupInstanceModel;
     }
 
-    public async contractToModel(contract: PopupContract, bindingContext?: Bag<any>): Promise<PopupModel> {
-        const model = new PopupModel();
+    public async contractToModel(contract: PopupContract, bindingContext?: Bag<any>): Promise<PopupInstanceModel> {
+        const popupContent: PopupInstanceContract = <any>await this.popupService.getPopupContent(contract.key);
+
+        const model = new PopupInstanceModel();
         model.key = contract.key;
-        model.styles = contract.styles;
-        model.backdrop = contract.backdrop;
+        model.styles = popupContent.styles;
+        model.backdrop = popupContent.backdrop;
 
-        if (!contract.nodes) {
-            contract.nodes = contract.nodes || [];
-        }
-
-        const modelPromises = contract.nodes.map(async (contract: Contract) => {
+        const modelPromises = popupContent.nodes.map(async (contract: Contract) => {
             const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
             return modelBinder.contractToModel(contract, bindingContext);
         });
@@ -38,10 +39,9 @@ export class PopupModelBinder implements IModelBinder<PopupModel> {
         return model;
     }
 
-    public modelToContract(model: PopupModel): Contract {
-        const contract: PopupContract = {
+    public modelToContract(model: PopupInstanceModel): PopupInstanceContract {
+        const contract: PopupInstanceContract = {
             type: "popup",
-            key: model.key,
             styles: model.styles,
             backdrop: model.backdrop,
             nodes: model.widgets.map(widget => {

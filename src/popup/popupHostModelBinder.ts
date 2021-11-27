@@ -1,13 +1,12 @@
-import { PopupHostModel } from "./popupHostModel";
-import { PopupHostContract } from "./popupHostContract";
-import { ModelBinderSelector } from "@paperbits/common/widgets";
+import { Bag, Contract } from "@paperbits/common";
 import { IModelBinder } from "@paperbits/common/editing";
-import { Contract, Bag } from "@paperbits/common";
+import { PopupContract } from "@paperbits/common/popups";
+import { PopupHostContract } from "./popupHostContract";
+import { PopupHostModel } from "./popupHostModel";
+import { PopupModelBinder } from "./popupModelBinder";
 
 export class PopupHostModelBinder implements IModelBinder<PopupHostModel> {
-    constructor(private readonly modelBinderSelector: ModelBinderSelector) {
-        this.contractToModel = this.contractToModel.bind(this);
-    }
+    constructor(private readonly popupModelBinder: PopupModelBinder) { }
 
     public canHandleContract(contract: Contract): boolean {
         return contract.type === "popup-host";
@@ -20,13 +19,12 @@ export class PopupHostModelBinder implements IModelBinder<PopupHostModel> {
     public async contractToModel(contract: PopupHostContract, bindingContext?: Bag<any>): Promise<PopupHostModel> {
         const model = new PopupHostModel();
 
-        if (!contract.nodes) {
-            contract.nodes = [];
+        if (!contract.popups) {
+            contract.popups = [];
         }
 
-        const modelPromises = contract.nodes.map(async (contract: Contract) => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-            return modelBinder.contractToModel(contract, bindingContext);
+        const modelPromises = contract.popups.map((popupContract: PopupContract) => {
+            return this.popupModelBinder.contractToModel(popupContract, bindingContext);
         });
 
         model.widgets = await Promise.all<any>(modelPromises);
@@ -34,17 +32,7 @@ export class PopupHostModelBinder implements IModelBinder<PopupHostModel> {
         return model;
     }
 
-    public modelToContract(model: PopupHostModel): Contract {
-        const contract: PopupHostContract = {
-            type: "popup-host",
-            nodes: []
-        };
-
-        model.widgets.forEach(widgetModel => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
-            contract.nodes.push(modelBinder.modelToContract(widgetModel));
-        });
-
-        return contract;
+    public modelToContract(): Contract {
+        throw new Error("Not implemented.");
     }
 }

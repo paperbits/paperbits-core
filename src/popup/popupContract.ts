@@ -1,8 +1,7 @@
-import { Contract, Breakpoints } from "@paperbits/common";
+import { Contract } from "@paperbits/common";
 import { LocalStyles } from "@paperbits/common/styles";
 
-export interface PopupContract extends Contract {
-    key: string;
+export interface PopupInstanceContract extends Contract {
     styles: LocalStyles;
     backdrop: boolean;
 }

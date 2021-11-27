@@ -1,3 +1,5 @@
-import { Contract } from "@paperbits/common";
+import { PopupContract } from "@paperbits/common/popups";
 
-export interface PopupHostContract extends Contract { }
+export interface PopupHostContract {
+    popups: PopupContract[];
+}
