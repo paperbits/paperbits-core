@@ -26,6 +26,7 @@ export class PictureEditor {
     public readonly sizeConfig: ko.Observable<SizeStylePluginConfig>;
     public readonly appearanceStyles: ko.ObservableArray<any>;
     public readonly appearanceStyle: ko.Observable<any>;
+    public readonly mediaFileName: ko.Observable<string>;
 
     constructor(
         private readonly styleService: StyleService,
@@ -39,6 +40,7 @@ export class PictureEditor {
         this.sizeConfig = ko.observable();
         this.appearanceStyles = ko.observableArray();
         this.appearanceStyle = ko.observable();
+        this.mediaFileName = ko.observable();
     }
 
     @Param()
@@ -58,6 +60,7 @@ export class PictureEditor {
                 background.sourceUrl = MediaUtils.getThumbnailUrl(media);
                 this.background(background);
                 this.sourceKey(this.model.sourceKey);
+                this.mediaFileName(media.fileName);
             }
         }
 
@@ -110,6 +113,7 @@ export class PictureEditor {
             background.size = "contain";
             background.position = "center center";
             this.background(background);
+            this.mediaFileName(media.fileName());
 
             // await this.updateSizeConfigForSelectedMedia(media); // TODO: Set size to media itself on upload
         }
