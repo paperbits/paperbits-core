@@ -80,7 +80,7 @@ export class PopupHostViewModelBinder implements ViewModelBinder<PopupHostModel,
         return model instanceof PopupHostModel;
     }
 
-    public async contractToViewModel(bindingContext: any): Promise<PopupHost> {
+    public async contractToViewModel(bindingContext: Bag<any>): Promise<PopupHost> {
         // TODO: Scan page and fetch referenced popup keys.
         const popupContracts = await this.popupService.search(Query.from());
         const popupHostContract: PopupHostContract = { popups: popupContracts.value };

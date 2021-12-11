@@ -22,7 +22,7 @@ export class PopupModelBinder implements IModelBinder<PopupInstanceModel> {
     }
 
     public async contractToModel(contract: PopupContract, bindingContext?: Bag<any>): Promise<PopupInstanceModel> {
-        const popupContent: PopupInstanceContract = <any>await this.popupService.getPopupContent(contract.key);
+        const popupContent: PopupInstanceContract = <any>await this.popupService.getPopupContent(contract.key, bindingContext?.locale);
 
         const model = new PopupInstanceModel();
         model.key = contract.key;
