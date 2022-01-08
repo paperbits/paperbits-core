@@ -36,7 +36,6 @@ import { DragManager } from "@paperbits/common/ui/draggables";
 import { UnhandledErrorHandler } from "@paperbits/common/errors";
 import { PlaceholderViewModel } from "./placeholder/ko/placeholderViewModel";
 import { DefaultViewManager, Tooltip } from "./ko/ui";
-import { KnockoutValidation } from "./ko/validation/validators";
 import { CropperBindingHandler } from "./workshops/cropper/cropper";
 import { GridEditor } from "./grid/ko";
 import { CardEditorModule } from "./card/ko/cardEditor.module";
@@ -76,11 +75,13 @@ import { PopupPermalinkResolver, PopupService } from "@paperbits/common/popups";
 import { PopupHostModelBinder } from "./popup/popupHostModelBinder";
 import { DismissButtonDesignModule } from "./dismiss-button/dismissButton.design.module";
 import { StickToBindingHandler } from "./ko/bindingHandlers/bindingHandlers.stickTo";
+import { KnockoutDesignModule } from "./ko/knockout.design.module";
 
 
 export class CoreDesignModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bindModule(new CoreModule());
+        injector.bindModule(new KnockoutDesignModule());
         injector.bindCollection("styleGroups");
         injector.bindCollection("dropHandlers");
         injector.bindCollectionLazily("workshopSections");
@@ -96,7 +97,6 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bind("mediaHyperlinkProvider", MediaHyperlinkProvider);
         injector.bind("urlHyperlinkProvider", UrlHyperlinkProvider);
         injector.bind("gridEditor", GridEditor);
-        injector.bindToCollection("autostart", KnockoutValidation);
         injector.bindToCollection("autostart", ResizableBindingHandler);
         injector.bindToCollection("autostart", CropperBindingHandler);
         injector.bindToCollection("autostart", BalloonBindingHandler);

@@ -29,7 +29,7 @@ import { BackgroundBindingHandler } from "./ko/bindingHandlers/bindingHandlers.b
 import { SecuredBindingHandler } from "./ko/bindingHandlers/bindingHandlers.secured";
 import { WidgetBindingHandler } from "./ko/bindingHandlers/bindingHandlers.widget";
 import { KnockoutRegistrationLoaders } from "./ko/knockout.loaders";
-import { KoModule } from "./ko/ko.module";
+import { KoModule } from "./ko/knockout.module";
 import { ViewModelBinderSelector } from "./ko/viewModelBinderSelector";
 import { MenuModule } from "./menu/ko";
 import { NavbarModule } from "./navbar/ko/navbar.module";
