@@ -10,7 +10,7 @@ import { IComponent, View, ViewManager, ICommand, ViewManagerMode, IHighlightCon
 import { Router } from "@paperbits/common/routing";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
-import { Component, OnMounted, OnDestroyed } from "@paperbits/common/ko/decorators";
+import { Component, OnMounted, OnDestroyed, RuntimeComponent } from "@paperbits/common/ko/decorators";
 import { RoleModel, BuiltInRoles } from "@paperbits/common/user";
 import { DesignerUserService } from "./designerUserService";
 import { ViewStack } from "@paperbits/common/ui/viewStack";
@@ -19,6 +19,10 @@ import { ISettingsProvider } from "@paperbits/common/configuration";
 declare let uploadDialog: HTMLInputElement;
 
 
+@RuntimeComponent({
+    selector: "paperbits-designer",
+    componentName: "view-manager"
+})
 @Component({
     selector: "view-manager",
     template: template
@@ -114,6 +118,9 @@ export class DefaultViewManager implements ViewManager {
 
         const websitePreviewEnabled = await this.settingsProvider.getSetting<boolean>("websitePreviewEnabled");
         this.websitePreviewEnabled(websitePreviewEnabled || false);
+
+        this.setHost({ name: "page-host" });
+        this.showToolboxes();
     }
 
     private onKeyDown(event: KeyboardEvent): void {
