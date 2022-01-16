@@ -19,10 +19,6 @@ import { ISettingsProvider } from "@paperbits/common/configuration";
 declare let uploadDialog: HTMLInputElement;
 
 
-@RuntimeComponent({
-    selector: "paperbits-designer",
-    componentName: "view-manager"
-})
 @Component({
     selector: "view-manager",
     template: template
