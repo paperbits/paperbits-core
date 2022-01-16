@@ -10,7 +10,7 @@ class KnockoutBootstrapper {
 
     public bootstrap(): void {
         document.addEventListener("DOMContentLoaded", () => {
-            setImmediate(() => ko.applyBindings(undefined, document.body));
+            setImmediate(() => ko.applyBindings(undefined, undefined));
         });
     }
 }
