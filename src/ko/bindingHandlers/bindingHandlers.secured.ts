@@ -31,9 +31,6 @@ export class SecuredBindingHandler {
                     const widgetRoles = assignedRoles || [BuiltInRoles.everyone.key];
                     const userRoles = await this.userService.getUserRoles();
                     const visibleToUser = userRoles.some(x => widgetRoles.includes(x)) || widgetRoles.includes(BuiltInRoles.everyone.key);
-
-                    console.log("User roles: " + userRoles.join(","));
-
                     hiddenObservable(!visibleToUser);
                 };
 
