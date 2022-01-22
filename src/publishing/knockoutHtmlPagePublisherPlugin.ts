@@ -1,8 +1,8 @@
 import * as ko from "knockout";
 import { HtmlPage } from "@paperbits/common/publishing/htmlPage";
 import { HtmlPagePublisherPlugin } from "@paperbits/common/publishing/htmlPagePublisherPlugin";
-import { ContentViewModelBinder } from "../content/ko";
 import { ILayoutService } from "@paperbits/common/layouts";
+import { ContentViewModelBinder } from "../content/ko";
 import { PopupHostViewModelBinder } from "../popup/ko/popupHostViewModelBinder";
 
 
@@ -12,17 +12,16 @@ export class KnockoutHtmlPagePublisherPlugin implements HtmlPagePublisherPlugin 
         private readonly layoutService: ILayoutService,
         private readonly popupHostViewModelBinder: PopupHostViewModelBinder
     ) {
+        // this needed to avoid rendering issues with domino in different environments.
         ko.tasks.scheduler = (callback) => setImmediate(callback);
     }
 
-    private render(doc: Document, layoutContentViewModel: any): Promise<void> {
+    private renderContent(doc: Document, layoutContentViewModel: any): Promise<void> {
         return new Promise((resolve, reject) => {
             try {
                 const onDescendantsComplete = () => {
-                    setTimeout(() => {
-                        ko.cleanNode(doc.body);
-                        resolve();
-                    }, 400);
+                    ko.cleanNode(doc.body);
+                    resolve();
                 };
 
                 ko.applyBindingsToNode(doc.body, {
@@ -47,8 +46,8 @@ export class KnockoutHtmlPagePublisherPlugin implements HtmlPagePublisherPlugin 
         const layoutContentViewModel = await this.contentViewModelBinder.contractToViewModel(layoutContentContract, page.bindingContext);
         const popupHostViewModel = await this.popupHostViewModelBinder.contractToViewModel(page.bindingContext);
 
-         layoutContentViewModel.widgets.unshift(popupHostViewModel);
+        layoutContentViewModel.widgets.unshift(popupHostViewModel);
 
-        await this.render(doc, layoutContentViewModel);
+        await this.renderContent(doc, layoutContentViewModel);
     }
 }

@@ -9,15 +9,13 @@ export class SecuredBindingHandler {
         private readonly userService: UserService
     ) {
         ko.bindingHandlers["secured"] = {
-            update: (element: HTMLElement, valueAccessor: () => string[]) => {
-                const hiddenObservable: ko.Observable < boolean > = ko.observable(true);
-                const dataRoleObservable: ko.Observable<string> = ko.observable();
+            init: (element: HTMLElement, valueAccessor: any) => {
+                const initiallyAssignedRoles = ko.unwrap(valueAccessor());
+                const dataRoleObservable: ko.Observable<string> = ko.observable(initiallyAssignedRoles);
+                const hiddenObservable: ko.Observable<boolean> = ko.observable(false);
 
-                const applyRoles = async () => {
-                    const widgetRoles = ko.unwrap(valueAccessor()) || [BuiltInRoles.everyone.key];
-                    const userRoles = await this.userService.getUserRoles();
-                    const visibleToUser = userRoles.some(x => widgetRoles.includes(x)) || widgetRoles.includes(BuiltInRoles.everyone.key);
-                    
+                const applyRoles = (assignedRoles: string[]) => { // has to be synchronous to be applied during publishing
+                    const widgetRoles = assignedRoles || [BuiltInRoles.everyone.key];
 
                     const roles = widgetRoles
                         && widgetRoles.length === 1
@@ -26,6 +24,16 @@ export class SecuredBindingHandler {
                         : widgetRoles.join(",");
 
                     dataRoleObservable(roles);
+                    applyVisibility(assignedRoles);
+                };
+
+                const applyVisibility = async (assignedRoles: string[]) => { // doesn't have to be synchronous, used in design- and run-time only
+                    const widgetRoles = assignedRoles || [BuiltInRoles.everyone.key];
+                    const userRoles = await this.userService.getUserRoles();
+                    const visibleToUser = userRoles.some(x => widgetRoles.includes(x)) || widgetRoles.includes(BuiltInRoles.everyone.key);
+
+                    console.log("User roles: " + userRoles.join(","));
+
                     hiddenObservable(!visibleToUser);
                 };
 
@@ -40,7 +48,9 @@ export class SecuredBindingHandler {
                     this.eventManager.removeEventListener("onUserRoleChange", applyRoles);
                 });
 
-                applyRoles();
+                const assignedRolesObsevable: ko.Observable<string[]> = valueAccessor();
+                assignedRolesObsevable.subscribe(applyRoles);
+                applyRoles(initiallyAssignedRoles);
             }
         };
     }

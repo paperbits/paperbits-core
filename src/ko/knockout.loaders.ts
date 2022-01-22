@@ -174,7 +174,10 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
 
         ko.bindingProvider.instance.preprocessNode = (node: HTMLElement): Node[] => {
             if (node.removeAttribute) {
-                setImmediate(() => node.removeAttribute("data-bind"));
+                const subscription = ko.bindingEvent.subscribe(node, "childrenComplete", () => {
+                    node.removeAttribute("data-bind");
+                    subscription.dispose();
+                });
             }
             return null;
         };
