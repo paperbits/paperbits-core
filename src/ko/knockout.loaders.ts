@@ -1,7 +1,8 @@
 ﻿import * as ko from "knockout";
 import { IInjector, IInjectorModule, InjectableMetadataKey } from "@paperbits/common/injection";
 import { ComponentConfig } from "@paperbits/common/ko/decorators/component.decorator";
-import { ComponentDefinition } from "./bindingHandlers/bindingHandlers.component";
+import { ComponentDefinition } from "./componentDefinition";
+
 
 export class KnockoutRegistrationLoaders implements IInjectorModule {
     public register(injector: IInjector): void {
