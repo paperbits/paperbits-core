@@ -1,18 +1,27 @@
 ﻿import * as ko from "knockout";
 
-let componentLoadingOperationUniqueId = 0;
-
 export interface ComponentDefinition extends ko.components.Component {
     constructor: Function;
     encapsulation?: "none" | "shadowDom";
 }
 
+const makeArray = (arrayLikeObject) => {
+    const result = [];
+    for (let i = 0, j = arrayLikeObject.length; i < j; i++) {
+        result.push(arrayLikeObject[i]);
+    }
+    return result;
+};
+
+let componentLoadingOperationUniqueId = 0;
+
 ko.bindingHandlers["component"] = {
-    init: (element: HTMLElement, valueAccessor, ignored1, ignored2, bindingContext) => {
-        let currentViewModel;
-        let currentLoadingOperationId;
-        
-        const disposeAssociatedComponentViewModel = () => {
+    init: function (element: any, valueAccessor: any, ignored1: any, ignored2: any, bindingContext: any): any {
+        let currentViewModel,
+            currentLoadingOperationId,
+            afterRenderSub;
+
+        const disposeAssociatedComponentViewModel = function (): any {
             if (currentViewModel) {
                 const onDestroyedMethodDescriptions = Reflect.getMetadata("ondestroyed", currentViewModel.constructor);
 
@@ -26,7 +35,7 @@ ko.bindingHandlers["component"] = {
                     });
                 }
                 else {
-                    const currentViewModelDispose = currentViewModel && currentViewModel["dispose"];
+                    const currentViewModelDispose = currentViewModel["dispose"];
 
                     if (typeof currentViewModelDispose === "function") {
                         currentViewModelDispose.call(currentViewModel);
@@ -34,35 +43,40 @@ ko.bindingHandlers["component"] = {
                 }
             }
 
+            if (afterRenderSub) {
+                afterRenderSub.dispose();
+            }
+
+            afterRenderSub = null;
             currentViewModel = null;
             // Any in-flight loading operation is no longer relevant, so make sure we ignore its completion
             currentLoadingOperationId = null;
         };
+
         const originalChildNodes = makeArray(ko.virtualElements.childNodes(element));
 
+        ko.virtualElements.emptyNode(element);
         ko.utils.domNodeDisposal.addDisposeCallback(element, disposeAssociatedComponentViewModel);
 
-        ko.computed(() => {
-            let componentOnCreateHandler;
+        ko.computed(function (): void {
             const value = ko.utils.unwrapObservable(valueAccessor());
             let componentName, componentParams;
 
             if (typeof value === "string") {
                 componentName = value;
-            }
-            else {
+            } else {
                 componentName = ko.utils.unwrapObservable(value["name"]);
                 componentParams = ko.utils.unwrapObservable(value["params"]);
-                componentOnCreateHandler = ko.utils.unwrapObservable(value["oncreate"]);
             }
 
             if (!componentName) {
                 throw new Error("No component name specified");
             }
 
-            const loadingOperationId = currentLoadingOperationId = ++componentLoadingOperationUniqueId;
+            const asyncContext = ko.bindingEvent.startPossiblyAsyncContentBinding(element, bindingContext);
 
-            ko.components.get(componentName, componentDefinition => {
+            const loadingOperationId = currentLoadingOperationId = ++componentLoadingOperationUniqueId;
+            ko.components.get(componentName, function (componentDefinition: ComponentDefinition): any {
                 // If this is not the current load operation for this element, ignore it.
                 if (currentLoadingOperationId !== loadingOperationId) {
                     return;
@@ -73,24 +87,31 @@ ko.bindingHandlers["component"] = {
 
                 // Instantiate and bind new component. Implicitly this cleans any old DOM nodes.
                 if (!componentDefinition) {
-                    throw new Error(`Unknown component "${componentName}"`);
+                    throw new Error("Unknown component '" + componentName + "'");
                 }
+                cloneTemplateIntoElement(componentName, componentDefinition, element);
 
-                const root = cloneTemplateIntoElement(componentDefinition, element);
-                const componentViewModel = createViewModel(componentDefinition, root, originalChildNodes, componentParams),
-                    childBindingContext = bindingContext["createChildContext"](componentViewModel, /* dataItemAlias */ undefined, ctx => {
-                        ctx["$component"] = componentViewModel;
-                        ctx["$componentTemplateNodes"] = originalChildNodes;
+                const componentInfo = {
+                    element: element,
+                    templateNodes: originalChildNodes
+                };
+
+                const componentViewModel = createViewModel(componentDefinition, componentParams, componentInfo),
+                    childBindingContext = asyncContext["createChildContext"](componentViewModel, {
+                        extend: function (ctx: any): any {
+                            ctx["$component"] = componentViewModel;
+                            ctx["$componentTemplateNodes"] = originalChildNodes;
+                        }
                     });
-                currentViewModel = componentViewModel;
 
-                ko.applyBindingsToDescendants(childBindingContext, root);
-
-                if (componentOnCreateHandler) {
-                    componentOnCreateHandler(componentViewModel, element);
+                if (componentViewModel && componentViewModel["koDescendantsComplete"]) {
+                    afterRenderSub = ko.bindingEvent.subscribe(element, ko.bindingEvent["descendantsComplete"], componentViewModel["koDescendantsComplete"], componentViewModel);
                 }
+
+                currentViewModel = componentViewModel;
+                ko.applyBindingsToDescendants(childBindingContext, element);
             });
-        }, null, <any>{ disposeWhenNodeIsRemoved: element });
+        }, null, { disposeWhenNodeIsRemoved: element });
 
         return { controlsDescendantBindings: true };
     }
@@ -98,46 +119,20 @@ ko.bindingHandlers["component"] = {
 
 ko.virtualElements.allowedBindings["component"] = true;
 
-const makeArray = (arrayLikeObject) => {
-    const result = [];
-    for (let i = 0, j = arrayLikeObject.length; i < j; i++) {
-        result.push(arrayLikeObject[i]);
-    }
-    return result;
-};
-
-const cloneNodes = (nodesArray: Node[], shouldCleanNodes: boolean) => {
-    const newNodesArray = [], j = nodesArray.length;
-    for (let i = 0; i < j; i++) {
-        const clonedNode = nodesArray[i].cloneNode(true);
-        newNodesArray.push(shouldCleanNodes ? ko.cleanNode(clonedNode) : clonedNode);
-    }
-    return newNodesArray;
-};
-
-function cloneTemplateIntoElement(componentDefinition: ComponentDefinition, element: HTMLElement): Element {
-    const template = componentDefinition.template;
-
+function cloneTemplateIntoElement(componentName: string, componentDefinition: ComponentDefinition, element: HTMLElement): any {
+    const template = componentDefinition["template"];
+    
     if (!template) {
-        return element;
+        throw new Error(`Component "${componentName}" has no template.`);
     }
 
-    const clonedNodesArray = cloneNodes(template, false);
-    if (componentDefinition.encapsulation === "shadowDom") {
-        const shadow = element.attachShadow({mode: "open"});
-        ko.virtualElements.setDomNodeChildren(shadow, clonedNodesArray);
-        return shadow.firstElementChild;
-    } else {
-        ko.virtualElements.setDomNodeChildren(element, clonedNodesArray);
-        return element;
-    }
+    const clonedNodesArray = ko.utils["cloneNodes"](template);
+    ko.virtualElements.setDomNodeChildren(element, clonedNodesArray);
 }
 
-function createViewModel(componentDefinition: ComponentDefinition, element: Element, originalChildNodes: any[], componentParams: any): any {
-    const componentViewModelFactory = componentDefinition.createViewModel;
-
+function createViewModel(componentDefinition: ComponentDefinition, componentParams: any, componentInfo: any): any {
+    const componentViewModelFactory = componentDefinition["createViewModel"];
     return componentViewModelFactory
-        ? componentViewModelFactory.call(componentDefinition, componentParams, { element: element, templateNodes: originalChildNodes })
+        ? componentViewModelFactory.call(componentDefinition, componentParams, componentInfo)
         : componentParams; // Template-only component
 }
-
