@@ -189,28 +189,48 @@ export class ResizableBindingHandler {
                     eventManager.dispatchEvent("onEditorResize");
                 };
 
-                if (directions.includes("vertically")) {
+                const appendTopHandler = (): void => {
                     const topResizeHandle = element.ownerDocument.createElement("div");
                     topResizeHandle.classList.add("resize-handle", "resize-handle-top");
                     element.appendChild(topResizeHandle);
                     topResizeHandle.addEventListener(Events.MouseDown, (e) => onPointerDown(e, "top"));
+                };
 
+                const appendBottomHandler = (): void => {
                     const bottomResizeHandle = element.ownerDocument.createElement("div");
                     bottomResizeHandle.classList.add("resize-handle", "resize-handle-bottom");
                     element.appendChild(bottomResizeHandle);
                     bottomResizeHandle.addEventListener(Events.MouseDown, (e) => onPointerDown(e, "bottom"));
-                }
+                };
 
-                if (directions.includes("horizontally")) {
+                const appendRightHandler = (): void => {
                     const rightResizeHandle = element.ownerDocument.createElement("div");
                     rightResizeHandle.classList.add("resize-handle", "resize-handle-right");
                     element.appendChild(rightResizeHandle);
                     rightResizeHandle.addEventListener(Events.MouseDown, (e) => onPointerDown(e, "right"));
+                };
 
+                const appendLeftHandler = (): void => {
                     const leftResizeHandle = element.ownerDocument.createElement("div");
                     leftResizeHandle.classList.add("resize-handle", "resize-handle-left");
                     element.appendChild(leftResizeHandle);
                     leftResizeHandle.addEventListener(Events.MouseDown, (e) => onPointerDown(e, "left"));
+                };
+
+                if (directions.includes("top") || directions.includes("vertically")) {
+                    appendTopHandler();
+                }
+
+                if (directions.includes("bottom") || directions.includes("vertically")) {
+                    appendBottomHandler();
+                }
+
+                if (directions.includes("left") || directions.includes("horizontally")) {
+                    appendLeftHandler();
+                }
+
+                if (directions.includes("right") || directions.includes("horizontally")) {
+                    appendRightHandler();
                 }
 
                 ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
