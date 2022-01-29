@@ -1,12 +1,9 @@
 <ul class="nav" data-bind="foreach: { data: $data.nodes, as: 'item' }">
     <!-- ko if: item.nodes().length > 0 -->
     <li class="nav-item" data-bind="css: { 'expanded': expanded }">
-        <a href="#" class="nav-link" data-toggle="dropdown"
-            data-bind="text: item.label, hyperlink: item.hyperlink, css: { 'nav-link-active': item.isActive }"></a>
+        <a href="#" class="nav-link" data-toggle="dropdown" data-bind="text: item.label, hyperlink: item.hyperlink, css: { 'nav-link-active': item.isActive }"></a>
         <!-- ko if: item.nodes().length > 0 -->
-        <div class="dropdown">
-            <!-- ko template: { name: 'horizontalMenu', data: item } -->
-            <!-- /ko -->
+        <div class="dropdown" data-bind="template: { name: 'horizontalMenu', data: item }">
         </div>
         <!-- /ko -->
     </li>
@@ -14,8 +11,7 @@
 
     <!-- ko ifnot: item.nodes().length > 0 -->
     <li class="nav-item">
-        <a href="#" class="nav-link"
-            data-bind="text: item.label, hyperlink: item.hyperlink, css: { 'nav-link-active': item.isActive }"></a>
+        <a href="#" class="nav-link" data-bind="text: item.label, hyperlink: item.hyperlink, css: { 'nav-link-active': item.isActive }"></a>
     </li>
     <!-- /ko -->
 </ul>

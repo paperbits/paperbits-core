@@ -3,6 +3,7 @@ import { Keys } from "@paperbits/common/keyboard";
 import { Events, MouseButton } from "@paperbits/common/events";
 import { AriaAttributes, DataAttributes } from "@paperbits/common/html";
 import { TriggerEvent } from "./triggerEvent";
+import { ToggleType } from "./toggleType";
 
 
 const showClassName = "show";
@@ -15,9 +16,9 @@ interface ToggleableHandle {
     close(): void;
 }
 
-const openTogglable = (toggleElement: HTMLElement, toggleType: string, triggerEvent: TriggerEvent): void => {
+const openTogglable = (toggleElement: HTMLElement, toggleType: ToggleType, triggerEvent: TriggerEvent): void => {
     switch (toggleType) {
-        case "popup":
+        case ToggleType.popup:
             const targetSelector = toggleElement.getAttribute(DataAttributes.Target);
 
             if (!targetSelector) {
@@ -33,13 +34,13 @@ const openTogglable = (toggleElement: HTMLElement, toggleType: string, triggerEv
             onShowPopup(toggleElement, targetElement, triggerEvent);
             break;
 
-        case "dropdown": {
+        case ToggleType.dropdown: {
             const targetElement = <HTMLElement>toggleElement.parentElement.querySelector(".dropdown");
             onShowTogglable(toggleElement, targetElement);
             break;
         }
 
-        case "collapsible": {
+        case ToggleType.collapsible: {
             const targetElement = <HTMLElement>toggleElement.closest(".collapsible-panel");
             onShowTogglable(toggleElement, targetElement);
             break;
@@ -64,7 +65,7 @@ const onClick = (event: MouseEvent): void => {
 
     event.preventDefault();
 
-    const toggleType = toggleElement.getAttribute(DataAttributes.Toggle);
+    const toggleType = <ToggleType>toggleElement.getAttribute(DataAttributes.Toggle);
     openTogglable(toggleElement, toggleType, TriggerEvent.Click);
 };
 
@@ -84,7 +85,7 @@ const onMouseEnter = (event: MouseEvent): void => {
 
     event.preventDefault();
 
-    const toggleType = toggleElement.getAttribute(DataAttributes.Toggle);
+    const toggleType = <ToggleType>toggleElement.getAttribute(DataAttributes.Toggle);
     openTogglable(toggleElement, toggleType, TriggerEvent.Hover);
 };
 
@@ -100,7 +101,7 @@ const onShowTogglable = (toggleElement: HTMLElement, targetElement: HTMLElement)
         return;
     }
 
-    const dismissElement = targetElement.querySelector(`[${DataAttributes.Dismiss}]`);
+    const dismissElements: HTMLElement[] = Arrays.coerce(targetElement.querySelectorAll(`[${DataAttributes.Dismiss}]`));
 
     const openTarget = (): void => {
         targetElement.classList.add(showClassName);
@@ -108,8 +109,8 @@ const onShowTogglable = (toggleElement: HTMLElement, targetElement: HTMLElement)
 
         setImmediate(() => addEventListener(Events.MouseDown, clickOutside));
 
-        if (dismissElement) {
-            dismissElement.addEventListener(Events.MouseDown, closeTarget);
+        for (const dismissElement of dismissElements) {
+            dismissElement.addEventListener(Events.Click, closeTarget);
         }
     };
 
@@ -118,8 +119,8 @@ const onShowTogglable = (toggleElement: HTMLElement, targetElement: HTMLElement)
         removeEventListener(Events.MouseDown, clickOutside);
         toggleElement.setAttribute(AriaAttributes.expanded, "false");
 
-        if (dismissElement) {
-            dismissElement.removeEventListener(Events.MouseDown, clickOutside);
+        for (const dismissElement of dismissElements) {
+            dismissElement.removeEventListener(Events.Click, closeTarget);
         }
     };
 
@@ -130,9 +131,9 @@ const onShowTogglable = (toggleElement: HTMLElement, targetElement: HTMLElement)
             return;
         }
 
-        const isTargetClicked = targetElement.contains(clickTarget);
+        const isClickInsideTarget = targetElement.contains(clickTarget);
 
-        if (isTargetClicked) {
+        if (isClickInsideTarget) {
             return;
         }
 
@@ -209,7 +210,6 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement, tri
     };
 
     const dismissElements: HTMLElement[] = Arrays.coerce(targetElement.querySelectorAll(`[${DataAttributes.Dismiss}]`));
-
 
     const checkOutsideClick = (event: MouseEvent) => {
         const eventTarget = <HTMLElement>event.target;
