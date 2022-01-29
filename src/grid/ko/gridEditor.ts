@@ -286,12 +286,6 @@ export class GridEditor {
         this.pointerX = event.clientX;
         this.pointerY = event.clientY;
 
-        const elements = this.getUnderlyingElements();
-
-        if (elements.length === 0) {
-            return;
-        }
-
         switch (this.viewManager.mode) {
             case ViewManagerMode.selecting:
             case ViewManagerMode.selected:
@@ -525,11 +519,15 @@ export class GridEditor {
 
     private getUnderlyingElements(): HTMLElement[] {
         const elements = Utils.elementsFromPoint(this.ownerDocument, this.pointerX, this.pointerY);
+        const popupContainer = elements.find(x => x.classList.contains("popup-container"));
+        const cutoffIndex = elements.findIndex(x => x.classList.contains("backdrop") || x.classList.contains("popup-backdrop") || x.classList.contains("popup-container"));
 
-        const index = elements.findIndex(x => x.classList.contains("backdrop") || x.classList.contains("popup-backdrop"));
+        if (cutoffIndex >= 0) {
+            elements.splice(cutoffIndex); // removing from stack
+        }
 
-        if (index >= 0) {
-            elements.splice(index);
+        if (popupContainer) {
+            elements.splice(cutoffIndex, 0, popupContainer);
         }
 
         return elements;
@@ -540,9 +538,7 @@ export class GridEditor {
             return;
         }
 
-        const elements = this.getUnderlyingElements();
-
-        this.renderContextualCommands(this.pointerX, this.pointerY, elements);
+        this.renderContextualCommands();
     }
 
     private getDefaultContextCommands(context: WidgetContext): IContextCommandSet {
@@ -600,13 +596,15 @@ export class GridEditor {
         return contextCommands;
     }
 
-    private renderContextualCommands(pointerX: number, pointerY: number, elements: HTMLElement[]): void {
+    private renderContextualCommands(): void {
         let highlightedElement: HTMLElement;
         let highlightedText: string;
         let highlightColor: string;
         const tobeDeleted = Object.keys(this.actives);
 
         let current = null;
+
+        const elements = this.getUnderlyingElements();
 
         for (let i = elements.length - 1; i >= 0; i--) {
             const element = elements[i];
@@ -628,7 +626,7 @@ export class GridEditor {
 
             current = widgetBinding;
 
-            const quadrant = Utils.pointerToClientQuadrant(pointerX, pointerY, element);
+            const quadrant = Utils.pointerToClientQuadrant(this.pointerX, this.pointerY, element);
             const half = quadrant.vertical;
             const active = this.actives[widgetBinding.name];
             const contextualCommandSet = this.getContextCommands(element, half);

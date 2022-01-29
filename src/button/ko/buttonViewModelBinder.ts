@@ -42,7 +42,7 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: true,
-            flow: ComponentFlow.Inline,
+            flow: ComponentFlow.Contents,
             editor: "button-editor",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
