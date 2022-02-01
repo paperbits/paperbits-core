@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import { EventManager, Events } from "@paperbits/common/events";
-import { isNumber } from "util";
 import { ResizableOptions } from "@paperbits/common/ui/resizableOptions";
+import { isNumber } from "@paperbits/common";
 
 export class ResizableBindingHandler {
     constructor(eventManager: EventManager) {
