@@ -109,7 +109,7 @@
 <!-- ko with: selectedElementContextualEditor() -->
 <div class="fixed" data-bind="stickTo: { target: element, position: 'top right' }">
     <!-- ko foreach: { data: selectCommands, as: 'command' } -->
-    <button tabindex="-1" class="btn-standalone" data-bind="gridCommand: command">
+    <button tabindex="-1" class="btn-standalone" data-bind="gridCommand: command, tooltip: command.tooltip">
         <i aria-hidden="true" data-bind="css: command.iconClass"></i>
     </button>
     <!-- ko if: command.component -->

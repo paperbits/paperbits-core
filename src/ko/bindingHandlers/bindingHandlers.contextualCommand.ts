@@ -16,9 +16,7 @@ export class ContextualCommandBindingHandler {
                     background: {
                         color: config.command.color
                     },
-                    attr: {
-                        title: config.command.tooltip
-                    }
+                    tooltip: config.command.tooltip
                 };
 
                 if (config.command.component) {
