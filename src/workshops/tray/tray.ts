@@ -35,7 +35,7 @@ export class Tray {
         this.availableRoles(roles.slice(1)); // Excluding Everyone.
         this.selectedRoles(this.viewManager.getViewRoles());
 
-        const localizationEnabled = await this.settingsProvider.getSetting<boolean>("localizationEnabled");
+        const localizationEnabled = await this.settingsProvider.getSetting<boolean>("features/localization");
         this.localizationEnabled(!!localizationEnabled);
     }
 

@@ -112,7 +112,7 @@ export class DefaultViewManager implements ViewManager {
         this.eventManager.addEventListener("onKeyDown", this.onKeyDown.bind(this));
         this.eventManager.addEventListener("onKeyUp", this.onKeyUp.bind(this));
 
-        const websitePreviewEnabled = await this.settingsProvider.getSetting<boolean>("websitePreviewEnabled");
+        const websitePreviewEnabled = await this.settingsProvider.getSetting<boolean>("features/preview");
         this.websitePreviewEnabled(websitePreviewEnabled || false);
 
         this.setHost({ name: "page-host" });

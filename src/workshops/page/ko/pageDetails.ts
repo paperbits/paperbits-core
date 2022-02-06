@@ -88,7 +88,7 @@ export class PageDetailsWorkshop {
             this.isReserved(true);
         }
 
-        const seoSetting = await this.settingsProvider.getSetting<boolean>("enableSeo");
+        const seoSetting = await this.settingsProvider.getSetting<boolean>("features/seo");
 
         if (seoSetting) {
             this.isSeoEnabled(seoSetting);
