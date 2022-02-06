@@ -12,7 +12,7 @@ import {
     OpenGraphHtmlPagePublisherPlugin,
     LinkedDataHtmlPagePublisherPlugin,
     SocialShareDataHtmlPagePublisherPlugin,
-    DominoHtmlDocumentProvider,
+    JsDomHtmlDocumentProvider,
     SitemapBuilder,
     SearchIndexBuilder
 } from "@paperbits/common/publishing";
@@ -42,7 +42,7 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindSingleton("searchIndexBuilder", SearchIndexBuilder);
         injector.bindSingleton("htmlPagePublisher", HtmlPagePublisher);
         injector.bindSingleton("htmlPageOptimizer",  HtmlPageOptimizer);
-        injector.bindSingleton("htmlDocumentProvider", DominoHtmlDocumentProvider);
+        injector.bindSingleton("htmlDocumentProvider", JsDomHtmlDocumentProvider);
         injector.bindCollection("htmlPagePublisherPlugins");
         injector.bindToCollection("permalinkResolvers", MediaPermalinkResolver, "mediaPermalinkResolver");
         injector.bindToCollection("htmlPagePublisherPlugins", KnockoutHtmlPagePublisherPlugin);
