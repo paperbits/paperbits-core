@@ -128,10 +128,10 @@ export class PageDetailsWorkshop {
     }
 
     public async copyPage(): Promise<void> {
-        const copyContract = await this.pageService.copyPage(this.pageItem.key);
+        const copiedPage = await this.pageService.copyPage(this.pageItem.key);
 
         if (this.onCopyCallback) {
-            this.onCopyCallback(new PageItem(copyContract));
+            this.onCopyCallback(new PageItem(copiedPage));
         }
     }
 

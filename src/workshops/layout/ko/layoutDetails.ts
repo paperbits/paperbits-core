@@ -83,22 +83,10 @@ export class LayoutDetails {
     }
 
     public async copyLayout(): Promise<void> {
-        const copyPermalink = `${this.layoutItem.permalinkTemplate()} copy`;
-        const layoutContract = await this.layoutService.createLayout(`${this.layoutItem.title()} copy`, this.layoutItem.description(), copyPermalink);
-
-        const copyContract = this.layoutItem.toContract();
-        copyContract.key = layoutContract.key;
-        copyContract.permalinkTemplate = layoutContract.permalinkTemplate;
-        copyContract.title = layoutContract.title;
-        copyContract.contentKey = layoutContract.contentKey;
-
-        await this.layoutService.updateLayout(copyContract);
-
-        const layoutContentContract = await this.layoutService.getLayoutContent(this.layoutItem.key);
-        await this.layoutService.updateLayoutContent(copyContract.key, layoutContentContract);
+        const copiedLayout = await this.layoutService.copyLayout(this.layoutItem.key);
 
         if (this.onCopyCallback) {
-            this.onCopyCallback(new LayoutItem(copyContract));
+            this.onCopyCallback(new LayoutItem(copiedLayout));
         }
     }
 }
