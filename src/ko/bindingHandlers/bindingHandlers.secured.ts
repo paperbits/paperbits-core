@@ -24,17 +24,19 @@ export class SecuredBindingHandler {
                         : widgetRoles.join(",");
 
                     dataRoleObservable(roles);
-                    applyVisibility(assignedRoles);
+                    applyVisibility();
                 };
 
-                const applyVisibility = async (assignedRoles: string[]) => { // doesn't have to be synchronous, used in design- and run-time only
-                    const widgetRoles = assignedRoles || [BuiltInRoles.everyone.key];
+                const applyVisibility = async () => { // doesn't have to be synchronous, used in design- and run-time only
+                    const widgetRolesString = dataRoleObservable();
+                    const widgetRoles = !!widgetRolesString ? widgetRolesString.split(",") : [BuiltInRoles.everyone.key];
                     const userRoles = await this.userService.getUserRoles();
                     const visibleToUser = userRoles.some(x => widgetRoles.includes(x)) || widgetRoles.includes(BuiltInRoles.everyone.key);
+                    
                     hiddenObservable(!visibleToUser);
                 };
 
-                this.eventManager.addEventListener("onUserRoleChange", applyRoles);
+                this.eventManager.addEventListener("onUserRoleChange", applyVisibility);
 
                 ko.applyBindingsToNode(element, {
                     attr: { "data-role": dataRoleObservable },
@@ -42,7 +44,7 @@ export class SecuredBindingHandler {
                 }, null);
 
                 ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
-                    this.eventManager.removeEventListener("onUserRoleChange", applyRoles);
+                    this.eventManager.removeEventListener("onUserRoleChange", applyVisibility);
                 });
 
                 const assignedRolesObsevable: ko.Observable<string[]> = valueAccessor();

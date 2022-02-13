@@ -114,9 +114,6 @@ export class DefaultViewManager implements ViewManager {
 
         const websitePreviewEnabled = await this.settingsProvider.getSetting<boolean>("features/preview");
         this.websitePreviewEnabled(websitePreviewEnabled || false);
-
-        this.setHost({ name: "page-host" });
-        this.showToolboxes();
     }
 
     private onKeyDown(event: KeyboardEvent): void {
@@ -512,9 +509,12 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public setViewRoles(roles: RoleModel[]): void {
+        const roleKeys = roles.map(role => role.key);
+        
         this.rolesScope(roles);
-        this.designerUserService.setUserRoles(roles.map(role => role.key));
-        this.eventManager.dispatchEvent("onUserRoleChange", roles);
+        this.designerUserService.setUserRoles(roleKeys);
+
+        this.eventManager.dispatchEvent("onUserRoleChange", roleKeys);
     }
 
     public getViewRoles(): RoleModel[] {
