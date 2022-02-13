@@ -7,6 +7,13 @@ import { ViewStack } from "@paperbits/common/ui/viewStack";
 import { Events } from "@paperbits/common/events";
 
 
+enum BalloonState {
+    opening = "opening",
+    open = "open",
+    closing = "closing",
+    closed = "closed"
+}
+
 export class BalloonBindingHandler {
     constructor(viewStack: ViewStack) {
         ko.bindingHandlers["balloon"] = {
@@ -16,10 +23,10 @@ export class BalloonBindingHandler {
 
                 let inBalloon = false;
                 let isHoverOver = false;
-                let view: View;
+                let balloonView: View;
                 let balloonElement: HTMLElement;
                 let balloonTipElement: HTMLElement;
-                let balloonIsOpen = false;
+                let balloonState = BalloonState.closed;
                 let closeTimeout;
                 let createBalloonElement: () => void;
 
@@ -45,13 +52,15 @@ export class BalloonBindingHandler {
                     toggleElement.setAttribute(Html.AriaAttributes.expanded, "false");
                 }
 
-                const createBalloonTip = () => {
+                const createBalloonTip = (): void => {
                     balloonTipElement = document.createElement("div");
                     balloonTipElement.classList.add("balloon-tip");
                     document.body.appendChild(balloonTipElement);
                 };
 
-                const removeBalloon = () => {
+                const removeBalloon = (): void => {
+                    balloonState = BalloonState.closed;
+
                     if (!balloonElement) {
                         return;
                     }
@@ -63,18 +72,19 @@ export class BalloonBindingHandler {
                     balloonTipElement.remove();
                     balloonTipElement = null;
 
-                    viewStack.removeView(view);
+                    viewStack.removeView(balloonView);
                 };
 
                 const resetCloseTimeout = () => {
                     if (options.closeTimeout) {
                         clearTimeout(closeTimeout);
-                        closeTimeout = setTimeout(close, options.closeTimeout);
+                        balloonState = BalloonState.closing;
+                        closeTimeout = setTimeout(closeBalloon, options.closeTimeout);
                     }
                 };
 
                 const updatePosition = async (): Promise<void> => {
-                    if (!balloonElement || !balloonElement) {
+                    if (!balloonElement || !BalloonState.open) {
                         return;
                     }
 
@@ -282,16 +292,16 @@ export class BalloonBindingHandler {
                     balloonTipElement.style.left = `${balloonTipX}px`;
                 };
 
-                const open = (returnFocusTo?: HTMLElement): void => {
+                const openBalloon = (returnFocusTo?: HTMLElement): void => {
                     if (options.isDisabled && options.isDisabled()) {
                         return;
                     }
 
-                    resetCloseTimeout();
-
-                    if (balloonIsOpen) {
+                    if (balloonState !== BalloonState.opening) {
                         return;
                     }
+
+                    resetCloseTimeout();
 
                     const existingBalloonHandle: BalloonHandle = toggleElement["activeBalloon"];
 
@@ -319,8 +329,8 @@ export class BalloonBindingHandler {
                         createBalloonElement();
                         createBalloonTip();
 
-                        view = {
-                            close: close,
+                        balloonView = {
+                            close: closeBalloon,
                             element: balloonElement,
                             returnFocusTo: returnFocusTo,
                             hitTest: (targetElement) => {
@@ -333,7 +343,7 @@ export class BalloonBindingHandler {
                         };
 
                         viewStack.runHitTest(toggleElement);
-                        viewStack.pushView(view);
+                        viewStack.pushView(balloonView);
 
                         if (activateOn === BalloonActivationOptions.clickOrKeyDown) {
                             toggleElement.setAttribute(Html.AriaAttributes.expanded, "true");
@@ -343,7 +353,7 @@ export class BalloonBindingHandler {
 
                         balloonElement.classList.add("balloon-is-active");
                         requestAnimationFrame(updatePosition);
-                        balloonIsOpen = true;
+                        balloonState = BalloonState.open;
 
                         if (options.onOpen) {
                             options.onOpen();
@@ -362,12 +372,10 @@ export class BalloonBindingHandler {
                     });
                 };
 
-                const close = (): void => {
+                const closeBalloon = (): void => {
                     if (!balloonElement) {
                         return;
                     }
-
-                    balloonIsOpen = false;
 
                     if (options.onClose) {
                         options.onClose();
@@ -380,19 +388,21 @@ export class BalloonBindingHandler {
                 const toggle = (): void => {
                     resetCloseTimeout();
 
-                    if (balloonIsOpen) {
+                    if (balloonState === BalloonState.open) {
                         if (!options.closeTimeout) {
-                            close();
+                            balloonState = BalloonState.closing;
+                            closeBalloon();
                         }
                     }
                     else {
-                        open(toggleElement);
+                        balloonState = BalloonState.opening;
+                        openBalloon(toggleElement);
                     }
                 };
 
                 const ballonHandle: BalloonHandle = {
-                    open: open,
-                    close: close,
+                    open: openBalloon,
+                    close: closeBalloon,
                     toggle: toggle,
                     updatePosition: () => requestAnimationFrame(updatePosition)
                 };
@@ -416,35 +426,40 @@ export class BalloonBindingHandler {
                     toggle();
                 };
 
-                const onFocus = async (): Promise<void> => {
-                    open();
+                const onFocus = (): void => {
+                    balloonState = BalloonState.opening;
+                    openBalloon();
                 };
 
-                const onBlur = async (): Promise<void> => {
-                    close();
+                const onBlur = (): void => {
+                    balloonState = BalloonState.closing;
+                    closeBalloon();
                 };
 
-                const onMouseEnter = async (event: MouseEvent): Promise<void> => {
+                const onMouseEnter = (event: MouseEvent): void => {
                     isHoverOver = true;
+
+                    balloonState = BalloonState.opening;
 
                     setTimeout(() => {
                         if (!isHoverOver) {
                             return;
                         }
 
-                        open();
+                        openBalloon();
                     }, options.delay || 0);
                 };
 
-                const onMouseLeave = async (event: MouseEvent): Promise<void> => {
+                const onMouseLeave = (event: MouseEvent): void => {
                     isHoverOver = false;
                     checkCloseHoverBalloon();
                 };
 
-                const checkCloseHoverBalloon = async (): Promise<void> => {
+                const checkCloseHoverBalloon = (): void => {
                     setTimeout(() => {
                         if (!isHoverOver && !inBalloon) {
-                            close();
+                            balloonState = BalloonState.closing;
+                            closeBalloon();
                         }
                     }, 50);
                 };
@@ -472,7 +487,7 @@ export class BalloonBindingHandler {
                 };
 
                 if (options.closeOn) {
-                    options.closeOn.subscribe(() => close());
+                    options.closeOn.subscribe(() => closeBalloon());
                 }
 
                 toggleElement.addEventListener(Events.Click, onClick);
@@ -500,6 +515,7 @@ export class BalloonBindingHandler {
                 }
 
                 ko.utils.domNodeDisposal.addDisposeCallback(toggleElement, () => {
+                    balloonState = BalloonState.closing;
                     window.removeEventListener(Events.MouseDown, onPointerDown, true);
                     toggleElement.removeEventListener(Events.Click, onClick);
 

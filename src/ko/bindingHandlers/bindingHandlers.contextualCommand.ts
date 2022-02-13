@@ -15,8 +15,7 @@ export class ContextualCommandBindingHandler {
                 const bindings = {
                     background: {
                         color: config.command.color
-                    },
-                    tooltip: config.command.tooltip
+                    }
                 };
 
                 if (config.command.component) {
@@ -43,6 +42,8 @@ export class ContextualCommandBindingHandler {
                 if (config.command.position) {
                     bindings["stickTo"] = { target: config.element, position: config.command.position };
                 }
+
+                bindings["tooltip"] = config.command.tooltip;
 
                 ko.applyBindingsToNode(element, bindings, null);
             }
