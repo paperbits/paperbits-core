@@ -165,7 +165,7 @@ export class GridEditor {
             const htmlElement = <HTMLElement>event.target;
             const htmlLinkElement = <HTMLLinkElement>htmlElement.closest("A");
 
-            if (!htmlLinkElement) {
+            if (!htmlLinkElement || htmlLinkElement.href.endsWith("#")) {
                 return;
             }
 
