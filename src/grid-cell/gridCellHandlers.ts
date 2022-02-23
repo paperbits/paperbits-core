@@ -2,8 +2,7 @@ import { IWidgetHandler, WidgetContext, GridHelper } from "@paperbits/common/edi
 import { EventManager, Events } from "@paperbits/common/events";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IContextCommandSet, ViewManager, IHighlightConfig } from "@paperbits/common/ui";
-import { WidgetModel, WidgetService } from "@paperbits/common/widgets";
-import { SectionModel } from "../section";
+import { WidgetModel } from "@paperbits/common/widgets";
 
 
 export class GridCellHandlers implements IWidgetHandler {
