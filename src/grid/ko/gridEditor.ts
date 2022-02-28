@@ -242,16 +242,6 @@ export class GridEditor {
             return;
         }
 
-        // const widgetBinding = this.getWidgetBinding(element);
-
-        // if (!widgetBinding) {
-        //     return;
-        // }
-
-        // if (widgetBinding.readonly) {
-        //     return;
-        // }
-
         if (!gridItem.binding && gridItem.binding?.editor !== "text-block-editor") {
             event.preventDefault();
         }
@@ -792,22 +782,23 @@ export class GridEditor {
                         position: "top right",
                         color: "#607d8b",
                         callback: () => {
+                            const styleable = element["styleable"];
+                            const style = styleable.style;
+
+                            console.log("Before");
+                            console.log(style);
+
                             const view: View = {
                                 heading: "Local style",
                                 component: {
                                     name: "style-editor",
                                     params: {
-                                        elementStyle: element["styleable"].style,
+                                        elementStyle: style,
                                         onUpdate: async () => {
-                                            // await this.styleService.updateStyle(style);
+                                            console.log("After");
+                                            console.log(style);
 
-                                            // if (style.key.startsWith("components/")) {
-                                            //     const parts = style.key.split("/");
-                                            //     const componentName = parts[1];
-                                            //     await this.onUpdateStyle(componentName);
-                                            // }
-
-                                            // this.applyChanges();
+                                            styleable.applyChanges();
                                         }
                                     }
                                 },
