@@ -36,6 +36,8 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }
 
+        console.log(model.styles);
+
         viewModel["widgetBinding"] = {
             name: "button",
             displayName: "Button",
