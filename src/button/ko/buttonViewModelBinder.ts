@@ -45,7 +45,6 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
             flow: ComponentFlow.Inline,
             editor: "button-editor",
             applyChanges: async () => {
-                console.log(model.styles);
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent(Events.ContentUpdate);
             }

@@ -376,7 +376,11 @@ export class GridEditor {
             return;
         }
 
-        const stack = this.getWidgetStack(elements[1]); // skipping body element
+        const startElement = elements[0].classList.contains("design")
+            ? elements[1]
+            : elements[0];
+
+        const stack = this.getWidgetStack(startElement);
 
         const acceptingParentElement = stack.find(x => {
             if (!x.binding.handler || x.binding.readonly) {
@@ -594,10 +598,14 @@ export class GridEditor {
         const elements = this.getUnderlyingElements();
 
         if (elements.length === 0) {
-            return;
+            return [];
         }
 
-        const stack = this.getWidgetStack(elements[1]); // skipping body element        
+        const startElement = elements.length > 1 && elements[0].classList.contains("design")
+            ? elements[1]
+            : elements[0];
+
+        const stack = this.getWidgetStack(startElement);
 
         return stack;
     }
@@ -609,6 +617,7 @@ export class GridEditor {
 
         const tobeDeleted = Object.keys(this.activeElements);
         const gridItems = this.getActiveGridItems();
+
 
         for (let i = gridItems.length - 1; i >= 0; i--) {
             const gridItem = gridItems[i];
@@ -858,7 +867,9 @@ export class GridEditor {
             lastAdded = item.name;
         });
 
-        return roots.reverse();
+        const result = roots.reverse();
+
+        return result;
     }
 
     private getSelfAndParentBindings(element: HTMLElement): IWidgetBinding<any, any>[] {
