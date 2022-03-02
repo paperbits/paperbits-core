@@ -786,27 +786,27 @@ export class GridEditor {
                     element: element,
                     selectCommands: [{
                         name: "edit",
-                        tooltip: "Edit variation",
+                        tooltip: "Edit local style",
                         iconClass: "paperbits-icon paperbits-edit-72",
                         position: "top right",
                         color: "#607d8b",
                         callback: () => {
                             const styleable = element["styleable"];
+
+                            if (!styleable) {
+                                console.warn("No styleable attached to the element.");
+                                return;
+                            }
+
                             const style = styleable.style;
 
-                            console.log("Before");
-                            console.log(style);
-
                             const view: View = {
-                                heading: "Local style",
+                                heading: style.displayName || "Local style",
                                 component: {
                                     name: "style-editor",
                                     params: {
                                         elementStyle: style,
-                                        onUpdate: async () => {
-                                            console.log("After");
-                                            console.log(style);
-
+                                        onUpdate: (): void => {
                                             styleable.applyChanges();
                                         }
                                     }
