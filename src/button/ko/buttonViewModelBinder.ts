@@ -5,7 +5,8 @@ import { ButtonModel } from "../buttonModel";
 import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
-import { ComponentFlow } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
+import { ButtonHandlers } from "../buttonHandlers";
 
 export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Button>  {
     constructor(
@@ -36,11 +37,12 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }
 
-        viewModel["widgetBinding"] = {
+        const binding: IWidgetBinding<ButtonModel, Button> = {
             name: "button",
             displayName: "Button",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
+            handler: ButtonHandlers,
             draggable: true,
             flow: ComponentFlow.Inline,
             editor: "button-editor",
@@ -49,6 +51,8 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
                 this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
+
+        viewModel["widgetBinding"] = binding;
 
         return viewModel;
     }
