@@ -800,7 +800,7 @@ export class GridEditor {
             console.warn("No style key.");
             return null;
         }
-        
+
         const handler = this.widgetService.getWidgetHandler(binding.handler);
 
         if (!handler.getStyleDefinitions) {
@@ -808,8 +808,8 @@ export class GridEditor {
             return null;
         }
 
-        const styleKeyParts = styleKey.split("/");
-        const keyWithoutVariations = styleKeyParts.filter(x => x !== "default" && x !== "instance").slice(1).join("/");
+        const styleKeySegments = styleKey.split("/");
+        const keyWithoutVariations = styleKeySegments.filter(x => x !== "default" && x !== "instance").slice(1).join("/");
         const styleDefinitions = handler.getStyleDefinitions();
         const styleDefinition = Objects.getObjectAt<StyleDefinition>(keyWithoutVariations, styleDefinitions);
 
@@ -820,18 +820,20 @@ export class GridEditor {
             position: "top right",
             color: "#607d8b",
             callback: () => {
+                // TODO: Temporary hack, need to refactor.
                 const styles = binding.model?.styles;
+                const shortKey = styleKeySegments.slice(2).join("/");
 
                 let primitive: PrimitiveContract;
-                primitive = Objects.getObjectAt(styleKey, styles);
+                primitive = Objects.getObjectAt(shortKey, styles);
 
                 if (!primitive) {
                     primitive = {
-                        key: styleKeyParts.slice(2).join("/"),
-                        displayName: styles.displayName || styleDefinition.displayName
+                        key: shortKey,
+                        displayName: styles.displayName || styleDefinition.displayName,
+                        ...styleDefinition.defaults
                     };
 
-                    Objects.mergeDeep(primitive, styleDefinition.defaults);
                     Objects.setValue(primitive.key, styles, primitive);
                 }
 
@@ -842,7 +844,7 @@ export class GridEditor {
                         params: {
                             elementStyle: primitive,
                             onUpdate: (): void => {
-                                binding.applyChanges();
+                                binding.applyChanges(binding.model);
                             }
                         }
                     },
