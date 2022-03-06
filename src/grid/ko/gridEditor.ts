@@ -3,6 +3,7 @@ import * as _ from "lodash";
 import * as Arrays from "@paperbits/common/arrays";
 import * as Utils from "@paperbits/common/utils";
 import * as Html from "@paperbits/common/html";
+import * as Objects from "@paperbits/common/objects";
 import { ViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet, ActiveElement, View } from "@paperbits/common/ui";
 import { IWidgetBinding, WidgetContext, GridItem, ComponentFlow, WidgetBinding } from "@paperbits/common/editing";
 import { IWidgetService } from "@paperbits/common/widgets";
@@ -12,12 +13,13 @@ import { ContentModel } from "../../content";
 import { PopupHostModel } from "../../popup/popupHostModel";
 import { SectionModel } from "../../section";
 import { Bag, Keys } from "@paperbits/common";
+import { PrimitiveContract, StyleDefinition } from "@paperbits/common/styles";
 
 
 const defaultCommandColor = "#607d8b";
 
 export class GridEditor {
-    private activeHighlightedElement: HTMLElement;
+    private activeHighlightedGridItem: GridItem;
     private scrolling: boolean;
     private scrollTimeout: any;
     private pointerX: number;
@@ -184,6 +186,14 @@ export class GridEditor {
         }
     }
 
+    private isInContent(bindings: IWidgetBinding<any, any>[]): boolean {
+        return bindings.some(binding =>
+            binding.model instanceof ContentModel
+            || binding.model instanceof PopupHostModel
+            || binding.name === "email-layout"
+        );
+    }
+
     private onPointerDown(event: PointerEvent): void {
         if (event.ctrlKey || event.metaKey || this.viewManager.mode === ViewManagerMode.preview) {
             const htmlElement = <HTMLElement>event.target;
@@ -215,13 +225,18 @@ export class GridEditor {
             return;
         }
 
-        const element = this.activeHighlightedElement;
-        const bindings = this.getParentWidgetBindings(element);
+        const gridItem = this.activeHighlightedGridItem;
+        const bindings = this.getParentWidgetBindings(gridItem.element);
 
-        const widgetIsInContent = bindings.some(x =>
-            x.model instanceof ContentModel ||
-            x.model instanceof PopupHostModel ||
-            x.name === "email-layout");
+        let widgetIsInContent = this.isInContent(bindings);
+
+        if (!gridItem) {
+            return;
+        }
+
+        if (gridItem.isStylable) {
+            widgetIsInContent = true;
+        }
 
         /* TODO: This is temporary solution */
         const host = this.viewManager.getHost();
@@ -231,14 +246,7 @@ export class GridEditor {
         if (!widgetIsInContent && !layoutEditing && !emailEditing) {
             event.preventDefault();
             event.stopPropagation();
-
             this.eventManager.dispatchEvent("displayInactiveLayoutHint");
-            return;
-        }
-
-        const gridItem = this.getGridItem(element);
-
-        if (!gridItem) {
             return;
         }
 
@@ -258,8 +266,8 @@ export class GridEditor {
         else {
             event.preventDefault(); // To prevent document selection.
 
-            if (element["dragSource"]) { // TODO: Maybe make part of Binding?
-                element["dragSource"].beginDrag(element, this.pointerX, this.pointerY);
+            if (gridItem.element["dragSource"]) { // TODO: Maybe make part of Binding?
+                gridItem.element["dragSource"].beginDrag(gridItem.element, this.pointerX, this.pointerY);
             }
 
             this.selectElement(gridItem);
@@ -380,7 +388,7 @@ export class GridEditor {
             ? elements[1]
             : elements[0];
 
-        const stack = this.getWidgetStack(startElement);
+        const stack = this.getGridItemStack(startElement);
 
         const acceptingParentElement = stack.find(x => {
             if (!x.binding.handler || x.binding.readonly) {
@@ -594,30 +602,14 @@ export class GridEditor {
         return contextCommands;
     }
 
-    private getActiveGridItems(): GridItem[] {
-        const elements = this.getUnderlyingElements();
-
-        if (elements.length === 0) {
-            return [];
-        }
-
-        const startElement = elements.length > 1 && elements[0].classList.contains("design")
-            ? elements[1]
-            : elements[0];
-
-        const stack = this.getWidgetStack(startElement);
-
-        return stack;
-    }
-
     private renderContextualCommands(): void {
         let highlightedElement: HTMLElement;
+        let highlightedGridItem: GridItem;
         let highlightedText: string;
         let highlightColor: string;
 
         const tobeDeleted = Object.keys(this.activeElements);
-        const gridItems = this.getActiveGridItems();
-
+        const gridItems = this.getGridItemsUnderCursor();
 
         for (let i = gridItems.length - 1; i >= 0; i--) {
             const gridItem = gridItems[i];
@@ -625,6 +617,7 @@ export class GridEditor {
             const index = tobeDeleted.indexOf(gridItem.name);
             tobeDeleted.splice(index, 1);
 
+            highlightedGridItem = gridItem;
             highlightedElement = gridItem.element;
             highlightedText = gridItem.displayName;
 
@@ -651,10 +644,13 @@ export class GridEditor {
             delete this.activeElements[key];
         });
 
-        if (this.activeHighlightedElement !== highlightedElement) {
-            this.activeHighlightedElement = highlightedElement;
+        if (this.activeHighlightedGridItem !== highlightedGridItem) {
+            this.activeHighlightedGridItem = highlightedGridItem;
 
-            this.viewManager.setHighlight({ element: highlightedElement, text: highlightedText, color: highlightColor });
+            this.viewManager.setHighlight({
+                element: highlightedGridItem?.element,
+                text: highlightedText, color: highlightColor
+            });
         }
     }
 
@@ -776,6 +772,7 @@ export class GridEditor {
             name: "style",
             displayName: "Style",
             element: element,
+            isStylable: true,
             getParent: () => this.getParentGridItem(gridItem),
             getChildren: () => this.getChildGridItems(gridItem),
             getSiblings: () => this.getSiblingGridItems(gridItem),
@@ -792,22 +789,50 @@ export class GridEditor {
                         color: "#607d8b",
                         callback: () => {
                             const styleable = element["styleable"];
+                            const styleKey = styleable.key;
 
-                            if (!styleable) {
-                                console.warn("No styleable attached to the element.");
+                            if (!styleKey) {
+                                console.warn("No style key.");
                                 return;
                             }
 
-                            const style = styleable.style;
+                            const styleKeyParts = styleKey.split("/");
+                            const keyWithoutVariations = styleKeyParts.filter(x => x !== "default" && x !== "instance").slice(1).join("/");
+
+                            const parentGridItem = gridItem.getParent();
+                            const binding = parentGridItem.binding;
+                            const styles = binding.model?.styles;
+                            const handler = this.widgetService.getWidgetHandler(binding.handler);
+
+                            if (!handler.getStyleDefinitions) {
+                                console.warn(`Method "getStyleDefinitions" is not defined on "${parentGridItem.displayName}" handler.`);
+                                return;
+                            }
+
+                            const styleDefinitions = handler.getStyleDefinitions();
+                            const styleDefinition = Objects.getObjectAt<StyleDefinition>(keyWithoutVariations, styleDefinitions);
+
+                            let primitive: PrimitiveContract;
+                            primitive = Objects.getObjectAt(styleKey, styles);
+
+                            if (!primitive) {
+                                primitive = {
+                                    key: styleKeyParts.slice(2).join("/"),
+                                    displayName: styles.displayName || styleDefinition.displayName
+                                };
+
+                                Objects.mergeDeep(primitive, styleDefinition.defaults);
+                                Objects.setValue(primitive.key, styles, primitive);
+                            }
 
                             const view: View = {
-                                heading: style.displayName || "Local style",
+                                heading: styleDefinition.displayName,
                                 component: {
                                     name: "style-editor",
                                     params: {
-                                        elementStyle: style,
+                                        elementStyle: primitive,
                                         onUpdate: (): void => {
-                                            styleable.applyChanges();
+                                            binding.applyChanges();
                                         }
                                     }
                                 },
@@ -846,7 +871,7 @@ export class GridEditor {
      * Returns stack of grid items and its acestors.
      * @param element Starting element.
      */
-    public getWidgetStack(element: HTMLElement): GridItem[] {
+    public getGridItemStack(element: HTMLElement): GridItem[] {
         const elements = this.getSelfAndParentElements(element);
         let lastAdded = null;
         const roots = [];
@@ -973,7 +998,7 @@ export class GridEditor {
     }
 
     public getParentGridItem(gridItem: GridItem): GridItem {
-        const stack = this.getWidgetStack(gridItem.element);
+        const stack = this.getGridItemStack(gridItem.element);
 
         return stack.length > 1
             ? stack[1]
@@ -1003,5 +1028,138 @@ export class GridEditor {
         }
 
         return this.getGridItem(previousElement);
+    }
+
+    public getGridItemsUnderCursor(includeReadonly: boolean = false): GridItem[] {
+        const elements = this.getUnderlyingElements().filter(x => !x.classList.contains("design") && x.tagName !== "HTML");
+
+        let currentwidgetBinding: IWidgetBinding<any, any>;
+        const stackOfGridItems = [];
+
+        for (const element of elements.reverse()) {
+            const styleable = element["styleable"];
+            const context = ko.contextFor(element);
+
+            if (context) {
+                const widgetBinding: WidgetBinding<any, any> = context.$data instanceof WidgetBinding
+                    ? context.$data
+                    : context.$data?.widgetBinding;
+
+                if (!widgetBinding) {
+                    continue;
+                }
+
+                if (widgetBinding.readonly && !includeReadonly) {
+                    continue;
+                }
+
+                if (currentwidgetBinding !== widgetBinding) {
+                    const gridItem: GridItem = {
+                        name: widgetBinding.name,
+                        displayName: widgetBinding.displayName,
+                        element: element,
+                        binding: widgetBinding,
+                        getParent: () => this.getParentGridItem(gridItem),
+                        getChildren: () => this.getChildGridItems(gridItem),
+                        getSiblings: () => this.getSiblingGridItems(gridItem),
+                        getNextSibling: () => this.getNextSibling(gridItem),
+                        getPrevSibling: () => this.getPrevSibling(gridItem),
+                        getContextCommands: (half) => this.getContextCommands(gridItem.element, half)
+                    };
+
+                    stackOfGridItems.push(gridItem);
+
+                    currentwidgetBinding = widgetBinding;
+                }
+            }
+
+            if (styleable && currentwidgetBinding?.handler) {
+                const handler = this.widgetService.getWidgetHandler(currentwidgetBinding.handler);
+
+                if (!handler.getStyleDefinitions) {
+                    console.warn(`Method "getStyleDefinitions" is not defined on "${currentwidgetBinding.displayName}" handler.`);
+                    return;
+                }
+
+                const styleable = element["styleable"];
+                const styleKey = styleable.key;
+
+                if (!styleKey) {
+                    console.warn("No style key.");
+                    return;
+                }
+
+                const styleKeyParts = styleKey.split("/");
+                const keyWithoutVariations = styleKeyParts.filter(x => x !== "default" && x !== "instance").slice(1).join("/");
+                const styleDefinitions = handler.getStyleDefinitions();
+                const styleDefinition = Objects.getObjectAt<StyleDefinition>(keyWithoutVariations, styleDefinitions);
+
+                const gridItem: GridItem = {
+                    name: "style",
+                    displayName: styleDefinition.displayName,
+                    element: element,
+                    isStylable: true,
+                    getParent: () => this.getParentGridItem(gridItem),
+                    getChildren: () => this.getChildGridItems(gridItem),
+                    getSiblings: () => this.getSiblingGridItems(gridItem),
+                    getNextSibling: () => this.getNextSibling(gridItem),
+                    getPrevSibling: () => this.getPrevSibling(gridItem),
+                    getContextCommands: () => {
+                        const contextualCommands: IContextCommandSet = {
+                            element: element,
+                            selectCommands: [{
+                                name: "edit",
+                                tooltip: "Edit local style",
+                                iconClass: "paperbits-icon paperbits-edit-72",
+                                position: "top right",
+                                color: "#607d8b",
+                                callback: () => {
+                                    const styles = currentwidgetBinding.model?.styles;
+
+                                    let primitive: PrimitiveContract;
+                                    primitive = Objects.getObjectAt(styleKey, styles);
+
+                                    if (!primitive) {
+                                        primitive = {
+                                            key: styleKeyParts.slice(2).join("/"),
+                                            displayName: styles.displayName || styleDefinition.displayName
+                                        };
+
+                                        Objects.mergeDeep(primitive, styleDefinition.defaults);
+                                        Objects.setValue(primitive.key, styles, primitive);
+                                    }
+
+                                    const view: View = {
+                                        heading: styleDefinition.displayName,
+                                        component: {
+                                            name: "style-editor",
+                                            params: {
+                                                elementStyle: primitive,
+                                                onUpdate: (): void => {
+                                                    currentwidgetBinding.applyChanges();
+                                                }
+                                            }
+                                        },
+                                        resize: "vertically horizontally"
+                                    };
+
+                                    this.viewManager.openViewAsPopup(view);
+                                }
+                            }],
+                            hoverCommands: null,
+                            deleteCommand: null
+                        };
+
+                        return contextualCommands;
+                    }
+                };
+
+                stackOfGridItems.push(gridItem);
+            }
+
+
+        }
+
+        return stackOfGridItems.reverse();
     }
 }

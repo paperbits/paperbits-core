@@ -1,6 +1,4 @@
-﻿import { Bag } from "@paperbits/common";
-import { IWidgetOrder, IWidgetHandler } from "@paperbits/common/editing";
-import { StyleDefinition } from "@paperbits/common/styles";
+﻿import { IWidgetOrder, IWidgetHandler } from "@paperbits/common/editing";
 import { ButtonModel } from "./buttonModel";
 
 
@@ -17,25 +15,5 @@ export class ButtonHandlers implements IWidgetHandler {
         };
 
         return widgetOrder;
-    }
-
-    public getStyleDefinitions(): Bag<StyleDefinition> {
-        return {
-            button: {
-                displayName: "Button",
-                plugins: ["margin"],
-                components: {
-                    label: {
-                        displayName: "Button label",
-                        plugins: ["margin"],
-                        defaults: {
-                            typography: {
-                                fontSize: 50
-                            }
-                        }
-                    }
-                }
-            }
-        };
     }
 }
