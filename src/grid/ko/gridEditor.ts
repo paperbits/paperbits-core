@@ -273,7 +273,7 @@ export class GridEditor {
             return;
         }
 
-        const gridItem = this.getGridItem(selectedElement.element);
+        const gridItem = this.getWidgetBindingGridItem(selectedElement.element);
 
         if (!gridItem) {
             return;
@@ -312,7 +312,7 @@ export class GridEditor {
                 let children;
 
                 if (gridItem.binding.model instanceof SectionModel) {
-                    const containerGridItem = this.getGridItem(<HTMLElement>gridItem.element.firstElementChild, true);
+                    const containerGridItem = this.getWidgetBindingGridItem(<HTMLElement>gridItem.element.firstElementChild, true);
                     children = containerGridItem.getChildren();
                 }
                 else {
@@ -640,13 +640,13 @@ export class GridEditor {
 
     private findFocusableElement(): GridItem {
         const element = <HTMLElement>Html.findFirst(this.ownerDocument.body,
-            node => node.nodeName === "SECTION" && !!this.getGridItem(<HTMLElement>node));
+            node => node.nodeName === "SECTION" && !!this.getWidgetBindingGridItem(<HTMLElement>node));
 
         if (!element) {
             return null;
         }
 
-        return this.getGridItem(element);
+        return this.getWidgetBindingGridItem(element);
     }
 
     private onGlobalFocusChange(event: FocusEvent): void {
@@ -743,110 +743,6 @@ export class GridEditor {
         return gridItem;
     }
 
-    private getStylableGridItem(element: HTMLElement): GridItem {
-        if (!element["styleable"]) {
-            return null;
-        }
-
-        const gridItem: GridItem = {
-            name: "style",
-            displayName: "Style",
-            element: element,
-            isStylable: true,
-            getParent: () => this.getParentGridItem(gridItem),
-            getChildren: () => this.getChildGridItems(gridItem),
-            getSiblings: () => this.getSiblingGridItems(gridItem),
-            getNextSibling: () => this.getNextSibling(gridItem),
-            getPrevSibling: () => this.getPrevSibling(gridItem),
-            getContextCommands: () => {
-                const contextualCommands: IContextCommandSet = {
-                    element: element,
-                    selectCommands: [{
-                        name: "edit",
-                        tooltip: "Edit local style",
-                        iconClass: "paperbits-icon paperbits-edit-72",
-                        position: "top right",
-                        color: "#607d8b",
-                        callback: () => {
-                            const styleable = element["styleable"];
-                            const styleKey = styleable.key;
-
-                            if (!styleKey) {
-                                console.warn("No style key.");
-                                return;
-                            }
-
-                            const styleKeyParts = styleKey.split("/");
-                            const keyWithoutVariations = styleKeyParts.filter(x => x !== "default" && x !== "instance").slice(1).join("/");
-
-                            const parentGridItem = gridItem.getParent();
-                            const binding = parentGridItem.binding;
-                            const styles = binding.model?.styles;
-                            const handler = this.widgetService.getWidgetHandler(binding.handler);
-
-                            if (!handler.getStyleDefinitions) {
-                                console.warn(`Method "getStyleDefinitions" is not defined on "${parentGridItem.displayName}" handler.`);
-                                return;
-                            }
-
-                            const styleDefinitions = handler.getStyleDefinitions();
-                            const styleDefinition = Objects.getObjectAt<StyleDefinition>(keyWithoutVariations, styleDefinitions);
-
-                            let primitive: PrimitiveContract;
-                            primitive = Objects.getObjectAt(styleKey, styles);
-
-                            if (!primitive) {
-                                primitive = {
-                                    key: styleKeyParts.slice(2).join("/"),
-                                    displayName: styles.displayName || styleDefinition.displayName
-                                };
-
-                                Objects.mergeDeep(primitive, styleDefinition.defaults);
-                                Objects.setValue(primitive.key, styles, primitive);
-                            }
-
-                            const view: View = {
-                                heading: styleDefinition.displayName,
-                                component: {
-                                    name: "style-editor",
-                                    params: {
-                                        elementStyle: primitive,
-                                        onUpdate: (): void => {
-                                            binding.applyChanges();
-                                        }
-                                    }
-                                },
-                                resize: "vertically horizontally"
-                            };
-
-                            this.viewManager.openViewAsPopup(view);
-                        }
-                    }],
-                    hoverCommands: null,
-                    deleteCommand: null
-                };
-
-                return contextualCommands;
-            }
-        };
-
-        return gridItem;
-    }
-
-    private getGridItem(element: HTMLElement, includeReadonly: boolean = false): GridItem {
-        let gridItem: GridItem;
-
-        gridItem = this.getStylableGridItem(element);
-
-        if (gridItem) {
-            return gridItem;
-        }
-
-        gridItem = this.getWidgetBindingGridItem(element, includeReadonly);
-
-        return gridItem;
-    }
-
     /**
      * Returns stack of grid items up to top ancestor.
      * @param element Starting element.
@@ -857,7 +753,7 @@ export class GridEditor {
         const roots = [];
 
         elements.reverse().forEach(element => {
-            const item = this.getGridItem(element);
+            const item = this.getWidgetBindingGridItem(element);
 
             if (!item) {
                 return;
@@ -917,7 +813,7 @@ export class GridEditor {
         const childElements = Arrays.coerce<HTMLElement>(gridItem.element.children);
 
         return childElements
-            .map(child => this.getGridItem(child))
+            .map(child => this.getWidgetBindingGridItem(child))
             .filter(x => !!x && x.binding.model !== gridItem.binding.model);
     }
 
@@ -941,7 +837,7 @@ export class GridEditor {
             return null;
         }
 
-        return this.getGridItem(nextElement);
+        return this.getWidgetBindingGridItem(nextElement);
     }
 
     private getPrevSibling(gridItem: GridItem): GridItem {
@@ -951,7 +847,7 @@ export class GridEditor {
             return null;
         }
 
-        return this.getGridItem(previousElement);
+        return this.getWidgetBindingGridItem(previousElement);
     }
 
     private getGridItemsUnderPointer(includeReadonly: boolean = false): GridItem[] {
