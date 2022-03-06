@@ -68,7 +68,7 @@ export class GridEditor {
     }
 
     private getContextCommands(gridItem: GridItem, half: string = null): IContextCommandSet {
-        const bindings = this.getParentWidgetBindings(gridItem.element);
+        const bindings = GridHelper.getParentWidgetBindings(gridItem.element);
 
         const providers = bindings
             .filter(x => !!x.provides)
@@ -180,7 +180,7 @@ export class GridEditor {
             gridItem = gridItem.getParent();
         }
 
-        const bindings = this.getParentWidgetBindings(gridItem.element);
+        const bindings = GridHelper.getParentWidgetBindings(gridItem.element);
 
         return bindings.some(binding =>
             binding.model instanceof ContentModel
@@ -732,9 +732,9 @@ export class GridEditor {
             displayName: widgetBinding.displayName,
             element: element,
             binding: widgetBinding,
-            getParent: () => this.getParentGridItem(gridItem),
-            getChildren: () => this.getChildGridItems(gridItem),
-            getSiblings: () => this.getSiblingGridItems(gridItem),
+            getParent: () => this.getParent(gridItem),
+            getChildren: () => this.getChildren(gridItem),
+            getSiblings: () => this.getSiblings(gridItem),
             getNextSibling: () => this.getNextSibling(gridItem),
             getPrevSibling: () => this.getPrevSibling(gridItem),
             getContextCommands: (half) => this.getContextCommands(gridItem, half)
@@ -747,7 +747,7 @@ export class GridEditor {
      * Returns stack of grid items up to top ancestor.
      * @param element Starting element.
      */
-    private getGridItemStack(element: HTMLElement): GridItem[] {
+    private getStack(element: HTMLElement): GridItem[] {
         const elements = this.getSelfAndParentElements(element);
         let lastAdded = null;
         const roots = [];
@@ -773,43 +773,7 @@ export class GridEditor {
         return result;
     }
 
-    private getParentViewModels(element: HTMLElement): any[] {
-        const context = ko.contextFor(element);
-
-        if (!context) {
-            return [];
-        }
-
-        const viewModels = [];
-
-        let current = context.$data;
-
-        context.$parents.forEach(viewModel => {
-            if (viewModel && viewModel !== current) {
-                viewModels.push(viewModel);
-                current = viewModel;
-            }
-        });
-
-        return viewModels;
-    }
-
-    private getParentWidgetBindings(element: HTMLElement): IWidgetBinding<any, any>[] {
-        const bindings = [];
-        const parentViewModels = this.getParentViewModels(element);
-
-        parentViewModels.forEach(x => {
-            const binding = x["widgetBinding"];
-
-            if (binding) {
-                bindings.push(binding);
-            }
-        });
-
-        return bindings;
-    }
-
-    private getChildGridItems(gridItem: GridItem): GridItem[] {
+    private getChildren(gridItem: GridItem): GridItem[] {
         const childElements = Arrays.coerce<HTMLElement>(gridItem.element.children);
 
         return childElements
@@ -817,17 +781,17 @@ export class GridEditor {
             .filter(x => !!x && x.binding.model !== gridItem.binding.model);
     }
 
-    private getParentGridItem(gridItem: GridItem): GridItem {
-        const stack = this.getGridItemStack(gridItem.element);
+    private getParent(gridItem: GridItem): GridItem {
+        const stack = this.getStack(gridItem.element);
 
         return stack.length > 1
             ? stack[1]
             : null;
     }
 
-    private getSiblingGridItems(gridItem: GridItem): GridItem[] {
-        const parent = this.getParentGridItem(gridItem);
-        return this.getChildGridItems(parent);
+    private getSiblings(gridItem: GridItem): GridItem[] {
+        const parent = this.getParent(gridItem);
+        return this.getChildren(parent);
     }
 
     private getNextSibling(gridItem: GridItem): GridItem {
@@ -879,9 +843,9 @@ export class GridEditor {
                         displayName: widgetBinding.displayName,
                         element: element,
                         binding: widgetBinding,
-                        getParent: () => this.getParentGridItem(gridItem),
-                        getChildren: () => this.getChildGridItems(gridItem),
-                        getSiblings: () => this.getSiblingGridItems(gridItem),
+                        getParent: () => this.getParent(gridItem),
+                        getChildren: () => this.getChildren(gridItem),
+                        getSiblings: () => this.getSiblings(gridItem),
                         getNextSibling: () => this.getNextSibling(gridItem),
                         getPrevSibling: () => this.getPrevSibling(gridItem),
                         getContextCommands: (half) => this.getContextCommands(gridItem, half)
@@ -959,9 +923,9 @@ export class GridEditor {
                     displayName: styleDefinition.displayName,
                     element: element,
                     isStylable: true,
-                    getParent: () => this.getParentGridItem(gridItem),
-                    getChildren: () => this.getChildGridItems(gridItem),
-                    getSiblings: () => this.getSiblingGridItems(gridItem),
+                    getParent: () => this.getParent(gridItem),
+                    getChildren: () => this.getChildren(gridItem),
+                    getSiblings: () => this.getSiblings(gridItem),
                     getNextSibling: () => this.getNextSibling(gridItem),
                     getPrevSibling: () => this.getPrevSibling(gridItem),
                     getContextCommands: () => {
