@@ -1,27 +1,31 @@
+import * as ko from "knockout";
 import * as _ from "lodash";
+import * as Arrays from "@paperbits/common/arrays";
 import * as Utils from "@paperbits/common/utils";
 import * as Html from "@paperbits/common/html";
-import { ViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet } from "@paperbits/common/ui";
-import { IWidgetBinding, GridHelper, WidgetContext, GridItem, ComponentFlow } from "@paperbits/common/editing";
+import * as Objects from "@paperbits/common/objects";
+import { ViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet, ActiveElement, View, IContextCommand } from "@paperbits/common/ui";
+import { IWidgetBinding, WidgetContext, GridItem, ComponentFlow, WidgetBinding, GridHelper } from "@paperbits/common/editing";
 import { IWidgetService } from "@paperbits/common/widgets";
 import { EventManager, Events, MouseButton } from "@paperbits/common/events";
 import { Router } from "@paperbits/common/routing";
 import { ContentModel } from "../../content";
 import { PopupHostModel } from "../../popup/popupHostModel";
 import { SectionModel } from "../../section";
-import { Keys } from "@paperbits/common";
+import { Bag, Keys } from "@paperbits/common";
+import { PrimitiveContract, StyleDefinition } from "@paperbits/common/styles";
 
 
 const defaultCommandColor = "#607d8b";
 
 export class GridEditor {
-    private activeHighlightedElement: HTMLElement;
+    private activeHighlightedGridItem: GridItem;
     private scrolling: boolean;
     private scrollTimeout: any;
     private pointerX: number;
     private pointerY: number;
     private activeContextualCommands: IContextCommandSet;
-    private actives: object;
+    private activeElements: Bag<ActiveElement>;
     private ownerDocument: Document;
     private selection: GridItem;
 
@@ -41,7 +45,7 @@ export class GridEditor {
         this.onWindowScroll = this.onWindowScroll.bind(this);
         this.onKeyDown = this.onKeyDown.bind(this);
 
-        this.actives = {};
+        this.activeElements = {};
     }
 
     private isModelBeingEdited(binding: IWidgetBinding<any, any>): boolean {
@@ -58,24 +62,25 @@ export class GridEditor {
         return true;
     }
 
-    private getContextCommands(element: HTMLElement, half: string): IContextCommandSet {
-        const bindings = GridHelper.getParentWidgetBindings(element);
+    private isSelected(gridItem: GridItem): boolean {
+        const selectedElement = this.viewManager.getSelectedElement();
+        return selectedElement?.element === gridItem.element;
+    }
+
+    private getContextCommands(gridItem: GridItem, half: string = null): IContextCommandSet {
+        const bindings = GridHelper.getParentWidgetBindings(gridItem.element);
 
         const providers = bindings
             .filter(x => !!x.provides)
             .map(x => x.provides)
             .reduce((acc, val) => acc.concat(val), []);
 
-        let model;
-        let binding;
-
-        if (element) {
-            model = GridHelper.getModel(element);
-            binding = GridHelper.getWidgetBinding(element);
-        }
+        const model = gridItem.binding.model;
+        const binding = gridItem.binding;
 
         let parentModel;
-        const parentBinding = GridHelper.getParentWidgetBinding(element);
+        const parent = gridItem.getParent();
+        const parentBinding = parent?.binding;
 
         if (parentBinding) {
             parentModel = parentBinding.model;
@@ -89,27 +94,23 @@ export class GridEditor {
             half: half,
             providers: providers,
             switchToParent: () => {
-                const gridItem = GridHelper.getGridItem(element);
-                const parentGridItem = gridItem.getParent(); // closest parent
-
-                if (!parentGridItem) {
+                if (!parent) {
                     return;
                 }
 
-                const contextualCommands = this.getContextCommands(parentGridItem.element, "top");
+                const contextualCommands = parent.getContextCommands();
 
                 if (!contextualCommands) {
                     return;
                 }
 
                 const config: IHighlightConfig = {
-                    element: parentGridItem.element,
-                    text: parentGridItem.binding.displayName,
+                    element: parent.element,
+                    text: parent.binding.displayName,
                     color: contextualCommands.color
                 };
 
                 this.viewManager.setSelectedElement(config, contextualCommands);
-                this.activeContextualCommands = contextualCommands;
             }
         };
 
@@ -127,28 +128,19 @@ export class GridEditor {
             contextualCommands = this.getDefaultContextCommands(context);
         }
 
-        contextualCommands.element = element;
+        const defaultCommand: IContextCommand = {
+            callback: () => {
+                this.viewManager.openWidgetEditor(context.binding);
+            }
+        };
+
+        contextualCommands.element = gridItem.element;
         contextualCommands.selectCommands = contextualCommands.selectCommands || null;
         contextualCommands.hoverCommands = contextualCommands.hoverCommands || null;
         contextualCommands.deleteCommand = contextualCommands.deleteCommand || null;
+        contextualCommands.defaultCommand = defaultCommand;
 
         return contextualCommands;
-    }
-
-    private isModelSelected(binding: IWidgetBinding<any, any>): boolean {
-        const selectedElement = this.viewManager.getSelectedElement();
-
-        if (!selectedElement) {
-            return false;
-        }
-
-        const selectedBinding = GridHelper.getWidgetBinding(selectedElement.element);
-
-        if (binding !== selectedBinding) {
-            return false;
-        }
-
-        return true;
     }
 
     private onMouseClick(event: MouseEvent): void {
@@ -158,6 +150,43 @@ export class GridEditor {
         if (htmlLinkElement) {
             event.preventDefault(); // prevent default event handling for hyperlink controls
         }
+    }
+
+    private onPointerMove(event: PointerEvent): void {
+        if (this.viewManager.mode === ViewManagerMode.pause) {
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+        }
+
+        this.pointerX = event.clientX;
+        this.pointerY = event.clientY;
+
+        switch (this.viewManager.mode) {
+            case ViewManagerMode.selecting:
+            case ViewManagerMode.selected:
+            case ViewManagerMode.configure:
+                this.renderHighlightedElements();
+                break;
+
+            case ViewManagerMode.dragging:
+                this.renderDropHandlers();
+                break;
+        }
+    }
+
+    private isInContent(gridItem: GridItem): boolean {
+        if (gridItem.isStylable) {
+            gridItem = gridItem.getParent();
+        }
+
+        const bindings = GridHelper.getParentWidgetBindings(gridItem.element);
+
+        return bindings.some(binding =>
+            binding.model instanceof ContentModel
+            || binding.model instanceof PopupHostModel
+            || binding.name === "email-layout"
+        );
     }
 
     private onPointerDown(event: PointerEvent): void {
@@ -191,13 +220,13 @@ export class GridEditor {
             return;
         }
 
-        const element = this.activeHighlightedElement;
-        const bindings = GridHelper.getParentWidgetBindings(element);
+        const gridItem = this.activeHighlightedGridItem;
 
-        const widgetIsInContent = bindings.some(x =>
-            x.model instanceof ContentModel ||
-            x.model instanceof PopupHostModel ||
-            x.name === "email-layout");
+        if (!gridItem) {
+            return;
+        }
+
+        const widgetIsInContent = this.isInContent(gridItem);
 
         /* TODO: This is temporary solution */
         const host = this.viewManager.getHost();
@@ -207,95 +236,33 @@ export class GridEditor {
         if (!widgetIsInContent && !layoutEditing && !emailEditing) {
             event.preventDefault();
             event.stopPropagation();
-
             this.eventManager.dispatchEvent("displayInactiveLayoutHint");
             return;
         }
 
-        const widgetBinding = GridHelper.getWidgetBinding(element);
-
-        if (!widgetBinding) {
-            return;
-        }
-
-        if (widgetBinding.readonly) {
-            return;
-        }
-
-        if (widgetBinding.editor !== "text-block-editor") {
+        if (gridItem.binding?.editor !== "text-block-editor") {
             event.preventDefault();
         }
 
-        if (this.isModelBeingEdited(widgetBinding)) {
+        if (this.isModelBeingEdited(gridItem.binding)) {
             return;
         }
 
-        if (this.isModelSelected(widgetBinding)) {
-            if (widgetBinding.editor) {
-                this.viewManager.openWidgetEditor(widgetBinding);
+        if (this.isSelected(gridItem)) {
+            const commandSet = gridItem.getContextCommands("");
+
+            if (commandSet.defaultCommand) {
+                commandSet.defaultCommand.callback();
             }
         }
         else {
             event.preventDefault(); // To prevent document selection.
 
-            if (element["dragSource"]) { // TODO: Maybe make part of Binding?
-                element["dragSource"].beginDrag(element, this.pointerX, this.pointerY);
+            if (gridItem.element["dragSource"]) { // TODO: Maybe make part of Binding?
+                gridItem.element["dragSource"].beginDrag(gridItem.element, this.pointerX, this.pointerY);
             }
 
-            this.selectElement({
-                binding: widgetBinding,
-                element: element
-            });
-        }
-    }
-
-    private selectElement(item: GridItem, scrollIntoView: boolean = true): void {
-        if (!item) {
-            throw new Error(`Parameter "item" not specified.`);
-        }
-
-        const commandSet = this.getContextCommands(item.element, "top");
-
-        if (!commandSet) {
-            return;
-        }
-
-        const config: IHighlightConfig = {
-            element: item.element,
-            text: item.binding.displayName,
-            color: commandSet.color
-        };
-
-        this.viewManager.setSelectedElement(config, commandSet);
-        this.activeContextualCommands = commandSet;
-
-        this.selection = item;
-
-        if (scrollIntoView) {
-            item.element.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        }
-    }
-
-    private onPointerMove(event: PointerEvent): void {
-        if (this.viewManager.mode === ViewManagerMode.pause) {
-            event.preventDefault();
-            event.stopPropagation();
-            return;
-        }
-
-        this.pointerX = event.clientX;
-        this.pointerY = event.clientY;
-
-        switch (this.viewManager.mode) {
-            case ViewManagerMode.selecting:
-            case ViewManagerMode.selected:
-            case ViewManagerMode.configure:
-                this.renderHighlightedElements();
-                break;
-
-            case ViewManagerMode.dragging:
-                this.renderDropHandlers();
-                break;
+            this.selectElement(gridItem);
         }
     }
 
@@ -306,7 +273,7 @@ export class GridEditor {
             return;
         }
 
-        const gridItem = GridHelper.getGridItem(selectedElement.element);
+        const gridItem = this.getWidgetGridItem(selectedElement.element);
 
         if (!gridItem) {
             return;
@@ -345,7 +312,7 @@ export class GridEditor {
                 let children;
 
                 if (gridItem.binding.model instanceof SectionModel) {
-                    const containerGridItem = GridHelper.getGridItem(<HTMLElement>gridItem.element.firstElementChild, true);
+                    const containerGridItem = this.getWidgetGridItem(<HTMLElement>gridItem.element.firstElementChild, true);
                     children = containerGridItem.getChildren();
                 }
                 else {
@@ -369,6 +336,33 @@ export class GridEditor {
         }
     }
 
+    private selectElement(item: GridItem, scrollIntoView: boolean = true): void {
+        if (!item) {
+            throw new Error(`Parameter "item" not specified.`);
+        }
+
+        const commandSet = item?.getContextCommands();
+
+        if (!commandSet) {
+            return;
+        }
+
+        const config: IHighlightConfig = {
+            element: item.element,
+            text: item.displayName,
+            color: commandSet.color
+        };
+
+        this.viewManager.setSelectedElement(config, commandSet);
+        this.activeContextualCommands = commandSet;
+
+        this.selection = item;
+
+        if (scrollIntoView) {
+            item.element.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+    }
+
     private renderDropHandlers(): void {
         const dragSession = this.viewManager.getDragSession();
 
@@ -376,15 +370,13 @@ export class GridEditor {
             return;
         }
 
-        const elements = this.getUnderlyingElements();
+        const stack = this.getGridItemsUnderPointer();
 
-        if (elements.length === 0) {
+        if (stack.length === 0) {
             return;
         }
 
-        const stack = GridHelper.getWidgetStack(elements[1]);
-
-        const acceptingParentElement = stack.find(x => {
+        const acceptingParent = stack.find(x => {
             if (!x.binding.handler || x.binding.readonly) {
                 return false;
             }
@@ -398,7 +390,7 @@ export class GridEditor {
             return false;
         });
 
-        if (!acceptingParentElement || elements.some(element => element.classList.contains("dragged-origin"))) {
+        if (!acceptingParent || dragSession.sourceParentBinding === acceptingParent.binding) {
             delete dragSession.targetElement;
             delete dragSession.targetBinding;
 
@@ -406,16 +398,16 @@ export class GridEditor {
             return;
         }
 
-        dragSession.targetElement = acceptingParentElement.element;
-        dragSession.targetBinding = GridHelper.getWidgetBinding(acceptingParentElement.element);
+        dragSession.targetElement = acceptingParent.element;
+        dragSession.targetBinding = acceptingParent.binding;
 
-        const siblingElement: GridItem = stack.find(x => x.element.parentElement === acceptingParentElement.element);
+        const siblingElement: GridItem = stack.find(x => x.element.parentElement === acceptingParent.element);
 
         if (siblingElement) {
             const quadrant = Utils.pointerToClientQuadrant(this.pointerX, this.pointerY, siblingElement.element);
             const sourceElementFlow = dragSession.sourceBinding.flow || ComponentFlow.Inline;
 
-            dragSession.insertIndex = acceptingParentElement.binding.model.widgets.indexOf(siblingElement.binding.model);
+            dragSession.insertIndex = acceptingParent.binding.model.widgets.indexOf(siblingElement.binding.model);
             const hoveredElementFlow = siblingElement.binding.flow || ComponentFlow.Inline;
 
             if (sourceElementFlow === ComponentFlow.Inline && hoveredElementFlow === ComponentFlow.Inline) {
@@ -443,13 +435,13 @@ export class GridEditor {
             }
         }
         else {
-            const quadrant = Utils.pointerToClientQuadrant(this.pointerX, this.pointerY, acceptingParentElement.element);
+            const quadrant = Utils.pointerToClientQuadrant(this.pointerX, this.pointerY, acceptingParent.element);
 
-            if (acceptingParentElement.binding.model.widgets.length === 0) {
+            if (acceptingParent.binding.model.widgets.length === 0) {
                 dragSession.insertIndex = 0;
 
                 this.viewManager.setSplitter({
-                    element: acceptingParentElement.element,
+                    element: acceptingParent.element,
                     side: quadrant.vertical,
                     where: "inside"
                 });
@@ -457,7 +449,7 @@ export class GridEditor {
                 return;
             }
             else {
-                const children = Array.prototype.slice.call(acceptingParentElement.element.children);
+                const children = Array.prototype.slice.call(acceptingParent.element.children);
 
                 if (quadrant.vertical === "top") {
                     dragSession.insertIndex = 0;
@@ -597,73 +589,64 @@ export class GridEditor {
     }
 
     private renderContextualCommands(): void {
-        let highlightedElement: HTMLElement;
+        let highlightedGridItem: GridItem;
         let highlightedText: string;
         let highlightColor: string;
-        const tobeDeleted = Object.keys(this.actives);
 
-        let current = null;
+        const tobeDeleted = Object.keys(this.activeElements);
+        const gridItems = this.getGridItemsUnderPointer();
 
-        const elements = this.getUnderlyingElements();
+        for (let i = gridItems.length - 1; i >= 0; i--) {
+            const gridItem = gridItems[i];
 
-        for (let i = elements.length - 1; i >= 0; i--) {
-            const element = elements[i];
-            const widgetBinding = GridHelper.getWidgetBinding(element);
-
-            if (!widgetBinding) {
-                continue;
-            }
-
-            if (!widgetBinding || widgetBinding.readonly || widgetBinding === current) {
-                continue;
-            }
-
-            const index = tobeDeleted.indexOf(widgetBinding.name);
+            const index = tobeDeleted.indexOf(gridItem.name);
             tobeDeleted.splice(index, 1);
 
-            highlightedElement = element;
-            highlightedText = widgetBinding.displayName;
+            highlightedGridItem = gridItem;
+            highlightedText = gridItem.displayName;
 
-            current = widgetBinding;
-
-            const quadrant = Utils.pointerToClientQuadrant(this.pointerX, this.pointerY, element);
+            const quadrant = Utils.pointerToClientQuadrant(this.pointerX, this.pointerY, gridItem.element);
             const half = quadrant.vertical;
-            const active = this.actives[widgetBinding.name];
-            const contextualCommandSet = this.getContextCommands(element, half);
+            const activeElement = this.activeElements[gridItem.name];
+            const contextualCommandSet = gridItem.getContextCommands(half);
 
             highlightColor = contextualCommandSet.color;
 
-            if (!active || element !== active.element || half !== active.half) {
-                this.viewManager.setContextualCommands(widgetBinding.name, contextualCommandSet);
+            if (!activeElement || gridItem.element !== activeElement.element || half !== activeElement.half) {
+                this.viewManager.setContextualCommands(gridItem.name, contextualCommandSet);
 
-                this.actives[widgetBinding.name] = {
-                    element: element,
+                this.activeElements[gridItem.name] = {
+                    key: gridItem.name,
+                    element: gridItem.element,
                     half: quadrant.vertical
                 };
             }
         }
 
-        tobeDeleted.forEach(x => {
-            this.viewManager.removeContextualCommands(x);
-            delete this.actives[x];
+        tobeDeleted.forEach(key => {
+            this.viewManager.removeContextualCommands(key);
+            delete this.activeElements[key];
         });
 
-        if (this.activeHighlightedElement !== highlightedElement) {
-            this.activeHighlightedElement = highlightedElement;
+        if (this.activeHighlightedGridItem !== highlightedGridItem) {
+            this.activeHighlightedGridItem = highlightedGridItem;
 
-            this.viewManager.setHighlight({ element: highlightedElement, text: highlightedText, color: highlightColor });
+            this.viewManager.setHighlight({
+                element: highlightedGridItem?.element,
+                text: highlightedText, color: highlightColor
+            });
         }
     }
 
     private findFocusableElement(): GridItem {
         const element = <HTMLElement>Html.findFirst(this.ownerDocument.body,
-            node => node.nodeName === "SECTION" && !!GridHelper.getGridItem(<HTMLElement>node));
+            node => node.nodeName === "SECTION" && !!this.getWidgetGridItem(<HTMLElement>node));
 
         if (!element) {
             return null;
         }
 
-        return GridHelper.getGridItem(element);
+        return this.getWidgetGridItem(element);
     }
 
     private onGlobalFocusChange(event: FocusEvent): void {
@@ -712,5 +695,209 @@ export class GridEditor {
         this.ownerDocument.removeEventListener(Events.Click, this.onMouseClick, false);
         this.eventManager.removeEventListener("onKeyDown", this.onKeyDown);
         this.eventManager.removeEventListener("onDelete", this.onDelete);
+    }
+
+    /**
+     * Returns stack of grid items up to top ancestor.
+     * @param element Starting element.
+     */
+    private getStack(element: HTMLElement): GridItem[] {
+        const elements = Html.selfAndParents(element);
+        return this.getGridItems(elements);
+    }
+
+    private getChildren(gridItem: GridItem): GridItem[] {
+        const childElements = Arrays.coerce<HTMLElement>(gridItem.element.children);
+
+        return childElements
+            .map(child => this.getWidgetGridItem(child))
+            .filter(x => !!x && x.binding.model !== gridItem.binding.model);
+    }
+
+    private getParent(gridItem: GridItem): GridItem {
+        const stack = this.getStack(gridItem.element);
+
+        return stack.length > 1
+            ? stack[1]
+            : null;
+    }
+
+    private getSiblings(gridItem: GridItem): GridItem[] {
+        const parent = this.getParent(gridItem);
+        return this.getChildren(parent);
+    }
+
+    private getNextSibling(gridItem: GridItem): GridItem {
+        const nextElement = <HTMLElement>gridItem.element.nextElementSibling;
+
+        if (!nextElement) {
+            return null;
+        }
+
+        return this.getWidgetGridItem(nextElement);
+    }
+
+    private getPrevSibling(gridItem: GridItem): GridItem {
+        const previousElement = <HTMLElement>gridItem.element.previousElementSibling;
+
+        if (!previousElement) {
+            return null;
+        }
+
+        return this.getWidgetGridItem(previousElement);
+    }
+
+    private getGridItemsUnderPointer(includeReadonly: boolean = false): GridItem[] {
+        const elements = this.getUnderlyingElements().filter(x => !x.classList.contains("design") && x.tagName !== "HTML");
+        return this.getGridItems(elements, includeReadonly);
+    }
+
+    private getWidgetGridItem(element: HTMLElement, includeReadonly: boolean = false): GridItem {
+        const context = ko.contextFor(element);
+
+        if (!context) {
+            return null;
+        }
+
+        const widgetBinding = context.$data instanceof WidgetBinding
+            ? context.$data
+            : context.$data?.widgetBinding;
+
+        if (!widgetBinding) {
+            return null;
+        }
+
+        if (widgetBinding.readonly && !includeReadonly) {
+            return null;
+        }
+
+        const gridItem: GridItem = {
+            name: widgetBinding.name,
+            displayName: widgetBinding.displayName,
+            element: element,
+            binding: widgetBinding,
+            getParent: () => this.getParent(gridItem),
+            getChildren: () => this.getChildren(gridItem),
+            getSiblings: () => this.getSiblings(gridItem),
+            getNextSibling: () => this.getNextSibling(gridItem),
+            getPrevSibling: () => this.getPrevSibling(gridItem),
+            getContextCommands: (half) => this.getContextCommands(gridItem, half)
+        };
+
+        return gridItem;
+    }
+
+    private getStylableGridItem(element: HTMLElement, binding: IWidgetBinding<any, any>): GridItem {
+        const styleable = element["styleable"];
+
+        if (!styleable) {
+            return null;
+        }
+
+        const styleKey = styleable.key;
+
+        if (!styleKey) {
+            console.warn("No style key.");
+            return null;
+        }
+        
+        const handler = this.widgetService.getWidgetHandler(binding.handler);
+
+        if (!handler.getStyleDefinitions) {
+            console.warn(`Method "getStyleDefinitions" is not defined on "${binding.displayName}" handler.`);
+            return null;
+        }
+
+        const styleKeyParts = styleKey.split("/");
+        const keyWithoutVariations = styleKeyParts.filter(x => x !== "default" && x !== "instance").slice(1).join("/");
+        const styleDefinitions = handler.getStyleDefinitions();
+        const styleDefinition = Objects.getObjectAt<StyleDefinition>(keyWithoutVariations, styleDefinitions);
+
+        const defaultCommand: IContextCommand = {
+            name: "edit",
+            tooltip: "Edit local style",
+            iconClass: "paperbits-icon paperbits-edit-72",
+            position: "top right",
+            color: "#607d8b",
+            callback: () => {
+                const styles = binding.model?.styles;
+
+                let primitive: PrimitiveContract;
+                primitive = Objects.getObjectAt(styleKey, styles);
+
+                if (!primitive) {
+                    primitive = {
+                        key: styleKeyParts.slice(2).join("/"),
+                        displayName: styles.displayName || styleDefinition.displayName
+                    };
+
+                    Objects.mergeDeep(primitive, styleDefinition.defaults);
+                    Objects.setValue(primitive.key, styles, primitive);
+                }
+
+                const view: View = {
+                    heading: styleDefinition.displayName,
+                    component: {
+                        name: "style-editor",
+                        params: {
+                            elementStyle: primitive,
+                            onUpdate: (): void => {
+                                binding.applyChanges();
+                            }
+                        }
+                    },
+                    resize: "vertically horizontally"
+                };
+
+                this.viewManager.openViewAsPopup(view);
+            }
+        };
+
+        const gridItem: GridItem = {
+            name: "style",
+            displayName: styleDefinition.displayName,
+            element: element,
+            isStylable: true,
+            getParent: () => this.getParent(gridItem),
+            getChildren: () => this.getChildren(gridItem),
+            getSiblings: () => this.getSiblings(gridItem),
+            getNextSibling: () => this.getNextSibling(gridItem),
+            getPrevSibling: () => this.getPrevSibling(gridItem),
+            getContextCommands: () => {
+                const contextualCommands: IContextCommandSet = {
+                    element: element,
+                    defaultCommand: defaultCommand,
+                    selectCommands: [defaultCommand],
+                    hoverCommands: null,
+                    deleteCommand: null
+                };
+
+                return contextualCommands;
+            }
+        };
+
+        return gridItem;
+    }
+
+    private getGridItems(elements: HTMLElement[], includeReadonly: boolean = false): GridItem[] {
+        let currentwidgetBinding: IWidgetBinding<any, any>;
+        const stackOfGridItems = [];
+
+        for (const element of elements.reverse()) {
+            const widgetGridItem = this.getWidgetGridItem(element, includeReadonly);
+
+            if (widgetGridItem && widgetGridItem.binding !== currentwidgetBinding) {
+                stackOfGridItems.push(widgetGridItem);
+                currentwidgetBinding = widgetGridItem.binding;
+            }
+
+            const styleableGridItem = this.getStylableGridItem(element, currentwidgetBinding);
+
+            if (styleableGridItem) {
+                stackOfGridItems.push(styleableGridItem);
+            }
+        }
+
+        return stackOfGridItems.reverse();
     }
 }

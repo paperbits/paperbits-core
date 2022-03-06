@@ -1,7 +1,7 @@
-import { IWidgetHandler, WidgetContext, GridHelper } from "@paperbits/common/editing";
+import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { EventManager, Events } from "@paperbits/common/events";
 import { DragSession } from "@paperbits/common/ui/draggables";
-import { IContextCommandSet, ViewManager, IHighlightConfig } from "@paperbits/common/ui";
+import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { WidgetModel } from "@paperbits/common/widgets";
 
 
