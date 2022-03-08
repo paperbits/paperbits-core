@@ -17,10 +17,19 @@ export class CarouselItemHandlers {
             deleteCommand: null,
             selectCommands: [{
                 tooltip: "Edit carousel slide",
+                displayName: "Edit slide",
                 iconClass: "paperbits-icon paperbits-edit-72",
                 position: "top right",
                 color: "#607d8b",
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
+            },
+            {
+                tooltip: "Edit carousel",
+                displayName: "Edit carousel",
+                iconClass: "paperbits-icon paperbits-edit-72",
+                position: "top right",
+                color: "#607d8b",
+                callback: () => this.viewManager.openWidgetEditor(context.parentBinding)
             },
             {
                 tooltip: "Switch to parent",
@@ -30,7 +39,17 @@ export class CarouselItemHandlers {
                 callback: () => {
                     context.switchToParent();
                 }
-            }]
+            },
+            {
+                tooltip: "Help",
+                iconClass: "paperbits-icon paperbits-c-question",
+                position: "top right",
+                color: "#607d8b",
+                callback: () => {
+                    // 
+                }
+            }
+        ]
         };
 
         if (context.parentModel["carouselItems"].length > 1) {

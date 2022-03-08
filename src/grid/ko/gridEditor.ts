@@ -668,7 +668,7 @@ export class GridEditor {
             if (this.selection) {
                 const toolbox = target.closest(".toolbox");
 
-                if (toolbox) {
+                if (toolbox && !toolbox.classList.contains("toolbox-context")) {
                     this.viewManager.clearSelection();
                 }
             }

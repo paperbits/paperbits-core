@@ -107,10 +107,13 @@
 </div>
 
 <!-- ko with: selectedElementContextualEditor() -->
-<div class="fixed" data-bind="stickTo: { target: element, position: 'top right' }">
+<div class="fixed toolbox toolbox-horizontal toolbox-context" data-bind="stickTo: { target: element, position: 'top right' }">
     <!-- ko foreach: { data: selectCommands, as: 'command' } -->
-    <button tabindex="-1" class="btn-standalone" data-bind="gridCommand: command, tooltip: command.tooltip">
+    <button class="toolbox-btn" data-bind="gridCommand: command, css: { 'toolbox-btn-group': command.displayName }">
         <i aria-hidden="true" data-bind="css: command.iconClass"></i>
+        <!-- ko id: command.displayName -->
+        <span data-bind="text: command.displayName"></span>
+        <!-- /ko -->
     </button>
     <!-- ko if: command.component -->
     <div class="balloon" data-bind="component: command.component"></div>
@@ -118,7 +121,7 @@
     <!-- /ko -->
 
     <!-- ko if: deleteCommand -->
-    <button tabindex="-1" class="btn-standalone" data-bind="contextualCommand: { command: deleteCommand }">
+    <button tabindex="-1" class="toolbox-btn" data-bind="gridCommand: deleteCommand">
         <i aria-hidden="true" class="paperbits-icon paperbits-trash-simple"></i>
     </button>
     <!-- /ko -->

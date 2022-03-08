@@ -10,7 +10,7 @@ ko.bindingHandlers["gridCommand"] = {
         }
 
         const bindings = {
-            background: { color: command.color },
+            // background: { color: command.color },
             tooltip: command.tooltip
         };
 

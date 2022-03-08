@@ -1,10 +1,10 @@
 import { IContextCommandSet, View, ViewManager } from "@paperbits/common/ui";
-import { IWidgetOrder, WidgetContext } from "@paperbits/common/editing";
+import { IWidgetHandler, IWidgetOrder, WidgetContext } from "@paperbits/common/editing";
 import { CarouselItemModel, CarouselModel } from "./carouselModel";
 import { EventManager, Events } from "@paperbits/common/events";
 
 
-export class CarouselHandlers {
+export class CarouselHandlers implements IWidgetHandler {
     constructor(
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager
