@@ -9,6 +9,7 @@ import { Display } from "@paperbits/styles/plugins";
 import { ViewManager } from "@paperbits/common/ui";
 import { EventManager, Events } from "@paperbits/common/events";
 import { SelectOption } from "@paperbits/common/ui/selectOption";
+import { VariationContract } from "@paperbits/common/styles";
 
 @Component({
     selector: "button-editor",
@@ -18,8 +19,8 @@ export class ButtonEditor {
     public readonly label: ko.Observable<string>;
     public readonly hyperlink: ko.Observable<HyperlinkModel>;
     public readonly hyperlinkTitle: ko.Observable<string>;
-    public readonly appearanceStyle: ko.Observable<string>;
-    public readonly appearanceStyles: ko.ObservableArray<any>;
+    public readonly buttonVariationKey: ko.Observable<string>;
+    public readonly buttonVariations: ko.ObservableArray<VariationContract>;
     public readonly displayStyle: ko.Observable<string>;
 
     public displayOptions: SelectOption[] = [
@@ -34,8 +35,8 @@ export class ButtonEditor {
         private readonly eventManager: EventManager
     ) {
         this.label = ko.observable<string>();
-        this.appearanceStyles = ko.observableArray();
-        this.appearanceStyle = ko.observable();
+        this.buttonVariations = ko.observableArray();
+        this.buttonVariationKey = ko.observable();
         this.hyperlink = ko.observable<HyperlinkModel>();
         this.hyperlinkTitle = ko.observable<string>();
         this.displayStyle = ko.observable<string>();
@@ -51,11 +52,11 @@ export class ButtonEditor {
     @OnMounted()
     public async initialize(): Promise<void> {
         const variations = await this.styleService.getComponentVariations("button");
-        this.appearanceStyles(variations.filter(x => x.category === "appearance"));
+        this.buttonVariations(variations.filter(x => x.category === "appearance"));
 
         await this.updateObservables();
 
-        this.appearanceStyle.subscribe(this.applyChanges);
+        this.buttonVariationKey.subscribe(this.applyChanges);
         this.label.subscribe(this.applyChanges);
         this.hyperlink.subscribe(this.applyChanges);
 
@@ -69,7 +70,7 @@ export class ButtonEditor {
             const viewport = this.viewManager.getViewport();
             const localStyles = this.model.styles;
 
-            this.appearanceStyle(<string>this.model.styles?.appearance);
+            this.buttonVariationKey(<string>this.model.styles?.appearance);
 
             const displayStyle = <Display>StyleHelper.getPluginConfigForLocalStyles(localStyles, "display", viewport);
             this.displayStyle(displayStyle);
@@ -111,7 +112,7 @@ export class ButtonEditor {
     private applyChanges(): void {
         this.model.label = this.label();
         this.model.hyperlink = this.hyperlink();
-        this.model.styles["appearance"] = this.appearanceStyle();
+        this.model.styles["appearance"] = this.buttonVariationKey();
 
         this.onChange(this.model);
     }
