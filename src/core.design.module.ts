@@ -52,12 +52,14 @@ import "./ko/bindingHandlers/bindingHandlers.dialog";
 import "./ko/bindingHandlers/bindingHandlers.activate";
 import "./ko/bindingHandlers/bindingHandlers.whenInView";
 import "./ko/bindingHandlers/bindingHandlers.listbox";
+import "./ko/bindingHandlers/bindingHandlers.markdown";
 import { ContentEditorModule } from "./content/ko";
 import { ViewStack } from "@paperbits/common/ui/viewStack";
 import { MediaDisplay } from "./workshops/media/ko/mediaDisplay";
 import { Lightbox } from "./workshops/media/ko/lightbox";
 import { MapDesignModule } from "./map/map.design.module";
 import { MemoryCache } from "@paperbits/common/caching";
+import { DefaultHelpService } from "@paperbits/common/tutorials/defaultHelpService";
 import { CarouselDesignModule } from "./carousel/ko";
 import { TabPanelDesignModule } from "./tabs/tabPanel.design.module";
 import { TableDesignModule } from "./table/ko";
@@ -76,6 +78,8 @@ import { PopupHostModelBinder } from "./popup/popupHostModelBinder";
 import { DismissButtonDesignModule } from "./dismiss-button/dismissButton.design.module";
 import { StickToBindingHandler } from "./ko/bindingHandlers/bindingHandlers.stickTo";
 import { KnockoutDesignModule } from "./ko/knockout.design.module";
+import { HelpCenterBindingHandler } from "./ko/bindingHandlers/bindingHandler.helpCenter";
+import { HelpCenter } from "./workshops/helpCenter/helpCenter";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -102,6 +106,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindToCollection("autostart", BalloonBindingHandler);
         injector.bindToCollection("autostart", UnhandledErrorHandler);
         injector.bindToCollection("autostart", SurfaceBindingHandler);
+        injector.bindToCollection("autostart", HelpCenterBindingHandler);
         injector.bindToCollection("autostart", ContextualCommandBindingHandler);
         injector.bind("tooltip", Tooltip);
         injector.bindSingleton("dragManager", DragManager);
@@ -121,6 +126,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bind("roleSelector", RoleSelector);
         injector.bind("roleInput", RoleInput);
         injector.bind("spinner", Spinner);
+        injector.bind("helpCenter", HelpCenter);
         injector.bind("localSettings", LocalStorageSettingsProvider);
         injector.bindModule(new MapDesignModule());
         injector.bindToCollection("permalinkResolvers", MediaPermalinkResolver, "mediaPermalinkResolver");
@@ -164,6 +170,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindToCollection("permalinkResolvers", PopupPermalinkResolver, "popupPermalinkResolver");
         injector.bindToCollection("modelBinders", PopupModelBinder, "popupModelBinder");
         injector.bindToCollection("viewModelBinders", PopupHostViewModelBinder, "popupHostViewModelBinder");
+        injector.bindSingleton("helpService", DefaultHelpService);
 
         // injector.bindModule(new DividerDesignModule());
         injector.bindToCollection("hyperlinkProviders", UrlHyperlinkProvider);
