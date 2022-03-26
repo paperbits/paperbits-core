@@ -88,6 +88,7 @@ export class GridEditor {
         }
 
         const context: WidgetContext = {
+            gridItem: gridItem,
             parentModel: parentModel,
             parentBinding: parentBinding,
             model: model,
@@ -572,6 +573,7 @@ export class GridEditor {
             },
             selectCommands: context.binding?.editor && context.binding?.applyChanges && [{
                 tooltip: "Edit widget",
+                displayName: context.binding.displayName,
                 iconClass: "paperbits-icon paperbits-edit-72",
                 position: "top right",
                 color: defaultCommandColor,
@@ -782,7 +784,8 @@ export class GridEditor {
             getSiblings: () => this.getSiblings(gridItem),
             getNextSibling: () => this.getNextSibling(gridItem),
             getPrevSibling: () => this.getPrevSibling(gridItem),
-            getContextCommands: (half) => this.getContextCommands(gridItem, half)
+            getContextCommands: (half) => this.getContextCommands(gridItem, half),
+            select: (scrollIntoView: boolean = false) => this.selectElement(gridItem, scrollIntoView)
         };
 
         return gridItem;
@@ -876,7 +879,8 @@ export class GridEditor {
                 };
 
                 return contextualCommands;
-            }
+            },
+            select: (scrollIntoView: boolean = false) => this.selectElement(gridItem, scrollIntoView)
         };
 
         return gridItem;

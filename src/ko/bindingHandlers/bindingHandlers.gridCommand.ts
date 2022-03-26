@@ -15,7 +15,8 @@ ko.bindingHandlers["gridCommand"] = {
         };
 
         if (command.component) {
-            bindings["balloon"] = { target: "#sc-" + command.component.name, position: "top" };
+            bindings["balloon"] = { component: command.component };
+            bindings["css"] = { dropdpown: true };
         }
 
         if (command.callback) {

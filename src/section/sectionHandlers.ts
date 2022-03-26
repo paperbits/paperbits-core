@@ -62,6 +62,7 @@ export class SectionHandlers {
             },
             selectCommands: [{
                 tooltip: "Edit section",
+                displayName: "Edit section",
                 iconClass: "paperbits-icon paperbits-edit-72",
                 position: "top right",
                 color: "#2b87da",

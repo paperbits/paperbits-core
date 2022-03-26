@@ -27,6 +27,48 @@ export class TextblockHandlers implements IWidgetHandler {
         return widgetOrder;
     }
 
+    // public getContextCommands(context: WidgetContext): IContextCommandSet {
+    //     const contextualEditor: IContextCommandSet = {
+    //         color: "#2b87da",
+    //         hoverCommands: [],
+    //         deleteCommand: null,
+    //         selectCommands: [{
+    //             tooltip: "Edit carousel slide",
+    //             displayName: "Slide 1",
+    //             iconClass: "paperbits-icon paperbits-edit-72",
+    //             position: "top right",
+    //             color: "#607d8b",
+    //             callback: () => this.viewManager.openWidgetEditor(context.binding)
+    //         },
+    //         {
+    //             tooltip: "Edit carousel",
+    //             displayName: "Carousel",
+    //             iconClass: "paperbits-icon paperbits-edit-72",
+    //             position: "top right",
+    //             color: "#607d8b",
+    //             callback: () => this.viewManager.openWidgetEditor(context.parentBinding)
+    //         },
+    //         // {
+    //         //     tooltip: "Switch to parent",
+    //         //     iconClass: "paperbits-icon paperbits-enlarge-vertical",
+    //         //     position: "top right",
+    //         //     color: "#607d8b",
+    //         //     callback: () => {
+    //         //         context.switchToParent();
+    //         //     }
+    //         // },
+    //         {
+    //             tooltip: "Help",
+    //             iconClass: "paperbits-icon paperbits-c-question",
+    //             position: "top right",
+    //             color: "#607d8b",
+    //             callback: () => {
+    //                 // 
+    //             }
+    //         }
+    //     ]
+    //     };
+
     public async getWidgetOrder(): Promise<IWidgetOrder> {
         return await this.getWidgetOrderByConfig();
     }
