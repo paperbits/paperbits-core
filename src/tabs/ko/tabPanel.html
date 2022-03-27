@@ -1,4 +1,4 @@
-<tab-panel-runtime class="tab-panel" data-bind="styled: styles">
+<tab-panel-runtime class="tab-panel" data-bind="styled: styles, attr: { 'data-active-tab': activeItemIndex }">
     <ul class="nav tab-navs">
         <!-- ko foreach: { data: tabLinks, as: 'tabLink' } -->
         <li class="nav-item">

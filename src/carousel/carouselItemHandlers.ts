@@ -17,80 +17,85 @@ export class CarouselItemHandlers {
             hoverCommands: [],
             selectCommands: [
                 {
+                    controlType: "toolbox-button",
                     tooltip: "Carousel settings",
                     displayName: "Carousel",
-                    iconClass: "paperbits-icon paperbits-edit-72",
-                    position: "top right",
-                    color: "#607d8b",
                     callback: () => this.viewManager.openWidgetEditor(context.parentBinding)
+                },
+                {
+                    controlType: "toolbox-splitter"
                 },
                 {
                     tooltip: "Slide settings",
                     displayName: context.binding.displayName,
-                    iconClass: "paperbits-icon paperbits-edit-72",
-                    position: "top right",
-                    color: "#607d8b",
                     callback: () => this.viewManager.openWidgetEditor(context.binding),
+                    controlType: "toolbox-button"
                 },
                 {
                     tooltip: "Select slide",
                     iconClass: "paperbits-icon paperbits-small-down",
-                    position: "top right",
-                    color: "#607d8b",
-                    controlType: "",
+                    controlType: "toolbox-dropdown",
                     component: {
                         name: "carousel-item-selector",
                         params: {
                             activeCarouselItemModel: context.model,
                             carouselItemModels: context.parentBinding.model.carouselItems,
-                            onSelect: (item: CarouselItemModel) => {
+                            onSelect: (item: CarouselItemModel): void => {
                                 const index = context.parentBinding.model.carouselItems.indexOf(item);
                                 context.parentBinding["setActiveItem"](index);
                                 this.viewManager.clearContextualCommands();
                             },
-                            onCreate: () => {
+                            onCreate: (): void => {
                                 context.parentModel["carouselItems"].push(new CarouselItemModel());
+
                                 const index = context.parentBinding.model.carouselItems.length - 1;
+
                                 context.parentBinding.applyChanges();
+                                context.parentBinding["setActiveItem"](index);
+
                                 this.viewManager.clearContextualCommands();
                                 this.eventManager.dispatchEvent(Events.ContentUpdate);
-                                context.parentBinding["setActiveItem"](index);
                             }
                         }
                     }
                 },
                 {
+                    controlType: "toolbox-splitter"
+                },
+                {
+                    controlType: "toolbox-button",
                     tooltip: "Switch to parent",
                     iconClass: "paperbits-icon paperbits-enlarge-vertical",
-                    position: "top right",
-                    color: "#607d8b",
-                    callback: () => {
-                        context.gridItem.getParent().getParent().select();
-                    }
+                    callback: () => context.gridItem.getParent().getParent().select(),
                 },
                 {
                     tooltip: "Help",
                     iconClass: "paperbits-icon paperbits-c-question",
-                    position: "top right",
-                    color: "#607d8b",
                     callback: () => {
                         // 
-                    }
+                    },
+                    controlType: "toolbox-button"
                 }
             ]
         };
 
         if (context.parentModel["carouselItems"].length > 1) {
             contextualEditor.deleteCommand = {
+                controlType: "toolbox-button",
                 tooltip: "Delete slide",
                 color: "#607d8b",
                 callback: () => {
-                    const index = context.parentModel["carouselItems"].indexOf(context.model);
+                    let index = context.parentModel["carouselItems"].indexOf(context.model) - 1;
                     context.parentModel["carouselItems"].remove(context.model);
                     context.parentBinding.applyChanges();
                     this.viewManager.clearContextualCommands();
                     this.eventManager.dispatchEvent(Events.ContentUpdate);
-                    context.parentBinding["setActiveItem"](index - 1);
+
+                    if (index < 0) {
+                        index = 0;
+                    }
+
+                    context.parentBinding["setActiveItem"](index);
                 }
             };
         }
@@ -98,6 +103,7 @@ export class CarouselItemHandlers {
 
         if (context.model.widgets.length === 0) {
             contextualEditor.hoverCommands.push({
+                controlType: "toolbox-button",
                 color: "#607d8b",
                 iconClass: "paperbits-icon paperbits-simple-add",
                 position: "center",

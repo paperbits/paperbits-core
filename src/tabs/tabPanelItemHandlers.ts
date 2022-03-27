@@ -16,13 +16,18 @@ export class TabPanelItemHandlers {
             hoverCommands: [],
             deleteCommand: null,
             selectCommands: [{
-                tooltip: "Edit tab",
-                iconClass: "paperbits-icon paperbits-edit-72",
+                controlType: "toolbox-button",
+                displayName: context.binding.displayName,
+                tooltip: "Tab settings",
                 position: "top right",
                 color: "#607d8b",
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
             },
             {
+                controlType: "toolbox-splitter"
+            },
+            {
+                controlType: "toolbox-button",
                 tooltip: "Switch to parent",
                 iconClass: "paperbits-icon paperbits-enlarge-vertical",
                 position: "top right",
@@ -35,6 +40,7 @@ export class TabPanelItemHandlers {
 
         if (context.parentModel["tabPanelItems"].length > 1) {
             contextualEditor.deleteCommand = {
+                controlType: "toolbox-button",
                 tooltip: "Delete tab",
                 color: "#607d8b",
                 callback: () => {
@@ -42,6 +48,8 @@ export class TabPanelItemHandlers {
                     context.parentBinding.applyChanges();
                     this.viewManager.clearContextualCommands();
                     this.eventManager.dispatchEvent(Events.ContentUpdate);
+                    
+                    context.parentBinding["setActiveItem"](0);
                 }
             };
         }
@@ -49,6 +57,7 @@ export class TabPanelItemHandlers {
         if (context.model.widgets.length === 0) {
             contextualEditor.hoverCommands.push({
                 color: "#607d8b",
+                controlType: "toolbox-button",
                 iconClass: "paperbits-icon paperbits-simple-add",
                 position: "center",
                 tooltip: "Set tab layout",

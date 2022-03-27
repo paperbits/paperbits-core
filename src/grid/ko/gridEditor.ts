@@ -13,7 +13,7 @@ import { ContentModel } from "../../content";
 import { PopupHostModel } from "../../popup/popupHostModel";
 import { SectionModel } from "../../section";
 import { Bag, Keys } from "@paperbits/common";
-import { ComponentStyleDefinition, LocalStyles, PrimitiveContract, StyleDefinition, VariationContract } from "@paperbits/common/styles";
+import { LocalStyles, VariationContract } from "@paperbits/common/styles";
 import { StyleHelper } from "@paperbits/styles";
 
 
@@ -131,7 +131,11 @@ export class GridEditor {
         }
 
         const defaultCommand: IContextCommand = {
+            controlType: "toolbox-button",
             callback: () => {
+                if (!context.binding.editor) {
+                    return;
+                }
                 this.viewManager.openWidgetEditor(context.binding);
             }
         };
@@ -539,6 +543,7 @@ export class GridEditor {
         const contextCommands: IContextCommandSet = {
             color: defaultCommandColor,
             hoverCommands: [{
+                controlType: "toolbox-button",
                 color: defaultCommandColor,
                 iconClass: "paperbits-icon paperbits-simple-add",
                 position: context.half,
@@ -563,6 +568,7 @@ export class GridEditor {
                 }
             }],
             deleteCommand: {
+                controlType: "toolbox-button",
                 tooltip: "Delete widget",
                 color: defaultCommandColor,
                 callback: () => {
@@ -572,14 +578,18 @@ export class GridEditor {
                 },
             },
             selectCommands: context.binding?.editor && context.binding?.applyChanges && [{
+                controlType: "toolbox-button",
                 tooltip: "Edit widget",
                 displayName: context.binding.displayName,
-                iconClass: "paperbits-icon paperbits-edit-72",
                 position: "top right",
                 color: defaultCommandColor,
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
             },
             {
+                controlType: "toolbox-splitter"
+            },
+            {
+                controlType: "toolbox-button",
                 tooltip: "Switch to parent",
                 iconClass: "paperbits-icon paperbits-enlarge-vertical",
                 position: "top right",
@@ -817,6 +827,7 @@ export class GridEditor {
         const componentStyleDefinition = StyleHelper.getComponentStyleDefinition(styleDefinitions, styleKey);
 
         const defaultCommand: IContextCommand = {
+            controlType: "toolbox-button",
             name: "edit",
             tooltip: "Edit local style",
             iconClass: "paperbits-icon paperbits-edit-72",

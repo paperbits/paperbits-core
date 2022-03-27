@@ -19,6 +19,27 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
         private readonly styleCompiler: StyleCompiler
     ) { }
 
+    private createBinding(model: TabPanelModel, viewModel?: TabPanelViewModel, bindingContext?: Bag<any>): void {
+        const binding: IWidgetBinding<TabPanelModel, TabPanelViewModel> = {
+            name: "tab-panel",
+            displayName: "Tab panel",
+            readonly: bindingContext ? bindingContext.readonly : false,
+            model: model,
+            draggable: true,
+            flow: ComponentFlow.Block,
+            handler: TabPanelHandlers,
+            applyChanges: async () => {
+                await this.modelToViewModel(model, viewModel, bindingContext);
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
+            }
+        };
+
+        binding["setActiveItem"] = (index: number) => viewModel.activeItemIndex(index);
+        binding["getActiveItem"] = () => viewModel.activeItemIndex();
+        viewModel["widgetBinding"] = binding;
+        viewModel.activeItemIndex(0);
+    }
+
     public async itemModelToViewModel(model: TabPanelItemModel, index: number, viewModel?: TabPanelItemViewModel, bindingContext?: Bag<any>): Promise<TabPanelItemViewModel> {
         if (!viewModel) {
             viewModel = new TabPanelItemViewModel();
@@ -69,6 +90,7 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
     public async modelToViewModel(model: TabPanelModel, viewModel?: TabPanelViewModel, bindingContext?: Bag<any>): Promise<TabPanelViewModel> {
         if (!viewModel) {
             viewModel = new TabPanelViewModel();
+            this.createBinding(model, viewModel, bindingContext);
         }
 
         const tabPanelItemViewModels = [];
@@ -83,28 +105,10 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
         }
 
         viewModel.tabPanelItems(tabPanelItemViewModels);
-        viewModel.activeItemIndex(null);
-        viewModel.activeItemIndex(0);
 
         if (model.styles) {
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }
-
-        const binding: IWidgetBinding<TabPanelModel, TabPanelViewModel> = {
-            name: "tab-panel",
-            displayName: "Tab panel",
-            readonly: bindingContext ? bindingContext.readonly : false,
-            model: model,
-            draggable: true,
-            flow: ComponentFlow.Block,
-            handler: TabPanelHandlers,
-            applyChanges: async () => {
-                await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent(Events.ContentUpdate);
-            }
-        };
-
-        viewModel["widgetBinding"] = binding;
 
         return viewModel;
     }

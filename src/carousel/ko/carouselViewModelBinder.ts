@@ -102,9 +102,6 @@ export class CarouselViewModelBinder implements ViewModelBinder<CarouselModel, C
         }
 
         viewModel.carouselItems(carouselItemViewModels);
-        // viewModel.activeItemIndex(null);
-        // viewModel.activeItemIndex(0);
-
         viewModel.autoplay(model.autoplay);
         viewModel.pauseOnHover(model.pauseOnHover);
         viewModel.autoplayInterval(model.autoplayInterval);

@@ -1,7 +1,5 @@
 import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
-import { DragSession } from "@paperbits/common/ui/draggables";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
-import { ColumnModel } from "../column/columnModel";
 import { RowModel } from "../row/rowModel";
 
 
@@ -12,6 +10,7 @@ export class RowHandlers implements IWidgetHandler {
         const rowContextualEditor: IContextCommandSet = {
             color: "#29c4a9",
             hoverCommands: [{
+                controlType: "toolbox-button",
                 color: "#29c4a9",
                 iconClass: "paperbits-icon paperbits-simple-add",
                 position: context.half,
@@ -36,6 +35,7 @@ export class RowHandlers implements IWidgetHandler {
             }],
             selectCommands: null,
             deleteCommand: {
+                controlType: "toolbox-button",
                 tooltip: "Delete row",
                 color: "#29c4a9",
                 callback: () => {

@@ -2,8 +2,19 @@ import { coerce } from "@paperbits/common";
 import { Events } from "@paperbits/common/events";
 
 export class TabPanelHTMLElement extends HTMLElement {
+    private currentTabIndex: number;
+
     constructor() {
         super();
+        const activeTabAttr = this.getAttribute("data-active-tab");
+
+        this.currentTabIndex = !!activeTabAttr
+            ? parseInt(activeTabAttr)
+            : 0;
+    }
+
+    public static get observedAttributes(): string[] {
+        return ["data-active-tab"];
     }
 
     private setActiveItem = (index: number) => {
@@ -27,6 +38,22 @@ export class TabPanelHTMLElement extends HTMLElement {
             navLinks[index].classList.add("nav-link-active");
         });
     };
+
+    public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+        if (name !== "data-active-tab") {
+            return;
+        }
+
+        switch (name) {
+            case "data-active-tab":
+                this.currentTabIndex = parseInt(newValue);
+                this.setActiveItem(this.currentTabIndex);
+                break;
+            
+            default:
+                break;
+        }
+    }
 
     private onClick(event: MouseEvent): void {
         const element = <HTMLElement>event.target;

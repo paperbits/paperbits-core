@@ -18,9 +18,10 @@ export class CarouselHTMLElement extends HTMLElement {
         this.currentSlideIndex = !!activeSlideAttr
             ? parseInt(activeSlideAttr)
             : 0;
-            this.autoplay = autoplayAttr === "true";
-            this.pauseOnHover = pauseOnHoverAttr === "true";
-            this.autoplayInterval = autoplayIntervalAttr ? parseInt(autoplayIntervalAttr) : 5000;
+
+        this.autoplay = autoplayAttr === "true";
+        this.pauseOnHover = pauseOnHoverAttr === "true";
+        this.autoplayInterval = autoplayIntervalAttr ? parseInt(autoplayIntervalAttr) : 5000;
     }
 
     static get observedAttributes(): string[] {
@@ -118,21 +119,23 @@ export class CarouselHTMLElement extends HTMLElement {
     private prevSlide = (): void => {
         const element = <HTMLElement>this;
         const carouselItems = coerce<Element>(element.querySelectorAll(".carousel-item"));
-            this.currentSlideIndex--;
+        this.currentSlideIndex--;
 
-            if (this.currentSlideIndex < 0) {
-                this.currentSlideIndex = carouselItems.length - 1;
-            }
+        if (this.currentSlideIndex < 0) {
+            this.currentSlideIndex = carouselItems.length - 1;
+        }
 
-            this.setActiveItem(this.currentSlideIndex);
+        this.setActiveItem(this.currentSlideIndex);
     }
 
     public connectedCallback(): void {
         const element = <HTMLElement>this;
+
         element.addEventListener(Events.Click, oEvent => {
             const clickElement = oEvent.composedPath()[0] as HTMLElement;
             const prevButton = clickElement.closest(".carousel-control-prev") ? true : false;
             const nextButton = clickElement.closest(".carousel-control-next") ? true : false;
+            
             if (prevButton) {
                 this.prevSlide();
             } else if (nextButton) {
@@ -143,7 +146,7 @@ export class CarouselHTMLElement extends HTMLElement {
         if (this.enablePauseOnHover) {
             this.enablePauseOnHover();
         }
-        
+
         if (this.autoplay) {
             this.enableAutoplay();
         }

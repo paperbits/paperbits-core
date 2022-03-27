@@ -16,6 +16,7 @@ export class ContentHandlers implements IWidgetHandler {
 
         if (context.model.widgets.length === 0) {
             contextualEditor.hoverCommands = [{
+                controlType: "toolbox-button",
                 color: "#2b87da",
                 iconClass: "paperbits-icon paperbits-simple-add",
                 position: "center",

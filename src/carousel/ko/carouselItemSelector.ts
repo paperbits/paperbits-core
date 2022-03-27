@@ -31,8 +31,6 @@ export class CarouselItemSelector {
 
     @OnMounted()
     public initialize(): void {
-        console.log(this.carouselItemModels);
-
         this.carouselItems(this.carouselItemModels);
         this.activeCarouselItem(this.activeCarouselItemModel);
     }

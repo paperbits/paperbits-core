@@ -18,6 +18,7 @@ export class SectionHandlers {
         const sectionContextualEditor: IContextCommandSet = {
             color: "#2b87da",
             hoverCommands: [{
+                controlType: "toolbox-button",
                 position: context.half,
                 iconClass: "paperbits-icon paperbits-simple-add",
                 tooltip: "Add section",
@@ -51,6 +52,7 @@ export class SectionHandlers {
                 }
             }],
             deleteCommand: {
+                controlType: "toolbox-button",
                 tooltip: "Delete section",
                 color: "#2b87da",
                 callback: () => {
@@ -61,14 +63,18 @@ export class SectionHandlers {
                 }
             },
             selectCommands: [{
-                tooltip: "Edit section",
-                displayName: "Edit section",
-                iconClass: "paperbits-icon paperbits-edit-72",
+                controlType: "toolbox-button",
+                tooltip: "Section settings",
+                displayName: "Section",
                 position: "top right",
                 color: "#2b87da",
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
             },
             {
+                controlType: "toolbox-splitter"
+            },
+            {
+                controlType: "toolbox-button",
                 tooltip: "Add to library",
                 iconClass: "paperbits-icon paperbits-simple-add",
                 position: "top right",
@@ -95,6 +101,7 @@ export class SectionHandlers {
 
         if (context.model.widgets.length === 0) {
             sectionContextualEditor.hoverCommands.push({
+                controlType: "toolbox-button",
                 position: "center",
                 iconClass: "paperbits-icon paperbits-simple-add",
                 tooltip: "Add row",
