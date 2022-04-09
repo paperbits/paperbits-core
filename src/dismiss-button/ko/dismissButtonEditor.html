@@ -1,28 +1,27 @@
-<div class="form" data-bind="scrollable: true">
-    <div class="form-group">
-        <label for="label" class="form-label">
-            Label
-            <button class="btn btn-info" type="dismissButton" aria-hidden="true" role="tooltip"
-                data-bind="tooltip: 'Text on the button'"></button>
-        </label>
-        <input id="label" type="text" class="form-control" data-bind="textInput: label" maxlength="256" />
-    </div>
+<div class="form-group">
+    <label for="label" class="form-label">
+        Label
+        <button class="btn btn-info" type="dismissButton" aria-hidden="true" role="tooltip"
+            data-bind="tooltip: 'Text on the button'"></button>
+    </label>
+    <input id="label" type="text" class="form-control" data-bind="textInput: label" maxlength="256" />
+</div>
 
-    <div class="form-group">
-        <label for="appearanceStyle" class="form-label">
-            Appearance
-            <button class="btn btn-info" type="dismissButton" aria-hidden="true" role="tooltip"
-                data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
-        </label>
-        <!-- <div class="input-group">
+<div class="form-group">
+    <label for="appearanceStyle" class="form-label">
+        Appearance
+        <button class="btn btn-info" type="dismissButton" aria-hidden="true" role="tooltip"
+            data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
+    </label>
+    <!-- <div class="input-group">
             <a href="#" class="form-control" data-bind="text: appearanceStyle() && appearanceStyle().displayName, balloon: { component: { name: 'style-variation-selector', params: { snippetType: 'components/dismissButton', onSelect: $component.onVariationSelected } } }">
             </a>
         </div> -->
-        <select id="appearanceStyle" class="form-control"
-            data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
-    </div>
+    <select id="appearanceStyle" class="form-control"
+        data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
+</div>
 
-    <!-- <div class="form-group">
+<!-- <div class="form-group">
         <label for="sizeStyle" class="form-label">
             Size
             <button class="btn btn-info" type="dismissButton" data-bind="tooltip: 'Predefined size from style guide.'"></button>
@@ -30,5 +29,4 @@
         <select id="sizeStyle" class="form-control" data-bind="options: sizeStyles, value: sizeStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
     </div> -->
 
-    <glyph-input params="{ selection: model.iconKey, onChange: onIconSelect }"></glyph-input>
-</div>
+<glyph-input params="{ selection: model.iconKey, onChange: onIconSelect }"></glyph-input>

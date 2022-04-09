@@ -1,62 +1,60 @@
-<div class="form" data-bind="scrollable: true">
-    <div class="form-group">
-        <label class="form-label">Root navigation item</label>
-        <a href="#" class="form-control"
-            data-bind="balloon: { component: { name: 'navigation-item-selector', params: { onSelect: $component.onNavigationItemChange } } }">
-            <i aria-hidden="true" class="paperbits-icon paperbits-menu-34 pull-right"></i>
-            <span data-bind="text: navigationItemTitle"></span>
-        </a>
-    </div>
-
-    <div class="form-group">
-        <label for="showHeadings" class="form-label">
-            <input id="showHeadings" type="checkbox" name="showHeadings" data-bind="checked: showHeadings" />
-            Show page headings
-        </label>
-    </div>
-
-    <!-- ko if: showHeadings -->
-
-    <div class="form-group">
-        <label for="minHeadingLevel" class="form-label">Min heading level</label>
-        <select id="minHeadingLevel" class="form-control"
-            data-bind="options: headingLevelOptions, value: minHeadingLevel, optionsText: 'text', optionsValue: 'value'"></select>
-    </div>
-
-    <div class="form-group">
-        <label for="maxHeadingLevel" class="form-label">Max heading level</label>
-        <select id="maxHeadingLevel" class="form-control"
-            data-bind="options: headingLevelOptions, value: maxHeadingLevel, optionsText: 'text', optionsValue: 'value'"></select>
-    </div>
-
-    <!-- /ko -->
-
-    <div class="form-group">
-        <label for="layout" class="form-label">
-            Layout
-        </label>
-        <select id="layout" class="form-control"
-            data-bind="options: layoutOptions, value: layout, optionsText: 'text', optionsValue: 'value'">
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="appearanceStyle" class="form-label">
-            Appearance
-            <button class="btn btn-info" type="button"
-                data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
-        </label>
-        <select id="appearanceStyle" class="form-control"
-            data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
-    </div>
-
-    <div class="form-group">
-        <label for="displayStyle" class="form-label">
-            Visibility
-        </label>
-        <select id="displayStyle" class="form-control"
-            data-bind="options: displayOptions, value: displayStyle, optionsText: 'text', optionsValue: 'value', event: { change: onDisplayChange }"></select>
-    </div>
-
-    <role-input params="{ selection: model.roles, onChange: onRoleSelect }"></role-input>
+<div class="form-group">
+    <label class="form-label">Root navigation item</label>
+    <a href="#" class="form-control"
+        data-bind="balloon: { component: { name: 'navigation-item-selector', params: { onSelect: $component.onNavigationItemChange } } }">
+        <i aria-hidden="true" class="paperbits-icon paperbits-menu-34 pull-right"></i>
+        <span data-bind="text: navigationItemTitle"></span>
+    </a>
 </div>
+
+<div class="form-group">
+    <label for="showHeadings" class="form-label">
+        <input id="showHeadings" type="checkbox" name="showHeadings" data-bind="checked: showHeadings" />
+        Show page headings
+    </label>
+</div>
+
+<!-- ko if: showHeadings -->
+
+<div class="form-group">
+    <label for="minHeadingLevel" class="form-label">Min heading level</label>
+    <select id="minHeadingLevel" class="form-control"
+        data-bind="options: headingLevelOptions, value: minHeadingLevel, optionsText: 'text', optionsValue: 'value'"></select>
+</div>
+
+<div class="form-group">
+    <label for="maxHeadingLevel" class="form-label">Max heading level</label>
+    <select id="maxHeadingLevel" class="form-control"
+        data-bind="options: headingLevelOptions, value: maxHeadingLevel, optionsText: 'text', optionsValue: 'value'"></select>
+</div>
+
+<!-- /ko -->
+
+<div class="form-group">
+    <label for="layout" class="form-label">
+        Layout
+    </label>
+    <select id="layout" class="form-control"
+        data-bind="options: layoutOptions, value: layout, optionsText: 'text', optionsValue: 'value'">
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="appearanceStyle" class="form-label">
+        Appearance
+        <button class="btn btn-info" type="button"
+            data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
+    </label>
+    <select id="appearanceStyle" class="form-control"
+        data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
+</div>
+
+<div class="form-group">
+    <label for="displayStyle" class="form-label">
+        Visibility
+    </label>
+    <select id="displayStyle" class="form-control"
+        data-bind="options: displayOptions, value: displayStyle, optionsText: 'text', optionsValue: 'value', event: { change: onDisplayChange }"></select>
+</div>
+
+<role-input params="{ selection: model.roles, onChange: onRoleSelect }"></role-input>

@@ -47,8 +47,10 @@
             <i aria-hidden="true" class="paperbits-icon paperbits-simple-remove"></i>
         </button>
         <hr />
-        <!-- ko component: { name: component.name, params: component.params, oncreate: component.oncreate } -->
-        <!--/ko -->
+        <div class="form" data-bind="scrollable: $data.scrollable">
+            <!-- ko component: { name: component.name, params: component.params, oncreate: component.oncreate } -->
+            <!--/ko -->
+        </div>
     </div>
 </div>
 <!-- /ko -->

@@ -1,28 +1,26 @@
-<div class="form flex-item flex-item-grow" data-bind="scrollable: true">
-    <div class="form-group form-group-collapsible">
-        <label class="form-label">
-            <a href="#" class="form-group-toggle" title="Toggle section"
-                data-bind="collapse: '#backgroundCollapse'" aria-label="Toggle 'Background' section"></a>
-            <b>Background</b>
-            <button class="btn btn-info" type="button" data-bind="tooltip: 'Manage background'"></button>
-        </label>
+<div class="form-group form-group-collapsible">
+    <label class="form-label">
+        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#backgroundCollapse'"
+            aria-label="Toggle 'Background' section"></a>
+        <b>Background</b>
+        <button class="btn btn-info" type="button" data-bind="tooltip: 'Manage background'"></button>
+    </label>
 
-        <div id="backgroundCollapse" class="collapse form-group-collapse">
-            <background params="{ background: backgroundConfig, onUpdate: onBackgroundChange }"></background>
-        </div>
+    <div id="backgroundCollapse" class="collapse form-group-collapse">
+        <background params="{ background: backgroundConfig, onUpdate: onBackgroundChange }"></background>
     </div>
+</div>
 
-    <container params="{ container: containerConfig, onUpdate: onContainerChange }"></container>
+<container params="{ container: containerConfig, onUpdate: onContainerChange }"></container>
 
-    <div class="form-group form-group-collapsible">
-        <label class="form-label">
-            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
-                aria-label="Toggle 'Size' section"></a>
-            <b>Size</b>
-        </label>
-        <div id="sizeCollapse" class="collapse form-group-collapse">
-            <size-editor params="{ features: 'minMaxWidth', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
-            </size-editor>
-        </div>
+<div class="form-group form-group-collapsible">
+    <label class="form-label">
+        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
+            aria-label="Toggle 'Size' section"></a>
+        <b>Size</b>
+    </label>
+    <div id="sizeCollapse" class="collapse form-group-collapse">
+        <size-editor params="{ features: 'minMaxWidth', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
+        </size-editor>
     </div>
 </div>

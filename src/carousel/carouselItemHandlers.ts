@@ -18,8 +18,7 @@ export class CarouselItemHandlers {
             selectCommands: [
                 {
                     controlType: "toolbox-button",
-                    tooltip: "Carousel settings",
-                    displayName: "Carousel",
+                    displayName: "Edit carousel",
                     callback: () => this.viewManager.openWidgetEditor(context.parentBinding)
                 },
                 {
@@ -91,15 +90,31 @@ export class CarouselItemHandlers {
                     tooltip: "Switch to parent",
                     iconClass: "paperbits-icon paperbits-enlarge-vertical",
                     callback: () => context.gridItem.getParent().getParent().select(),
-                },
-                {
-                    tooltip: "Help",
-                    iconClass: "paperbits-icon paperbits-c-question",
-                    callback: () => {
-                        // 
-                    },
-                    controlType: "toolbox-button"
                 }
+                // {
+                //     tooltip: "Help",
+                //     iconClass: "paperbits-icon paperbits-c-question",
+                //     callback: () => {
+                //         const view: View = {
+                //             heading: "Help center",
+                //             component: {
+                //                 name: "help-center",
+                //                 params: {
+                //                     articleKey: "popups",
+                //                 }
+                //             },
+                //             resize: {
+                //                 directions: "vertically horizontally",
+                //                 initialWidth: 500,
+                //                 initialHeight: 700
+                //             },
+                //             scrollable: false
+                //         };
+
+                //         this.viewManager.openViewAsPopup(view);
+                //     },
+                //     controlType: "toolbox-button"
+                // }
             ]
         };
 
@@ -107,7 +122,6 @@ export class CarouselItemHandlers {
             contextualEditor.deleteCommand = {
                 controlType: "toolbox-button",
                 tooltip: "Delete slide",
-                color: "#607d8b",
                 callback: () => {
                     let index = context.parentModel["carouselItems"].indexOf(context.model) - 1;
                     context.parentModel["carouselItems"].remove(context.model);
@@ -120,6 +134,22 @@ export class CarouselItemHandlers {
                     }
 
                     context.parentBinding["setActiveItem"](index);
+                }
+            };
+        }
+        else {
+            const carouselParentBinding = context.gridItem.getParent().getParent().binding;
+            const carouselParentModel = carouselParentBinding.model;
+            const carouselModel = context.gridItem.getParent().binding.model;
+
+            contextualEditor.deleteCommand = {
+                controlType: "toolbox-button",
+                tooltip: "Delete carousel",
+                callback: () => {
+                    carouselParentModel.widgets.remove(carouselModel);
+                    carouselParentBinding.applyChanges();
+                    this.viewManager.clearContextualCommands();
+                    this.eventManager.dispatchEvent(Events.ContentUpdate);
                 }
             };
         }

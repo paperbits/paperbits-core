@@ -70,13 +70,18 @@ export class CollapsiblePanelHandlers implements IWidgetHandler {
                     this.viewManager.clearContextualCommands();
                 },
             },
-            selectCommands: [{
-                controlType: "toolbox-button",
-                tooltip: "Edit collapsible panel",
-                position: "top right",
-                color: "#607d8b",
-                callback: () => this.viewManager.openWidgetEditor(context.binding)
-            }]
+            selectCommands: [
+                {
+                    controlType: "toolbox-button",
+                    displayName: "Collapsible panel settings",
+                    position: "top right",
+                    color: "#607d8b",
+                    callback: () => this.viewManager.openWidgetEditor(context.binding)
+                },
+                {
+                    controlType: "toolbox-splitter"
+                }
+            ]
         };
 
 

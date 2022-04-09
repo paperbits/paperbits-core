@@ -122,7 +122,12 @@ export class GridEditor {
             const handler = this.widgetService.getWidgetHandler(context.binding.handler);
 
             if (handler.getContextCommands) {
-                contextualCommands = handler.getContextCommands(context);
+                try {
+                    contextualCommands = handler.getContextCommands(context);
+                }
+                catch (error) {
+                    console.warn(`Could not get context commands.`);
+                }
             }
         }
 
@@ -579,8 +584,7 @@ export class GridEditor {
             },
             selectCommands: context.binding?.editor && context.binding?.applyChanges && [{
                 controlType: "toolbox-button",
-                tooltip: "Edit widget",
-                displayName: context.binding.displayName,
+                displayName: `Edit widget`,
                 position: "top right",
                 color: defaultCommandColor,
                 callback: () => this.viewManager.openWidgetEditor(context.binding)

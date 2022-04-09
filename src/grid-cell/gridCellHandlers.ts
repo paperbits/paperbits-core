@@ -22,8 +22,7 @@ export class GridCellHandlers implements IWidgetHandler {
             deleteCommand: null,
             selectCommands: [{
                 controlType: "toolbox-button",
-                displayName: context.binding.displayName,
-                tooltip: "Settings",
+                displayName: `Edit ${context.binding.displayName.toLowerCase()}`,
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
             },
             { 

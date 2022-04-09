@@ -1,13 +1,11 @@
-<div class="form flex-item flex-item-grow" data-bind="scrollable: true">
-    <div class="form-group form-group-collapsible">
-        <label class="form-label">
-            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
-                aria-label="Toggle 'Size' section"></a>
-            <b>Size</b>
-        </label>
-        <div id="sizeCollapse" class="collapse form-group-collapse">
-            <size-editor params="{ features: 'width,height', sizeConfig: sizeConfig, onUpdate: onSizeUpdate }">
-            </size-editor>
-        </div>
+<div class="form-group form-group-collapsible">
+    <label class="form-label">
+        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
+            aria-label="Toggle 'Size' section"></a>
+        <b>Size</b>
+    </label>
+    <div id="sizeCollapse" class="collapse form-group-collapse">
+        <size-editor params="{ features: 'width,height', sizeConfig: sizeConfig, onUpdate: onSizeUpdate }">
+        </size-editor>
     </div>
 </div>

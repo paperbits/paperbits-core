@@ -6,6 +6,10 @@ ko.bindingHandlers["scrollable"] = {
     init: (element: HTMLElement, valueAccessor) => {
         const config = ko.unwrap(valueAccessor());
 
+        if (typeof config === "boolean" && config === false) {
+            return;
+        }
+
         const configType = typeof config;
         let scrollbar = new PerfectScrollbar(element);
 

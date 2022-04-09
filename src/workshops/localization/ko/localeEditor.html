@@ -1,21 +1,19 @@
-<div class="form" data-bind="scrollable: true">
-    <div class="form-group">
-        <label class="form-label">
-            Language
-        </label>
-        <select id="textTransform" class="form-control"
-                    data-bind="options: languages, value: selectedLanguage, optionsText: 'displayName'"></select>
-    </div>
-    <!-- ko if: locales -->
-    <div class="form-group">
-        <label class="form-label">
-            Locale
-        </label>
-        <select id="textTransform" class="form-control"
-                    data-bind="options: locales, value: selectedLocale, optionsText: 'displayName'"></select>
-    </div>
-    <!-- /ko -->
+<div class="form-group">
+    <label class="form-label">
+        Language
+    </label>
+    <select id="textTransform" class="form-control"
+        data-bind="options: languages, value: selectedLanguage, optionsText: 'displayName'"></select>
 </div>
+<!-- ko if: locales -->
+<div class="form-group">
+    <label class="form-label">
+        Locale
+    </label>
+    <select id="textTransform" class="form-control"
+        data-bind="options: locales, value: selectedLocale, optionsText: 'displayName'"></select>
+</div>
+<!-- /ko -->
 
 <div class="flex-item btn-group">
     <button class="btn btn-default" data-bind="click: addLocale">
