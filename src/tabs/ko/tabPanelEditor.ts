@@ -11,7 +11,7 @@ import { EventManager } from "@paperbits/common/events/eventManager";
 import { Events } from "@paperbits/common/events";
 
 @Component({
-    selector: "tabPanel-editor",
+    selector: "tab-panel-editor",
     template: template
 })
 export class TabPanelEditor {

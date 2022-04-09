@@ -28,6 +28,7 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
             draggable: true,
             flow: ComponentFlow.Block,
             handler: TabPanelHandlers,
+            editor: "tab-panel-editor",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent(Events.ContentUpdate);
@@ -35,7 +36,7 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
         };
 
         binding["setActiveItem"] = (index: number) => viewModel.activeItemIndex(index);
-        binding["getActiveItem"] = () => viewModel.activeItemIndex();
+        binding["getActiveItem"] = () => parseInt(<any>viewModel.activeItemIndex());
         viewModel["widgetBinding"] = binding;
         viewModel.activeItemIndex(0);
     }

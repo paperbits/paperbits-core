@@ -1,4 +1,4 @@
-import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
+import { IContextCommandSet, ViewManager, Icons, View } from "@paperbits/common/ui";
 import { WidgetContext } from "@paperbits/common/editing";
 import { EventManager, Events } from "@paperbits/common/events";
 import { SectionModel } from "../section";
@@ -59,6 +59,30 @@ export class CarouselItemHandlers {
                         }
                     }
                 },
+                // {
+                //     controlType: "toolbox-button",
+                //     tooltip: "Edit styles",
+                //     iconClass: Icons.palette,
+                //     callback: () => {
+                //         const view: View = {
+                //             heading: "Carousel styles",
+                //             component: {
+                //                 name: "style-editor",
+                //                 params: {
+                //                     // elementStyle: componentVariation,
+                //                     // baseComponentKey: componentStyleDefinition.baseComponentKey,
+                //                     // plugins: componentStyleDefinition.plugins,
+                //                     // onUpdate: (): void => {
+                //                     //     binding.applyChanges(binding.model);
+                //                     // }
+                //                 }
+                //             },
+                //             resize: "vertically horizontally"
+                //         };
+
+                //         this.viewManager.openViewAsPopup(view);
+                //     }
+                // },
                 {
                     controlType: "toolbox-splitter"
                 },

@@ -1,6 +1,8 @@
 import { coerce } from "@paperbits/common";
 import { Events } from "@paperbits/common/events";
 
+const activeContentTabClass = "tab-content-active";
+
 export class TabPanelHTMLElement extends HTMLElement {
     private currentTabIndex: number;
 
@@ -23,6 +25,8 @@ export class TabPanelHTMLElement extends HTMLElement {
         if (activeTab) {
             activeTab.classList.remove("tab-content-active");
         }
+
+        
 
         const activeLink = this.querySelector(".tab-navs .nav-link.nav-link-active");
 
@@ -49,7 +53,7 @@ export class TabPanelHTMLElement extends HTMLElement {
                 this.currentTabIndex = parseInt(newValue);
                 this.setActiveItem(this.currentTabIndex);
                 break;
-            
+
             default:
                 break;
         }
@@ -66,7 +70,7 @@ export class TabPanelHTMLElement extends HTMLElement {
         event.preventDefault();
         event.stopImmediatePropagation();
 
-        this.setActiveItem(parseInt(tabIndexIndex));
+        this.setAttribute("data-active-tab", tabIndexIndex.toString());
     }
 
     public connectedCallback(): void {

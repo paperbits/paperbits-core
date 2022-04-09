@@ -1,4 +1,4 @@
-<tab-panel-runtime class="tab-panel" data-bind="styled: styles, attr: { 'data-active-tab': activeItemIndex }">
+<tab-panel-runtime class="tab-panel" data-bind="styled: styles, attr: { 'data-active-tab': activeItemIndex }, attr2way: { 'data-active-tab': activeItemIndex }">
     <ul class="nav tab-navs">
         <!-- ko foreach: { data: tabLinks, as: 'tabLink' } -->
         <li class="nav-item">
@@ -7,7 +7,7 @@
         <!-- /ko -->
     </ul>
     <!-- ko foreach: { data: tabPanelItems, as: 'tabPanelItem' } -->
-    <div class="tab-content" data-bind="styled: tabPanelItem.styles">
+    <div class="tab-content" data-bind="styled: tabPanelItem.styles, css: { 'tab-content-active': $index() === $component.activeItemIndex() }">
         <!-- ko foreach: { data: tabPanelItem.widgets, as: 'widget' } -->
         <!-- ko widget: widget -->
         <!-- /ko -->

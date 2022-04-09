@@ -17,10 +17,24 @@ export class TableCellHandlers implements IWidgetHandler {
     }
 
     public getContextCommands(context: WidgetContext): IContextCommandSet {
+        const tableParentBinding =  context.gridItem.getParent().getParent().binding;
+        const tableParentModel = tableParentBinding.model;
+        const tableModel = context.gridItem.getParent().binding.model;
+
         const tableCellContextualEditor: IContextCommandSet = {
             color: "#9C27B0",
             hoverCommands: [],
-            deleteCommand: null,
+            deleteCommand: {
+                controlType: "toolbox-button",
+                tooltip: "Delete table",
+                color: "#607d8b",
+                callback: () => {
+                    tableParentModel.widgets.remove(tableModel);
+                    tableParentBinding.applyChanges();
+                    this.viewManager.clearContextualCommands();
+                    this.eventManager.dispatchEvent(Events.ContentUpdate);
+                }
+            },
             selectCommands: [
                 {
                     controlType: "toolbox-button",
@@ -28,7 +42,7 @@ export class TableCellHandlers implements IWidgetHandler {
                     displayName: "Table",
                     callback: () => this.viewManager.openWidgetEditor(context.parentBinding)
                 },
-                { 
+                {
                     controlType: "toolbox-splitter"
                 },
                 {
@@ -39,7 +53,7 @@ export class TableCellHandlers implements IWidgetHandler {
                     color: "#9C27B0",
                     callback: () => this.viewManager.openWidgetEditor(context.binding)
                 },
-                { 
+                {
                     controlType: "toolbox-splitter"
                 },
                 {

@@ -611,18 +611,16 @@ export class GridEditor {
 
         for (let i = gridItems.length - 1; i >= 0; i--) {
             const gridItem = gridItems[i];
-
             const index = tobeDeleted.indexOf(gridItem.name);
             tobeDeleted.splice(index, 1);
-
-            highlightedGridItem = gridItem;
-            highlightedText = gridItem.displayName;
 
             const quadrant = Utils.pointerToClientQuadrant(this.pointerX, this.pointerY, gridItem.element);
             const half = quadrant.vertical;
             const activeElement = this.activeElements[gridItem.name];
             const contextualCommandSet = gridItem.getContextCommands(half);
 
+            highlightedGridItem = gridItem;
+            highlightedText = gridItem.displayName;
             highlightColor = contextualCommandSet.color;
 
             if (!activeElement || gridItem.element !== activeElement.element || half !== activeElement.half) {

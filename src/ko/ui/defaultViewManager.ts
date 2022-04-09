@@ -126,6 +126,7 @@ export class DefaultViewManager implements ViewManager {
         }
 
         this.designTime(false);
+        this.clearSelection();
     }
 
     private onKeyUp(event: KeyboardEvent): void {
