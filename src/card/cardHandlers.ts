@@ -58,10 +58,13 @@ export class CardHandlers implements IWidgetHandler {
             },
             selectCommands: [{
                 controlType: "toolbox-button",
-                tooltip: "Edit card",
+                displayName: "Edit card",
                 position: "top right",
                 color: "#4c5866",
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
+            },
+            {
+                controlType: "toolbox-splitter",
             },
             {
                 controlType: "toolbox-button",
