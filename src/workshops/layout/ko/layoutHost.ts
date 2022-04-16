@@ -1,4 +1,5 @@
 import * as ko from "knockout";
+import template from "./layoutHost.html";
 import { ContentViewModelBinder, ContentViewModel } from "../../../content/ko";
 import { Component, OnMounted, Param } from "@paperbits/common/ko/decorators";
 import { Router } from "@paperbits/common/routing";
@@ -13,7 +14,7 @@ import { PopupHost } from "../../../popup/ko/popupHost";
 
 @Component({
     selector: "layout-host",
-    template: "<!-- ko if: popupHostViewModel --><!-- ko widget: popupHostViewModel --><!-- /ko --><!-- /ko --><!-- ko if: contentViewModel --><!-- ko widget: contentViewModel, grid: {} --><!-- /ko --><!-- /ko -->"
+    template: template
 })
 export class LayoutHost {
     public readonly contentViewModel: ko.Observable<ContentViewModel>;

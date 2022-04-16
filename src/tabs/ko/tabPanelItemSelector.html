@@ -1,0 +1,14 @@
+<div class="flex flex-column">
+    <div role="listbox" class="list-checkboxes" data-bind="foreach: { data: tabPanelItems, as: 'tabPanelItem' }, scrollable: true, listbox: {}">
+        <a role="option" class="list-item"
+            data-bind="text: tabPanelItem.label, activate: $component.selectTabPanelItem, css: { 'list-item-checked': tabPanelItem === $component.activeTabPanelItem() }">
+        </a>
+    </div>
+    <div class="flex-item btn-group">
+        <button class="btn btn-default"
+            data-bind="activate: $component.addTabPanelItem">
+            <i aria-hidden="true" class="paperbits-icon paperbits-simple-add"></i>
+            Add tab
+        </button>
+    </div>
+</div>

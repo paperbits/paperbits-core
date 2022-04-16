@@ -63,36 +63,7 @@ export class CarouselViewModelBinder implements ViewModelBinder<CarouselModel, C
         return viewModel;
     }
 
-    public async modelToViewModel(model: CarouselModel, viewModel?: CarouselViewModel, bindingContext?: Bag<any>): Promise<CarouselViewModel> {
-        if (!viewModel) {
-            viewModel = new CarouselViewModel();
-        }
-
-        const carouselItemViewModels = [];
-
-        for (const [index, carouselItemModel] of model.carouselItems.entries()) {
-            const carouselItemViewModel = await this.itemModelToViewModel(carouselItemModel, index, null, bindingContext);
-            carouselItemViewModels.push(carouselItemViewModel);
-        }
-
-        if (carouselItemViewModels.length === 0) {
-            carouselItemViewModels.push(<any>new PlaceholderViewModel("Carousel"));
-        }
-
-        viewModel.carouselItems(carouselItemViewModels);
-        viewModel.activeItemIndex(null);
-        viewModel.activeItemIndex(0);
-
-        viewModel.autoplay(model.autoplay);
-        viewModel.pauseOnHover(model.pauseOnHover);
-        viewModel.autoplayInterval(model.autoplayInterval);
-        viewModel.showControls(model.showControls);
-        viewModel.showIndicators(model.showIndicators);
-
-        if (model.styles) {
-            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
-        }
-
+    private createBinding(model: CarouselModel, viewModel?: CarouselViewModel, bindingContext?: Bag<any>): void {
         const binding: IWidgetBinding<CarouselModel, CarouselViewModel> = {
             name: "carousel",
             displayName: "Carousel",
@@ -108,7 +79,38 @@ export class CarouselViewModelBinder implements ViewModelBinder<CarouselModel, C
             }
         };
 
+        binding["setActiveItem"] = (index: number) => viewModel.activeItemIndex(index);
         viewModel["widgetBinding"] = binding;
+        viewModel.activeItemIndex(0);
+    }
+
+    public async modelToViewModel(model: CarouselModel, viewModel?: CarouselViewModel, bindingContext?: Bag<any>): Promise<CarouselViewModel> {
+        if (!viewModel) {
+            viewModel = new CarouselViewModel();
+            this.createBinding(model, viewModel, bindingContext);
+        }
+
+        const carouselItemViewModels = [];
+
+        for (const [index, carouselItemModel] of model.carouselItems.entries()) {
+            const carouselItemViewModel = await this.itemModelToViewModel(carouselItemModel, index, null, bindingContext);
+            carouselItemViewModels.push(carouselItemViewModel);
+        }
+
+        if (carouselItemViewModels.length === 0) {
+            carouselItemViewModels.push(<any>new PlaceholderViewModel("Carousel"));
+        }
+
+        viewModel.carouselItems(carouselItemViewModels);
+        viewModel.autoplay(model.autoplay);
+        viewModel.pauseOnHover(model.pauseOnHover);
+        viewModel.autoplayInterval(model.autoplayInterval);
+        viewModel.showControls(model.showControls);
+        viewModel.showIndicators(model.showIndicators);
+
+        if (model.styles) {
+            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
+        }
 
         return viewModel;
     }

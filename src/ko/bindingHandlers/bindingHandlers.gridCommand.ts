@@ -10,12 +10,11 @@ ko.bindingHandlers["gridCommand"] = {
         }
 
         const bindings = {
-            background: { color: command.color },
             tooltip: command.tooltip
         };
 
         if (command.component) {
-            bindings["balloon"] = { target: "#sc-" + command.component.name, position: "top" };
+            bindings["balloon"] = { component: command.component };
         }
 
         if (command.callback) {

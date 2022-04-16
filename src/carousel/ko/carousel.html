@@ -5,8 +5,7 @@
         'data-carousel-autoplay': autoplay,
         'data-carousel-autoplay-interval': autoplayInterval,
         'data-carousel-pauseonhover': pauseOnHover
-    }"
->
+    }">
 
     <div class="carousel-items">
         <!-- ko foreach: { data: carouselItems, as: 'carouselItem' } -->
@@ -20,28 +19,28 @@
     </div>
 
     <!-- ko if: showControls -->
-        <button class="carousel-control-prev" aria-label="Next slide">
-            <span class="carousel-control-prev-icon">
-                <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                        d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
-                </svg>
-            </span>
-        </button>
-        <button class="carousel-control-next" aria-label="Previous slide">
-            <span class="carousel-control-next-icon">
-                <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z">
-                    </path>
-                </svg>
-            </span>
-        </button>
+    <button class="carousel-control-prev" aria-label="Next slide">
+        <span class="carousel-control-prev-icon">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                    d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            </svg>
+        </span>
+    </button>
+    <button class="carousel-control-next" aria-label="Previous slide">
+        <span class="carousel-control-next-icon">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z">
+                </path>
+            </svg>
+        </span>
+    </button>
     <!-- /ko -->
 
     <!-- ko if: showIndicators -->
-        <ol class="carousel-indicators" data-bind="foreach: { data: carouselItems, as: 'carouselItem' }">
-            <li class="carousel-indicator"></li>
-        </ol>
+    <ol class="carousel-indicators" data-bind="foreach: { data: carouselItems, as: 'carouselItem' }">
+        <li class="carousel-indicator"></li>
+    </ol>
     <!-- /ko -->
 </carousel-runtime>

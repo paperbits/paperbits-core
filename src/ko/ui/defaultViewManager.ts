@@ -126,6 +126,7 @@ export class DefaultViewManager implements ViewManager {
         }
 
         this.designTime(false);
+        this.clearSelection();
     }
 
     private onKeyUp(event: KeyboardEvent): void {
@@ -386,6 +387,7 @@ export class DefaultViewManager implements ViewManager {
                     onChange: binding.applyChanges
                 }
             },
+            scrollable: "editorScroll" in binding ? binding.editorScroll : true,
             heading: binding.displayName,
             resize: binding.editorResize || "vertically horizontally",
             returnFocusTo: document.getElementById("contentEditor")
@@ -510,7 +512,7 @@ export class DefaultViewManager implements ViewManager {
 
     public setViewRoles(roles: RoleModel[]): void {
         const roleKeys = roles.map(role => role.key);
-        
+
         this.rolesScope(roles);
         this.designerUserService.setUserRoles(roleKeys);
 

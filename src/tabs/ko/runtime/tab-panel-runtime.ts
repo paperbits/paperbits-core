@@ -1,9 +1,22 @@
 import { coerce } from "@paperbits/common";
 import { Events } from "@paperbits/common/events";
 
+const activeContentTabClass = "tab-content-active";
+
 export class TabPanelHTMLElement extends HTMLElement {
+    private currentTabIndex: number;
+
     constructor() {
         super();
+        const activeTabAttr = this.getAttribute("data-active-tab");
+
+        this.currentTabIndex = !!activeTabAttr
+            ? parseInt(activeTabAttr)
+            : 0;
+    }
+
+    public static get observedAttributes(): string[] {
+        return ["data-active-tab"];
     }
 
     private setActiveItem = (index: number) => {
@@ -12,6 +25,8 @@ export class TabPanelHTMLElement extends HTMLElement {
         if (activeTab) {
             activeTab.classList.remove("tab-content-active");
         }
+
+        
 
         const activeLink = this.querySelector(".tab-navs .nav-link.nav-link-active");
 
@@ -28,6 +43,22 @@ export class TabPanelHTMLElement extends HTMLElement {
         });
     };
 
+    public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+        if (name !== "data-active-tab") {
+            return;
+        }
+
+        switch (name) {
+            case "data-active-tab":
+                this.currentTabIndex = parseInt(newValue);
+                this.setActiveItem(this.currentTabIndex);
+                break;
+
+            default:
+                break;
+        }
+    }
+
     private onClick(event: MouseEvent): void {
         const element = <HTMLElement>event.target;
         const tabIndexIndex = element.getAttribute("data-tab");
@@ -39,7 +70,7 @@ export class TabPanelHTMLElement extends HTMLElement {
         event.preventDefault();
         event.stopImmediatePropagation();
 
-        this.setActiveItem(parseInt(tabIndexIndex));
+        this.setAttribute("data-active-tab", tabIndexIndex.toString());
     }
 
     public connectedCallback(): void {

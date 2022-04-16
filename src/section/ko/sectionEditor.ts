@@ -28,9 +28,6 @@ export class SectionEditor {
     public readonly box: ko.Observable<BoxStylePluginConfig>;
     public readonly containerSizeStyles: ko.Observable<SizeStylePluginConfig>;
     public readonly sectionSizeStyles: ko.Observable<SizeStylePluginConfig>;
-    public readonly stretch: ko.Observable<boolean>;
-
-
     private gridModel: GridModel;
 
     constructor(
@@ -38,7 +35,6 @@ export class SectionEditor {
         private readonly eventManager: EventManager
     ) {
         this.stickTo = ko.observable<string>("none");
-        this.stretch = ko.observable<boolean>(false);
         this.background = ko.observable<BackgroundStylePluginConfig>();
         this.typography = ko.observable<TypographyStylePluginConfig>();
         this.containerSizeStyles = ko.observable<SizeStylePluginConfig>();
@@ -57,10 +53,6 @@ export class SectionEditor {
         this.updateObservables();
 
         this.stickTo
-            .extend(ChangeRateLimit)
-            .subscribe(this.applyChanges);
-
-        this.stretch
             .extend(ChangeRateLimit)
             .subscribe(this.applyChanges);
 
@@ -83,7 +75,7 @@ export class SectionEditor {
         this.stickTo(stickToStyles || "none");
 
         const sectionSizeStyles = <SizeStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(localStyles, "size", viewport);
-        this.stretch(sectionSizeStyles?.stretch);
+        this.sectionSizeStyles(sectionSizeStyles);
 
         /* Grid styles */
         this.gridModel = <GridModel>this.model.widgets[0];

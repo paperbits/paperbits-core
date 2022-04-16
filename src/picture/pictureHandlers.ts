@@ -1,11 +1,14 @@
 ﻿import * as Utils from "@paperbits/common/utils";
 import { MediaContract } from "@paperbits/common/media";
-import { IWidgetOrder, IContentDropHandler, IWidgetHandler, IDataTransfer, IContentDescriptor } from "@paperbits/common/editing";
+import { IWidgetOrder, IContentDropHandler, IWidgetHandler, IDataTransfer, IContentDescriptor, WidgetContext } from "@paperbits/common/editing";
 import { PictureModel } from "./pictureModel";
+import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 
 const widgetDisplayName = "Picture";
 
 export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
+    constructor(private readonly viewManager: ViewManager) { }
+    
     private static readonly imageFileExtensions = [".jpg", ".jpeg", ".png", ".svg", ".gif"];
 
     private async getWidgetOrderByConfig(sourceUrl: string, caption: string): Promise<IWidgetOrder> {
@@ -71,5 +74,48 @@ export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
 
     public static isMediaFile(media: MediaContract): boolean {
         return (media.mimeType && media.mimeType.indexOf("image") !== -1) || (media.fileName && this.imageFileExtensions.some(e => media.fileName.endsWith(e)));
+    }
+
+    public getContextCommands(context: WidgetContext): IContextCommandSet {
+        const contextualEditor: IContextCommandSet = {
+            color: "#2b87da",
+            hoverCommands: [],
+            selectCommands: [
+                {
+                    controlType: "toolbox-button",
+                    displayName: "Edit picture",
+                    callback: () => this.viewManager.openWidgetEditor(context.binding)
+                },
+                {
+                    controlType: "toolbox-splitter"
+                },
+                {
+                    controlType: "toolbox-button",
+                    tooltip: "Switch to parent",
+                    iconClass: "paperbits-icon paperbits-enlarge-vertical",
+                    callback: () => context.gridItem.getParent().select(),
+                }
+                // {
+                //     tooltip: "Help",
+                //     iconClass: "paperbits-icon paperbits-c-question",
+                //     position: "top right",
+                //     color: "#607d8b",
+                //     callback: () => {
+                //         // 
+                //     }
+                // }
+            ],
+            deleteCommand: {
+                controlType: "toolbox-button",
+                tooltip: "Delete widget",
+                callback: () => {
+                    context.parentModel.widgets.remove(context.model);
+                    context.parentBinding.applyChanges();
+                    this.viewManager.clearContextualCommands();
+                }
+            }
+        };
+
+        return contextualEditor;
     }
 }

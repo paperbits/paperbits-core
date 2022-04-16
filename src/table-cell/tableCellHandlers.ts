@@ -17,26 +17,53 @@ export class TableCellHandlers implements IWidgetHandler {
     }
 
     public getContextCommands(context: WidgetContext): IContextCommandSet {
+        const tableParentBinding =  context.gridItem.getParent().getParent().binding;
+        const tableParentModel = tableParentBinding.model;
+        const tableModel = context.gridItem.getParent().binding.model;
+
         const tableCellContextualEditor: IContextCommandSet = {
             color: "#9C27B0",
             hoverCommands: [],
-            deleteCommand: null,
-            selectCommands: [{
-                tooltip: "Edit table cell",
-                iconClass: "paperbits-icon paperbits-edit-72",
-                position: "top right",
-                color: "#9C27B0",
-                callback: () => this.viewManager.openWidgetEditor(context.binding)
-            },
-            {
-                tooltip: "Switch to parent",
-                iconClass: "paperbits-icon paperbits-enlarge-vertical",
-                position: "top right",
-                color: "#9C27B0",
+            deleteCommand: {
+                controlType: "toolbox-button",
+                tooltip: "Delete table",
+                color: "#607d8b",
                 callback: () => {
-                    context.switchToParent();
+                    tableParentModel.widgets.remove(tableModel);
+                    tableParentBinding.applyChanges();
+                    this.viewManager.clearContextualCommands();
+                    this.eventManager.dispatchEvent(Events.ContentUpdate);
                 }
-            }]
+            },
+            selectCommands: [
+                {
+                    controlType: "toolbox-button",
+                    tooltip: "Table settings",
+                    displayName: "Table",
+                    callback: () => this.viewManager.openWidgetEditor(context.parentBinding)
+                },
+                {
+                    controlType: "toolbox-splitter"
+                },
+                {
+                    controlType: "toolbox-button",
+                    tooltip: "Cell settings",
+                    displayName: "Cell",
+                    position: "top right",
+                    color: "#9C27B0",
+                    callback: () => this.viewManager.openWidgetEditor(context.binding)
+                },
+                {
+                    controlType: "toolbox-splitter"
+                },
+                {
+                    controlType: "toolbox-button",
+                    tooltip: "Switch to parent",
+                    iconClass: "paperbits-icon paperbits-enlarge-vertical",
+                    position: "top right",
+                    color: "#9C27B0",
+                    callback: () => context.gridItem.getParent().getParent().select()
+                }]
         };
 
         if (context.model.widgets.length !== 0) {
@@ -45,6 +72,7 @@ export class TableCellHandlers implements IWidgetHandler {
 
         tableCellContextualEditor.hoverCommands.push({
             color: "#607d8b",
+            controlType: "toolbox-button",
             iconClass: "paperbits-icon paperbits-simple-add",
             position: "center",
             tooltip: "Add widget",
@@ -63,6 +91,7 @@ export class TableCellHandlers implements IWidgetHandler {
         });
 
         tableCellContextualEditor.hoverCommands.push({
+            controlType: "toolbox-button",
             color: "#607d8b",
             iconClass: "paperbits-icon paperbits-edit-72",
             position: "parent-left",
@@ -89,6 +118,7 @@ export class TableCellHandlers implements IWidgetHandler {
         });
 
         tableCellContextualEditor.hoverCommands.push({
+            controlType: "toolbox-button",
             color: "#607d8b",
             iconClass: "paperbits-icon paperbits-edit-72",
             position: "parent-top",

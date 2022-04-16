@@ -13,9 +13,12 @@ export class ContentHandlers implements IWidgetHandler {
 
     public getContextCommands(context: WidgetContext): IContextCommandSet {
         const contextualEditor: IContextCommandSet = {};
+        const host = this.viewManager.getHost();
+        const activeLayer = host.name.replace("-host", "");
 
-        if (context.model.widgets.length === 0) {
+        if (context.model.widgets.length === 0 && activeLayer === context.model["type"]) {
             contextualEditor.hoverCommands = [{
+                controlType: "toolbox-button",
                 color: "#2b87da",
                 iconClass: "paperbits-icon paperbits-simple-add",
                 position: "center",

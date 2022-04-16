@@ -9,6 +9,7 @@ import { ContentModel } from "../contentModel";
 import { ContentModelBinder } from "../contentModelBinder";
 import { ContentViewModel } from "./contentViewModel";
 import { WidgetViewModel } from "../../ko";
+import { PlaceholderViewModel } from "../../placeholder/ko";
 
 
 export class ContentViewModelBinder implements ViewModelBinder<ContentModel, ContentViewModel> {
@@ -50,11 +51,12 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
             readonly: false,
             name: "content",
             model: model,
-            flow: ComponentFlow.Block,
+            flow: ComponentFlow.Contents,
             draggable: true,
             handler: ContentHandlers,
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
+                this.eventManager.dispatchEvent(Events.ContentUpdate);
             },
             onCreate: () => {
                 if (model.type === bindingContext?.contentType) {
@@ -98,6 +100,10 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
 
         viewModel.widgets(viewModels);
 
+        if (viewModels.length === 0 && bindingContext.contentType !== model.type) {
+            viewModel.widgets.push(new PlaceholderViewModel("Main"));
+        }
+
         return viewModel;
     }
 
@@ -107,9 +113,8 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
 
     public async contractToViewModel(contentContract: Contract, bindingContext: Bag<any>): Promise<ContentViewModel> {
         const layoutModel = await this.contentModelBinder.contractToModel(contentContract, bindingContext);
+        layoutModel.type = "layout";
         const layoutViewModel = await this.modelToViewModel(layoutModel, null, bindingContext);
-
-        layoutViewModel["widgetBinding"].readonly = true;
 
         return layoutViewModel;
     }

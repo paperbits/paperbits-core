@@ -2,7 +2,8 @@
 <dropbucket></dropbucket>
 
 <!-- ko if: host -->
-<div id="contentEditor" class="viewport" tabindex="0" data-bind="host: { viewport: viewport, host: host, block: block }"></div>
+<div id="contentEditor" class="viewport" tabindex="0"
+    data-bind="host: { viewport: viewport, host: host, block: block }"></div>
 <!-- /ko -->
 
 <div class="shutter" data-bind="css: { 'active': shutter }">
@@ -33,19 +34,23 @@
 </div>
 
 <!-- ko with: activeView() -->
-<div class="toolbox toolbox-popup toolbox-position-left-offset" data-bind="resizable: resize, surface: $data, dialog: {}">
+<div class="toolbox toolbox-popup toolbox-position-left-offset"
+    data-bind="resizable: resize, surface: $data, dialog: {}">
     <div class="editor resizable-content flex flex-column">
         <!-- ko if: heading -->
         <h1>
             <span data-bind="text: heading"></span>
         </h1>
         <!-- /ko -->
-        <button tabindex="-1" class="btn btn-dismiss" title="Close" aria-label="Close" data-bind="click: $component.closeView">
+        <button tabindex="-1" class="btn btn-dismiss" title="Close" aria-label="Close"
+            data-bind="click: $component.closeView">
             <i aria-hidden="true" class="paperbits-icon paperbits-simple-remove"></i>
         </button>
         <hr />
-        <!-- ko component: { name: component.name, params: component.params, oncreate: component.oncreate } -->
-        <!--/ko -->
+        <div class="form" data-bind="scrollable: $data.scrollable">
+            <!-- ko component: { name: component.name, params: component.params, oncreate: component.oncreate } -->
+            <!--/ko -->
+        </div>
     </div>
 </div>
 <!-- /ko -->
@@ -107,18 +112,24 @@
 </div>
 
 <!-- ko with: selectedElementContextualEditor() -->
-<div class="fixed" data-bind="stickTo: { target: element, position: 'top right' }">
+<div class="fixed toolbox toolbox-horizontal toolbox-context"
+    data-bind="stickTo: { target: element, position: 'top right' }">
     <!-- ko foreach: { data: selectCommands, as: 'command' } -->
-    <button tabindex="-1" class="btn-standalone" data-bind="gridCommand: command, tooltip: command.tooltip">
+    <div data-bind="gridCommand: command, css: command.controlType">
+        <!-- ko if: command.iconClass -->
         <i aria-hidden="true" data-bind="css: command.iconClass"></i>
-    </button>
+        <!-- /ko -->
+        <!-- ko if: command.displayName -->
+        <span data-bind="text: command.displayName"></span>
+        <!-- /ko -->
+    </div>
     <!-- ko if: command.component -->
     <div class="balloon" data-bind="component: command.component"></div>
     <!-- /ko -->
     <!-- /ko -->
 
     <!-- ko if: deleteCommand -->
-    <button tabindex="-1" class="btn-standalone" data-bind="contextualCommand: { command: deleteCommand }">
+    <button tabindex="-1" class="toolbox-button" data-bind="gridCommand: deleteCommand">
         <i aria-hidden="true" class="paperbits-icon paperbits-trash-simple"></i>
     </button>
     <!-- /ko -->
@@ -131,15 +142,19 @@
 
 <tray class="toolbox toolbox-position-left-bottom" data-bind="visible: primaryToolboxVisible"></tray>
 
-<input id="uploadDialog" type="file" multiple="multiple" aria-hidden="true" class="d-none"/>
+<input id="uploadDialog" type="file" multiple="multiple" aria-hidden="true" class="d-none" />
 
 <!-- ko if: canPreview -->
 <div class="toolbox toolbox-position-right-top">
-    <button tabindex="-1" class="toolbox-btn" data-bind="visible: primaryToolboxVisible(), click: $component.enablePreviewMode, tooltip: { message: '<h1>Preview</h1><p>See the website live before publishing.<p>', position: 'left' }" aria-label="Preview">
+    <button tabindex="-1" class="toolbox-btn"
+        data-bind="visible: primaryToolboxVisible(), click: $component.enablePreviewMode, tooltip: { message: '<h1>Preview</h1><p>See the website live before publishing.<p>', position: 'left' }"
+        aria-label="Preview">
         <i aria-hidden="true" class="paperbits-icon paperbits-l-search"></i>
     </button>
 
-    <button tabindex="-1" class="toolbox-btn" data-bind="visible: !primaryToolboxVisible(), click: $component.disablePreviewMode, tooltip: { message: '<h1>Go back</h1><p>Return to editing the content.<p>', position: 'left' }" aria-label="Return to editing the content">
+    <button tabindex="-1" class="toolbox-btn"
+        data-bind="visible: !primaryToolboxVisible(), click: $component.disablePreviewMode, tooltip: { message: '<h1>Go back</h1><p>Return to editing the content.<p>', position: 'left' }"
+        aria-label="Return to editing the content">
         <i aria-hidden="true" class="paperbits-icon paperbits-curved-arrow-left"></i>
     </button>
 </div>
@@ -147,7 +162,9 @@
 
 <!-- ko if: canGoBack -->
 <div class="toolbox toolbox-position-right-top">
-    <button tabindex="-1" class="toolbox-btn" data-bind="click: $component.returnToContentEditing, tooltip: { message: '<h1>Go back</h1><p>Return to editing the content.<p>', position: 'left' }" aria-label="Return to editing the content">
+    <button tabindex="-1" class="toolbox-btn"
+        data-bind="click: $component.returnToContentEditing, tooltip: { message: '<h1>Go back</h1><p>Return to editing the content.<p>', position: 'left' }"
+        aria-label="Return to editing the content">
         <i aria-hidden="true" class="paperbits-icon paperbits-curved-arrow-left"></i>
     </button>
 </div>

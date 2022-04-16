@@ -21,17 +21,17 @@ export class GridCellHandlers implements IWidgetHandler {
             hoverCommands: [],
             deleteCommand: null,
             selectCommands: [{
-                tooltip: "Edit grid cell",
-                iconClass: "paperbits-icon paperbits-edit-72",
-                position: "top right",
-                color: "#9C27B0",
+                controlType: "toolbox-button",
+                displayName: `Edit ${context.binding.displayName.toLowerCase()}`,
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
             },
+            { 
+                controlType: "toolbox-splitter"
+            },
             {
+                controlType: "toolbox-button",
                 tooltip: "Switch to parent",
                 iconClass: "paperbits-icon paperbits-enlarge-vertical",
-                position: "top right",
-                color: "#9C27B0",
                 callback: () => {
                     context.switchToParent();
                 }
@@ -43,6 +43,7 @@ export class GridCellHandlers implements IWidgetHandler {
         }
 
         gridCellContextualEditor.hoverCommands.push({
+            controlType: "toolbox-button",
             color: "#607d8b",
             iconClass: "paperbits-icon paperbits-simple-add",
             position: "center",

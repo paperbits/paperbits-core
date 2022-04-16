@@ -9,6 +9,7 @@ import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { MediaService } from "@paperbits/common/media";
 import { MediaVariantModel } from "../mediaVariantModel";
+import { PictureHandlers } from "../pictureHandlers";
 
 
 export class PictureViewModelBinder implements ViewModelBinder<PictureModel, PictureViewModel> {
@@ -67,6 +68,7 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
             displayName: "Picture",
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
+            handler: PictureHandlers,
             draggable: true,
             flow: ComponentFlow.Inline,
             editor: "picture-editor",

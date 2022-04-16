@@ -1,7 +1,7 @@
 ﻿import { IWidgetOrder, IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { CollapsiblePanelModel } from "./collapsiblePanelModel";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
-import { ModelBinderSelector, WidgetModel } from "@paperbits/common/widgets";
+import { WidgetModel } from "@paperbits/common/widgets";
 import { EventManager, Events } from "@paperbits/common/events";
 import { DragSession } from "@paperbits/common/ui/draggables";
 
@@ -36,6 +36,7 @@ export class CollapsiblePanelHandlers implements IWidgetHandler {
         const gridCellContextualEditor: IContextCommandSet = {
             color: "#9C27B0",
             hoverCommands: [{
+                controlType: "toolbox-button",
                 color: "#607d8b",
                 iconClass: "paperbits-icon paperbits-simple-add",
                 position: context.half,
@@ -60,6 +61,7 @@ export class CollapsiblePanelHandlers implements IWidgetHandler {
                 }
             }],
             deleteCommand: {
+                controlType: "toolbox-button",
                 tooltip: "Delete widget",
                 color: "#607d8b",
                 callback: () => {
@@ -68,18 +70,24 @@ export class CollapsiblePanelHandlers implements IWidgetHandler {
                     this.viewManager.clearContextualCommands();
                 },
             },
-            selectCommands: [{
-                tooltip: "Edit collapsible panel",
-                iconClass: "paperbits-icon paperbits-edit-72",
-                position: "top right",
-                color: "#607d8b",
-                callback: () => this.viewManager.openWidgetEditor(context.binding)
-            }]
+            selectCommands: [
+                {
+                    controlType: "toolbox-button",
+                    displayName: "Collapsible panel settings",
+                    position: "top right",
+                    color: "#607d8b",
+                    callback: () => this.viewManager.openWidgetEditor(context.binding)
+                },
+                {
+                    controlType: "toolbox-splitter"
+                }
+            ]
         };
 
 
         if (context.model.widgets.length === 0) {
             gridCellContextualEditor.hoverCommands.push({
+                controlType: "toolbox-button",
                 color: "#607d8b",
                 iconClass: "paperbits-icon paperbits-simple-add",
                 position: "center",

@@ -21,6 +21,7 @@ export class CardHandlers implements IWidgetHandler {
         const cardContextualEditor: IContextCommandSet = {
             color: "#4c5866",
             hoverCommands: [{
+                controlType: "toolbox-button",
                 color: "#607d8b",
                 iconClass: "paperbits-icon paperbits-simple-add",
                 position: context.half,
@@ -45,6 +46,7 @@ export class CardHandlers implements IWidgetHandler {
                 }
             }],
             deleteCommand: {
+                controlType: "toolbox-button",
                 tooltip: "Delete card",
                 color: "#4c5866",
                 callback: () => {
@@ -55,13 +57,14 @@ export class CardHandlers implements IWidgetHandler {
                 }
             },
             selectCommands: [{
+                controlType: "toolbox-button",
                 tooltip: "Edit card",
-                iconClass: "paperbits-icon paperbits-edit-72",
                 position: "top right",
                 color: "#4c5866",
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
             },
             {
+                controlType: "toolbox-button",
                 tooltip: "Switch to parent",
                 iconClass: "paperbits-icon paperbits-enlarge-vertical",
                 position: "top right",
@@ -74,6 +77,7 @@ export class CardHandlers implements IWidgetHandler {
 
         if (context.model.widgets.length === 0) {
             cardContextualEditor.hoverCommands.push({
+                controlType: "toolbox-button",
                 color: "#607d8b",
                 iconClass: "paperbits-icon paperbits-simple-add",
                 position: "center",

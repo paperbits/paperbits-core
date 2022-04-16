@@ -1,44 +1,42 @@
-<div class="form flex-item flex-item-grow" data-bind="scrollable: true">
-    <div class="form-group form-group-collapsible">
-        <label class="form-label">
-            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#behaviourCollapse'"
-                aria-label="Toggle 'Carousel behavior' section"></a>
-            <b>Carousel behavior</b>
+<div class="form-group form-group-collapsible">
+    <label class="form-label">
+        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#behaviourCollapse'"
+            aria-label="Toggle 'Carousel behavior' section"></a>
+        <b>Carousel behavior</b>
+    </label>
+    <div id="behaviourCollapse" class="collapse form-group-collapse">
+        <label for="autoplay" class="form-label">
+            <input type="checkbox" id="autoplay" data-bind="checked: autoplay" /> Autoplay
         </label>
-        <div id="behaviourCollapse" class="collapse form-group-collapse">
-            <label for="autoplay" class="form-label">
-                <input type="checkbox" id="autoplay" data-bind="checked: autoplay" /> Autoplay
-            </label>
 
-            <label for="autoplayInterval" class="form-label">Autoplay Interval (ms)</label>
-            <div class="input-group">
-                <input type="number" id="autoplayInterval" class="form-control" data-bind="value: autoplayInterval"
-                    placeholder="5000" min="0" />
-            </div>
-
-            <label for="pauseOnHover" class="form-label">
-                <input type="checkbox" id="pauseOnHover" data-bind="checked: pauseOnHover" /> Pause autoplay on hover
-            </label>
-
-            <label for="showControls" class="form-label">
-                <input type="checkbox" id="showControls" data-bind="checked: showControls" /> Show Controls
-            </label>
-
-            <label for="showIndicators" class="form-label">
-                <input type="checkbox" id="showIndicators" data-bind="checked: showIndicators" /> Show Indicators
-            </label>
+        <label for="autoplayInterval" class="form-label">Autoplay Interval (ms)</label>
+        <div class="input-group">
+            <input type="number" id="autoplayInterval" class="form-control" data-bind="value: autoplayInterval"
+                placeholder="5000" min="0" />
         </div>
+
+        <label for="pauseOnHover" class="form-label">
+            <input type="checkbox" id="pauseOnHover" data-bind="checked: pauseOnHover" /> Pause autoplay on hover
+        </label>
+
+        <label for="showControls" class="form-label">
+            <input type="checkbox" id="showControls" data-bind="checked: showControls" /> Show Controls
+        </label>
+
+        <label for="showIndicators" class="form-label">
+            <input type="checkbox" id="showIndicators" data-bind="checked: showIndicators" /> Show Indicators
+        </label>
     </div>
+</div>
 
-    <div class="form-group form-group-collapsible">
-        <label class="form-label">
-            <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
-                aria-label="Toggle 'Size' section"></a>
-            <b>Size</b>
-        </label>
-        <div id="sizeCollapse" class="collapse form-group-collapse">
-            <size-editor params="{ features: 'minMaxHeight', sizeConfig: sizeConfig, onUpdate: onSizeUpdate }">
-            </size-editor>
-        </div>
+<div class="form-group form-group-collapsible">
+    <label class="form-label">
+        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
+            aria-label="Toggle 'Size' section"></a>
+        <b>Size</b>
+    </label>
+    <div id="sizeCollapse" class="collapse form-group-collapse">
+        <size-editor params="{ features: 'minMaxHeight', sizeConfig: sizeConfig, onUpdate: onSizeUpdate }">
+        </size-editor>
     </div>
 </div>

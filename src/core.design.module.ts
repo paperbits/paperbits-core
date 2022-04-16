@@ -50,6 +50,7 @@ import { DesignerUserService } from "./ko/ui/designerUserService";
 import { RoleSelector, RoleInput } from "./workshops/roles/ko";
 import "./ko/bindingHandlers/bindingHandlers.dialog";
 import "./ko/bindingHandlers/bindingHandlers.activate";
+import "./ko/bindingHandlers/bindingHandlers.attr2way";
 import "./ko/bindingHandlers/bindingHandlers.whenInView";
 import "./ko/bindingHandlers/bindingHandlers.listbox";
 import "./ko/bindingHandlers/bindingHandlers.markdown";
@@ -78,7 +79,7 @@ import { PopupHostModelBinder } from "./popup/popupHostModelBinder";
 import { DismissButtonDesignModule } from "./dismiss-button/dismissButton.design.module";
 import { StickToBindingHandler } from "./ko/bindingHandlers/bindingHandlers.stickTo";
 import { KnockoutDesignModule } from "./ko/knockout.design.module";
-import { HelpCenterBindingHandler } from "./ko/bindingHandlers/bindingHandler.helpCenter";
+import { HelpCenterBindingHandler } from "./ko/bindingHandlers/bindingHandlers.helpCenter";
 import { HelpCenter } from "./workshops/helpCenter/helpCenter";
 
 

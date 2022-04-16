@@ -29,43 +29,71 @@ export class TabPanelHandlers {
     }
 
     public getContextCommands(context: WidgetContext): IContextCommandSet {
+        // const activeTabIndex = context.binding["getActiveItem"]();
+        // const activeTab = context.binding.model.tabPanelItems[activeTabIndex];
+
         const tabPanelContextualEditor: IContextCommandSet = {
-            color: "#2b87da",
             hoverCommands: null,
+            defaultCommand: null,
             deleteCommand: {
+                controlType: "toolbox-button",
                 tooltip: "Delete tab panel",
-                color: "#607d8b",
                 callback: () => {
+                    const index = context.parentModel["tabPanelItems"].indexOf(context.model);
                     context.parentModel.widgets.remove(context.model);
                     context.parentBinding.applyChanges();
                     this.viewManager.clearContextualCommands();
                     this.eventManager.dispatchEvent(Events.ContentUpdate);
+                    context.parentBinding["setActiveItem"](index - 1);
                 }
             },
             selectCommands: [{
-                tooltip: "Add tab",
-                iconClass: "paperbits-icon paperbits-circle-add",
-                position: "top right",
-                color: "#607d8b",
-                callback: () => {
-                    context.model["tabPanelItems"].push(new TabPanelItemModel());
-                    context.parentBinding.applyChanges();
-                    this.viewManager.clearContextualCommands();
-                    this.eventManager.dispatchEvent(Events.ContentUpdate);
-                }
+                controlType: "toolbox-button",
+                displayName: "Tab panel",
+                callback: () => this.viewManager.openWidgetEditor(context.binding)
+            },
+            {
+                controlType: "toolbox-splitter"
             },
             // {
-            //     tooltip: "Edit tabPanel",
-            //     iconClass: "paperbits-icon paperbits-edit-72",
-            //     position: "top right",
-            //     color: "#607d8b",
-            //     callback: () => this.viewManager.openWidgetEditor(context.binding)
+            //     controlType: "toolbox-button",
+            //     displayName: activeTab.label,
+            // },
+            // {
+            //     tooltip: "Select tab",
+            //     iconClass: "paperbits-icon paperbits-small-down",
+            //     controlType: "toolbox-dropdown",
+            //     component: {
+            //         name: "tabpanel-item-selector",
+            //         params: {
+            //             activeTabPanelItemModel: activeTab,
+            //             tabPanelItemModels: context.binding.model.tabPanelItems,
+            //             onSelect: (item: TabPanelItemModel): void => {
+            //                 const index = context.binding.model.tabPanelItems.indexOf(item);
+            //                 context.binding["setActiveItem"](index);
+            //                 this.viewManager.clearContextualCommands();
+            //             },
+            //             onCreate: (): void => {
+            //                 context.binding.model.tabPanelItems.push(new TabPanelItemModel());
+
+            //                 const index = context.binding.model.tabPanelItems.length - 1;
+
+            //                 context.binding.applyChanges();
+            //                 context.binding["setActiveItem"](index);
+
+            //                 this.viewManager.clearContextualCommands();
+            //                 this.eventManager.dispatchEvent(Events.ContentUpdate);
+            //             }
+            //         }
+            //     }
+            // },
+            // {
+            //     controlType: "toolbox-splitter"
             // },
             {
+                controlType: "toolbox-button",
                 tooltip: "Switch to parent",
                 iconClass: "paperbits-icon paperbits-enlarge-vertical",
-                position: "top right",
-                color: "#607d8b",
                 callback: () => context.switchToParent()
             }]
         };
