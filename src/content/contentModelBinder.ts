@@ -49,9 +49,6 @@ export class ContentModelBinder<TModel> implements IModelBinder<TModel> {
         if (contentContract.nodes) {
             contentModel.widgets = await this.getChildModels(contentContract.nodes, bindingContext);
         }
-        else {
-            contentModel.widgets = [<WidgetModel>new PlaceholderModel("Content")];
-        }
 
         return <any>contentModel;
     }

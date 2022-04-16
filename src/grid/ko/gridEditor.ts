@@ -30,7 +30,6 @@ export class GridEditor {
     private ownerDocument: Document;
     private selection: GridItem;
 
-
     constructor(
         private readonly viewManager: ViewManager,
         private readonly widgetService: IWidgetService,
@@ -184,43 +183,6 @@ export class GridEditor {
                 this.renderDropHandlers();
                 break;
         }
-    }
-
-    private isInContent(gridItem: GridItem): boolean {
-        if (gridItem.isStylable) {
-            gridItem = gridItem.getParent();
-        }
-
-        const bindings = GridHelper.getParentWidgetBindings(gridItem.element);
-
-        return bindings.some(binding =>
-            binding.model instanceof ContentModel
-            || binding.model instanceof PopupHostModel
-            || binding.name === "email-layout"
-        );
-    }
-
-
-    private getClosestElementWithContext(element: HTMLElement): HTMLElement {
-        const context = ko.contextFor(element);
-
-        if (!!context?.$data) {
-            return element;
-        }
-
-        if (element.parentElement) {
-            return this.getClosestElementWithContext(element.parentElement);
-        }
-
-        return null;
-    }
-
-    private getTopLevelElementWithViewModel(checkingElement: HTMLElement, viewModel: any): HTMLElement {
-        if (ko.contextFor(checkingElement.parentElement).$data === viewModel) {
-            return this.getTopLevelElementWithViewModel(checkingElement.parentElement, viewModel);
-        }
-
-        return checkingElement;
     }
 
     private onPointerDown(event: PointerEvent): void {

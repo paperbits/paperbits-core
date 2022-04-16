@@ -58,8 +58,8 @@ export class SectionHandlers {
                 callback: () => {
                     context.parentModel.widgets.remove(context.model);
                     context.parentBinding.applyChanges();
+
                     this.viewManager.clearContextualCommands();
-                    this.eventManager.dispatchEvent(Events.ContentUpdate);
                 }
             },
             selectCommands: [{
