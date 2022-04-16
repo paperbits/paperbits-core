@@ -674,7 +674,7 @@ export class GridEditor {
             delete this.activeElements[key];
         });
 
-        if (this.activeHighlightedGridItem !== highlightedGridItem && highlightedGridItem.binding.name !== "content") {
+        if (this.activeHighlightedGridItem !== highlightedGridItem && highlightedGridItem?.binding.name !== "content") {
 
             this.activeHighlightedGridItem = highlightedGridItem;
 
