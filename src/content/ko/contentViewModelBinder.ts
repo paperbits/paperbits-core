@@ -50,7 +50,8 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
             readonly: false,
             name: "content",
             model: model,
-            flow: ComponentFlow.Block,
+             flow: ComponentFlow.Contents,
+            //flow: "flex",
             draggable: true,
             handler: ContentHandlers,
             applyChanges: async () => {
@@ -109,7 +110,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
         const layoutModel = await this.contentModelBinder.contractToModel(contentContract, bindingContext);
         const layoutViewModel = await this.modelToViewModel(layoutModel, null, bindingContext);
 
-        layoutViewModel["widgetBinding"].readonly = true;
+        layoutViewModel["widgetBinding"].readonly = false;
 
         return layoutViewModel;
     }

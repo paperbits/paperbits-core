@@ -1,4 +1,5 @@
 import * as ko from "knockout";
+import template from "./pageHost.html";
 import { Contract } from "@paperbits/common";
 import { EventManager } from "@paperbits/common/events";
 import { Component, OnDestroyed, OnMounted, Param } from "@paperbits/common/ko/decorators";
@@ -14,7 +15,7 @@ import { PopupHost } from "../../../popup/ko/popupHost";
 
 @Component({
     selector: "page-host",
-    template: "<!-- ko if: popupHostViewModel --><!-- ko widget: popupHostViewModel --><!-- /ko --><!-- /ko --><!-- ko if: contentViewModel --><!-- ko widget: contentViewModel, grid: {} --><!-- /ko --><!-- /ko -->"
+    template: template
 })
 export class PageHost {
     public readonly contentViewModel: ko.Observable<ContentViewModel>;

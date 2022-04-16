@@ -200,6 +200,29 @@ export class GridEditor {
         );
     }
 
+
+    private getClosestElementWithContext(element: HTMLElement): HTMLElement {
+        const context = ko.contextFor(element);
+
+        if (!!context?.$data) {
+            return element;
+        }
+
+        if (element.parentElement) {
+            return this.getClosestElementWithContext(element.parentElement);
+        }
+
+        return null;
+    }
+
+    private getTopLevelElementWithViewModel(checkingElement: HTMLElement, viewModel: any): HTMLElement {
+        if (ko.contextFor(checkingElement.parentElement).$data === viewModel) {
+            return this.getTopLevelElementWithViewModel(checkingElement.parentElement, viewModel);
+        }
+
+        return checkingElement;
+    }
+
     private onPointerDown(event: PointerEvent): void {
         if (event.ctrlKey || event.metaKey || this.viewManager.mode === ViewManagerMode.preview) {
             const htmlElement = <HTMLElement>event.target;
@@ -231,25 +254,32 @@ export class GridEditor {
             return;
         }
 
+        const gridItems = this.getGridItemsUnderPointer(true);
+
+        if (gridItems.length > 0) {
+            const topGridItem = gridItems[0];
+
+            if (topGridItem.binding.name === "content") {
+                return;
+            }
+
+            const clickOnParentLayer = !!topGridItem.binding.readonly;
+
+            if (clickOnParentLayer) {
+                event.preventDefault();
+                event.stopPropagation();
+                this.eventManager.dispatchEvent("displayInactiveLayoutHint");
+                return;
+            }
+        }
+
         const gridItem = this.activeHighlightedGridItem;
 
         if (!gridItem) {
             return;
         }
 
-        const widgetIsInContent = this.isInContent(gridItem);
-
-        /* TODO: This is temporary solution */
-        const host = this.viewManager.getHost();
-        const layoutEditing = host.name === "layout-host";
-        const emailEditing = host.name === "email-host";
-
-        if (!widgetIsInContent && !layoutEditing && !emailEditing) {
-            event.preventDefault();
-            event.stopPropagation();
-            this.eventManager.dispatchEvent("displayInactiveLayoutHint");
-            return;
-        }
+       
 
         if (gridItem.binding?.editor !== "text-block-editor") {
             event.preventDefault();
@@ -284,7 +314,7 @@ export class GridEditor {
             return;
         }
 
-        const gridItem = this.getWidgetGridItem(selectedElement.element);
+        const gridItem = this.getGridItem(selectedElement.element);
 
         if (!gridItem) {
             return;
@@ -323,7 +353,7 @@ export class GridEditor {
                 let children;
 
                 if (gridItem.binding.model instanceof SectionModel) {
-                    const containerGridItem = this.getWidgetGridItem(<HTMLElement>gridItem.element.firstElementChild, true);
+                    const containerGridItem = this.getGridItem(<HTMLElement>gridItem.element.firstElementChild, true);
                     children = containerGridItem.getChildren();
                 }
                 else {
@@ -522,6 +552,7 @@ export class GridEditor {
 
     private getUnderlyingElements(): HTMLElement[] {
         const elements = Utils.elementsFromPoint(this.ownerDocument, this.pointerX, this.pointerY);
+
         const popupContainer = elements.find(x => x.classList.contains("popup-container"));
         const cutoffIndex = elements.findIndex(x => x.classList.contains("backdrop") || x.classList.contains("popup-backdrop") || x.classList.contains("popup-container"));
 
@@ -643,7 +674,8 @@ export class GridEditor {
             delete this.activeElements[key];
         });
 
-        if (this.activeHighlightedGridItem !== highlightedGridItem) {
+        if (this.activeHighlightedGridItem !== highlightedGridItem && highlightedGridItem.binding.name !== "content") {
+
             this.activeHighlightedGridItem = highlightedGridItem;
 
             this.viewManager.setHighlight({
@@ -655,13 +687,13 @@ export class GridEditor {
 
     private findFocusableElement(): GridItem {
         const element = <HTMLElement>Html.findFirst(this.ownerDocument.body,
-            node => node.nodeName === "SECTION" && !!this.getWidgetGridItem(<HTMLElement>node));
+            node => node.nodeName === "SECTION" && !!this.getGridItem(<HTMLElement>node));
 
         if (!element) {
             return null;
         }
 
-        return this.getWidgetGridItem(element);
+        return this.getGridItem(element);
     }
 
     private onGlobalFocusChange(event: FocusEvent): void {
@@ -725,7 +757,7 @@ export class GridEditor {
         const childElements = Arrays.coerce<HTMLElement>(gridItem.element.children);
 
         return childElements
-            .map(child => this.getWidgetGridItem(child))
+            .map(child => this.getGridItem(child))
             .filter(x => !!x && x.binding.model !== gridItem.binding.model);
     }
 
@@ -749,7 +781,7 @@ export class GridEditor {
             return null;
         }
 
-        return this.getWidgetGridItem(nextElement);
+        return this.getGridItem(nextElement);
     }
 
     private getPrevSibling(gridItem: GridItem): GridItem {
@@ -759,15 +791,17 @@ export class GridEditor {
             return null;
         }
 
-        return this.getWidgetGridItem(previousElement);
+        return this.getGridItem(previousElement);
     }
 
     private getGridItemsUnderPointer(includeReadonly: boolean = false): GridItem[] {
-        const elements = this.getUnderlyingElements().filter(x => !x.classList.contains("design") && x.tagName !== "HTML");
+        // const elements = this.getUnderlyingElements().filter(x => !x.classList.contains("design") && x.tagName !== "HTML");
+        const elements = this.getUnderlyingElements().filter(x => x.tagName !== "HTML");
+
         return this.getGridItems(elements, includeReadonly);
     }
 
-    private getWidgetGridItem(element: HTMLElement, includeReadonly: boolean = false): GridItem {
+    private getGridItem(element: HTMLElement, includeReadonly: boolean = false): GridItem {
         const context = ko.contextFor(element);
 
         if (!context) {
@@ -904,7 +938,7 @@ export class GridEditor {
         const stackOfGridItems = [];
 
         for (const element of elements.reverse()) {
-            const widgetGridItem = this.getWidgetGridItem(element, includeReadonly);
+            const widgetGridItem = this.getGridItem(element, includeReadonly);
 
             if (widgetGridItem && widgetGridItem.binding !== currentwidgetBinding) {
                 stackOfGridItems.push(widgetGridItem);
