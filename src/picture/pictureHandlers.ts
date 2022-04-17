@@ -79,7 +79,6 @@ export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
     public getContextCommands(context: WidgetContext): IContextCommandSet {
         const contextualEditor: IContextCommandSet = {
             color: "#2b87da",
-            hoverCommands: [],
             selectCommands: [
                 {
                     controlType: "toolbox-button",

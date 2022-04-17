@@ -5,7 +5,7 @@ import { ButtonModel } from "./buttonModel";
 
 export class ButtonHandlers implements IWidgetHandler {
     constructor(private readonly viewManager: ViewManager) { }
-    
+
     public async getWidgetOrder(): Promise<IWidgetOrder> {
         const widgetOrder: IWidgetOrder = {
             name: "button",
@@ -23,22 +23,20 @@ export class ButtonHandlers implements IWidgetHandler {
     public getContextCommands(context: WidgetContext): IContextCommandSet {
         const contextualEditor: IContextCommandSet = {
             color: "#2b87da",
-            hoverCommands: [],
-            selectCommands: [
-                {
-                    controlType: "toolbox-button",
-                    displayName: "Edit button",
-                    callback: () => this.viewManager.openWidgetEditor(context.binding)
-                },
-                {
-                    controlType: "toolbox-splitter"
-                },
-                {
-                    controlType: "toolbox-button",
-                    tooltip: "Switch to parent",
-                    iconClass: "paperbits-icon paperbits-enlarge-vertical",
-                    callback: () => context.gridItem.getParent().select(),
-                }
+            selectCommands: [{
+                controlType: "toolbox-button",
+                displayName: "Edit button",
+                callback: () => this.viewManager.openWidgetEditor(context.binding)
+            },
+            {
+                controlType: "toolbox-splitter"
+            },
+            {
+                controlType: "toolbox-button",
+                tooltip: "Switch to parent",
+                iconClass: "paperbits-icon paperbits-enlarge-vertical",
+                callback: () => context.gridItem.getParent().select(),
+            }
                 // {
                 //     tooltip: "Help",
                 //     iconClass: "paperbits-icon paperbits-c-question",

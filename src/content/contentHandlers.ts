@@ -36,6 +36,9 @@ export class ContentHandlers implements IWidgetHandler {
                 }
             }];
         }
+        else {
+            contextualEditor.hoverCommands = [];
+        }
 
         return contextualEditor;
     }

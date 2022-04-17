@@ -26,6 +26,7 @@ import { Bag } from "@paperbits/common";
 import { ComponentBinder } from "@paperbits/common/editing/componentBinder";
 import { PopupPublishModule } from "./popup/popup.publish.module";
 import { DismissButtonPublishModule } from "./dismiss-button/dismissButton.publish.module";
+import { ConsoleLogger } from "@paperbits/common/logging";
 
 
 export class CorePublishModule implements IInjectorModule {
@@ -44,6 +45,7 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindSingleton("htmlPageOptimizer",  HtmlPageOptimizer);
         injector.bindSingleton("htmlDocumentProvider", JsDomHtmlDocumentProvider);
         injector.bindCollection("htmlPagePublisherPlugins");
+        injector.bindSingleton("logger", ConsoleLogger);
         injector.bindToCollection("permalinkResolvers", MediaPermalinkResolver, "mediaPermalinkResolver");
         injector.bindToCollection("htmlPagePublisherPlugins", KnockoutHtmlPagePublisherPlugin);
         injector.bindToCollection("htmlPagePublisherPlugins", LinkedDataHtmlPagePublisherPlugin);

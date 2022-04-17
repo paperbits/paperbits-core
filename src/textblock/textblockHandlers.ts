@@ -33,7 +33,6 @@ export class TextblockHandlers implements IWidgetHandler {
     public getContextCommands(context: WidgetContext): IContextCommandSet {
         const contextualEditor: IContextCommandSet = {
             color: "#2b87da",
-            hoverCommands: [],
             selectCommands: [
                 {
                     controlType: "toolbox-button",

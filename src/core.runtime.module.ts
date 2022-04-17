@@ -9,6 +9,7 @@ import { TabPanelRuntimeModule } from "./tabs/tabPanel.runtime.module";
 import { MapRuntimeModule } from "./map/map.runtime.module";
 import { SearchRuntimeModule } from "./search/search.runtime.module";
 import { KnockoutRegistrationLoaders } from "./ko";
+import { ConsoleLogger } from "@paperbits/common/logging";
 
 export class CoreRuntimeModule implements IInjectorModule {
     public register(injector: IInjector): void {
@@ -17,6 +18,7 @@ export class CoreRuntimeModule implements IInjectorModule {
         injector.bindModule(new TabPanelRuntimeModule());
         injector.bindModule(new MapRuntimeModule());
         injector.bindModule(new SearchRuntimeModule());
+        injector.bindSingleton("logger", ConsoleLogger);
         injector.bindSingleton("eventManager", DefaultEventManager);
         injector.bindCollection("autostart");
         injector.bindCollection("routeGuards");

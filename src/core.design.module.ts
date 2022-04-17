@@ -81,6 +81,7 @@ import { StickToBindingHandler } from "./ko/bindingHandlers/bindingHandlers.stic
 import { KnockoutDesignModule } from "./ko/knockout.design.module";
 import { HelpCenterBindingHandler } from "./ko/bindingHandlers/bindingHandlers.helpCenter";
 import { HelpCenter } from "./workshops/helpCenter/helpCenter";
+import { ConsoleLogger } from "@paperbits/common/logging";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -164,6 +165,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bind("popupHost", PopupHost);
         injector.bind("popupEditor", PopupEditor);
         injector.bind("popupSelector", PopupSelector);
+        injector.bindSingleton("logger", ConsoleLogger);
         injector.bindSingleton("popupService", PopupService);
         injector.bindToCollection("modelBinders", PopupHostModelBinder, "popupHostModelBinder");
         injector.bindToCollection("viewModelBinders", PopupViewModelBinder);

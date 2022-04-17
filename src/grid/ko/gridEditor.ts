@@ -130,8 +130,10 @@ export class GridEditor {
             }
         }
 
+        const defaultCommands = this.getDefaultContextCommands(context);
+
         if (!contextualCommands) {
-            contextualCommands = this.getDefaultContextCommands(context);
+            contextualCommands = defaultCommands;
         }
 
         const defaultCommand: IContextCommand = {
@@ -145,10 +147,19 @@ export class GridEditor {
         };
 
         contextualCommands.element = gridItem.element;
-        contextualCommands.selectCommands = contextualCommands.selectCommands || null;
-        contextualCommands.hoverCommands = contextualCommands.hoverCommands || null;
-        contextualCommands.deleteCommand = contextualCommands.deleteCommand || null;
         contextualCommands.defaultCommand = defaultCommand;
+
+        contextualCommands.selectCommands = contextualCommands.selectCommands !== undefined
+            ? contextualCommands.selectCommands
+            : defaultCommands.selectCommands;
+
+        contextualCommands.hoverCommands = contextualCommands.hoverCommands !== undefined
+            ? contextualCommands.hoverCommands
+            : defaultCommands.hoverCommands;
+
+        contextualCommands.deleteCommand = contextualCommands.deleteCommand !== undefined
+            ? contextualCommands.deleteCommand
+            : defaultCommands.deleteCommand;
 
         return contextualCommands;
     }
@@ -241,7 +252,7 @@ export class GridEditor {
             return;
         }
 
-       
+
 
         if (gridItem.binding?.editor !== "text-block-editor") {
             event.preventDefault();
@@ -606,14 +617,19 @@ export class GridEditor {
         const tobeDeleted = Object.keys(this.activeElements);
         const gridItems = this.getGridItemsUnderPointer();
 
+        tobeDeleted.forEach(key => {
+            this.viewManager.removeContextualCommands(key);
+            delete this.activeElements[key];
+        });
+
         for (let i = gridItems.length - 1; i >= 0; i--) {
             const gridItem = gridItems[i];
-            const index = tobeDeleted.indexOf(gridItem.name);
+            const index = tobeDeleted.indexOf(gridItem.binding.name);
             tobeDeleted.splice(index, 1);
 
             const quadrant = Utils.pointerToClientQuadrant(this.pointerX, this.pointerY, gridItem.element);
             const half = quadrant.vertical;
-            const activeElement = this.activeElements[gridItem.name];
+            const activeElement = this.activeElements[gridItem.binding.name];
             const contextualCommandSet = gridItem.getContextCommands(half);
 
             highlightedGridItem = gridItem;
@@ -621,9 +637,9 @@ export class GridEditor {
             highlightColor = contextualCommandSet.color;
 
             if (!activeElement || gridItem.element !== activeElement.element || half !== activeElement.half) {
-                this.viewManager.setContextualCommands(gridItem.name, contextualCommandSet);
+                this.viewManager.setContextualCommands(gridItem.binding.name, contextualCommandSet);
 
-                this.activeElements[gridItem.name] = {
+                this.activeElements[gridItem.binding.name] = {
                     key: gridItem.name,
                     element: gridItem.element,
                     half: quadrant.vertical
@@ -631,13 +647,7 @@ export class GridEditor {
             }
         }
 
-        tobeDeleted.forEach(key => {
-            this.viewManager.removeContextualCommands(key);
-            delete this.activeElements[key];
-        });
-
         if (this.activeHighlightedGridItem !== highlightedGridItem && highlightedGridItem?.binding.name !== "content") {
-
             this.activeHighlightedGridItem = highlightedGridItem;
 
             this.viewManager.setHighlight({
