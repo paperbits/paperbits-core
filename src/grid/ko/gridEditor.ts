@@ -825,10 +825,9 @@ export class GridEditor {
         if (!styleDefinitions.components) {
             return null;
         }
-
-        const pairs = StyleHelper.buildSelectors(styleDefinitions.components);
-        const match = pairs.find(x => element.matches(x.selector));
-
+        
+        const componentStyleDefinitionWrapper = StyleHelper.buildSelectors(styleDefinitions.components);
+        const match = componentStyleDefinitionWrapper.find(x => element.matches(x.selector));
 
         if (!match) {
             return null;
