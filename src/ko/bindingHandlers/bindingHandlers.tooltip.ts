@@ -1,5 +1,5 @@
 import * as ko from "knockout";
-import { BalloonHandle, BalloonActivationOptions } from "@paperbits/common/ui/balloons";
+import { BalloonHandle, BalloonActivationMethod } from "@paperbits/common/ui/balloons";
 
 
 const defaultTooltipDelayMs = 700;
@@ -63,7 +63,7 @@ ko.bindingHandlers["tooltip"] = {
                 },
                 position: tooltipPosition,
                 delay: tooltipDelayMs || defaultTooltipDelayMs,
-                activateOn: BalloonActivationOptions.hoverOrFocus,
+                activateOn: BalloonActivationMethod.hoverOrFocus,
                 closeTimeout: closeTimeout,
                 isDisabled: isDisabled,
                 onCreated: (handle: BalloonHandle): void => {
