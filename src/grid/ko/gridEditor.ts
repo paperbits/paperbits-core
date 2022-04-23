@@ -826,7 +826,7 @@ export class GridEditor {
             return null;
         }
         
-        const componentStyleDefinitionWrapper = StyleHelper.buildSelectors(styleDefinitions.components);
+        const componentStyleDefinitionWrapper = StyleHelper.getStyleDefinitionWrappers(styleDefinitions.components);
         const match = componentStyleDefinitionWrapper.find(x => element.matches(x.selector));
 
         if (!match) {
