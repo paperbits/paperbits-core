@@ -9,7 +9,7 @@ import { Component, Event, OnMounted, Param } from "@paperbits/common/ko/decorat
 import { GridModelBinder } from "../../grid-layout-section";
 import { SectionModelBinder } from "../../section";
 import { GridViewModelBinder } from ".";
-import { BlockContract } from "@paperbits/common/blocks";
+import { BlockContract, IBlockService } from "@paperbits/common/blocks";
 import { HttpClient } from "@paperbits/common/http";
 import { GridContract } from "../../grid/gridContract";
 import { BlockItem } from "../../workshops/block/ko";
@@ -44,7 +44,8 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         private readonly gridViewModelBinder: GridViewModelBinder,
         private readonly sectionModelBinder: SectionModelBinder,
         private readonly sectionViewModelBinder: SectionViewModelBinder,
-        private readonly httpClient: HttpClient
+        private readonly httpClient: HttpClient,
+        private readonly blockService: IBlockService
     ) {
         this.heading = ko.observable();
         this.selectLayout = this.selectLayout.bind(this);
@@ -86,11 +87,7 @@ export class GridLayoutSelector implements IResourceSelector<any> {
                 return [];
             }
 
-            const response = await this.httpClient.send({
-                url: blocksUrl,
-                method: "GET"
-            });
-
+            const response = await this.httpClient.send({ url: blocksUrl, method: "GET" });
             const blockSnippets = <any>response.toObject();
             const bagOfBlocks: Bag<BlockContract> = blockSnippets["blocks"];
             const blocks = Object.values(bagOfBlocks).filter(block => block.title.includes(pattern) && block.type === "blank-section");
@@ -142,6 +139,21 @@ export class GridLayoutSelector implements IResourceSelector<any> {
     public async onBlockSelected(block: BlockItem): Promise<void> {
         if (this.onSelect) {
             this.onSelect(block.model);
+        }
+
+        if (this.blockService.importSnippet && block.imports) {
+            const response = await this.httpClient.send({ url: Constants.blockSnippetsLibraryUrl, method: "GET" });
+            const library = <any>response.toObject();
+
+            for (const importKey of block.imports) {
+                const snippet = Objects.getObjectAt(importKey, library);
+
+                if (!snippet) {
+                    console.warn(`Could not import object by key "${importKey}".`);
+                }
+
+                await this.blockService.importSnippet(importKey, snippet);
+            }
         }
     }
 }

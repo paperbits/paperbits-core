@@ -7,6 +7,7 @@ import { Contract } from "@paperbits/common";
 export class BlockItem {
     public key: string;
     public contentKey: string;
+    public imports: string[];
 
     public readonly hasFocus: ko.Observable<boolean>;
     public readonly title: ko.Observable<string>;
@@ -26,6 +27,7 @@ export class BlockItem {
         this.model = model,
         this.widget = widget;
         this.styleManager = styleManager;
+        this.imports = block.imports;
     }
 
     public toContract(): BlockContract {

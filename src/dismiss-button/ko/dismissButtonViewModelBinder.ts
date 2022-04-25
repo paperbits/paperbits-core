@@ -39,7 +39,7 @@ export class DismissButtonViewModelBinder implements ViewModelBinder<DismissButt
             readonly: bindingContext ? bindingContext.readonly : false,
             model: model,
             draggable: true,
-            flow: ComponentFlow.Inline,
+            flow: ComponentFlow.Contents,
             requires: ["popup"],
             editor: "dismiss-button-editor",
             applyChanges: async () => {
