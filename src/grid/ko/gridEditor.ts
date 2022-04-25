@@ -10,7 +10,6 @@ import { IWidgetService } from "@paperbits/common/widgets";
 import { EventManager, Events, MouseButton } from "@paperbits/common/events";
 import { Router } from "@paperbits/common/routing";
 import { ContentModel } from "../../content";
-import { PopupHostModel } from "../../popup/popupHostModel";
 import { SectionModel } from "../../section";
 import { Bag, Keys } from "@paperbits/common";
 import { LocalStyles, VariationContract } from "@paperbits/common/styles";
@@ -48,14 +47,14 @@ export class GridEditor {
         this.activeElements = {};
     }
 
-    private isModelBeingEdited(binding: IWidgetBinding<any, any>): boolean {
+    private isModelBeingEdited(gridItem: GridItem): boolean {
         const editorView = this.viewManager.getActiveView();
 
         if (!editorView) {
             return false;
         }
 
-        if (editorView.component.name !== binding.editor) {
+        if (editorView.component.name !== gridItem.editor) {
             return false;
         }
 
@@ -232,11 +231,11 @@ export class GridEditor {
         if (gridItems.length > 0) {
             const topGridItem = gridItems[0];
 
-            if (topGridItem.binding.name === "content") {
+            if (topGridItem.name === "content") {
                 return;
             }
 
-            const clickOnParentLayer = !!topGridItem.binding.readonly;
+            const clickOnParentLayer = !!topGridItem.readonly;
 
             if (clickOnParentLayer) {
                 event.preventDefault();
@@ -252,13 +251,11 @@ export class GridEditor {
             return;
         }
 
-
-
-        if (gridItem.binding?.editor !== "text-block-editor") {
+        if (gridItem.editor !== "text-block-editor") {
             event.preventDefault();
         }
 
-        if (this.isModelBeingEdited(gridItem.binding)) {
+        if (this.isModelBeingEdited(gridItem)) {
             return;
         }
 
@@ -624,12 +621,12 @@ export class GridEditor {
 
         for (let i = gridItems.length - 1; i >= 0; i--) {
             const gridItem = gridItems[i];
-            const index = tobeDeleted.indexOf(gridItem.binding.name);
+            const index = tobeDeleted.indexOf(gridItem.name);
             tobeDeleted.splice(index, 1);
 
             const quadrant = Utils.pointerToClientQuadrant(this.pointerX, this.pointerY, gridItem.element);
             const half = quadrant.vertical;
-            const activeElement = this.activeElements[gridItem.binding.name];
+            const activeElement = this.activeElements[gridItem.name];
             const contextualCommandSet = gridItem.getContextCommands(half);
 
             highlightedGridItem = gridItem;
@@ -637,9 +634,9 @@ export class GridEditor {
             highlightColor = contextualCommandSet.color;
 
             if (!activeElement || gridItem.element !== activeElement.element || half !== activeElement.half) {
-                this.viewManager.setContextualCommands(gridItem.binding.name, contextualCommandSet);
+                this.viewManager.setContextualCommands(gridItem.name, contextualCommandSet);
 
-                this.activeElements[gridItem.binding.name] = {
+                this.activeElements[gridItem.name] = {
                     key: gridItem.name,
                     element: gridItem.element,
                     half: quadrant.vertical
@@ -647,7 +644,7 @@ export class GridEditor {
             }
         }
 
-        if (this.activeHighlightedGridItem !== highlightedGridItem && highlightedGridItem?.binding.name !== "content") {
+        if (this.activeHighlightedGridItem !== highlightedGridItem && highlightedGridItem?.name !== "content") {
             this.activeHighlightedGridItem = highlightedGridItem;
 
             this.viewManager.setHighlight({
@@ -795,6 +792,8 @@ export class GridEditor {
         const gridItem: GridItem = {
             name: widgetBinding.name,
             displayName: widgetBinding.displayName,
+            readonly: widgetBinding.readonly,
+            editor: widgetBinding.editor,
             element: element,
             binding: widgetBinding,
             getParent: () => this.getParent(gridItem),
@@ -810,16 +809,7 @@ export class GridEditor {
     }
 
     private getStylableGridItem(element: HTMLElement, binding: IWidgetBinding<any, any>): GridItem {
-        const styleable = element["styleable"];
-
-        if (!styleable) {
-            return null;
-        }
-
-        const styleKey = styleable.key;
-
-        if (!styleKey) {
-            console.warn("No style key.");
+        if (!binding?.handler) {
             return null;
         }
 
@@ -830,9 +820,21 @@ export class GridEditor {
             return null;
         }
 
-        const styleKeySegments = styleKey.split("/");
         const styleDefinitions = handler.getStyleDefinitions();
-        const componentStyleDefinition = StyleHelper.getComponentStyleDefinition(styleDefinitions, styleKey);
+
+        if (!styleDefinitions.components) {
+            return null;
+        }
+        
+        const componentStyleDefinitionWrapper = StyleHelper.getStyleDefinitionWrappers(styleDefinitions.components);
+        const match = componentStyleDefinitionWrapper.find(x => element.matches(x.selector));
+
+        if (!match) {
+            return null;
+        }
+
+        const componentStyleDefinition = match.definition;
+        const styleKeySegments = match.key.split("/");
 
         const defaultCommand: IContextCommand = {
             controlType: "toolbox-button",
@@ -842,9 +844,8 @@ export class GridEditor {
             position: "top right",
             color: "#607d8b",
             callback: () => {
-                // TODO: Temporary hack, need to refactor.
                 const styles: LocalStyles = binding.model?.styles;
-                const shortKey = styleKeySegments.slice(2).join("/");
+                const shortKey = "instance/" + styleKeySegments.slice(2).join("/");
 
                 let componentVariation: VariationContract;
                 componentVariation = Objects.getObjectAt(shortKey, styles);
@@ -883,6 +884,8 @@ export class GridEditor {
             displayName: componentStyleDefinition.displayName,
             element: element,
             isStylable: true,
+            readonly: false,
+            editor: "style-editor",
             getParent: () => this.getParent(gridItem),
             getChildren: () => this.getChildren(gridItem),
             getSiblings: () => this.getSiblings(gridItem),

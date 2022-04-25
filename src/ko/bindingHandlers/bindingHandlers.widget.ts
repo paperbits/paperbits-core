@@ -169,6 +169,8 @@ export class WidgetBindingHandler {
                                     }
                                 }, null);
 
+                                componentViewModel["wrapped"] = binding.flow !== ComponentFlow.Contents;
+
                                 if (binding.draggable) {
                                     ko.applyBindingsToNode(nonVirtualElement, { draggable: {} }, null);
                                 }

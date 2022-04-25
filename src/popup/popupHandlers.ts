@@ -20,11 +20,14 @@ export class PopupHandlers implements IWidgetHandler {
             color: "#4c5866",
             hoverCommands: [],
             selectCommands: [{
+                displayName: "Edit popup",
                 controlType: "toolbox-button",
-                tooltip: "Edit popup",
                 position: "top right",
                 color: "#4c5866",
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
+            },
+            {
+                controlType: "toolbox-splitter"
             }]
         };
 

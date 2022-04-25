@@ -39,12 +39,10 @@ export class TabPanelHandlers {
                 controlType: "toolbox-button",
                 tooltip: "Delete tab panel",
                 callback: () => {
-                    const index = context.parentModel["tabPanelItems"].indexOf(context.model);
                     context.parentModel.widgets.remove(context.model);
                     context.parentBinding.applyChanges();
                     this.viewManager.clearContextualCommands();
                     this.eventManager.dispatchEvent(Events.ContentUpdate);
-                    context.parentBinding["setActiveItem"](index - 1);
                 }
             },
             selectCommands: [{

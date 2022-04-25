@@ -44,7 +44,7 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
             model: model,
             handler: ButtonHandlers,
             draggable: true,
-            flow: ComponentFlow.Inline,
+            flow: ComponentFlow.Contents,
             editor: "button-editor",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
