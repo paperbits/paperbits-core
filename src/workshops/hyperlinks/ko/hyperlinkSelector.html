@@ -4,8 +4,8 @@
 
     <div class="tabs" role="tablist">
         <div class="tab" role="presentation"
-            data-bind="css: { 'tab-is-active': !hyperlinkProvider() }, attr: { 'aria-selected': !hyperlinkProvider() }">
-            <a href="#" data-bind="click: clearProvider, focus: true" title="Clear hyperlink" role="tab"
+            data-bind="css: { 'tab-is-active': !hyperlinkProvider() }">
+            <a href="#" data-bind="click: clearProvider, focus: true, attr: { 'aria-selected': (!hyperlinkProvider()).toString() }" title="Clear hyperlink" role="tab"
                 aria-label="Clear hyperlink">
                 <i aria-hidden="true" class="paperbits-icon paperbits-ban"></i>
             </a>
@@ -16,7 +16,7 @@
         <div class="tab" role="presentation"
             data-bind="css: { 'tab-is-active': $component.hyperlinkProvider() && hyperlinkProvider.componentName === $component.hyperlinkProvider().componentName }, attr: { 'title': hyperlinkProvider.name }">
             <a href="#" role="tab"
-                data-bind="balloon: { component: { name: hyperlinkProvider.componentName, params: { onHyperlinkSelect: $component.onHyperlinkSelected } }, closeOn: $component.hyperlink }, attr: { 'aria-label': hyperlinkProvider.name, 'aria-selected': $parent.hyperlinkProvider() && hyperlinkProvider.componentName === $parent.hyperlinkProvider().componentName }">
+                data-bind="balloon: { component: { name: hyperlinkProvider.componentName, params: { onHyperlinkSelect: $component.onHyperlinkSelected } }, closeOn: $component.hyperlink }, attr: { 'aria-label': hyperlinkProvider.name, 'aria-selected': ($parent.hyperlinkProvider() && hyperlinkProvider.componentName === $parent.hyperlinkProvider().componentName).toString() }">
                 <i aria-hidden="true" data-bind="css: hyperlinkProvider.iconClass"></i>
             </a>
         </div>

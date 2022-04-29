@@ -6,7 +6,7 @@ import { BalloonOptions, BalloonActivationMethod, BalloonHandle, BalloonState } 
 import { ViewStack } from "@paperbits/common/ui/viewStack";
 import { Events } from "@paperbits/common/events";
 
-
+const balloonHandlesProp = "balloonHandles";
 
 export class BalloonBindingHandler {
     constructor(viewStack: ViewStack) {
@@ -14,11 +14,10 @@ export class BalloonBindingHandler {
             init: (toggleElement: HTMLElement, valueAccessor: () => BalloonOptions) => {
                 const options = ko.unwrap(valueAccessor());
                 const activateOn = options.activateOn || BalloonActivationMethod.clickOrKeyDown;
+                const balloonHandles: BalloonHandle[] = toggleElement[balloonHandlesProp] || [];
 
-                let balloonHandles: BalloonHandle[] = toggleElement["balloonHandles"] || [];
-
-                if (!toggleElement["balloonHandles"]) {
-                    toggleElement["balloonHandles"] = balloonHandles;
+                if (!toggleElement[balloonHandlesProp]) {
+                    toggleElement[balloonHandlesProp] = balloonHandles;
                 }
 
                 let inBalloon = false;
@@ -26,9 +25,7 @@ export class BalloonBindingHandler {
                 let balloonView: View;
                 let balloonElement: HTMLElement;
                 let balloonTipElement: HTMLElement;
-                // let balloonState = BalloonState.closed;
                 let closeTimeout;
-                let openTimeout;
                 let createBalloonElement: () => void;
 
                 if (options.component) {
@@ -423,27 +420,10 @@ export class BalloonBindingHandler {
                 }
 
                 const getBaloonBaloonHandleFor = (...methods: BalloonActivationMethod[]): BalloonHandle => {
-                    const balloonHandles: BalloonHandle[] = toggleElement["balloonHandles"];
+                    const balloonHandles: BalloonHandle[] = toggleElement[balloonHandlesProp];
 
-                    const h = methods.map(x => balloonHandles.find(y => y.activateOn === x)).find(x => !!x);
-
-                    return h;
-
-                    // if (methods.includes(BalloonActivationMethod.clickOrKeyDown)) {
-                    //     const preferredMethodHandle = balloonHandles.find(x => x.activateOn === BalloonActivationMethod.clickOrKeyDown);
-
-                    //     if (preferredMethodHandle) {
-                    //         return preferredMethodHandle;
-                    //     }
-                    // }
-
-                    // const anyHandle = balloonHandles.find(x => methods.includes(x.activateOn));
-
-                    // if (anyHandle) {
-                    //     return anyHandle;
-                    // }
-
-                    // return null;
+                    const handle = methods.map(x => balloonHandles.find(y => y.activateOn === x)).find(x => !!x);
+                    return handle;
                 };
 
                 const onPointerDown = async (event: MouseEvent): Promise<void> => {

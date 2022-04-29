@@ -84,7 +84,6 @@ ko.bindingHandlers["tooltip"] = {
         }
 
         ko.applyBindingsToNode(triggerElement, {
-            attr: { "aria-label": tooltipMessage },
             balloon: {
                 component: {
                     name: "tooltip",
