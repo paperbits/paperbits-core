@@ -2,32 +2,33 @@
 import * as Html from "@paperbits/common/html";
 import { Keys } from "@paperbits/common/keyboard";
 import { View } from "@paperbits/common/ui";
-import { BalloonOptions, BalloonActivationOptions, BalloonHandle } from "@paperbits/common/ui/balloons";
+import { BalloonOptions, BalloonActivationMethod, BalloonHandle, BalloonState } from "@paperbits/common/ui/balloons";
 import { ViewStack } from "@paperbits/common/ui/viewStack";
 import { Events } from "@paperbits/common/events";
 
 
-enum BalloonState {
-    opening = "opening",
-    open = "open",
-    closing = "closing",
-    closed = "closed"
-}
 
 export class BalloonBindingHandler {
     constructor(viewStack: ViewStack) {
         ko.bindingHandlers["balloon"] = {
             init: (toggleElement: HTMLElement, valueAccessor: () => BalloonOptions) => {
                 const options = ko.unwrap(valueAccessor());
-                const activateOn = options.activateOn || BalloonActivationOptions.clickOrKeyDown;
+                const activateOn = options.activateOn || BalloonActivationMethod.clickOrKeyDown;
+
+                let balloonHandles: BalloonHandle[] = toggleElement["balloonHandles"] || [];
+
+                if (!toggleElement["balloonHandles"]) {
+                    toggleElement["balloonHandles"] = balloonHandles;
+                }
 
                 let inBalloon = false;
                 let isHoverOver = false;
                 let balloonView: View;
                 let balloonElement: HTMLElement;
                 let balloonTipElement: HTMLElement;
-                let balloonState = BalloonState.closed;
+                // let balloonState = BalloonState.closed;
                 let closeTimeout;
+                let openTimeout;
                 let createBalloonElement: () => void;
 
                 if (options.component) {
@@ -48,7 +49,7 @@ export class BalloonBindingHandler {
                     };
                 }
 
-                if (activateOn === BalloonActivationOptions.clickOrKeyDown) {
+                if (activateOn === BalloonActivationMethod.clickOrKeyDown) {
                     toggleElement.setAttribute(Html.AriaAttributes.expanded, "false");
                 }
 
@@ -59,7 +60,7 @@ export class BalloonBindingHandler {
                 };
 
                 const removeBalloon = (): void => {
-                    balloonState = BalloonState.closed;
+                    balloonHandle.balloonState = BalloonState.closed;
 
                     if (!balloonElement) {
                         return;
@@ -78,7 +79,7 @@ export class BalloonBindingHandler {
                 const resetCloseTimeout = () => {
                     if (options.closeTimeout) {
                         clearTimeout(closeTimeout);
-                        balloonState = BalloonState.closing;
+                        balloonHandle.balloonState = BalloonState.closing;
                         closeTimeout = setTimeout(closeBalloon, options.closeTimeout);
                     }
                 };
@@ -297,20 +298,16 @@ export class BalloonBindingHandler {
                         return;
                     }
 
-                    if (balloonState !== BalloonState.opening) {
-                        return;
-                    }
-
                     resetCloseTimeout();
 
                     const existingBalloonHandle: BalloonHandle = toggleElement["activeBalloon"];
 
                     if (existingBalloonHandle) {
-                        if (activateOn === BalloonActivationOptions.hoverOrFocus) {
-                            return;
+                        if (existingBalloonHandle.activateOn === BalloonActivationMethod.hoverOrFocus) {
+                            existingBalloonHandle.close();
                         }
                         else {
-                            existingBalloonHandle.close();
+                            return;
                         }
                     }
 
@@ -318,7 +315,7 @@ export class BalloonBindingHandler {
                         const activeBalloonHandle: BalloonHandle = toggleElement["activeBalloon"];
 
                         if (activeBalloonHandle) {
-                            if (activateOn === BalloonActivationOptions.hoverOrFocus) {
+                            if (activateOn === BalloonActivationMethod.hoverOrFocus) {
                                 return;
                             }
                             else {
@@ -345,21 +342,21 @@ export class BalloonBindingHandler {
                         viewStack.runHitTest(toggleElement);
                         viewStack.pushView(balloonView);
 
-                        if (activateOn === BalloonActivationOptions.clickOrKeyDown) {
+                        if (activateOn === BalloonActivationMethod.clickOrKeyDown) {
                             toggleElement.setAttribute(Html.AriaAttributes.expanded, "true");
                         }
 
-                        toggleElement["activeBalloon"] = ballonHandle;
+                        toggleElement["activeBalloon"] = balloonHandle;
 
                         balloonElement.classList.add("balloon-is-active");
                         requestAnimationFrame(updatePosition);
-                        balloonState = BalloonState.open;
+                        balloonHandle.balloonState = BalloonState.open;
 
                         if (options.onOpen) {
                             options.onOpen();
                         }
 
-                        if (activateOn === BalloonActivationOptions.hoverOrFocus) {
+                        if (activateOn === BalloonActivationMethod.hoverOrFocus) {
                             balloonElement.addEventListener("mouseenter", () => {
                                 inBalloon = true;
                             });
@@ -388,28 +385,66 @@ export class BalloonBindingHandler {
                 const toggle = (): void => {
                     resetCloseTimeout();
 
-                    if (balloonState === BalloonState.open) {
+                    const existingBalloonHandle: BalloonHandle = toggleElement["activeBalloon"];
+
+                    if (existingBalloonHandle && balloonHandle !== existingBalloonHandle) {
+                        existingBalloonHandle.close();
+                    }
+
+                    if (balloonHandle.balloonState === BalloonState.open) {
                         if (!options.closeTimeout) {
-                            balloonState = BalloonState.closing;
+                            balloonHandle.balloonState = BalloonState.closing;
                             closeBalloon();
                         }
                     }
                     else {
-                        balloonState = BalloonState.opening;
+                        balloonHandle.balloonState = BalloonState.opening;
                         openBalloon(toggleElement);
                     }
                 };
 
-                const ballonHandle: BalloonHandle = {
+                const balloonHandle: BalloonHandle = {
                     open: openBalloon,
                     close: closeBalloon,
                     toggle: toggle,
-                    updatePosition: () => requestAnimationFrame(updatePosition)
+                    updatePosition: () => requestAnimationFrame(updatePosition),
+                    activateOn: activateOn,
+                    balloonState: BalloonState.closed
                 };
 
-                if (options.onCreated) {
-                    options.onCreated(ballonHandle);
+                if (balloonHandles.some(x => x.activateOn === activateOn)) {
+                    throw new Error(`The element already has balloon with activation method "${activateOn}".`);
                 }
+
+                balloonHandles.push(balloonHandle);
+
+                if (options.onCreated) {
+                    options.onCreated(balloonHandle);
+                }
+
+                const getBaloonBaloonHandleFor = (...methods: BalloonActivationMethod[]): BalloonHandle => {
+                    const balloonHandles: BalloonHandle[] = toggleElement["balloonHandles"];
+
+                    const h = methods.map(x => balloonHandles.find(y => y.activateOn === x)).find(x => !!x);
+
+                    return h;
+
+                    // if (methods.includes(BalloonActivationMethod.clickOrKeyDown)) {
+                    //     const preferredMethodHandle = balloonHandles.find(x => x.activateOn === BalloonActivationMethod.clickOrKeyDown);
+
+                    //     if (preferredMethodHandle) {
+                    //         return preferredMethodHandle;
+                    //     }
+                    // }
+
+                    // const anyHandle = balloonHandles.find(x => methods.includes(x.activateOn));
+
+                    // if (anyHandle) {
+                    //     return anyHandle;
+                    // }
+
+                    // return null;
+                };
 
                 const onPointerDown = async (event: MouseEvent): Promise<void> => {
                     if (!toggleElement) {
@@ -423,23 +458,37 @@ export class BalloonBindingHandler {
                         return;
                     }
 
-                    toggle();
+                    const handle = getBaloonBaloonHandleFor(BalloonActivationMethod.clickOrKeyDown);
+
+                    if (handle) {
+                        handle.toggle();
+                    }
                 };
 
                 const onFocus = (): void => {
-                    balloonState = BalloonState.opening;
+                    const existingBalloonHandle: BalloonHandle = toggleElement["activeBalloon"];
+
+                    if (existingBalloonHandle) {
+                        return;
+                    }
+
                     openBalloon();
                 };
 
                 const onBlur = (): void => {
-                    balloonState = BalloonState.closing;
                     closeBalloon();
                 };
 
                 const onMouseEnter = (event: MouseEvent): void => {
+                    const handle = getBaloonBaloonHandleFor(BalloonActivationMethod.hoverOrFocus, BalloonActivationMethod.all);
+
+                    if (!handle) {
+                        return;
+                    }
+
                     isHoverOver = true;
 
-                    balloonState = BalloonState.opening;
+                    balloonHandle.balloonState = BalloonState.opening;
 
                     setTimeout(() => {
                         if (!isHoverOver) {
@@ -458,7 +507,7 @@ export class BalloonBindingHandler {
                 const checkCloseHoverBalloon = (): void => {
                     setTimeout(() => {
                         if (!isHoverOver && !inBalloon) {
-                            balloonState = BalloonState.closing;
+                            balloonHandle.balloonState = BalloonState.closing;
                             closeBalloon();
                         }
                     }, 50);
@@ -469,7 +518,13 @@ export class BalloonBindingHandler {
                         case Keys.Enter:
                         case Keys.Space:
                             event.preventDefault();
-                            toggle();
+
+                            const handle = getBaloonBaloonHandleFor(BalloonActivationMethod.clickOrKeyDown, BalloonActivationMethod.all);
+
+                            if (handle) {
+                                handle.toggle();
+                            }
+
                             break;
                     }
                 };
@@ -492,22 +547,27 @@ export class BalloonBindingHandler {
 
                 toggleElement.addEventListener(Events.Click, onClick);
                 window.addEventListener(Events.Scroll, onScroll, true);
-                document.addEventListener(Events.MouseDown, onPointerDown, true);
 
                 switch (activateOn) {
-                    case BalloonActivationOptions.clickOrKeyDown:
+                    case BalloonActivationMethod.clickOrKeyDown:
                         toggleElement.addEventListener(Events.KeyDown, onKeyDown);
+                        document.addEventListener(Events.MouseDown, onPointerDown, true);
                         break;
 
-                    case BalloonActivationOptions.hoverOrFocus:
+                    case BalloonActivationMethod.hoverOrFocus:
                         toggleElement.addEventListener(Events.MouseEnter, onMouseEnter);
                         toggleElement.addEventListener(Events.MouseLeave, onMouseLeave);
+                        toggleElement.addEventListener(Events.Focus, onFocus);
+                        toggleElement.addEventListener(Events.Blur, onBlur);
+
                         break;
 
-                    case BalloonActivationOptions.all:
+                    case BalloonActivationMethod.all:
                         toggleElement.addEventListener(Events.KeyDown, onKeyDown);
                         toggleElement.addEventListener(Events.MouseEnter, onMouseEnter);
                         toggleElement.addEventListener(Events.MouseLeave, onMouseLeave);
+                        // toggleElement.addEventListener(Events.Focus, onFocus);
+                        // toggleElement.addEventListener(Events.Blur, onBlur);
                         break;
 
                     default:
@@ -515,21 +575,21 @@ export class BalloonBindingHandler {
                 }
 
                 ko.utils.domNodeDisposal.addDisposeCallback(toggleElement, () => {
-                    balloonState = BalloonState.closing;
+                    balloonHandle.balloonState = BalloonState.closing;
                     window.removeEventListener(Events.MouseDown, onPointerDown, true);
                     toggleElement.removeEventListener(Events.Click, onClick);
 
                     switch (activateOn) {
-                        case BalloonActivationOptions.clickOrKeyDown:
+                        case BalloonActivationMethod.clickOrKeyDown:
                             toggleElement.removeEventListener(Events.KeyDown, onKeyDown);
                             break;
 
-                        case BalloonActivationOptions.hoverOrFocus:
+                        case BalloonActivationMethod.hoverOrFocus:
                             toggleElement.removeEventListener(Events.MouseEnter, onMouseEnter);
                             toggleElement.removeEventListener(Events.MouseLeave, onMouseLeave);
                             break;
 
-                        case BalloonActivationOptions.all:
+                        case BalloonActivationMethod.all:
                             toggleElement.removeEventListener(Events.KeyDown, onKeyDown);
                             toggleElement.removeEventListener(Events.MouseEnter, onMouseEnter);
                             toggleElement.removeEventListener(Events.MouseLeave, onMouseLeave);

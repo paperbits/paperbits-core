@@ -28,7 +28,7 @@
                 <span data-bind="text: heading"></span>
                 <!-- ko if: $data.helpText -->
                 <button class="btn-help" role="tooltip" aria-label="Help"
-                    data-bind="tooltip: { message: $data.helpText, position: 'right' }">
+                    data-bind="tooltip: { message: $data.helpText, position: 'right', activateOn: 'clickOrKeyDown' }">
                     <i aria-hidden="true" class="paperbits-icon paperbits-c-question"></i>
                 </button>
                 <!--/ko -->
