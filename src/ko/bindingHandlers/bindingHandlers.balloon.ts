@@ -7,23 +7,6 @@ import { ViewStack } from "@paperbits/common/ui/viewStack";
 import { Events } from "@paperbits/common/events";
 
 
-export class Balloon {
-    private toggleElement: HTMLElement;
-
-    constructor(options: BalloonOptions) {
-
-    }
-
-    public attach(toggleElement: HTMLElement): void {
-
-    }
-
-    public detach(toggleElement: HTMLElement): void {
-
-    }
-}
-
-
 
 export class BalloonBindingHandler {
     constructor(viewStack: ViewStack) {
@@ -45,6 +28,7 @@ export class BalloonBindingHandler {
                 let balloonTipElement: HTMLElement;
                 // let balloonState = BalloonState.closed;
                 let closeTimeout;
+                let openTimeout;
                 let createBalloonElement: () => void;
 
                 if (options.component) {
@@ -482,21 +466,16 @@ export class BalloonBindingHandler {
                 };
 
                 const onFocus = (): void => {
-                    setTimeout(() => {
-                        const existingBalloonHandle: BalloonHandle = toggleElement["activeBalloon"];
+                    const existingBalloonHandle: BalloonHandle = toggleElement["activeBalloon"];
 
-                        if (existingBalloonHandle) {
-                            return;
-                        }
+                    if (existingBalloonHandle) {
+                        return;
+                    }
 
-                        openBalloon();
-                    }, 500);
-
+                    openBalloon();
                 };
 
-                const onBlur = (): void => {
-                    // closeBalloon();
-                };
+                // const onBlur = (): void => { };
 
                 const onMouseEnter = (event: MouseEvent): void => {
                     const handle = getBaloonBaloonHandleFor(BalloonActivationMethod.hoverOrFocus, BalloonActivationMethod.all);
@@ -577,7 +556,7 @@ export class BalloonBindingHandler {
                     case BalloonActivationMethod.hoverOrFocus:
                         toggleElement.addEventListener(Events.MouseEnter, onMouseEnter);
                         toggleElement.addEventListener(Events.MouseLeave, onMouseLeave);
-                         toggleElement.addEventListener(Events.Focus, onFocus);
+                        toggleElement.addEventListener(Events.Focus, onFocus);
                         // toggleElement.addEventListener(Events.Blur, onBlur);
 
                         break;
