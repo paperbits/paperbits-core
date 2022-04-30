@@ -18,6 +18,8 @@ import { PopupHost } from "../../../popup/ko/popupHost";
     template: template
 })
 export class PageHost {
+    private readonly styleManager: StyleManager;
+
     public readonly contentViewModel: ko.Observable<ContentViewModel>;
     public readonly popupHostViewModel: ko.Observable<PopupHost>;
 
@@ -34,6 +36,7 @@ export class PageHost {
         this.contentViewModel = ko.observable();
         this.popupHostViewModel = ko.observable();
         this.pageKey = ko.observable();
+        this.styleManager = new StyleManager(this.eventManager);
     }
 
     @Param()
@@ -46,6 +49,7 @@ export class PageHost {
         this.router.addRouteChangeListener(this.onRouteChange);
         this.eventManager.addEventListener("onDataPush", () => this.onDataPush());
         this.eventManager.addEventListener("onLocaleChange", () => this.onLocaleUpdate());
+        this.eventManager.addEventListener("onPopupUpdate", () => this.onPopupUpdate());
     }
 
     /**
@@ -59,6 +63,10 @@ export class PageHost {
 
     private async onLocaleUpdate(): Promise<void> {
         await this.refreshContent();
+    }
+
+    private async onPopupUpdate(): Promise<void> {
+        await this.refreshPopupContent();
     }
 
     private async refreshContent(): Promise<void> {
@@ -80,13 +88,12 @@ export class PageHost {
 
         this.pageKey(pageContract.key);
 
-        const styleManager = new StyleManager(this.eventManager);
         const styleSheet = await this.styleCompiler.getStyleSheet();
-        styleManager.setStyleSheet(styleSheet);
+        this.styleManager.setStyleSheet(styleSheet);
 
         const pageBindingContext = {
             contentItemKey: pageContract.key,
-            styleManager: styleManager,
+            styleManager: this.styleManager,
             navigationPath: route.path,
             contentType: "page",
             template: { // Template here describes fields of particular content type.
@@ -111,10 +118,18 @@ export class PageHost {
 
         this.contentViewModel(layoutContentViewModel);
 
+        await this.refreshPopupContent();
 
-        /* Popups */
+        this.viewManager.removeShutter();
+
+        this.jumpToAnchor(route);
+    }
+
+    private async refreshPopupContent(): Promise<void> {
+        const route = this.router.getCurrentRoute();
+
         const popupBindingContext = {
-            styleManager: styleManager,
+            styleManager: this.styleManager,
             navigationPath: route.path,
             contentType: "popup",
             getHostedDocument: () => {
@@ -126,10 +141,6 @@ export class PageHost {
         popupHostViewModel["widgetBinding"].provides = ["html", "js", "interaction"];
 
         this.popupHostViewModel(popupHostViewModel);
-
-        this.viewManager.removeShutter();
-
-        this.jumpToAnchor(route);
     }
 
     private async onRouteChange(route: Route): Promise<void> {
