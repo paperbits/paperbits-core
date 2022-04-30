@@ -4,7 +4,7 @@ import { Events } from "@paperbits/common/events";
 
 
 ko.bindingHandlers["activate"] = {
-    init: (element: HTMLElement, valueAccessor: () => (data: any) => void) => {
+    init: (element: HTMLElement, valueAccessor: () => (data: any) => void, allBindings, viewModel) => {
         const onActivate = valueAccessor();
 
         if (!onActivate) {
@@ -13,11 +13,12 @@ ko.bindingHandlers["activate"] = {
         }
 
         const data = ko.dataFor(element);
+        const callback = onActivate.bind(viewModel);
 
         const onClick = (event: PointerEvent) => {
             event.preventDefault();
             event.stopImmediatePropagation();
-            onActivate(data);
+            callback(data);
         };
 
         const onKeyDown = (event: KeyboardEvent) => {
@@ -27,7 +28,7 @@ ko.bindingHandlers["activate"] = {
 
             event.preventDefault();
             event.stopImmediatePropagation();
-            onActivate(data);
+            callback(data);
         };
 
         element.addEventListener(Events.KeyDown, onKeyDown);

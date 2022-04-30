@@ -6,7 +6,7 @@ import { AriaAttributes, AriaRoles, Attributes } from "@paperbits/common/html";
 
 
 const selectedClassName = "selected";
-const optionElementSelector = "[role=option]";
+const optionElementSelector = "[role=option]:not([disabled])";
 const selectedOptionElementSelector = `[${AriaAttributes.selected}]`;
 const defaultTabIndex = "0";
 

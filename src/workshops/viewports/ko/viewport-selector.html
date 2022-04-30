@@ -1,37 +1,38 @@
-<div class="toolbox toolbox-horizontal">
-    <div class="toolbox-btn d-none d-xl-inline-block"
-        data-bind="css: { 'toolbox-btn-is-active': viewport() == 'zoomout' }">
-        <a href="#" data-bind="click: zoomOut, tooltip: 'Zoom out', focus: true" role="button"
+<div role="listbox" class="toolbox toolbox-horizontal" data-bind="listbox: {}">
+    <div class="toolbox-btn d-none d-xl-inline-block" data-bind="css: { 'toolbox-btn-is-active': viewport() == 'zoomout' }">
+        <a role="option" data-bind="activate: zoomOut, tooltip: 'Zoom out', focus: true"
             aria-label="Switch to zoomed out view">
             <i aria-hidden="true" class="paperbits-icon paperbits-zoom-out"></i>
         </a>
     </div>
     <div class="toolbox-btn d-none d-xl-inline-block" data-bind="css: { 'toolbox-btn-is-active': viewport() == 'xl' }">
-        <a href="#" data-bind="click: setXl, tooltip: 'Extra large screen'" role="button" aria-label="Switch to extra large screen view">
+        <a role="option" data-bind="activate: setXl, tooltip: 'Extra large screen'"
+            aria-label="Switch to extra large screen view">
             <i aria-hidden="true" class="paperbits-icon paperbits-desktop-screen"></i>
         </a>
     </div>
     <div class="toolbox-btn d-none d-lg-inline-block" data-bind="css: { 'toolbox-btn-is-active': viewport() == 'lg' }">
-        <a href="#" data-bind="click: setLg, tooltip: 'Large screen'" role="button" aria-label="Switch to large screen view">
+        <a role="option" data-bind="activate: setLg, tooltip: 'Large screen'" aria-label="Switch to large screen view">
             <svg width="10" height="10">
                 <circle r="4" cy="50%" cx="50%" stroke="black" stroke-width="1" fill="none" />
             </svg>
         </a>
     </div>
     <div class="toolbox-btn d-none d-md-inline-block" data-bind="css: { 'toolbox-btn-is-active': viewport() == 'md' }">
-        <a href="#" data-bind="click: setMd, tooltip: 'Medium screen'" role="button" aria-label="Switch to medium screen view">
+        <a role="option" data-bind="activate: setMd, tooltip: 'Medium screen'" aria-label="Switch to medium screen view">
             <i aria-hidden="true" class="paperbits-icon paperbits-tablet-2"></i>
         </a>
     </div>
     <div class="toolbox-btn d-none d-sm-inline-block" data-bind="css: { 'toolbox-btn-is-active': viewport() == 'sm' }">
-        <a href="#" data-bind="click: setSm, tooltip: 'Small screen'" role="button" aria-label="Switch to small screen view">
+        <a role="option" data-bind="activate: setSm, tooltip: 'Small screen'" aria-label="Switch to small screen view">
             <svg width="10" height="10">
                 <circle r="4" cy="50%" cx="50%" stroke="black" stroke-width="1" fill="none" />
             </svg>
         </a>
     </div>
     <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': viewport() == 'xs' }">
-        <a href="#" data-bind="click: setXs, tooltip: 'Extra small screen'" role="button" aria-label="Switch to extra small screen view">
+        <a role="option" data-bind="activate: setXs, tooltip: 'Extra small screen'"
+            aria-label="Switch to extra small screen view">
             <i aria-hidden="true" class="paperbits-icon paperbits-mobile"></i>
         </a>
     </div>

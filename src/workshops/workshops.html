@@ -1,11 +1,11 @@
 <div class="toolbox toolbox-position-left workshops-container flex flex-row"
     data-bind="visible: viewManager.primaryToolboxVisible, resizable: resizing">
-    <ul role="tablist" class="flex-item toolbox-btn-group toolbox-btn-group-vertical">
+    <ul role="listbox"  class="flex-item toolbox-btn-group toolbox-btn-group-vertical" data-bind="listbox: {}">
         <!-- ko foreach: { data: sections, as: 'section' } -->
         <li role="presentation" class="toolbox-btn"
             data-bind="css: { 'toolbox-btn-is-active': $component.viewManager.journeyName() == section.title }">
-            <a href="#" role="tab"
-                data-bind="attr: { 'aria-label': section.title, 'aria-selected': ($component.viewManager.journeyName() == section.title).toString() }, click: section.onActivate, tooltip: { message: section.tooltip, position: 'right', isDisabled: () => $component.viewManager.journeyName() == section.title }">
+            <a role="option"
+                data-bind="attr: { 'aria-label': section.title, 'aria-selected': ($component.viewManager.journeyName() == section.title).toString() }, activate: section.onActivate, tooltip: { message: section.tooltip, position: 'right', isDisabled: () => $component.viewManager.journeyName() == section.title }">
                 <i data-bind="css: section.iconClass"></i>
             </a>
         </li>
@@ -13,7 +13,7 @@
 
         <!-- ko if: userPhotoUrl -->
         <li role="presentation" class="toolbox-btn pull-down">
-            <a href="#" role="tab" title="Account" aria-label="Account">
+            <a role="option" title="Account" aria-label="Account">
                 <div class="photo" data-bind="style: { 'background-image': 'url('+userPhotoUrl()+')' }">
                 </div>
             </a>
@@ -34,7 +34,7 @@
                 <!--/ko -->
             </h1>
             <button class="btn btn-dismiss" title="Close" aria-label="Close"
-                data-bind="click: $component.closeWorkshop">
+                data-bind="activate: $component.closeWorkshop">
                 <i aria-hidden="true" class="paperbits-icon paperbits-simple-remove"></i>
             </button>
             <hr />

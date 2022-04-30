@@ -1,30 +1,34 @@
-<div class="toolbox-btn">
-    <a href="#" role="button" data-bind="tooltip: '<h1>Screen sizes</h1><p>See and adjust the content for<br/> devices of different sizes.</p>', balloon: { component: { name: 'viewport-selector' }, position: 'top' }"
-        aria-label="Screen sizes">
-        <i aria-hidden="true" class="paperbits-icon paperbits-mirror-2"></i>
-    </a>
-</div>
+<div role="listbox" data-bind="listbox: {}">
+    <div class="toolbox-btn">
+        <a role="option"
+            data-bind="tooltip: '<h1>Screen sizes</h1><p>See and adjust the content for<br/> devices of different sizes.</p>', balloon: { component: { name: 'viewport-selector' }, position: 'top' }"
+            aria-label="Screen sizes">
+            <i aria-hidden="true" class="paperbits-icon paperbits-mirror-2"></i>
+        </a>
+    </div>
 
-<!-- ko if: localizationEnabled -->
-<div class="toolbox-btn">
-    <a href="#" role="button" data-bind="tooltip: '<h1>Locales</h1><p>See and adjust the content for<br/> specific languages and locales.</p>', balloon: { component: { name: 'locale-selector' }, position: 'top' }"
-        aria-label="Locale selection">
-        <i aria-hidden="true" class="paperbits-icon paperbits-world"></i>
-    </a>
-</div>
-<!-- /ko -->
+    <!-- ko if: localizationEnabled -->
+    <div class="toolbox-btn">
+        <a role="option"
+            data-bind="tooltip: '<h1>Locales</h1><p>See and adjust the content for<br/> specific languages and locales.</p>', balloon: { component: { name: 'locale-selector' }, position: 'top' }"
+            aria-label="Locale selection">
+            <i aria-hidden="true" class="paperbits-icon paperbits-world"></i>
+        </a>
+    </div>
+    <!-- /ko -->
 
-<div class="toolbox-btn">
-    <a href="#" role="button"
-        data-bind="tooltip: '<h1>Roles</h1><p>See how the content looks like<br/> for users in a particular role.</p>', balloon: { component: { name: 'role-selector', params: { availableRoles: availableRoles, selectedRoles: selectedRoles, onSelect: onRoleSelect } }, position: 'top' }"
-        aria-label="Roles">
-        <i aria-hidden="true" class="paperbits-icon paperbits-single-02"></i>
-    </a>
-</div>
+    <div class="toolbox-btn">
+        <a role="option"
+            data-bind="tooltip: '<h1>Roles</h1><p>See how the content looks like<br/> for users in a particular role.</p>', balloon: { component: { name: 'role-selector', params: { availableRoles: availableRoles, selectedRoles: selectedRoles, onSelect: onRoleSelect } }, position: 'top' }"
+            aria-label="Roles">
+            <i aria-hidden="true" class="paperbits-icon paperbits-single-02"></i>
+        </a>
+    </div>
 
-<!-- ko foreach: { data: buttons, as: 'button' } -->
-<button role="button" class="toolbox-btn"
-    data-bind="attr: { 'aria-label': button.title }, tooltip: button.tooltip, click: button.onActivate, disable: button.disabled">
-    <i data-bind="css: button.iconClass"></i>
-</button>
-<!-- /ko -->
+    <!-- ko foreach: { data: buttons, as: 'button' } -->
+    <button role="option" class="toolbox-btn"
+        data-bind="attr: { 'aria-label': button.title }, tooltip: button.tooltip, activate: button.onActivate, disable: button.disabled">
+        <i data-bind="css: button.iconClass"></i>
+    </button>
+    <!-- /ko -->
+</div>
