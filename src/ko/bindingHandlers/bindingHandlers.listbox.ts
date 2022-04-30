@@ -62,6 +62,7 @@ ko.bindingHandlers["listbox"] = {
             }
 
             switch (event.key) {
+                case Keys.ArrowRight:
                 case Keys.ArrowDown:
                     event.preventDefault();
 
@@ -76,6 +77,7 @@ ko.bindingHandlers["listbox"] = {
 
                     break;
 
+                case Keys.ArrowLeft:
                 case Keys.ArrowUp:
                     event.preventDefault();
 

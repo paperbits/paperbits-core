@@ -26,9 +26,11 @@
     </div>
 
     <!-- ko foreach: { data: buttons, as: 'button' } -->
-    <button role="option" class="toolbox-btn"
-        data-bind="attr: { 'aria-label': button.title }, tooltip: button.tooltip, activate: button.onActivate, disable: button.disabled">
-        <i data-bind="css: button.iconClass"></i>
-    </button>
+    <div class="toolbox-btn">
+        <a role="option"
+            data-bind="tooltip: button.tooltip, activate: button.onActivate, disable: button.disabled, attr: { 'aria-label': button.title }">
+            <i data-bind="css: button.iconClass"></i>
+        </a>
+    </div>
     <!-- /ko -->
 </div>
