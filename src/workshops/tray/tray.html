@@ -26,9 +26,9 @@
     </div>
 
     <!-- ko foreach: { data: buttons, as: 'button' } -->
-    <div class="toolbox-btn" data-bind="attr: { disabled: button.disabled ? 'disabled' : null }">
+    <div class="toolbox-btn" data-bind="attr: { disabled: button.disabled() ? 'disabled' : null }">
         <a role="option"
-            data-bind="tooltip: button.tooltip, activate: button.onActivate, disable: button.disabled, attr: { 'aria-label': button.title, disabled: button.disabled ? 'disabled' : null }">
+            data-bind="tooltip: button.tooltip, activate: button.onActivate, disable: button.disabled, attr: { 'aria-label': button.title, disabled: button.disabled() ? 'disabled' : null }">
             <i data-bind="css: button.iconClass"></i>
         </a>
     </div>
