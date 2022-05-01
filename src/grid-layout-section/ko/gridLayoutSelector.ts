@@ -1,9 +1,8 @@
 import * as ko from "knockout";
-import * as Utils from "@paperbits/common";
-import { Bag } from "@paperbits/common";
 import * as Objects from "@paperbits/common/objects";
 import * as Constants from "@paperbits/common/constants";
 import template from "./gridLayoutSelector.html";
+import { Bag } from "@paperbits/common";
 import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
 import { Component, Event, OnMounted, Param } from "@paperbits/common/ko/decorators";
 import { GridModelBinder } from "../../grid-layout-section";
@@ -13,8 +12,9 @@ import { BlockContract, IBlockService } from "@paperbits/common/blocks";
 import { HttpClient } from "@paperbits/common/http";
 import { GridContract } from "../../grid/gridContract";
 import { BlockItem } from "../../workshops/block/ko";
-import { StyleManager } from "@paperbits/common/styles";
+import { StyleCompiler, StyleManager } from "@paperbits/common/styles";
 import { SectionViewModelBinder } from "../../section/ko";
+import { EventManager } from "@paperbits/common/events";
 
 
 interface GridLayoutSelectorItem {
@@ -45,7 +45,9 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         private readonly sectionModelBinder: SectionModelBinder,
         private readonly sectionViewModelBinder: SectionViewModelBinder,
         private readonly httpClient: HttpClient,
-        private readonly blockService: IBlockService
+        private readonly blockService: IBlockService,
+        private readonly eventManager: EventManager,
+        private readonly styleCompiler: StyleCompiler
     ) {
         this.heading = ko.observable();
         this.selectLayout = this.selectLayout.bind(this);
@@ -63,7 +65,7 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         const response = await this.httpClient.send({ method: "GET", url: Constants.gridSnippetsLibraryUrl });
         const presets = response.toObject();
 
-        for (const presetContract of Utils.clone<any>(presets)) {
+        for (const presetContract of Objects.clone<any>(presets)) {
             const model = await this.gridModelBinder.contractToModel(presetContract);
             const viewModel = await this.gridViewModelBinder.modelToViewModel(model);
 
@@ -127,7 +129,7 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         const blankSectionContentClone: GridContract = blankSectionContent;
         const sectionGridNode = blankSectionContentClone.nodes[0];
 
-        Objects.mergeDeep(sectionGridNode, Utils.clone(item.contract));
+        Objects.mergeDeep(sectionGridNode, Objects.clone(item.contract));
 
         const sectionModel = await this.sectionModelBinder.contractToModel(blankSectionContent);
 
@@ -137,10 +139,6 @@ export class GridLayoutSelector implements IResourceSelector<any> {
     }
 
     public async onBlockSelected(block: BlockItem): Promise<void> {
-        if (this.onSelect) {
-            this.onSelect(block.model);
-        }
-
         if (this.blockService.importSnippet && block.imports) {
             const response = await this.httpClient.send({ url: Constants.blockSnippetsLibraryUrl, method: "GET" });
             const library = <any>response.toObject();
@@ -154,6 +152,18 @@ export class GridLayoutSelector implements IResourceSelector<any> {
 
                 await this.blockService.importSnippet(importKey, snippet);
             }
+
+            // 1. Re-build styles
+            const styleManager = new StyleManager(this.eventManager);
+            const styleSheet = await this.styleCompiler.getStyleSheet();
+            styleManager.setStyleSheet(styleSheet);
+
+            // 2. Re-render popups
+            this.eventManager.dispatchEvent("onPopupUpdate");
+        }
+
+        if (this.onSelect) {
+            this.onSelect(block.model);
         }
     }
 }

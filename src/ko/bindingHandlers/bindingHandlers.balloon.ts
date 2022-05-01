@@ -309,6 +309,10 @@ export class BalloonBindingHandler {
                     }
 
                     setImmediate(() => { // give chance to view stack to clear unrelated views
+                        if (!document.contains(toggleElement)) {
+                            return;
+                        }
+
                         const activeBalloonHandle: BalloonHandle = toggleElement["activeBalloon"];
 
                         if (activeBalloonHandle) {
