@@ -590,6 +590,11 @@ export class DefaultViewManager implements ViewManager {
         this.mode = ViewManagerMode.selecting;
     }
 
+    public getActiveLayer(): string {
+        const host = this.getHost();
+        const activeLayer = host.name.replace("-host", "");
+        return activeLayer;
+    }
 
     @OnDestroyed()
     public dispose(): void {

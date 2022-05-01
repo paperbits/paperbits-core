@@ -226,22 +226,23 @@ export class GridEditor {
             return;
         }
 
-        const gridItems = this.getGridItemsUnderPointer(true);
+        const gridItems = this.getGridItemsUnderPointer();
 
         if (gridItems.length > 0) {
+            const activeLayer = this.viewManager.getActiveLayer();
             const topGridItem = gridItems[0];
 
             if (topGridItem.name === "content") {
-                return;
-            }
-
-            const clickOnParentLayer = !!topGridItem.readonly;
-
-            if (clickOnParentLayer) {
-                event.preventDefault();
-                event.stopPropagation();
-                this.eventManager.dispatchEvent("displayInactiveLayoutHint");
-                return;
+                if (topGridItem.binding.model.type !== activeLayer) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    this.eventManager.dispatchEvent("displayInactiveLayoutHint", topGridItem.binding.model);
+                    return;
+                }
+                else {
+                    this.viewManager.clearContextualCommands();
+                    return;
+                }
             }
         }
 
@@ -825,7 +826,7 @@ export class GridEditor {
         if (!styleDefinitions.components) {
             return null;
         }
-        
+
         const componentStyleDefinitionWrapper = StyleHelper.getStyleDefinitionWrappers(styleDefinitions.components);
         const match = componentStyleDefinitionWrapper.find(x => element.matches(x.selector));
 
