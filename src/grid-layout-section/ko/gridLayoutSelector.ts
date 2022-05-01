@@ -12,7 +12,7 @@ import { BlockContract, IBlockService } from "@paperbits/common/blocks";
 import { HttpClient } from "@paperbits/common/http";
 import { GridContract } from "../../grid/gridContract";
 import { BlockItem } from "../../workshops/block/ko";
-import { StyleManager } from "@paperbits/common/styles";
+import { StyleCompiler, StyleManager } from "@paperbits/common/styles";
 import { SectionViewModelBinder } from "../../section/ko";
 import { EventManager } from "@paperbits/common/events";
 
@@ -46,7 +46,8 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         private readonly sectionViewModelBinder: SectionViewModelBinder,
         private readonly httpClient: HttpClient,
         private readonly blockService: IBlockService,
-        private readonly eventManager: EventManager
+        private readonly eventManager: EventManager,
+        private readonly styleCompiler: StyleCompiler
     ) {
         this.heading = ko.observable();
         this.selectLayout = this.selectLayout.bind(this);
@@ -153,7 +154,9 @@ export class GridLayoutSelector implements IResourceSelector<any> {
             }
 
             // 1. Re-build styles
-            // ???
+            const styleManager = new StyleManager(this.eventManager);
+            const styleSheet = await this.styleCompiler.getStyleSheet();
+            styleManager.setStyleSheet(styleSheet);
 
             // 2. Re-render popups
             this.eventManager.dispatchEvent("onPopupUpdate");
