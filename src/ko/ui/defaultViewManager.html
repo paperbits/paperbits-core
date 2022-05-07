@@ -34,11 +34,11 @@
 </div>
 
 <!-- ko with: activeView() -->
-<div class="toolbox toolbox-popup toolbox-position-left-offset"
+<div role="dialog" aria-labelledby="popupHeading" tabindex="-1" class="toolbox toolbox-popup toolbox-position-left-offset"
     data-bind="resizable: resize, surface: $data, dialog: {}">
-    <div class="editor resizable-content flex flex-column">
+    <div role="document" class="editor resizable-content flex flex-column">
         <!-- ko if: heading -->
-        <h1>
+        <h1 id="popupHeading">
             <span data-bind="text: heading"></span>
         </h1>
         <!-- /ko -->
