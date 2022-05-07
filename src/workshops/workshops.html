@@ -1,6 +1,6 @@
 <div class="toolbox toolbox-position-left workshops-container flex flex-row"
     data-bind="visible: viewManager.primaryToolboxVisible, resizable: resizing">
-    <ul role="listbox"  class="flex-item toolbox-btn-group toolbox-btn-group-vertical" data-bind="listbox: {}">
+    <ul role="listbox" aria-label="Main menu" class="flex-item toolbox-btn-group toolbox-btn-group-vertical" data-bind="listbox: {}">
         <!-- ko foreach: { data: sections, as: 'section' } -->
         <li role="presentation" class="toolbox-btn"
             data-bind="css: { 'toolbox-btn-is-active': $component.viewManager.journeyName() == section.title }">

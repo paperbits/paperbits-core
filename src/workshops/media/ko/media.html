@@ -14,7 +14,7 @@
 
     <!-- ko if: searchPattern() === "" -->
     <p class="flex-item flex-item-grow text-center">It seems that you don't have media yet. Would you like to
-        <a href="#" class="btn-link" data-bind="click: uploadMedia">upload one</a>?
+        <a href="#" class="btn-link" data-bind="activate: uploadMedia">upload one</a>?
     </p>
     <!-- /ko -->
 
@@ -27,7 +27,7 @@
     <div class="flex flex-row flex-wrap flex-item flex-item-grow" role="listbox" data-bind="scrollable: true, listbox: {}">
         <!-- ko foreach: { data: mediaItems, as: 'media' } -->
         <a role="option" class="list-item list-item-image"
-            data-bind="click: $component.selectMedia, css: { selected: $component.isSelected(media) }, attr: { 'aria-label': media.fileName() },
+            data-bind="activate: $component.selectMedia, css: { selected: $component.isSelected(media) }, attr: { 'aria-label': media.fileName() },
             balloon: { activateOn: 'hoverOrFocus', isDisabled: nonPreviewable, delay: 800, position: 'right', component: { name: 'media-display', params: { item: media }}}">
             <span class="thumbnail"
                 data-bind="style: { 'background-image': 'url('+media.thumbnailUrl()+')' }, attr: { title: media.fileName() }">
@@ -43,11 +43,11 @@
     </div>
 
     <div class="flex-item btn-group">
-        <button class="btn btn-default" data-bind="click: uploadMedia">
+        <button class="btn btn-default" data-bind="activate: uploadMedia">
             <i aria-hidden="true" class="paperbits-icon paperbits-square-upload"></i>
             Upload file
         </button>
-        <button class="btn btn-default" data-bind="click: linkMedia">
+        <button class="btn btn-default" data-bind="activate: linkMedia">
             <i aria-hidden="true" class="paperbits-icon paperbits-link-69-2"></i>
             Link file
         </button>

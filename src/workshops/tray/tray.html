@@ -1,5 +1,5 @@
-<div role="listbox" data-bind="listbox: {}">
-    <div class="toolbox-btn">
+<div role="listbox" aria-label="Tray" data-bind="listbox: {}">
+    <div role="presentation" class="toolbox-btn">
         <a role="option"
             data-bind="tooltip: '<h1>Screen sizes</h1><p>See and adjust the content for<br/> devices of different sizes.</p>', balloon: { component: { name: 'viewport-selector' }, position: 'top' }"
             aria-label="Screen sizes">
@@ -8,7 +8,7 @@
     </div>
 
     <!-- ko if: localizationEnabled -->
-    <div class="toolbox-btn">
+    <div role="presentation" class="toolbox-btn">
         <a role="option"
             data-bind="tooltip: '<h1>Locales</h1><p>See and adjust the content for<br/> specific languages and locales.</p>', balloon: { component: { name: 'locale-selector' }, position: 'top' }"
             aria-label="Locale selection">
@@ -17,7 +17,7 @@
     </div>
     <!-- /ko -->
 
-    <div class="toolbox-btn">
+    <div role="presentation" class="toolbox-btn">
         <a role="option"
             data-bind="tooltip: '<h1>Roles</h1><p>See how the content looks like<br/> for users in a particular role.</p>', balloon: { component: { name: 'role-selector', params: { availableRoles: availableRoles, selectedRoles: selectedRoles, onSelect: onRoleSelect } }, position: 'top' }"
             aria-label="Roles">
@@ -26,7 +26,7 @@
     </div>
 
     <!-- ko foreach: { data: buttons, as: 'button' } -->
-    <div class="toolbox-btn" data-bind="attr: { disabled: button.disabled() ? 'disabled' : null }">
+    <div role="presentation" class="toolbox-btn" data-bind="attr: { disabled: button.disabled() ? 'disabled' : null }">
         <a role="option"
             data-bind="tooltip: button.tooltip, activate: button.onActivate, disable: button.disabled, attr: { 'aria-label': button.title, disabled: button.disabled() ? 'disabled' : null }">
             <i data-bind="css: button.iconClass"></i>
