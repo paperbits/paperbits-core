@@ -10,9 +10,11 @@ import { StyleModel } from "@paperbits/common/styles";
 export class MapViewModel {
     public readonly runtimeConfig: ko.Observable<string>;
     public readonly styles: ko.Observable<StyleModel>;
+    public readonly hasApiKey: ko.Observable<boolean>;
 
     constructor() {
         this.runtimeConfig = ko.observable();
         this.styles = ko.observable<StyleModel>();
+        this.hasApiKey = ko.observable(false);
     }
 }

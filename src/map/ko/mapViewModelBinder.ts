@@ -7,15 +7,19 @@ import { MapModel } from "../mapModel";
 import { GoogleMapsSettings } from "./googleMapsSettings";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { ComponentFlow } from "@paperbits/common/editing";
+import { ISiteService } from "@paperbits/common/sites";
+import { Geolocation } from "@paperbits/common/geocoding";
 
-const defaultApiKey = "AIzaSyC7eT_xRPt3EjX3GuzSvlaZzJmlyFxvFFs";
+
+const googleMapsSettingsPath = "integration/googleMaps";
 
 export class MapViewModelBinder {
     constructor(
         private readonly eventManager: EventManager,
         private readonly styleCompiler: StyleCompiler,
         private readonly settingsProvider: ISettingsProvider,
-        private readonly mediaPermalinkResolver: IPermalinkResolver
+        private readonly mediaPermalinkResolver: IPermalinkResolver,
+        private readonly siteService: ISiteService
     ) { }
 
     public async modelToViewModel(model: MapModel, viewModel?: MapViewModel, bindingContext?: Bag<any>): Promise<MapViewModel> {
@@ -23,8 +27,22 @@ export class MapViewModelBinder {
             viewModel = new MapViewModel();
         }
 
-        const settings = await this.settingsProvider.getSetting<GoogleMapsSettings>("integration/googleMaps");
-        const apiKey = settings?.apiKey || defaultApiKey;
+        let googleMapsSettings = await this.settingsProvider.getSetting<GoogleMapsSettings>(googleMapsSettingsPath);
+
+        if (!googleMapsSettings) {
+            googleMapsSettings = await this.siteService.getSetting<any>(googleMapsSettingsPath);
+        }
+
+        const apiKey = googleMapsSettings?.apiKey;
+        viewModel.hasApiKey(!!apiKey);
+
+        let location: Geolocation;
+        if (typeof model.location === "object" && model.location.hasOwnProperty("lat") && model.location.hasOwnProperty("lng")) {
+            location = model.location;
+        }
+        else {
+            location = { address: "400 Broad St, Seattle, WA 98109", lat: 47.6203953, lng: -122.3493709 };
+        }
 
         const markerIconUrl =
             model.marker?.sourceKey
@@ -34,7 +52,7 @@ export class MapViewModelBinder {
         viewModel.runtimeConfig(JSON.stringify({
             apiKey: apiKey,
             caption: model.caption,
-            location: model.location,
+            location: location,
             zoom: model.zoom,
             mapType: model.mapType,
             markerIcon: markerIconUrl,

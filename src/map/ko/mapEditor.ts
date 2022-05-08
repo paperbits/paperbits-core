@@ -10,6 +10,10 @@ import { Events, EventManager } from "@paperbits/common/events";
 import { MediaContract } from "@paperbits/common/media";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
 import { HyperlinkModel, IPermalinkResolver } from "@paperbits/common/permalinks";
+import { ISettingsProvider } from "@paperbits/common/configuration";
+import { GoogleMapsSettings } from "./googleMapsSettings";
+import { ISiteService } from "@paperbits/common/sites";
+import { GoogleGeocodingService } from "@paperbits/common/geocoding/googleGeocodingService";
 
 
 interface MapTypeOption {
@@ -17,11 +21,15 @@ interface MapTypeOption {
     value: string;
 }
 
+const googleMapsSettingsPath = "integration/googleMaps";
+
 @Component({
     selector: "paperbits-map-editor",
     template: template
 })
 export class MapEditor {
+    private geolocationService: GoogleGeocodingService;
+
     public readonly location: ko.Observable<string>;
     public readonly caption: ko.Observable<string>;
     public readonly zoom: ko.Observable<number>;
@@ -32,12 +40,16 @@ export class MapEditor {
     public readonly background: ko.Observable<BackgroundModel>;
     public readonly hyperlink: ko.Observable<HyperlinkModel>;
     public readonly hyperlinkTitle: ko.Computed<string>;
+    public readonly showApiKeyInput: ko.Observable<boolean>;
+    public readonly apiKey: ko.Observable<string>;
 
     constructor(
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager,
         private readonly mediaPermalinkResolver: IPermalinkResolver,
-        private readonly popupPermalinkResolver: IPermalinkResolver
+        private readonly popupPermalinkResolver: IPermalinkResolver,
+        private readonly settingsProvider: ISettingsProvider,
+        private readonly siteService: ISiteService
     ) {
         this.location = ko.observable<string>();
         this.caption = ko.observable<string>();
@@ -48,6 +60,8 @@ export class MapEditor {
         this.background = ko.observable();
         this.hyperlink = ko.observable<HyperlinkModel>();
         this.hyperlinkTitle = ko.computed<string>(() => this.hyperlink() ? this.hyperlink().title : "Attach popup...");
+        this.apiKey = ko.observable();
+        this.showApiKeyInput = ko.observable(false);
 
         this.mapTypeOptions = ko.observableArray<MapTypeOption>([
             { label: "Terrain", value: "terrain" },
@@ -63,18 +77,38 @@ export class MapEditor {
     public onChange: (model: MapModel) => void;
 
     @OnMounted()
-    public initialize(): void {
-        this.location(this.model.location);
+    public async initialize(): Promise<void> {
+        const location = typeof this.model.location === "string"
+            ? this.model.location
+            : this.model.location?.address;
+
+        this.location(location);
         this.caption(this.model.caption);
         this.zoom(this.model.zoom);
         this.mapType(this.model.mapType);
+
+        let googleMapsSettings = await this.settingsProvider.getSetting<GoogleMapsSettings>(googleMapsSettingsPath);
+
+        if (googleMapsSettings?.apiKey) {
+            this.showApiKeyInput(false);
+
+        }
+        else {
+            googleMapsSettings = await this.siteService.getSetting<any>(googleMapsSettingsPath);
+            this.apiKey(googleMapsSettings?.apiKey);
+            this.showApiKeyInput(true);
+
+            this.apiKey
+                .extend(ChangeRateLimit)
+                .subscribe(this.applyApiKey);
+        }
 
         this.updateObservables();
         this.eventManager.addEventListener(Events.ViewportChange, this.updateObservables);
 
         this.location
             .extend(ChangeRateLimit)
-            .subscribe(this.applyChanges);
+            .subscribe(this.geocodeLocation);
 
         this.caption
             .extend(ChangeRateLimit)
@@ -87,6 +121,25 @@ export class MapEditor {
         this.mapType
             .extend(ChangeRateLimit)
             .subscribe(this.applyChanges);
+    }
+
+    private async geocodeLocation(address: string): Promise<void> {
+        const apiKey = this.apiKey();
+
+        if (!apiKey) {
+            this.viewManager.addToast(`Map settings`, `Google Maps API key not specified.`);
+            return;
+        }
+
+        try {
+            const geolocationService = new GoogleGeocodingService(this.apiKey());
+            const geolocation = await geolocationService.addressToGeolocation(address);
+            this.model.location = geolocation;
+            this.onChange(this.model);
+        }
+        catch (error) {
+            this.viewManager.notifyError(`Map widget`, error);
+        }
     }
 
     private async updateObservables(): Promise<void> {
@@ -108,9 +161,13 @@ export class MapEditor {
         }
     }
 
+    private async applyApiKey(): Promise<void> {
+        await this.siteService.setSetting(googleMapsSettingsPath, { apiKey: this.apiKey() });
+        this.onChange(this.model);
+    }
+
     private applyChanges(): void {
         this.model.caption = this.caption();
-        this.model.location = this.location();
         this.model.zoom = this.zoom();
         this.model.mapType = this.mapType();
         this.onChange(this.model);

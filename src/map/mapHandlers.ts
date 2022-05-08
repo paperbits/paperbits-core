@@ -1,9 +1,10 @@
 ﻿import { MapModel } from "./mapModel";
 import { IContentDropHandler, IContentDescriptor, IDataTransfer, IWidgetOrder, IWidgetHandler } from "@paperbits/common/editing";
 import { MapContract } from "./mapContract";
+import { Geolocation } from "@paperbits/common/geocoding";
 
 
-export class MapHandlers implements IWidgetHandler, IContentDropHandler {
+export class MapHandlers implements IWidgetHandler /*, IContentDropHandler */ {
     public name: string = "map";
     public displayName: string = "Map";
 
@@ -26,7 +27,7 @@ export class MapHandlers implements IWidgetHandler, IContentDropHandler {
         return widgetOrder;
     }
 
-    private async getWidgetOrderByConfig(location: string, caption: string): Promise<IWidgetOrder> {
+    private async getWidgetOrderByConfig(location: Geolocation, caption: string): Promise<IWidgetOrder> {
         const config: MapContract = {
             type: "map",
             location: location,
@@ -37,53 +38,52 @@ export class MapHandlers implements IWidgetHandler, IContentDropHandler {
     }
 
     public getWidgetOrder(): Promise<IWidgetOrder> {
-        return Promise.resolve(this.getWidgetOrderByConfig("400 Broad St, Seattle, WA 98109", "Space Needle"));
+        return Promise.resolve(this.getWidgetOrderByConfig({ address: "400 Broad St, Seattle, WA 98109", lat: 47.6203953, lng: -122.3493709 }, "Space Needle"));
     }
 
-    public getContentDescriptorFromDataTransfer(dataTransfer: IDataTransfer): IContentDescriptor {
-        const mapConfig = this.parseDataTransfer(dataTransfer);
+    // public getContentDescriptorFromDataTransfer(dataTransfer: IDataTransfer): IContentDescriptor {
+    //     const mapConfig = this.parseDataTransfer(dataTransfer);
 
-        if (!mapConfig) {
-            return null;
-        }
+    //     if (!mapConfig) {
+    //         return null;
+    //     }
 
-        const getThumbnailPromise = () => Promise.resolve(`https://maps.googleapis.com/maps/api/staticmap?center=${mapConfig.location}&format=jpg&size=130x90`);
+    //     const getThumbnailPromise = () => Promise.resolve(`https://maps.googleapis.com/maps/api/staticmap?center=${mapConfig.location}&format=jpg&size=130x90`);
 
-        const descriptor: IContentDescriptor = {
-            title: "Map",
-            description: mapConfig.location,
-            getWidgetOrder: () => Promise.resolve(this.getWidgetOrderByConfig(mapConfig.location, mapConfig.caption)),
-            getThumbnailUrl: getThumbnailPromise
-        };
+    //     const descriptor: IContentDescriptor = {
+    //         title: "Map",
+    //         description: mapConfig.location.toString(),
+    //         getWidgetOrder: () => Promise.resolve(this.getWidgetOrderByConfig(mapConfig.location.toString(), mapConfig.caption)),
+    //         getThumbnailUrl: getThumbnailPromise
+    //     };
 
-        return descriptor;
-    }
+    //     return descriptor;
+    // }
 
-    private parseDataTransfer(dataTransfer: IDataTransfer): MapContract {
-        const source = dataTransfer.source;
+    // private parseDataTransfer(dataTransfer: IDataTransfer): MapContract {
+    //     const source = dataTransfer.source;
 
-        if (source && typeof source === "string") {
-            const url = source.toLowerCase();
+    //     if (source && typeof source === "string") {
+    //         const url = source.toLowerCase();
 
-            if (url.startsWith("https://www.google.com/maps/") || url.startsWith("http://www.google.com/maps/")) {
-                let location: string;
-                let match = new RegExp("/place/([^/]+)").exec(url);
+    //         if (url.startsWith("https://www.google.com/maps/") || url.startsWith("http://www.google.com/maps/")) {
+    //             let location: string;
+    //             let match = new RegExp("/place/([^/]+)").exec(url);
 
-                if (match && match.length > 1) {
-                    location = match[1].replaceAll("+", " ");
-                }
-                else {
-                    match = new RegExp("/@([^/]+)").exec(url);
-                    if (match && match.length > 1) {
-                        const locationParts = match[1].split(",");
-                        location = locationParts.slice(0, 2).join(",");
-                    }
-                }
+    //             if (match && match.length > 1) {
+    //                 location = match[1].replaceAll("+", " ");
+    //             }
+    //             else {
+    //                 match = new RegExp("/@([^/]+)").exec(url);
+    //                 if (match && match.length > 1) {
+    //                     const locationParts = match[1].split(",");
+    //                     location = locationParts.slice(0, 2).join(",");
+    //                 }
+    //             }
 
-                return location ? { location: location, type: "map" } : null;
-            }
-        }
+    //             return   location ? { location: location.toString(), type: "map" } : null;
+    //         }
+    //     }
 
-        return null;
-    }
+    //     return null;
 }

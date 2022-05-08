@@ -1,3 +1,4 @@
+import { Geolocation } from "@paperbits/common/geocoding";
 import { LocalStyles } from "@paperbits/common/styles";
 import { MapCustomizations } from "./mapContract";
 
@@ -15,7 +16,7 @@ export class MapModel {
     /**
      * Location shown on the map, e.g. "Seattle, WA"
      */
-    public location: string;
+    public location: string | Geolocation;
 
     /**
      * Location pin caption, e.g. "Space needle".
@@ -56,7 +57,7 @@ export class MapModel {
                         height: 200
                     }
                 }
-            },
+            }
         };
     }
 }

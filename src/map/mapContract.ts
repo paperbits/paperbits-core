@@ -1,4 +1,5 @@
 import { Contract } from "@paperbits/common";
+import { Geolocation } from "@paperbits/common/geocoding";
 import { LocalStyles } from "@paperbits/common/styles";
 import { GoogleMapsCustomization } from "./googleMapCustomization";
 
@@ -17,7 +18,7 @@ export interface MapContract extends Contract {
     /**
      * Location shown on the map, e.g. "Seattle, WA".
      */
-    location: string;
+    location: string | Geolocation;
 
     /**
      * Location pin caption, e.g. "Space needle".

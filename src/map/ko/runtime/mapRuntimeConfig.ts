@@ -1,3 +1,5 @@
+import { Geolocation } from "@paperbits/common/geocoding/geolocation";
+
 export interface MapRuntimeConfig {
     /**
      * Google Maps API key.
@@ -7,7 +9,7 @@ export interface MapRuntimeConfig {
     /**
      * Location shown on the map, e.g. "Seattle, WA".
      */
-    location: string;
+    location: Geolocation;
 
     /**
      * Location pin caption, e.g. "Space needle".

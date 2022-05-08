@@ -1,4 +1,21 @@
-﻿<div class="form-group form-group-collapsible">
+﻿<!-- ko if: showApiKeyInput -->
+<div class="form-group form-group-collapsible">
+    <label class="form-label">
+        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#mapSettingsCollapse'"
+            aria-label="Toggle 'Map settings' section"></a>
+        <b>API key</b>
+    </label>
+    <div id="mapSettingsCollapse" class="collapse form-group-collapse">
+        <div class="form-group">
+            <label for="apiKey" class="form-label">Google Maps API key</label>
+            <input id="apiKey" type="text" class="form-control" data-bind="textInput: apiKey" />
+        </div>
+    </div>
+</div>
+<!-- /ko -->
+
+<!-- ko if: apiKey -->
+<div class="form-group form-group-collapsible">
     <label class="form-label">
         <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#mapSettingsCollapse'"
             aria-label="Toggle 'Map settings' section"></a>
@@ -63,6 +80,7 @@
         </div>
     </div>
 </div>
+<!-- /ko -->
 
 <div class="form-group form-group-collapsible">
     <label class="form-label">

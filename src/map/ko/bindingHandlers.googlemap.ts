@@ -1,7 +1,7 @@
 ﻿import * as ko from "knockout";
 import { Loader, LoaderOptions } from "@googlemaps/js-api-loader";
-import { MapRuntimeConfig } from "./runtime/mapRuntimeConfig";
 import { Events } from "@paperbits/common/events";
+import { MapRuntimeConfig } from "./runtime/mapRuntimeConfig";
 
 
 export class GooglmapsBindingHandler {
@@ -9,21 +9,31 @@ export class GooglmapsBindingHandler {
         const attach = this.attach.bind(this);
 
         ko.bindingHandlers["googlemap"] = {
-            init(element: HTMLElement, valueAccessor: () => MapRuntimeConfig): void {
+            update(element: HTMLElement, valueAccessor: () => MapRuntimeConfig): void {
                 const configuration = valueAccessor();
-                attach(element, ko.toJS(configuration));
+
+                try {
+                    attach(element, ko.toJS(configuration));
+                }
+                catch (error) {
+                    console.warn(`Unable to load map.`);
+                }
             }
         };
     }
 
     private async attach(element: HTMLElement, configuration: MapRuntimeConfig): Promise<void> {
+        if (!configuration.apiKey) {
+            return;
+        }
+
         const options: Partial<LoaderOptions> = {/* todo */ };
         const loader = new Loader({ apiKey: configuration.apiKey, ...options });
+        loader.deleteScript();
         await loader.load();
 
         const markerWidth = 50;
         const markerHeight = 50;
-        const geocoder = new google.maps.Geocoder();
         const mapOptions: google.maps.MapOptions = {};
         const map = new google.maps.Map(element, mapOptions);
 
@@ -47,33 +57,6 @@ export class GooglmapsBindingHandler {
             zoom: configuration.zoom,
             styles: configuration.customizations
         });
-
-        const locationToPosition = async (location: string): Promise<google.maps.LatLng> => {
-            const request: google.maps.GeocoderRequest = {};
-            const coordinates = new RegExp("(-?\\d+\(?:.\\d+)?),(-?\\d+\(?:.\\d+)?)").exec(location);
-
-            if (coordinates) {
-                request.location = {
-                    lat: <any>coordinates[1] * 1,
-                    lng: <any>coordinates[2] * 1,
-                };
-            }
-            else {
-                request.address = location;
-            }
-
-            return new Promise<google.maps.LatLng>((resolve, reject) => {
-                geocoder.geocode(request, (results: google.maps.GeocoderResult[], status) => {
-                    const position = results[0].geometry.location;
-
-                    if (status === google.maps.GeocoderStatus.OK) {
-                        resolve(position);
-                    }
-
-                    reject(`Could not geocode specified location: "${location}".`);
-                });
-            });
-        };
 
         class PopupAnchor extends google.maps.OverlayView {
             private readonly content: HTMLElement;
@@ -115,8 +98,7 @@ export class GooglmapsBindingHandler {
             }
         }
 
-        const position = await locationToPosition(configuration.location);
-
+        const position = new google.maps.LatLng({ lat: configuration.location.lat, lng: configuration.location.lng });
         const marker: google.maps.Marker = new google.maps.Marker();
         marker.setMap(map);
 

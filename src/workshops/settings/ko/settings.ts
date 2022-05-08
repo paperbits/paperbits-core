@@ -21,7 +21,6 @@ export class SettingsWorkshop {
     public readonly faviconFileName: ko.Observable<string>;
     public readonly favicon: ko.Observable<BackgroundModel>;
 
-
     constructor(
         private readonly mediaService: IMediaService,
         private readonly siteService: ISiteService
@@ -41,8 +40,7 @@ export class SettingsWorkshop {
     public async initialize(): Promise<void> {
         this.working(true);
 
-        const settings = await this.siteService.getSettings<any>();
-        const siteSettings: SiteSettingsContract = settings.site;
+        const siteSettings = await this.siteService.getSetting<SiteSettingsContract>("site");
 
         if (siteSettings) {
             this.title(siteSettings.title);
@@ -53,6 +51,7 @@ export class SettingsWorkshop {
             this.faviconSourceKey(siteSettings.faviconSourceKey);
             this.setFaviconUri(siteSettings.faviconSourceKey);
         }
+
         this.working(false);
 
         this.title.subscribe(this.onSettingChange);
@@ -64,8 +63,6 @@ export class SettingsWorkshop {
     }
 
     private async onSettingChange(): Promise<void> {
-        const settings = await this.siteService.getSettings<any>();
-
         const siteSettings: SiteSettingsContract = {
             title: this.title(),
             description: this.description(),
@@ -75,9 +72,7 @@ export class SettingsWorkshop {
             author: this.author()
         };
 
-        settings.site = siteSettings;
-
-        await this.siteService.setSettings(settings);
+        await this.siteService.setSetting("site",  siteSettings);
     }
 
     public onMediaSelected(media: MediaContract): void {

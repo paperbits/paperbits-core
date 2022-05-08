@@ -1,1 +1,12 @@
+<!-- ko if: hasApiKey -->
 <map-runtime data-bind="attr: { params: runtimeConfig }, styled: styles"></map-runtime>
+<!-- /ko -->
+
+<!-- ko ifnot: hasApiKey -->
+<div class="empty-media" data-bind="styled: styles">
+    <p class="not-configured">
+        Map widget requires valid Google Maps API key.
+        <a href="https://developers.google.com/maps/documentation/javascript/cloud-setup">Learn more</a>
+    </p>
+</div>
+<!-- /ko -->
