@@ -4,6 +4,7 @@ import { WidgetItem } from "./widgetItem";
 import { IWidgetService, WidgetModel } from "@paperbits/common/widgets";
 import { Component, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
+import { Logger } from "@paperbits/common/logging";
 
 @Component({
     selector: "widget-selector",
@@ -24,7 +25,10 @@ export class WidgetSelector {
     @Event()
     public onRequest: () => string[];
 
-    constructor(private readonly widgetService: IWidgetService) {
+    constructor(
+        private readonly widgetService: IWidgetService,
+        private readonly logger: Logger
+    ) {
         this.working = ko.observable(true);
         this.searchPattern = ko.observable<string>();
         this.categories = ko.observable<{ name: string, items: WidgetItem[] }[]>();
@@ -98,5 +102,7 @@ export class WidgetSelector {
     public async selectWidget(widgetItem: WidgetItem): Promise<void> {
         const model = await widgetItem.widgetOrder.createModel();
         this.onSelect(model);
+
+        this.logger.trackEvent("WidgetAdded", { name: widgetItem.widgetOrder.name });
     }
 }
