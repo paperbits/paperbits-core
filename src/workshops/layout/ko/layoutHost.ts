@@ -72,6 +72,7 @@ export class LayoutHost {
             styleManager: styleManager,
             navigationPath: route.path,
             contentType: "layout",
+            layer: "layout",
             template: {
                 layout: {
                     value: layoutContentContract,

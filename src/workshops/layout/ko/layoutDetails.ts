@@ -56,6 +56,7 @@ export class LayoutDetails {
             return !this.isDefaultLayout();
         });
 
+        this.viewManager.setActiveLayer("layout");
         this.viewManager.setHost({ name: "layout-host", params: { layoutKey: this.layoutItem.key } });
 
         this.eventManager.dispatchEvent("displayHint", {
@@ -79,6 +80,7 @@ export class LayoutDetails {
             this.onDeleteCallback();
         }
 
+        this.viewManager.setActiveLayer("page");
         this.viewManager.setHost({ name: "page-host" }); // Returning to editing current page.
     }
 

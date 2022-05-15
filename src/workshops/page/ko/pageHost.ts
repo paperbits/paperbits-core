@@ -132,6 +132,7 @@ export class PageHost {
             styleManager: this.styleManager,
             navigationPath: route.path,
             contentType: "popup",
+            layer: "page",
             getHostedDocument: () => {
                 return this.viewManager.getHostDocument();
             }
