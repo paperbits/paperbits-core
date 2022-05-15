@@ -21,7 +21,6 @@ export class TestimonialsViewModelBinder implements ViewModelBinder<Testimonials
 
         viewModel["widgetBinding"] = {
             displayName: "Testimonials",
-            readonly: bindingContext ? bindingContext.readonly : false,
             layer: bindingContext?.layer,
             model: model,
             flow: ComponentFlow.Block,

@@ -68,7 +68,6 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
         const binding: IWidgetBinding<MenuModel, MenuViewModel> = {
             name: "menu",
             displayName: "Menu",
-            readonly: bindingContext ? bindingContext.readonly : false,
             layer: bindingContext?.layer,
             model: model,
             flow: ComponentFlow.Inline, // Commented out due do discovered backward compatibility issues.

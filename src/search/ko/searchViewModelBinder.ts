@@ -17,7 +17,6 @@ export class SearchViewModelBinder implements ViewModelBinder<SearchModel, Searc
             const binding: IWidgetBinding<SearchModel, SearchViewModel> = {
                 name: "search",
                 displayName: "Search website",
-                readonly: bindingContext ? bindingContext.readonly : false,
                 layer: bindingContext?.layer,
                 handler: SearchHandlers,
                 model: model,

@@ -37,7 +37,6 @@ export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlay
         const biding: IWidgetBinding<YoutubePlayerModel, YoutubePlayerViewModel> = {
             name: "youtube-player",
             displayName: "Youtube player",
-            readonly: bindingContext ? bindingContext.readonly : false,
             layer: bindingContext?.layer,
             model: model,
             flow: ComponentFlow.Inline,

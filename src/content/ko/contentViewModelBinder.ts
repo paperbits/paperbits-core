@@ -47,7 +47,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
         };
 
         const binding: IWidgetBinding<ContentModel, ContentViewModel> = {
-            displayName: `Content (${model.type})`,
+            displayName: `${model.type} content`,
             layer: bindingContext?.layer || model.type, // setting up own layer, if there is no parent
             name: "content",
             model: model,
@@ -107,7 +107,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
         viewModel.widgets(viewModels);
 
         if (viewModels.length === 0 && bindingContext.contentType !== model.type) {
-            viewModel.widgets.push(new PlaceholderViewModel(`Content (${model.type})`));
+            viewModel.widgets.push(new PlaceholderViewModel(`${model.type} content`));
         }
 
         return viewModel;

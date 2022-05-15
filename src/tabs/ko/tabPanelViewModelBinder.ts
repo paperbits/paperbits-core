@@ -23,7 +23,6 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
         const binding: IWidgetBinding<TabPanelModel, TabPanelViewModel> = {
             name: "tab-panel",
             displayName: "Tab panel",
-            readonly: bindingContext ? bindingContext.readonly : false,
             layer: bindingContext?.layer,
             model: model,
             draggable: true,
@@ -72,7 +71,6 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
         const binding: IWidgetBinding<TabPanelItemModel, TabPanelItemViewModel> = {
             name: "tabPanel-item",
             displayName: defaultLabel,
-            readonly: bindingContext ? bindingContext.readonly : false,
             layer: bindingContext?.layer,
             model: model,
             draggable: true,

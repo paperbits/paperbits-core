@@ -43,7 +43,6 @@ export class CollapsiblePanelViewModelBinder implements ViewModelBinder<Collapsi
 
         viewModel["widgetBinding"] = {
             displayName: "Collapsible panel",
-            readonly: bindingContext ? bindingContext.readonly : false,
             layer: bindingContext?.layer,
             model: model,
             draggable: true,
