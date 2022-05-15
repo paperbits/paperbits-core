@@ -14,6 +14,7 @@ import { SectionModel } from "../../section";
 import { Bag, Keys } from "@paperbits/common";
 import { LocalStyles, VariationContract } from "@paperbits/common/styles";
 import { StyleHelper } from "@paperbits/styles";
+import { GridCellModel } from "../../grid-cell";
 
 
 const defaultCommandColor = "#607d8b";
@@ -235,7 +236,7 @@ export class GridEditor {
 
         const topGridItem = gridItems[0];
 
-        if (topGridItem.binding.layer !== this.activeLayer) {
+        if (topGridItem.binding.layer !== "*" && topGridItem.binding.layer !== this.activeLayer) {
             event.preventDefault();
             event.stopPropagation();
             this.eventManager.dispatchEvent("displayInactiveLayoutHint", topGridItem.binding.model);
@@ -319,7 +320,11 @@ export class GridEditor {
                 break;
 
             case Keys.PageUp:
-                const parent = gridItem.getParent();
+                let parent = gridItem.getParent();
+
+                if (gridItem.binding.model instanceof GridCellModel) {
+                    parent = parent.getParent(); // Skipping Grid model
+                }
 
                 if (parent && !(parent.binding.model instanceof ContentModel)) {
                     this.selectElement(parent);
@@ -327,7 +332,7 @@ export class GridEditor {
                 break;
 
             case Keys.PageDown:
-                let children;
+                let children: GridItem[];
 
                 if (gridItem.binding.model instanceof SectionModel) {
                     const containerGridItem = this.getGridItem(<HTMLElement>gridItem.element.firstElementChild);
@@ -339,7 +344,10 @@ export class GridEditor {
 
                 if (children.length > 0) {
                     const firstChild = children[0];
-                    this.selectElement(firstChild);
+
+                    if (firstChild.binding.flow !== "placeholder") {
+                        this.selectElement(firstChild);
+                    }
                 }
                 break;
 
@@ -799,7 +807,7 @@ export class GridEditor {
             return null;
         }
 
-        if (!!layer && widgetBinding.layer !== layer) {
+        if (!!layer && widgetBinding.layer !== "*" && widgetBinding.layer !== layer) {
             return null;
         }
 

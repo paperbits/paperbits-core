@@ -1,3 +1,4 @@
+import * as Objects from "@paperbits/common/objects";
 import { Bag } from "@paperbits/common";
 import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { EventManager, Events } from "@paperbits/common/events";
@@ -68,8 +69,7 @@ export class PopupViewModelBinder implements ViewModelBinder<PopupInstanceModel,
         const binding: IWidgetBinding<PopupInstanceModel, PopupViewModel> = {
             name: "popup",
             displayName: "Popup",
-            readonly: bindingContext ? bindingContext.readonly : false,
-            layer: bindingContext?.layer,
+            layer: "*",
             flow: ComponentFlow.Block,
             model: model,
             draggable: true,
@@ -97,6 +97,15 @@ export class PopupViewModelBinder implements ViewModelBinder<PopupInstanceModel,
         }
 
         const widgetViewModels = [];
+
+        // let childBindingContext: Bag<any> = {};
+
+        // if (bindingContext) {
+        //     childBindingContext = <Bag<any>>Objects.clone(bindingContext);
+        //     childBindingContext.layer = "*"; 
+        // }
+
+        bindingContext.layer = "*";
 
         for (const widgetModel of model.widgets) {
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);

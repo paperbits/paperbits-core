@@ -61,9 +61,11 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
                 if (model.type === bindingContext?.contentType) {
                     this.eventManager.addEventListener(Events.ContentUpdate, scheduleUpdate);
                     binding.flow = ComponentFlow.Contents;
+                    binding.readonly = true;
                 }
                 else {
                     binding.flow = ComponentFlow.Block;
+                    binding.readonly = false;
                 }
             },
             onDispose: () => {
