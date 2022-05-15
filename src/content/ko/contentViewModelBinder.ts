@@ -48,7 +48,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
 
         const binding: IWidgetBinding<ContentModel, ContentViewModel> = {
             displayName: `${model.type} content`,
-            layer: bindingContext?.layer || model.type, // setting up own layer, if there is no parent
+            layer: bindingContext?.layer, // setting up own layer, if there is no parent
             name: "content",
             model: model,
             draggable: true,
@@ -58,18 +58,16 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
                 this.eventManager.dispatchEvent(Events.ContentUpdate);
             },
             onCreate: () => {
-                if (model.type === bindingContext?.contentType) {
+                if (model.type === bindingContext?.layer) {
                     this.eventManager.addEventListener(Events.ContentUpdate, scheduleUpdate);
                     binding.flow = ComponentFlow.Contents;
-                    binding.readonly = true;
                 }
                 else {
                     binding.flow = ComponentFlow.Block;
-                    binding.readonly = false;
                 }
             },
             onDispose: () => {
-                if (model.type === bindingContext?.contentType) {
+                if (model.type === bindingContext?.layer) {
                     this.eventManager.removeEventListener(Events.ContentUpdate, scheduleUpdate);
                 }
             }
@@ -87,7 +85,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
 
         if (bindingContext) {
             childBindingContext = <Bag<any>>Objects.clone(bindingContext);
-            childBindingContext.readonly = model.type !== bindingContext?.contentType;
+            childBindingContext.readonly = model.type !== bindingContext?.layer;
             childBindingContext.template = bindingContext.template;
             childBindingContext.styleManager = bindingContext.styleManager;
             childBindingContext.layer = model.type; // setting same layer for all child components
@@ -106,7 +104,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
 
         viewModel.widgets(viewModels);
 
-        if (viewModels.length === 0 && bindingContext.contentType !== model.type) {
+        if (viewModels.length === 0 && bindingContext.layer !== model.type) {
             viewModel.widgets.push(new PlaceholderViewModel(`${model.type} content`));
         }
 

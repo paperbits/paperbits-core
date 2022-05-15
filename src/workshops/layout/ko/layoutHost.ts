@@ -73,7 +73,6 @@ export class LayoutHost {
         const bindingContext = {
             styleManager: styleManager,
             navigationPath: route.path,
-            contentType: "layout",
             layer: "layout",
             template: {
                 layout: {

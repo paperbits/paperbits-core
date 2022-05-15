@@ -248,9 +248,6 @@ export class GridEditor {
             return;
         }
 
-
-        // const gridItem = this.activeHighlightedGridItem;
-
         const gridItem = topGridItem;
 
         if (!gridItem) {
@@ -320,7 +317,7 @@ export class GridEditor {
                 break;
 
             case Keys.PageUp:
-                const parent = gridItem.getParent();
+                const parent = gridItem.getParent(this.activeLayer);
 
                 if (parent) {
                     this.selectElement(parent);
@@ -328,7 +325,7 @@ export class GridEditor {
                 break;
 
             case Keys.PageDown:
-                const children = gridItem.getChildren();
+                const children = gridItem.getChildren(this.activeLayer);
 
                 if (children.length > 0) {
                     const firstChild = children[0];
@@ -644,7 +641,9 @@ export class GridEditor {
             }
         }
 
-        if (!highlightedGridItem) {
+        const isTopLevelWidget = highlightedGridItem?.binding.name === "content" && this.activeLayer === highlightedGridItem?.binding.layer;
+
+        if (!highlightedGridItem || isTopLevelWidget) {
             this.activeHighlightedGridItem = null;
             this.viewManager.setHighlight(null);
             return;
@@ -720,17 +719,18 @@ export class GridEditor {
         this.eventManager.removeEventListener("onDelete", this.onDelete);
     }
 
-    private getChildren(gridItem: GridItem): GridItem[] {
+    private getChildren(gridItem: GridItem, layerName?: string): GridItem[] {
         const childElements = Arrays.coerce<HTMLElement>(gridItem.element.querySelectorAll("*"));
 
         return childElements
-            .map(child => this.getGridItem(child, this.activeLayer))
+            .map(child => this.getGridItem(child, layerName))
             .filter(x => !!x && x.binding.model !== gridItem.binding.model && !x.binding.readonly);
     }
 
-    private getParent(gridItem: GridItem): GridItem {
+    private getParent(gridItem: GridItem, layerName?: string): GridItem {
         const elements = Html.parents(gridItem.element);
-        const parentGridItems = this.getGridItems(elements, this.activeLayer);
+        const parentGridItems = this.getGridItems(elements, layerName);
+
         return parentGridItems.find(x => !x.binding.readonly);
     }
 
@@ -759,14 +759,12 @@ export class GridEditor {
         return this.getGridItem(previousElement);
     }
 
-    private getGridItemsUnderPointer(layer?: string): GridItem[] {
-        // const elements = this.getUnderlyingElements().filter(x => !x.classList.contains("design") && x.tagName !== "HTML");
+    private getGridItemsUnderPointer(layerName?: string): GridItem[] {
         const elements = this.getUnderlyingElements().filter(x => x.tagName !== "HTML");
-
-        return this.getGridItems(elements, layer);
+        return this.getGridItems(elements, layerName);
     }
 
-    private getGridItem(element: HTMLElement, layer?: string): GridItem {
+    private getGridItem(element: HTMLElement, requestedLayerName?: string): GridItem {
         const context = ko.contextFor(element);
 
         if (!context) {
@@ -781,7 +779,9 @@ export class GridEditor {
             return null;
         }
 
-        if (!!layer && widgetBinding.layer !== "*" && widgetBinding.layer !== layer) {
+        const isAnotherLayer = widgetBinding.layer !== "*" && requestedLayerName && widgetBinding.layer !== requestedLayerName;
+
+        if (isAnotherLayer) {
             return null;
         }
 
@@ -791,8 +791,8 @@ export class GridEditor {
             editor: widgetBinding.editor,
             element: element,
             binding: widgetBinding,
-            getParent: () => this.getParent(gridItem),
-            getChildren: () => this.getChildren(gridItem),
+            getParent: (layerName: string) => this.getParent(gridItem, layerName),
+            getChildren: (layerName: string) => this.getChildren(gridItem, layerName),
             getSiblings: () => this.getSiblings(gridItem),
             getNextSibling: () => this.getNextSibling(gridItem),
             getPrevSibling: () => this.getPrevSibling(gridItem),
@@ -903,12 +903,12 @@ export class GridEditor {
         return gridItem;
     }
 
-    private getGridItems(elements: HTMLElement[], layer?: string): GridItem[] {
+    private getGridItems(elements: HTMLElement[], layerName: string): GridItem[] {
         let currentwidgetBinding: IWidgetBinding<any, any>;
         const stackOfGridItems = [];
 
         for (const element of elements.reverse()) {
-            const widgetGridItem = this.getGridItem(element, layer);
+            const widgetGridItem = this.getGridItem(element, layerName);
 
             if (widgetGridItem && widgetGridItem.binding !== currentwidgetBinding) {
                 stackOfGridItems.push(widgetGridItem);

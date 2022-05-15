@@ -97,7 +97,6 @@ export class PageHost {
             contentItemKey: pageContract.key,
             styleManager: this.styleManager,
             navigationPath: route.path,
-            contentType: "page",
             template: { // Template here describes fields of particular content type.
                 page: {
                     value: pageContentContract,
