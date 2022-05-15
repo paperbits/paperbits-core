@@ -4,6 +4,7 @@ import { EventManager, Events } from "@paperbits/common/events";
 import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { SearchViewModel } from "./searchViewModel";
 import { SearchModel } from "../searchModel";
+import { SearchHandlers } from "../searchHandlers";
 
 
 export class SearchViewModelBinder implements ViewModelBinder<SearchModel, SearchViewModel> {
@@ -17,6 +18,8 @@ export class SearchViewModelBinder implements ViewModelBinder<SearchModel, Searc
                 name: "search",
                 displayName: "Search website",
                 readonly: bindingContext ? bindingContext.readonly : false,
+                layer: bindingContext?.layer,
+                handler: SearchHandlers,
                 model: model,
                 flow: ComponentFlow.Block,
                 draggable: true,

@@ -44,6 +44,7 @@ export class SectionViewModelBinder implements ViewModelBinder<SectionModel, Sec
             name: "section",
             displayName: "Section",
             readonly: bindingContext ? bindingContext.readonly : false,
+            layer: bindingContext?.layer,
             model: model,
             draggable: true,
             flow: "flex",

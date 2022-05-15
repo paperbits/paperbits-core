@@ -5,6 +5,7 @@ import { Query } from "@paperbits/common/persistence";
 import { IPopupService } from "@paperbits/common/popups";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
+import { PopupHandlers } from "../popupHandlers";
 import { PopupHostContract } from "../popupHostContract";
 import { PopupHostModel } from "../popupHostModel";
 import { PopupHostModelBinder } from "../popupHostModelBinder";
@@ -37,6 +38,8 @@ export class PopupHostViewModelBinder implements ViewModelBinder<PopupHostModel,
             name: "popup-host",
             displayName: "Popup host",
             readonly: true,
+            handler: PopupHandlers,
+            layer: bindingContext?.layer,
             model: model,
             draggable: false,
             applyChanges: () => this.modelToViewModel(model, viewModel, bindingContext),

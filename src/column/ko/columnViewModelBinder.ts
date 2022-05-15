@@ -119,6 +119,7 @@ export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, Colum
             name: "column",
             displayName: "Column",
             readonly: bindingContext ? bindingContext.readonly : false,
+            layer: bindingContext?.layer,
             flow: ComponentFlow.Inline,
             model: model,
             draggable: false,

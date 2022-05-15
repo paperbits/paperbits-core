@@ -41,6 +41,7 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
             name: "button",
             displayName: "Button",
             readonly: bindingContext ? bindingContext.readonly : false,
+            layer: bindingContext?.layer,
             model: model,
             handler: ButtonHandlers,
             draggable: true,

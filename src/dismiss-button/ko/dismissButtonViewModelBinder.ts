@@ -37,6 +37,7 @@ export class DismissButtonViewModelBinder implements ViewModelBinder<DismissButt
         viewModel["widgetBinding"] = {
             displayName: "Dismiss button",
             readonly: bindingContext ? bindingContext.readonly : false,
+            layer: bindingContext?.layer,
             model: model,
             draggable: true,
             flow: ComponentFlow.Contents,

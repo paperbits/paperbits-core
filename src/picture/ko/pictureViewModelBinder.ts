@@ -67,6 +67,7 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
             name: "picture",
             displayName: "Picture",
             readonly: bindingContext ? bindingContext.readonly : false,
+            layer: bindingContext?.layer,
             model: model,
             handler: PictureHandlers,
             draggable: true,

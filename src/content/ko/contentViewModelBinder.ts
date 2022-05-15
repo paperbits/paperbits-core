@@ -47,11 +47,10 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
         };
 
         const binding: IWidgetBinding<ContentModel, ContentViewModel> = {
-            displayName: "Content",
-            readonly: false,
+            displayName: `Content (${model.type})`,
+            layer: bindingContext?.layer || model.type, // setting up own layer, if there is no parent
             name: "content",
             model: model,
-            flow: ComponentFlow.Contents,
             draggable: true,
             handler: ContentHandlers,
             applyChanges: async () => {
@@ -61,6 +60,10 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
             onCreate: () => {
                 if (model.type === bindingContext?.contentType) {
                     this.eventManager.addEventListener(Events.ContentUpdate, scheduleUpdate);
+                    binding.flow = ComponentFlow.Contents;
+                }
+                else {
+                    binding.flow = ComponentFlow.Block;
                 }
             },
             onDispose: () => {
@@ -85,6 +88,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
             childBindingContext.readonly = model.type !== bindingContext?.contentType;
             childBindingContext.template = bindingContext.template;
             childBindingContext.styleManager = bindingContext.styleManager;
+            childBindingContext.layer = model.type; // setting same layer for all child components
         }
 
         const promises = model.widgets.map(widgetModel => {
@@ -101,7 +105,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
         viewModel.widgets(viewModels);
 
         if (viewModels.length === 0 && bindingContext.contentType !== model.type) {
-            viewModel.widgets.push(new PlaceholderViewModel("Main"));
+            viewModel.widgets.push(new PlaceholderViewModel(`Content (${model.type})`));
         }
 
         return viewModel;

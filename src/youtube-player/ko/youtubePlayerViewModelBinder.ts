@@ -5,6 +5,7 @@ import { YoutubePlayerModel } from "../youtubePlayerModel";
 import { EventManager, Events } from "@paperbits/common/events";
 import { Bag } from "@paperbits/common";
 import { StyleCompiler } from "@paperbits/common/styles";
+import { YoutubeHandlers } from "../youtubeHandlers";
 
 export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlayerModel, YoutubePlayerViewModel> {
     constructor(
@@ -37,10 +38,12 @@ export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlay
             name: "youtube-player",
             displayName: "Youtube player",
             readonly: bindingContext ? bindingContext.readonly : false,
+            layer: bindingContext?.layer,
             model: model,
             flow: ComponentFlow.Inline,
             draggable: true,
             editor: "youtube-player-editor",
+            handler: YoutubeHandlers,
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent(Events.ContentUpdate);

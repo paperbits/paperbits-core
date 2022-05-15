@@ -49,6 +49,7 @@ export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerMo
         viewModel["widgetBinding"] = {
             displayName: "Video player",
             readonly: bindingContext ? bindingContext.readonly : false,
+            layer: bindingContext?.layer,
             model: model,
             flow: ComponentFlow.Inline,
             draggable: true,

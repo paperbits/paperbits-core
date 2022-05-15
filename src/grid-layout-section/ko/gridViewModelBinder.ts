@@ -8,6 +8,7 @@ import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
 import { WidgetViewModel } from "../../ko";
+import { GridHandlers } from "../gridHandlers";
 
 
 export class GridViewModelBinder implements ViewModelBinder<GridModel, GridViewModel> {
@@ -42,8 +43,9 @@ export class GridViewModelBinder implements ViewModelBinder<GridModel, GridViewM
         const binding: IWidgetBinding<GridModel, GridViewModel> = {
             name: "grid",
             displayName: "Grid",
-            readonly: true,
+            layer: bindingContext?.layer,
             model: model,
+            handler: GridHandlers,
             draggable: false,
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
