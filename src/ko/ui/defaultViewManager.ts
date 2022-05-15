@@ -159,10 +159,6 @@ export class DefaultViewManager implements ViewManager {
         this.clearContextualCommands();
         this.host(component);
         this.previewable(component.name !== "style-guide");
-
-        if (!this.activeLayer()) {
-            this.setActiveLayer("page");
-        }
     }
 
     public getHost(): IComponent {
@@ -375,7 +371,6 @@ export class DefaultViewManager implements ViewManager {
         }
 
         if (!this.getActiveView() && this.journey().length === 0 && host && host.name !== "page-host") {
-            this.setActiveLayer("page");
             this.setHost({ name: "page-host" }); // TODO: Get host type by current route.
         }
     }

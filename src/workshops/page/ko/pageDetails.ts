@@ -95,7 +95,6 @@ export class PageDetailsWorkshop {
         }
 
         await this.router.navigateTo(validPermalink());
-        this.viewManager.setActiveLayer("page");
         this.viewManager.setHost({ name: "page-host" });
 
         this.eventManager.dispatchEvent("displayHint", {

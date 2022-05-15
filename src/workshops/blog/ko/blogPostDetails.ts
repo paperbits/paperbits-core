@@ -55,7 +55,7 @@ export class BlogPostDetailsWorkshop {
         }
 
         await this.router.navigateTo(validPermalink());
-        this.viewManager.setActiveLayer("page");
+        
         this.viewManager.setHost({ name: "blog-post-host" });
     }
 
