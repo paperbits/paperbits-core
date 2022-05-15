@@ -159,6 +159,10 @@ export class DefaultViewManager implements ViewManager {
         this.clearContextualCommands();
         this.host(component);
         this.previewable(component.name !== "style-guide");
+
+        if (!this.activeLayer()) {
+            this.setActiveLayer("page");
+        }
     }
 
     public getHost(): IComponent {

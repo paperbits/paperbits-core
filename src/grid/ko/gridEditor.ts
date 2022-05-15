@@ -230,9 +230,6 @@ export class GridEditor {
 
         const gridItems = this.getGridItemsUnderPointer();
 
-        console.log(gridItems);
-        console.log(this.activeLayer);
-
         if (gridItems.length === 0) {
             return;
         }
