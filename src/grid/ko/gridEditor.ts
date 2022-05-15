@@ -320,34 +320,19 @@ export class GridEditor {
                 break;
 
             case Keys.PageUp:
-                let parent = gridItem.getParent();
+                const parent = gridItem.getParent();
 
-                if (gridItem.binding.model instanceof GridCellModel) {
-                    parent = parent.getParent(); // Skipping Grid model
-                }
-
-                if (parent && !(parent.binding.model instanceof ContentModel)) {
+                if (parent) {
                     this.selectElement(parent);
                 }
                 break;
 
             case Keys.PageDown:
-                let children: GridItem[];
-
-                if (gridItem.binding.model instanceof SectionModel) {
-                    const containerGridItem = this.getGridItem(<HTMLElement>gridItem.element.firstElementChild);
-                    children = containerGridItem.getChildren();
-                }
-                else {
-                    children = gridItem.getChildren();
-                }
+                const children = gridItem.getChildren();
 
                 if (children.length > 0) {
                     const firstChild = children[0];
-
-                    if (firstChild.binding.flow !== "placeholder") {
-                        this.selectElement(firstChild);
-                    }
+                    this.selectElement(firstChild);
                 }
                 break;
 
@@ -735,29 +720,18 @@ export class GridEditor {
         this.eventManager.removeEventListener("onDelete", this.onDelete);
     }
 
-    /**
-     * Returns stack of grid items up to top ancestor.
-     * @param element Starting element.
-     */
-    private getStack(element: HTMLElement): GridItem[] {
-        const elements = Html.selfAndParents(element);
-        return this.getGridItems(elements);
-    }
-
     private getChildren(gridItem: GridItem): GridItem[] {
-        const childElements = Arrays.coerce<HTMLElement>(gridItem.element.children);
+        const childElements = Arrays.coerce<HTMLElement>(gridItem.element.querySelectorAll("*"));
 
         return childElements
-            .map(child => this.getGridItem(child))
-            .filter(x => !!x && x.binding.model !== gridItem.binding.model);
+            .map(child => this.getGridItem(child, this.activeLayer))
+            .filter(x => !!x && x.binding.model !== gridItem.binding.model && !x.binding.readonly);
     }
 
     private getParent(gridItem: GridItem): GridItem {
-        const stack = this.getStack(gridItem.element);
-
-        return stack.length > 1
-            ? stack[1]
-            : null;
+        const elements = Html.parents(gridItem.element);
+        const parentGridItems = this.getGridItems(elements, this.activeLayer);
+        return parentGridItems.find(x => !x.binding.readonly);
     }
 
     private getSiblings(gridItem: GridItem): GridItem[] {
