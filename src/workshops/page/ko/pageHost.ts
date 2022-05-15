@@ -91,6 +91,8 @@ export class PageHost {
         const styleSheet = await this.styleCompiler.getStyleSheet();
         this.styleManager.setStyleSheet(styleSheet);
 
+        this.viewManager.setActiveLayer("page");
+
         const pageBindingContext = {
             contentItemKey: pageContract.key,
             styleManager: this.styleManager,
@@ -132,6 +134,7 @@ export class PageHost {
             styleManager: this.styleManager,
             navigationPath: route.path,
             contentType: "popup",
+            layer: "page",
             getHostedDocument: () => {
                 return this.viewManager.getHostDocument();
             }

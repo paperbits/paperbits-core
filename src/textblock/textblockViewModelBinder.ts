@@ -28,7 +28,7 @@ export class TextblockViewModelBinder implements ViewModelBinder<TextblockModel,
         const widgetBinding: IWidgetBinding<TextblockModel, TextblockViewModel> = {
             name: "text-block",
             displayName: "Text",
-            readonly: bindingContext ? bindingContext.readonly : false,
+            layer: bindingContext?.layer,
             model: model,
             draggable: true,
             handler: TextblockHandlers,

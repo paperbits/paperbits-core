@@ -55,6 +55,7 @@ export class BlogPostDetailsWorkshop {
         }
 
         await this.router.navigateTo(validPermalink());
+        
         this.viewManager.setHost({ name: "blog-post-host" });
     }
 

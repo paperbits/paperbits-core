@@ -54,7 +54,7 @@ export class TableCellViewModelBinder implements ViewModelBinder<TableCellModel,
         const binding: IWidgetBinding<TableCellModel, TableCellViewModel> = {
             name: "table-cell",
             displayName: displayName,
-            readonly: bindingContext ? bindingContext.readonly : false,
+            layer: bindingContext?.layer,
             model: model,
             draggable: false,
             editor: "table-cell-editor",

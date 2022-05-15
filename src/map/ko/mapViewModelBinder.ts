@@ -66,7 +66,7 @@ export class MapViewModelBinder {
 
         viewModel["widgetBinding"] = {
             displayName: "Map",
-            readonly: bindingContext ? bindingContext.readonly : false,
+            layer: bindingContext?.layer,
             model: model,
             flow: ComponentFlow.Inline,
             draggable: true,

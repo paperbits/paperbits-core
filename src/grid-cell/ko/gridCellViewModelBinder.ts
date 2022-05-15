@@ -48,7 +48,7 @@ export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, G
         const binding: IWidgetBinding<GridCellModel, GridCellViewModel> = {
             name: "grid-cell",
             displayName: displayName,
-            readonly: bindingContext ? bindingContext.readonly : false,
+            layer: bindingContext?.layer,
             model: model,
             draggable: false,
             editor: "grid-cell-editor",

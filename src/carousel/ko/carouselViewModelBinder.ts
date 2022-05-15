@@ -46,7 +46,7 @@ export class CarouselViewModelBinder implements ViewModelBinder<CarouselModel, C
         const binding: IWidgetBinding<CarouselItemModel, CarouselViewModel> = {
             name: "carousel-item",
             displayName: `Slide ${index + 1}`,
-            readonly: bindingContext ? bindingContext.readonly : false,
+            layer: bindingContext?.layer,
             model: model,
             draggable: false,
             flow: "flex",
@@ -67,7 +67,7 @@ export class CarouselViewModelBinder implements ViewModelBinder<CarouselModel, C
         const binding: IWidgetBinding<CarouselModel, CarouselViewModel> = {
             name: "carousel",
             displayName: "Carousel",
-            readonly: bindingContext ? bindingContext.readonly : false,
+            layer: bindingContext?.layer,
             model: model,
             draggable: true,
             flow: ComponentFlow.Block,

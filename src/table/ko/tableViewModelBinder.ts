@@ -7,6 +7,7 @@ import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
+import { TableHandlers } from "../tableHandlers";
 
 
 export class TableViewModelBinder implements ViewModelBinder<TableModel, TableViewModel> {
@@ -44,7 +45,9 @@ export class TableViewModelBinder implements ViewModelBinder<TableModel, TableVi
             name: "table",
             displayName: "Table",
             readonly: false,
+            layer: bindingContext?.layer,
             editor: "table-editor",
+            handler: TableHandlers,
             model: model,
             flow: ComponentFlow.Block,
             draggable: false,

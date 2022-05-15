@@ -23,7 +23,7 @@ export class DividerViewModelBinder implements ViewModelBinder<DividerModel, Div
 
         viewModel["widgetBinding"] = {
             displayName: "Divider",
-            readonly: bindingContext ? bindingContext.readonly : false,
+            layer: bindingContext?.layer,
             model: model,
             draggable: true,
             flow: ComponentFlow.Block,

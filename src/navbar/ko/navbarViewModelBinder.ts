@@ -65,7 +65,7 @@ export class NavbarViewModelBinder implements ViewModelBinder<NavbarModel, Navba
 
         viewModel["widgetBinding"] = {
             displayName: "Navigation bar",
-            readonly: bindingContext ? bindingContext.readonly : false,
+            layer: bindingContext?.layer,
             model: model,
             flow: ComponentFlow.Inline,
             draggable: true,

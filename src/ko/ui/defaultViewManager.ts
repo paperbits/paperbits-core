@@ -48,6 +48,7 @@ export class DefaultViewManager implements ViewManager {
     public readonly canPreview: ko.Computed<boolean>;
     public readonly canGoBack: ko.Computed<boolean>;
     public readonly websitePreviewEnabled: ko.Observable<boolean>;
+    public readonly activeLayer: ko.Observable<string>;
 
     public mode: ViewManagerMode;
     public hostDocument: Document;
@@ -65,6 +66,7 @@ export class DefaultViewManager implements ViewManager {
     ) {
         this.designTime = ko.observable(false);
         this.previewable = ko.observable(true);
+        this.activeLayer = ko.observable();
         this.block = ko.computed(() => {
             return this.designTime() && this.previewable();
         });
@@ -591,9 +593,11 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public getActiveLayer(): string {
-        const host = this.getHost();
-        const activeLayer = host.name.replace("-host", "");
-        return activeLayer;
+        return this.activeLayer();
+    }
+
+    public setActiveLayer(layerName: string): void {
+        this.activeLayer(layerName);
     }
 
     @OnDestroyed()
