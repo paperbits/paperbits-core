@@ -58,7 +58,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
                 this.eventManager.dispatchEvent(Events.ContentUpdate);
             },
             onCreate: () => {
-                if (model.type === bindingContext?.layer) {
+                if (model.type === bindingContext?.contentType) {
                     this.eventManager.addEventListener(Events.ContentUpdate, scheduleUpdate);
                     binding.flow = ComponentFlow.Contents;
                 }
@@ -67,7 +67,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
                 }
             },
             onDispose: () => {
-                if (model.type === bindingContext?.layer) {
+                if (model.type === bindingContext?.contentType) {
                     this.eventManager.removeEventListener(Events.ContentUpdate, scheduleUpdate);
                 }
             }
