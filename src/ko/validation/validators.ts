@@ -3,6 +3,7 @@ import * as ko from "knockout";
 import * as validation from "knockout.validation";
 import { ILayoutService } from "@paperbits/common/layouts/ILayoutService";
 import { IPermalinkResolver, PermalinkService } from "@paperbits/common/permalinks";
+import { RegExps } from "@paperbits/common";
 
 const errorClassName = "is-invalid";
 
@@ -42,7 +43,19 @@ export class KnockoutValidation {
             return resultObservable;
         };
 
-        validation.rules["validPermalink"] = {
+        validation.rules["isValidPermalink"] = {
+            validator: (permalink: string): boolean => {
+                if (!permalink) {
+                    return false;
+                }
+
+                const isValidPermalink = RegExps.permalink.test(permalink);
+                return isValidPermalink;
+            },
+            message: `Permalink is invalid. Use letters, numbers, dashes and slashes. Example: "/about/contacts"`
+        };
+
+        validation.rules["isPermalinkInUse"] = {
             async: true,
             validator: async (permalink: string, targetKey: string, callback: (valid: boolean) => void) => {
                 if (!permalink) {

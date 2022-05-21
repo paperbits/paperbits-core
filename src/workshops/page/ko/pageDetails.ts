@@ -65,7 +65,7 @@ export class PageDetailsWorkshop {
             this.isReserved(true);
         }
         else {
-            validPermalink = validPermalink.extend(<any>{ required: true, validPermalink: this.pageItem.key, onlyValid: true });
+            validPermalink = validPermalink.extend(<any>{ required: true, isValidPermalink: true, validPermalink: this.pageItem.key, onlyValid: true });
             validPermalink.subscribe(this.onPermalinkChange);
         }
 
