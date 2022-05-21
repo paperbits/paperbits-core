@@ -77,8 +77,8 @@ export class LayoutHost {
             template: {
                 layout: {
                     value: layoutContentContract,
-                    onValueUpdate: async (updatedContentContract: Contract) => {
-                        await this.layoutService.updateLayoutContent(this.layoutKey(), updatedContentContract);
+                    onValueUpdate: async (updatedContentContract: Contract, changeDescription: string) => {
+                        await this.layoutService.updateLayoutContent(this.layoutKey(), updatedContentContract, null, changeDescription);
                     }
                 }
             }

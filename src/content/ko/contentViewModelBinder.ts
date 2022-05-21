@@ -23,7 +23,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
     public createBinding(model: ContentModel, viewModel: ContentViewModel, bindingContext: Bag<any>): void {
         let savingTimeout;
 
-        const updateContent = (): void => {
+        const updateContent = (changeDescription: string): void => {
             const contentContract = {
                 type: model.type,
                 nodes: []
@@ -37,13 +37,13 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
             const onValueUpdate = bindingContext?.template?.[contentContract.type]?.onValueUpdate;
 
             if (onValueUpdate) {
-                onValueUpdate(contentContract);
+                onValueUpdate(contentContract, changeDescription);
             }
         };
 
-        const scheduleUpdate = (): void => {
+        const scheduleUpdate = (changeDescription: string): void => {
             clearTimeout(savingTimeout);
-            savingTimeout = setTimeout(updateContent, 500);
+            savingTimeout = setTimeout(() => updateContent(changeDescription), 500);
         };
 
         const binding: IWidgetBinding<ContentModel, ContentViewModel> = {

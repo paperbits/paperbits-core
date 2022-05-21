@@ -101,8 +101,8 @@ export class PageHost {
             template: { // Template here describes fields of particular content type.
                 page: {
                     value: pageContentContract,
-                    onValueUpdate: async (updatedContentContract: Contract) => {
-                        await this.pageService.updatePageContent(pageContract.key, updatedContentContract);
+                    onValueUpdate: async (updatedContentContract: Contract, changeDescription: string) => {
+                        await this.pageService.updatePageContent(pageContract.key, updatedContentContract, null, changeDescription);
                     }
                 }
             }
