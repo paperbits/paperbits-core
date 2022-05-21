@@ -9,12 +9,9 @@ import { IWidgetBinding, WidgetContext, GridItem, ComponentFlow, WidgetBinding, 
 import { IWidgetService } from "@paperbits/common/widgets";
 import { EventManager, Events, MouseButton } from "@paperbits/common/events";
 import { Router } from "@paperbits/common/routing";
-import { ContentModel } from "../../content";
-import { SectionModel } from "../../section";
 import { Bag, Keys } from "@paperbits/common";
 import { LocalStyles, VariationContract } from "@paperbits/common/styles";
 import { StyleHelper } from "@paperbits/styles";
-import { GridCellModel } from "../../grid-cell";
 
 
 const defaultCommandColor = "#607d8b";
@@ -301,7 +298,7 @@ export class GridEditor {
                 const next = gridItem.getNextSibling();
 
                 if (next) {
-                    this.selectElement(next);
+                    this.selectElement(next, true);
                 }
 
                 break;
@@ -311,7 +308,7 @@ export class GridEditor {
                 const prev = gridItem.getPrevSibling();
 
                 if (prev) {
-                    this.selectElement(prev);
+                    this.selectElement(prev, true);
                 }
 
                 break;
@@ -320,7 +317,7 @@ export class GridEditor {
                 const parent = gridItem.getParent(this.activeLayer);
 
                 if (parent) {
-                    this.selectElement(parent);
+                    this.selectElement(parent, true);
                 }
                 break;
 
@@ -329,7 +326,7 @@ export class GridEditor {
 
                 if (children.length > 0) {
                     const firstChild = children[0];
-                    this.selectElement(firstChild);
+                    this.selectElement(firstChild, true);
                 }
                 break;
 
@@ -344,7 +341,7 @@ export class GridEditor {
         }
     }
 
-    private selectElement(item: GridItem, scrollIntoView: boolean = true): void {
+    private selectElement(item: GridItem, scrollIntoView: boolean = false): void {
         if (!item) {
             throw new Error(`Parameter "item" not specified.`);
         }
