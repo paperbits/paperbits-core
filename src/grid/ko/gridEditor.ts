@@ -547,7 +547,7 @@ export class GridEditor {
                 color: defaultCommandColor,
                 iconClass: "paperbits-icon paperbits-simple-add",
                 position: context.half,
-                tooltip: "Add widget 0" + context.binding.name,
+                tooltip: "Add widget",
                 component: {
                     name: "widget-selector",
                     params: {
