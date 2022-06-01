@@ -1,4 +1,5 @@
-﻿import * as ko from "knockout";
+﻿import { Encapsulation } from "@paperbits/common/ko/decorators";
+import * as ko from "knockout";
 import { ComponentDefinition } from "../componentDefinition";
 
 const makeArray = (arrayLikeObject) => {
@@ -8,6 +9,7 @@ const makeArray = (arrayLikeObject) => {
     }
     return result;
 };
+
 
 let componentLoadingOperationUniqueId = 0;
 
@@ -85,7 +87,7 @@ ko.bindingHandlers["component"] = {
                 if (!componentDefinition) {
                     throw new Error("Unknown component '" + componentName + "'");
                 }
-                cloneTemplateIntoElement(componentName, componentDefinition, element);
+                cloneTemplateIntoElement(componentName, componentDefinition, element, componentDefinition.encapsulation === Encapsulation.shadowDom);
 
                 const componentInfo = {
                     element: element,
@@ -115,15 +117,60 @@ ko.bindingHandlers["component"] = {
 
 ko.virtualElements.allowedBindings["component"] = true;
 
-function cloneTemplateIntoElement(componentName: string, componentDefinition: ComponentDefinition, element: HTMLElement): any {
+const applyBindingsToDescendants = function (viewModelOrBindingContext, rootNode) {
+    if (rootNode.nodeType === 1 || rootNode.nodeType === 8 || rootNode.nodeType === 11) {
+        applyBindingsToDescendantsInternal(getBindingContext(viewModelOrBindingContext), rootNode);
+    }
+};
+
+const applyBindingsToDescendantsInternal = function (bindingContext, elementOrVirtualElement) {
+    let nextInQueue = ko.virtualElements.firstChild(elementOrVirtualElement);
+
+    if (nextInQueue) {
+        let currentChild,
+            provider = ko.bindingProvider["instance"],
+            preprocessNode = provider["preprocessNode"];
+
+        // Preprocessing allows a binding provider to mutate a node before bindings are applied to it. For example it's
+        // possible to insert new siblings after it, and/or replace the node with a different one. This can be used to
+        // implement custom binding syntaxes, such as {{ value }} for string interpolation, or custom element types that
+        // trigger insertion of <template> contents at that point in the document.
+        if (preprocessNode) {
+            while (currentChild = nextInQueue) {
+                nextInQueue = ko.virtualElements.nextSibling(currentChild);
+                preprocessNode.call(provider, currentChild);
+            }
+            // Reset nextInQueue for the next loop
+            nextInQueue = ko.virtualElements.firstChild(elementOrVirtualElement);
+        }
+
+        while (currentChild = nextInQueue) {
+            // Keep a record of the next child *before* applying bindings, in case the binding removes the current child from its position
+            nextInQueue = ko.virtualElements.nextSibling(currentChild);
+            applyBindingsToNodeAndDescendantsInternal(bindingContext, currentChild);
+        }
+    }
+    ko.bindingEvent["notify"](elementOrVirtualElement, ko.bindingEvent.childrenComplete);
+}
+
+function cloneTemplateIntoElement(componentName: string, componentDefinition: ComponentDefinition, element: HTMLElement, useShadow: boolean = false): any {
     const template = componentDefinition["template"];
-    
+
     if (!template) {
         throw new Error(`Component "${componentName}" has no template.`);
     }
 
     const clonedNodesArray = ko.utils["cloneNodes"](template);
-    ko.virtualElements.setDomNodeChildren(element, clonedNodesArray);
+
+    if (useShadow) {
+        const shadowRoot = element.attachShadow({ mode: "open" });
+        clonedNodesArray.forEach(node => shadowRoot.appendChild(node));
+
+        console.log(shadowRoot.nodeType);
+    }
+    else {
+        ko.virtualElements.setDomNodeChildren(element, clonedNodesArray);
+    }
 }
 
 function createViewModel(componentDefinition: ComponentDefinition, componentParams: any, componentInfo: any): any {

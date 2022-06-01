@@ -32,7 +32,7 @@ export class WidgetContainer {
             const globalStyleSheet = await this.styleCompiler.getStyleSheet();
             const globalCss = compiler.compile(globalStyleSheet);
 
-            this.css(globalCss + " " + localCss);
+            this.css(`${globalCss} ${localCss}`);
         });
 
         this.widgetViewModel(this.widgetData.widget);
