@@ -273,9 +273,7 @@ export class GridEditor {
                 gridItem.element["dragSource"].beginDrag(gridItem.element, this.pointerX, this.pointerY);
             }
 
-            if (gridItem?.binding?.editor) {
-                this.selectElement(gridItem);
-            }
+            this.selectElement(gridItem);
         }
     }
 

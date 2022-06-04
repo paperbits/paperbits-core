@@ -7,6 +7,7 @@ import { Bag } from "@paperbits/common";
 import { PlaceholderViewModel } from "../../placeholder/ko";
 import { ViewModelBinderSelector } from "../../ko";
 import { CollapsiblePanelHandlers } from "..";
+import { IWidgetBinding } from "@paperbits/common/editing";
 
 
 export class CollapsiblePanelViewModelBinder implements ViewModelBinder<CollapsiblePanelModel, CollapsiblePanel>  {
@@ -41,7 +42,8 @@ export class CollapsiblePanelViewModelBinder implements ViewModelBinder<Collapsi
 
         viewModel.widgets(widgetViewModels);
 
-        viewModel["widgetBinding"] = {
+        const binding: IWidgetBinding<CollapsiblePanelModel, CollapsiblePanel> = {
+            name: "collapiblePanel",
             displayName: "Collapsible panel",
             layer: bindingContext?.layer,
             model: model,
@@ -54,6 +56,8 @@ export class CollapsiblePanelViewModelBinder implements ViewModelBinder<Collapsi
                 this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
+
+        viewModel["widgetBinding"] = binding;
 
         return viewModel;
     }

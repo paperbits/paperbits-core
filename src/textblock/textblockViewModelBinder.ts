@@ -25,7 +25,7 @@ export class TextblockViewModelBinder implements ViewModelBinder<TextblockModel,
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }
 
-        const widgetBinding: IWidgetBinding<TextblockModel, TextblockViewModel> = {
+        const binding: IWidgetBinding<TextblockModel, TextblockViewModel> = {
             name: "text-block",
             displayName: "Text",
             layer: bindingContext?.layer,
@@ -42,7 +42,7 @@ export class TextblockViewModelBinder implements ViewModelBinder<TextblockModel,
             }
         };
 
-        viewModel["widgetBinding"] = widgetBinding;
+        viewModel["widgetBinding"] = binding;
 
         return viewModel;
     }

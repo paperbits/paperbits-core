@@ -3,7 +3,7 @@ import { ViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
 import { TestimonialsModel } from "../testimonialsModel";
 import { EventManager, Events } from "@paperbits/common/events";
 import { Bag } from "@paperbits/common";
-import { ComponentFlow } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 
 export class TestimonialsViewModelBinder implements ViewModelBinder<TestimonialsModel, TestimonialsViewModel>  {
     constructor(private readonly eventManager: EventManager) { }
@@ -19,7 +19,8 @@ export class TestimonialsViewModelBinder implements ViewModelBinder<Testimonials
         viewModel.author(model.author);
         viewModel.authorTitle(model.authorTitle);
 
-        viewModel["widgetBinding"] = {
+        const binding: IWidgetBinding<TestimonialsModel, TestimonialsViewModel> = {
+            name: "testimonials",
             displayName: "Testimonials",
             layer: bindingContext?.layer,
             model: model,
@@ -31,6 +32,8 @@ export class TestimonialsViewModelBinder implements ViewModelBinder<Testimonials
                 this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
+
+        viewModel["widgetBinding"] = binding;
 
         return viewModel;
     }

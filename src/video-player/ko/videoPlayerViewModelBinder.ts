@@ -5,7 +5,7 @@ import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles/styleCompiler";
 import { Bag } from "@paperbits/common";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
-import { ComponentFlow } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 
 export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerModel, VideoPlayer> {
     constructor(
@@ -46,7 +46,8 @@ export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerMo
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }
 
-        viewModel["widgetBinding"] = {
+        const binding: IWidgetBinding<VideoPlayerModel, VideoPlayer> = {
+            name: "videoPlayer",
             displayName: "Video player",
             layer: bindingContext?.layer,
             model: model,
@@ -58,6 +59,8 @@ export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerMo
                 this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
+        
+        viewModel["widgetBinding"] = binding;
 
         return viewModel;
     }

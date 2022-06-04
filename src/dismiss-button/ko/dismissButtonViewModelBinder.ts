@@ -5,7 +5,7 @@ import { DismissButtonModel } from "../dismissButtonModel";
 import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
-import { ComponentFlow } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 
 export class DismissButtonViewModelBinder implements ViewModelBinder<DismissButtonModel, DismissButton>  {
     constructor(
@@ -13,7 +13,7 @@ export class DismissButtonViewModelBinder implements ViewModelBinder<DismissButt
         private readonly styleCompiler: StyleCompiler
     ) { }
 
-    public async modelToViewModel(model: DismissButtonModel, viewModel?: DismissButton, bindingContext?: Bag<any>): Promise<DismissButton> {
+    public async modelToViewModel(model: DismissButton, viewModel?: DismissButton, bindingContext?: Bag<any>): Promise<DismissButton> {
         if (!viewModel) {
             viewModel = new DismissButton();
         }
@@ -34,7 +34,8 @@ export class DismissButtonViewModelBinder implements ViewModelBinder<DismissButt
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }
 
-        viewModel["widgetBinding"] = {
+        const binding: IWidgetBinding<DismissButton, DismissButton> = {
+            name: "dismissButton",
             displayName: "Dismiss button",
             layer: bindingContext?.layer,
             model: model,
@@ -47,6 +48,8 @@ export class DismissButtonViewModelBinder implements ViewModelBinder<DismissButt
                 this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
+
+        viewModel["widgetBinding"] = binding;
 
         return viewModel;
     }

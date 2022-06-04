@@ -6,7 +6,7 @@ import { MapViewModel } from "./mapViewModel";
 import { MapModel } from "../mapModel";
 import { GoogleMapsSettings } from "./googleMapsSettings";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
-import { ComponentFlow } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { ISiteService } from "@paperbits/common/sites";
 import { Geolocation } from "@paperbits/common/geocoding";
 
@@ -64,7 +64,8 @@ export class MapViewModelBinder {
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }
 
-        viewModel["widgetBinding"] = {
+        const binding: IWidgetBinding<MapModel, MapViewModel> = {
+            name: "map",
             displayName: "Map",
             layer: bindingContext?.layer,
             model: model,
@@ -76,6 +77,8 @@ export class MapViewModelBinder {
                 this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
+
+        viewModel["widgetBinding"] = binding;
 
         return viewModel;
     }

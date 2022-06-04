@@ -4,7 +4,7 @@ import { DividerModel } from "../dividerModel";
 import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
-import { ComponentFlow } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 
 export class DividerViewModelBinder implements ViewModelBinder<DividerModel, Divider>  {
     constructor(
@@ -21,7 +21,8 @@ export class DividerViewModelBinder implements ViewModelBinder<DividerModel, Div
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }
 
-        viewModel["widgetBinding"] = {
+        const binding: IWidgetBinding<DividerModel, Divider> = {
+            name: "divider",
             displayName: "Divider",
             layer: bindingContext?.layer,
             model: model,
@@ -32,6 +33,8 @@ export class DividerViewModelBinder implements ViewModelBinder<DividerModel, Div
                 this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
+
+        viewModel["widgetBinding"] = binding;
 
         return viewModel;
     }

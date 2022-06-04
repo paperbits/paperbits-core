@@ -38,9 +38,9 @@ export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, Colum
         styles["alignY"] = y;
     }
 
-    public async modelToViewModel(model: ColumnModel, columnViewModel?: ColumnViewModel, bindingContext?: Bag<any>): Promise<ColumnViewModel> {
-        if (!columnViewModel) {
-            columnViewModel = new ColumnViewModel();
+    public async modelToViewModel(model: ColumnModel, viewModel?: ColumnViewModel, bindingContext?: Bag<any>): Promise<ColumnViewModel> {
+        if (!viewModel) {
+            viewModel = new ColumnViewModel();
         }
 
         const viewModels = [];
@@ -56,25 +56,25 @@ export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, Colum
             viewModels.push(new PlaceholderViewModel("Column"));
         }
 
-        columnViewModel.widgets(viewModels);
+        viewModel.widgets(viewModels);
 
         if (model.size) {
             model.size = Utils.optimizeBreakpoints(model.size);
-            columnViewModel.sizeXs(model.size.xs);
-            columnViewModel.sizeSm(model.size.sm);
-            columnViewModel.sizeMd(model.size.md);
-            columnViewModel.sizeLg(model.size.lg);
-            columnViewModel.sizeXl(model.size.xl);
+            viewModel.sizeXs(model.size.xs);
+            viewModel.sizeSm(model.size.sm);
+            viewModel.sizeMd(model.size.md);
+            viewModel.sizeLg(model.size.lg);
+            viewModel.sizeXl(model.size.xl);
         }
 
         if (model.alignment) {
             model.alignment = Utils.optimizeBreakpoints(model.alignment);
 
-            columnViewModel.alignmentXs(model.alignment.xs);
-            columnViewModel.alignmentSm(model.alignment.sm);
-            columnViewModel.alignmentMd(model.alignment.md);
-            columnViewModel.alignmentLg(model.alignment.lg);
-            columnViewModel.alignmentXl(model.alignment.xl);
+            viewModel.alignmentXs(model.alignment.xs);
+            viewModel.alignmentSm(model.alignment.sm);
+            viewModel.alignmentMd(model.alignment.md);
+            viewModel.alignmentLg(model.alignment.lg);
+            viewModel.alignmentXl(model.alignment.xl);
 
             // this.getAlignmentClass(styles, model.alignment.xs, "xs");
             // this.getAlignmentClass(styles, model.alignment.sm, "sm");
@@ -86,34 +86,34 @@ export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, Colum
         if (model.alignment) {
             model.alignment = Utils.optimizeBreakpoints(model.alignment);
 
-            columnViewModel.alignmentXs(model.alignment.xs);
-            columnViewModel.alignmentSm(model.alignment.sm);
-            columnViewModel.alignmentMd(model.alignment.md);
-            columnViewModel.alignmentLg(model.alignment.lg);
-            columnViewModel.alignmentXl(model.alignment.xl);
+            viewModel.alignmentXs(model.alignment.xs);
+            viewModel.alignmentSm(model.alignment.sm);
+            viewModel.alignmentMd(model.alignment.md);
+            viewModel.alignmentLg(model.alignment.lg);
+            viewModel.alignmentXl(model.alignment.xl);
         }
 
         if (model.offset) {
             model.offset = Utils.optimizeBreakpoints(model.offset);
 
-            columnViewModel.offsetXs(model.offset.xs);
-            columnViewModel.offsetSm(model.offset.sm);
-            columnViewModel.offsetMd(model.offset.md);
-            columnViewModel.offsetLg(model.offset.lg);
-            columnViewModel.offsetXl(model.offset.xl);
+            viewModel.offsetXs(model.offset.xs);
+            viewModel.offsetSm(model.offset.sm);
+            viewModel.offsetMd(model.offset.md);
+            viewModel.offsetLg(model.offset.lg);
+            viewModel.offsetXl(model.offset.xl);
         }
 
         if (model.order) {
             model.order = Utils.optimizeBreakpoints(model.order);
-            columnViewModel.orderXs(model.order.xs);
-            columnViewModel.orderSm(model.order.sm);
-            columnViewModel.orderMd(model.order.md);
-            columnViewModel.orderLg(model.order.lg);
-            columnViewModel.orderXl(model.order.xl);
+            viewModel.orderXs(model.order.xs);
+            viewModel.orderSm(model.order.sm);
+            viewModel.orderMd(model.order.md);
+            viewModel.orderLg(model.order.lg);
+            viewModel.orderXl(model.order.xl);
         }
 
-        columnViewModel.overflowX(model.overflowX);
-        columnViewModel.overflowY(model.overflowY);
+        viewModel.overflowX(model.overflowX);
+        viewModel.overflowY(model.overflowY);
 
         const binding: IWidgetBinding<ColumnModel, ColumnViewModel> = {
             name: "column",
@@ -132,14 +132,14 @@ export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, Colum
              */
 
             applyChanges: async () => {
-                await this.modelToViewModel(model, columnViewModel, bindingContext);
+                await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent(Events.ContentUpdate);
             }
         };
 
-        columnViewModel["widgetBinding"] = binding;
+        viewModel["widgetBinding"] = binding;
 
-        return columnViewModel;
+        return viewModel;
     }
 
     public canHandleModel(model: ColumnModel): boolean {
