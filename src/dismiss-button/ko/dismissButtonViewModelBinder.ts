@@ -13,7 +13,7 @@ export class DismissButtonViewModelBinder implements ViewModelBinder<DismissButt
         private readonly styleCompiler: StyleCompiler
     ) { }
 
-    public async modelToViewModel(model: DismissButton, viewModel?: DismissButton, bindingContext?: Bag<any>): Promise<DismissButton> {
+    public async modelToViewModel(model: DismissButtonModel, viewModel?: DismissButton, bindingContext?: Bag<any>): Promise<DismissButton> {
         if (!viewModel) {
             viewModel = new DismissButton();
         }
@@ -34,7 +34,7 @@ export class DismissButtonViewModelBinder implements ViewModelBinder<DismissButt
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
         }
 
-        const binding: IWidgetBinding<DismissButton, DismissButton> = {
+        const binding: IWidgetBinding<DismissButtonModel, DismissButton> = {
             name: "dismissButton",
             displayName: "Dismiss button",
             layer: bindingContext?.layer,

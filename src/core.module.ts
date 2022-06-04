@@ -32,7 +32,6 @@ import { KnockoutRegistrationLoaders } from "./ko/knockout.loaders";
 import { KoModule } from "./ko/knockout.module";
 import { ViewModelBinderSelector } from "./ko/viewModelBinderSelector";
 import { MenuModule } from "./menu/ko";
-import { NavbarModule } from "./navbar/ko/navbar.module";
 import { PictureModule } from "./picture/picture.module";
 import { RowModule } from "./row/ko/row.module";
 import { SectionModule } from "./section/ko/section.module";
@@ -92,7 +91,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new SectionModule());
         injector.bindModule(new GridModule());
         injector.bindModule(new GridCellModule());
-        injector.bindModule(new NavbarModule());
         injector.bindModule(new ButtonModule());
         // injector.bindModule(new MapModule());
         injector.bindModule(new MenuModule());

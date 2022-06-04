@@ -45,7 +45,7 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
             handler: ButtonHandlers,
             draggable: true,
             flow: ComponentFlow.Contents,
-            // editor: "button-editor",
+            editor: "button-editor",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent(Events.ContentUpdate);
