@@ -68,12 +68,13 @@ export class LayoutHost {
         const styleSheet = await this.styleCompiler.getStyleSheet();
         styleManager.setStyleSheet(styleSheet);
 
-        this.viewManager.setActiveLayer("layout");
+        const activeLayer = "layout";
+        this.viewManager.setActiveLayer(activeLayer);
 
         const bindingContext = {
             styleManager: styleManager,
             navigationPath: route.path,
-            contentType: "layout",
+            activeLayer: activeLayer,
             template: {
                 layout: {
                     value: layoutContentContract,

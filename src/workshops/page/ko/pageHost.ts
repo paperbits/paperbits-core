@@ -91,14 +91,15 @@ export class PageHost {
         const styleSheet = await this.styleCompiler.getStyleSheet();
         this.styleManager.setStyleSheet(styleSheet);
 
-        this.viewManager.setActiveLayer("page");
+        const activeLayer = "page";
+        this.viewManager.setActiveLayer(activeLayer);
 
         const pageBindingContext = {
             contentItemKey: pageContract.key,
             styleManager: this.styleManager,
             navigationPath: route.path,
-            contentType: "page",
-            template: { // Template here describes fields of particular content type.
+            activeLayer: activeLayer,
+            template: {
                 page: {
                     value: pageContentContract,
                     onValueUpdate: async (updatedContentContract: Contract, changeDescription: string) => {

@@ -48,7 +48,9 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
 
         const binding: IWidgetBinding<ContentModel, ContentViewModel> = {
             displayName: `${model.type} content`,
-            layer: bindingContext?.layer, // setting up own layer, if there is no parent
+            layer: model.type === bindingContext.activeLayer
+                ? model.type
+                : bindingContext.layer,
             name: "content",
             model: model,
             draggable: true,
@@ -58,7 +60,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
                 this.eventManager.dispatchEvent(Events.ContentUpdate);
             },
             onCreate: () => {
-                if (model.type === bindingContext?.contentType) {
+                if (model.type === bindingContext?.activeLayer) {
                     this.eventManager.addEventListener(Events.ContentUpdate, scheduleUpdate);
                     binding.flow = ComponentFlow.Contents;
                 }
@@ -67,7 +69,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
                 }
             },
             onDispose: () => {
-                if (model.type === bindingContext?.contentType) {
+                if (model.type === bindingContext?.activeLayer) {
                     this.eventManager.removeEventListener(Events.ContentUpdate, scheduleUpdate);
                 }
             }
