@@ -51,6 +51,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
             layer: model.type === bindingContext.activeLayer
                 ? model.type
                 : bindingContext.layer,
+            readonly: model.type === bindingContext.activeLayer,
             name: "content",
             model: model,
             draggable: true,

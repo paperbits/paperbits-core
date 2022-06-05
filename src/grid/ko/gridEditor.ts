@@ -93,19 +93,21 @@ export class GridEditor {
             half: half,
             providers: providers,
             switchToParent: () => {
-                if (!parent) {
+                const selectableParent = gridItem.getParent(null, true);
+
+                if (!selectableParent) {
                     return;
                 }
 
-                const contextualCommands = parent.getContextCommands();
+                const contextualCommands = selectableParent.getContextCommands();
 
                 if (!contextualCommands) {
                     return;
                 }
 
                 const config: IHighlightConfig = {
-                    element: parent.element,
-                    text: parent.binding.displayName,
+                    element: selectableParent.element,
+                    text: selectableParent.binding.displayName,
                     color: contextualCommands.color
                 };
 
@@ -233,6 +235,10 @@ export class GridEditor {
 
         const topGridItem = gridItems[0];
 
+        if (topGridItem.binding.readonly) {
+            return;
+        }
+
         if (topGridItem.binding.layer !== "*" && topGridItem.binding.layer !== this.activeLayer) {
             event.preventDefault();
             event.stopPropagation();
@@ -312,7 +318,7 @@ export class GridEditor {
                 break;
 
             case Keys.PageUp:
-                const parent = gridItem.getParent(this.activeLayer);
+                const parent = gridItem.getParent(this.activeLayer, true);
 
                 if (parent) {
                     this.selectElement(parent, true);
@@ -320,7 +326,7 @@ export class GridEditor {
                 break;
 
             case Keys.PageDown:
-                const children = gridItem.getChildren(this.activeLayer);
+                const children = gridItem.getChildren(this.activeLayer, true);
 
                 if (children.length > 0) {
                     const firstChild = children[0];
@@ -722,11 +728,13 @@ export class GridEditor {
             .filter(x => !!x && x.binding.model !== gridItem.binding.model && !x.binding.readonly);
     }
 
-    private getParent(gridItem: GridItem, layerName?: string): GridItem {
+    private getParent(gridItem: GridItem, layerName?: string, excludeReadonly?: boolean): GridItem {
         const elements = Html.parents(gridItem.element);
         const parentGridItems = this.getGridItems(elements, layerName);
 
-        return parentGridItems.find(x => !x.binding.readonly);
+        return excludeReadonly
+            ? parentGridItems.find(x => !x.binding.readonly)
+            : parentGridItems.find(() => true);
     }
 
     private getSiblings(gridItem: GridItem): GridItem[] {
@@ -786,7 +794,7 @@ export class GridEditor {
             editor: widgetBinding.editor,
             element: element,
             binding: widgetBinding,
-            getParent: (layerName: string) => this.getParent(gridItem, layerName),
+            getParent: (layerName: string, excludeReadonly: boolean) => this.getParent(gridItem, layerName, excludeReadonly),
             getChildren: (layerName: string) => this.getChildren(gridItem, layerName),
             getSiblings: () => this.getSiblings(gridItem),
             getNextSibling: () => this.getNextSibling(gridItem),
