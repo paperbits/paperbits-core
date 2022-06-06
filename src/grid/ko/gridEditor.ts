@@ -814,7 +814,6 @@ export class GridEditor {
         const handler = this.widgetService.getWidgetHandler(binding.handler);
 
         if (!handler.getStyleDefinitions) {
-            console.warn(`Method "getStyleDefinitions" is not defined on "${binding.displayName}" handler.`);
             return null;
         }
 
