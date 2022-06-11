@@ -113,7 +113,7 @@
 
 <!-- ko with: selectedElementContextualEditor() -->
 <div class="fixed toolbox toolbox-horizontal toolbox-context"
-    data-bind="stickTo: { target: element, position: 'top right' }">
+    data-bind="stickTo: { target: element, position: 'top right', offsetY: 10 }">
     <!-- ko foreach: { data: selectCommands, as: 'command' } -->
     <div data-bind="gridCommand: command, css: command.controlType">
         <!-- ko if: command.iconClass -->

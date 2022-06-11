@@ -40,7 +40,10 @@ export class ContextualCommandBindingHandler {
                 }
 
                 if (config.command.position) {
-                    bindings["stickTo"] = { target: config.element, position: config.command.position };
+                    bindings["stickTo"] = {
+                        target: config.element,
+                        position: config.command.position
+                    };
                 }
 
                 bindings["tooltip"] = config.command.tooltip;
