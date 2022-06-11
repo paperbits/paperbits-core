@@ -8,6 +8,7 @@ export class GridCellModel implements WidgetModel {
 
     constructor() {
         this.role = "article";
+        this.styles = {};
         this.widgets = [];
     }
 }
