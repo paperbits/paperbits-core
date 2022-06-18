@@ -83,8 +83,9 @@ export class SectionEditor {
 
         const containerSizeStyles = <SizeStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(gridLocalStyles, "size", viewport);
         const marginStyles = <MarginStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(gridLocalStyles, "margin", viewport);
+        const paddingStyles = <MarginStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(gridLocalStyles, "padding", viewport);
 
-        this.box({ margin: marginStyles });
+        this.box({ margin: marginStyles, padding: paddingStyles });
         this.containerSizeStyles(containerSizeStyles);
     }
 
@@ -103,9 +104,11 @@ export class SectionEditor {
         /* Grid styles */
         const gridStyles = this.gridModel.styles;
         const marginStyle = this.box().margin;
+        const paddingStyle = this.box().padding;
         const containerSizeStyles: SizeStylePluginConfig = this.containerSizeStyles();
         StyleHelper.setPluginConfigForLocalStyles(gridStyles, "size", containerSizeStyles, viewport);
         StyleHelper.setPluginConfigForLocalStyles(gridStyles, "margin", marginStyle, viewport);
+        StyleHelper.setPluginConfigForLocalStyles(gridStyles, "padding", paddingStyle, viewport);
 
         this.onChange(this.model);
     }
