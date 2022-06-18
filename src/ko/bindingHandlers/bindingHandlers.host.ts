@@ -16,7 +16,8 @@ export class HostBindingHandler {
         private readonly viewManager: ViewManager,
         private readonly router: Router,
         private readonly siteService: SiteService,
-        private readonly mediaService: IMediaService
+        private readonly mediaService: IMediaService,
+        private readonly eventManager: EventManager
     ) {
         this.hostComponent = ko.observable();
         this.designTime = ko.observable(true);
@@ -31,6 +32,12 @@ export class HostBindingHandler {
 
                 config.viewport.subscribe((viewport: string) => {
                     this.viewManager.mode = ViewManagerMode.selecting;
+
+                    if (this.hostComponent()?.name === "style-guide") {
+                        css("viewport-xl");
+                        this.eventManager.dispatchEvent("onViewportChange");
+                        return;
+                    }
 
                     switch (viewport) {
                         case "zoomout":
