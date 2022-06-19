@@ -22,7 +22,6 @@ export class HostBindingHandler {
         this.hostComponent = ko.observable();
         this.designTime = ko.observable(true);
 
-
         ko.bindingHandlers["host"] = {
             init: (element: HTMLElement, valueAccessor: () => any) => {
                 const config = valueAccessor();
@@ -74,6 +73,8 @@ export class HostBindingHandler {
 
                 const hostElement = this.createIFrame();
                 element.appendChild(hostElement);
+
+
             },
 
             update: (element: HTMLElement, valueAccessor: any) => {
@@ -82,6 +83,35 @@ export class HostBindingHandler {
             }
         };
     }
+
+    private fillDocument(document: Document): void {
+        const charsetTag = document.createElement("meta");
+        charsetTag.setAttribute("charset", "utf-8");
+        document.head.appendChild(charsetTag);
+
+        const viewportTag = document.createElement("meta");
+        viewportTag.setAttribute("name", "viewport");
+        viewportTag.setAttribute("content", "width=device-width,minimum-scale=1,initial-scale=1");
+        document.head.appendChild(viewportTag);
+
+        const faviconLink = document.createElement("link");
+        faviconLink.setAttribute("href", "favicon.ico");
+        faviconLink.setAttribute("rel", "shortcut icon");
+        document.head.appendChild(faviconLink);
+
+        const stylesLink = document.createElement("link");
+        stylesLink.setAttribute("href", "/styles/theme.css");
+        stylesLink.setAttribute("rel", "stylesheet");
+        stylesLink.setAttribute("type", "text/css");
+        document.head.appendChild(stylesLink);
+
+        const sctiptTag = document.createElement("script");
+        sctiptTag.setAttribute("href", "/scripts/theme.js");
+        sctiptTag.setAttribute("type", "text/javascript");
+
+        document.head.appendChild(sctiptTag);
+    }
+
 
     private createIFrame(): HTMLIFrameElement {
         const hostElement: HTMLIFrameElement = document.createElement("iframe");
@@ -100,6 +130,8 @@ export class HostBindingHandler {
 
         const onLoad = async (): Promise<void> => {
             const contentDocument = hostElement.contentDocument;
+
+            // this.fillDocument(contentDocument);
 
             this.viewManager["hostDocument"] = contentDocument;
             this.globalEventHandler.appendDocument(contentDocument);
