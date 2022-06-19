@@ -156,11 +156,13 @@ export class PageHost {
     }
 
     private jumpToAnchor(route: Route): void {
+        const hostDocument = this.viewManager.getHostDocument();
+
         if (!route.hash) {
+            hostDocument.defaultView.scrollTo({ top: 0 });
             return;
         }
 
-        const hostDocument = this.viewManager.getHostDocument();
         const anchorElementSelector = `[id="${route.hash}"]`; // Hash may not be proper "id" selector.
         const anchorElement = hostDocument.querySelector(anchorElementSelector);
 
