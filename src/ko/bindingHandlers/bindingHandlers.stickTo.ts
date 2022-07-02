@@ -2,6 +2,11 @@
 import { ViewManager, ViewManagerMode } from "@paperbits/common/ui";
 import { Events } from "@paperbits/common/events";
 
+export enum StickToPlacement {
+    border = "border",
+    outside = "outside"
+}
+
 export interface StickToConfig {
     /**
      * Target element.
@@ -14,9 +19,9 @@ export interface StickToConfig {
     position: string;
 
     /**
-     * border (default), corner
+     * border (default), outside
      */
-    placement: string;
+    placement: StickToPlacement;
 
     /**
      * Horizontal offset from the assigned position.
@@ -57,7 +62,7 @@ export class StickToBindingHandler {
                     const frameRect = frameElement.getBoundingClientRect();
                     const targetRect = config.target.getBoundingClientRect();
 
-                    const placement = config.placement || "border";
+                    const placement = config.placement || StickToPlacement.border;
                     let coordX: number;
                     let coordY: number;
 
@@ -70,8 +75,14 @@ export class StickToBindingHandler {
                     if (anchors.includes("top")) {
                         coordY = targetRect.top - offsetY;
 
-                        if (placement === "border") {
-                            coordY = coordY - Math.floor(element.clientHeight);
+                        switch (placement) {
+                            case StickToPlacement.border:
+                                coordY = coordY - Math.floor(element.clientHeight / 2);
+                                break;
+
+                            case StickToPlacement.outside:
+                                coordY = coordY - element.clientHeight;
+                                break;
                         }
 
                         if (coordY < 0) { // keeping the element within viewport
@@ -82,8 +93,14 @@ export class StickToBindingHandler {
                     if (anchors.includes("bottom")) {
                         coordY = targetRect.top + offsetY + targetRect.height - element.clientHeight;
 
-                        if (placement === "border") {
-                            coordY = coordY + Math.floor(element.clientHeight / 2);
+                        switch (placement) {
+                            case StickToPlacement.border:
+                                coordY = coordY + Math.floor(element.clientHeight / 2);
+                                break;
+
+                            case StickToPlacement.outside:
+                                coordY = coordY + element.clientHeight;
+                                break;
                         }
                     }
 
