@@ -1,18 +1,25 @@
-﻿import * as ko from "knockout";
-import { ComponentFlow, IWidgetBinding, WidgetBinding } from "@paperbits/common/editing";
-import { ComponentBinder } from "@paperbits/common/editing/componentBinder";
+import * as ko from "knockout";
+import { ComponentFlow, IWidgetBinding, WidgetBinding,ComponentBinder } from "@paperbits/common/editing";
 import { Bag } from "@paperbits/common";
 import * as Arrays from "@paperbits/common";
-import { ComponentDefinition } from "../componentDefinition";
+import { ComponentDefinition } from "./componentDefinition";
+
+export class KnockoutComponentBinder implements ComponentBinder {
+    public init(element: Element, binding: WidgetBinding<any, any>): void{
+        ko.applyBindingsToNode(element, { kowidget: binding.viewModel }, null);
+    }
+
+    public dispose?(element: Element, binding: WidgetBinding<any, any>): void {
+
+    }
+}
 
 
-
-
-export class WidgetBindingHandler {
+export class KoWidgetBindingHandler {
     constructor(componentBinders: Bag<ComponentBinder>) {
         let componentLoadingOperationUniqueId = 0;
 
-        ko.bindingHandlers["widget"] = {
+        ko.bindingHandlers["kowidget"] = {
             init: function (element: any, valueAccessor: any, ignored1: any, ignored2: any, bindingContext: any): any {
                 const bindingConfig = ko.utils.unwrapObservable(valueAccessor());
 
@@ -20,31 +27,6 @@ export class WidgetBindingHandler {
                     console.warn("No binding config!");
                     return;
                 }
-
-                /* New binding logic */
-                if (bindingConfig instanceof WidgetBinding) {
-                    const binding = <WidgetBinding<any, any>>bindingConfig;
-                    const componentBinder = componentBinders[binding.framework];
-
-                    if (!componentBinder) {
-                        throw new Error(`No component binders registered for ${binding.framework} framework.`);
-                    }
-
-                    componentBinder.init(element, binding);
-
-                    if (componentBinder.dispose) {
-                        ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
-                            componentBinder.dispose(element, binding);
-                        });
-                    }
-
-                    if (binding.draggable) {
-                        ko.applyBindingsToNode(element, { draggable: {} }, null);
-                    }
-
-                    return;
-                }
-
 
                 let currentViewModel,
                     currentLoadingOperationId,
@@ -87,9 +69,6 @@ export class WidgetBindingHandler {
                         return;
                     }
 
-
-
-                    /* Legacy binding logic */
                     const registration = Reflect.getMetadata("paperbits-component", bindingConfig.constructor);
 
                     if (!registration) {

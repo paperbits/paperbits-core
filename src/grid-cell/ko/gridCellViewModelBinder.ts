@@ -8,12 +8,14 @@ import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel"
 import { GridCellHandlers } from "../gridCellHandlers";
 import { GridCellModel } from "../gridCellModel";
 import { GridCellViewModel } from "./gridCellViewModel";
+import { WidgetRegistry } from "@paperbits/common/editing/widgetRegistry";
 
 export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, GridCellViewModel> {
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly eventManager: EventManager,
-        private readonly styleCompiler: StyleCompiler
+        private readonly styleCompiler: StyleCompiler,
+        private readonly widgetRegistry: WidgetRegistry
     ) { }
 
     public async modelToViewModel(model: GridCellModel, viewModel?: GridCellViewModel, bindingContext?: Bag<any>): Promise<GridCellViewModel> {
@@ -22,6 +24,13 @@ export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, G
         }
 
         const promises = model.widgets.map(widgetModel => {
+            const definition = this.widgetRegistry.getWidgetDefinitionForModel(widgetModel);
+
+            if (definition) {
+                const binding = this.widgetRegistry.createWidgetBinding(definition, widgetModel, bindingContext);
+                return binding;
+            }
+
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
 
             return widgetViewModelBinder.createWidgetBinding

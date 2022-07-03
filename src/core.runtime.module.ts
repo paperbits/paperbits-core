@@ -10,9 +10,12 @@ import { MapRuntimeModule } from "./map/map.runtime.module";
 import { SearchRuntimeModule } from "./search/search.runtime.module";
 import { KnockoutRegistrationLoaders } from "./ko";
 import { ConsoleLogger } from "@paperbits/common/logging";
+import { Bag } from "@paperbits/common";
+import { ComponentBinder } from "@paperbits/common/editing";
 
 export class CoreRuntimeModule implements IInjectorModule {
     public register(injector: IInjector): void {
+        injector.bindInstance<Bag<ComponentBinder>>("componentBinders", {});
         injector.bindModule(new KnockoutRegistrationLoaders());
         injector.bindModule(new CarouselRuntimeModule());
         injector.bindModule(new TabPanelRuntimeModule());
