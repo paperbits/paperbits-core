@@ -1,5 +1,7 @@
 import * as ko from "knockout";
+import { Bag } from "@paperbits/common";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
+import { ComponentBinder } from "@paperbits/common/editing/componentBinder";
 
 import "./bindingHandlers/bindingHandlers.columnSizeCfg";
 import "./bindingHandlers/bindingHandlers.component";
@@ -23,11 +25,15 @@ import "./bindingHandlers/bindingHandlers.confirm";
 import "./bindingHandlers/bindingHandlers.gridCell";
 import "./bindingHandlers/bindingHandlers.selectable";
 import "./bindingExtenders/bindingExtenders.max";
+import { KnockoutComponentBinder } from "./knockoutComponentBinder";
 
-export class KoModule implements IInjectorModule {
+export class KnockoutModule implements IInjectorModule {
     public register(injector: IInjector): void {
         ko.virtualElements.allowedBindings["widget"] = true;
         ko.virtualElements.allowedBindings["layoutrow"] = true;
         ko.virtualElements.allowedBindings["component"] = true;     
+
+        const componentBinders = injector.resolve<Bag<ComponentBinder>>("componentBinders");
+        componentBinders["knockout"] = new KnockoutComponentBinder();
     }
 }

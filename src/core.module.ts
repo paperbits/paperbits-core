@@ -29,7 +29,7 @@ import { BackgroundBindingHandler } from "./ko/bindingHandlers/bindingHandlers.b
 import { SecuredBindingHandler } from "./ko/bindingHandlers/bindingHandlers.secured";
 import { WidgetBindingHandler } from "./ko/bindingHandlers/bindingHandlers.widget";
 import { KnockoutRegistrationLoaders } from "./ko/knockout.loaders";
-import { KoModule } from "./ko/knockout.module";
+import { KnockoutModule } from "./ko/knockout.module";
 import { ViewModelBinderSelector } from "./ko/viewModelBinderSelector";
 import { MenuModule } from "./menu/ko";
 import { PictureModule } from "./picture/picture.module";
@@ -39,6 +39,8 @@ import { TestimonialsModule } from "./testimonials/ko/testimonials.module";
 import { TextblockModule } from "./textblock/ko/textblock.module";
 import { VideoPlayerModule } from "./video-player/videoPlayer.publish.module";
 import { YoutubePlayerPublishModule } from "./youtube-player/youtubePlayer.publish.module";
+import { Bag } from "@paperbits/common";
+import { ComponentBinder } from "@paperbits/common/editing";
 
 
 /**
@@ -53,6 +55,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindCollectionLazily("modelBinders");
         injector.bindCollectionLazily("viewModelBinders");
         injector.bindCollectionLazily("permalinkResolvers");
+        injector.bindInstance<Bag<ComponentBinder>>("componentBinders", {});
         
         /*** Core ***/
         injector.bindSingleton("settingsProvider", DefaultSettingsProvider);
@@ -83,7 +86,7 @@ export class CoreModule implements IInjectorModule {
         injector.bind("backgroundModelBinder", BackgroundModelBinder);
 
         injector.bindModule(new KnockoutRegistrationLoaders());
-        injector.bindModule(new KoModule());
+        injector.bindModule(new KnockoutModule());
         injector.bindModule(new ContentModule());
         injector.bindModule(new ColumnModule());
         injector.bindModule(new RowModule());
@@ -104,7 +107,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindToCollection("routeGuards", DefaultRouteGuard);
         injector.bindToCollection("routeGuards", MailtoRouteGuard);
         injector.bindToCollection("routeGuards", JavaScriptRouteGuard);
-        // injector.bindToCollection("autostart", KnockoutWidgetBindingHandler);
         injector.bindToCollection("autostart", WidgetBindingHandler);
         
         injector.bindToCollection("autostart", BackgroundBindingHandler);

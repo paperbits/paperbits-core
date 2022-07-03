@@ -93,7 +93,6 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindCollectionLazily("workshopSections");
         injector.bindCollection("trayCommands");
         injector.bindCollection("hyperlinkProviders");
-        injector.bindInstance<Bag<ComponentBinder>>("componentBinders", {});
         injector.bindSingleton("viewManager", DefaultViewManager);
         injector.bindSingleton("tray", Tray);
         injector.bindSingleton("viewStack", ViewStack);

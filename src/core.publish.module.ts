@@ -31,7 +31,6 @@ import { ConsoleLogger } from "@paperbits/common/logging";
 
 export class CorePublishModule implements IInjectorModule {
     public register(injector: IInjector): void {
-        injector.bindInstance<Bag<ComponentBinder>>("componentBinders", {});
         injector.bindModule(new DividerPublishModule());
         injector.bindCollection("publishers");
         injector.bindToCollection("publishers", AssetPublisher);
