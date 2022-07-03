@@ -41,6 +41,7 @@ import { VideoPlayerModule } from "./video-player/videoPlayer.publish.module";
 import { YoutubePlayerPublishModule } from "./youtube-player/youtubePlayer.publish.module";
 import { Bag } from "@paperbits/common";
 import { ComponentBinder } from "@paperbits/common/editing";
+import { WidgetRegistry } from "@paperbits/common/editing/widgetRegistry";
 
 
 /**
@@ -55,6 +56,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindCollectionLazily("modelBinders");
         injector.bindCollectionLazily("viewModelBinders");
         injector.bindCollectionLazily("permalinkResolvers");
+        injector.bindInstance("widgetRegistry", new WidgetRegistry(injector));
         injector.bindInstance<Bag<ComponentBinder>>("componentBinders", {});
         
         /*** Core ***/

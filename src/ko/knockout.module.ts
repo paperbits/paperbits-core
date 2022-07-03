@@ -2,6 +2,7 @@ import * as ko from "knockout";
 import { Bag } from "@paperbits/common";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { ComponentBinder } from "@paperbits/common/editing/componentBinder";
+import { KnockoutComponentBinder } from "./knockoutComponentBinder";
 
 import "./bindingHandlers/bindingHandlers.columnSizeCfg";
 import "./bindingHandlers/bindingHandlers.component";
@@ -25,7 +26,6 @@ import "./bindingHandlers/bindingHandlers.confirm";
 import "./bindingHandlers/bindingHandlers.gridCell";
 import "./bindingHandlers/bindingHandlers.selectable";
 import "./bindingExtenders/bindingExtenders.max";
-import { KnockoutComponentBinder } from "./knockoutComponentBinder";
 
 export class KnockoutModule implements IInjectorModule {
     public register(injector: IInjector): void {

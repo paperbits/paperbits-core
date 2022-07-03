@@ -23,8 +23,6 @@ export class ButtonEditorModule implements IInjectorModule {
         };
         injector.bindInstanceToCollection("styleGroups", styleGroup);
 
-
-
         const registry = injector.resolve<WidgetRegistry>("widgetRegistry");
 
         registry.register("button",
