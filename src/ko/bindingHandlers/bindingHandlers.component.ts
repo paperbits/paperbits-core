@@ -85,12 +85,10 @@ ko.bindingHandlers["component"] = {
                 if (!componentDefinition) {
                     throw new Error("Unknown component '" + componentName + "'");
                 }
+
                 cloneTemplateIntoElement(componentName, componentDefinition, element);
 
-                const componentInfo = {
-                    element: element,
-                    templateNodes: originalChildNodes
-                };
+                const componentInfo = { element: element, templateNodes: originalChildNodes };
 
                 const componentViewModel = createViewModel(componentDefinition, componentParams, componentInfo),
                     childBindingContext = asyncContext["createChildContext"](componentViewModel, {
@@ -117,7 +115,7 @@ ko.virtualElements.allowedBindings["component"] = true;
 
 function cloneTemplateIntoElement(componentName: string, componentDefinition: ComponentDefinition, element: HTMLElement): any {
     const template = componentDefinition["template"];
-    
+
     if (!template) {
         throw new Error(`Component "${componentName}" has no template.`);
     }

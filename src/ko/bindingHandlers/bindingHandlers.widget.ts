@@ -63,7 +63,6 @@ export class WidgetBindingHandler {
                     return;
                 }
 
-
                 let currentViewModel,
                     currentLoadingOperationId,
                     afterRenderSub;
@@ -98,14 +97,13 @@ export class WidgetBindingHandler {
                 ko.virtualElements.emptyNode(element);
                 ko.utils.domNodeDisposal.addDisposeCallback(element, disposeAssociatedComponentViewModel);
 
+
                 ko.computed(function (): void {
                     const componentViewModel = ko.utils.unwrapObservable(valueAccessor());
 
                     if (!componentViewModel) {
                         return;
                     }
-
-
 
                     /* Legacy binding logic */
                     const registration = Reflect.getMetadata("paperbits-component", bindingConfig.constructor);
@@ -127,7 +125,7 @@ export class WidgetBindingHandler {
                     const binding: IWidgetBinding<any, any> = componentViewModel["widgetBinding"];
 
                     if (binding && binding.onCreate) {
-                        binding.onCreate();
+                        //binding.onCreate();
                     }
 
                     ko.components.get(componentName, function (componentDefinition: ComponentDefinition): any {
