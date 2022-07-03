@@ -1,8 +1,13 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { CardEditor } from "./cardEditor";
-import { IWidgetHandler } from "@paperbits/common/editing";
+import { ComponentFlow, IWidgetHandler } from "@paperbits/common/editing";
 import { CardHandlers } from "../cardHandlers";
 import { IStyleGroup } from "@paperbits/common/styles/IStyleGroup";
+import { WidgetRegistry } from "@paperbits/common/editing/widgetRegistry";
+import { CardModel } from "../cardModel";
+import { CardViewModel } from "./cardViewModel";
+import { CardModelBinder } from "../cardModelBinder";
+import { CardViewModelBinder } from "./cardViewModelBinder";
 
 export class CardEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {        
@@ -16,5 +21,28 @@ export class CardEditorModule implements IInjectorModule {
         };
         injector.bindInstanceToCollection("styleGroups", styleGroup);
         injector.bindToCollection<IWidgetHandler>("widgetHandlers", CardHandlers, "cardHandler");
+
+
+        const registry = injector.resolve<WidgetRegistry>("widgetRegistry");
+
+        registry.register("card",
+            {
+                name: "card",
+                modelClass: CardModel,
+                flow: ComponentFlow.Inline,
+                componentBinder: "knockout", // ReactComponentBinder,
+                componentBinderArguments: CardViewModel,
+                modelBinder: CardModelBinder,
+                viewModelBinder: CardViewModelBinder
+            },
+            {
+                displayName: "Card",
+                editorComponent: "card-editor",
+                handlerComponent: CardHandlers,
+                iconClass:  "widget-icon widget-icon-button",
+                requires: [],
+                draggable: true
+            }
+        );
     }
 }

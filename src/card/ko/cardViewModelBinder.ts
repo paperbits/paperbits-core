@@ -1,40 +1,36 @@
 import { CardViewModel } from "./cardViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
-import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { CardModel } from "../cardModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
-import { CardHandlers } from "../cardHandlers";
-import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
+import { WidgetRegistry } from "@paperbits/common/editing/widgetRegistry";
 
 export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewModel> {
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
-        private readonly eventManager: EventManager,
-        private readonly styleCompiler: StyleCompiler
+        private readonly styleCompiler: StyleCompiler,
+        private readonly widgetRegistry: WidgetRegistry
     ) { }
 
     public async modelToViewModel(model: CardModel, viewModel?: CardViewModel, bindingContext?: Bag<any>): Promise<CardViewModel> {
-        if (!viewModel) {
-            viewModel = new CardViewModel();
-        }
+        const promises = model.widgets.map(widgetModel => {
+            const definition = this.widgetRegistry.getWidgetDefinitionForModel(widgetModel);
 
-        const widgetViewModels = [];
+            if (definition) {
+                const binding = this.widgetRegistry.createWidgetBinding(definition, widgetModel, bindingContext);
+                return binding;
+            }
 
-        for (const widgetModel of model.widgets) {
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
 
-            if (widgetViewModelBinder.createWidgetBinding) {
-                const binding = await widgetViewModelBinder.createWidgetBinding<any>(widgetModel, bindingContext);
-                widgetViewModels.push(binding);
-            }
-            else {
-                const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
-                widgetViewModels.push(widgetViewModel);
-            }
-        }
+            return widgetViewModelBinder.createWidgetBinding
+                ? widgetViewModelBinder.createWidgetBinding<CardViewModel>(widgetModel, bindingContext)
+                : widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+        });
+
+        const widgetViewModels = await Promise.all(promises);
 
         if (widgetViewModels.length === 0) {
             widgetViewModels.push(new PlaceholderViewModel("Card"));
@@ -45,25 +41,6 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
         }
 
         viewModel.widgets(widgetViewModels);
-
-        if (!viewModel["widgetBinding"]) {
-            const binding: IWidgetBinding<CardModel, CardViewModel> = {
-                name: "card",
-                displayName: "Card",
-                layer: bindingContext?.layer,
-                flow: ComponentFlow.Inline,
-                model: model,
-                draggable: true,
-                editor: "card-editor",
-                handler: CardHandlers,
-                applyChanges: async () => {
-                    await this.modelToViewModel(model, viewModel, bindingContext);
-                    this.eventManager.dispatchEvent(Events.ContentUpdate);
-                }
-            };
-
-            viewModel["widgetBinding"] = binding;
-        }
 
         return viewModel;
     }

@@ -1,7 +1,31 @@
 import * as ko from "knockout";
 import * as Arrays from "@paperbits/common";
-import { WidgetBinding, ComponentBinder } from "@paperbits/common/editing";
+import { WidgetBinding, ComponentBinder, IWidgetBinding, ComponentFlow } from "@paperbits/common/editing";
 import { ComponentDefinition } from "./componentDefinition";
+
+
+function getNonVirtualElement(element: Node): HTMLElement {
+    let nonVirtualElement: Node = element;
+
+    if (nonVirtualElement.nodeName.startsWith("#")) {
+        do {
+            nonVirtualElement = nonVirtualElement.nextSibling;
+        }
+        while (nonVirtualElement !== null && nonVirtualElement.nodeName.startsWith("#"));
+    }
+
+    if (!nonVirtualElement) {
+        return null;
+    }
+
+    // Hack: copying context props explicitly
+    const originalElementContext = ko.contextFor(element);
+    const nonVirtualElementContext = ko.contextFor(nonVirtualElement);
+    nonVirtualElementContext.$parents = originalElementContext.$parents;
+    nonVirtualElementContext.$parent = originalElementContext.$parent;
+
+    return <HTMLElement>nonVirtualElement;
+}
 
 export class KnockoutComponentBinder implements ComponentBinder {
     constructor() {
@@ -9,9 +33,9 @@ export class KnockoutComponentBinder implements ComponentBinder {
 
         ko.bindingHandlers["knockoutWidget"] = {
             init: function (element: any, valueAccessor: any, ignored1: any, ignored2: any, bindingContext: any): any {
-                const bindingConfig = <WidgetBinding<any, any>>ko.utils.unwrapObservable(valueAccessor());
+                const widgetBinding = <WidgetBinding<any, any>>ko.utils.unwrapObservable(valueAccessor());
 
-                if (!bindingConfig) {
+                if (!widgetBinding) {
                     console.warn("No binding config!");
                     return;
                 }
@@ -24,8 +48,8 @@ export class KnockoutComponentBinder implements ComponentBinder {
                     const currentViewModelDispose = currentViewModel && currentViewModel["dispose"];
 
                     if (currentViewModel) {
-                        if (bindingConfig && bindingConfig.onDispose) {
-                            bindingConfig.onDispose();
+                        if (widgetBinding && widgetBinding.onDispose) {
+                            widgetBinding.onDispose();
                         }
                     }
 
@@ -55,10 +79,10 @@ export class KnockoutComponentBinder implements ComponentBinder {
                         return;
                     }
 
-                    const registration = Reflect.getMetadata("paperbits-component", bindingConfig.componentBinderArgs);
+                    const registration = Reflect.getMetadata("paperbits-component", widgetBinding.componentBinderArgs);
 
                     if (!registration) {
-                        throw new Error(`Could not find component registration for ${bindingConfig.name} widget. Ensure that "@Component" decorator is added on widget view model class.`);
+                        throw new Error(`Could not find component registration for ${widgetBinding.name} widget. Ensure that "@Component" decorator is added on widget view model class.`);
                     }
 
                     const componentName = registration.name;
@@ -70,6 +94,7 @@ export class KnockoutComponentBinder implements ComponentBinder {
                     const componentParams = registration.params;
                     const asyncContext = ko.bindingEvent.startPossiblyAsyncContentBinding(element, bindingContext);
                     const loadingOperationId = currentLoadingOperationId = ++componentLoadingOperationUniqueId;
+
 
                     ko.components.get(componentName, function (componentDefinition: ComponentDefinition): any {
                         // If this is not the current load operation for this element, ignore it.
@@ -85,22 +110,24 @@ export class KnockoutComponentBinder implements ComponentBinder {
                             throw new Error("Unknown component '" + componentName + "'");
                         }
 
+
                         cloneTemplateIntoElement(componentName, componentDefinition, element);
 
                         const componentInfo = { element: element, templateNodes: originalChildNodes };
+                        const componentViewModel = createViewModel(componentDefinition, componentParams, componentInfo);
 
-                        const componentViewModel = createViewModel(componentDefinition, componentParams, componentInfo),
-                            childBindingContext = asyncContext["createChildContext"](componentViewModel, {
-                                extend: function (ctx: any): any {
-                                    ctx["$component"] = componentViewModel;
-                                    ctx["$componentTemplateNodes"] = originalChildNodes;
-                                }
-                            });
+                        componentViewModel["widgetBinding"] = widgetBinding;
 
+                        const childBindingContext = asyncContext["createChildContext"](componentViewModel, {
+                            extend: function (ctx: any): any {
+                                ctx["$component"] = componentViewModel;
+                                ctx["$componentTemplateNodes"] = originalChildNodes;
+                            }
+                        });
 
-                        if (bindingConfig && bindingConfig.onCreate) {
-                            bindingConfig.viewModel = componentViewModel;
-                            bindingConfig.onCreate(componentViewModel);
+                        if (widgetBinding && widgetBinding.onCreate) {
+                            widgetBinding.viewModel = componentViewModel;
+                            widgetBinding.onCreate(componentViewModel);
                         }
 
                         if (componentViewModel && componentViewModel["koDescendantsComplete"]) {
@@ -109,6 +136,23 @@ export class KnockoutComponentBinder implements ComponentBinder {
 
                         currentViewModel = componentViewModel;
                         ko.applyBindingsToDescendants(childBindingContext, element);
+
+                        const nonVirtualElement = getNonVirtualElement(element);
+
+                        if (nonVirtualElement) {
+                            ko.applyBindingsToNode(nonVirtualElement, {
+                                css: {
+                                    "block": widgetBinding.flow === ComponentFlow.Block,
+                                    "inline-block": widgetBinding.flow === ComponentFlow.Inline,
+                                    "legacy": widgetBinding.flow === ComponentFlow.Legacy,
+                                    "placeholder": widgetBinding.flow === ComponentFlow.Placeholder
+                                }
+                            }, null);
+
+                            if (widgetBinding.draggable) {
+                                ko.applyBindingsToNode(nonVirtualElement, { draggable: {} }, null);
+                            }
+                        }
                     });
                 }, null, { disposeWhenNodeIsRemoved: element });
 

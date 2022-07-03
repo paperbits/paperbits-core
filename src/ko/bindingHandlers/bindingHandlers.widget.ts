@@ -1,11 +1,9 @@
 ﻿import * as ko from "knockout";
+import * as Arrays from "@paperbits/common";
 import { ComponentFlow, IWidgetBinding, WidgetBinding } from "@paperbits/common/editing";
 import { ComponentBinder } from "@paperbits/common/editing/componentBinder";
 import { Bag } from "@paperbits/common";
-import * as Arrays from "@paperbits/common";
 import { ComponentDefinition } from "../componentDefinition";
-
-
 
 
 export class WidgetBindingHandler {
@@ -32,40 +30,11 @@ export class WidgetBindingHandler {
 
                     componentBinder.init(element, binding);
 
-                    let flowClassName;
-
-                    switch (binding.flow) {
-                        case ComponentFlow.Block:
-                            flowClassName = "block";
-                            break;
-                        case ComponentFlow.Inline:
-                            flowClassName = "inline";
-                            break;
-                        case ComponentFlow.Placeholder:
-                            flowClassName = "placeholder";
-                            break;
-                        default:
-                            console.warn(`Uknown component flow: ${binding.flow}`);
-                    }
-
-                    //                 "block": binding.flow === ComponentFlow.Block,
-                    //                 "inline-block": binding.flow === ComponentFlow.Inline,
-                    //                 "legacy": binding.flow === ComponentFlow.Legacy,
-                    //                 "placeholder": binding.flow === ComponentFlow.Placeholder,
-                    //                 "contents": binding.flow === ComponentFlow.Contents
-
-                    element.classList.add(flowClassName);
-
                     if (componentBinder.dispose) {
-                        ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
-                            componentBinder.dispose(element, binding);
-                        });
+                        ko.utils.domNodeDisposal.addDisposeCallback(element, () => componentBinder.dispose(element, binding));
                     }
 
-                    if (binding.draggable) {
-                        ko.applyBindingsToNode(element, { draggable: {} }, null);
-                    }
-
+                    // return { controlsDescendantBindings: true };
                     return;
                 }
 
@@ -125,13 +94,11 @@ export class WidgetBindingHandler {
                     }
 
                     const asyncContext = ko.bindingEvent.startPossiblyAsyncContentBinding(element, bindingContext);
-
                     const loadingOperationId = currentLoadingOperationId = ++componentLoadingOperationUniqueId;
-
                     const binding: IWidgetBinding<any, any> = componentViewModel["widgetBinding"];
 
                     if (binding && binding.onCreate) {
-                        //binding.onCreate();
+                        binding.onCreate();
                     }
 
                     ko.components.get(componentName, function (componentDefinition: ComponentDefinition): any {
@@ -147,8 +114,8 @@ export class WidgetBindingHandler {
                         if (!componentDefinition) {
                             throw new Error("Unknown component '" + componentName + "'");
                         }
-                        cloneTemplateIntoElement(componentName, componentDefinition, element);
 
+                        cloneTemplateIntoElement(componentName, componentDefinition, element);
 
                         const childBindingContext = asyncContext["createChildContext"](componentViewModel, {
                             extend: function (ctx: any): any {
@@ -164,14 +131,7 @@ export class WidgetBindingHandler {
                         currentViewModel = componentViewModel;
                         ko.applyBindingsToDescendants(childBindingContext, element);
 
-                        let nonVirtualElement: Node = element;
-
-                        if (nonVirtualElement.nodeName.startsWith("#")) {
-                            do {
-                                nonVirtualElement = nonVirtualElement.nextSibling;
-                            }
-                            while (nonVirtualElement !== null && nonVirtualElement.nodeName.startsWith("#"));
-                        }
+                        let nonVirtualElement: Node = getNonVirtualElement(element);                        
 
                         if (nonVirtualElement) {
                             const binding: IWidgetBinding<any, any> = componentViewModel["widgetBinding"];
@@ -199,6 +159,19 @@ export class WidgetBindingHandler {
                 return { controlsDescendantBindings: true };
             }
         };
+
+        function getNonVirtualElement(element: Node): HTMLElement {
+            let nonVirtualElement: Node = element;
+
+            if (nonVirtualElement.nodeName.startsWith("#")) {
+                do {
+                    nonVirtualElement = nonVirtualElement.nextSibling;
+                }
+                while (nonVirtualElement !== null && nonVirtualElement.nodeName.startsWith("#"));
+            }
+
+            return <HTMLElement>nonVirtualElement;
+        }
 
         function cloneTemplateIntoElement(componentName: string, componentDefinition: ComponentDefinition, element: HTMLElement): any {
             const template = componentDefinition["template"];
