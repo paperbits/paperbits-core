@@ -32,6 +32,24 @@ export class WidgetBindingHandler {
 
                     componentBinder.init(element, binding);
 
+                    let flowClassName;
+
+                    switch (binding.flow) {
+                        case "block":
+                            flowClassName = "block";
+                            break;
+                        case "inline":
+                            flowClassName = "inline";
+                            break;
+                        case "none":
+                            flowClassName = "placeholder";
+                            break;
+                        default:
+                            console.warn(`Uknown component flow: ${binding.flow}`);
+                    }
+
+                    element.classList.add(flowClassName);
+
                     if (componentBinder.dispose) {
                         ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
                             componentBinder.dispose(element, binding);
@@ -160,8 +178,7 @@ export class WidgetBindingHandler {
                                         "block": binding.flow === ComponentFlow.Block,
                                         "inline-block": binding.flow === ComponentFlow.Inline,
                                         "legacy": binding.flow === ComponentFlow.Legacy,
-                                        "placeholder": binding.flow === ComponentFlow.Placeholder,
-                                        "contents": binding.flow === ComponentFlow.Contents
+                                        "placeholder": binding.flow === ComponentFlow.Placeholder
                                     }
                                 }, null);
 
