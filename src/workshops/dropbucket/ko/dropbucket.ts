@@ -122,7 +122,9 @@ export class DropBucket {
             let j = 0;
 
             while (contentDescriptor === null && j < this.dropHandlers.length) {
-                contentDescriptor = this.dropHandlers[j].getContentDescriptorFromDataTransfer(item);
+                if (this.dropHandlers[j].getContentDescriptorFromDataTransfer){
+                    contentDescriptor = this.dropHandlers[j].getContentDescriptorFromDataTransfer(item);
+                }
 
                 if (contentDescriptor) {
                     this.handleDroppedContent(contentDescriptor);
