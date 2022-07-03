@@ -35,18 +35,24 @@ export class WidgetBindingHandler {
                     let flowClassName;
 
                     switch (binding.flow) {
-                        case "block":
+                        case ComponentFlow.Block:
                             flowClassName = "block";
                             break;
-                        case "inline":
+                        case ComponentFlow.Inline:
                             flowClassName = "inline";
                             break;
-                        case "none":
+                        case ComponentFlow.Placeholder:
                             flowClassName = "placeholder";
                             break;
                         default:
                             console.warn(`Uknown component flow: ${binding.flow}`);
                     }
+
+                    //                 "block": binding.flow === ComponentFlow.Block,
+                    //                 "inline-block": binding.flow === ComponentFlow.Inline,
+                    //                 "legacy": binding.flow === ComponentFlow.Legacy,
+                    //                 "placeholder": binding.flow === ComponentFlow.Placeholder,
+                    //                 "contents": binding.flow === ComponentFlow.Contents
 
                     element.classList.add(flowClassName);
 

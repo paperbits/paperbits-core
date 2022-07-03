@@ -39,7 +39,6 @@ import { TestimonialsModule } from "./testimonials/ko/testimonials.module";
 import { TextblockModule } from "./textblock/ko/textblock.module";
 import { VideoPlayerModule } from "./video-player/videoPlayer.publish.module";
 import { YoutubePlayerPublishModule } from "./youtube-player/youtubePlayer.publish.module";
-import { KoWidgetBindingHandler } from "./ko/knockoutComponentBinder";
 
 
 /**
@@ -105,7 +104,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindToCollection("routeGuards", DefaultRouteGuard);
         injector.bindToCollection("routeGuards", MailtoRouteGuard);
         injector.bindToCollection("routeGuards", JavaScriptRouteGuard);
-        injector.bindToCollection("autostart", KoWidgetBindingHandler);
+        // injector.bindToCollection("autostart", KnockoutWidgetBindingHandler);
         injector.bindToCollection("autostart", WidgetBindingHandler);
         
         injector.bindToCollection("autostart", BackgroundBindingHandler);

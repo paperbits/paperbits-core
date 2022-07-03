@@ -1,30 +1,13 @@
 import * as ko from "knockout";
-import { ComponentFlow, IWidgetBinding, WidgetBinding, ComponentBinder } from "@paperbits/common/editing";
-import { Bag } from "@paperbits/common";
 import * as Arrays from "@paperbits/common";
+import { WidgetBinding, ComponentBinder } from "@paperbits/common/editing";
 import { ComponentDefinition } from "./componentDefinition";
 
 export class KnockoutComponentBinder implements ComponentBinder {
-    public init(element: Element, binding: WidgetBinding<any, any>): void {
-        // console.log(binding);
-        // ko.applyBindingsToNode(element, { kowidget: binding.componentBinderArgs }, null);
-        ko.applyBindingsToNode(element, { kowidget: binding }, null);
-
-        // const a = ko.contextFor(element);
-        // debugger;
-    }
-
-    public dispose?(element: Element, binding: WidgetBinding<any, any>): void {
-
-    }
-}
-
-
-export class KoWidgetBindingHandler {
     constructor() {
         let componentLoadingOperationUniqueId = 0;
 
-        ko.bindingHandlers["kowidget"] = {
+        ko.bindingHandlers["knockoutWidget"] = {
             init: function (element: any, valueAccessor: any, ignored1: any, ignored2: any, bindingContext: any): any {
                 const bindingConfig = <WidgetBinding<any, any>>ko.utils.unwrapObservable(valueAccessor());
 
@@ -41,10 +24,8 @@ export class KoWidgetBindingHandler {
                     const currentViewModelDispose = currentViewModel && currentViewModel["dispose"];
 
                     if (currentViewModel) {
-                        const binding = currentViewModel["widgetBinding"];
-
-                        if (binding && binding.onDispose) {
-                            binding.onDispose();
+                        if (bindingConfig && bindingConfig.onDispose) {
+                            bindingConfig.onDispose();
                         }
                     }
 
@@ -74,11 +55,10 @@ export class KoWidgetBindingHandler {
                         return;
                     }
 
-                    // const registration = Reflect.getMetadata("paperbits-component", bindingConfig.constructor);
                     const registration = Reflect.getMetadata("paperbits-component", bindingConfig.componentBinderArgs);
 
                     if (!registration) {
-                        throw new Error(`Could not find component registration for view model: ${bindingConfig}`);
+                        throw new Error(`Could not find component registration for ${bindingConfig.name} widget. Ensure that "@Component" decorator is added on widget view model class.`);
                     }
 
                     const componentName = registration.name;
@@ -88,14 +68,8 @@ export class KoWidgetBindingHandler {
                     }
 
                     const componentParams = registration.params;
-
                     const asyncContext = ko.bindingEvent.startPossiblyAsyncContentBinding(element, bindingContext);
-
                     const loadingOperationId = currentLoadingOperationId = ++componentLoadingOperationUniqueId;
-
-                    /// const binding: IWidgetBinding<any, any> = componentViewModel["widgetBinding"];
-
-
 
                     ko.components.get(componentName, function (componentDefinition: ComponentDefinition): any {
                         // If this is not the current load operation for this element, ignore it.
@@ -135,37 +109,6 @@ export class KoWidgetBindingHandler {
 
                         currentViewModel = componentViewModel;
                         ko.applyBindingsToDescendants(childBindingContext, element);
-
-                        let nonVirtualElement: Node = element;
-
-                        if (nonVirtualElement.nodeName.startsWith("#")) {
-                            do {
-                                nonVirtualElement = nonVirtualElement.nextSibling;
-                            }
-                            while (nonVirtualElement !== null && nonVirtualElement.nodeName.startsWith("#"));
-                        }
-
-                        if (nonVirtualElement) {
-                            const binding: IWidgetBinding<any, any> = componentViewModel["widgetBinding"];
-
-                            if (binding) {
-                                ko.applyBindingsToNode(nonVirtualElement, {
-                                    css: {
-                                        "block": binding.flow === ComponentFlow.Block,
-                                        "inline-block": binding.flow === ComponentFlow.Inline,
-                                        "legacy": binding.flow === ComponentFlow.Legacy,
-                                        "placeholder": binding.flow === ComponentFlow.Placeholder,
-                                        "contents": binding.flow === ComponentFlow.Contents
-                                    }
-                                }, null);
-
-                                componentViewModel["wrapped"] = binding.flow !== ComponentFlow.Contents;
-
-                                if (binding.draggable) {
-                                    ko.applyBindingsToNode(nonVirtualElement, { draggable: {} }, null);
-                                }
-                            }
-                        }
                     });
                 }, null, { disposeWhenNodeIsRemoved: element });
 
@@ -191,6 +134,15 @@ export class KoWidgetBindingHandler {
                 : componentParams; // Template-only component
         }
 
-        ko.virtualElements.allowedBindings["kowidget"] = true;
+        ko.virtualElements.allowedBindings["knockoutWidget"] = true;
+    }
+
+    public init(element: Element, binding: WidgetBinding<any, any>): void {
+        ko.applyBindingsToNode(element, { knockoutWidget: binding }, null);
+        // Method onCreate() is called from knockoutWidget binding handler.
+    }
+
+    public dispose?(element: Element, binding: WidgetBinding<any, any>): void {
+        // Method onDispose() is called from knockoutWidget binding handler.
     }
 }
