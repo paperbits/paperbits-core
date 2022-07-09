@@ -28,8 +28,9 @@ export class ButtonDesignModule implements IInjectorModule {
 
         const registry = injector.resolve<IWidgetService>("widgetService");
 
+
+        // TODO: Move registrations to separate file?
         registry.registerWidget("button", {
-            name: "button",
             modelClass: ButtonModel,
             componentFlow: ComponentFlow.Contents,
             componentBinder: "knockout", // ReactComponentBinder,
@@ -43,10 +44,8 @@ export class ButtonDesignModule implements IInjectorModule {
             iconClass: "widget-icon widget-icon-button",
             requires: [],
             draggable: true,
-            editorComponent: "button-editor", // class (preferable) or string
-            handlerComponent: ButtonHandlers,
+            editorComponent: ButtonEditor,
+            handlerComponent: ButtonHandlers
         });
-
-        // registry.registerWidgetHandler("button", ButtonHandlers);        
     }
 }

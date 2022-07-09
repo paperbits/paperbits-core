@@ -138,9 +138,10 @@ export class GridEditor {
         const defaultCommand: IContextCommand = {
             controlType: "toolbox-button",
             callback: () => {
-                if (!context.binding.editor) {
+                if (!context.binding) {
                     return;
                 }
+
                 this.viewManager.openWidgetEditor(context.binding);
             }
         };

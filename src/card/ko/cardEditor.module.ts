@@ -26,7 +26,6 @@ export class CardEditorModule implements IInjectorModule {
         const registry = injector.resolve<IWidgetService>("widgetService");
 
         registry.registerWidget("card", {
-            name: "card",
             modelClass: CardModel,
             componentFlow: ComponentFlow.Inline,
             componentBinder: "knockout", // ReactComponentBinder,
@@ -37,7 +36,7 @@ export class CardEditorModule implements IInjectorModule {
 
         registry.registerWidgetEditor("card", {
             displayName: "Card",
-            editorComponent: "card-editor",
+            editorComponent: CardEditor,
             handlerComponent: CardHandlers,
             iconClass: "widget-icon widget-icon-card",
             requires: [],
