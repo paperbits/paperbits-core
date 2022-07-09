@@ -26,15 +26,17 @@ export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, G
             const definition = this.widgetService.getWidgetHandlerForModel(widgetModel);
 
             if (definition) {
-                const binding = this.widgetService.createWidgetBinding(definition, widgetModel, bindingContext);
-                return binding;
+                const bindingPromise = this.widgetService.createWidgetBinding(definition, widgetModel, bindingContext);
+                return bindingPromise;
             }
 
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
 
-            return widgetViewModelBinder.createWidgetBinding
+            const bindingPromise = widgetViewModelBinder.createWidgetBinding
                 ? widgetViewModelBinder.createWidgetBinding<GridCellViewModel>(widgetModel, bindingContext)
                 : widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+
+            return bindingPromise;
         });
 
         const widgetViewModels = await Promise.all(promises);

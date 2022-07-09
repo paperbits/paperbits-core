@@ -38,7 +38,7 @@ import { PlaceholderViewModel } from "./placeholder/ko/placeholderViewModel";
 import { DefaultViewManager, Tooltip } from "./ko/ui";
 import { CropperBindingHandler } from "./workshops/cropper/cropper";
 import { GridEditor } from "./grid/ko";
-import { CardEditorModule } from "./card/ko/cardEditor.module";
+import { CardEditorModule } from "./card/card.design.module";
 import { MediaPermalinkResolver } from "@paperbits/common/media/mediaPermalinkResolver.design";
 import { GridEditorModule } from "./grid-layout-section/ko/gridEditor.module";
 import { GridCellEditorModule } from "./grid-cell/ko/gridCellEditor.module";

@@ -18,7 +18,7 @@ import { UrlService } from "@paperbits/common/urls";
 import { UrlPermalinkResolver } from "@paperbits/common/urls/urlPermalinkResolver";
 import { ModelBinderSelector, WidgetService } from "@paperbits/common/widgets";
 import { BackgroundModelBinder } from "@paperbits/common/widgets/background";
-import { CardModule } from "./card/ko/card.module";
+import { CardPublishModule } from "./card/card.publish.module";
 import { CollapsiblePanelModule } from "./collapsible-panel/ko";
 import { ColumnModule } from "./column/ko/column.module";
 import { ContentModule } from "./content/ko";
@@ -102,7 +102,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new VideoPlayerModule());
         injector.bindModule(new YoutubePlayerPublishModule());
         injector.bindModule(new TestimonialsModule());
-        injector.bindModule(new CardModule());
+        injector.bindModule(new CardPublishModule());
         injector.bindModule(new CollapsiblePanelModule());
 
         injector.bindToCollection("routeGuards", DefaultRouteGuard);

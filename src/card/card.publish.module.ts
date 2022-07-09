@@ -1,9 +1,9 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { CardViewModel } from "./cardViewModel";
-import { CardModelBinder } from "../cardModelBinder";
-import { CardViewModelBinder } from "./cardViewModelBinder";
+import { CardViewModel } from "./ko/cardViewModel";
+import { CardModelBinder } from "./cardModelBinder";
+import { CardViewModelBinder } from "./ko/cardViewModelBinder";
 
-export class CardModule implements IInjectorModule {
+export class CardPublishModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("card", CardViewModel);
         injector.bindToCollection("modelBinders", CardModelBinder);

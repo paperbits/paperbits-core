@@ -1,13 +1,13 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { CardEditor } from "./cardEditor";
+import { CardEditor } from "./ko/cardEditor";
 import { ComponentFlow, IWidgetHandler } from "@paperbits/common/editing";
-import { CardHandlers } from "../cardHandlers";
+import { CardHandlers } from "./cardHandlers";
 import { IStyleGroup } from "@paperbits/common/styles/IStyleGroup";
 import { IWidgetService } from "@paperbits/common/widgets";
-import { CardModel } from "../cardModel";
-import { CardViewModel } from "./cardViewModel";
-import { CardModelBinder } from "../cardModelBinder";
-import { CardViewModelBinder } from "./cardViewModelBinder";
+import { CardModel } from "./cardModel";
+import { CardViewModel } from "./ko/cardViewModel";
+import { CardModelBinder } from "./cardModelBinder";
+import { CardViewModelBinder } from "./ko/cardViewModelBinder";
 
 export class CardEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {

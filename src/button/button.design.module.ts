@@ -15,7 +15,11 @@ export class ButtonDesignModule implements IInjectorModule {
         injector.bindToCollection("modelBinders", ButtonModelBinder);
         injector.bindToCollection("viewModelBinders", ButtonViewModelBinder);
         injector.bind("buttonEditor", ButtonEditor);
-        injector.bindToCollection("widgetHandlers", ButtonHandlers, "buttonHandler");
+        // injector.bindToCollection("widgetHandlers", ButtonHandlers, "buttonHandler");
+
+        // injector.bindSingleton("modelBinders", ButtonModelBinder);
+        // injector.bindSingleton("viewModelBinders", ButtonViewModelBinder)
+        injector.bindSingleton("buttonHandler", ButtonHandlers);
 
         const styleGroup: IStyleGroup = {
             key: "button",
@@ -27,7 +31,6 @@ export class ButtonDesignModule implements IInjectorModule {
         injector.bindInstanceToCollection("styleGroups", styleGroup);
 
         const registry = injector.resolve<IWidgetService>("widgetService");
-
 
         // TODO: Move registrations to separate file?
         registry.registerWidget("button", {
@@ -42,7 +45,6 @@ export class ButtonDesignModule implements IInjectorModule {
         registry.registerWidgetEditor("button", {
             displayName: "Button",
             iconClass: "widget-icon widget-icon-button",
-            requires: [],
             draggable: true,
             editorComponent: ButtonEditor,
             handlerComponent: ButtonHandlers
