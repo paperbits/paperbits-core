@@ -12,13 +12,13 @@ import { ButtonViewModelBinder } from "./ko/buttonViewModelBinder";
 export class ButtonDesignModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("button", Button);
-        injector.bindToCollection("modelBinders", ButtonModelBinder);
-        injector.bindToCollection("viewModelBinders", ButtonViewModelBinder);
+        // injector.bindToCollection("modelBinders", ButtonModelBinder);
+        // injector.bindToCollection("viewModelBinders", ButtonViewModelBinder);
         injector.bind("buttonEditor", ButtonEditor);
         // injector.bindToCollection("widgetHandlers", ButtonHandlers, "buttonHandler");
 
-        // injector.bindSingleton("modelBinders", ButtonModelBinder);
-        // injector.bindSingleton("viewModelBinders", ButtonViewModelBinder)
+        injector.bindSingleton("buttonModelBinder", ButtonModelBinder);
+        injector.bindSingleton("buttonViewModelBinder", ButtonViewModelBinder)
         injector.bindSingleton("buttonHandler", ButtonHandlers);
 
         const styleGroup: IStyleGroup = {

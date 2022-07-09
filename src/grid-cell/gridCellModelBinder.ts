@@ -1,13 +1,13 @@
 import { GridCellModel } from "./gridCellModel";
 import { GridCellContract } from "./gridCellContract";
-import { ModelBinderSelector } from "@paperbits/common/widgets";
+import { IWidgetService, ModelBinderSelector } from "@paperbits/common/widgets";
 import { Contract, Bag } from "@paperbits/common";
 import { ContentModelBinder } from "../content";
 
 
 export class GridCellModelBinder extends ContentModelBinder<GridCellModel> {
-    constructor(protected modelBinderSelector: ModelBinderSelector) {
-        super(modelBinderSelector);
+    constructor(protected readonly widgetService: IWidgetService, protected modelBinderSelector: ModelBinderSelector) {
+        super(widgetService, modelBinderSelector);
     }
 
     public canHandleContract(contract: Contract): boolean {
