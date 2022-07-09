@@ -31,6 +31,7 @@ export class TableCellViewModelBinder implements ViewModelBinder<TableCellModel,
                 return bindingPromise;
             }
 
+            // legacy binding resolution
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
 
             const bindingPromise = widgetViewModelBinder.createWidgetBinding

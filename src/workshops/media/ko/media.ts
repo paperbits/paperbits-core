@@ -7,7 +7,6 @@ import { MediaItem, defaultFileName, defaultURL } from "./mediaItem";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { EventManager } from "@paperbits/common/events";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
-import { IWidgetService } from "@paperbits/common/widgets";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { Query, Operator, Page } from "@paperbits/common/persistence";
 
@@ -25,8 +24,7 @@ export class MediaWorkshop {
     constructor(
         private readonly eventManager: EventManager,
         private readonly mediaService: IMediaService,
-        private readonly viewManager: ViewManager,
-        private readonly widgetService: IWidgetService
+        private readonly viewManager: ViewManager
     ) {
         this.working = ko.observable(false);
         this.mediaItems = ko.observableArray<MediaItem>();
@@ -140,33 +138,33 @@ export class MediaWorkshop {
         await this.searchMedia();
     }
 
-    public onDragStart(item: MediaItem): HTMLElement {
-        item.widgetFactoryResult = item.widgetOrder.createWidget();
+    // public onDragStart(item: MediaItem): HTMLElement {
+    //     item.widgetFactoryResult = item.widgetOrder.createWidget();
 
-        const widgetElement = item.widgetFactoryResult.element;
-        const widgetModel = item.widgetFactoryResult.widgetModel;
-        const widgetBinding = item.widgetFactoryResult.widgetBinding;
+    //     const widgetElement = item.widgetFactoryResult.element;
+    //     const widgetModel = item.widgetFactoryResult.widgetModel;
+    //     const widgetBinding = item.widgetFactoryResult.widgetBinding;
 
-        this.viewManager.beginDrag({
-            sourceModel: widgetModel,
-            sourceBinding: widgetBinding
-        });
+    //     this.viewManager.beginDrag({
+    //         sourceModel: widgetModel,
+    //         sourceBinding: widgetBinding
+    //     });
 
-        return widgetElement;
-    }
+    //     return widgetElement;
+    // }
 
-    public onDragEnd(item: MediaItem): void {
-        item.widgetFactoryResult.element.remove();
-        const dragSession = this.viewManager.getDragSession();
-        const acceptorBinding = dragSession.targetBinding;
+    // public onDragEnd(item: MediaItem): void {
+    //     item.widgetFactoryResult.element.remove();
+    //     const dragSession = this.viewManager.getDragSession();
+    //     const acceptorBinding = dragSession.targetBinding;
 
-        if (acceptorBinding && acceptorBinding.handler) {
-            const widgetHandler = this.widgetService.getWidgetHandler(acceptorBinding);
-            widgetHandler.onDragDrop(dragSession);
-        }
+    //     if (acceptorBinding && acceptorBinding.handler) {
+    //         const widgetHandler = this.widgetService.getWidgetHandler(acceptorBinding);
+    //         widgetHandler.onDragDrop(dragSession);
+    //     }
 
-        this.eventManager.dispatchEvent("virtualDragEnd");
-    }
+    //     this.eventManager.dispatchEvent("virtualDragEnd");
+    // }
 
     public isSelected(media: MediaItem): boolean {
         const selectedMedia = this.selectedMediaItem();

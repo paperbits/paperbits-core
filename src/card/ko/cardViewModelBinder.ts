@@ -19,10 +19,11 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
             const definition = this.widgetService.getWidgetHandlerForModel(widgetModel);
 
             if (definition) {
-                const binding = this.widgetService.createWidgetBinding(definition, widgetModel, bindingContext);
-                return binding;
+                const bindingPromise = this.widgetService.createWidgetBinding(definition, widgetModel, bindingContext);
+                return bindingPromise;
             }
 
+            // legacy binding resolution
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
 
             return widgetViewModelBinder.createWidgetBinding

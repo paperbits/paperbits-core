@@ -30,6 +30,7 @@ export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, G
                 return bindingPromise;
             }
 
+            // legacy binding resolution
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
 
             const bindingPromise = widgetViewModelBinder.createWidgetBinding
