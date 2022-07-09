@@ -161,7 +161,7 @@ export class MediaWorkshop {
         const acceptorBinding = dragSession.targetBinding;
 
         if (acceptorBinding && acceptorBinding.handler) {
-            const widgetHandler = this.widgetService.getWidgetHandler(acceptorBinding.handler);
+            const widgetHandler = this.widgetService.getWidgetHandler(acceptorBinding);
             widgetHandler.onDragDrop(dragSession);
         }
 

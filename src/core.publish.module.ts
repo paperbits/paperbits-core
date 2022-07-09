@@ -16,6 +16,7 @@ import {
     SitemapBuilder,
     SearchIndexBuilder
 } from "@paperbits/common/publishing";
+import { ButtonPublishModule } from "./button/button.publish.module";
 import { MapPublishModule } from "./map/map.publish.module";
 import { DividerPublishModule } from "./divider/divider.publish.module";
 import { CarouselPublishModule } from "./carousel/carousel.publish.module";
@@ -52,6 +53,7 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindToCollection("htmlPagePublisherPlugins", SocialShareDataHtmlPagePublisherPlugin);
         injector.bindInstance("stateCache", new MemoryCache());
         injector.bindInstance("changesCache", new MemoryCache());
+        
         injector.bindModule(new MapPublishModule());
         injector.bindModule(new CarouselPublishModule());
         injector.bindModule(new TabPanelPublishModule());

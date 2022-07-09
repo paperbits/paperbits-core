@@ -1,4 +1,4 @@
-﻿import { IWidgetOrder, IWidgetHandler, WidgetContext, WidgetBinding, ComponentFlow } from "@paperbits/common/editing";
+﻿import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { ButtonModel } from "./buttonModel";
 
@@ -6,23 +6,12 @@ import { ButtonModel } from "./buttonModel";
 export class ButtonHandlers implements IWidgetHandler {
     constructor(private readonly viewManager: ViewManager) { }
 
-    public async getWidgetOrder(): Promise<IWidgetOrder> {
-        const widgetOrder: IWidgetOrder = {
-            name: "button",
-            displayName: "Button",
-            iconClass: "widget-icon widget-icon-button",
-            requires: [],
-            createModel: async () => {
-                return new ButtonModel();
-            }
-        };
-
-        return widgetOrder;
+    public async getWidgetModel(): Promise<ButtonModel> {
+        return new ButtonModel();
     }
 
     public getContextCommands(context: WidgetContext): IContextCommandSet {
         const contextualEditor: IContextCommandSet = {
-            color: "#2b87da",
             selectCommands: [{
                 controlType: "toolbox-button",
                 displayName: "Edit button",
@@ -38,6 +27,7 @@ export class ButtonHandlers implements IWidgetHandler {
                 callback: () => context.gridItem.getParent().select(),
             }
                 // {
+                //     controlType: "toolbox-button",
                 //     tooltip: "Help",
                 //     iconClass: "paperbits-icon paperbits-c-question",
                 //     position: "top right",
@@ -46,16 +36,7 @@ export class ButtonHandlers implements IWidgetHandler {
                 //         // 
                 //     }
                 // }
-            ],
-            deleteCommand: {
-                controlType: "toolbox-button",
-                tooltip: "Delete widget",
-                callback: () => {
-                    context.parentModel.widgets.remove(context.model);
-                    context.parentBinding.applyChanges();
-                    this.viewManager.clearContextualCommands();
-                }
-            }
+            ]
         };
 
         return contextualEditor;

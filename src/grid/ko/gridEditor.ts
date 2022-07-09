@@ -116,13 +116,12 @@ export class GridEditor {
         };
 
         let contextualCommands: IContextCommandSet;
+        let widgetHandler = this.widgetService.getWidgetHandler(binding);
 
-        if (context.binding?.handler) {
-            const handler = this.widgetService.getWidgetHandler(context.binding.handler);
-
-            if (handler.getContextCommands) {
+        if (widgetHandler) {
+            if (widgetHandler.getContextCommands) {
                 try {
-                    contextualCommands = handler.getContextCommands(context);
+                    contextualCommands = widgetHandler.getContextCommands(context);
                 }
                 catch (error) {
                     console.warn(`Could not get context commands.`);
@@ -386,13 +385,13 @@ export class GridEditor {
         }
 
         const acceptingParent = stack.find(x => {
-            if (!x.binding.handler) {
+            if (!x.binding) {
                 return false;
             }
 
-            const handler = this.widgetService.getWidgetHandler(x.binding.handler);
+            const handler = this.widgetService.getWidgetHandler(x.binding);
 
-            if (handler && handler.canAccept && handler.canAccept(dragSession)) {
+            if (handler?.canAccept && handler.canAccept(dragSession)) {
                 return true;
             }
 
@@ -811,7 +810,7 @@ export class GridEditor {
             return null;
         }
 
-        const handler = this.widgetService.getWidgetHandler(binding.handler);
+        const handler = this.widgetService.getWidgetHandler(binding);
 
         if (!handler.getStyleDefinitions) {
             return null;

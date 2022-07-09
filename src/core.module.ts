@@ -18,7 +18,6 @@ import { UrlService } from "@paperbits/common/urls";
 import { UrlPermalinkResolver } from "@paperbits/common/urls/urlPermalinkResolver";
 import { ModelBinderSelector, WidgetService } from "@paperbits/common/widgets";
 import { BackgroundModelBinder } from "@paperbits/common/widgets/background";
-import { ButtonModule } from "./button/ko/button.module";
 import { CardModule } from "./card/ko/card.module";
 import { CollapsiblePanelModule } from "./collapsible-panel/ko";
 import { ColumnModule } from "./column/ko/column.module";
@@ -41,7 +40,6 @@ import { VideoPlayerModule } from "./video-player/videoPlayer.publish.module";
 import { YoutubePlayerPublishModule } from "./youtube-player/youtubePlayer.publish.module";
 import { Bag } from "@paperbits/common";
 import { ComponentBinder } from "@paperbits/common/editing";
-import { WidgetRegistry } from "@paperbits/common/editing/widgetRegistry";
 
 
 /**
@@ -49,6 +47,8 @@ import { WidgetRegistry } from "@paperbits/common/editing/widgetRegistry";
  */
 export class CoreModule implements IInjectorModule {
     public register(injector: IInjector): void {
+        injector.bindInstance("injector", injector);
+        
         injector.bindCollection("autostart");
         injector.bindCollection("styleHandlers");
         injector.bindCollectionLazily("widgetHandlers");
@@ -56,7 +56,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindCollectionLazily("modelBinders");
         injector.bindCollectionLazily("viewModelBinders");
         injector.bindCollectionLazily("permalinkResolvers");
-        injector.bindInstance("widgetRegistry", new WidgetRegistry(injector));
         injector.bindInstance<Bag<ComponentBinder>>("componentBinders", {});
         
         /*** Core ***/
@@ -68,6 +67,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("changeCommitter", DefaultChangeCommitter);
 
         /*** Services ***/
+        // injector.bindInstance("widgetService", new WidgetService(injector));
         injector.bindSingleton("widgetService", WidgetService);
         injector.bindSingleton("permalinkService", DefaultPermalinkService);
         injector.bindSingleton("layoutService", LayoutService);
@@ -96,7 +96,6 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new SectionModule());
         injector.bindModule(new GridModule());
         injector.bindModule(new GridCellModule());
-        injector.bindModule(new ButtonModule());
         // injector.bindModule(new MapModule());
         injector.bindModule(new MenuModule());
         injector.bindModule(new PictureModule());

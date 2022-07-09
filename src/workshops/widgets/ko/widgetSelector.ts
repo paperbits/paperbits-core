@@ -1,10 +1,10 @@
 import * as ko from "knockout";
-import template from "./widgetSelector.html";
-import { WidgetItem } from "./widgetItem";
-import { IWidgetService, WidgetModel } from "@paperbits/common/widgets";
-import { Component, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
+import { Component, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { Logger } from "@paperbits/common/logging";
+import { IWidgetService, WidgetModel } from "@paperbits/common/widgets";
+import { WidgetItem } from "./widgetItem";
+import template from "./widgetSelector.html";
 
 @Component({
     selector: "widget-selector",
@@ -18,13 +18,6 @@ export class WidgetSelector {
     public readonly working: ko.Observable<boolean>;
     public readonly searchPattern: ko.Observable<string>;
 
-
-    @Event()
-    public onSelect: (widgetModel: WidgetModel) => void;
-
-    @Event()
-    public onRequest: () => string[];
-
     constructor(
         private readonly widgetService: IWidgetService,
         private readonly logger: Logger
@@ -34,6 +27,12 @@ export class WidgetSelector {
         this.categories = ko.observable<{ name: string, items: WidgetItem[] }[]>();
         this.widgetCount = ko.observable();
     }
+
+    @Event()
+    public onSelect: (widgetModel: WidgetModel) => void;
+
+    @Event()
+    public onRequest: () => string[];
 
     @OnMounted()
     public initialize(): void {
@@ -48,16 +47,16 @@ export class WidgetSelector {
         pattern = pattern.toLowerCase();
 
         const filteredCategories = this.originalCategories
-            .map(x => ({
-                name: x.name,
-                items: x.items.filter(w => w.displayName.toLowerCase().includes(pattern))
+            .map(category => ({
+                name: category.name,
+                items: category.items.filter(w => w.displayName.toLowerCase().includes(pattern))
             }))
-            .filter(x => x.items.length > 0);
+            .filter(category => category.items.length > 0);
 
         this.categories(filteredCategories);
 
         const widgetCount = filteredCategories.length > 0
-            ? filteredCategories.map(x => x.items.length).reduce((x, y) => x += y)
+            ? filteredCategories.map(category => category.items.length).reduce((x, y) => x += y)
             : 0;
 
         this.widgetCount(widgetCount);
@@ -71,15 +70,15 @@ export class WidgetSelector {
         const provided = this.onRequest();
 
         widgetOrders
-            .filter(x => !x.requires || x.requires.every(y => provided.includes(y)))
-            .forEach((widgetOrder) => {
+            .filter(widgetOrder => !widgetOrder.requires || widgetOrder.requires.every(entry => provided.includes(entry)))
+            .forEach(widgetOrder => {
                 const widgetItem = new WidgetItem();
-
+                widgetItem.name = widgetOrder.name;
+                widgetItem.displayName = widgetOrder.displayName;
                 widgetItem.css = `${widgetOrder.iconClass}`;
                 widgetItem.iconUrl = widgetOrder.iconUrl;
-                widgetItem.displayName = widgetOrder.displayName;
                 widgetItem.category = widgetOrder.category || "";
-                widgetItem.widgetOrder = widgetOrder;
+                widgetItem.createModel = widgetOrder.createModel
 
                 items.push(widgetItem);
             });
@@ -100,9 +99,9 @@ export class WidgetSelector {
     }
 
     public async selectWidget(widgetItem: WidgetItem): Promise<void> {
-        const model = await widgetItem.widgetOrder.createModel();
-        this.onSelect(model);
+        const widgetModel = await widgetItem.createModel();
 
-        this.logger.trackEvent("WidgetAdded", { name: widgetItem.widgetOrder.name });
+        this.onSelect(widgetModel);
+        this.logger.trackEvent("WidgetAdded", { name: widgetItem.name });
     }
 }

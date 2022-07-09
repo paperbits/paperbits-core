@@ -1,25 +1,25 @@
-import { CardViewModel } from "./cardViewModel";
-import { ViewModelBinder } from "@paperbits/common/widgets";
-import { CardModel } from "../cardModel";
+import { Bag } from "@paperbits/common";
+import { StyleCompiler } from "@paperbits/common/styles";
+import { IWidgetService, ViewModelBinder } from "@paperbits/common/widgets";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
-import { StyleCompiler } from "@paperbits/common/styles";
-import { Bag } from "@paperbits/common";
-import { WidgetRegistry } from "@paperbits/common/editing/widgetRegistry";
+import { CardModel } from "../cardModel";
+import { CardViewModel } from "./cardViewModel";
+
 
 export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewModel> {
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly styleCompiler: StyleCompiler,
-        private readonly widgetRegistry: WidgetRegistry
+        private readonly widgetService: IWidgetService
     ) { }
 
     public async modelToViewModel(model: CardModel, viewModel?: CardViewModel, bindingContext?: Bag<any>): Promise<CardViewModel> {
         const promises = model.widgets.map(widgetModel => {
-            const definition = this.widgetRegistry.getWidgetDefinitionForModel(widgetModel);
+            const definition = this.widgetService.getWidgetHandlerForModel(widgetModel);
 
             if (definition) {
-                const binding = this.widgetRegistry.createWidgetBinding(definition, widgetModel, bindingContext);
+                const binding = this.widgetService.createWidgetBinding(definition, widgetModel, bindingContext);
                 return binding;
             }
 

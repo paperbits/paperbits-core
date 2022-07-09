@@ -162,7 +162,7 @@ export class MediaSelector {
         const acceptorBinding = dragSession.targetBinding;
 
         if (acceptorBinding && acceptorBinding.handler) {
-            const widgetHandler = this.widgetService.getWidgetHandler(acceptorBinding.handler);
+            const widgetHandler = this.widgetService.getWidgetHandler(acceptorBinding);
             widgetHandler.onDragDrop(dragSession);
         }
 

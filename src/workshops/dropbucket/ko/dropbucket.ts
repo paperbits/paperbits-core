@@ -224,8 +224,8 @@ export class DropBucket {
         const dragSession = this.viewManager.getDragSession();
         const acceptorBinding = dragSession.targetBinding;
 
-        if (acceptorBinding && acceptorBinding.handler) {
-            const widgetHandler = this.widgetService.getWidgetHandler(acceptorBinding.handler);
+        if (acceptorBinding) {
+            const widgetHandler = this.widgetService.getWidgetHandler(acceptorBinding);
             widgetHandler.onDragDrop(dragSession);
         }
 
