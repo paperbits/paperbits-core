@@ -23,8 +23,15 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
 
         viewModel.icon(iconClass);
 
+        if (model.label.includes("AAAA")) {
+            debugger;
+
+            viewModel.styles(<any>"ZZZ");
+        }
+
         if (model.styles) {
-            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
+            const a = await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager);
+            viewModel.styles(a);
         }
 
         return viewModel;

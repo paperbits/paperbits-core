@@ -25,10 +25,8 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
 
             // legacy binding resolution
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-
-            return widgetViewModelBinder.createWidgetBinding
-                ? widgetViewModelBinder.createWidgetBinding<CardViewModel>(widgetModel, bindingContext)
-                : widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+            const bindingPromise = widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+            return bindingPromise;
         });
 
         const widgetViewModels = await Promise.all(promises);

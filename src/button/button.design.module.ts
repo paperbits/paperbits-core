@@ -12,10 +12,7 @@ import { ButtonViewModelBinder } from "./ko/buttonViewModelBinder";
 export class ButtonDesignModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("button", Button);
-        // injector.bindToCollection("modelBinders", ButtonModelBinder);
-        // injector.bindToCollection("viewModelBinders", ButtonViewModelBinder);
         injector.bind("buttonEditor", ButtonEditor);
-        // injector.bindToCollection("widgetHandlers", ButtonHandlers, "buttonHandler");
 
         injector.bindSingleton("buttonModelBinder", ButtonModelBinder);
         injector.bindSingleton("buttonViewModelBinder", ButtonViewModelBinder)
@@ -36,7 +33,7 @@ export class ButtonDesignModule implements IInjectorModule {
         registry.registerWidget("button", {
             modelClass: ButtonModel,
             componentFlow: ComponentFlow.Contents,
-            componentBinder: "knockout", // ReactComponentBinder,
+            componentBinder: "knockout",
             componentBinderArguments: Button,
             modelBinder: ButtonModelBinder,
             viewModelBinder: ButtonViewModelBinder

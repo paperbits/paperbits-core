@@ -182,6 +182,10 @@ export class KnockoutComponentBinder implements ComponentBinder {
     }
 
     public init(element: Element, binding: WidgetBinding<any, any>): void {
+        /**
+         * Looks like we need to make this operation asynchronous and after the viewmodel get created run modelToViewModel once.
+         */
+
         ko.applyBindingsToNode(element, { knockoutWidget: binding }, null);
         // Method onCreate() is called from knockoutWidget binding handler.
     }
