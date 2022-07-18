@@ -8,10 +8,27 @@ import { Bag } from "@paperbits/common";
 export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Button>  {
     constructor(private readonly styleCompiler: StyleCompiler) { }
 
-    public async modelToViewModel(model: ButtonModel, viewModel?: Button, bindingContext?: Bag<any>): Promise<Button> {
-        viewModel.label(model.label);
-        viewModel.hyperlink(model.hyperlink);
-        viewModel.roles(model.roles);
+    public stateToIntance(state: any, componentInstance: Button): void {
+        componentInstance.label(state.label);
+        componentInstance.hyperlink(state.hyperlink);
+        componentInstance.roles(state.roles);
+
+        let iconClass: string = null;
+
+        if (state.iconKey) {
+            const segments = state.iconKey.split("/");
+            const name = segments[1];
+            iconClass = `icon icon-${Utils.camelCaseToKebabCase(name.replace("/", "-"))}`;
+        }
+
+        componentInstance.icon(iconClass);
+        componentInstance.styles(state.styles);
+    }
+
+    public async modelToState(model: ButtonModel, state: any, bindingContext?: Bag<any>): Promise<void> {
+        state.label = model.label;
+        state.hyperlink = model.hyperlink;
+        state.roles = model.roles;
 
         let iconClass: string = null;
 
@@ -21,24 +38,10 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
             iconClass = `icon icon-${Utils.camelCaseToKebabCase(name.replace("/", "-"))}`;
         }
 
-        viewModel.icon(iconClass);
-
-        if (model.label.includes("AAAA")) {
-            debugger;
-
-            viewModel.styles(<any>"ZZZ");
-        }
+        state.icon = iconClass;
 
         if (model.styles) {
-            const a = await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager);
-            viewModel.styles(a);
+            state.styles = await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager);
         }
-
-        return viewModel;
-    }
-
-    // TODO:  Do we still need this?
-    public canHandleModel(model: ButtonModel): boolean {
-        return model instanceof ButtonModel;
     }
 }
