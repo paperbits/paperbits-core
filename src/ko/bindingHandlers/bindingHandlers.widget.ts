@@ -121,6 +121,7 @@ export class WidgetBindingHandler {
                             extend: function (ctx: any): any {
                                 ctx["$component"] = componentViewModel;
                                 ctx["$componentTemplateNodes"] = originalChildNodes;
+                                ctx["widgetBinding"] = binding;
                             }
                         });
 

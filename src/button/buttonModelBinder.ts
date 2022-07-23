@@ -7,10 +7,7 @@ import { BuiltInRoles } from "@paperbits/common/user";
 
 
 export class ButtonModelBinder implements IModelBinder<ButtonModel>  {
-    constructor(
-        private readonly permalinkResolver: IPermalinkResolver
-    ) {
-    }
+    constructor(private readonly permalinkResolver: IPermalinkResolver) { }
 
     public canHandleContract(contract: Contract): boolean {
         return contract.type === "button";

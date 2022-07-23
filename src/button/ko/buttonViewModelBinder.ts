@@ -1,9 +1,7 @@
-import { Button } from "./button";
-import * as Utils from "@paperbits/common/utils";
+import { StyleCompiler } from "@paperbits/common/styles";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { ButtonModel } from "../buttonModel";
-import { StyleCompiler } from "@paperbits/common/styles";
-import { Bag } from "@paperbits/common";
+import { Button } from "./button";
 
 export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Button>  {
     constructor(private readonly styleCompiler: StyleCompiler) { }
@@ -12,36 +10,21 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
         componentInstance.label(state.label);
         componentInstance.hyperlink(state.hyperlink);
         componentInstance.roles(state.roles);
-
-        let iconClass: string = null;
-
-        if (state.iconKey) {
-            const segments = state.iconKey.split("/");
-            const name = segments[1];
-            iconClass = `icon icon-${Utils.camelCaseToKebabCase(name.replace("/", "-"))}`;
-        }
-
-        componentInstance.icon(iconClass);
+        componentInstance.icon(state.iconClass);
         componentInstance.styles(state.styles);
     }
 
-    public async modelToState(model: ButtonModel, state: any, bindingContext?: Bag<any>): Promise<void> {
+    public async modelToState(model: ButtonModel, state: any): Promise<void> {
         state.label = model.label;
         state.hyperlink = model.hyperlink;
         state.roles = model.roles;
 
-        let iconClass: string = null;
-
         if (model.iconKey) {
-            const segments = model.iconKey.split("/");
-            const name = segments[1];
-            iconClass = `icon icon-${Utils.camelCaseToKebabCase(name.replace("/", "-"))}`;
+            state.iconClass = this.styleCompiler.getIconClassName(model.iconKey);
         }
 
-        state.icon = iconClass;
-
         if (model.styles) {
-            state.styles = await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager);
+            state.styles = await this.styleCompiler.getStyleModelAsync(model.styles);
         }
     }
 }
