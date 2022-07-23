@@ -12,6 +12,9 @@ import { CardViewModelBinder } from "./ko/cardViewModelBinder";
 export class CardEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("cardEditor", CardEditor);
+        injector.bindSingleton("cardModelBinder", CardModelBinder);
+        injector.bindSingleton("cardViewModelBinder", CardViewModelBinder)
+        injector.bindSingleton("cardHandler", CardHandlers);
         
         const styleGroup: IStyleGroup = {
             key: "card",
@@ -39,7 +42,6 @@ export class CardEditorModule implements IInjectorModule {
             editorComponent: CardEditor,
             handlerComponent: CardHandlers,
             iconClass: "widget-icon widget-icon-card",
-            requires: [],
             draggable: true
         });
     }

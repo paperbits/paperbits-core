@@ -13,7 +13,6 @@ export class ButtonDesignModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("button", Button);
         injector.bind("buttonEditor", ButtonEditor);
-
         injector.bindSingleton("buttonModelBinder", ButtonModelBinder);
         injector.bindSingleton("buttonViewModelBinder", ButtonViewModelBinder)
         injector.bindSingleton("buttonHandler", ButtonHandlers);

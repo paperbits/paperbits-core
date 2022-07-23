@@ -14,7 +14,12 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
         private readonly widgetService: IWidgetService
     ) { }
 
-    public async modelToViewModel(model: CardModel, viewModel?: CardViewModel, bindingContext?: Bag<any>): Promise<CardViewModel> {
+    public stateToIntance(state: any, componentInstance: CardViewModel): void {
+        componentInstance.styles(state.styles);
+        componentInstance.widgets(state.widgets)
+    }
+
+    public async modelToState(model: CardModel, state: any, bindingContext: Bag<any>): Promise<void> {
         const promises = model.widgets.map(widgetModel => {
             const definition = this.widgetService.getWidgetHandlerForModel(widgetModel);
 
@@ -35,16 +40,10 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
             widgetViewModels.push(new PlaceholderViewModel("Card"));
         }
 
+        state.widgets = widgetViewModels;
+
         if (model.styles) {
-            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
+            state.styles = await this.styleCompiler.getStyleModelAsync(model.styles);
         }
-
-        viewModel.widgets(widgetViewModels);
-
-        return viewModel;
-    }
-
-    public canHandleModel(model: CardModel): boolean {
-        return model instanceof CardModel;
     }
 }

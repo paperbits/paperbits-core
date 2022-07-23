@@ -35,6 +35,8 @@ export class KnockoutComponentBinder implements ComponentBinder {
             init: function (element: any, valueAccessor: any, ignored1: any, ignored2: any, bindingContext: any): any {
                 const widgetBinding = <WidgetBinding<any, any>>ko.utils.unwrapObservable(valueAccessor());
 
+                bindingContext = ko.contextFor(element); // restoring context broken by the ko.applyBindingsToNode in init() method
+
                 if (!widgetBinding) {
                     console.warn("No binding config!");
                     return;
@@ -182,10 +184,6 @@ export class KnockoutComponentBinder implements ComponentBinder {
     }
 
     public init(element: Element, binding: WidgetBinding<any, any>): void {
-        /**
-         * Looks like we need to make this operation asynchronous and after the viewmodel get created run modelToViewModel once.
-         */
-
         ko.applyBindingsToNode(element, { knockoutWidget: binding }, null);
         // Method onCreate() is called from knockoutWidget binding handler.
     }

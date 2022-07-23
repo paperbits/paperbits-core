@@ -34,8 +34,7 @@ export class WidgetBindingHandler {
                         ko.utils.domNodeDisposal.addDisposeCallback(element, () => componentBinder.dispose(element, binding));
                     }
 
-                    // return { controlsDescendantBindings: true };
-                    return;
+                    return { controlsDescendantBindings: true };
                 }
 
                 let currentViewModel,
@@ -121,7 +120,6 @@ export class WidgetBindingHandler {
                             extend: function (ctx: any): any {
                                 ctx["$component"] = componentViewModel;
                                 ctx["$componentTemplateNodes"] = originalChildNodes;
-                                ctx["widgetBinding"] = binding;
                             }
                         });
 
@@ -132,7 +130,7 @@ export class WidgetBindingHandler {
                         currentViewModel = componentViewModel;
                         ko.applyBindingsToDescendants(childBindingContext, element);
 
-                        let nonVirtualElement: Node = getNonVirtualElement(element);                        
+                        let nonVirtualElement: Node = getNonVirtualElement(element);
 
                         if (nonVirtualElement) {
                             const binding: IWidgetBinding<any, any> = componentViewModel["widgetBinding"];
