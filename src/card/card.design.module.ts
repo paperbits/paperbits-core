@@ -26,9 +26,9 @@ export class CardEditorModule implements IInjectorModule {
         injector.bindInstanceToCollection("styleGroups", styleGroup);
         injector.bindToCollection<IWidgetHandler>("widgetHandlers", CardHandlers, "cardHandler");
 
-        const registry = injector.resolve<IWidgetService>("widgetService");
+        const widgetService = injector.resolve<IWidgetService>("widgetService");
 
-        registry.registerWidget("card", {
+        widgetService.registerWidget("card", {
             modelClass: CardModel,
             componentFlow: ComponentFlow.Inline,
             componentBinder: "knockout", // ReactComponentBinder,
@@ -37,7 +37,7 @@ export class CardEditorModule implements IInjectorModule {
             viewModelBinder: CardViewModelBinder
         });
 
-        registry.registerWidgetEditor("card", {
+        widgetService.registerWidgetEditor("card", {
             displayName: "Card",
             editorComponent: CardEditor,
             handlerComponent: CardHandlers,

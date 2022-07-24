@@ -26,10 +26,10 @@ export class ButtonDesignModule implements IInjectorModule {
         };
         injector.bindInstanceToCollection("styleGroups", styleGroup);
 
-        const registry = injector.resolve<IWidgetService>("widgetService");
+        const widgetService = injector.resolve<IWidgetService>("widgetService");
 
         // TODO: Move registrations to separate file?
-        registry.registerWidget("button", {
+        widgetService.registerWidget("button", {
             modelClass: ButtonModel,
             componentFlow: ComponentFlow.Contents,
             componentBinder: "knockout",
@@ -38,7 +38,7 @@ export class ButtonDesignModule implements IInjectorModule {
             viewModelBinder: ButtonViewModelBinder
         });
 
-        registry.registerWidgetEditor("button", {
+        widgetService.registerWidgetEditor("button", {
             displayName: "Button",
             iconClass: "widget-icon widget-icon-button",
             draggable: true,

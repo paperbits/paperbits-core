@@ -25,7 +25,7 @@ export class WidgetBindingHandler {
                     const componentBinder = componentBinders[binding.framework];
 
                     if (!componentBinder) {
-                        throw new Error(`No component binders registered for ${binding.framework} framework.`);
+                        throw new Error(`No component binders registered for ${binding.framework} framework. Binding: ${binding.name}`);
                     }
 
                     componentBinder.init(element, binding);

@@ -19,10 +19,10 @@ function getNonVirtualElement(element: Node): HTMLElement {
     }
 
     // Hack: copying context props explicitly
-    const originalElementContext = ko.contextFor(element);
-    const nonVirtualElementContext = ko.contextFor(nonVirtualElement);
-    nonVirtualElementContext.$parents = originalElementContext.$parents;
-    nonVirtualElementContext.$parent = originalElementContext.$parent;
+    // const originalElementContext = ko.contextFor(element);
+    // const nonVirtualElementContext = ko.contextFor(nonVirtualElement);
+    // nonVirtualElementContext.$parents = originalElementContext.$parents;
+    // nonVirtualElementContext.$parent = originalElementContext.$parent;
 
     return <HTMLElement>nonVirtualElement;
 }

@@ -34,7 +34,6 @@ import { PictureModule } from "./picture/picture.module";
 import { RowModule } from "./row/ko/row.module";
 import { SectionModule } from "./section/ko/section.module";
 import { TestimonialsModule } from "./testimonials/ko/testimonials.module";
-import { TextblockModule } from "./textblock/ko/textblock.module";
 import { VideoPlayerModule } from "./video-player/videoPlayer.publish.module";
 import { YoutubePlayerPublishModule } from "./youtube-player/youtubePlayer.publish.module";
 import { Bag } from "@paperbits/common";
@@ -90,7 +89,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new ContentModule());
         injector.bindModule(new ColumnModule());
         injector.bindModule(new RowModule());
-        injector.bindModule(new TextblockModule());
+        
         injector.bindModule(new SectionModule());
         injector.bindModule(new GridModule());
         injector.bindModule(new GridCellModule());

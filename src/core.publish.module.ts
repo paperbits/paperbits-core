@@ -27,6 +27,7 @@ import { PopupPublishModule } from "./popup/popup.publish.module";
 import { DismissButtonPublishModule } from "./dismiss-button/dismissButton.publish.module";
 import { ConsoleLogger } from "@paperbits/common/logging";
 import { CardPublishModule } from "./card/card.publish.module";
+import { TextblockPublishModule } from "./textblock/textblock.publish.module";
 
 
 export class CorePublishModule implements IInjectorModule {
@@ -62,5 +63,6 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindModule(new DismissButtonPublishModule());
         injector.bindModule(new ButtonPublishModule());
         injector.bindModule(new CardPublishModule());
+        injector.bindModule(new TextblockPublishModule());
     }
 }

@@ -20,7 +20,7 @@ import { MediaWorkshopModule } from "./workshops/media/ko/media.module";
 import { NavigationWorkshopModule } from "./workshops/navigation/ko/navigation.module";
 import { SettingsWorkshopModule } from "./workshops/settings/ko/settings.module";
 import { Workshops } from "./workshops/workshops";
-import { TextblockEditorModule } from "./textblock/ko/textblockEditor.module";
+import { TextblockDesignModule } from "./textblock/textblock.design.module";
 import { DropbucketModule } from "./workshops/dropbucket/ko/dropbucket.module";
 import { ViewportSelector } from "./workshops/viewports/ko/viewport-selector";
 import { LocaleSelector, LocaleEditor } from "./workshops/localization/ko";
@@ -130,7 +130,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bind("localSettings", LocalStorageSettingsProvider);
         injector.bindModule(new MapDesignModule());
         injector.bindToCollection("permalinkResolvers", MediaPermalinkResolver, "mediaPermalinkResolver");
-        injector.bindModule(new TextblockEditorModule());
+        injector.bindModule(new TextblockDesignModule());
         injector.bindModule(new PictureDesignModule());
         injector.bindModule(new ButtonDesignModule());
         injector.bindModule(new VideoPlayerDesignModule());
@@ -158,6 +158,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new TableDesignModule());
         injector.bindModule(new TableCellDesignModule());
         injector.bindModule(new DismissButtonDesignModule());
+        injector.bindModule(new TextblockDesignModule());
 
         injector.bind("popup", PopupViewModel);
         injector.bind("popupHost", PopupHost);
