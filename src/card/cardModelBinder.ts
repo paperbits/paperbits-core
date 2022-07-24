@@ -8,7 +8,6 @@ import { ContentModelBinder } from "../content";
 export class CardModelBinder extends ContentModelBinder<CardModel> {
     constructor(protected readonly widgetService: IWidgetService, protected modelBinderSelector: ModelBinderSelector) {
         super(widgetService, modelBinderSelector);
-        this.contractToModel = this.contractToModel.bind(this);
     }
 
     public canHandleContract(contract: Contract): boolean {
