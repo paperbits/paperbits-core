@@ -1,8 +1,7 @@
 ﻿import { TextblockModel } from "./textblockModel";
-import { IWidgetOrder, IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
+import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 
-export const nodeName = "paperbits-text";
 
 export class TextblockHandlers implements IWidgetHandler {
     constructor(private readonly viewManager: ViewManager) { }
