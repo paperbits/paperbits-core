@@ -39,15 +39,10 @@ export class TableCellModelBinder extends ContentModelBinder<TableCellModel> {
     public modelToContract(model: TableCellModel): Contract {
         const contract: TableCellContract = {
             type: "table-cell",
-            nodes: [],
+            nodes: this.getChildContracts(model.widgets),
             role: model.role,
             styles: model.styles
         };
-
-        model.widgets.forEach(widgetModel => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
-            contract.nodes.push(modelBinder.modelToContract(widgetModel));
-        });
 
         return contract;
     }
