@@ -30,9 +30,14 @@ export class ContentModelBinder<TModel> implements IModelBinder<TModel> {
     public getChildContracts(models: WidgetModel[]): Contract[] {
         const nodes = [];
 
-        models.forEach(model => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByModel(model);
-            nodes.push(modelBinder.modelToContract(model));
+        models.forEach(widgetModel => {
+            let modelBinder = this.widgetService.getModelBinderForModel(widgetModel);
+
+            if (!modelBinder) {
+                modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
+            }
+
+            nodes.push(modelBinder.modelToContract(widgetModel));
         });
 
         return nodes;

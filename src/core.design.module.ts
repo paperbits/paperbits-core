@@ -158,7 +158,6 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new TableDesignModule());
         injector.bindModule(new TableCellDesignModule());
         injector.bindModule(new DismissButtonDesignModule());
-        injector.bindModule(new TextblockDesignModule());
 
         injector.bind("popup", PopupViewModel);
         injector.bind("popupHost", PopupHost);

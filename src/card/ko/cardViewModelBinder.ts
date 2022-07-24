@@ -21,7 +21,7 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
 
     public async modelToState(model: CardModel, state: any, bindingContext: Bag<any>): Promise<void> {
         const promises = model.widgets.map(widgetModel => {
-            const definition = this.widgetService.getWidgetHandlerForModel(widgetModel);
+            const definition = this.widgetService.getWidgetDefinitionForModel(widgetModel);
 
             if (definition) {
                 const bindingPromise = this.widgetService.createWidgetBinding(definition, widgetModel, bindingContext);

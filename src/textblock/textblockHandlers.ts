@@ -7,27 +7,17 @@ export const nodeName = "paperbits-text";
 export class TextblockHandlers implements IWidgetHandler {
     constructor(private readonly viewManager: ViewManager) { }
 
-    public async getWidgetOrderByConfig(): Promise<IWidgetOrder> {
-        const widgetOrder: IWidgetOrder = {
-            name: "text-block",
-            displayName: "Text block",
-            iconClass: "widget-icon widget-icon-text-block",
-            requires: [],
-            createModel: async () => {
-                return new TextblockModel([
-                    {
-                        type: "heading1",
-                        nodes: [{ type: "text", text: "Heading" }]
-                    },
-                    {
-                        type: "paragraph",
-                        nodes: [{ type: "text", text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." }]
-                    }
-                ]);
+    public async getWidgetModel(): Promise<TextblockModel> {
+        return new TextblockModel([
+            {
+                type: "heading1",
+                nodes: [{ type: "text", text: "Heading" }]
+            },
+            {
+                type: "paragraph",
+                nodes: [{ type: "text", text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." }]
             }
-        };
-
-        return widgetOrder;
+        ]);
     }
 
     public getContextCommands(context: WidgetContext): IContextCommandSet {
@@ -70,9 +60,5 @@ export class TextblockHandlers implements IWidgetHandler {
         };
 
         return contextualEditor;
-    }
-
-    public async getWidgetOrder(): Promise<IWidgetOrder> {
-        return await this.getWidgetOrderByConfig();
     }
 }

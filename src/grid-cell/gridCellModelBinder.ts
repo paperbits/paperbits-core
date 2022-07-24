@@ -39,15 +39,10 @@ export class GridCellModelBinder extends ContentModelBinder<GridCellModel> {
     public modelToContract(model: GridCellModel): Contract {
         const contract: GridCellContract = {
             type: "grid-cell",
-            nodes: [],
+            nodes: this.getChildContracts(model.widgets),
             role: model.role,
             styles: model.styles
         };
-
-        model.widgets.forEach(widgetModel => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
-            contract.nodes.push(modelBinder.modelToContract(widgetModel));
-        });
 
         return contract;
     }

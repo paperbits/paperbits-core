@@ -23,7 +23,7 @@ export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, G
         }
 
         const promises = model.widgets.map(widgetModel => {
-            const definition = this.widgetService.getWidgetHandlerForModel(widgetModel);
+            const definition = this.widgetService.getWidgetDefinitionForModel(widgetModel);
 
             if (definition) {
                 const bindingPromise = this.widgetService.createWidgetBinding(definition, widgetModel, bindingContext);

@@ -24,7 +24,7 @@ export class TableCellViewModelBinder implements ViewModelBinder<TableCellModel,
         }
 
         const promises = model.widgets.map(widgetModel => {
-            const definition = this.widgetService.getWidgetHandlerForModel(widgetModel);
+            const definition = this.widgetService.getWidgetDefinitionForModel(widgetModel);
 
             if (definition) {
                 const bindingPromise = this.widgetService.createWidgetBinding(definition, widgetModel, bindingContext);
