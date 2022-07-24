@@ -1,11 +1,13 @@
 import { TableCellModel } from "./tableCellModel";
 import { TableCellContract } from "./tableCellContract";
-import { ModelBinderSelector } from "@paperbits/common/widgets";
-import { IModelBinder } from "@paperbits/common/editing";
+import { IWidgetService, ModelBinderSelector } from "@paperbits/common/widgets";
 import { Contract, Bag } from "@paperbits/common";
+import { ContentModelBinder } from "../content";
 
-export class TableCellModelBinder implements IModelBinder<TableCellModel> {
-    constructor(private readonly modelBinderSelector: ModelBinderSelector) { }
+export class TableCellModelBinder extends ContentModelBinder<TableCellModel> {
+    constructor(protected readonly widgetService: IWidgetService, protected modelBinderSelector: ModelBinderSelector) {
+        super(widgetService, modelBinderSelector);
+    }
 
     public canHandleContract(contract: Contract): boolean {
         return contract.type === "table-cell";
@@ -17,31 +19,15 @@ export class TableCellModelBinder implements IModelBinder<TableCellModel> {
 
     public async contractToModel(contract: TableCellContract, bindingContext?: Bag<any>): Promise<TableCellModel> {
         const tableCellModel = new TableCellModel();
-
-        if (!contract.nodes) {
-            contract.nodes = [];
-        }
-
-        const modelPromises = contract.nodes.map(async (contract: Contract) => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-            return modelBinder.contractToModel(contract, bindingContext);
-        });
-
-        tableCellModel.widgets = await Promise.all<any>(modelPromises);
-
+        tableCellModel.widgets = await this.getChildModels(contract.nodes, bindingContext);
         return tableCellModel;
     }
 
     public modelToContract(model: TableCellModel): Contract {
         const contract: any = {
             type: "table-cell",
-            nodes: []
+            nodes: this.getChildContracts(model.widgets)
         };
-
-        model.widgets.forEach(widgetModel => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
-            contract.nodes.push(modelBinder.modelToContract(widgetModel));
-        });
 
         return contract;
     }

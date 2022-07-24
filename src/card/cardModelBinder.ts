@@ -29,11 +29,6 @@ export class CardModelBinder extends ContentModelBinder<CardModel> {
         model.overflowX = contract.overflowX;
         model.overflowY = contract.overflowY;
         model.styles = contract.styles;
-
-        if (!contract.nodes) {
-            contract.nodes = [];
-        }
-
         model.widgets = await this.getChildModels(contract.nodes, bindingContext);
 
         return model;

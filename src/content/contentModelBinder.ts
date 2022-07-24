@@ -13,7 +13,7 @@ const typeName = "page";
 export class ContentModelBinder<TModel> implements IModelBinder<TModel> {
     constructor(protected readonly widgetService: IWidgetService, protected readonly modelBinderSelector: ModelBinderSelector) { }
 
-    public async getChildModels(nodes: Contract[], bindingContext: any): Promise<any[]> {
+    public async getChildModels(nodes: Contract[] = [], bindingContext: any): Promise<any[]> {
         const modelPromises = nodes.map((contract: Contract) => {
             let modelBinder = this.widgetService.getModelBinder(contract.type);
 
