@@ -1,12 +1,13 @@
 import * as Utils from "@paperbits/common/utils";
 import { CardModel } from "./cardModel";
 import { CardContract } from "./cardContract";
-import { ModelBinderSelector } from "@paperbits/common/widgets";
-import { IModelBinder } from "@paperbits/common/editing";
+import { IWidgetService, ModelBinderSelector } from "@paperbits/common/widgets";
 import { Contract, Bag } from "@paperbits/common";
+import { ContentModelBinder } from "../content";
 
-export class CardModelBinder implements IModelBinder<CardModel> {
-    constructor(private readonly modelBinderSelector: ModelBinderSelector) {
+export class CardModelBinder extends ContentModelBinder<CardModel> {
+    constructor(protected readonly widgetService: IWidgetService, protected modelBinderSelector: ModelBinderSelector) {
+        super(widgetService, modelBinderSelector);
         this.contractToModel = this.contractToModel.bind(this);
     }
 
@@ -34,12 +35,7 @@ export class CardModelBinder implements IModelBinder<CardModel> {
             contract.nodes = [];
         }
 
-        const modelPromises = contract.nodes.map(async (contract: Contract) => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-            return modelBinder.contractToModel(contract, bindingContext);
-        });
-
-        model.widgets = await Promise.all<any>(modelPromises);
+        model.widgets = await this.getChildModels(contract.nodes, bindingContext);
 
         return model;
     }
@@ -48,17 +44,11 @@ export class CardModelBinder implements IModelBinder<CardModel> {
         const contract: CardContract = {
             type: "card",
             styles: model.styles,
-            nodes: []
+            nodes: this.getChildContracts(model.widgets),
+            alignment: model.alignment,
+            overflowX: model.overflowX,
+            overflowY: model.overflowY
         };
-
-        contract.alignment = model.alignment;
-        contract.overflowX = model.overflowX;
-        contract.overflowY = model.overflowY;
-
-        model.widgets.forEach(widgetModel => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
-            contract.nodes.push(modelBinder.modelToContract(widgetModel));
-        });
 
         return contract;
     }
