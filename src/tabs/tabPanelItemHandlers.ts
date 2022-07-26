@@ -48,12 +48,12 @@ export class TabPanelItemHandlers {
                                 this.viewManager.clearContextualCommands();
                             },
                             onCreate: (): void => {
-                                context.binding.model.tabPanelItems.push(new TabPanelItemModel());
+                                context.parentBinding.model.tabPanelItems.push(new TabPanelItemModel());
 
-                                const index = context.binding.model.tabPanelItems.length - 1;
+                                const index = context.parentBinding.model.tabPanelItems.length - 1;
 
-                                context.binding.applyChanges();
-                                context.binding["setActiveItem"](index);
+                                context.parentBinding.applyChanges();
+                                context.parentBinding["setActiveItem"](index);
 
                                 this.viewManager.clearContextualCommands();
                                 this.eventManager.dispatchEvent(Events.ContentUpdate);
