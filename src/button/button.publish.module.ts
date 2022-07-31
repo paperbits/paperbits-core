@@ -3,9 +3,9 @@ import { Button } from "./ko/button";
 import { ButtonModelBinder } from "./buttonModelBinder";
 import { ButtonViewModelBinder } from "./ko/buttonViewModelBinder";
 import { ButtonModel } from "./buttonModel";
-import { ComponentFlow } from "@paperbits/common/editing";
 import { IWidgetService } from "@paperbits/common/widgets";
 import { ButtonHandlers } from "./buttonHandlers";
+import { KnockoutComponentBinder } from "../ko/knockoutComponentBinder";
 
 
 export class ButtonPublishModule implements IInjectorModule {
@@ -18,10 +18,9 @@ export class ButtonPublishModule implements IInjectorModule {
         const registry = injector.resolve<IWidgetService>("widgetService");
 
         registry.registerWidget("button", {
-            modelClass: ButtonModel,
-            componentFlow: ComponentFlow.Contents,
-            componentBinder: "knockout", 
-            componentBinderArguments: Button,
+            modelDefinition: ButtonModel,
+            componentBinder: KnockoutComponentBinder, 
+            componentDefinition: Button,
             modelBinder: ButtonModelBinder,
             viewModelBinder: ButtonViewModelBinder
         });

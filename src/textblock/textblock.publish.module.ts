@@ -10,6 +10,7 @@ import { IWidgetService } from "@paperbits/common/widgets";
 import { TextblockModel } from "./textblockModel";
 import { ComponentFlow } from "@paperbits/common/editing";
 import { TextblockHandlers } from "./textblockHandlers";
+import { KnockoutComponentBinder } from "../ko/knockoutComponentBinder";
 
 
 export class TextblockPublishModule implements IInjectorModule {
@@ -27,10 +28,10 @@ export class TextblockPublishModule implements IInjectorModule {
         const widgetService = injector.resolve<IWidgetService>("widgetService");
 
         widgetService.registerWidget("text-block", {
-            modelClass: TextblockModel,
+            modelDefinition: TextblockModel,
             componentFlow: ComponentFlow.Block,
-            componentBinder: "knockout",
-            componentBinderArguments: TextblockViewModel,
+            componentBinder: KnockoutComponentBinder,
+            componentDefinition: TextblockViewModel,
             modelBinder: TextblockModelBinder,
             viewModelBinder: TextblockViewModelBinder
         });

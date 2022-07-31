@@ -31,9 +31,8 @@ export class KnockoutModule implements IInjectorModule {
     public register(injector: IInjector): void {
         ko.virtualElements.allowedBindings["widget"] = true;
         ko.virtualElements.allowedBindings["layoutrow"] = true;
-        ko.virtualElements.allowedBindings["component"] = true;     
-
-        const componentBinders = injector.resolve<Bag<ComponentBinder>>("componentBinders");
-        componentBinders["knockout"] = new KnockoutComponentBinder();
+        ko.virtualElements.allowedBindings["component"] = true;    
+        
+        injector.bind("knockoutComponentBinder", KnockoutComponentBinder)
     }
 }

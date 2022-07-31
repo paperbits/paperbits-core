@@ -1,7 +1,7 @@
-import { ComponentFlow } from "@paperbits/common/editing";
 import { IInjector, IInjectorModule } from "@paperbits/common/injection";
 import { IStyleGroup } from "@paperbits/common/styles";
 import { IWidgetService } from "@paperbits/common/widgets";
+import { KnockoutComponentBinder } from "../ko/knockoutComponentBinder";
 import { ButtonHandlers } from "./buttonHandlers";
 import { ButtonModel } from "./buttonModel";
 import { ButtonModelBinder } from "./buttonModelBinder";
@@ -28,12 +28,10 @@ export class ButtonDesignModule implements IInjectorModule {
 
         const widgetService = injector.resolve<IWidgetService>("widgetService");
 
-        // TODO: Move registrations to separate file?
         widgetService.registerWidget("button", {
-            modelClass: ButtonModel,
-            componentFlow: ComponentFlow.Contents,
-            componentBinder: "knockout",
-            componentBinderArguments: Button,
+            modelDefinition: ButtonModel,
+            componentBinder: KnockoutComponentBinder,
+            componentDefinition: Button,
             modelBinder: ButtonModelBinder,
             viewModelBinder: ButtonViewModelBinder
         });
@@ -42,7 +40,8 @@ export class ButtonDesignModule implements IInjectorModule {
             displayName: "Button",
             iconClass: "widget-icon widget-icon-button",
             draggable: true,
-            editorComponent: ButtonEditor,
+            componentBinder: KnockoutComponentBinder,
+            componentDefinition: ButtonEditor,
             handlerComponent: ButtonHandlers
         });
     }

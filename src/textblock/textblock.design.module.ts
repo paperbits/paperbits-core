@@ -1,20 +1,21 @@
-import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { ComponentFlow } from "@paperbits/common/editing";
-import { TextblockHandlers } from "./textblockHandlers";
+import { IInjector, IInjectorModule } from "@paperbits/common/injection";
+import { IWidgetService } from "@paperbits/common/widgets";
+import { HtmlEditorBindingHandler } from "../ko/bindingHandlers";
+import { KnockoutComponentBinder } from "../ko/knockoutComponentBinder";
+import { BlockModelBinder } from "../text/modelBinders/blockModelBinder";
+import { InlineModelBinder } from "../text/modelBinders/inlineModelBinder";
+import { ListModelBinder } from "../text/modelBinders/listModelBinder";
+import { TextblockViewModel } from "./ko";
 import { BlockStyleSelector } from "./ko/formatting/blockStyleSelector";
 import { TextBlockEditorFormattingTools } from "./ko/formatting/formattingTools";
+import { TextStyleSelector } from "./ko/formatting/textStyleSelector";
 import { TextBlockEditorHyperlinkTools } from "./ko/hyperlink/hyperlinkTools";
 import { TextblockEditor } from "./ko/textblockEditor";
-import { TextStyleSelector } from "./ko/formatting/textStyleSelector";
+import { TextblockHandlers } from "./textblockHandlers";
+import { TextblockModel } from "./textblockModel";
 import { TextblockModelBinder } from "./textblockModelBinder";
 import { TextblockViewModelBinder } from "./textblockViewModelBinder";
-import { IWidgetService } from "@paperbits/common/widgets";
-import { TextblockModel } from "./textblockModel";
-import { TextblockViewModel } from "./ko";
-import { InlineModelBinder } from "../text/modelBinders/inlineModelBinder";
-import { BlockModelBinder } from "../text/modelBinders/blockModelBinder";
-import { ListModelBinder } from "../text/modelBinders/listModelBinder";
-import { HtmlEditorBindingHandler } from "../ko/bindingHandlers";
 
 export class TextblockDesignModule implements IInjectorModule {
     public register(injector: IInjector): void {
@@ -41,10 +42,10 @@ export class TextblockDesignModule implements IInjectorModule {
         const widgetService = injector.resolve<IWidgetService>("widgetService");
 
         widgetService.registerWidget("text-block", {
-            modelClass: TextblockModel,
+            modelDefinition: TextblockModel,
             componentFlow: ComponentFlow.Block,
-            componentBinder: "knockout",
-            componentBinderArguments: TextblockViewModel,
+            componentBinder: KnockoutComponentBinder,
+            componentDefinition: TextblockViewModel,
             modelBinder: TextblockModelBinder,
             viewModelBinder: TextblockViewModelBinder
         });
@@ -53,7 +54,8 @@ export class TextblockDesignModule implements IInjectorModule {
             displayName: "Text",
             iconClass: "widget-icon widget-icon-text-block",
             draggable: true,
-            editorComponent: TextblockEditor,
+            componentBinder: KnockoutComponentBinder,
+            componentDefinition: TextblockEditor,
             handlerComponent: TextblockHandlers
         });
     }

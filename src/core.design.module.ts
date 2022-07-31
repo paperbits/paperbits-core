@@ -67,8 +67,7 @@ import { TableDesignModule } from "./table/ko";
 import { TableCellDesignModule } from "./table-cell/tableCell.design.module";
 // import { DividerDesignModule } from "./divider/divider.design.module";
 import { LocalStorageSettingsProvider } from "@paperbits/common/configuration";
-import { PopupDesignModule, PopupHandlers, PopupModelBinder } from "./popup";
-import { ComponentBinder } from "@paperbits/common/editing/componentBinder";
+import { PopupHandlers, PopupModelBinder } from "./popup";
 import { PopupHostViewModelBinder } from "./popup/ko/popupHostViewModelBinder";
 import { PopupEditor, PopupViewModel, PopupViewModelBinder } from "./popup/ko";
 import { PopupHost } from "./popup/ko/popupHost";
@@ -183,7 +182,6 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindToCollection("autostart", Hinter);
         injector.bindInstance("reservedPermalinks", ["/", "/404", "/500"]);
         injector.resolve("workshopSections");
-
 
         const userService = new DesignerUserService();
         injector.bindInstance("userService", userService);

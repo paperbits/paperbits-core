@@ -22,7 +22,7 @@ export class WidgetBindingHandler {
                 /* New binding logic */
                 if (bindingConfig instanceof WidgetBinding) {
                     const binding = <WidgetBinding<any, any>>bindingConfig;
-                    const componentBinder = componentBinders[binding.framework];
+                    const componentBinder = binding.componentBinder;
 
                     if (!componentBinder) {
                         throw new Error(`No component binders registered for ${binding.framework} framework. Binding: ${binding.name}`);

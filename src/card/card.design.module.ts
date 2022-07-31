@@ -1,6 +1,6 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { CardEditor } from "./ko/cardEditor";
-import { ComponentFlow, IWidgetHandler } from "@paperbits/common/editing";
+import { IWidgetHandler } from "@paperbits/common/editing";
 import { CardHandlers } from "./cardHandlers";
 import { IStyleGroup } from "@paperbits/common/styles/IStyleGroup";
 import { IWidgetService } from "@paperbits/common/widgets";
@@ -8,6 +8,8 @@ import { CardModel } from "./cardModel";
 import { CardViewModel } from "./ko/cardViewModel";
 import { CardModelBinder } from "./cardModelBinder";
 import { CardViewModelBinder } from "./ko/cardViewModelBinder";
+import { KnockoutComponentBinder } from "../ko/knockoutComponentBinder";
+
 
 export class CardEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {
@@ -15,7 +17,7 @@ export class CardEditorModule implements IInjectorModule {
         injector.bindSingleton("cardModelBinder", CardModelBinder);
         injector.bindSingleton("cardViewModelBinder", CardViewModelBinder)
         injector.bindSingleton("cardHandler", CardHandlers);
-        
+
         const styleGroup: IStyleGroup = {
             key: "card",
             name: "components_card",
@@ -29,17 +31,17 @@ export class CardEditorModule implements IInjectorModule {
         const widgetService = injector.resolve<IWidgetService>("widgetService");
 
         widgetService.registerWidget("card", {
-            modelClass: CardModel,
-            componentFlow: ComponentFlow.Inline,
-            componentBinder: "knockout", // ReactComponentBinder,
-            componentBinderArguments: CardViewModel,
+            componentBinder: KnockoutComponentBinder,
+            componentDefinition: CardViewModel,
             modelBinder: CardModelBinder,
+            modelDefinition: CardModel,
             viewModelBinder: CardViewModelBinder
         });
 
         widgetService.registerWidgetEditor("card", {
             displayName: "Card",
-            editorComponent: CardEditor,
+            componentBinder: KnockoutComponentBinder,
+            componentDefinition: CardEditor,
             handlerComponent: CardHandlers,
             iconClass: "widget-icon widget-icon-card",
             draggable: true

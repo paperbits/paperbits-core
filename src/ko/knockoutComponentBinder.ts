@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import * as Arrays from "@paperbits/common";
-import { WidgetBinding, ComponentBinder, IWidgetBinding, ComponentFlow } from "@paperbits/common/editing";
+import { WidgetBinding, ComponentBinder, ComponentFlow } from "@paperbits/common/editing";
 import { ComponentDefinition } from "./componentDefinition";
 
 
@@ -17,12 +17,6 @@ function getNonVirtualElement(element: Node): HTMLElement {
     if (!nonVirtualElement) {
         return null;
     }
-
-    // Hack: copying context props explicitly
-    // const originalElementContext = ko.contextFor(element);
-    // const nonVirtualElementContext = ko.contextFor(nonVirtualElement);
-    // nonVirtualElementContext.$parents = originalElementContext.$parents;
-    // nonVirtualElementContext.$parent = originalElementContext.$parent;
 
     return <HTMLElement>nonVirtualElement;
 }
