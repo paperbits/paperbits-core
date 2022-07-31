@@ -1,7 +1,5 @@
 import * as ko from "knockout";
-import { Bag } from "@paperbits/common";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { ComponentBinder } from "@paperbits/common/editing/componentBinder";
 import { KnockoutComponentBinder } from "./knockoutComponentBinder";
 
 import "./bindingHandlers/bindingHandlers.columnSizeCfg";
@@ -33,6 +31,6 @@ export class KnockoutModule implements IInjectorModule {
         ko.virtualElements.allowedBindings["layoutrow"] = true;
         ko.virtualElements.allowedBindings["component"] = true;    
         
-        injector.bind("knockoutComponentBinder", KnockoutComponentBinder)
+        injector.bindSingleton("knockoutComponentBinder", KnockoutComponentBinder)
     }
 }
