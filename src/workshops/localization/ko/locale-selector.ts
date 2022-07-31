@@ -59,7 +59,7 @@ export class LocaleSelector {
                     }
                 }
             },
-            resize: "vertically horizontally"
+            resizing: "vertically horizontally"
         };
 
         this.viewManager.openViewAsPopup(view);

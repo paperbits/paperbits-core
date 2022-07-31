@@ -24,7 +24,6 @@ export class TextblockDesignModule implements IInjectorModule {
         injector.bindToCollection("modelBinders", BlockModelBinder);
         injector.bindToCollection("modelBinders", ListModelBinder);
         injector.bindToCollection("autostart", HtmlEditorBindingHandler);
-
         injector.bindInstance("textblockEditorPlugins", [
             "text-block-editor-formatting",
             "text-block-editor-hyperlinks"
@@ -34,7 +33,6 @@ export class TextblockDesignModule implements IInjectorModule {
         injector.bind("textblockEditor", TextblockEditor);
         injector.bind("blockStyleSelector", BlockStyleSelector);
         injector.bind("textStyleSelector", TextStyleSelector);
-
         injector.bindSingleton("textblockModelBinder", TextblockModelBinder);
         injector.bindSingleton("textblockViewModelBinder", TextblockViewModelBinder)
         injector.bindSingleton("textblockHandler", TextblockHandlers);
@@ -53,10 +51,11 @@ export class TextblockDesignModule implements IInjectorModule {
         widgetService.registerWidgetEditor("text-block", {
             displayName: "Text",
             iconClass: "widget-icon widget-icon-text-block",
-            draggable: true,
             componentBinder: KnockoutComponentBinder,
             componentDefinition: TextblockEditor,
-            handlerComponent: TextblockHandlers
+            handlerComponent: TextblockHandlers,
+            editorResizing: "horizontally",
+            editorScrolling: false
         });
     }
 }

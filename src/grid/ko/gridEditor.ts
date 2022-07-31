@@ -12,6 +12,7 @@ import { Router } from "@paperbits/common/routing";
 import { Bag, Keys } from "@paperbits/common";
 import { LocalStyles, VariationContract } from "@paperbits/common/styles";
 import { StyleHelper } from "@paperbits/styles";
+import { TextblockEditor } from "../../textblock/ko";
 
 
 const defaultCommandColor = "#607d8b";
@@ -53,7 +54,17 @@ export class GridEditor {
             return false;
         }
 
-        if (editorView.component.name !== gridItem.editor) {
+        let editorComponentName: string;
+
+        if (typeof gridItem.editor === "string") {
+            editorComponentName = gridItem.editor;
+        }
+        else {
+            const registration = Reflect.getMetadata("paperbits-component", gridItem.editor);
+            editorComponentName = registration.name;
+        }
+
+        if (editorView.component.name !== editorComponentName) {
             return false;
         }
 
@@ -257,8 +268,12 @@ export class GridEditor {
             return;
         }
 
-        if (gridItem.editor !== "text-block-editor") {
-            event.preventDefault();
+        if (gridItem.editor !== TextblockEditor) {
+            /**
+             * Special case for text editor. All other widget element (like a hyperlink or a form submit)
+             * should not trigger their default events.
+             */ 
+            event.preventDefault(); 
         }
 
         if (this.isModelBeingEdited(gridItem)) {
@@ -869,7 +884,7 @@ export class GridEditor {
                             }
                         }
                     },
-                    resize: "vertically horizontally"
+                resizing: "vertically horizontally"
                 };
 
                 this.viewManager.openViewAsPopup(view);

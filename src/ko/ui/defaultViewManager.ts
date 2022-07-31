@@ -339,8 +339,8 @@ export class DefaultViewManager implements ViewManager {
             view.component.params.onClose = () => this.closeView();
         }
 
-        if (!view.resize) {
-            view.resize = "vertically horizontally";
+        if (!view.resizing) {
+            view.resizing = "vertically horizontally";
         }
 
         this.clearContextualCommands();
@@ -408,9 +408,9 @@ export class DefaultViewManager implements ViewManager {
                     onChange: binding.applyChanges
                 }
             },
-            scrollable: "editorScroll" in binding ? binding.editorScroll : true,
+            scrolling: "editorScrolling" in binding ? <boolean>binding.editorScrolling : true,
             heading: binding.displayName,
-            resize: binding.editorResize || "vertically horizontally",
+            resizing: <string>binding.editorResizing || "vertically horizontally",
             returnFocusTo: document.getElementById("contentEditor")
         };
 

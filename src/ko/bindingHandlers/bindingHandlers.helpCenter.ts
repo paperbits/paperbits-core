@@ -17,7 +17,7 @@ export class HelpCenterBindingHandler {
                                 articleKey: articleKey,
                             }
                         },
-                        resize: {
+                        resizing: {
                             directions: "vertically horizontally",
                             initialWidth: 500,
                             initialHeight: 700

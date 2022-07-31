@@ -76,7 +76,7 @@ export class CarouselItemHandlers {
                 //                     // }
                 //                 }
                 //             },
-                //             resize: "vertically horizontally"
+                //             resizing: "vertically horizontally"
                 //         };
 
                 //         this.viewManager.openViewAsPopup(view);
@@ -103,7 +103,7 @@ export class CarouselItemHandlers {
                 //                     articleKey: "popups",
                 //                 }
                 //             },
-                //             resize: {
+                //             resizing: {
                 //                 directions: "vertically horizontally",
                 //                 initialWidth: 500,
                 //                 initialHeight: 700
