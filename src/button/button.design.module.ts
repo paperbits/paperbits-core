@@ -39,7 +39,6 @@ export class ButtonDesignModule implements IInjectorModule {
         widgetService.registerWidgetEditor("button", {
             displayName: "Button",
             iconClass: "widget-icon widget-icon-button",
-            draggable: true,
             componentBinder: KnockoutComponentBinder,
             componentDefinition: ButtonEditor,
             handlerComponent: ButtonHandlers

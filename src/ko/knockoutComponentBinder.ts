@@ -75,7 +75,7 @@ export class KnockoutComponentBinder implements ComponentBinder {
                         return;
                     }
 
-                    const registration = Reflect.getMetadata("paperbits-component", widgetBinding.componentBinderArgs);
+                    const registration = Reflect.getMetadata("paperbits-component", widgetBinding.componentDefinition);
 
                     if (!registration) {
                         throw new Error(`Could not find component registration for ${widgetBinding.name} widget. Ensure that "@Component" decorator is added on widget view model class.`);
@@ -138,10 +138,10 @@ export class KnockoutComponentBinder implements ComponentBinder {
                         if (nonVirtualElement) {
                             ko.applyBindingsToNode(nonVirtualElement, {
                                 css: {
-                                    "block": widgetBinding.flow === ComponentFlow.Block,
-                                    "inline-block": widgetBinding.flow === ComponentFlow.Inline,
-                                    "legacy": widgetBinding.flow === ComponentFlow.Legacy,
-                                    "placeholder": widgetBinding.flow === ComponentFlow.Placeholder
+                                    "block": widgetBinding.wrapper === ComponentFlow.Block,
+                                    "inline-block": widgetBinding.wrapper === ComponentFlow.Inline,
+                                    "legacy": widgetBinding.wrapper === ComponentFlow.Legacy,
+                                    "placeholder": widgetBinding.wrapper === ComponentFlow.Placeholder
                                 }
                             }, null);
 
