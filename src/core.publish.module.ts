@@ -16,22 +16,22 @@ import {
     SitemapBuilder,
     SearchIndexBuilder
 } from "@paperbits/common/publishing";
+import { ButtonPublishModule } from "./button/button.publish.module";
 import { MapPublishModule } from "./map/map.publish.module";
 import { DividerPublishModule } from "./divider/divider.publish.module";
 import { CarouselPublishModule } from "./carousel/carousel.publish.module";
 import { TabPanelPublishModule } from "./tabs/tabPanel.publish.module";
 import { TablePublishModule } from "./table/table.publish.module";
 import { TableCellPublishModule } from "./table-cell/tableCell.publish.module";
-import { Bag } from "@paperbits/common";
-import { ComponentBinder } from "@paperbits/common/editing/componentBinder";
 import { PopupPublishModule } from "./popup/popup.publish.module";
 import { DismissButtonPublishModule } from "./dismiss-button/dismissButton.publish.module";
 import { ConsoleLogger } from "@paperbits/common/logging";
+import { CardPublishModule } from "./card/card.publish.module";
+import { TextblockPublishModule } from "./textblock/textblock.publish.module";
 
 
 export class CorePublishModule implements IInjectorModule {
     public register(injector: IInjector): void {
-        injector.bindInstance<Bag<ComponentBinder>>("componentBinders", {});
         injector.bindModule(new DividerPublishModule());
         injector.bindCollection("publishers");
         injector.bindToCollection("publishers", AssetPublisher);
@@ -53,6 +53,7 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindToCollection("htmlPagePublisherPlugins", SocialShareDataHtmlPagePublisherPlugin);
         injector.bindInstance("stateCache", new MemoryCache());
         injector.bindInstance("changesCache", new MemoryCache());
+        
         injector.bindModule(new MapPublishModule());
         injector.bindModule(new CarouselPublishModule());
         injector.bindModule(new TabPanelPublishModule());
@@ -60,5 +61,8 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindModule(new TableCellPublishModule());
         injector.bindModule(new PopupPublishModule());
         injector.bindModule(new DismissButtonPublishModule());
+        injector.bindModule(new ButtonPublishModule());
+        injector.bindModule(new CardPublishModule());
+        injector.bindModule(new TextblockPublishModule());
     }
 }

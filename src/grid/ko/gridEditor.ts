@@ -12,6 +12,7 @@ import { Router } from "@paperbits/common/routing";
 import { Bag, Keys } from "@paperbits/common";
 import { LocalStyles, VariationContract } from "@paperbits/common/styles";
 import { StyleHelper } from "@paperbits/styles";
+import { TextblockEditor } from "../../textblock/ko";
 
 
 const defaultCommandColor = "#607d8b";
@@ -53,7 +54,17 @@ export class GridEditor {
             return false;
         }
 
-        if (editorView.component.name !== gridItem.editor) {
+        let editorComponentName: string;
+
+        if (typeof gridItem.editor === "string") {
+            editorComponentName = gridItem.editor;
+        }
+        else {
+            const registration = Reflect.getMetadata("paperbits-component", gridItem.editor);
+            editorComponentName = registration.name;
+        }
+
+        if (editorView.component.name !== editorComponentName) {
             return false;
         }
 
@@ -116,13 +127,12 @@ export class GridEditor {
         };
 
         let contextualCommands: IContextCommandSet;
+        let widgetHandler = this.widgetService.getWidgetHandler(binding);
 
-        if (context.binding?.handler) {
-            const handler = this.widgetService.getWidgetHandler(context.binding.handler);
-
-            if (handler.getContextCommands) {
+        if (widgetHandler) {
+            if (widgetHandler.getContextCommands) {
                 try {
-                    contextualCommands = handler.getContextCommands(context);
+                    contextualCommands = widgetHandler.getContextCommands(context);
                 }
                 catch (error) {
                     console.warn(`Could not get context commands.`);
@@ -139,9 +149,10 @@ export class GridEditor {
         const defaultCommand: IContextCommand = {
             controlType: "toolbox-button",
             callback: () => {
-                if (!context.binding.editor) {
+                if (!context.binding) {
                     return;
                 }
+
                 this.viewManager.openWidgetEditor(context.binding);
             }
         };
@@ -257,8 +268,12 @@ export class GridEditor {
             return;
         }
 
-        if (gridItem.editor !== "text-block-editor") {
-            event.preventDefault();
+        if (gridItem.editor !== TextblockEditor) {
+            /**
+             * Special case for text editor. All other widget element (like a hyperlink or a form submit)
+             * should not trigger their default events.
+             */ 
+            event.preventDefault(); 
         }
 
         if (this.isModelBeingEdited(gridItem)) {
@@ -386,13 +401,13 @@ export class GridEditor {
         }
 
         const acceptingParent = stack.find(x => {
-            if (!x.binding.handler) {
+            if (!x.binding) {
                 return false;
             }
 
-            const handler = this.widgetService.getWidgetHandler(x.binding.handler);
+            const handler = this.widgetService.getWidgetHandler(x.binding);
 
-            if (handler && handler.canAccept && handler.canAccept(dragSession)) {
+            if (handler?.canAccept && handler.canAccept(dragSession)) {
                 return true;
             }
 
@@ -811,7 +826,7 @@ export class GridEditor {
             return null;
         }
 
-        const handler = this.widgetService.getWidgetHandler(binding.handler);
+        const handler = this.widgetService.getWidgetHandler(binding);
 
         if (!handler.getStyleDefinitions) {
             return null;
@@ -869,7 +884,7 @@ export class GridEditor {
                             }
                         }
                     },
-                    resize: "vertically horizontally"
+                resizing: "vertically horizontally"
                 };
 
                 this.viewManager.openViewAsPopup(view);

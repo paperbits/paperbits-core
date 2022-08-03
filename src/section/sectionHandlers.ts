@@ -90,7 +90,7 @@ export class SectionHandlers {
                                 blockType: "layout-section"
                             }
                         },
-                        resize: "vertically horizontally"
+                        resizing: "vertically horizontally"
                     };
 
                     this.viewManager.openViewAsPopup(view);

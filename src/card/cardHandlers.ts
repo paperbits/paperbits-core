@@ -103,31 +103,21 @@ export class CardHandlers implements IWidgetHandler {
         return cardContextualEditor;
     }
 
-    public async getWidgetOrder(): Promise<IWidgetOrder> {
-        const widgetOrder: IWidgetOrder = {
-            name: "card",
-            displayName: "Card",
-            iconClass: "widget-icon widget-icon-card",
-            requires: ["html"],
-            createModel: async () => {
-                const textblock: any = new TextblockModel([
-                    {
-                        type: "heading1",
-                        nodes: [{ type: "text", text: "Card" }]
-                    },
-                    {
-                        type: "paragraph",
-                        nodes: [{ type: "text", text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor..." }]
-                    }
-                ]);
-
-                const model = new CardModel();
-                model.widgets.push(textblock);
-
-                return model;
+    public async getWidgetModel(): Promise<CardModel> {
+        const textblock: any = new TextblockModel([
+            {
+                type: "heading1",
+                nodes: [{ type: "text", text: "Card" }]
+            },
+            {
+                type: "paragraph",
+                nodes: [{ type: "text", text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor..." }]
             }
-        };
+        ]);
 
-        return widgetOrder;
+        const model = new CardModel();
+        model.widgets.push(textblock);
+
+        return model;
     }
 }

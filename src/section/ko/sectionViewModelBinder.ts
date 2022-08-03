@@ -46,7 +46,6 @@ export class SectionViewModelBinder implements ViewModelBinder<SectionModel, Sec
             layer: bindingContext?.layer,
             model: model,
             draggable: true,
-            flow: "flex",
             editor: "layout-section-editor",
             handler: SectionHandlers,
             applyChanges: async () => {

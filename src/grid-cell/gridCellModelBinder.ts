@@ -1,17 +1,19 @@
 import { GridCellModel } from "./gridCellModel";
 import { GridCellContract } from "./gridCellContract";
-import { ModelBinderSelector } from "@paperbits/common/widgets";
+import { IWidgetService, ModelBinderSelector } from "@paperbits/common/widgets";
 import { Contract, Bag } from "@paperbits/common";
 import { ContentModelBinder } from "../content";
 
 
+const nodeType = "grid-cell";
+
 export class GridCellModelBinder extends ContentModelBinder<GridCellModel> {
-    constructor(protected modelBinderSelector: ModelBinderSelector) {
-        super(modelBinderSelector);
+    constructor(protected readonly widgetService: IWidgetService, protected modelBinderSelector: ModelBinderSelector) {
+        super(widgetService, modelBinderSelector);
     }
 
     public canHandleContract(contract: Contract): boolean {
-        return contract.type === "grid-cell";
+        return contract.type === nodeType;
     }
 
     public canHandleModel(model: Object): boolean {
@@ -38,16 +40,11 @@ export class GridCellModelBinder extends ContentModelBinder<GridCellModel> {
 
     public modelToContract(model: GridCellModel): Contract {
         const contract: GridCellContract = {
-            type: "grid-cell",
-            nodes: [],
+            type: nodeType,
+            nodes: this.getChildContracts(model.widgets),
             role: model.role,
             styles: model.styles
         };
-
-        model.widgets.forEach(widgetModel => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
-            contract.nodes.push(modelBinder.modelToContract(widgetModel));
-        });
 
         return contract;
     }

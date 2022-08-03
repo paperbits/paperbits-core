@@ -103,7 +103,7 @@ export class MediaDetailsWorkshop {
                 name: "picture-cropper",
                 params: { mediaItem: this.mediaItem }
             },
-            resize: "vertically horizontally"
+            resizing: "vertically horizontally"
         });
     }
 }

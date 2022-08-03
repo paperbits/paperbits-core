@@ -1,6 +1,6 @@
 import * as Utils from "@paperbits/common/utils";
 import { TableCellViewModel } from "./tableCellViewModel";
-import { ViewModelBinder } from "@paperbits/common/widgets";
+import { IWidgetService, ViewModelBinder } from "@paperbits/common/widgets";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { TableCellModel } from "../tableCellModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
@@ -14,7 +14,8 @@ export class TableCellViewModelBinder implements ViewModelBinder<TableCellModel,
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly eventManager: EventManager,
-        private readonly styleCompiler: StyleCompiler
+        private readonly styleCompiler: StyleCompiler,
+        private readonly widgetService: IWidgetService
     ) { }
 
     public async modelToViewModel(model: TableCellModel, viewModel?: TableCellViewModel, bindingContext?: Bag<any>): Promise<TableCellViewModel> {
@@ -22,20 +23,21 @@ export class TableCellViewModelBinder implements ViewModelBinder<TableCellModel,
             viewModel = new TableCellViewModel();
         }
 
-        const widgetViewModels = [];
+        const promises = model.widgets.map(widgetModel => {
+            const definition = this.widgetService.getWidgetDefinitionForModel(widgetModel);
 
-        for (const widgetModel of model.widgets) {
+            if (definition) {
+                const bindingPromise = this.widgetService.createWidgetBinding(definition, widgetModel, bindingContext);
+                return bindingPromise;
+            }
+
+            // legacy binding resolution
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
+            const bindingPromise = widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+            return bindingPromise;
+        });
 
-            if (widgetViewModelBinder.createWidgetBinding) {
-                const binding = await widgetViewModelBinder.createWidgetBinding<TableCellViewModel>(widgetModel, bindingContext);
-                widgetViewModels.push(binding);
-            }
-            else {
-                const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
-                widgetViewModels.push(widgetViewModel);
-            }
-        }
+        const widgetViewModels = await Promise.all(promises);
 
         if (widgetViewModels.length === 0) {
             widgetViewModels.push(new PlaceholderViewModel(model.role));

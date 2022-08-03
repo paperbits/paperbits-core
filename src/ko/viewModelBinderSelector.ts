@@ -1,9 +1,14 @@
 import { PlaceholderViewModelBinder } from "../placeholder/ko/placeholderViewModelBinder";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { PlaceholderModel } from "@paperbits/common/widgets/placeholder";
+import { IWidgetService } from "@paperbits/common/widgets";
+
 
 export class ViewModelBinderSelector {
-    constructor(private viewModelBinders: ViewModelBinder<any, any>[]) { }
+    constructor(
+        private viewModelBinders: ViewModelBinder<any, any>[],
+        private readonly widgetService: IWidgetService
+    ) { }
 
     public getViewModelBinderByModel<TModel>(model: TModel): ViewModelBinder<any, any> {
         if (!model) {

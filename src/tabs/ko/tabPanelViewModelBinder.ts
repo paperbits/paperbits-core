@@ -74,7 +74,6 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
             layer: bindingContext?.layer,
             model: model,
             draggable: true,
-            flow: "flex",
             editor: "tabPanel-item-editor",
             handler: TabPanelItemHandlers,
             applyChanges: async () => {

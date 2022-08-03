@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
+import { KnockoutComponentBinder } from "./knockoutComponentBinder";
 
 import "./bindingHandlers/bindingHandlers.columnSizeCfg";
 import "./bindingHandlers/bindingHandlers.component";
@@ -24,10 +25,12 @@ import "./bindingHandlers/bindingHandlers.gridCell";
 import "./bindingHandlers/bindingHandlers.selectable";
 import "./bindingExtenders/bindingExtenders.max";
 
-export class KoModule implements IInjectorModule {
+export class KnockoutModule implements IInjectorModule {
     public register(injector: IInjector): void {
         ko.virtualElements.allowedBindings["widget"] = true;
         ko.virtualElements.allowedBindings["layoutrow"] = true;
-        ko.virtualElements.allowedBindings["component"] = true;     
+        ko.virtualElements.allowedBindings["component"] = true;    
+        
+        injector.bindSingleton("knockoutComponentBinder", KnockoutComponentBinder)
     }
 }

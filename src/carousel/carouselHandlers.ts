@@ -3,7 +3,7 @@ import { CarouselItemModel, CarouselModel } from "./carouselModel";
 
 
 export class CarouselHandlers implements IWidgetHandler {
-        public async getWidgetOrder(): Promise<IWidgetOrder> {
+    public async getWidgetOrder(): Promise<IWidgetOrder> {
         const widgetOrder: IWidgetOrder = {
             name: "carousel",
             displayName: "Carousel",
@@ -42,5 +42,5 @@ export class CarouselHandlers implements IWidgetHandler {
         };
 
         return widgetOrder;
-    }    
+    }
 }

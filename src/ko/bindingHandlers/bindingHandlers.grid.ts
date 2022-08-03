@@ -73,8 +73,8 @@ export class GridBindingHandler {
                 parentModel.widgets.remove(model); // replace widgets with "children"
             }
 
-            if (acceptorBinding && acceptorBinding.handler) {
-                const widgetHandler = widgetService.getWidgetHandler(acceptorBinding.handler);
+            if (acceptorBinding) {
+                const widgetHandler = widgetService.getWidgetHandler(acceptorBinding);
 
                 if (widgetHandler.canAccept && widgetHandler.canAccept(dragSession)) {
                     if (widgetHandler.onDragDrop) {

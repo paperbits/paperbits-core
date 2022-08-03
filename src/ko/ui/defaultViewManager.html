@@ -35,7 +35,7 @@
 
 <!-- ko with: activeView() -->
 <div role="dialog" aria-labelledby="popupHeading" tabindex="-1" class="toolbox toolbox-popup toolbox-position-left-offset"
-    data-bind="resizable: resize, surface: $data, dialog: {}">
+    data-bind="resizable: resizing, surface: $data, dialog: {}">
     <div role="document" class="editor resizable-content flex flex-column">
         <!-- ko if: heading -->
         <h1 id="popupHeading">
@@ -47,7 +47,7 @@
             <i aria-hidden="true" class="paperbits-icon paperbits-simple-remove"></i>
         </button>
         <hr />
-        <div class="form" data-bind="scrollable: $data.scrollable">
+        <div class="form" data-bind="scrollable: $data.scrolling">
             <!-- ko component: { name: component.name, params: component.params, oncreate: component.oncreate } -->
             <!--/ko -->
         </div>

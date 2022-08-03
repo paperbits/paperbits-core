@@ -2,7 +2,7 @@ import * as Utils from "@paperbits/common/utils";
 import { ContentModel } from "./contentModel";
 import { Contract, Bag } from "@paperbits/common";
 import { IModelBinder } from "@paperbits/common/editing";
-import { WidgetModel, ModelBinderSelector } from "@paperbits/common/widgets";
+import { WidgetModel, ModelBinderSelector, IWidgetService } from "@paperbits/common/widgets";
 import { SectionModel } from "@paperbits/core/section";
 import { GridModel } from "../grid-layout-section";
 import { GridCellModel } from "../grid-cell/gridCellModel";
@@ -11,14 +11,17 @@ import { GridCellModel } from "../grid-cell/gridCellModel";
 const typeName = "page";
 
 export class ContentModelBinder<TModel> implements IModelBinder<TModel> {
-    constructor(protected readonly modelBinderSelector: ModelBinderSelector) { }
+    constructor(protected readonly widgetService: IWidgetService, protected readonly modelBinderSelector: ModelBinderSelector) { }
 
-    public async getChildModels(nodes: Contract[], bindingContext: any): Promise<any[]> {
+    public async getChildModels(nodes: Contract[] = [], bindingContext: any): Promise<any[]> {
         const modelPromises = nodes.map((contract: Contract) => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-            const promise = modelBinder.contractToModel(contract, bindingContext);
+            let modelBinder = this.widgetService.getModelBinder(contract.type);
 
-            return promise;
+            if (!modelBinder) {
+                modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(contract);
+            }
+
+            return modelBinder.contractToModel(contract, bindingContext);
         });
 
         return await Promise.all<any>(modelPromises);
@@ -27,9 +30,14 @@ export class ContentModelBinder<TModel> implements IModelBinder<TModel> {
     public getChildContracts(models: WidgetModel[]): Contract[] {
         const nodes = [];
 
-        models.forEach(model => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByModel(model);
-            nodes.push(modelBinder.modelToContract(model));
+        models.forEach(widgetModel => {
+            let modelBinder = this.widgetService.getModelBinderForModel(widgetModel);
+
+            if (!modelBinder) {
+                modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
+            }
+
+            nodes.push(modelBinder.modelToContract(widgetModel));
         });
 
         return nodes;

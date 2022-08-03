@@ -339,8 +339,8 @@ export class DefaultViewManager implements ViewManager {
             view.component.params.onClose = () => this.closeView();
         }
 
-        if (!view.resize) {
-            view.resize = "vertically horizontally";
+        if (!view.resizing) {
+            view.resizing = "vertically horizontally";
         }
 
         this.clearContextualCommands();
@@ -381,17 +381,36 @@ export class DefaultViewManager implements ViewManager {
     }
 
     public openWidgetEditor(binding: IWidgetBinding<any, any>): void {
+        if (!binding.editor) {
+            return;
+        }
+
+        let editorComponentName: string;
+
+        if (typeof binding.editor === "string") {
+            editorComponentName = binding.editor;
+        }
+        else {
+            const registration = Reflect.getMetadata("paperbits-component", binding.editor);
+
+            if (!registration) {
+                throw new Error(`Could not find component registration for editor of ${binding.name} widget. Ensure that editor class has @Component decorator.`);
+            }
+
+            editorComponentName = registration.name;
+        }
+
         const view: View = {
             component: {
-                name: binding.editor,
+                name: editorComponentName,
                 params: {
                     model: binding.model,
                     onChange: binding.applyChanges
                 }
             },
-            scrollable: "editorScroll" in binding ? binding.editorScroll : true,
+            scrolling: "editorScrolling" in binding ? <boolean>binding.editorScrolling : true,
             heading: binding.displayName,
-            resize: binding.editorResize || "vertically horizontally",
+            resizing: <string>binding.editorResizing || "vertically horizontally",
             returnFocusTo: document.getElementById("contentEditor")
         };
 

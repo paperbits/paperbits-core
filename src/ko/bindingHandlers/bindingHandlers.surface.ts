@@ -75,11 +75,11 @@ export class SurfaceBindingHandler {
 
         let resizeDirections;
 
-        if (typeof view.resize === "string") {
-            resizeDirections = view.resize;
+        if (typeof view.resizing === "string") {
+            resizeDirections = view.resizing;
         }
         else {
-            resizeDirections = view.resize.directions;
+            resizeDirections = view.resizing.directions;
         }
 
         ko.applyBindingsToNode(element, {

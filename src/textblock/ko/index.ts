@@ -1,4 +1,4 @@
-export * from "./textblock.module";
-export * from "./textblockEditor.module";
+export * from "../textblock.publish.module";
+export * from "../textblock.design.module";
 export * from "./textblockEditor";
 export * from "./textblockViewModel";

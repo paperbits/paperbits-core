@@ -2,7 +2,7 @@ import { Bag } from "@paperbits/common";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
-import { ViewModelBinder } from "@paperbits/common/widgets";
+import { IWidgetService, ViewModelBinder } from "@paperbits/common/widgets";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
 import { GridCellHandlers } from "../gridCellHandlers";
@@ -13,7 +13,8 @@ export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, G
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly eventManager: EventManager,
-        private readonly styleCompiler: StyleCompiler
+        private readonly styleCompiler: StyleCompiler,
+        private readonly widgetService: IWidgetService
     ) { }
 
     public async modelToViewModel(model: GridCellModel, viewModel?: GridCellViewModel, bindingContext?: Bag<any>): Promise<GridCellViewModel> {
@@ -22,11 +23,17 @@ export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, G
         }
 
         const promises = model.widgets.map(widgetModel => {
-            const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
+            const definition = this.widgetService.getWidgetDefinitionForModel(widgetModel);
 
-            return widgetViewModelBinder.createWidgetBinding
-                ? widgetViewModelBinder.createWidgetBinding<GridCellViewModel>(widgetModel, bindingContext)
-                : widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+            if (definition) {
+                const bindingPromise = this.widgetService.createWidgetBinding(definition, widgetModel, bindingContext);
+                return bindingPromise;
+            }
+
+            // legacy binding resolution
+            const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
+            const bindingPromise = widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+            return bindingPromise;
         });
 
         const widgetViewModels = await Promise.all(promises);

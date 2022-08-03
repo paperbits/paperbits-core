@@ -1,7 +1,7 @@
 import { GridContract } from "../grid/gridContract";
 import { GridModel } from "./gridModel";
 import { IModelBinder } from "@paperbits/common/editing";
-import { ModelBinderSelector } from "@paperbits/common/widgets";
+import { IWidgetService, ModelBinderSelector } from "@paperbits/common/widgets";
 import { Contract, Bag } from "@paperbits/common";
 
 export class GridModelBinder implements IModelBinder<GridModel> {
@@ -13,7 +13,10 @@ export class GridModelBinder implements IModelBinder<GridModel> {
         return model instanceof GridModel;
     }
 
-    constructor(private readonly modelBinderSelector: ModelBinderSelector) { }
+    constructor(
+        private readonly widgetService: IWidgetService,
+        private readonly modelBinderSelector: ModelBinderSelector
+    ) { }
 
     public async contractToModel(contract: GridContract, bindingContext?: Bag<any>): Promise<GridModel> {
         const model = new GridModel();
@@ -22,7 +25,12 @@ export class GridModelBinder implements IModelBinder<GridModel> {
         model.styles = contract.styles;
 
         const modelPromises = contract.nodes.map(async (contract: Contract) => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(contract);
+            let modelBinder = this.widgetService.getModelBinder(contract.type);
+
+            if (!modelBinder) {
+                modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(contract);
+            }
+
             return modelBinder.contractToModel(contract, bindingContext);
         });
 

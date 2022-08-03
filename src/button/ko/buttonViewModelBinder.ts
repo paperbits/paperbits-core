@@ -1,63 +1,30 @@
-import { Button } from "./button";
-import * as Utils from "@paperbits/common/utils";
-import { ViewModelBinder } from "@paperbits/common/widgets";
-import { ButtonModel } from "../buttonModel";
-import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
-import { Bag } from "@paperbits/common";
-import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
-import { ButtonHandlers } from "../buttonHandlers";
+import { ViewModelBinder, WidgetState } from "@paperbits/common/widgets";
+import { ButtonModel } from "../buttonModel";
+import { Button } from "./button";
 
 export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Button>  {
-    constructor(
-        private readonly eventManager: EventManager,
-        private readonly styleCompiler: StyleCompiler
-    ) { }
+    constructor(private readonly styleCompiler: StyleCompiler) { }
 
-    public async modelToViewModel(model: ButtonModel, viewModel?: Button, bindingContext?: Bag<any>): Promise<Button> {
-        if (!viewModel) {
-            viewModel = new Button();
-        }
+    public stateToIntance(state: WidgetState, componentInstance: Button): void {
+        componentInstance.label(state.label);
+        componentInstance.hyperlink(state.hyperlink);
+        componentInstance.roles(state.roles);
+        componentInstance.icon(state.iconClass);
+        componentInstance.styles(state.styles);
+    }
 
-        viewModel.label(model.label);
-        viewModel.hyperlink(model.hyperlink);
-        viewModel.roles(model.roles);
+    public async modelToState(model: ButtonModel, state: WidgetState): Promise<void> {
+        state.label = model.label;
+        state.hyperlink = model.hyperlink;
+        state.roles = model.roles;
 
         if (model.iconKey) {
-            // TODO: Refactor
-            const segments = model.iconKey.split("/");
-            const name = segments[1];
-            viewModel.icon(`icon icon-${Utils.camelCaseToKebabCase(name.replace("/", "-"))}`);
-        }
-        else {
-            viewModel.icon(null);
+            state.iconClass = this.styleCompiler.getIconClassName(model.iconKey);
         }
 
         if (model.styles) {
-            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
+            state.styles = await this.styleCompiler.getStyleModelAsync(model.styles);
         }
-
-        const binding: IWidgetBinding<ButtonModel, Button> = {
-            name: "button",
-            displayName: "Button",
-            layer: bindingContext?.layer,
-            model: model,
-            handler: ButtonHandlers,
-            draggable: true,
-            flow: ComponentFlow.Contents,
-            editor: "button-editor",
-            applyChanges: async () => {
-                await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent(Events.ContentUpdate);
-            }
-        };
-
-        viewModel["widgetBinding"] = binding;
-
-        return viewModel;
-    }
-
-    public canHandleModel(model: ButtonModel): boolean {
-        return model instanceof ButtonModel;
     }
 }
