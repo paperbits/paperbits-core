@@ -1,16 +1,17 @@
-import { PopupInstanceModel } from "./popupModel";
-import { PopupInstanceContract } from "./popupContract";
-import { ModelBinderSelector } from "@paperbits/common/widgets";
-import { IModelBinder } from "@paperbits/common/editing";
-import { Contract, Bag } from "@paperbits/common";
+import { Bag, Contract } from "@paperbits/common";
+import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
 import { PopupContract, PopupService } from "@paperbits/common/popups";
+import { IWidgetService, ModelBinderSelector } from "@paperbits/common/widgets";
+import { PopupInstanceContract } from "./popupContract";
+import { PopupInstanceModel } from "./popupModel";
 
-export class PopupModelBinder implements IModelBinder<PopupInstanceModel> {
+export class PopupModelBinder extends ContainerModelBinder implements IModelBinder<PopupInstanceModel> {
     constructor(
-        private readonly modelBinderSelector: ModelBinderSelector,
+        protected readonly widgetService: IWidgetService,
+        protected readonly modelBinderSelector: ModelBinderSelector,
         private readonly popupService: PopupService
     ) {
-        this.contractToModel = this.contractToModel.bind(this);
+        super(widgetService, modelBinderSelector);
     }
 
     public canHandleContract(contract: Contract): boolean {
@@ -28,13 +29,7 @@ export class PopupModelBinder implements IModelBinder<PopupInstanceModel> {
         model.key = contract.key;
         model.styles = popupContent.styles;
         model.backdrop = popupContent.backdrop;
-
-        const modelPromises = popupContent.nodes.map(async (contract: Contract) => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-            return modelBinder.contractToModel(contract, bindingContext);
-        });
-
-        model.widgets = await Promise.all<any>(modelPromises);
+        model.widgets = await this.getChildModels(popupContent.nodes, bindingContext);
 
         return model;
     }
@@ -44,10 +39,7 @@ export class PopupModelBinder implements IModelBinder<PopupInstanceModel> {
             type: "popup",
             styles: model.styles,
             backdrop: model.backdrop,
-            nodes: model.widgets.map(widget => {
-                const modelBinder = this.modelBinderSelector.getModelBinderByModel(widget);
-                return modelBinder.modelToContract(widget);
-            })
+            nodes: this.getChildContracts(model.widgets)
         };
 
         return contract;

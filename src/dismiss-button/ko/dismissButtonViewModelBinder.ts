@@ -1,60 +1,26 @@
-import { DismissButton } from "./dismissButtonViewModel";
-import * as Utils from "@paperbits/common/utils";
-import { ViewModelBinder } from "@paperbits/common/widgets";
-import { DismissButtonModel } from "../dismissButtonModel";
-import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
-import { Bag } from "@paperbits/common";
-import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
+import { ViewModelBinder, WidgetState } from "@paperbits/common/widgets";
+import { DismissButtonModel } from "../dismissButtonModel";
+import { DismissButton } from "./dismissButtonViewModel";
 
 export class DismissButtonViewModelBinder implements ViewModelBinder<DismissButtonModel, DismissButton>  {
-    constructor(
-        private readonly eventManager: EventManager,
-        private readonly styleCompiler: StyleCompiler
-    ) { }
+    constructor(private readonly styleCompiler: StyleCompiler) { }
 
-    public async modelToViewModel(model: DismissButtonModel, viewModel?: DismissButton, bindingContext?: Bag<any>): Promise<DismissButton> {
-        if (!viewModel) {
-            viewModel = new DismissButton();
-        }
+    public stateToIntance(state: WidgetState, componentInstance: DismissButton): void {
+        componentInstance.label(state.label);
+        componentInstance.icon(state.iconClass);
+        componentInstance.styles(state.styles);
+    }
 
-        viewModel.label(model.label);
+    public async modelToState(model: DismissButtonModel, state: WidgetState): Promise<void> {
+        state.label = model.label;
 
         if (model.iconKey) {
-            // TODO: Refactor
-            const segments = model.iconKey.split("/");
-            const name = segments[1];
-            viewModel.icon(`icon icon-${Utils.camelCaseToKebabCase(name.replace("/", "-"))}`);
-        }
-        else {
-            viewModel.icon(null);
+            state.iconClass = this.styleCompiler.getIconClassName(model.iconKey);
         }
 
         if (model.styles) {
-            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
+            state.styles = await this.styleCompiler.getStyleModelAsync(model.styles);
         }
-
-        const binding: IWidgetBinding<DismissButtonModel, DismissButton> = {
-            name: "dismissButton",
-            displayName: "Dismiss button",
-            layer: bindingContext?.layer,
-            model: model,
-            draggable: true,
-            flow: ComponentFlow.None,
-            requires: ["popup"],
-            editor: "dismiss-button-editor",
-            applyChanges: async () => {
-                await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent(Events.ContentUpdate);
-            }
-        };
-
-        viewModel["widgetBinding"] = binding;
-
-        return viewModel;
-    }
-
-    public canHandleModel(model: DismissButtonModel): boolean {
-        return model instanceof DismissButtonModel;
     }
 }

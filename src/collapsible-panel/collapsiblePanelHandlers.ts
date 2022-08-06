@@ -69,21 +69,8 @@ export class CollapsiblePanelHandlers implements IWidgetHandler {
                     context.parentBinding.applyChanges();
                     this.viewManager.clearContextualCommands();
                 },
-            },
-            selectCommands: [
-                {
-                    controlType: "toolbox-button",
-                    displayName: "Collapsible panel settings",
-                    position: "top right",
-                    color: "#607d8b",
-                    callback: () => this.viewManager.openWidgetEditor(context.binding)
-                },
-                {
-                    controlType: "toolbox-splitter"
-                }
-            ]
+            }
         };
-
 
         if (context.model.widgets.length === 0) {
             gridCellContextualEditor.hoverCommands.push({

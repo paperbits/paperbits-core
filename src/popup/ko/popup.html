@@ -3,11 +3,14 @@
     <div class="popup-backdrop" aria-hidden="true" data-bind="if: backdrop"></div>
     <!-- /ko -->
     <div class="popup-container">
-        <!-- <button class="popup-close" data-dismiss="modal">
-            <i class="icon-emb icon-emb-simple-remove"></i>
-        </button> -->
         <!-- ko foreach: { data: widgets, as: 'widget' } -->
+        <!-- ko if: widget.wrapped -->
         <div data-bind="widget: widget"></div>
+        <!-- /ko -->
+        <!-- ko ifnot: widget.wrapped -->
+        <!-- ko widget: widget -->
+        <!-- /ko -->
+        <!-- /ko -->
         <!-- /ko -->
     </div>
 </div>

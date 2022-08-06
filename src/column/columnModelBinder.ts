@@ -1,13 +1,16 @@
 import * as Utils from "@paperbits/common/utils";
-import { ColumnModel } from "./columnModel";
+import { Bag, Contract } from "@paperbits/common";
+import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
+import { IWidgetService, ModelBinderSelector } from "@paperbits/common/widgets";
 import { ColumnContract } from "./columnContract";
-import { ModelBinderSelector } from "@paperbits/common/widgets";
-import { IModelBinder } from "@paperbits/common/editing";
-import { Contract, Bag } from "@paperbits/common";
+import { ColumnModel } from "./columnModel";
 
-export class ColumnModelBinder implements IModelBinder<ColumnModel> {
-    constructor(private readonly modelBinderSelector: ModelBinderSelector) {
-        this.contractToModel = this.contractToModel.bind(this);
+export class ColumnModelBinder extends ContainerModelBinder implements IModelBinder<ColumnModel> {
+    constructor(
+        protected readonly widgetService: IWidgetService,
+        protected modelBinderSelector: ModelBinderSelector
+    ) {
+        super(widgetService, modelBinderSelector);
     }
 
     public canHandleContract(contract: Contract): boolean {
@@ -43,17 +46,7 @@ export class ColumnModelBinder implements IModelBinder<ColumnModel> {
 
         columnModel.overflowX = contract.overflowX;
         columnModel.overflowY = contract.overflowY;
-
-        if (!contract.nodes) {
-            contract.nodes = [];
-        }
-
-        const modelPromises = contract.nodes.map(async (contract: Contract) => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-            return modelBinder.contractToModel(contract, bindingContext);
-        });
-
-        columnModel.widgets = await Promise.all<any>(modelPromises);
+        columnModel.widgets = await this.getChildModels(contract.nodes, bindingContext);
 
         return columnModel;
     }
@@ -61,20 +54,14 @@ export class ColumnModelBinder implements IModelBinder<ColumnModel> {
     public modelToContract(model: ColumnModel): Contract {
         const contract: ColumnContract = {
             type: "layout-column",
-            nodes: []
+            size: model.size,
+            alignment: model.alignment,
+            offset: model.offset,
+            order: model.order,
+            overflowX: model.overflowX,
+            overflowY: model.overflowY,
+            nodes: this.getChildContracts(model.widgets)
         };
-
-        contract.size = model.size;
-        contract.alignment = model.alignment;
-        contract.offset = model.offset;
-        contract.order = model.order;
-        contract.overflowX = model.overflowX;
-        contract.overflowY = model.overflowY;
-
-        model.widgets.forEach(widgetModel => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
-            contract.nodes.push(modelBinder.modelToContract(widgetModel));
-        });
 
         return contract;
     }

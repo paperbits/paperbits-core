@@ -3,6 +3,7 @@ import { ViewModelBinder, WidgetState } from "@paperbits/common/widgets";
 import { ButtonModel } from "../buttonModel";
 import { Button } from "./button";
 
+
 export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Button>  {
     constructor(private readonly styleCompiler: StyleCompiler) { }
 

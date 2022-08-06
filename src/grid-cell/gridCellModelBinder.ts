@@ -8,7 +8,10 @@ import { GridCellModel } from "./gridCellModel";
 const nodeType = "grid-cell";
 
 export class GridCellModelBinder extends ContainerModelBinder implements IModelBinder<GridCellModel> {
-    constructor(protected readonly widgetService: IWidgetService, protected modelBinderSelector: ModelBinderSelector) {
+    constructor(
+        protected readonly widgetService: IWidgetService,
+        protected modelBinderSelector: ModelBinderSelector
+    ) {
         super(widgetService, modelBinderSelector);
     }
 
@@ -23,16 +26,8 @@ export class GridCellModelBinder extends ContainerModelBinder implements IModelB
     public async contractToModel(contract: GridCellContract, bindingContext?: Bag<any>): Promise<GridCellModel> {
         const gridCellModel = new GridCellModel();
 
-        if (contract.styles) {
-            gridCellModel.styles = contract.styles;
-        }
-
+        gridCellModel.styles = contract.styles;
         gridCellModel.role = contract.role;
-
-        if (!contract.nodes) {
-            contract.nodes = [];
-        }
-
         gridCellModel.widgets = await this.getChildModels(contract.nodes, bindingContext);
 
         return gridCellModel;

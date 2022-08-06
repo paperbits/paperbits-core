@@ -1,10 +1,9 @@
-import * as Objects from "@paperbits/common/objects";
 import { Bag } from "@paperbits/common";
 import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { EventManager, Events } from "@paperbits/common/events";
 import { IPopupService } from "@paperbits/common/popups";
 import { StyleCompiler } from "@paperbits/common/styles";
-import { ModelBinderSelector, ViewModelBinder } from "@paperbits/common/widgets";
+import { IWidgetService, ModelBinderSelector, ViewModelBinder } from "@paperbits/common/widgets";
 import { PopupInstanceContract } from "..";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
@@ -18,7 +17,8 @@ export class PopupViewModelBinder implements ViewModelBinder<PopupInstanceModel,
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly popupService: IPopupService,
         private readonly eventManager: EventManager,
-        private readonly styleCompiler: StyleCompiler
+        private readonly styleCompiler: StyleCompiler,
+        private readonly widgetService: IWidgetService
     ) { }
 
     public createBinding(model: PopupInstanceModel, viewModel?: PopupViewModel, bindingContext?: Bag<any>): void {
@@ -96,8 +96,6 @@ export class PopupViewModelBinder implements ViewModelBinder<PopupInstanceModel,
             viewModel = new PopupViewModel();
         }
 
-        const widgetViewModels = [];
-
         // let childBindingContext: Bag<any> = {};
 
         // if (bindingContext) {
@@ -107,18 +105,35 @@ export class PopupViewModelBinder implements ViewModelBinder<PopupInstanceModel,
 
         bindingContext.layer = "*";
 
-        for (const widgetModel of model.widgets) {
-            const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
 
-            if (widgetViewModelBinder.createWidgetBinding) {
-                const binding = await widgetViewModelBinder.createWidgetBinding<any>(widgetModel, bindingContext);
-                widgetViewModels.push(binding);
+        const promises = model.widgets.map(widgetModel => {
+            const definition = this.widgetService.getWidgetDefinitionForModel(widgetModel);
+
+            if (definition) {
+                const bindingPromise = this.widgetService.createWidgetBinding(definition, widgetModel, bindingContext);
+                return bindingPromise;
             }
-            else {
-                const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
-                widgetViewModels.push(widgetViewModel);
-            }
-        }
+
+            // legacy binding resolution
+            const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
+            const bindingPromise = widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+            return bindingPromise;
+        });
+
+        const widgetViewModels = await Promise.all(promises);
+
+        // for (const widgetModel of model.widgets) {
+        //     const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
+
+        //     if (widgetViewModelBinder.createWidgetBinding) {
+        //         const binding = await widgetViewModelBinder.createWidgetBinding<any>(widgetModel, bindingContext);
+        //         widgetViewModels.push(binding);
+        //     }
+        //     else {
+        //         const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+        //         widgetViewModels.push(widgetViewModel);
+        //     }
+        // }
 
         if (widgetViewModels.length === 0) {
             widgetViewModels.push(new PlaceholderViewModel("Popup content"));

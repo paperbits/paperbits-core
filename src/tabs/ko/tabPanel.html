@@ -1,15 +1,23 @@
-<tab-panel-runtime class="tab-panel" data-bind="styled: styles, attr: { 'data-active-tab': activeItemIndex }, attr2way: { 'data-active-tab': activeItemIndex }">
+<tab-panel-runtime class="tab-panel"
+    data-bind="styled: styles, attr: { 'data-active-tab': activeItemIndex }, attr2way: { 'data-active-tab': activeItemIndex }">
     <ul class="nav tab-navs">
         <!-- ko foreach: { data: tabLinks, as: 'tabLink' } -->
         <li class="nav-item">
-            <span tabindex="0" class="nav-link" data-bind="attr: { 'data-tab': $index }, text: tabLink" data-tab="$index"></span>
+            <span tabindex="0" class="nav-link" data-bind="attr: { 'data-tab': $index }, text: tabLink"
+                data-tab="$index"></span>
         </li>
         <!-- /ko -->
     </ul>
     <!-- ko foreach: { data: tabPanelItems, as: 'tabPanelItem' } -->
-    <div class="tab-content" data-bind="styled: tabPanelItem.styles, css: { 'tab-content-active': $index() === $component.activeItemIndex() }">
+    <div class="tab-content"
+        data-bind="styled: tabPanelItem.styles, css: { 'tab-content-active': $index() === $component.activeItemIndex() }">
         <!-- ko foreach: { data: tabPanelItem.widgets, as: 'widget' } -->
+        <!-- ko if: widget.wrapped -->
+        <div data-bind="widget: widget"></div>
+        <!-- /ko -->
+        <!-- ko ifnot: widget.wrapped -->
         <!-- ko widget: widget -->
+        <!-- /ko -->
         <!-- /ko -->
         <!-- /ko -->
     </div>

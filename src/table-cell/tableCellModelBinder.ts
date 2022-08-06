@@ -21,16 +21,8 @@ export class TableCellModelBinder extends ContainerModelBinder implements IModel
     public async contractToModel(contract: TableCellContract, bindingContext?: Bag<any>): Promise<TableCellModel> {
         const tableCellModel = new TableCellModel();
 
-        if (contract.styles) {
-            tableCellModel.styles = contract.styles;
-        }
-
+        tableCellModel.styles = contract.styles;
         tableCellModel.role = contract.role;
-
-        if (!contract.nodes) {
-            contract.nodes = [];
-        }
-
         tableCellModel.widgets = await this.getChildModels(contract.nodes, bindingContext);
 
         return tableCellModel;

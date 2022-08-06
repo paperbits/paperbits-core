@@ -1,12 +1,17 @@
-import { IModelBinder } from "@paperbits/common/editing";
-import { CollapsiblePanelModel } from "./collapsiblePanelModel";
-import { Contract, Bag } from "@paperbits/common";
+import { Bag, Contract } from "@paperbits/common";
+import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
+import { IWidgetService, ModelBinderSelector } from "@paperbits/common/widgets";
 import { CollapsiblePanelContract } from "./collapsiblePanelContract";
-import { ModelBinderSelector } from "@paperbits/common/widgets";
+import { CollapsiblePanelModel } from "./collapsiblePanelModel";
 
 
-export class CollapsiblePanelModelBinder implements IModelBinder<CollapsiblePanelModel>  {
-    constructor(private readonly modelBinderSelector: ModelBinderSelector) {    }
+export class CollapsiblePanelModelBinder extends ContainerModelBinder implements IModelBinder<CollapsiblePanelModel>  {
+    constructor(
+        protected readonly widgetService: IWidgetService,
+        protected modelBinderSelector: ModelBinderSelector
+    ) {
+        super(widgetService, modelBinderSelector);
+    }
 
     public canHandleContract(contract: Contract): boolean {
         return contract.type === "collapsible-panel";
@@ -18,22 +23,8 @@ export class CollapsiblePanelModelBinder implements IModelBinder<CollapsiblePane
 
     public async contractToModel(contract: CollapsiblePanelContract, bindingContext?: Bag<any>): Promise<CollapsiblePanelModel> {
         const model = new CollapsiblePanelModel();
-
-        if (contract.styles) {
-            model.styles = contract.styles;
-        }
-
-        if (!contract.nodes) {
-            contract.nodes = [];
-        }
-
-        const modelPromises = contract.nodes.map(async (contract: Contract) => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-            return modelBinder.contractToModel(contract, bindingContext);
-        });
-
-        model.widgets = await Promise.all<any>(modelPromises);
-
+        model.styles = contract.styles;
+        model.widgets = await this.getChildModels(contract.nodes, bindingContext);
         return model;
     }
 
@@ -42,13 +33,8 @@ export class CollapsiblePanelModelBinder implements IModelBinder<CollapsiblePane
             type: "collapsible-panel",
             styles: model.styles,
             version: model.version,
-            nodes: []
+            nodes: this.getChildContracts(model.widgets)
         };
-
-        model.widgets.forEach(widgetModel => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
-            contract.nodes.push(modelBinder.modelToContract(widgetModel));
-        });
 
         return contract;
     }

@@ -12,6 +12,7 @@ export class DismissButton {
     public readonly label: ko.Observable<string>;
     public readonly styles: ko.Observable<StyleModel>;
     public readonly icon: ko.Observable<string>;
+    public readonly roles: ko.ObservableArray<string>;
 
     constructor() {
         this.label = ko.observable<string>("DismissButton");

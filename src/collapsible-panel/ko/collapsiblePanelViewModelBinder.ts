@@ -1,20 +1,21 @@
-import { CollapsiblePanel } from "./collapsiblePanelViewModel";
-import { ViewModelBinder } from "@paperbits/common/widgets";
-import { CollapsiblePanelModel } from "../collapsiblePanelModel";
+import { Bag } from "@paperbits/common";
+import { IWidgetBinding } from "@paperbits/common/editing";
 import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
-import { Bag } from "@paperbits/common";
-import { PlaceholderViewModel } from "../../placeholder/ko";
-import { ViewModelBinderSelector } from "../../ko";
+import { IWidgetService, ViewModelBinder } from "@paperbits/common/widgets";
 import { CollapsiblePanelHandlers } from "..";
-import { IWidgetBinding } from "@paperbits/common/editing";
+import { ViewModelBinderSelector } from "../../ko";
+import { PlaceholderViewModel } from "../../placeholder/ko";
+import { CollapsiblePanelModel } from "../collapsiblePanelModel";
+import { CollapsiblePanel } from "./collapsiblePanelViewModel";
 
 
 export class CollapsiblePanelViewModelBinder implements ViewModelBinder<CollapsiblePanelModel, CollapsiblePanel>  {
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly eventManager: EventManager,
-        private readonly styleCompiler: StyleCompiler
+        private readonly styleCompiler: StyleCompiler,
+        private readonly widgetService: IWidgetService
     ) { }
 
     public async modelToViewModel(model: CollapsiblePanelModel, viewModel?: CollapsiblePanel, bindingContext?: Bag<any>): Promise<CollapsiblePanel> {
@@ -22,14 +23,21 @@ export class CollapsiblePanelViewModelBinder implements ViewModelBinder<Collapsi
             viewModel = new CollapsiblePanel();
         }
 
-        const widgetViewModels = [];
+        const promises = model.widgets.map(widgetModel => {
+            const definition = this.widgetService.getWidgetDefinitionForModel(widgetModel);
 
-        for (const widgetModel of model.widgets) {
+            if (definition) {
+                const bindingPromise = this.widgetService.createWidgetBinding(definition, widgetModel, bindingContext);
+                return bindingPromise;
+            }
+
+            // legacy binding resolution
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+            const bindingPromise = widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+            return bindingPromise;
+        });
 
-            widgetViewModels.push(widgetViewModel);
-        }
+        const widgetViewModels = await Promise.all(promises);
 
         if (widgetViewModels.length === 0) {
             widgetViewModels.push(new PlaceholderViewModel("Collapsible panel content"));

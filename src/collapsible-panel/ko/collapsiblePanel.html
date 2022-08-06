@@ -1,8 +1,13 @@
 <div class="collapsible collapsible-panel">
     <div class="collapsible-backdrop"></div>
     <div class="collapsible-content" data-bind="styled: $component.styles">
-        <!-- ko foreach: { data: widgets, as: 'widget'  } -->
+        <!-- ko foreach: { data: widgets, as: 'widget' } -->
+        <!-- ko if: widget.wrapped -->
+        <div data-bind="widget: widget"></div>
+        <!-- /ko -->
+        <!-- ko ifnot: widget.wrapped -->
         <!-- ko widget: widget -->
+        <!-- /ko -->
         <!-- /ko -->
         <!-- /ko -->
 
