@@ -536,15 +536,11 @@ export class GridEditor {
     private getUnderlyingElements(): HTMLElement[] {
         const elements = Utils.elementsFromPoint(this.ownerDocument, this.pointerX, this.pointerY);
 
-        const popupContainer = elements.find(x => x.classList.contains("popup-container"));
-        const cutoffIndex = elements.findIndex(x => x.classList.contains("backdrop") || x.classList.contains("popup-backdrop") || x.classList.contains("popup-container"));
+        // Determining cut-off index to exclude from selection stack the elements under popups or dropdowns.
+        const cutoffIndex = elements.findIndex(element => getComputedStyle(element).zIndex !== "auto");
 
         if (cutoffIndex >= 0) {
-            elements.splice(cutoffIndex); // removing from stack
-        }
-
-        if (popupContainer) {
-            elements.splice(cutoffIndex, 0, popupContainer);
+            elements.splice(cutoffIndex + 1);
         }
 
         return elements;
