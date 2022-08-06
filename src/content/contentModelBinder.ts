@@ -1,46 +1,18 @@
 import * as Utils from "@paperbits/common/utils";
-import { ContentModel } from "./contentModel";
-import { Contract, Bag } from "@paperbits/common";
-import { IModelBinder } from "@paperbits/common/editing";
-import { WidgetModel, ModelBinderSelector, IWidgetService } from "@paperbits/common/widgets";
+import { Bag, Contract } from "@paperbits/common";
+import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
+import { IWidgetService, ModelBinderSelector, WidgetModel } from "@paperbits/common/widgets";
 import { SectionModel } from "@paperbits/core/section";
-import { GridModel } from "../grid-layout-section";
 import { GridCellModel } from "../grid-cell/gridCellModel";
+import { GridModel } from "../grid-layout-section";
+import { ContentModel } from "./contentModel";
 
 
 const typeName = "page";
 
-export class ContentModelBinder<TModel> implements IModelBinder<TModel> {
-    constructor(protected readonly widgetService: IWidgetService, protected readonly modelBinderSelector: ModelBinderSelector) { }
-
-    public async getChildModels(nodes: Contract[] = [], bindingContext: any): Promise<any[]> {
-        const modelPromises = nodes.map((contract: Contract) => {
-            let modelBinder = this.widgetService.getModelBinder(contract.type);
-
-            if (!modelBinder) {
-                modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(contract);
-            }
-
-            return modelBinder.contractToModel(contract, bindingContext);
-        });
-
-        return await Promise.all<any>(modelPromises);
-    }
-
-    public getChildContracts(models: WidgetModel[]): Contract[] {
-        const nodes = [];
-
-        models.forEach(widgetModel => {
-            let modelBinder = this.widgetService.getModelBinderForModel(widgetModel);
-
-            if (!modelBinder) {
-                modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
-            }
-
-            nodes.push(modelBinder.modelToContract(widgetModel));
-        });
-
-        return nodes;
+export class ContentModelBinder<TModel> extends ContainerModelBinder implements IModelBinder<TModel> {
+    constructor(protected readonly widgetService: IWidgetService, protected readonly modelBinderSelector: ModelBinderSelector) {
+        super(widgetService, modelBinderSelector);
     }
 
     public canHandleContract(contract: Contract): boolean {

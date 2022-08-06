@@ -37,7 +37,7 @@ import { TestimonialsModule } from "./testimonials/ko/testimonials.module";
 import { VideoPlayerModule } from "./video-player/videoPlayer.publish.module";
 import { YoutubePlayerPublishModule } from "./youtube-player/youtubePlayer.publish.module";
 import { Bag } from "@paperbits/common";
-import { ComponentBinder } from "@paperbits/common/editing";
+import { ComponentBinder, ContainerModelBinder } from "@paperbits/common/editing";
 
 
 /**
@@ -46,7 +46,7 @@ import { ComponentBinder } from "@paperbits/common/editing";
 export class CoreModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bindInstance("injector", injector);
-        
+
         injector.bindCollection("autostart");
         injector.bindCollection("styleHandlers");
         injector.bindCollectionLazily("widgetHandlers");
@@ -55,7 +55,8 @@ export class CoreModule implements IInjectorModule {
         injector.bindCollectionLazily("viewModelBinders");
         injector.bindCollectionLazily("permalinkResolvers");
         injector.bindInstance<Bag<ComponentBinder>>("componentBinders", {});
-        
+        injector.bind("containerModelBinder", ContainerModelBinder);
+
         /*** Core ***/
         injector.bindSingleton("settingsProvider", DefaultSettingsProvider);
         injector.bindSingleton("router", DefaultRouter);
@@ -89,7 +90,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindModule(new ContentModule());
         injector.bindModule(new ColumnModule());
         injector.bindModule(new RowModule());
-        
+
         injector.bindModule(new SectionModule());
         injector.bindModule(new GridModule());
         injector.bindModule(new GridCellModule());
@@ -105,7 +106,7 @@ export class CoreModule implements IInjectorModule {
         injector.bindToCollection("routeGuards", MailtoRouteGuard);
         injector.bindToCollection("routeGuards", JavaScriptRouteGuard);
         injector.bindToCollection("autostart", WidgetBindingHandler);
-        
+
         injector.bindToCollection("autostart", BackgroundBindingHandler);
         injector.bindToCollection("autostart", SecuredBindingHandler);
     }

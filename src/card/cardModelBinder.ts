@@ -3,9 +3,9 @@ import { CardModel } from "./cardModel";
 import { CardContract } from "./cardContract";
 import { IWidgetService, ModelBinderSelector } from "@paperbits/common/widgets";
 import { Contract, Bag } from "@paperbits/common";
-import { ContentModelBinder } from "../content";
+import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
 
-export class CardModelBinder extends ContentModelBinder<CardModel> {
+export class CardModelBinder extends ContainerModelBinder implements IModelBinder<CardModel> {
     constructor(protected readonly widgetService: IWidgetService, protected modelBinderSelector: ModelBinderSelector) {
         super(widgetService, modelBinderSelector);
     }

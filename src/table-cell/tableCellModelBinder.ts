@@ -1,11 +1,11 @@
-import { TableCellModel } from "./tableCellModel";
-import { TableCellContract } from "./tableCellContract";
+import { Bag, Contract } from "@paperbits/common";
+import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
 import { IWidgetService, ModelBinderSelector } from "@paperbits/common/widgets";
-import { Contract, Bag } from "@paperbits/common";
-import { ContentModelBinder } from "../content";
+import { TableCellContract } from "./tableCellContract";
+import { TableCellModel } from "./tableCellModel";
 
 
-export class TableCellModelBinder extends ContentModelBinder<TableCellModel> {
+export class TableCellModelBinder extends ContainerModelBinder implements IModelBinder<TableCellModel> {
     constructor(protected readonly widgetService: IWidgetService, protected modelBinderSelector: ModelBinderSelector) {
         super(widgetService, modelBinderSelector);
     }
