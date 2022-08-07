@@ -272,8 +272,8 @@ export class GridEditor {
             /**
              * Special case for text editor. All other widget element (like a hyperlink or a form submit)
              * should not trigger their default events.
-             */ 
-            event.preventDefault(); 
+             */
+            event.preventDefault();
         }
 
         if (this.isModelBeingEdited(gridItem)) {
@@ -817,7 +817,9 @@ export class GridEditor {
         return gridItem;
     }
 
-    private getStylableGridItem(element: HTMLElement, binding: IWidgetBinding<any, any>): GridItem {
+    private getStylableGridItem(element: HTMLElement): GridItem {
+        const binding = GridHelper.getClosestParentBinding(element);
+
         if (!binding?.handler) {
             return null;
         }
@@ -880,7 +882,7 @@ export class GridEditor {
                             }
                         }
                     },
-                resizing: "vertically horizontally"
+                    resizing: "vertically horizontally"
                 };
 
                 this.viewManager.openViewAsPopup(view);
@@ -926,9 +928,10 @@ export class GridEditor {
             if (widgetGridItem && widgetGridItem.binding !== currentwidgetBinding) {
                 stackOfGridItems.push(widgetGridItem);
                 currentwidgetBinding = widgetGridItem.binding;
+                continue;
             }
 
-            const styleableGridItem = this.getStylableGridItem(element, currentwidgetBinding);
+            const styleableGridItem = this.getStylableGridItem(element);
 
             if (styleableGridItem) {
                 stackOfGridItems.push(styleableGridItem);
