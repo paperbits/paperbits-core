@@ -1,16 +1,16 @@
+import { Contract } from "@paperbits/common";
 import { IModelBinder } from "@paperbits/common/editing";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
-import { ButtonModel } from "./buttonModel";
-import { Contract } from "@paperbits/common";
-import { ButtonContract } from "./buttonContract";
-import { BuiltInRoles } from "@paperbits/common/user";
 import { SecurityModelBinder } from "@paperbits/common/security/securityModelBinder";
+import { BuiltInRoles } from "@paperbits/common/user";
+import { ButtonContract } from "./buttonContract";
+import { ButtonModel } from "./buttonModel";
 
 
 export class ButtonModelBinder implements IModelBinder<ButtonModel>  {
     constructor(
         private readonly permalinkResolver: IPermalinkResolver,
-        private readonly securityModelBinder: SecurityModelBinder<any, any>
+        private readonly securityModelBinder: SecurityModelBinder
     ) { }
 
     public canHandleContract(contract: Contract): boolean {
@@ -46,23 +46,26 @@ export class ButtonModelBinder implements IModelBinder<ButtonModel>  {
             ? null
             : model.roles;
 
-        const buttonConfig: ButtonContract = {
+        const contract: ButtonContract = {
             type: "button",
             label: model.label,
             styles: model.styles,
             roles: roles,
-            security: model.security,
             iconKey: model.iconKey
         };
 
+        if (model.security) {
+            contract.security = this.securityModelBinder.modelToContract(model.security);
+        }
+
         if (model.hyperlink) {
-            buttonConfig.hyperlink = {
+            contract.hyperlink = {
                 target: model.hyperlink.target,
                 targetKey: model.hyperlink.targetKey,
                 anchor: model.hyperlink.anchor
             };
         }
 
-        return buttonConfig;
+        return contract;
     }
 }
