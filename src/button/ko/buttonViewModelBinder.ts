@@ -11,6 +11,7 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
         componentInstance.label(state.label);
         componentInstance.hyperlink(state.hyperlink);
         componentInstance.roles(state.roles);
+        componentInstance.security(state.security);
         componentInstance.icon(state.iconClass);
         componentInstance.styles(state.styles);
     }
@@ -19,6 +20,7 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
         state.label = model.label;
         state.hyperlink = model.hyperlink;
         state.roles = model.roles;
+        state.security = model.security;
 
         if (model.iconKey) {
             state.iconClass = this.styleCompiler.getIconClassName(model.iconKey);

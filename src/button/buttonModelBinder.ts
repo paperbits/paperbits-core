@@ -4,10 +4,14 @@ import { ButtonModel } from "./buttonModel";
 import { Contract } from "@paperbits/common";
 import { ButtonContract } from "./buttonContract";
 import { BuiltInRoles } from "@paperbits/common/user";
+import { SecurityModelBinder } from "@paperbits/common/security/securityModelBinder";
 
 
 export class ButtonModelBinder implements IModelBinder<ButtonModel>  {
-    constructor(private readonly permalinkResolver: IPermalinkResolver) { }
+    constructor(
+        private readonly permalinkResolver: IPermalinkResolver,
+        private readonly securityModelBinder: SecurityModelBinder<any, any>
+    ) { }
 
     public canHandleContract(contract: Contract): boolean {
         return contract.type === "button";
@@ -23,6 +27,10 @@ export class ButtonModelBinder implements IModelBinder<ButtonModel>  {
         model.roles = contract.roles || [BuiltInRoles.everyone.key];
         model.styles = contract.styles || { appearance: "components/button/default" };
         model.iconKey = contract.iconKey;
+
+        if (contract.security) {
+            model.security = await this.securityModelBinder.contractToModel(contract.security);
+        }
 
         if (contract.hyperlink) {
             model.hyperlink = await this.permalinkResolver.getHyperlinkFromContract(contract.hyperlink);
@@ -43,6 +51,7 @@ export class ButtonModelBinder implements IModelBinder<ButtonModel>  {
             label: model.label,
             styles: model.styles,
             roles: roles,
+            security: model.security,
             iconKey: model.iconKey
         };
 

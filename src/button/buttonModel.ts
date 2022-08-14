@@ -1,4 +1,5 @@
 import { HyperlinkModel } from "@paperbits/common/permalinks";
+import { SecurityModel } from "@paperbits/common/security";
 import { LocalStyles } from "@paperbits/common/styles";
 
 /**
@@ -21,9 +22,14 @@ export class ButtonModel {
     public styles: LocalStyles;
 
     /**
-     * Keys of user roles.
+     * @deprecated. Keys of user roles.
      */
     public roles?: string[];
+
+    /**
+     * Security settings.
+     */
+    public security?: SecurityModel;
 
     /**
      * Icon key.
