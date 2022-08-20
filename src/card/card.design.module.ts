@@ -26,7 +26,6 @@ export class CardEditorModule implements IInjectorModule {
             styleTemplate: `<div class="no-pointer-events" data-bind="stylePreview: variation.key" style="width: 340px"><h1>Card</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p></div>`
         };
         injector.bindInstanceToCollection("styleGroups", styleGroup);
-        injector.bindToCollection<IWidgetHandler>("widgetHandlers", CardHandlers, "cardHandler");
 
         const widgetService = injector.resolve<IWidgetService>("widgetService");
 

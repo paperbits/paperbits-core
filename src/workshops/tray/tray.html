@@ -17,20 +17,20 @@
     </div>
     <!-- /ko -->
 
-    <div role="presentation" class="toolbox-btn">
-        <a role="option"
-            data-bind="tooltip: '<h1>Roles</h1><p>See how the content looks like<br/> for users in a particular role.</p>', balloon: { component: { name: 'role-selector', params: { availableRoles: availableRoles, selectedRoles: selectedRoles, onSelect: onRoleSelect } }, position: 'top' }"
-            aria-label="Roles">
-            <i aria-hidden="true" class="paperbits-icon paperbits-single-02"></i>
-        </a>
-    </div>
-
     <!-- ko foreach: { data: buttons, as: 'button' } -->
     <div role="presentation" class="toolbox-btn" data-bind="attr: { disabled: button.disabled() ? 'disabled' : null }">
+        <!-- ko ifnot: button.component-->
         <a role="option"
             data-bind="tooltip: button.tooltip, activate: button.onActivate, disable: button.disabled, attr: { 'aria-label': button.title, disabled: button.disabled() ? 'disabled' : null }">
             <i data-bind="css: button.iconClass"></i>
         </a>
+        <!-- /ko -->
+        <!-- ko if: button.component-->
+        <a role="option"
+            data-bind="tooltip: button.tooltip, activate: button.onActivate, disable: button.disabled, attr: { 'aria-label': button.title, disabled: button.disabled() ? 'disabled' : null }, balloon: { component: button.component, position: 'top' }">
+            <i data-bind="css: button.iconClass"></i>
+        </a>
+        <!-- /ko -->
     </div>
     <!-- /ko -->
 </div>
