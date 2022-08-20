@@ -820,7 +820,7 @@ export class GridEditor {
     private getStylableGridItem(element: HTMLElement): GridItem {
         const binding = GridHelper.getClosestParentBinding(element);
 
-        if (!binding?.handler) {
+        if (!binding) {
             return null;
         }
 
