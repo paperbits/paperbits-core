@@ -162,7 +162,7 @@ export class GridEditor {
 
         contextualCommands.selectCommands = contextualCommands.selectCommands !== undefined
             ? contextualCommands.selectCommands
-            : defaultCommands.selectCommands;
+            : defaultCommands?.selectCommands;
 
         contextualCommands.hoverCommands = contextualCommands.hoverCommands !== undefined
             ? contextualCommands.hoverCommands
@@ -170,7 +170,7 @@ export class GridEditor {
 
         contextualCommands.deleteCommand = contextualCommands.deleteCommand !== undefined
             ? contextualCommands.deleteCommand
-            : defaultCommands.deleteCommand;
+            : defaultCommands?.deleteCommand;
 
         return contextualCommands;
     }

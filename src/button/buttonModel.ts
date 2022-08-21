@@ -17,24 +17,19 @@ export class ButtonModel {
     public hyperlink: HyperlinkModel;
 
     /**
+     * Icon key.
+     */
+     public iconKey?: string;
+
+    /**
      * Button local styles.
      */
     public styles: LocalStyles;
 
     /**
-     * @deprecated. Keys of user roles.
-     */
-    public roles?: string[];
-
-    /**
      * Security settings.
      */
     public security?: SecurityModel;
-
-    /**
-     * Icon key.
-     */
-    public iconKey?: string;
 
     constructor() {
         this.label = "Button";

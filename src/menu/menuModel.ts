@@ -1,4 +1,5 @@
 import { NavigationItemModel } from "@paperbits/common/navigation";
+import { SecurityModel } from "@paperbits/common/security";
 import { LocalStyles } from "@paperbits/common/styles";
 
 /**
@@ -31,18 +32,17 @@ export class MenuModel {
     public layout: string;
 
     /**
-     * Keys of user roles.
-     */
-    public roles?: string[];
-
-    /**
      * Menu local styles.
      */
     public styles: LocalStyles;
 
+    /**
+     * Security settings.
+     */
+     public security?: SecurityModel;
+
     constructor() {
         this.items = [];
-        this.roles = null;
         this.layout = "vertical";
         this.styles = { appearance: "components/menu/default" };
     }

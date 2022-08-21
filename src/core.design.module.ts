@@ -80,7 +80,8 @@ import { KnockoutDesignModule } from "./ko/knockout.design.module";
 import { HelpCenterBindingHandler } from "./ko/bindingHandlers/bindingHandlers.helpCenter";
 import { HelpCenter } from "./workshops/helpCenter/helpCenter";
 import { ConsoleLogger } from "@paperbits/common/logging";
-import { AuthContextToolButton } from "./workshops/authContextToolbutton";
+import { AccessContextToolButton } from "./workshops/accessContextToolbutton";
+import { RoleBasedSecurityModelEditor } from "./workshops/roles/ko/roleBasedSecurityModelEditor";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -187,7 +188,7 @@ export class CoreDesignModule implements IInjectorModule {
         const userService = new DesignerUserService();
         injector.bindInstance("userService", userService);
         injector.bindInstance("designerUserService", userService);
-
-        injector.bindToCollection("trayCommands", AuthContextToolButton);
+        injector.bindToCollection("trayCommands", AccessContextToolButton);
+        injector.bind("securityModelEditor", RoleBasedSecurityModelEditor);
     }
 }

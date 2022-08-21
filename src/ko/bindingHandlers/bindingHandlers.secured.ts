@@ -1,6 +1,7 @@
 import * as ko from "knockout";
 import { BuiltInRoles, UserService } from "@paperbits/common/user";
 import { EventManager } from "@paperbits/common/events";
+import { RoleBasedSecurityModel } from "@paperbits/common/security/roleBasedSecurityModel";
 
 
 export class SecuredBindingHandler {
@@ -10,12 +11,13 @@ export class SecuredBindingHandler {
     ) {
         ko.bindingHandlers["secured"] = {
             init: (element: HTMLElement, valueAccessor: any) => {
-                const initiallyAssignedRoles = ko.unwrap(valueAccessor());
+                const securityModel = ko.unwrap(valueAccessor());
+                const initiallyAssignedRoles = securityModel?.roles;
                 const dataRoleObservable: ko.Observable<string> = ko.observable(initiallyAssignedRoles);
                 const hiddenObservable: ko.Observable<boolean> = ko.observable(false);
 
-                const applyRoles = (assignedRoles: string[]) => { // has to be synchronous to be applied during publishing
-                    const widgetRoles = assignedRoles || [BuiltInRoles.everyone.key];
+                const applyRoles = (securityModel: RoleBasedSecurityModel) => { // has to be synchronous to be applied during publishing
+                    const widgetRoles = securityModel?.roles || [BuiltInRoles.everyone.key];
 
                     const roles = widgetRoles
                         && widgetRoles.length === 1
@@ -32,7 +34,7 @@ export class SecuredBindingHandler {
                     const widgetRoles = !!widgetRolesString ? widgetRolesString.split(",") : [BuiltInRoles.everyone.key];
                     const userRoles = await this.userService.getUserRoles();
                     const visibleToUser = userRoles.some(x => widgetRoles.includes(x)) || widgetRoles.includes(BuiltInRoles.everyone.key);
-                    
+
                     hiddenObservable(!visibleToUser);
                 };
 
@@ -47,9 +49,9 @@ export class SecuredBindingHandler {
                     this.eventManager.removeEventListener("onUserRoleChange", applyVisibility);
                 });
 
-                const assignedRolesObsevable: ko.Observable<string[]> = valueAccessor();
+                const assignedRolesObsevable: ko.Observable<RoleBasedSecurityModel> = valueAccessor();
                 assignedRolesObsevable.subscribe(applyRoles);
-                applyRoles(initiallyAssignedRoles);
+                applyRoles(securityModel);
             }
         };
     }

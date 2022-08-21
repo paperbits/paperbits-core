@@ -1,8 +1,7 @@
 import { Contract } from "@paperbits/common";
 import { IModelBinder } from "@paperbits/common/editing";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
-import { SecurityModelBinder } from "@paperbits/common/security/securityModelBinder";
-import { BuiltInRoles } from "@paperbits/common/user";
+import { SecurityModelBinder } from "@paperbits/common/security";
 import { ButtonContract } from "./buttonContract";
 import { ButtonModel } from "./buttonModel";
 
@@ -10,7 +9,7 @@ import { ButtonModel } from "./buttonModel";
 export class ButtonModelBinder implements IModelBinder<ButtonModel>  {
     constructor(
         private readonly permalinkResolver: IPermalinkResolver,
-        private readonly securityModelBinder: SecurityModelBinder
+        private readonly securityModelBinder: SecurityModelBinder<any, any>
     ) { }
 
     public canHandleContract(contract: Contract): boolean {
@@ -24,11 +23,16 @@ export class ButtonModelBinder implements IModelBinder<ButtonModel>  {
     public async contractToModel(contract: ButtonContract): Promise<ButtonModel> {
         const model = new ButtonModel();
         model.label = contract.label;
-        model.roles = contract.roles || [BuiltInRoles.everyone.key];
         model.styles = contract.styles || { appearance: "components/button/default" };
         model.iconKey = contract.iconKey;
 
         if (contract.security) {
+            if (contract.roles) { // migration.
+                contract.security = {
+                    roles: contract.roles
+                }
+            }
+
             model.security = await this.securityModelBinder.contractToModel(contract.security);
         }
 
@@ -40,17 +44,10 @@ export class ButtonModelBinder implements IModelBinder<ButtonModel>  {
     }
 
     public modelToContract(model: ButtonModel): Contract {
-        const roles = model.roles
-            && model.roles.length === 1
-            && model.roles[0] === BuiltInRoles.everyone.key
-            ? null
-            : model.roles;
-
         const contract: ButtonContract = {
             type: "button",
             label: model.label,
             styles: model.styles,
-            roles: roles,
             iconKey: model.iconKey
         };
 

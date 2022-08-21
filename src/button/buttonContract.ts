@@ -19,14 +19,14 @@ export interface ButtonContract extends Contract {
     styles?: LocalStyles;
 
     /**
-     * @depreacted Keys of user roles.
-     */
-    roles?: string[];
-
-    /**
      * Security settings.
      */
-    security?: SecurityContract;
+     security?: SecurityContract;
+
+    /**
+     * @deprecated Keys of user roles.
+     */
+    roles?: string[];
 
     /**
      * Assigned hyperlink.

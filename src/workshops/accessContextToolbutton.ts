@@ -3,7 +3,7 @@ import { IComponent, ToolButton, ViewManager } from "@paperbits/common/ui";
 import { RoleModel, RoleService } from "@paperbits/common/user";
 
 
-export class AuthContextToolButton implements ToolButton {
+export class AccessContextToolButton implements ToolButton {
     public readonly selectedRoles: ko.ObservableArray<RoleModel> = ko.observableArray();
     public readonly availableRoles: ko.ObservableArray<RoleModel>= ko.observableArray();
     public iconClass: string = "paperbits-icon paperbits-icon paperbits-single-02";

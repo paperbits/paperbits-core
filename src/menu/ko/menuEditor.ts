@@ -120,9 +120,4 @@ export class MenuEditor {
 
         this.onChange(this.model);
     }
-
-    public onRoleSelect(roles: string[]): void {
-        this.model.roles = roles;
-        this.applyChanges();
-    }
 }

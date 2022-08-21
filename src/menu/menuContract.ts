@@ -1,4 +1,5 @@
 import { Contract } from "@paperbits/common";
+import { SecurityContract } from "@paperbits/common/security";
 import { LocalStyles } from "@paperbits/common/styles";
 
 /**
@@ -26,7 +27,7 @@ export interface MenuContract extends Contract {
     layout?: string;
 
     /**
-     * Keys of user roles.
+     * @deprecated Keys of user roles.
      */
     roles?: string[];
 
@@ -34,4 +35,9 @@ export interface MenuContract extends Contract {
      * Menu local styles.
      */
     styles: LocalStyles;
+
+    /**
+     * Security settings.
+     */
+     security?: SecurityContract;
 }
