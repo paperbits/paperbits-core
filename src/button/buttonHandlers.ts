@@ -29,7 +29,7 @@ export class ButtonHandlers implements IWidgetHandler {
             {
                 controlType: "toolbox-button",
                 tooltip: "Change visibility",
-                iconClass: "paperbits-icon paperbits-single-02",
+                iconClass: "paperbits-icon paperbits-a-security",
                 position: "top right",
                 color: "#607d8b",
                 callback: () => {
