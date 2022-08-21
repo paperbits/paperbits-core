@@ -8,7 +8,7 @@ export class AccessContextToolButton implements ToolButton {
     public readonly availableRoles: ko.ObservableArray<RoleModel>= ko.observableArray();
     public iconClass: string = "paperbits-icon paperbits-icon paperbits-single-02";
     public title: string = "Roles";
-    public tooltip: string = `<h1>Roles</h1><p>Push your changes to the storage.</p><div class="subtle">(Ctrl+S)</div>`;
+    public tooltip: string = `<h1>Roles</h1><p>See how the content looks like<br/> for users in a particular role.</p>`;
     public disabled: ko.Observable<boolean>;
 
     public component: IComponent = {

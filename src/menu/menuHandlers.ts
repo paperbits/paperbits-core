@@ -36,13 +36,13 @@ export class MenuHandlers implements IWidgetHandler {
             },
             {
                 controlType: "toolbox-button",
-                tooltip: "Help",
-                iconClass: "paperbits-icon paperbits-c-question",
+                tooltip: "Change visibility",
+                iconClass: "paperbits-icon paperbits-single-02",
                 position: "top right",
                 color: "#607d8b",
                 callback: () => {
                     const view: View = {
-                        heading: `Access control`,
+                        heading: `Visibility`,
                         component: {
                             name: "role-based-security-model-editor",
                             params: {
