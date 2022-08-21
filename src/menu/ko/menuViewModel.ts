@@ -13,6 +13,7 @@ import verticalMenuTemplate from "./verticalMenu.html";
 import { Component } from "@paperbits/common/ko/decorators";
 import { MenuItemViewModel } from "./menuItemViewModel";
 import { StyleModel } from "@paperbits/common/styles";
+import { SecurityModel } from "@paperbits/common/security";
 
 
 @Component({
@@ -28,13 +29,13 @@ export class MenuViewModel {
     public readonly nodes: ko.ObservableArray<MenuItemViewModel>;
     public readonly layout: ko.Observable<string>;
     public readonly css: ko.Computed<any>;
-    public readonly roles: ko.ObservableArray<string>;
+    public readonly security: ko.Observable<SecurityModel>;
     public readonly styles: ko.Observable<StyleModel>;
 
     constructor() {
         this.nodes = ko.observableArray<MenuItemViewModel>([]);
         this.layout = ko.observable("vertical");
-        this.roles = ko.observableArray<string>();
+        this.security = ko.observable();
         this.styles = ko.observable();
         this.isEmpty = ko.pureComputed(() => {
             return false;

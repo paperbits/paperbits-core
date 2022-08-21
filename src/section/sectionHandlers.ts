@@ -95,6 +95,31 @@ export class SectionHandlers {
 
                     this.viewManager.openViewAsPopup(view);
                 }
+            }, 
+            {
+                controlType: "toolbox-button",
+                tooltip: "Change visibility",
+                iconClass: "paperbits-icon paperbits-a-security",
+                position: "top right",
+                color: "#607d8b",
+                callback: () => {
+                    const view: View = {
+                        heading: `Visibility`,
+                        component: {
+                            name: "role-based-security-model-editor",
+                            params: {
+                                securityModel: context.binding.model.security,
+                                onChange: (securityModel): void => {
+                                    context.binding.model.security = securityModel;
+                                    context.binding.applyChanges();
+                                }
+                            }
+                        },
+                        resizing: "vertically horizontally"
+                    };
+
+                    this.viewManager.openViewAsPopup(view);
+                }
             }]
         };
 

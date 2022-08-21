@@ -91,11 +91,6 @@ export class ButtonEditor {
         this.hyperlink(hyperlink);
     }
 
-    public onRoleSelect(roles: string[]): void {
-        this.model.roles = roles;
-        this.applyChanges();
-    }
-
     public onIconSelect(iconKey: string): void {
         this.model.iconKey = iconKey;
         this.applyChanges();

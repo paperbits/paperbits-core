@@ -1,5 +1,5 @@
 ﻿import { IWidgetOrder, IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
-import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
+import { IContextCommandSet, View, ViewManager } from "@paperbits/common/ui";
 import { MenuModel } from "./menuModel";
 
 export class MenuHandlers implements IWidgetHandler {
@@ -33,6 +33,31 @@ export class MenuHandlers implements IWidgetHandler {
                 tooltip: "Switch to parent",
                 iconClass: "paperbits-icon paperbits-enlarge-vertical",
                 callback: () => context.gridItem.getParent().select(),
+            },
+            {
+                controlType: "toolbox-button",
+                tooltip: "Change visibility",
+                iconClass: "paperbits-icon paperbits-a-security",
+                position: "top right",
+                color: "#607d8b",
+                callback: () => {
+                    const view: View = {
+                        heading: `Visibility`,
+                        component: {
+                            name: "role-based-security-model-editor",
+                            params: {
+                                securityModel: context.binding.model.security,
+                                onChange: (securityModel): void => {
+                                    context.binding.model.security = securityModel;
+                                    context.binding.applyChanges();
+                                }
+                            }
+                        },
+                        resizing: "vertically horizontally"
+                    };
+
+                    this.viewManager.openViewAsPopup(view);
+                }
             }],
             deleteCommand: {
                 controlType: "toolbox-button",

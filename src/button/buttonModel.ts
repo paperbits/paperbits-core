@@ -1,4 +1,5 @@
 import { HyperlinkModel } from "@paperbits/common/permalinks";
+import { SecurityModel } from "@paperbits/common/security";
 import { LocalStyles } from "@paperbits/common/styles";
 
 /**
@@ -16,19 +17,19 @@ export class ButtonModel {
     public hyperlink: HyperlinkModel;
 
     /**
+     * Icon key.
+     */
+     public iconKey?: string;
+
+    /**
      * Button local styles.
      */
     public styles: LocalStyles;
 
     /**
-     * Keys of user roles.
+     * Security settings.
      */
-    public roles?: string[];
-
-    /**
-     * Icon key.
-     */
-    public iconKey?: string;
+    public security?: SecurityModel;
 
     constructor() {
         this.label = "Button";

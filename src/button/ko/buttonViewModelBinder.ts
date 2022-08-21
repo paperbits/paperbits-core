@@ -10,7 +10,7 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
     public stateToIntance(state: WidgetState, componentInstance: Button): void {
         componentInstance.label(state.label);
         componentInstance.hyperlink(state.hyperlink);
-        componentInstance.roles(state.roles);
+        componentInstance.security(state.security);
         componentInstance.icon(state.iconClass);
         componentInstance.styles(state.styles);
     }
@@ -18,7 +18,7 @@ export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Butto
     public async modelToState(model: ButtonModel, state: WidgetState): Promise<void> {
         state.label = model.label;
         state.hyperlink = model.hyperlink;
-        state.roles = model.roles;
+        state.security = model.security;
 
         if (model.iconKey) {
             state.iconClass = this.styleCompiler.getIconClassName(model.iconKey);

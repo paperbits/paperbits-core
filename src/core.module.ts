@@ -38,6 +38,7 @@ import { VideoPlayerModule } from "./video-player/videoPlayer.publish.module";
 import { YoutubePlayerPublishModule } from "./youtube-player/youtubePlayer.publish.module";
 import { Bag } from "@paperbits/common";
 import { ComponentBinder, ContainerModelBinder } from "@paperbits/common/editing";
+import  { RoleBasedSecurityModelBinder } from "@paperbits/common/security/roleBasedSecurityModelBinder";
 
 
 /**
@@ -106,8 +107,8 @@ export class CoreModule implements IInjectorModule {
         injector.bindToCollection("routeGuards", MailtoRouteGuard);
         injector.bindToCollection("routeGuards", JavaScriptRouteGuard);
         injector.bindToCollection("autostart", WidgetBindingHandler);
-
         injector.bindToCollection("autostart", BackgroundBindingHandler);
         injector.bindToCollection("autostart", SecuredBindingHandler);
+        injector.bindSingleton("securityModelBinder", RoleBasedSecurityModelBinder);
     }
 }

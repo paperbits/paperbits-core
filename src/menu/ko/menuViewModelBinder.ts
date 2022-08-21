@@ -52,7 +52,7 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
         const menuItems = model.items.map(menuItem => this.menuItemModelToViewModel(menuItem));
         viewModel.nodes(menuItems);
         viewModel.layout(model.layout);
-        viewModel.roles(model.roles);
+        viewModel.security(model.security);
 
         if (model.styles) {
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
@@ -79,7 +79,7 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
                     type: "menu",
                     navigationItemKey: updates.navigationItem?.key,
                     layout: updates.layout,
-                    roles: updates.roles,
+                    security: updates.security,
                     minHeading: updates.minHeading,
                     maxHeading: updates.maxHeading,
                     styles: updates.styles
@@ -89,7 +89,7 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
                 model.navigationItem = model1.navigationItem;
                 model.items = model1.items;
                 model.layout = model1.layout;
-                model.roles = model1.roles;
+                model.security = model1.security;
                 model.minHeading = model1.minHeading;
                 model.maxHeading = model1.maxHeading;
                 model.styles = model1.styles;

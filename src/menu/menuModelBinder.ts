@@ -3,6 +3,7 @@ import { IModelBinder } from "@paperbits/common/editing";
 import { ILocaleService } from "@paperbits/common/localization";
 import { INavigationService, NavigationItemContract, NavigationItemModel } from "@paperbits/common/navigation";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
+import { SecurityModelBinder } from "@paperbits/common/security";
 import { BuiltInRoles } from "@paperbits/common/user";
 import { AnchorUtils } from "../text/anchorUtils";
 import { BlockContract } from "../text/contracts";
@@ -14,6 +15,7 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
     constructor(
         private readonly permalinkResolver: IPermalinkResolver,
         private readonly navigationService: INavigationService,
+        private readonly securityModelBinder: SecurityModelBinder<any, any>,
         private readonly localeService: ILocaleService
     ) { }
 
@@ -154,8 +156,17 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
         menuModel.maxHeading = contract.maxHeading;
         menuModel.items = [];
         menuModel.layout = contract.layout;
-        menuModel.roles = contract.roles || [BuiltInRoles.everyone.key];
         menuModel.styles = contract.styles || { appearance: "components/menu/default" };
+
+        if (contract.security) {
+            if (contract.roles) { // migration.
+                contract.security = {
+                    roles: contract.roles
+                }
+            }
+
+            menuModel.security = await this.securityModelBinder.contractToModel(contract.security);
+        }
 
         const currentPageUrl = bindingContext?.navigationPath;
 
@@ -189,21 +200,18 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
     }
 
     public modelToContract(model: MenuModel): Contract {
-        const roles = model.roles
-            && model.roles.length === 1
-            && model.roles[0] === BuiltInRoles.everyone.key
-            ? null
-            : model.roles;
-
         const contract: MenuContract = {
             type: "menu",
             minHeading: model.minHeading,
             maxHeading: model.maxHeading,
             navigationItemKey: model.navigationItem?.key,
             layout: model.layout,
-            styles: model.styles,
-            roles: roles
+            styles: model.styles
         };
+
+        if (model.security) {
+            contract.security = this.securityModelBinder.modelToContract(model.security);
+        }
 
 
         return contract;

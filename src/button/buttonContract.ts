@@ -1,6 +1,7 @@
 import { Contract } from "@paperbits/common";
 import { HyperlinkContract } from "@paperbits/common/editing";
 import { LocalStyles } from "@paperbits/common/styles";
+import { SecurityContract } from "@paperbits/common/security";
 
 
 /**
@@ -18,10 +19,15 @@ export interface ButtonContract extends Contract {
     styles?: LocalStyles;
 
     /**
-     * Keys of user roles.
+     * Security settings.
+     */
+     security?: SecurityContract;
+
+    /**
+     * @deprecated Keys of user roles.
      */
     roles?: string[];
-    
+
     /**
      * Assigned hyperlink.
      */
