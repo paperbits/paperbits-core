@@ -23,7 +23,6 @@ export class Button {
         this.styles = ko.observable<StyleModel>();
         this.hyperlink = ko.observable<HyperlinkModel>();
         this.icon = ko.observable<string>();
-        this.roles = ko.observableArray<string>();
         this.security = ko.observableArray<SecurityModel>();
     }
 }
