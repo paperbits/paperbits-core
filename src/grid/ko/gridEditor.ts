@@ -615,14 +615,14 @@ export class GridEditor {
         if (!context.half) { // Not selection mode.
             const handler = this.widgetService.getWidgetHandler(context.binding);
 
-            if (!handler.getStyleDefinitions) {
-                return null;
+            if (!handler?.getStyleDefinitions) {
+                return contextCommands;
             }
 
             const styleDefinitions = handler.getStyleDefinitions();
 
-            if (!styleDefinitions.components) {
-                return null;
+            if (!styleDefinitions?.components) {
+                return contextCommands;
             }
 
             const styleEditorCommand = this.getStyleEditorCommand(context.gridItem.element, context.binding, styleDefinitions);
@@ -912,13 +912,13 @@ export class GridEditor {
 
         const handler = this.widgetService.getWidgetHandler(binding);
 
-        if (!handler.getStyleDefinitions) {
+        if (!handler?.getStyleDefinitions) {
             return null;
         }
 
         const styleDefinitions = handler.getStyleDefinitions();
 
-        if (!styleDefinitions.components) {
+        if (!styleDefinitions?.components) {
             return null;
         }
 
