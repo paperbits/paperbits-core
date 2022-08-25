@@ -49,7 +49,7 @@ export class MenuHandlers implements IWidgetHandler {
                                 securityModel: context.binding.model.security,
                                 onChange: (securityModel): void => {
                                     context.binding.model.security = securityModel;
-                                    context.binding.applyChanges();
+                                    context.binding.applyChanges(context.binding.model);
                                 }
                             }
                         },

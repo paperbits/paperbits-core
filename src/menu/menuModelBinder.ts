@@ -158,13 +158,13 @@ export class MenuModelBinder implements IModelBinder<MenuModel> {
         menuModel.layout = contract.layout;
         menuModel.styles = contract.styles || { appearance: "components/menu/default" };
 
-        if (contract.security) {
-            if (contract.roles) { // migration.
-                contract.security = {
-                    roles: contract.roles
-                }
+        if (contract.roles) { // converting legacy security contract
+            contract.security = {
+                roles: contract.roles
             }
+        }
 
+        if (contract.security) {
             menuModel.security = await this.securityModelBinder.contractToModel(contract.security);
         }
 

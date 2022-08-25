@@ -26,13 +26,13 @@ export class ButtonModelBinder implements IModelBinder<ButtonModel>  {
         model.styles = contract.styles || { appearance: "components/button/default" };
         model.iconKey = contract.iconKey;
 
-        if (contract.security) {
-            if (contract.roles) { // migration.
-                contract.security = {
-                    roles: contract.roles
-                }
+        if (contract.roles) { // converting legacy security contract
+            contract.security = {
+                roles: contract.roles
             }
+        }
 
+        if (contract.security) {
             model.security = await this.securityModelBinder.contractToModel(contract.security);
         }
 
