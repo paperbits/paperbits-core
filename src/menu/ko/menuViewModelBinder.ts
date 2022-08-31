@@ -6,7 +6,6 @@ import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { MenuContract, MenuModelBinder } from "..";
-import { MenuHandlers } from "../menuHandlers";
 import { MenuModel } from "../menuModel";
 import { MenuItemViewModel } from "./menuItemViewModel";
 import { MenuViewModel } from "./menuViewModel";
@@ -72,7 +71,7 @@ export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewM
             model: model,
             flow: ComponentFlow.Inline, // Commented out due do discovered backward compatibility issues.
             draggable: true,
-            handler: MenuHandlers,
+            handler: "menuHandler",
             editor: "menu-editor",
             applyChanges: async (updates: MenuModel) => {
                 const contract: MenuContract = {

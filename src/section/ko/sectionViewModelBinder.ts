@@ -49,7 +49,7 @@ export class SectionViewModelBinder implements ViewModelBinder<SectionModel, Sec
             model: model,
             draggable: true,
             editor: "layout-section-editor",
-            handler: SectionHandlers,
+            handler: "sectionHandler",
             applyChanges: async () => {
                 await this.modelToViewModel(model, viewModel, bindingContext);
                 this.eventManager.dispatchEvent(Events.ContentUpdate);

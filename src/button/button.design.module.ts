@@ -10,6 +10,8 @@ import { ButtonEditor } from "./ko/buttonEditor";
 import { ButtonViewModelBinder } from "./ko/buttonViewModelBinder";
 
 export class ButtonDesignModule implements IInjectorModule {
+    public static buttonHandlerKey = "buttonHandler";
+
     public register(injector: IInjector): void {
         injector.bind("button", Button);
         injector.bind("buttonEditor", ButtonEditor);
@@ -41,7 +43,7 @@ export class ButtonDesignModule implements IInjectorModule {
             iconClass: "widget-icon widget-icon-button",
             componentBinder: KnockoutComponentBinder,
             componentDefinition: ButtonEditor,
-            handlerComponent: ButtonHandlers
+            handlerComponent: ButtonDesignModule.buttonHandlerKey,
         });
     }
 }
