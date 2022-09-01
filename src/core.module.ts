@@ -12,7 +12,7 @@ import { NavigationService } from "@paperbits/common/navigation";
 import { PageService } from "@paperbits/common/pages";
 import { PagePermalinkResolver } from "@paperbits/common/pages/pagePermalinkResolver";
 import { DefaultPermalinkService, PermalinkResolver } from "@paperbits/common/permalinks";
-import { DefaultRouteGuard, MailtoRouteGuard, JavaScriptRouteGuard, DefaultRouter } from "@paperbits/common/routing";
+import { DefaultRouteGuard, DefaultRouter, JavaScriptRouteGuard, MailtoRouteGuard } from "@paperbits/common/routing";
 import { SiteService } from "@paperbits/common/sites";
 import { UrlService } from "@paperbits/common/urls";
 import { UrlPermalinkResolver } from "@paperbits/common/urls/urlPermalinkResolver";
@@ -24,7 +24,6 @@ import { ContentModule } from "./content/ko";
 import { GridCellModule } from "./grid-cell/ko/gridCell.module";
 import { GridModule } from "./grid-layout-section/ko/grid.module";
 import { BackgroundBindingHandler } from "./ko/bindingHandlers/bindingHandlers.background";
-import { SecuredBindingHandler } from "./ko/bindingHandlers/bindingHandlers.secured";
 import { WidgetBindingHandler } from "./ko/bindingHandlers/bindingHandlers.widget";
 import { KnockoutRegistrationLoaders } from "./ko/knockout.loaders";
 import { KnockoutModule } from "./ko/knockout.module";
@@ -38,7 +37,6 @@ import { VideoPlayerModule } from "./video-player/videoPlayer.publish.module";
 import { YoutubePlayerPublishModule } from "./youtube-player/youtubePlayer.publish.module";
 import { Bag } from "@paperbits/common";
 import { ComponentBinder, ContainerModelBinder } from "@paperbits/common/editing";
-import  { RoleBasedSecurityModelBinder } from "@paperbits/common/security/roleBasedSecurityModelBinder";
 
 
 /**
@@ -108,7 +106,5 @@ export class CoreModule implements IInjectorModule {
         injector.bindToCollection("routeGuards", JavaScriptRouteGuard);
         injector.bindToCollection("autostart", WidgetBindingHandler);
         injector.bindToCollection("autostart", BackgroundBindingHandler);
-        injector.bindToCollection("autostart", SecuredBindingHandler);
-        injector.bindSingleton("securityModelBinder", RoleBasedSecurityModelBinder);
     }
 }

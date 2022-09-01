@@ -1,10 +1,15 @@
 ﻿import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
-import { IContextCommandSet, View, ViewManager } from "@paperbits/common/ui";
+import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { ButtonModel } from "./buttonModel";
+import { IVisibilityCommandProvider } from "../security/visibilityContextCommandProvider";
 
 
 export class ButtonHandlers implements IWidgetHandler {
-    constructor(private readonly viewManager: ViewManager) { }
+    constructor(
+        private readonly viewManager: ViewManager,
+        private readonly visibilityCommandProvider: IVisibilityCommandProvider,
+    ) {
+    }
 
     public async getWidgetModel(): Promise<ButtonModel> {
         return new ButtonModel();
@@ -12,45 +17,22 @@ export class ButtonHandlers implements IWidgetHandler {
 
     public getContextCommands(context: WidgetContext): IContextCommandSet {
         const contextualEditor: IContextCommandSet = {
-            selectCommands: [{
-                controlType: "toolbox-button",
-                displayName: "Edit button",
-                callback: () => this.viewManager.openWidgetEditor(context.binding)
-            },
-            {
-                controlType: "toolbox-splitter"
-            },
-            {
-                controlType: "toolbox-button",
-                tooltip: "Switch to parent",
-                iconClass: "paperbits-icon paperbits-enlarge-vertical",
-                callback: () => context.gridItem.getParent().select(),
-            },
-            {
-                controlType: "toolbox-button",
-                tooltip: "Change visibility",
-                iconClass: "paperbits-icon paperbits-a-security",
-                position: "top right",
-                color: "#607d8b",
-                callback: () => {
-                    const view: View = {
-                        heading: `Visibility`,
-                        component: {
-                            name: "role-based-security-model-editor",
-                            params: {
-                                securityModel: context.binding.model.security,
-                                onChange: (securityModel): void => {
-                                    context.binding.model.security = securityModel;
-                                    context.binding.applyChanges();
-                                }
-                            }
-                        },
-                        resizing: "vertically horizontally"
-                    };
-
-                    this.viewManager.openViewAsPopup(view);
-                }
-            }
+            selectCommands: [
+                {
+                    controlType: "toolbox-button",
+                    displayName: "Edit button",
+                    callback: () => this.viewManager.openWidgetEditor(context.binding),
+                },
+                {
+                    controlType: "toolbox-splitter",
+                },
+                {
+                    controlType: "toolbox-button",
+                    tooltip: "Switch to parent",
+                    iconClass: "paperbits-icon paperbits-enlarge-vertical",
+                    callback: () => context.gridItem.getParent().select(),
+                },
+                this.visibilityCommandProvider.create(context),
                 // {
                 //     controlType: "toolbox-button",
                 //     tooltip: "Help",
@@ -58,7 +40,7 @@ export class ButtonHandlers implements IWidgetHandler {
                 //     position: "top right",
                 //     color: "#607d8b",
                 //     callback: () => {
-                //         // 
+                //         //
                 //     }
                 // }
             ],
@@ -69,8 +51,8 @@ export class ButtonHandlers implements IWidgetHandler {
                     context.parentModel.widgets.remove(context.model);
                     context.parentBinding.applyChanges();
                     this.viewManager.clearContextualCommands();
-                }
-            }
+                },
+            },
         };
 
         return contextualEditor;
