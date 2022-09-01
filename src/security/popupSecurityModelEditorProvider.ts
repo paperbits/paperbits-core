@@ -1,11 +1,9 @@
 import { View, ViewManager } from "@paperbits/common/ui";
 import { WidgetContext } from "@paperbits/common/editing";
 import { BaseVisibilityContextCommandProvider } from "./baseVisibilityContextCommandProvider";
-import { ISecurityModelEditor } from "./ISecurityModelEditor";
+import { SecurityModelEditor } from "./securityModelEditor";
 
 export abstract class PopupSecurityModelEditorProvider extends BaseVisibilityContextCommandProvider {
-
-    protected readonly viewParams?: Partial<Exclude<View, "component">>;
 
     protected constructor(
         private readonly viewManager: ViewManager,
@@ -15,7 +13,7 @@ export abstract class PopupSecurityModelEditorProvider extends BaseVisibilityCon
     }
 
     protected executeCommand(context: WidgetContext) {
-        const securityModelEditorParams: ISecurityModelEditor = {
+        const securityModelEditorParams: SecurityModelEditor = {
             securityModel: context.binding.model.security,
             onChange: (securityModel): void => {
                 context.binding.model.security = securityModel;
@@ -29,7 +27,6 @@ export abstract class PopupSecurityModelEditorProvider extends BaseVisibilityCon
                 params: securityModelEditorParams,
             },
             resizing: "vertically horizontally",
-            ...this.viewParams,
         };
         this.viewManager.openViewAsPopup(view);
     }

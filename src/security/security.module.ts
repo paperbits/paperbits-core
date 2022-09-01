@@ -7,5 +7,4 @@ export class SecurityModule implements IInjectorModule {
         injector.bindToCollection("autostart", SecuredBindingHandler);
         injector.bindSingleton("securityModelBinder", RoleBasedSecurityModelBinder);
     }
-
 }
