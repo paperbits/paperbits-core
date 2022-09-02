@@ -4,7 +4,7 @@ import { LightboxBindingHandler } from "./ko/bindingHandlers/bindingHandlers.lig
 import { GridBindingHandler } from "./ko/bindingHandlers/bindingHandlers.grid";
 import { DraggablesBindingHandler } from "./ko/bindingHandlers/bindingHandlers.draggables";
 import { CoreModule } from "./core.module";
-import { IInjectorModule, IInjector } from "@paperbits/common/injection";
+import { IInjector, IInjectorModule } from "@paperbits/common/injection";
 import { VideoPlayerDesignModule } from "./video-player/videoPlayer.design.module";
 import { PictureDesignModule } from "./picture/picture.design.module";
 import { YoutubePlayerDesignModule } from "./youtube-player/youtubePlayer.design.module";
@@ -14,7 +14,6 @@ import { ColumnEditorModule } from "./column/ko/columnEditor.module";
 import { SectionEditorModule } from "./section/ko/sectionEditor.module";
 import { RowEditorModule } from "./row/ko/rowEditor.module";
 import { BlockWorkshopModule } from "./workshops/block/ko/block.module";
-import { BlogDesignModule } from "./workshops/blog/ko/blog.design.module";
 import { PageDesignModule } from "./workshops/page/ko/page.design.module";
 import { MediaWorkshopModule } from "./workshops/media/ko/media.module";
 import { NavigationWorkshopModule } from "./workshops/navigation/ko/navigation.module";
@@ -23,12 +22,18 @@ import { Workshops } from "./workshops/workshops";
 import { TextblockDesignModule } from "./textblock/textblock.design.module";
 import { DropbucketModule } from "./workshops/dropbucket/ko/dropbucket.module";
 import { ViewportSelector } from "./workshops/viewports/ko/viewport-selector";
-import { LocaleSelector, LocaleEditor } from "./workshops/localization/ko";
-import { HostBindingHandler, BalloonBindingHandler, ResizableBindingHandler, SurfaceBindingHandler, ContextualCommandBindingHandler } from "./ko/bindingHandlers";
-import { MediaHandlers, HtmlEditorProvider } from "@paperbits/common/editing";
+import { LocaleEditor, LocaleSelector } from "./workshops/localization/ko";
+import {
+    BalloonBindingHandler,
+    ContextualCommandBindingHandler,
+    HostBindingHandler,
+    ResizableBindingHandler,
+    SurfaceBindingHandler,
+} from "./ko/bindingHandlers";
+import { HtmlEditorProvider, MediaHandlers } from "@paperbits/common/editing";
 import { HyperlinkSelector } from "./workshops/hyperlinks/ko/hyperlinkSelector";
 import { WidgetSelector } from "./workshops/widgets/ko/widgetSelector";
-import { UrlSelector, UrlHyperlinkDetails } from "./workshops/urls/ko";
+import { UrlHyperlinkDetails, UrlSelector } from "./workshops/urls/ko";
 import { LayoutDesignModule } from "./layout/ko/layout.design.module";
 import { UrlHyperlinkProvider } from "@paperbits/common/urls/urlHyperlinkProvider";
 import { MediaHyperlinkProvider } from "@paperbits/common/media";
@@ -47,7 +52,7 @@ import { CollapsiblePanelEditorModule } from "./collapsible-panel/ko";
 import { MenuEditorModule } from "./menu/ko";
 import { Spinner } from "./ko";
 import { DesignerUserService } from "./ko/ui/designerUserService";
-import { RoleSelector, RoleInput } from "./workshops/roles/ko";
+import { RoleInput, RoleSelector } from "./workshops/roles/ko";
 import "./ko/bindingHandlers/bindingHandlers.dialog";
 import "./ko/bindingHandlers/bindingHandlers.activate";
 import "./ko/bindingHandlers/bindingHandlers.attr2way";
@@ -80,8 +85,6 @@ import { KnockoutDesignModule } from "./ko/knockout.design.module";
 import { HelpCenterBindingHandler } from "./ko/bindingHandlers/bindingHandlers.helpCenter";
 import { HelpCenter } from "./workshops/helpCenter/helpCenter";
 import { ConsoleLogger } from "@paperbits/common/logging";
-import { AccessContextToolButton } from "./workshops/accessContextToolbutton";
-import { RoleBasedSecurityModelEditor } from "./workshops/roles/ko/roleBasedSecurityModelEditor";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -188,7 +191,5 @@ export class CoreDesignModule implements IInjectorModule {
         const userService = new DesignerUserService();
         injector.bindInstance("userService", userService);
         injector.bindInstance("designerUserService", userService);
-        injector.bindToCollection("trayCommands", AccessContextToolButton);
-        injector.bind("securityModelEditor", RoleBasedSecurityModelEditor);
     }
 }

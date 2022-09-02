@@ -3,12 +3,13 @@ import template from "./roleBasedSecurityModelEditor.html";
 import { Component, Event, OnMounted, Param } from "@paperbits/common/ko/decorators";
 import { BuiltInRoles, RoleModel, RoleService } from "@paperbits/common/user";
 import { RoleBasedSecurityModel } from "@paperbits/common/security/roleBasedSecurityModel";
+import { SecurityModelEditor } from "../../../security";
 
 @Component({
     selector: "role-based-security-model-editor",
-    template: template
+    template: template,
 })
-export class RoleBasedSecurityModelEditor {
+export class RoleBasedSecurityModelEditor implements SecurityModelEditor<RoleBasedSecurityModel> {
     constructor(private readonly roleService: RoleService) {
         this.availableRoles = ko.observableArray();
         this.selectedRoles = ko.observableArray();
