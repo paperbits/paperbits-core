@@ -1,15 +1,16 @@
 import { IInjector, IInjectorModule } from "@paperbits/common/injection";
 import { AccessContextToolButton } from "../workshops/accessContextToolbutton";
 import { RoleBasedSecurityModelEditor } from "../workshops/roles/ko/roleBasedSecurityModelEditor";
-import { SecurityModule } from "./security.module";
-import { RoleBaseSecurityModelEditorProvider } from "./roleBaseSecurityModelEditorProvider";
+import { RoleBasedSecurityPublishModule } from "./roleBasedSecurity.publish.module";
+import { RoleBasedSecurityModelEditorProvider } from "./roleBasedSecurityModelEditorProvider";
 
-export class SecurityDesignModule implements IInjectorModule {
+export class RoleBasedSecurityDesignModule implements IInjectorModule {
     register(injector: IInjector): void {
-        injector.bindModule(new SecurityModule());
+        injector.bindModule(new RoleBasedSecurityPublishModule());
+
+        injector.bindSingleton("visibilityCommandProvider", RoleBasedSecurityModelEditorProvider);
 
         injector.bindToCollection("trayCommands", AccessContextToolButton);
         injector.bind("securityModelEditor", RoleBasedSecurityModelEditor);
-        injector.bind("visibilityCommandProvider", RoleBaseSecurityModelEditorProvider);
     }
 }
