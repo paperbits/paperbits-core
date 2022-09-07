@@ -7,7 +7,7 @@ import {
     IVisibilityCommandProvider,
 } from "./visibilityContextCommandProvider";
 
-export class RoleBaseSecurityModelEditorProvider implements IVisibilityCommandProvider {
+export class RoleBasedSecurityModelEditorProvider implements IVisibilityCommandProvider {
 
     constructor(
         private readonly viewManager: ViewManager,
