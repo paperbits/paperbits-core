@@ -16,7 +16,6 @@ import "./bindingHandlers/bindingHandlers.tooltip";
 import "./bindingHandlers/bindingHandlers.collapse";
 import "./bindingHandlers/bindingHandlers.stickTo";
 import "./bindingHandlers/bindingHandlers.scrollable";
-import "./bindingHandlers/bindingHandlers.roleBasedSecured";
 import "./bindingHandlers/bindingHandlers.slider";
 import "./bindingHandlers/bindingHandlers.angle";
 import "./bindingHandlers/bindingHandlers.srcset";

@@ -7,7 +7,7 @@ import { RoleBasedSecurityModel } from "@paperbits/common/security/roleBasedSecu
 export class RoleBasedSecuredBindingHandler {
     constructor(
         private readonly eventManager: EventManager,
-        private readonly userService: UserService,
+        private readonly userService: UserService
     ) {
         ko.bindingHandlers["secured"] = {
             init: (element: HTMLElement, valueAccessor: any) => {

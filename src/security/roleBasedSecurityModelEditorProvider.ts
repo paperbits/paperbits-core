@@ -1,20 +1,16 @@
 import { ViewManager } from "@paperbits/common/ui";
 import { WidgetContext } from "@paperbits/common/editing";
-import { IContextCommand } from "@paperbits/common/ui/IContextCommandSet";
+import { IContextCommand } from "@paperbits/common/ui";
 import {
     createSecurityModelEditorComponent,
     createStandardVisibilityCommand,
-    IVisibilityCommandProvider,
+    IVisibilityCommandProvider
 } from "./visibilityContextCommandProvider";
 
 export class RoleBasedSecurityModelEditorProvider implements IVisibilityCommandProvider {
+    constructor(private readonly viewManager: ViewManager) { }
 
-    constructor(
-        private readonly viewManager: ViewManager,
-    ) {
-    }
-
-    create(context: WidgetContext): IContextCommand {
+    public create(context: WidgetContext): IContextCommand {
         return createStandardVisibilityCommand(() =>
             this.viewManager.openViewAsPopup({
                 heading: `Visibility`,
