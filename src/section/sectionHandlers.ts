@@ -1,56 +1,60 @@
 import * as Utils from "@paperbits/common/utils";
 import { IContextCommandSet, View, ViewManager } from "@paperbits/common/ui";
-import { WidgetContext } from "@paperbits/common/editing";
+import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { SectionModel } from "./sectionModel";
 import { RowModel } from "../row/rowModel";
 import { EventManager, Events } from "@paperbits/common/events";
 import { SectionModelBinder } from "./sectionModelBinder";
+import { IVisibilityCommandProvider } from "../security/visibilityContextCommandProvider";
 
 
-export class SectionHandlers {
+export class SectionHandlers implements IWidgetHandler {
     constructor(
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager,
-        private readonly sectionModelBinder: SectionModelBinder
-    ) { }
+        private readonly sectionModelBinder: SectionModelBinder,
+        private readonly visibilityCommandProvider: IVisibilityCommandProvider,
+    ) {
+    }
 
     public getContextCommands(context: WidgetContext): IContextCommandSet {
         const sectionContextualEditor: IContextCommandSet = {
             color: "#2b87da",
-            hoverCommands: [{
-                controlType: "toolbox-button",
-                position: context.half,
-                iconClass: "paperbits-icon paperbits-simple-add",
-                tooltip: "Add section",
-                color: "#2b87da",
-                component: {
-                    name: "grid-layout-selector",
-                    params: {
-                        heading: "Add section",
-                        onSelect: (sectionModel: SectionModel) => {
-                            if (!sectionModel.styles.instance) {
-                                sectionModel.styles.instance = {};
-                            }
+            hoverCommands: [
+                {
+                    controlType: "toolbox-button",
+                    position: context.half,
+                    iconClass: "paperbits-icon paperbits-simple-add",
+                    tooltip: "Add section",
+                    color: "#2b87da",
+                    component: {
+                        name: "grid-layout-selector",
+                        params: {
+                            heading: "Add section",
+                            onSelect: (sectionModel: SectionModel) => {
+                                if (!sectionModel.styles.instance) {
+                                    sectionModel.styles.instance = {};
+                                }
 
-                            sectionModel.styles.instance.key = Utils.randomClassName();
+                                sectionModel.styles.instance.key = Utils.randomClassName();
 
-                            const sectionHalf = context.half;
+                                const sectionHalf = context.half;
 
-                            let index = context.parentModel.widgets.indexOf(context.model);
+                                let index = context.parentModel.widgets.indexOf(context.model);
 
-                            if (sectionHalf === "bottom") {
-                                index++;
-                            }
+                                if (sectionHalf === "bottom") {
+                                    index++;
+                                }
 
-                            context.parentModel.widgets.splice(index, 0, sectionModel);
-                            context.parentBinding.applyChanges();
+                                context.parentModel.widgets.splice(index, 0, sectionModel);
+                                context.parentBinding.applyChanges();
 
-                            this.viewManager.clearContextualCommands();
-                            this.eventManager.dispatchEvent(Events.ContentUpdate);
-                        }
-                    }
-                }
-            }],
+                                this.viewManager.clearContextualCommands();
+                                this.eventManager.dispatchEvent(Events.ContentUpdate);
+                            },
+                        },
+                    },
+                }],
             deleteCommand: {
                 controlType: "toolbox-button",
                 tooltip: "Delete section",
@@ -60,67 +64,45 @@ export class SectionHandlers {
                     context.parentBinding.applyChanges();
 
                     this.viewManager.clearContextualCommands();
-                }
+                },
             },
-            selectCommands: [{
-                controlType: "toolbox-button",
-                displayName: "Edit section",
-                position: "top right",
-                color: "#2b87da",
-                callback: () => this.viewManager.openWidgetEditor(context.binding)
-            },
-            {
-                controlType: "toolbox-splitter"
-            },
-            {
-                controlType: "toolbox-button",
-                tooltip: "Add to library",
-                iconClass: "paperbits-icon paperbits-simple-add",
-                position: "top right",
-                color: "#2b87da",
-                callback: () => {
-                    const sectionContract = this.sectionModelBinder.modelToContract(<SectionModel>context.model);
+            selectCommands: [
+                {
+                    controlType: "toolbox-button",
+                    displayName: "Edit section",
+                    position: "top right",
+                    color: "#2b87da",
+                    callback: () => this.viewManager.openWidgetEditor(context.binding),
+                },
+                {
+                    controlType: "toolbox-splitter",
+                },
+                {
+                    controlType: "toolbox-button",
+                    tooltip: "Add to library",
+                    iconClass: "paperbits-icon paperbits-simple-add",
+                    position: "top right",
+                    color: "#2b87da",
+                    callback: () => {
+                        const sectionContract = this.sectionModelBinder.modelToContract(<SectionModel>context.model);
 
-                    const view: View = {
-                        heading: "Add to library",
-                        component: {
-                            name: "add-block-dialog",
-                            params: {
-                                blockContract: sectionContract,
-                                blockType: "layout-section"
-                            }
-                        },
-                        resizing: "vertically horizontally"
-                    };
+                        const view: View = {
+                            heading: "Add to library",
+                            component: {
+                                name: "add-block-dialog",
+                                params: {
+                                    blockContract: sectionContract,
+                                    blockType: "layout-section",
+                                },
+                            },
+                            resizing: "vertically horizontally",
+                        };
 
-                    this.viewManager.openViewAsPopup(view);
-                }
-            }, 
-            {
-                controlType: "toolbox-button",
-                tooltip: "Change visibility",
-                iconClass: "paperbits-icon paperbits-a-security",
-                position: "top right",
-                color: "#607d8b",
-                callback: () => {
-                    const view: View = {
-                        heading: `Visibility`,
-                        component: {
-                            name: "role-based-security-model-editor",
-                            params: {
-                                securityModel: context.binding.model.security,
-                                onChange: (securityModel): void => {
-                                    context.binding.model.security = securityModel;
-                                    context.binding.applyChanges();
-                                }
-                            }
-                        },
-                        resizing: "vertically horizontally"
-                    };
-
-                    this.viewManager.openViewAsPopup(view);
-                }
-            }]
+                        this.viewManager.openViewAsPopup(view);
+                    },
+                },
+                this.visibilityCommandProvider.create(context),
+            ],
         };
 
         if (context.model.widgets.length === 0) {
@@ -143,9 +125,9 @@ export class SectionHandlers {
 
                             this.viewManager.clearContextualCommands();
                             this.eventManager.dispatchEvent(Events.ContentUpdate);
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             });
         }
 
