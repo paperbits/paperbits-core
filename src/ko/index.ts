@@ -3,3 +3,4 @@ export * from "./knockout.loaders";
 export * from "./knockout.module";
 export * from "./viewModelBinderSelector";
 export * from "./widgetViewModel";
+export * from "./knockoutComponentBinder";
