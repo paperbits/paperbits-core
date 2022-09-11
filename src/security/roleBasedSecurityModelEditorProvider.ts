@@ -1,6 +1,5 @@
-import { ViewManager } from "@paperbits/common/ui";
+import { ViewManager, IContextCommand } from "@paperbits/common/ui";
 import { WidgetContext } from "@paperbits/common/editing";
-import { IContextCommand } from "@paperbits/common/ui";
 import {
     createSecurityModelEditorComponent,
     createStandardVisibilityCommand,
