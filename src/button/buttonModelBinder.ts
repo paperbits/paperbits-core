@@ -12,14 +12,6 @@ export class ButtonModelBinder implements IModelBinder<ButtonModel>  {
         private readonly securityModelBinder: SecurityModelBinder<any, any>
     ) { }
 
-    public canHandleContract(contract: Contract): boolean {
-        return contract.type === "button";
-    }
-
-    public canHandleModel(model: Object): boolean {
-        return model instanceof ButtonModel;
-    }
-
     public async contractToModel(contract: ButtonContract): Promise<ButtonModel> {
         const model = new ButtonModel();
         model.label = contract.label;

@@ -10,14 +10,6 @@ export class CardModelBinder extends ContainerModelBinder implements IModelBinde
         super(widgetService, modelBinderSelector);
     }
 
-    public canHandleContract(contract: Contract): boolean {
-        return contract.type === "card";
-    }
-
-    public canHandleModel(model: Object): boolean {
-        return model instanceof CardModel;
-    }
-
     public async contractToModel(contract: CardContract, bindingContext?: Bag<any>): Promise<CardModel> {
         const model = new CardModel();
 
