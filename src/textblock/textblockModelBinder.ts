@@ -28,14 +28,6 @@ export class TextblockModelBinder implements IModelBinder<TextblockModel> {
         return model;
     }
 
-    public canHandleContract(contract: Contract): boolean {
-        return contract.type === "text-block";
-    }
-
-    public canHandleModel(model: TextblockModel): boolean {
-        return model instanceof TextblockModel;
-    }
-
     public modelToContract(model: TextblockModel): Contract {
         let content: BlockModel[];
 
