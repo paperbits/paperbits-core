@@ -14,6 +14,6 @@ export class KnockoutComponentBinder implements ComponentBinder {
     }
 
     public async unbind(element: Element): Promise<void> {
-        ko.cleanNode(element);
+        // TODO
     }
 }
