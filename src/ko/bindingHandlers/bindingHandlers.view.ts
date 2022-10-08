@@ -1,0 +1,35 @@
+﻿import * as ko from "knockout";
+import { Component } from "@paperbits/common/ko/decorators";
+import { View } from "@paperbits/common/ui";
+
+
+
+ko.bindingHandlers["view"] = {
+    init: function (element: any, valueAccessor: any, ignored1: any, ignored2: any, bindingContext: any): any {
+        const view: View = valueAccessor();
+
+        const componentBinder = view.componentBinder;
+
+        if (!componentBinder) {
+            console.log(view.component)
+            ko.applyBindingsToNode(element, { component: view.component }, null);
+            return;
+        }
+
+        componentBinder.bind(element, view.componentDefinition, view.componentParams);
+
+        if (componentBinder.unbind) {
+            ko.utils.domNodeDisposal.addDisposeCallback(element, () => componentBinder.unbind(element));
+        }
+    }
+}
+
+@Component({
+    selector: "custom-view",
+    template: "<!--ko view: "
+})
+export class CustomView {
+
+}
+
+ko.virtualElements.allowedBindings["view"] = true;

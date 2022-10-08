@@ -1,13 +1,12 @@
 ﻿import * as ko from "knockout";
 import * as Arrays from "@paperbits/common";
 import { ComponentFlow, IWidgetBinding, WidgetBinding } from "@paperbits/common/editing";
-import { ComponentBinder } from "@paperbits/common/editing/componentBinder";
-import { Bag } from "@paperbits/common";
 import { ComponentDefinition } from "../componentDefinition";
+import { KnockoutComponentBinder } from "../knockoutComponentBinder";
 
 
 export class WidgetBindingHandler {
-    constructor(componentBinders: Bag<ComponentBinder>) {
+    constructor() {
         let componentLoadingOperationUniqueId = 0;
 
         ko.bindingHandlers["widget"] = {
@@ -20,7 +19,7 @@ export class WidgetBindingHandler {
                 }
 
                 /* New binding logic */
-                if (bindingConfig instanceof WidgetBinding) {
+                if (bindingConfig instanceof WidgetBinding && !(bindingConfig.componentBinder instanceof KnockoutComponentBinder)) {
                     const binding = <WidgetBinding<any, any>>bindingConfig;
                     const componentBinder = binding.componentBinder;
 
@@ -28,10 +27,23 @@ export class WidgetBindingHandler {
                         throw new Error(`No component binders registered for ${binding.framework} framework. Binding: ${binding.name}`);
                     }
 
-                    componentBinder.init(element, binding);
+                    componentBinder
+                        .bind(element, binding.componentDefinition)
+                        .then(componentInstance => {
+                            binding.viewModel = componentInstance;
+                            binding.onCreate(componentInstance);
+                        });
 
-                    if (componentBinder.dispose) {
-                        ko.utils.domNodeDisposal.addDisposeCallback(element, () => componentBinder.dispose(element, binding));
+                    if (binding.draggable) {
+                        let nonVirtualElement: Node = getNonVirtualElement(element);
+
+                        if (nonVirtualElement) {
+                            ko.applyBindingsToNode(nonVirtualElement, { draggable: {} }, null);
+                        }
+                    }
+
+                    if (componentBinder.unbind) {
+                        ko.utils.domNodeDisposal.addDisposeCallback(element, () => componentBinder.unbind(element));
                     }
 
                     return { controlsDescendantBindings: true };
@@ -71,16 +83,24 @@ export class WidgetBindingHandler {
                 ko.virtualElements.emptyNode(element);
                 ko.utils.domNodeDisposal.addDisposeCallback(element, disposeAssociatedComponentViewModel);
 
-
                 ko.computed(function (): void {
-                    const componentViewModel = ko.utils.unwrapObservable(valueAccessor());
+                    const bindingOrViewModel = ko.utils.unwrapObservable(valueAccessor());
 
-                    if (!componentViewModel) {
+                    if (!bindingOrViewModel) {
                         return;
                     }
 
+                    let componentViewModel: any;
+
+                    if (!(bindingOrViewModel instanceof WidgetBinding)) {
+                        componentViewModel = bindingOrViewModel;
+                    }
+
                     /* Legacy binding logic */
-                    const registration = Reflect.getMetadata("paperbits-component", bindingConfig.constructor);
+
+                    const constructor = bindingConfig.componentDefinition || bindingConfig.constructor;
+
+                    const registration = Reflect.getMetadata("paperbits-component", constructor);
 
                     if (!registration) {
                         throw new Error(`Could not find component registration for view model: ${bindingConfig}`);
@@ -94,11 +114,7 @@ export class WidgetBindingHandler {
 
                     const asyncContext = ko.bindingEvent.startPossiblyAsyncContentBinding(element, bindingContext);
                     const loadingOperationId = currentLoadingOperationId = ++componentLoadingOperationUniqueId;
-                    const binding: IWidgetBinding<any, any> = componentViewModel["widgetBinding"];
-
-                    if (binding && binding.onCreate) {
-                        binding.onCreate();
-                    }
+                    const binding: IWidgetBinding<any, any> = bindingOrViewModel["widgetBinding"] || bindingConfig;
 
                     ko.components.get(componentName, function (componentDefinition: ComponentDefinition): any {
                         // If this is not the current load operation for this element, ignore it.
@@ -116,25 +132,47 @@ export class WidgetBindingHandler {
 
                         cloneTemplateIntoElement(componentName, componentDefinition, element);
 
-                        const childBindingContext = asyncContext["createChildContext"](componentViewModel, {
-                            extend: function (ctx: any): any {
-                                ctx["$component"] = componentViewModel;
-                                ctx["$componentTemplateNodes"] = originalChildNodes;
-                            }
-                        });
+                        let childBindingContext: ko.BindingContext<any>;
+
+                        if (componentViewModel) {
+                            childBindingContext = asyncContext["createChildContext"](componentViewModel, {
+                                extend: function (ctx: any): any {
+                                    ctx["$component"] = componentViewModel;
+                                    ctx["$componentTemplateNodes"] = originalChildNodes;
+                                }
+                            });
+                        }
+                        else {
+                            const componentParams = ko.utils.unwrapObservable(bindingOrViewModel["params"]);
+                            const componentInfo = { element: element, templateNodes: originalChildNodes };
+
+                            componentViewModel = createViewModel(componentDefinition, componentParams, componentInfo),
+                                childBindingContext = asyncContext["createChildContext"](componentViewModel, {
+                                    extend: function (ctx: any): any {
+                                        ctx["$component"] = componentViewModel;
+                                        ctx["$componentTemplateNodes"] = originalChildNodes;
+                                    }
+                                });
+
+                            componentViewModel["widgetBinding"] = binding;
+                        }
 
                         if (componentViewModel && componentViewModel["koDescendantsComplete"]) {
                             afterRenderSub = ko.bindingEvent.subscribe(element, ko.bindingEvent["descendantsComplete"], componentViewModel["koDescendantsComplete"], componentViewModel);
                         }
 
                         currentViewModel = componentViewModel;
+
+                        if (binding && binding.onCreate) {
+                            binding["viewModel"] = currentViewModel;
+                            binding.onCreate(currentViewModel);
+                        }
+
                         ko.applyBindingsToDescendants(childBindingContext, element);
 
                         let nonVirtualElement: Node = getNonVirtualElement(element);
 
                         if (nonVirtualElement) {
-                            const binding: IWidgetBinding<any, any> = componentViewModel["widgetBinding"];
-
                             if (binding) {
                                 ko.applyBindingsToNode(nonVirtualElement, {
                                     css: {
@@ -158,6 +196,13 @@ export class WidgetBindingHandler {
                 return { controlsDescendantBindings: true };
             }
         };
+
+        function createViewModel(componentDefinition: ComponentDefinition, componentParams: any, componentInfo: any): any {
+            const componentViewModelFactory = componentDefinition["createViewModel"];
+            return componentViewModelFactory
+                ? componentViewModelFactory.call(componentDefinition, componentParams, componentInfo)
+                : componentParams; // Template-only component
+        }
 
         function getNonVirtualElement(element: Node): HTMLElement {
             let nonVirtualElement: Node = element;

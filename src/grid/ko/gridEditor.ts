@@ -802,8 +802,8 @@ export class GridEditor {
             return null;
         }
 
-        const widgetBinding = context.$data instanceof WidgetBinding
-            ? context.$data
+        const widgetBinding = context.widget instanceof WidgetBinding
+            ? context.widget
             : context.$data?.widgetBinding;
 
         if (!widgetBinding) {

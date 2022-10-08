@@ -59,6 +59,7 @@ import "./ko/bindingHandlers/bindingHandlers.attr2way";
 import "./ko/bindingHandlers/bindingHandlers.whenInView";
 import "./ko/bindingHandlers/bindingHandlers.listbox";
 import "./ko/bindingHandlers/bindingHandlers.markdown";
+import "./ko/bindingHandlers/bindingHandlers.view";
 import { ContentEditorModule } from "./content/ko";
 import { ViewStack } from "@paperbits/common/ui/viewStack";
 import { MediaDisplay } from "./workshops/media/ko/mediaDisplay";
