@@ -38,16 +38,20 @@ export class GridBindingHandler {
             if (viewManager.mode === ViewManagerMode.configure) {
                 return;
             }
-            const placeholderWidth = sourceElement.clientWidth - 1 + "px";
-            const placeholderHeight = sourceElement.clientHeight - 1 + "px";
             const sourceBinding = GridHelper.getWidgetBinding(sourceElement);
             const sourceModel = GridHelper.getModel(sourceElement);
             const sourceParentBinding = GridHelper.getParentWidgetBinding(sourceElement);
             const sourceParentModel = sourceParentBinding.model;
+            const sourceElementStyle = getComputedStyle(sourceElement);
 
             placeholderElement = sourceElement.ownerDocument.createElement("div");
-            placeholderElement.style.height = placeholderHeight;
-            placeholderElement.style.width = placeholderWidth;
+            placeholderElement.style.height = sourceElementStyle.height;
+            placeholderElement.style.width = sourceElementStyle.width;
+            placeholderElement.style.marginTop = sourceElementStyle.marginTop;
+            placeholderElement.style.marginBottom = sourceElementStyle.marginBottom;
+            placeholderElement.style.marginLeft = sourceElementStyle.marginLeft;
+            placeholderElement.style.marginRight = sourceElementStyle.marginRight;
+
             placeholderElement.classList.add("dragged-origin");
             sourceElement.parentNode.insertBefore(placeholderElement, sourceElement.nextSibling);
 
