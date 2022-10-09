@@ -385,52 +385,12 @@ export class DefaultViewManager implements ViewManager {
             return;
         }
 
-
-        if (binding["editorComponentBinder"]) {
-            const view: View = {
-                componentDefinition: binding["editor"],
-                componentBinder: binding["editorComponentBinder"],
-                componentParams: {
-                    model: binding.model,
-                    onChange: binding.applyChanges
-                },
-                component: {
-                    name: binding.name,
-                    params: {
-                        model: binding.model,
-                        onChange: binding.applyChanges
-                    }
-                },
-                scrolling: "editorScrolling" in binding ? <boolean>binding.editorScrolling : true,
-                heading: binding.displayName,
-                resizing: <string>binding.editorResizing || "vertically horizontally",
-                returnFocusTo: document.getElementById("contentEditor")
-            };
-
-            this.openViewAsPopup(view);
-
-
-            return;
-        }
-
-        let editorComponentName: string;
-
-        if (typeof binding.editor === "string") {
-            editorComponentName = binding.editor;
-        }
-        else {
-            const registration = Reflect.getMetadata("paperbits-component", binding.editor);
-
-            if (!registration) {
-                throw new Error(`Could not find component registration for editor of ${binding.name} widget. Ensure that editor class has @Component decorator.`);
-            }
-
-            editorComponentName = registration.name;
-        }
-
         const view: View = {
+            name: `${binding.name}-editor`,
             component: {
-                name: editorComponentName,
+                name: <string>binding.editor,
+                definition: binding.editor,
+                binder: binding.editorComponentBinder,
                 params: {
                     model: binding.model,
                     onChange: binding.applyChanges

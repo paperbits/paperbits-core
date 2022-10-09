@@ -24,7 +24,7 @@ export class SurfaceBindingHandler {
 
     private async initialize(element: HTMLElement, valueAccessor?: () => View): Promise<void> {
         const view = valueAccessor();
-        const editorSettings = await this.localSettings.getSetting<EditorSettings>(view.component.name);
+        const editorSettings = await this.localSettings.getSetting<EditorSettings>(view.name);
 
         if (editorSettings) {
             if (Number.isInteger(editorSettings.width)) {
@@ -62,13 +62,13 @@ export class SurfaceBindingHandler {
                     return clickedElement.closest("a, .form, .btn, .toolbox-btn, .toolbox-dropdown .cropbox") !== null;
                 },
                 ondragend: async (): Promise<void> => {
-                    if (!view || !view.component) {
+                    if (!view?.name) {
                         return;
                     }
 
                     const rect = element.getBoundingClientRect();
-                    await this.localSettings.setSetting(`${view.component.name}/top`, Math.floor(rect.top));
-                    await this.localSettings.setSetting(`${view.component.name}/left`, Math.floor(rect.left));
+                    await this.localSettings.setSetting(`${view.name}/top`, Math.floor(rect.top));
+                    await this.localSettings.setSetting(`${view.name}/left`, Math.floor(rect.left));
                 }
             }
         }, null);
@@ -86,16 +86,16 @@ export class SurfaceBindingHandler {
             resizable: {
                 directions: resizeDirections,
                 onresize: async (): Promise<void> => {
-                    if (!view || !view.component) {
+                    if (!view?.name) {
                         return;
                     }
 
                     if (resizeDirections.includes("horizontally")) {
-                        await this.localSettings.setSetting(`${view.component.name}/width`, element.clientWidth);
+                        await this.localSettings.setSetting(`${view.name}/width`, element.clientWidth);
                     }
 
                     if (resizeDirections.includes("vertically")) {
-                        await this.localSettings.setSetting(`${view.component.name}/height`, element.clientHeight);
+                        await this.localSettings.setSetting(`${view.name}/height`, element.clientHeight);
                     }
                 }
             }
