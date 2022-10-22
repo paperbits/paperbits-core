@@ -29,7 +29,6 @@ export class TextblockPublishModule implements IInjectorModule {
 
         widgetService.registerWidget("text-block", {
             modelDefinition: TextblockModel,
-            componentFlow: ComponentFlow.Block,
             componentBinder: KnockoutComponentBinder,
             componentDefinition: TextblockViewModel,
             modelBinder: TextblockModelBinder,
