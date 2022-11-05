@@ -8,7 +8,6 @@ import { BlockModelBinder } from "../text/modelBinders/blockModelBinder";
 import { ListModelBinder } from "../text/modelBinders/listModelBinder";
 import { IWidgetService } from "@paperbits/common/widgets";
 import { TextblockModel } from "./textblockModel";
-import { ComponentFlow } from "@paperbits/common/editing";
 import { TextblockHandlers } from "./textblockHandlers";
 import { KnockoutComponentBinder } from "../ko/knockoutComponentBinder";
 
