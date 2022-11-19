@@ -1,18 +1,37 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { IWidgetHandler, IContentDropHandler } from "@paperbits/common/editing";
 import { MapEditor } from "./ko/mapEditor";
 import { MapHandlers } from "./mapHandlers";
 import { MapViewModel } from "./ko/mapViewModel";
 import { MapModelBinder } from "./mapModelBinder";
 import { MapViewModelBinder } from "./ko/mapViewModelBinder";
+import { MapModel } from "./mapModel";
+import { KnockoutComponentBinder } from "../ko";
+import { IWidgetService } from "@paperbits/common/widgets";
 
 export class MapDesignModule implements IInjectorModule {
     public register(injector: IInjector): void {
+        injector.bind("map", Map);
         injector.bind("mapEditor", MapEditor);
-        injector.bind("map", MapViewModel);
-        injector.bindToCollection("modelBinders", MapModelBinder);
-        injector.bindToCollection("viewModelBinders", MapViewModelBinder);
-        injector.bindToCollection<IWidgetHandler>("widgetHandlers", MapHandlers, "mapHandler");
-        injector.bindToCollection<IContentDropHandler>("dropHandlers", MapHandlers, "mapHandler");
+        injector.bindSingleton("mapModelBinder", MapModelBinder);
+        injector.bindSingleton("mapViewModelBinder", MapViewModelBinder)
+        injector.bindSingleton("mapHandler", MapHandlers);
+
+        const widgetService = injector.resolve<IWidgetService>("widgetService");
+
+        widgetService.registerWidget("map", {
+            modelDefinition: MapModel,
+            componentBinder: KnockoutComponentBinder,
+            componentDefinition: MapViewModel,
+            modelBinder: MapModelBinder,
+            viewModelBinder: MapViewModelBinder
+        });
+
+        widgetService.registerWidgetEditor("map", {
+            displayName: "Map",
+            iconClass: "widget-icon widget-icon-map",
+            componentBinder: KnockoutComponentBinder,
+            componentDefinition: MapEditor,
+            handlerComponent: MapHandlers
+        });
     }
 }

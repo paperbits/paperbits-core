@@ -1,44 +1,19 @@
 ﻿import { MapModel } from "./mapModel";
-import { IContentDropHandler, IContentDescriptor, IDataTransfer, IWidgetOrder, IWidgetHandler } from "@paperbits/common/editing";
-import { MapContract } from "./mapContract";
-import { Geolocation } from "@paperbits/common/geocoding";
+import { IWidgetHandler } from "@paperbits/common/editing";
 
 
 export class MapHandlers implements IWidgetHandler /*, IContentDropHandler */ {
     public name: string = "map";
     public displayName: string = "Map";
 
-    private async prepareWidgetOrder(config: MapContract): Promise<IWidgetOrder> {
-        const widgetOrder: IWidgetOrder = {
-            name: "map",
-            displayName: "Map",
-            iconClass: "widget-icon widget-icon-map",
-            requires: ["html", "js"],
-            createModel: async () => {
-                const model = new MapModel();
-                model.location = config.location;
-                model.caption = config.caption;
-                model.location = config.location;
-                model.mapType = config.mapType;
-                return model;
-            }
-        };
+    public async getWidgetModel(): Promise<MapModel> {
+        const model = new MapModel();
+        model.mapType = "map";
+        model.location = { address: "400 Broad St, Seattle, WA 98109", lat: 47.6203953, lng: -122.3493709 };
+        model.caption = "Space Needle";
+        model.mapType = "terrain";
 
-        return widgetOrder;
-    }
-
-    private async getWidgetOrderByConfig(location: Geolocation, caption: string): Promise<IWidgetOrder> {
-        const config: MapContract = {
-            type: "map",
-            location: location,
-            caption: caption,
-            mapType: "terrain"
-        };
-        return await this.prepareWidgetOrder(config);
-    }
-
-    public getWidgetOrder(): Promise<IWidgetOrder> {
-        return Promise.resolve(this.getWidgetOrderByConfig({ address: "400 Broad St, Seattle, WA 98109", lat: 47.6203953, lng: -122.3493709 }, "Space Needle"));
+        return model;
     }
 
     // public getContentDescriptorFromDataTransfer(dataTransfer: IDataTransfer): IContentDescriptor {
