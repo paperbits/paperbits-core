@@ -77,8 +77,8 @@ export class CoreModule implements IInjectorModule {
         injector.bindSingleton("urlService", UrlService);
         injector.bindSingleton("localeService", LocaleService);
         injector.bindSingleton("permalinkResolver", PermalinkResolver);
-        injector.bindToCollection("permalinkResolvers", PagePermalinkResolver, "pagePermalinkResolver");
-        injector.bindToCollection("permalinkResolvers", UrlPermalinkResolver, "urlPermalinkResolver");
+        injector.bindToCollectionAsSingletone("permalinkResolvers", PagePermalinkResolver, "pagePermalinkResolver");
+        injector.bindToCollectionAsSingletone("permalinkResolvers", UrlPermalinkResolver, "urlPermalinkResolver");
 
         injector.bind("modelBinderSelector", ModelBinderSelector);
         injector.bind("viewModelBinderSelector", ViewModelBinderSelector);

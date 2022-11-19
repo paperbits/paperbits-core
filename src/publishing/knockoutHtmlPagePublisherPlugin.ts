@@ -4,14 +4,30 @@ import { HtmlPagePublisherPlugin } from "@paperbits/common/publishing/htmlPagePu
 import { ILayoutService } from "@paperbits/common/layouts";
 import { ContentViewModelBinder } from "../content/ko";
 import { PopupHostViewModelBinder } from "../popup/ko/popupHostViewModelBinder";
+import { HtmlDocumentProvider } from "@paperbits/common/publishing";
 
+declare var global: any;
 
 export class KnockoutHtmlPagePublisherPlugin implements HtmlPagePublisherPlugin {
     constructor(
+        private readonly htmlDocumentProvider: HtmlDocumentProvider,
         private readonly contentViewModelBinder: ContentViewModelBinder,
         private readonly layoutService: ILayoutService,
         private readonly popupHostViewModelBinder: PopupHostViewModelBinder
     ) {
+        this.initialize();
+    }
+
+    private initialize(): void {
+        if (global.document) {
+            return;
+        }
+        
+        const document = this.htmlDocumentProvider.createDocument(); // KO referenced global document
+        global.window = document.defaultView.window;
+        global.document = document;
+        global.navigator = window.navigator;
+
         // this needed to avoid rendering issues with domino in different environments.
         ko.tasks.scheduler = (callback) => setImmediate(callback);
     }

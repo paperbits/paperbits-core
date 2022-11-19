@@ -34,9 +34,9 @@ export class CorePublishModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bindModule(new DividerPublishModule());
         injector.bindCollection("publishers");
-        injector.bindToCollection("publishers", AssetPublisher);
-        injector.bindToCollection("publishers", MediaPublisher);
-        injector.bindToCollection("publishers", PagePublisher);
+        injector.bindToCollectionAsSingletone("publishers", AssetPublisher);
+        injector.bindToCollectionAsSingletone("publishers", MediaPublisher);
+        injector.bindToCollectionAsSingletone("publishers", PagePublisher);
         // injector.bindToCollection("publishers", BlogPublisher);
         injector.bindSingleton("sitePublisher", SitePublisher);
         injector.bindSingleton("sitemapBuilder", SitemapBuilder);
@@ -46,11 +46,11 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindSingleton("htmlDocumentProvider", JsDomHtmlDocumentProvider);
         injector.bindCollection("htmlPagePublisherPlugins");
         injector.bindSingleton("logger", ConsoleLogger);
-        injector.bindToCollection("permalinkResolvers", MediaPermalinkResolver, "mediaPermalinkResolver");
-        injector.bindToCollection("htmlPagePublisherPlugins", KnockoutHtmlPagePublisherPlugin);
-        injector.bindToCollection("htmlPagePublisherPlugins", LinkedDataHtmlPagePublisherPlugin);
-        injector.bindToCollection("htmlPagePublisherPlugins", OpenGraphHtmlPagePublisherPlugin);
-        injector.bindToCollection("htmlPagePublisherPlugins", SocialShareDataHtmlPagePublisherPlugin);
+        injector.bindToCollectionAsSingletone("permalinkResolvers", MediaPermalinkResolver, "mediaPermalinkResolver");
+        injector.bindToCollectionAsSingletone("htmlPagePublisherPlugins", KnockoutHtmlPagePublisherPlugin);
+        injector.bindToCollectionAsSingletone("htmlPagePublisherPlugins", LinkedDataHtmlPagePublisherPlugin);
+        injector.bindToCollectionAsSingletone("htmlPagePublisherPlugins", OpenGraphHtmlPagePublisherPlugin);
+        injector.bindToCollectionAsSingletone("htmlPagePublisherPlugins", SocialShareDataHtmlPagePublisherPlugin);
         injector.bindInstance("stateCache", new MemoryCache());
         injector.bindInstance("changesCache", new MemoryCache());
         
