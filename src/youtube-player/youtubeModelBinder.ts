@@ -1,21 +1,8 @@
 import { YoutubePlayerContract } from "./youtubePlayerContract";
 import { YoutubePlayerModel } from "./youtubePlayerModel";
 import { IModelBinder } from "@paperbits/common/editing";
-import { Contract } from "@paperbits/common";
 
 export class YoutubeModelBinder implements IModelBinder<YoutubePlayerModel> {
-    constructor() {
-        this.contractToModel = this.contractToModel.bind(this);
-    }
-
-    public canHandleContract(contract: Contract): boolean {
-        return contract.type === "youtube-player";
-    }
-
-    public canHandleModel(model: any): boolean {
-        return model instanceof YoutubePlayerModel;
-    }
-
     public async contractToModel(contract: YoutubePlayerContract): Promise<YoutubePlayerModel> {
         const youtubePlayerModel = new YoutubePlayerModel();
 

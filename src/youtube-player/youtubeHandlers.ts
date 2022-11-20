@@ -23,10 +23,6 @@ export class YoutubeHandlers implements IWidgetHandler {
     //     return widgetOrder;
     // }
 
-    // public async getWidgetOrder(): Promise<IWidgetOrder> {
-    //     return this.getWidgetOrderByConfig();
-    // }
-
     // public getContentDescriptorFromDataTransfer(dataTransfer: IDataTransfer): IContentDescriptor {
     //     const videoId = this.getVideoId(dataTransfer);
 

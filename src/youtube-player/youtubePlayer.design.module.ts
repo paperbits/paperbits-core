@@ -17,7 +17,7 @@ export class YoutubePlayerDesignModule implements IInjectorModule {
 
         const widgetService = injector.resolve<IWidgetService>("widgetService");
 
-        widgetService.registerWidget("youtubePlayer", {
+        widgetService.registerWidget("youtube-player", {
             modelDefinition: YoutubePlayerModel,
             componentBinder: KnockoutComponentBinder,
             componentDefinition: YoutubePlayerViewModel,
@@ -25,8 +25,8 @@ export class YoutubePlayerDesignModule implements IInjectorModule {
             viewModelBinder: YoutubePlayerViewModelBinder
         });
 
-        widgetService.registerWidgetEditor("youtubePlayer", {
-            displayName: "YoutubePlayer",
+        widgetService.registerWidgetEditor("youtube-player", {
+            displayName: "Youtube player",
             iconClass: "widget-icon widget-icon-youtube-player",
             componentBinder: KnockoutComponentBinder,
             componentDefinition: YoutubePlayerEditor,
