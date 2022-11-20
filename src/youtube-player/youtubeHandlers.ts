@@ -1,60 +1,64 @@
 ﻿import { IWidgetOrder, IContentDropHandler, IContentDescriptor, IDataTransfer, IWidgetHandler } from "@paperbits/common/editing";
 import { YoutubePlayerModel } from "./youtubePlayerModel";
 
-export class YoutubeHandlers implements IWidgetHandler, IContentDropHandler {
-    private async getWidgetOrderByConfig(youtubeClipId?: string): Promise<IWidgetOrder> {
-        const widgetOrder: IWidgetOrder = {
-            name: "youtube-player",
-            displayName: "Youtube player",
-            category: "Media",
-            iconClass: "widget-icon widget-icon-youtube-player",
-            requires: ["html", "js"],
-            createModel: async () => {
-                const youtubePlayerModel = new YoutubePlayerModel();
-                youtubePlayerModel.videoId = youtubeClipId;
-        
-                return youtubePlayerModel;
-            }
-        };
-        return widgetOrder;
+export class YoutubeHandlers implements IWidgetHandler {
+    public async getWidgetModel(): Promise<YoutubePlayerModel> {
+        return new YoutubePlayerModel();
     }
 
-    public async getWidgetOrder(): Promise<IWidgetOrder> {
-        return this.getWidgetOrderByConfig();
-    }
+    // private async getWidgetOrderByConfig(youtubeClipId?: string): Promise<IWidgetOrder> {
+    //     const widgetOrder: IWidgetOrder = {
+    //         name: "youtube-player",
+    //         displayName: "Youtube player",
+    //         category: "Media",
+    //         iconClass: "widget-icon widget-icon-youtube-player",
+    //         requires: ["html", "js"],
+    //         createModel: async () => {
+    //             const youtubePlayerModel = new YoutubePlayerModel();
+    //             youtubePlayerModel.videoId = youtubeClipId;
 
-    public getContentDescriptorFromDataTransfer(dataTransfer: IDataTransfer): IContentDescriptor {
-        const videoId = this.getVideoId(dataTransfer);
+    //             return youtubePlayerModel;
+    //         }
+    //     };
+    //     return widgetOrder;
+    // }
 
-        if (!videoId) {
-            return undefined;
-        }
+    // public async getWidgetOrder(): Promise<IWidgetOrder> {
+    //     return this.getWidgetOrderByConfig();
+    // }
 
-        const getThumbnailPromise = () => Promise.resolve(`https://img.youtube.com/vi/${videoId}/0.jpg`);
+    // public getContentDescriptorFromDataTransfer(dataTransfer: IDataTransfer): IContentDescriptor {
+    //     const videoId = this.getVideoId(dataTransfer);
 
-        const descriptor: IContentDescriptor = {
-            title: "Youtube player",
-            description: "",
-            getWidgetOrder: (): Promise<IWidgetOrder> => this.getWidgetOrderByConfig(videoId),
-            getPreviewUrl: getThumbnailPromise,
-            getThumbnailUrl: getThumbnailPromise
-        };
+    //     if (!videoId) {
+    //         return undefined;
+    //     }
 
-        return descriptor;
-    }
+    //     const getThumbnailPromise = () => Promise.resolve(`https://img.youtube.com/vi/${videoId}/0.jpg`);
 
-    private getVideoId(dataTransfer: IDataTransfer): string {
-        const source = dataTransfer.source;
+    //     const descriptor: IContentDescriptor = {
+    //         title: "Youtube player",
+    //         description: "",
+    //         getWidgetOrder: (): Promise<IWidgetOrder> => this.getWidgetOrderByConfig(videoId),
+    //         getPreviewUrl: getThumbnailPromise,
+    //         getThumbnailUrl: getThumbnailPromise
+    //     };
 
-        if (source && typeof source === "string") {
-            const lower = source.toLowerCase();
+    //     return descriptor;
+    // }
 
-            if (lower.startsWith("https://www.youtube.com") || lower.startsWith("http://www.youtube.com")) {
-                const videoId = new RegExp("[?&](?:v=)(.*?)(?:$|&)").exec(source);
-                return videoId ? videoId[1] : undefined;
-            }
-        }
+    // private getVideoId(dataTransfer: IDataTransfer): string {
+    //     const source = dataTransfer.source;
 
-        return undefined;
-    }
+    //     if (source && typeof source === "string") {
+    //         const lower = source.toLowerCase();
+
+    //         if (lower.startsWith("https://www.youtube.com") || lower.startsWith("http://www.youtube.com")) {
+    //             const videoId = new RegExp("[?&](?:v=)(.*?)(?:$|&)").exec(source);
+    //             return videoId ? videoId[1] : undefined;
+    //         }
+    //     }
+
+    //     return undefined;
+    // }
 }
