@@ -18,11 +18,67 @@ export class TableCellViewModelBinder implements ViewModelBinder<TableCellModel,
         private readonly widgetService: IWidgetService
     ) { }
 
-    public async modelToViewModel(model: TableCellModel, viewModel?: TableCellViewModel, bindingContext?: Bag<any>): Promise<TableCellViewModel> {
-        if (!viewModel) {
-            viewModel = new TableCellViewModel();
-        }
+    // public async modelToViewModel(model: TableCellModel, viewModel?: TableCellViewModel, bindingContext?: Bag<any>): Promise<TableCellViewModel> {
+    //     if (!viewModel) {
+    //         viewModel = new TableCellViewModel();
+    //     }
 
+    //     const promises = model.widgets.map(widgetModel => {
+    //         const definition = this.widgetService.getWidgetDefinitionForModel(widgetModel);
+
+    //         if (definition) {
+    //             const bindingPromise = this.widgetService.createWidgetBinding(definition, widgetModel, bindingContext);
+    //             return bindingPromise;
+    //         }
+
+    //         // legacy binding resolution
+    //         const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
+    //         const bindingPromise = widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+    //         return bindingPromise;
+    //     });
+
+    //     const widgetViewModels = await Promise.all(promises);
+
+    //     if (widgetViewModels.length === 0) {
+    //         widgetViewModels.push(new PlaceholderViewModel(model.role));
+    //     }
+
+    //     if (model.styles) {
+    //         const styleModel = await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager);
+    //         viewModel.styles(styleModel);
+    //     }
+
+    //     viewModel.role(model.role);
+    //     viewModel.widgets(widgetViewModels);
+
+    //     const displayName = model.role.charAt(0).toUpperCase() + model.role.slice(1);
+
+    //     const binding: IWidgetBinding<TableCellModel, TableCellViewModel> = {
+    //         name: "table-cell",
+    //         displayName: displayName,
+    //         layer: bindingContext?.layer,
+    //         model: model,
+    //         draggable: false,
+    //         editor: "table-cell-editor",
+    //         handler: TableCellHandlers,
+    //         applyChanges: async () => {
+    //             await this.modelToViewModel(model, viewModel, bindingContext);
+    //             this.eventManager.dispatchEvent(Events.ContentUpdate);
+    //         }
+    //     };
+
+    //     viewModel["widgetBinding"] = binding;
+
+    //     return viewModel;
+    // }
+
+    public stateToIntance(state: any, componentInstance: TableCellViewModel): void {
+        componentInstance.styles(state.styles);
+        componentInstance.role(state.role);
+        componentInstance.widgets(state.widgets)
+    }
+
+    public async modelToState(model: TableCellModel, state: any, bindingContext: Bag<any>): Promise<void> {
         const promises = model.widgets.map(widgetModel => {
             const definition = this.widgetService.getWidgetDefinitionForModel(widgetModel);
 
@@ -40,39 +96,14 @@ export class TableCellViewModelBinder implements ViewModelBinder<TableCellModel,
         const widgetViewModels = await Promise.all(promises);
 
         if (widgetViewModels.length === 0) {
-            widgetViewModels.push(new PlaceholderViewModel(model.role));
+            widgetViewModels.push(new PlaceholderViewModel("Cell"));
         }
+
+        state.role = model.role;
+        state.widgets = widgetViewModels;
 
         if (model.styles) {
-            const styleModel = await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager);
-            viewModel.styles(styleModel);
+            state.styles = await this.styleCompiler.getStyleModelAsync(model.styles);
         }
-
-        viewModel.role(model.role);
-        viewModel.widgets(widgetViewModels);
-
-        const displayName = model.role.charAt(0).toUpperCase() + model.role.slice(1);
-
-        const binding: IWidgetBinding<TableCellModel, TableCellViewModel> = {
-            name: "table-cell",
-            displayName: displayName,
-            layer: bindingContext?.layer,
-            model: model,
-            draggable: false,
-            editor: "table-cell-editor",
-            handler: TableCellHandlers,
-            applyChanges: async () => {
-                await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent(Events.ContentUpdate);
-            }
-        };
-
-        viewModel["widgetBinding"] = binding;
-
-        return viewModel;
-    }
-
-    public canHandleModel(model: TableCellModel): boolean {
-        return model instanceof TableCellModel;
     }
 }
