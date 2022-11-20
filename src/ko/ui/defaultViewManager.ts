@@ -327,6 +327,10 @@ export class DefaultViewManager implements ViewManager {
             return;
         }
 
+        if (!view.name) {
+            view.name = `${view.component.name}-view`;
+        }
+
         view.hitTest = (el) => { // TODO: Move to bindingHandler
             return !!Html.closest(el, (x: HTMLElement) =>
                 (x.getAttribute && !!x.getAttribute("contentEditable")) || // TODO: Move hitTest check to text editor

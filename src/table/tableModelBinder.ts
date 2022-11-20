@@ -10,14 +10,6 @@ export class TableModelBinder extends ContainerModelBinder implements IModelBind
         super(widgetService, modelBinderSelector);
     }
 
-    public canHandleContract(contract: Contract): boolean {
-        return contract.type === "table";
-    }
-
-    public canHandleModel(model: Object): boolean {
-        return model instanceof TableModel;
-    }
-
     public async contractToModel(contract: TableContract, bindingContext?: Bag<any>): Promise<TableModel> {
         const model = new TableModel();
         model.styles = contract.styles;
