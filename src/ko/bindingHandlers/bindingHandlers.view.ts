@@ -9,7 +9,6 @@ ko.bindingHandlers["view"] = {
         const componentBinder = view.component.binder;
 
         if (!componentBinder) {
-            console.log(view.component)
             ko.applyBindingsToNode(element, { component: view.component }, null);
             return;
         }

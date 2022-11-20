@@ -389,10 +389,20 @@ export class DefaultViewManager implements ViewManager {
             return;
         }
 
+        let editorComponentName: string;
+
+        if (typeof binding.editor === "string") {
+            editorComponentName = binding.editor;
+        }
+        else {
+            const registration = Reflect.getMetadata("paperbits-component", binding.editor);
+            editorComponentName = registration?.name;
+        }
+
         const view: View = {
             name: `${binding.name}-editor`,
             component: {
-                name: <string>binding.editor,
+                name: editorComponentName,
                 definition: binding.editor,
                 binder: binding.editorComponentBinder,
                 params: {
