@@ -1,71 +1,42 @@
-import { VideoPlayer } from "./videoPlayer";
-import { ViewModelBinder } from "@paperbits/common/widgets";
-import { VideoPlayerModel } from "../videoPlayerModel";
-import { EventManager, Events } from "@paperbits/common/events";
-import { StyleCompiler } from "@paperbits/common/styles/styleCompiler";
-import { Bag } from "@paperbits/common";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
-import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
+import { StyleCompiler } from "@paperbits/common/styles";
+import { ViewModelBinder, WidgetState } from "@paperbits/common/widgets";
+import { VideoPlayerModel } from "../videoPlayerModel";
+import { VideoPlayer } from "./videoPlayer";
 
 export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerModel, VideoPlayer> {
     constructor(
-        private readonly eventManager: EventManager,
         private readonly styleCompiler: StyleCompiler,
         private readonly mediaPermalinkResolver: IPermalinkResolver
     ) { }
 
-    public async modelToViewModel(model: VideoPlayerModel, viewModel?: VideoPlayer, bindingContext?: Bag<any>): Promise<VideoPlayer> {
-        if (!viewModel) {
-            viewModel = new VideoPlayer();
-        }
+    public stateToIntance(state: WidgetState, componentInstance: VideoPlayer): void {
+        componentInstance.sourceUrl(state.sourceUrl);
+        componentInstance.controls(state.controls);
+        componentInstance.autoplay(state.autoplay);
+        componentInstance.muted(state.muted);
+        componentInstance.posterUrl(state.posterUrl);
+    }
 
-        let sourceUrl = null;
+    public async modelToState(model: VideoPlayerModel, state: WidgetState): Promise<void> {
+        state.controls = model.controls;
+        state.autoplay = model.autoplay;
+        state.muted = model.muted ? "muted" : undefined;
 
         if (model.sourceKey) {
-            sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(model.sourceKey);
+            state.sourceUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(model.sourceKey);
 
-            if (!sourceUrl) {
+            if (!state.sourceUrl) {
                 console.warn(`Unable to set video. Media with source key ${model.sourceKey} not found.`);
             }
         }
 
-        viewModel.sourceUrl(sourceUrl);
-        viewModel.controls(model.controls);
-        viewModel.autoplay(model.autoplay);
-        viewModel.muted(model.muted ? "muted" : undefined);
-
         if (model.posterSourceKey) {
-            const posterUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(model.posterSourceKey);
-            viewModel.posterUrl(posterUrl);
-        }
-        else {
-            viewModel.posterUrl(null);
+            state.posterUrl = await this.mediaPermalinkResolver.getUrlByTargetKey(model.posterSourceKey);
         }
 
         if (model.styles) {
-            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
+            state.styles = await this.styleCompiler.getStyleModelAsync(model.styles);
         }
-
-        const binding: IWidgetBinding<VideoPlayerModel, VideoPlayer> = {
-            name: "videoPlayer",
-            displayName: "Video player",
-            layer: bindingContext?.layer,
-            model: model,
-            flow: ComponentFlow.Inline,
-            draggable: true,
-            editor: "video-player-editor",
-            applyChanges: async () => {
-                await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent(Events.ContentUpdate);
-            }
-        };
-        
-        viewModel["widgetBinding"] = binding;
-
-        return viewModel;
-    }
-
-    public canHandleModel(model: VideoPlayerModel): boolean {
-        return model instanceof VideoPlayerModel;
     }
 }

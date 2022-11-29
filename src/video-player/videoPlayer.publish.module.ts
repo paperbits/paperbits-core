@@ -1,12 +1,23 @@
-import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { VideoPlayer } from "./ko/videoPlayer";
-import { VideoPlayerModelBinder } from "./videoPlayerModelBinder";
-import { VideoPlayerViewModelBinder } from "./ko/videoPlayerViewModelBinder";
+import { IInjector, IInjectorModule } from "@paperbits/common/injection";
+import { IWidgetService } from "@paperbits/common/widgets";
+import { VideoPlayerModel, VideoPlayerModelBinder } from ".";
+import { KnockoutComponentBinder } from "../ko";
+import { VideoPlayer, VideoPlayerViewModelBinder } from "./ko";
 
 export class VideoPlayerModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("videoPlayer", VideoPlayer);
-        injector.bindToCollection("modelBinders", VideoPlayerModelBinder);
-        injector.bindToCollection("viewModelBinders", VideoPlayerViewModelBinder);
+        injector.bindSingleton("videoPlayerModelBinder", VideoPlayerModelBinder);
+        injector.bindSingleton("videoPlayerViewModelBinder", VideoPlayerViewModelBinder)
+
+        const widgetService = injector.resolve<IWidgetService>("widgetService");
+
+        widgetService.registerWidget("video-player", {
+            modelDefinition: VideoPlayerModel,
+            componentBinder: KnockoutComponentBinder,
+            componentDefinition: VideoPlayer,
+            modelBinder: VideoPlayerModelBinder,
+            viewModelBinder: VideoPlayerViewModelBinder
+        });
     }
 }
