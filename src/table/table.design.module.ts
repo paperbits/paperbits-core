@@ -13,11 +13,10 @@ import { TableModel } from "./tableModel";
 
 export class TableDesignModule implements IInjectorModule {
     public register(injector: IInjector): void {
-        injector.bind("tableEditor", TableEditor);
-        injector.bind("tableColumnEditor", TableColumnEditor);
-        injector.bind("tableRowEditor", TableRowEditor);
         injector.bind("table", TableViewModel);
         injector.bind("tableEditor", TableEditor);
+        injector.bind("tableRowEditor", TableRowEditor);
+        injector.bind("tableColumnEditor", TableColumnEditor);
         injector.bindSingleton("tableModelBinder", TableModelBinder);
         injector.bindSingleton("tableViewModelBinder", TableViewModelBinder)
         injector.bindSingleton("tableHandler", TableHandlers);

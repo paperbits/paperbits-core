@@ -10,7 +10,7 @@ import { TableCellModelBinder } from "./tableCellModelBinder";
 export class TableCellDesignModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("tableCell", TableCellViewModel);
-        injector.bind("tableEditor", TableCellEditor);
+        injector.bind("tableCellEditor", TableCellEditor);
         injector.bindSingleton("tableModelBinder", TableCellModelBinder);
         injector.bindSingleton("tableViewModelBinder", TableCellViewModelBinder)
         injector.bindSingleton("tableHandler", TableCellHandlers);
