@@ -3,6 +3,7 @@
     <hr />
 
     <div class="tabs" role="tablist">
+        <!-- ko if: isBlankTabEnabled -->
         <div class="tab"
             data-bind="css: { 'tab-is-active': selected() === 'blank' }, attr: { 'aria-selected':  selected() === 'blank'}">
             <a href="#" data-bind="click: selected.bind($data,'blank'), focus: true" title="New section" role="tab"
@@ -10,7 +11,8 @@
                 Blank
             </a>
         </div>
-        <!-- ko if: isBlocksEnabled -->
+        <!-- /ko -->
+        <!-- ko if: isBlocksTabEnabled -->
         <div class="tab"
             data-bind="css: { 'tab-is-active': selected() === 'library' }, attr: { 'aria-selected': selected() === 'library' }">
             <a href="#" data-bind="click: selected.bind($data,'library')" title="Blocks" role="tab"

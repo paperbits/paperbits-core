@@ -1,22 +1,18 @@
-import template from "./blockSelector.html";
 import * as ko from "knockout";
-import * as Constants from "@paperbits/common/constants";
 import * as Objects from "@paperbits/common/objects";
-import { BlockItem } from "./blockItem";
-import { BlockContract } from "@paperbits/common/blocks/blockContract";
+import template from "./blockSelector.html";
+import { Bag } from "@paperbits/common";
 import { IBlockService } from "@paperbits/common/blocks";
-import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
+import { BlockContract } from "@paperbits/common/blocks/blockContract";
+import { ChangeRateLimit } from "@paperbits/common/ko/consts";
+import { Component, Event, OnMounted, Param } from "@paperbits/common/ko/decorators";
+import { StyleManager } from "@paperbits/common/styles";
 import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelector";
 import { ViewModelBinderSelector } from "../../../ko/viewModelBinderSelector";
-import { ChangeRateLimit } from "@paperbits/common/ko/consts";
-import { StyleManager } from "@paperbits/common/styles";
-import { HttpClient } from "@paperbits/common/http";
-import { Bag } from "@paperbits/common";
+import { BlockItem } from "./blockItem";
 
-export interface UpdateBlock { block: BlockContract; blockType: string; }
 
 const blockPath = "blocks";
-
 
 @Component({
     selector: "block-selector",
@@ -31,8 +27,7 @@ export class BlockSelector {
     constructor(
         private readonly blockService: IBlockService,
         private readonly modelBinderSelector: ModelBinderSelector,
-        private readonly viewModelBinderSelector: ViewModelBinderSelector,
-        private readonly httpClient: HttpClient
+        private readonly viewModelBinderSelector: ViewModelBinderSelector
     ) {
         this.blocks = ko.observableArray();
         this.widgets = ko.observableArray();
@@ -60,19 +55,12 @@ export class BlockSelector {
 
     private async searchLibrary(pattern: string): Promise<BlockItem[]> {
         try {
-            const blocksUrl = Constants.blockSnippetsLibraryUrl;
+            const blockSnippets = await this.blockService.getPredefinedBlockSnippets();
 
-            if (!blocksUrl) {
-                console.warn("Settings for blocksUrl not found.");
+            if (!blockSnippets) {
                 return [];
             }
 
-            const response = await this.httpClient.send({
-                url: blocksUrl,
-                method: "GET"
-            });
-
-            const blockSnippets = <any>response.toObject();
             const bagOfBlocks: Bag<BlockContract> = blockSnippets[blockPath];
             const blocks = Object.values(bagOfBlocks).filter(block => block.title.includes(pattern) && block.type === this.blockType);
             const blockItems: BlockItem[] = [];

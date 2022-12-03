@@ -1,20 +1,18 @@
 import * as ko from "knockout";
 import * as Objects from "@paperbits/common/objects";
-import * as Constants from "@paperbits/common/constants";
 import template from "./gridLayoutSelector.html";
 import { Bag } from "@paperbits/common";
-import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
-import { Component, Event, OnMounted, Param } from "@paperbits/common/ko/decorators";
-import { GridModelBinder } from "../../grid-layout-section";
-import { SectionModelBinder } from "../../section";
-import { GridViewModelBinder } from ".";
 import { BlockContract, IBlockService } from "@paperbits/common/blocks";
-import { HttpClient } from "@paperbits/common/http";
-import { GridContract } from "../../grid/gridContract";
-import { BlockItem } from "../../workshops/block/ko";
-import { StyleCompiler, StyleManager } from "@paperbits/common/styles";
-import { SectionViewModelBinder } from "../../section/ko";
 import { EventManager } from "@paperbits/common/events";
+import { Component, Event, OnMounted, Param } from "@paperbits/common/ko/decorators";
+import { StyleCompiler, StyleManager } from "@paperbits/common/styles";
+import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
+import { GridViewModelBinder } from ".";
+import { GridModelBinder } from "../../grid-layout-section";
+import { GridContract } from "../../grid/gridContract";
+import { SectionModelBinder } from "../../section";
+import { SectionViewModelBinder } from "../../section/ko";
+import { BlockItem } from "../../workshops/block/ko";
 
 
 interface GridLayoutSelectorItem {
@@ -30,8 +28,12 @@ interface GridLayoutSelectorItem {
 export class GridLayoutSelector implements IResourceSelector<any> {
     public readonly snippets: ko.ObservableArray<GridLayoutSelectorItem>;
     public readonly selected: ko.Observable<string>;
-    public readonly isBlocksEnabled: ko.Observable<boolean>;
+    public readonly isBlocksTabEnabled: ko.Observable<boolean>;
+    public readonly isBlankTabEnabled: ko.Observable<boolean>;
     public readonly working: ko.Observable<boolean>;
+
+    private gridSnippets: Object;
+    private blockSnippets: Object;
 
     @Param()
     public heading: ko.Observable<string>;
@@ -44,7 +46,6 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         private readonly gridViewModelBinder: GridViewModelBinder,
         private readonly sectionModelBinder: SectionModelBinder,
         private readonly sectionViewModelBinder: SectionViewModelBinder,
-        private readonly httpClient: HttpClient,
         private readonly blockService: IBlockService,
         private readonly eventManager: EventManager,
         private readonly styleCompiler: StyleCompiler
@@ -54,49 +55,46 @@ export class GridLayoutSelector implements IResourceSelector<any> {
         this.snippets = ko.observableArray();
         this.selected = ko.observable("blank");
         this.working = ko.observable(true);
-        this.isBlocksEnabled = ko.observable();
+        this.isBlocksTabEnabled = ko.observable(false);
+        this.isBlankTabEnabled = ko.observable(false);
     }
 
     @OnMounted()
     public async initaialize(): Promise<void> {
         this.working(true);
+
         const snippets: GridLayoutSelectorItem[] = [];
+        this.gridSnippets = await this.blockService.getPredefinedGridSnippets();
 
-        const response = await this.httpClient.send({ method: "GET", url: Constants.gridSnippetsLibraryUrl });
-        const presets = response.toObject();
+        if (this.gridSnippets) {
+            for (const presetContract of Objects.clone<any>(this.gridSnippets)) {
+                const model = await this.gridModelBinder.contractToModel(presetContract);
+                const viewModel = await this.gridViewModelBinder.modelToViewModel(model);
 
-        for (const presetContract of Objects.clone<any>(presets)) {
-            const model = await this.gridModelBinder.contractToModel(presetContract);
-            const viewModel = await this.gridViewModelBinder.modelToViewModel(model);
+                snippets.push({ model: model, viewModel: viewModel, contract: presetContract });
 
-            snippets.push({ model: model, viewModel: viewModel, contract: presetContract });
-
+            }
+            this.snippets(snippets);
+            this.isBlankTabEnabled(true);
         }
-        this.snippets(snippets);
 
-        const blocksUrl = Constants.blockSnippetsLibraryUrl;
-        this.isBlocksEnabled(blocksUrl ? true : false);
+        this.blockSnippets = await this.blockService.getPredefinedBlockSnippets();
+
+        if (this.blockSnippets) {
+            this.isBlocksTabEnabled(true);
+        }
 
         this.working(false);
     }
 
     private async searchLibrary(pattern: string = ""): Promise<BlockItem[]> {
         try {
-            const blocksUrl = Constants.blockSnippetsLibraryUrl;
-
-            if (!blocksUrl) {
-                console.warn("Settings for blocksUrl not found.");
-                return [];
-            }
-
-            const response = await this.httpClient.send({ url: blocksUrl, method: "GET" });
-            const blockSnippets = <any>response.toObject();
-            const bagOfBlocks: Bag<BlockContract> = blockSnippets["blocks"];
+            const bagOfBlocks: Bag<BlockContract> = this.blockSnippets["blocks"];
             const blocks = Object.values(bagOfBlocks).filter(block => block.title.includes(pattern) && block.type === "blank-section");
             const blockItems = [];
 
             for (const block of blocks) {
-                const content = Objects.getObjectAt<BlockContract>(block.contentKey, blockSnippets);
+                const content = Objects.getObjectAt<BlockContract>(block.contentKey, this.blockSnippets);
                 const styleManager = new StyleManager();
 
                 const bindingContext = {
@@ -140,11 +138,8 @@ export class GridLayoutSelector implements IResourceSelector<any> {
 
     public async onBlockSelected(block: BlockItem): Promise<void> {
         if (this.blockService.importSnippet && block.imports) {
-            const response = await this.httpClient.send({ url: Constants.blockSnippetsLibraryUrl, method: "GET" });
-            const library = <any>response.toObject();
-
             for (const importKey of block.imports) {
-                const snippet = Objects.getObjectAt(importKey, library);
+                const snippet = Objects.getObjectAt(importKey, this.blockSnippets);
 
                 if (!snippet) {
                     console.warn(`Could not import object by key "${importKey}".`);
