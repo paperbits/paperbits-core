@@ -1,5 +1,4 @@
 import * as ko from "knockout";
-import * as _ from "lodash";
 import * as Arrays from "@paperbits/common/arrays";
 import * as Utils from "@paperbits/common/utils";
 import * as Html from "@paperbits/common/html";

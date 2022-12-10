@@ -1,5 +1,4 @@
 import * as ko from "knockout";
-import * as _ from "lodash";
 import template from "./textStyleSelector.html";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { StyleService } from "@paperbits/styles";
