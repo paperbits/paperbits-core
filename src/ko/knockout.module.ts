@@ -23,6 +23,7 @@ import "./bindingHandlers/bindingHandlers.confirm";
 import "./bindingHandlers/bindingHandlers.gridCell";
 import "./bindingHandlers/bindingHandlers.selectable";
 import "./bindingExtenders/bindingExtenders.max";
+import { KnockoutRegistrationLoaders } from "./knockout.loaders";
 
 export class KnockoutModule implements IInjectorModule {
     public register(injector: IInjector): void {
@@ -31,5 +32,6 @@ export class KnockoutModule implements IInjectorModule {
         ko.virtualElements.allowedBindings["component"] = true;    
         
         injector.bindSingleton("knockoutComponentBinder", KnockoutComponentBinder)
+        injector.bindModule(new KnockoutRegistrationLoaders());
     }
 }

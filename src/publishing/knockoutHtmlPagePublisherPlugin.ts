@@ -22,7 +22,7 @@ export class KnockoutHtmlPagePublisherPlugin implements HtmlPagePublisherPlugin 
         if (global.document) {
             return;
         }
-        
+
         const document = this.htmlDocumentProvider.createDocument(); // KO referenced global document
         global.window = document.defaultView.window;
         global.document = document;
