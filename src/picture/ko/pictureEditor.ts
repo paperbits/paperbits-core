@@ -1,16 +1,17 @@
 ﻿import * as ko from "knockout";
 import template from "./pictureEditor.html";
-import * as MediaUtils from "@paperbits/common/media/mediaUtils";
-import { MediaContract, MediaService } from "@paperbits/common/media";
-import { HyperlinkModel, IPermalinkResolver } from "@paperbits/common/permalinks";
-import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
-import { BackgroundModel } from "@paperbits/common/widgets/background";
-import { PictureModel } from "../pictureModel";
-import { StyleService } from "@paperbits/styles/styleService";
-import { LocalStyles } from "@paperbits/common/styles";
-import { SizeStylePluginConfig } from "@paperbits/styles/plugins/size/sizeStylePluginConfig";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
+import { Component, Event, OnMounted, Param } from "@paperbits/common/ko/decorators";
+import { MediaContract, MediaService } from "@paperbits/common/media";
+import * as MediaUtils from "@paperbits/common/media/mediaUtils";
+import { HyperlinkModel } from "@paperbits/common/permalinks";
+import { LocalStyles } from "@paperbits/common/styles";
+import { BackgroundModel } from "@paperbits/common/widgets/background";
+import { SizeStylePluginConfig } from "@paperbits/styles/plugins/size/sizeStylePluginConfig";
+import { StyleService } from "@paperbits/styles/styleService";
 import { MediaItem } from "../../workshops/media/ko";
+import { PictureModel } from "../pictureModel";
+
 
 
 @Component({

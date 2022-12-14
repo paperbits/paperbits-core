@@ -10,7 +10,7 @@ import { MediaVariantModel } from "../mediaVariantModel";
     selector: "paperbits-picture",
     template: template,
 })
-export class PictureViewModel {
+export class Picture {
     public readonly sourceUrl: ko.Observable<string>;
     public readonly caption: ko.Observable<string>;
     public readonly hyperlink: ko.Observable<HyperlinkModel>;

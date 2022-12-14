@@ -1,19 +1,11 @@
-import { PictureModel } from "./pictureModel";
-import { PictureContract } from "./pictureContract";
+import { Bag } from "@paperbits/common";
 import { IModelBinder } from "@paperbits/common/editing";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
-import { Contract, Bag } from "@paperbits/common";
+import { PictureContract } from "./pictureContract";
+import { PictureModel } from "./pictureModel";
 
 export class PictureModelBinder implements IModelBinder<PictureModel> {
     constructor(private readonly permalinkResolver: IPermalinkResolver) { }
-
-    public canHandleContract(contract: Contract): boolean {
-        return contract.type === "picture";
-    }
-
-    public canHandleModel(model: Object): boolean {
-        return model instanceof PictureModel;
-    }
 
     public async contractToModel(contract: PictureContract, bindingContext: Bag<any>): Promise<PictureModel> {
         const model = new PictureModel();
@@ -41,12 +33,9 @@ export class PictureModelBinder implements IModelBinder<PictureModel> {
             caption: pictureModel.caption,
             width: pictureModel.width,
             height: pictureModel.height,
-            styles: pictureModel.styles
+            styles: pictureModel.styles,
+            sourceKey: pictureModel.sourceKey
         };
-
-        if (pictureModel.sourceKey) {
-            pictureContract.sourceKey = pictureModel.sourceKey;
-        }
 
         if (pictureModel.hyperlink) {
             pictureContract.hyperlink = {

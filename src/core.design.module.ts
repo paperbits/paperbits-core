@@ -108,7 +108,6 @@ import { RowModule } from "./row/ko";
 import { SectionModule } from "./section/ko";
 import { GridModule } from "./grid-layout-section/ko";
 import { GridCellModule } from "./grid-cell/ko";
-import { PictureModule } from "./picture/picture.module";
 import { TestimonialsModule } from "./testimonials/ko";
 import { PagePermalinkResolver } from "@paperbits/common/pages/pagePermalinkResolver";
 import { UrlPermalinkResolver } from "@paperbits/common/urls/urlPermalinkResolver";
@@ -170,7 +169,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new GridModule());
         injector.bindModule(new GridCellModule());
         injector.bindModule(new MenuModule());
-        injector.bindModule(new PictureModule());
+        injector.bindModule(new PictureDesignModule());
         injector.bindModule(new TestimonialsModule());
         injector.bindModule(new CollapsiblePanelModule());
         injector.bindModule(new TextblockDesignModule());

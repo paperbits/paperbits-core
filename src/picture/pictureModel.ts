@@ -6,7 +6,7 @@ import { LocalStyles } from "@paperbits/common/styles";
  */
 export class PictureModel {
     /**
-     * Key of a permalink referencing the source of the picture.
+     * Key of the permalink referencing the source of the picture.
      */
     public sourceKey: string;
 

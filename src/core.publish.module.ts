@@ -56,7 +56,7 @@ import { SectionModule } from "./section/ko";
 import { GridModule } from "./grid-layout-section/ko";
 import { GridCellModule } from "./grid-cell/ko";
 import { MenuModule } from "./menu/ko";
-import { PictureModule } from "./picture/picture.module";
+import { PicturePublishModule } from "./picture/picture.publish.module";
 import { TestimonialsModule } from "./testimonials/ko";
 import { CollapsiblePanelModule } from "./collapsible-panel/ko";
 import { BackgroundBindingHandler, WidgetBindingHandler } from "./ko/bindingHandlers";
@@ -117,7 +117,7 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindModule(new GridModule());
         injector.bindModule(new GridCellModule());
         injector.bindModule(new MenuModule());
-        injector.bindModule(new PictureModule());
+        injector.bindModule(new PicturePublishModule());
         injector.bindModule(new TestimonialsModule());
         injector.bindModule(new CollapsiblePanelModule());
         injector.bindModule(new DividerPublishModule());
