@@ -118,11 +118,16 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindInstance("injector", injector);
         injector.bindCollection("autostart");
         injector.bindCollection("styleHandlers");
+        injector.bindCollection("styleGroups");
+        injector.bindCollection("dropHandlers");
+        injector.bindCollection("trayCommands");
+        injector.bindCollection("hyperlinkProviders");
         injector.bindCollectionLazily("widgetHandlers");
         injector.bindCollectionLazily("routeGuards");
         injector.bindCollectionLazily("modelBinders");
         injector.bindCollectionLazily("viewModelBinders");
         injector.bindCollectionLazily("permalinkResolvers");
+        injector.bindCollectionLazily("workshopSections");
         injector.bindInstance<Bag<ComponentBinder>>("componentBinders", {});
 
         /*** Core ***/
@@ -202,11 +207,7 @@ export class CoreDesignModule implements IInjectorModule {
         // injector.bindModule(new DividerDesignModule());
         // injector.bindModule(new BlogDesignModule());
 
-        injector.bindCollection("styleGroups");
-        injector.bindCollection("dropHandlers");
-        injector.bindCollectionLazily("workshopSections");
-        injector.bindCollection("trayCommands");
-        injector.bindCollection("hyperlinkProviders");
+
         injector.bindSingleton("viewManager", DefaultViewManager);
         injector.bindSingleton("tray", Tray);
         injector.bindSingleton("viewStack", ViewStack);
