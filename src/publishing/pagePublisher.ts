@@ -97,9 +97,9 @@ export class PagePublisher implements IPublisher {
                 template: template,
                 styleReferences: [
                     `/styles/styles.css`, // global style reference
-                    pagePermalink === "/" // local style reference
-                        ? `/styles.css`   // home page style reference
-                        : `${pagePermalink}/styles.css`
+                    page.permalink === "/"
+                        ? `${pagePermalink}styles.css`  // home page style reference
+                        : `${pagePermalink}/styles.css` // local style reference
                 ],
                 author: siteAuthor,
                 socialShareData: page.socialShareData,
