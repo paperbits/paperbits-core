@@ -11,6 +11,7 @@ import { SizeStylePluginConfig } from "@paperbits/styles/plugins/size/sizeStyleP
 import { StyleService } from "@paperbits/styles/styleService";
 import { MediaItem } from "../../workshops/media/ko";
 import { PictureModel } from "../pictureModel";
+import { MimeTypes } from "@paperbits/common";
 
 
 
@@ -135,7 +136,7 @@ export class PictureEditor {
                 let width = selectedMedia.width;
                 let height = selectedMedia.height;
 
-                if (!media.mimeType.startsWith("image/svg")) {
+                if (media.mimeType !== MimeTypes.imageSvg) {
                     const pixelRatio = devicePixelRatio || 1;
                     width = selectedMedia.width / pixelRatio;
                     height = selectedMedia.height / pixelRatio;

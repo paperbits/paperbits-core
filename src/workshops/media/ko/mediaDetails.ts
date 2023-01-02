@@ -6,6 +6,7 @@ import { ViewManager } from "@paperbits/common/ui";
 import { MediaItem } from "./mediaItem";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
+import { MimeTypes } from "@paperbits/common";
 
 @Component({
     selector: "media-details-workshop",
@@ -13,19 +14,18 @@ import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 })
 export class MediaDetailsWorkshop {
     public contentTypes: string[] = [
-        "image/gif",
-        "image/jpeg",
-        "image/png",
-        "image/tiff",
-        "image/x-icon",
-        "image/svg+xml",
-        "video/mpeg",
-        "video/mp4",
-        "video/quicktime",
-        "video/x-ms-wmv",
-        "video/x-msvideo",
-        "video/x-flv",
-        "video/webm",
+        MimeTypes.imageGif,
+        MimeTypes.imageJpeg,
+        MimeTypes.imagePng,
+        MimeTypes.imageTiff,
+        MimeTypes.imageIcon,
+        MimeTypes.imageSvg,
+        MimeTypes.videoMpeg,
+        MimeTypes.videoMp4,
+        MimeTypes.videoQt,
+        MimeTypes.videoWmv,
+        MimeTypes.videoFlv,
+        MimeTypes.videoWebm
     ];
 
     @Param()

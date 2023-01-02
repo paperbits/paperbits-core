@@ -12,6 +12,7 @@ import { StyleHelper } from "@paperbits/styles";
 import { EventManager, Events } from "@paperbits/common/events";
 import { ViewManager } from "@paperbits/common/ui";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
+import { MimeTypes } from "@paperbits/common";
 
 @Component({
     selector: "video-player-editor",
@@ -42,7 +43,7 @@ export class VideoPlayerEditor {
         this.appearanceStyles = ko.observableArray<any>();
         this.appearanceStyle = ko.observable();
         this.sizeConfig = ko.observable();
-        this.mimeType = "video/mp4";
+        this.mimeType = MimeTypes.videoMp4;
     }
 
     @Param()

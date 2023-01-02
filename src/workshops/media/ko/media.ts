@@ -9,6 +9,7 @@ import { EventManager } from "@paperbits/common/events";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { Query, Operator, Page } from "@paperbits/common/persistence";
+import { MimeTypes } from "@paperbits/common";
 
 @Component({
     selector: "media",
@@ -104,7 +105,7 @@ export class MediaWorkshop {
     }
 
     public async linkMedia(): Promise<void> {
-        const mediaContract = await this.mediaService.createMediaUrl(defaultFileName, defaultURL, "image/svg+xml");
+        const mediaContract = await this.mediaService.createMediaUrl(defaultFileName, defaultURL, MimeTypes.imageSvg);
         const mediaItem = new MediaItem(mediaContract);
 
         this.mediaItems.push(mediaItem);
