@@ -4,6 +4,7 @@ import { IPublisher } from "@paperbits/common/publishing";
 import { IBlobStorage } from "@paperbits/common/persistence";
 import { ISiteService, SiteSettingsContract } from "@paperbits/common/sites";
 import { IMediaService, MediaContract } from "@paperbits/common/media";
+import { MimeTypes } from "@paperbits/common";
 
 export class BlogPublisher implements IPublisher {
     constructor(
@@ -64,7 +65,7 @@ export class BlogPublisher implements IPublisher {
 
         const renderAndUpload = async (post): Promise<void> => {
             const pageRenderResult = await this.renderBlogPost(post, siteSettings, iconFile);
-            await this.outputBlobStorage.uploadBlob(pageRenderResult.name, pageRenderResult.bytes, "text/html");
+            await this.outputBlobStorage.uploadBlob(pageRenderResult.name, pageRenderResult.bytes, MimeTypes.textHtml);
         };
 
         for (const post of posts) {

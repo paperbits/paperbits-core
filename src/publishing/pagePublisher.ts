@@ -8,6 +8,7 @@ import {
     SitemapBuilder,
     SearchIndexBuilder
 } from "@paperbits/common/publishing";
+import { normalizePermalink } from "@paperbits/common/permalinks/utils";
 import { maxParallelPublisingTasks } from "@paperbits/common/constants";
 import { IBlobStorage, Query } from "@paperbits/common/persistence";
 import { IPageService, PageContract } from "@paperbits/common/pages";
@@ -17,22 +18,28 @@ import { ILocaleService, LocaleModel } from "@paperbits/common/localization";
 import { IMediaService } from "@paperbits/common/media";
 import { StyleCompiler, StyleManager } from "@paperbits/common/styles";
 import { LocalStyleBuilder } from "@paperbits/styles";
+import { OpenGraphType } from "@paperbits/common/publishing/openGraph";
+import { MimeTypes } from "@paperbits/common";
 
+
+const globalStylesheetPermalink = `/styles/styles.css`;
+const localStylesheetFilePath = `/styles.css`;
+const rootHtmlPageFilePath = "/index.html";
 
 export class PagePublisher implements IPublisher {
     private localStyleBuilder: LocalStyleBuilder;
 
     constructor(
-        private readonly pageService: IPageService,
-        private readonly siteService: ISiteService,
-        private readonly mediaService: IMediaService,
-        private readonly outputBlobStorage: IBlobStorage,
-        private readonly htmlPagePublisher: HtmlPagePublisher,
-        private readonly styleCompiler: StyleCompiler,
-        private readonly localeService: ILocaleService,
-        private readonly sitemapBuilder: SitemapBuilder,
-        private readonly searchIndexBuilder: SearchIndexBuilder,
-        private readonly logger: Logger
+        protected readonly pageService: IPageService,
+        protected readonly siteService: ISiteService,
+        protected readonly mediaService: IMediaService,
+        protected readonly outputBlobStorage: IBlobStorage,
+        protected readonly htmlPagePublisher: HtmlPagePublisher,
+        protected readonly styleCompiler: StyleCompiler,
+        protected readonly localeService: ILocaleService,
+        protected readonly sitemapBuilder: SitemapBuilder,
+        protected readonly searchIndexBuilder: SearchIndexBuilder,
+        protected readonly logger: Logger
     ) {
         this.localStyleBuilder = new LocalStyleBuilder(this.outputBlobStorage);
     }
@@ -47,9 +54,19 @@ export class PagePublisher implements IPublisher {
         }
     }
 
+    private async getFaviconPermalink(faviconSourceKey: string): Promise<string> {
+        try {
+            const media = await this.mediaService.getMediaByKey(faviconSourceKey);
+            return media?.permalink;
+        }
+        catch (error) {
+            this.logger.trackEvent("Publishing", { message: "Could not retrieve favicon." });
+        }
+    }
+
     private getIndexableContent(html: string): string {
         return html;
-        
+
         // const regex = /<main.*>([\s\S]*)<\/main>/g;
         // const match = regex.exec(html);
 
@@ -61,7 +78,7 @@ export class PagePublisher implements IPublisher {
         // return mainContent;
     }
 
-    private async renderAndUpload(settings: SiteSettingsContract, page: PageContract, locale?: LocaleModel): Promise<void> {
+    private async renderAndUpload(settings: SiteSettingsContract, faviconPermalink: string, page: PageContract, locale?: LocaleModel): Promise<void> {
         if (!page.permalink) {
             this.logger.trackEvent("Publishing", { message: `Skipping page with no permalink specified: "${page.title}".` });
             return;
@@ -75,15 +92,17 @@ export class PagePublisher implements IPublisher {
             const siteDescription = settings?.description;
             const siteKeywords = settings?.keywords;
             const siteHostname = settings?.hostname;
-            const faviconSourceKey = settings?.faviconSourceKey;
             const localePrefix = locale ? `/${locale.code}` : "";
             const pagePermalink = `${localePrefix}${page.permalink}`;
             const pageContent = await this.pageService.getPageContent(page.key, locale?.code);
             const pageUrl = siteHostname
-                ? `https://${settings?.hostname}${pagePermalink}`
+                ? `https://${siteHostname}${pagePermalink}`
                 : pagePermalink;
 
             const styleManager = new StyleManager();
+            const localStylesheetPermalink = pagePermalink === "/" // home page
+                ? localStylesheetFilePath
+                : `${pagePermalink}${localStylesheetFilePath}`
 
             const htmlPage: HtmlPage = {
                 title: [page.title, siteTitle].join(" - "),
@@ -92,19 +111,19 @@ export class PagePublisher implements IPublisher {
                 permalink: pagePermalink,
                 url: pageUrl,
                 siteHostName: siteHostname,
+                faviconPermalink: faviconPermalink,
                 locale: locale,
-                content: pageContent,
                 template: template,
                 styleReferences: [
-                    `/styles/styles.css`, // global style reference
-                    pagePermalink === "/" // local style reference
-                        ? `/styles.css`   // home page style reference
-                        : `${pagePermalink}/styles.css`
+                    globalStylesheetPermalink,
+                    localStylesheetPermalink
                 ],
                 author: siteAuthor,
                 socialShareData: page.socialShareData,
                 openGraph: {
-                    type: page.permalink === "/" ? "website" : "article",
+                    type: page.permalink === "/"
+                        ? OpenGraphType.website
+                        : OpenGraphType.article,
                     title: page.title || siteTitle,
                     description: page.description || siteDescription,
                     siteName: siteTitle
@@ -134,19 +153,6 @@ export class PagePublisher implements IPublisher {
                 }
             }
 
-            if (faviconSourceKey) {
-                try {
-                    const media = await this.mediaService.getMediaByKey(faviconSourceKey);
-
-                    if (media) {
-                        htmlPage.faviconPermalink = media.permalink;
-                    }
-                }
-                catch (error) {
-                    this.logger.trackEvent("Publishing", { message: "Could not retrieve favicon." });
-                }
-            }
-
             const htmlContent = await this.renderPage(htmlPage);
 
             // Building local styles
@@ -156,25 +162,20 @@ export class PagePublisher implements IPublisher {
             this.sitemapBuilder.appendPermalink(pagePermalink);
             this.searchIndexBuilder.appendHtml(pagePermalink, htmlPage.title, htmlPage.description, this.getIndexableContent(htmlContent));
 
-            let permalink = pagePermalink;
-
-            if (!permalink.endsWith("/")) {
-                permalink += "/";
-            }
-
-            permalink = `${permalink}index.html`;
+            let permalink = normalizePermalink(pagePermalink);
+            permalink = `${permalink}${rootHtmlPageFilePath}`;
 
             const uploadPath = permalink;
             const contentBytes = Utils.stringToUnit8Array(htmlContent);
 
-            await this.outputBlobStorage.uploadBlob(uploadPath, contentBytes, "text/html");
+            await this.outputBlobStorage.uploadBlob(uploadPath, contentBytes, MimeTypes.textHtml);
         }
         catch (error) {
             throw new Error(`Unable to publish page "${page.title}": ${error.stack || error.message}`);
         }
     }
 
-    private async publishNonLocalized(siteSettings: SiteSettingsContract): Promise<void> {
+    private async publishNonLocalized(siteSettings: SiteSettingsContract, faviconPermalink: string): Promise<void> {
         const query: Query<PageContract> = Query.from<PageContract>();
         let pagesOfResults = await this.pageService.search(query);
 
@@ -183,7 +184,7 @@ export class PagePublisher implements IPublisher {
             const pages = pagesOfResults.value;
 
             for (const page of pages) {
-                tasks.push(() => this.renderAndUpload(siteSettings, page));
+                tasks.push(() => this.renderAndUpload(siteSettings, faviconPermalink, page));
             }
 
             await parallel(tasks, maxParallelPublisingTasks);
@@ -198,7 +199,7 @@ export class PagePublisher implements IPublisher {
         while (pagesOfResults);
     }
 
-    private async publishLocalized(locales: LocaleModel[], siteSettings: SiteSettingsContract): Promise<void> {
+    private async publishLocalized(siteSettings: SiteSettingsContract, faviconPermalink: string, locales: LocaleModel[]): Promise<void> {
         const defaultLocale = await this.localeService.getDefaultLocaleCode();
 
         for (const locale of locales) {
@@ -214,7 +215,7 @@ export class PagePublisher implements IPublisher {
                 const pages = pagesOfResults.value;
 
                 for (const page of pages) {
-                    tasks.push(() => this.renderAndUpload(siteSettings, page, requestedLocale));
+                    tasks.push(() => this.renderAndUpload(siteSettings, faviconPermalink, page, requestedLocale));
                 }
 
                 await parallel(tasks, maxParallelPublisingTasks);
@@ -242,12 +243,15 @@ export class PagePublisher implements IPublisher {
         try {
             const settings = await this.siteService.getSettings<any>();
             const siteSettings: SiteSettingsContract = settings.site;
+            const faviconPermalink = settings?.faviconSourceKey
+                ? await this.getFaviconPermalink(settings.faviconSourceKey)
+                : null;
 
             if (localizationEnabled) {
-                await this.publishLocalized(locales, siteSettings);
+                await this.publishLocalized(siteSettings, faviconPermalink, locales);
             }
             else {
-                await this.publishNonLocalized(siteSettings);
+                await this.publishNonLocalized(siteSettings, faviconPermalink);
             }
         }
         catch (error) {

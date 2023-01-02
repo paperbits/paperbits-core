@@ -5,6 +5,7 @@ import { stripHtml } from "@paperbits/common/utils";
 import { HttpClient } from "@paperbits/common/http";
 import { Component, RuntimeComponent, OnMounted } from "@paperbits/common/ko/decorators";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
+import { MimeTypes } from "@paperbits/common";
 
 
 export interface SearchResult {
@@ -90,7 +91,7 @@ export class SearchRuntime {
 
         const text = response.toText();
         const parser = new DOMParser();
-        const searchedDocument: Document = parser.parseFromString(text, "text/html");
+        const searchedDocument: Document = parser.parseFromString(text, MimeTypes.textHtml);
         const title = searchedDocument.title;
         const body = stripHtml(searchedDocument.body.innerHTML);
         const fragmentSize = 150;
