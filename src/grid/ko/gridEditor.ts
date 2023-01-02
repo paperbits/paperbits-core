@@ -6,9 +6,9 @@ import * as Objects from "@paperbits/common/objects";
 import { ViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet, ActiveElement, View, IContextCommand } from "@paperbits/common/ui";
 import { IWidgetBinding, WidgetContext, GridItem, ComponentFlow, WidgetBinding, GridHelper } from "@paperbits/common/editing";
 import { IWidgetService } from "@paperbits/common/widgets";
-import { EventManager, Events, MouseButton } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { Router } from "@paperbits/common/routing";
-import { Bag, Keys } from "@paperbits/common";
+import { Bag, Keys, MouseButtons } from "@paperbits/common";
 import { LocalStyles, StyleDefinition, VariationContract } from "@paperbits/common/styles";
 import { StyleHelper } from "@paperbits/styles";
 import { TextblockEditor } from "../../textblock/ko";
@@ -227,7 +227,7 @@ export class GridEditor {
             return;
         }
 
-        if (event.button !== MouseButton.Main) {
+        if (event.button !== MouseButtons.Main) {
             return;
         }
 

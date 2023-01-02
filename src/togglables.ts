@@ -1,9 +1,9 @@
 import * as Arrays from "@paperbits/common/arrays";
-import { Keys } from "@paperbits/common/keyboard";
-import { Events, MouseButton } from "@paperbits/common/events";
+import { Keys, MouseButtons } from "@paperbits/common";
+import { Events } from "@paperbits/common/events";
 import { AriaAttributes, DataAttributes } from "@paperbits/common/html";
-import { TriggerEvent } from "./triggerEvent";
 import { ToggleType } from "./toggleType";
+import { TriggerEvent } from "./triggerEvent";
 
 
 const showClassName = "show";
@@ -52,7 +52,7 @@ const openTogglable = (toggleElement: HTMLElement, toggleType: ToggleType, trigg
 };
 
 const onClick = (event: MouseEvent): void => {
-    if (event.button !== MouseButton.Main) {
+    if (event.button !== MouseButtons.Main) {
         return;
     }
 

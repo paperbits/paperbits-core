@@ -1,6 +1,6 @@
 import * as ko from "knockout";
-import { Keys } from "@paperbits/common/keyboard";
-import { Events, MouseButton } from "@paperbits/common/events";
+import { Keys, MouseButtons } from "@paperbits/common";
+import { Events } from "@paperbits/common/events";
 
 ko.bindingHandlers["collapse"] = {
     init: (triggerElement: HTMLElement, valueAccessor) => {
@@ -41,7 +41,7 @@ ko.bindingHandlers["collapse"] = {
             };
 
             const onPointerDown = (event: MouseEvent): void => {
-                if (event.button !== MouseButton.Main) {
+                if (event.button !== MouseButtons.Main) {
                     return;
                 }
                 toggle();
