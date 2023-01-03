@@ -89,8 +89,22 @@ const onMouseEnter = (event: MouseEvent): void => {
     openTogglable(toggleElement, toggleType, TriggerEvent.Hover);
 };
 
-
 const onKeyDown = (event: KeyboardEvent) => {
+    if (event.key === Keys.Escape) {
+        const closestOpenCollapsible = <HTMLElement>document.activeElement.closest(`.${showClassName}`);
+
+        if (closestOpenCollapsible) {
+            /**
+             * TODO: 
+             * - Take into account native collapsibles like <select> element, before closing this one.
+             * - Keep track of which element was a toggle element to update "expand" state and set focus.
+             */
+            closeCollapsible(closestOpenCollapsible, null);
+        }
+
+        return;
+    }
+
     if (event.key !== Keys.Enter && event.key !== Keys.Space) {
         return;
     }
@@ -115,9 +129,8 @@ const onShowTogglable = (toggleElement: HTMLElement, targetElement: HTMLElement)
     };
 
     const closeTarget = (): void => {
-        targetElement.classList.remove(showClassName);
+        closeCollapsible(targetElement, toggleElement);
         removeEventListener(Events.MouseDown, clickOutside);
-        toggleElement.setAttribute(AriaAttributes.expanded, "false");
 
         for (const dismissElement of dismissElements) {
             dismissElement.removeEventListener(Events.Click, closeTarget);
@@ -150,6 +163,15 @@ const onShowTogglable = (toggleElement: HTMLElement, targetElement: HTMLElement)
 
     return togglableHandle;
 };
+
+const closeCollapsible = (targetElement: HTMLElement, toggleElement: HTMLElement): void => {
+    targetElement.classList.remove(showClassName);
+
+    if (toggleElement) {
+        toggleElement.setAttribute(AriaAttributes.expanded, "false");
+        toggleElement.focus();
+    }
+}
 
 const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement, triggerEvent: TriggerEvent): ToggleableHandle => {
     if (!toggleElement || !targetElement) {
@@ -276,8 +298,7 @@ const onShowPopup = (toggleElement: HTMLElement, targetElement: HTMLElement, tri
                 break;
         }
 
-        targetElement.classList.remove(showClassName);
-        toggleElement.setAttribute(AriaAttributes.expanded, "false");
+        closeCollapsible(targetElement, toggleElement)
 
         // Temporary hack to reposition popup:
         document.removeEventListener(onPopupRepositionRequestedEvent, repositionPopup);

@@ -333,7 +333,7 @@ export class DefaultViewManager implements ViewManager {
 
         view.hitTest = (el) => { // TODO: Move to bindingHandler
             return !!Html.closest(el, (x: HTMLElement) =>
-                (x.getAttribute && !!x.getAttribute("contentEditable")) || // TODO: Move hitTest check to text editor
+                (x.getAttribute && !!x.getAttribute(Html.Attributes.ContentEditable)) || // TODO: Move hitTest check to text editor
                 (x?.classList && Arrays.coerce(x.classList).includes("toolbox")));
         };
 
