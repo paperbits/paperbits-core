@@ -1,4 +1,4 @@
-export enum TriggerEvent {
+export enum ToggleableTriggerEvent {
     Click = "click",
     Hover = "hover",
     Focus = "focus",

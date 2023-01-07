@@ -3,7 +3,7 @@ import template from "./popupHyperlinkDetails.html";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { ViewManager } from "@paperbits/common/ui";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 
 
 @Component({
@@ -48,7 +48,7 @@ export class PopupHyperlinkDetails {
 
     public openPopup(): void {
         const hostDocument = this.viewManager.getHostDocument();
-        hostDocument.dispatchEvent(new CustomEvent("onPopupRequested", { detail: this.hyperlink.targetKey }));
+        hostDocument.dispatchEvent(new CustomEvent(Events.PopupRequest, { detail: this.hyperlink.targetKey }));
 
         this.viewManager.clearContextualCommands();
         this.viewManager.clearJourney();

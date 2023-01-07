@@ -1,4 +1,4 @@
-import "./togglables";
+import "./toggleables/toggleableManager";
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { DefaultEventManager } from "@paperbits/common/events";
 import { DefaultRouter, HistoryRouteHandler, LocationRouteHandler } from "@paperbits/common/routing";

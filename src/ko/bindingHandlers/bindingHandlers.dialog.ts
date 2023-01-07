@@ -1,17 +1,8 @@
 ﻿import * as ko from "knockout";
 import { Keys } from "@paperbits/common/keyboard";
 import { Events } from "@paperbits/common/events";
-import { coerce } from "@paperbits/common/arrays";
+import { getFocusableElements } from "@paperbits/common/html";
 
-
-const isVisible = (element: HTMLElement) => {
-    const box = element.getBoundingClientRect();
-    return box.width && box.height;
-};
-
-const getFocusableElements = (element: HTMLElement) => {
-    return coerce<HTMLElement>(element.querySelectorAll("*")).filter(x => x.tabIndex >= 0 && isVisible(x));
-};
 
 ko.bindingHandlers["dialog"] = {
     init(element: HTMLElement): void {

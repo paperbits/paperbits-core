@@ -75,7 +75,7 @@ export class GooglmapsBindingHandler {
                 this.content.setAttribute("data-position", "top");
 
                 this.getPanes().floatPane.appendChild(this.content);
-                document.dispatchEvent(new CustomEvent("onPopupRequested", { detail: configuration.markerPopupKey }));
+                document.dispatchEvent(new CustomEvent(Events.PopupRequest, { detail: configuration.markerPopupKey }));
             }
 
             /** Called each frame when the popup needs to draw itself. */
@@ -118,7 +118,7 @@ export class GooglmapsBindingHandler {
             const anchor = new PopupAnchor(position);
             anchor.setMap(map);
 
-            marker.addListener(Events.Click, () => document.dispatchEvent(new CustomEvent("onPopupRequested", { detail: configuration.markerPopupKey })));
+            marker.addListener(Events.Click, () => document.dispatchEvent(new CustomEvent(Events.PopupRequest, { detail: configuration.markerPopupKey })));
         }
         else {
             const infowindow = new google.maps.InfoWindow();
