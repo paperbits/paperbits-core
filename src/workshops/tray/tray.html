@@ -1,4 +1,5 @@
-<div role="listbox" aria-label="Tray" data-bind="listbox: {}">
+<div class="toolbox toolbox-position-left-bottom" role="listbox" aria-label="Tray"
+    data-bind="listbox: {}, visible: viewManager.primaryToolboxVisible">
     <div role="presentation" class="toolbox-btn">
         <a role="option"
             data-bind="tooltip: '<h1>Screen sizes</h1><p>See and adjust the content for<br/> devices of different sizes.</p>', balloon: { component: { name: 'viewport-selector' }, position: 'top' }"

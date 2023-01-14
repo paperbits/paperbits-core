@@ -1,10 +1,9 @@
-import * as ko from "knockout";
 import * as Arrays from "@paperbits/common/arrays";
 import * as Utils from "@paperbits/common/utils";
 import * as Html from "@paperbits/common/html";
 import * as Objects from "@paperbits/common/objects";
 import { ViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet, ActiveElement, View, IContextCommand } from "@paperbits/common/ui";
-import { IWidgetBinding, WidgetContext, GridItem, ComponentFlow, WidgetBinding, GridHelper } from "@paperbits/common/editing";
+import { IWidgetBinding, WidgetContext, GridItem, ComponentFlow, GridHelper } from "@paperbits/common/editing";
 import { IWidgetService } from "@paperbits/common/widgets";
 import { EventManager, Events } from "@paperbits/common/events";
 import { Router } from "@paperbits/common/routing";
@@ -795,15 +794,7 @@ export class GridEditor {
     }
 
     private getGridItem(element: HTMLElement, requestedLayerName?: string): GridItem {
-        const context = ko.contextFor(element);
-
-        if (!context) {
-            return null;
-        }
-
-        const widgetBinding = context.widget instanceof WidgetBinding
-            ? context.widget
-            : context.$data?.widgetBinding;
+        const widgetBinding = GridHelper.getWidgetBinding(element);
 
         if (!widgetBinding) {
             return null;

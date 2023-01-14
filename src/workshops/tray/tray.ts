@@ -14,6 +14,7 @@ export class Tray {
     public readonly localizationEnabled: ko.Observable<boolean>;
 
     constructor(
+        public readonly viewManager: ViewManager,
         private readonly trayCommands: ToolButton[],
         private readonly settingsProvider: ISettingsProvider
     ) {
