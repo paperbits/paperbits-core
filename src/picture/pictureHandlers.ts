@@ -1,84 +1,39 @@
 ﻿import * as Utils from "@paperbits/common/utils";
 import { MediaContract } from "@paperbits/common/media";
-import { IWidgetOrder, IContentDropHandler, IWidgetHandler, IDataTransfer, IContentDescriptor, WidgetContext } from "@paperbits/common/editing";
+import { IContentDropHandler, IWidgetHandler, IDataTransfer, IContentDescriptor, WidgetContext } from "@paperbits/common/editing";
 import { PictureModel } from "./pictureModel";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 
 const widgetDisplayName = "Picture";
 
-export class PictureHandlers implements IWidgetHandler { //, IContentDropHandler {
+export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
     constructor(private readonly viewManager: ViewManager) { }
 
     public async getWidgetModel(): Promise<PictureModel> {
         return new PictureModel();
     }
-    
-    // private static readonly imageFileExtensions = [".jpg", ".jpeg", ".png", ".svg", ".gif"];
 
-    // private async getWidgetOrderByConfig(sourceUrl: string, caption: string): Promise<IWidgetOrder> {
-    //     const widgetOrder: IWidgetOrder = {
-    //         name: "picture",
-    //         displayName: widgetDisplayName,
-    //         category: "Media",
-    //         iconClass: "widget-icon widget-icon-picture",
-    //         requires: ["html"],
-    //         createModel: async () => {
-    //             const pictureModel = new PictureModel();
-    //             pictureModel.sourceKey = sourceUrl;
-    //             pictureModel.caption = caption;
+    private static readonly imageFileExtensions = [".jpg", ".jpeg", ".png", ".svg", ".gif"];
 
-    //             return pictureModel;
-    //         }
-    //     };
+    public getContentDescriptorFromDataTransfer(dataTransfer: IDataTransfer): IContentDescriptor {
+        if (!dataTransfer.name || !PictureHandlers.imageFileExtensions.some(e => dataTransfer.name.endsWith(e))) {
+            return null;
+        }
 
-    //     return widgetOrder;
-    // }
+        const source = dataTransfer.source;
 
-    // public async getWidgetOrder(): Promise<IWidgetOrder> {
-    //     return await this.getWidgetOrderByConfig(null, widgetDisplayName);
-    // }
+        const getThumbnailPromise = () => new Promise<string>(async (resolve) => {
+            resolve(await Utils.readBlobAsDataUrl(<Blob>source));
+        });
 
-    // public getContentDescriptorFromMedia(media: MediaContract): IContentDescriptor {
-    //     if (!PictureHandlers.isMediaFile(media)) {
-    //         return null;
-    //     }
-
-    //     return {
-    //         title: widgetDisplayName,
-    //         description: media.description,
-    //         getWidgetOrder: async () => {
-    //             return await this.getWidgetOrderByConfig(media.downloadUrl, media.fileName);
-    //         }
-    //     };
-    // }
-
-    // public getContentDescriptorFromDataTransfer(dataTransfer: IDataTransfer): IContentDescriptor {
-    //     if (!dataTransfer.name || !PictureHandlers.imageFileExtensions.some(e => dataTransfer.name.endsWith(e))) {
-    //         return null;
-    //     }
-
-    //     const source = dataTransfer.source;
-    //     const droppedSourceUrl = URL.createObjectURL(<Blob>source);
-
-    //     const getThumbnailPromise = () => new Promise<string>(async (resolve) => {
-    //         resolve(await Utils.readBlobAsDataUrl(<Blob>source));
-    //     });
-
-    //     return {
-    //         title: widgetDisplayName,
-    //         description: dataTransfer.name,
-    //         getWidgetOrder: async () => {
-    //             return await this.getWidgetOrderByConfig(droppedSourceUrl, dataTransfer.name);
-    //         },
-    //         getPreviewUrl: getThumbnailPromise,
-    //         getThumbnailUrl: getThumbnailPromise,
-    //         uploadables: [dataTransfer.source]
-    //     };
-    // }
-
-    // public static isMediaFile(media: MediaContract): boolean {
-    //     return (media.mimeType && media.mimeType.indexOf("image") !== -1) || (media.fileName && this.imageFileExtensions.some(e => media.fileName.endsWith(e)));
-    // }
+        return {
+            title: widgetDisplayName,
+            description: dataTransfer.name,
+            getPreviewUrl: getThumbnailPromise,
+            getThumbnailUrl: getThumbnailPromise,
+            uploadables: [dataTransfer.source]
+        };
+    }
 
     public getContextCommands(context: WidgetContext): IContextCommandSet {
         const contextualEditor: IContextCommandSet = {

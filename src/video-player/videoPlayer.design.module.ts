@@ -18,6 +18,9 @@ export class VideoPlayerDesignModule implements IInjectorModule {
         injector.bindSingleton("videoPlayerViewModelBinder", VideoPlayerViewModelBinder)
         injector.bindSingleton("videoPlayerHandler", VideoPlayerHandlers);
 
+        // TODO: Create respective handler property in WidgetEditorDefinition
+        injector.bindToCollectionAsSingletone("dropHandlers", VideoPlayerHandlers);
+
         const widgetService = injector.resolve<IWidgetService>("widgetService");
 
         widgetService.registerWidget("video-player", {

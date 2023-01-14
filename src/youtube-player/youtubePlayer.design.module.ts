@@ -15,6 +15,9 @@ export class YoutubePlayerDesignModule implements IInjectorModule {
         injector.bindSingleton("youtubePlayerViewModelBinder", YoutubePlayerViewModelBinder)
         injector.bindSingleton("youtubePlayerHandler", YoutubeHandlers);
 
+        // TODO: Create respective handler property in WidgetEditorDefinition
+        injector.bindToCollectionAsSingletone("dropHandlers", YoutubeHandlers);
+
         const widgetService = injector.resolve<IWidgetService>("widgetService");
 
         widgetService.registerWidget("youtube-player", {

@@ -58,8 +58,11 @@ export class DropBucket {
 
         dropbucketItem.thumbnailUrl(contentDescriptor.iconUrl);
 
+        console.log(contentDescriptor);
+
         if (contentDescriptor.getThumbnailUrl) {
             contentDescriptor.getThumbnailUrl().then(thumbnailUrl => {
+                console.log(thumbnailUrl);
                 dropbucketItem.previewUrl(thumbnailUrl);
                 dropbucketItem.thumbnailUrl(thumbnailUrl);
             });
@@ -75,10 +78,10 @@ export class DropBucket {
     }
 
     private onDragDrop(event: DragEvent): void {
-
         if (this.viewManager.mode === ViewManagerMode.preview) {
             return;
         }
+        
         if (!this.canHandleDrop(event)) {
             return;
         }

@@ -17,6 +17,9 @@ export class PictureDesignModule implements IInjectorModule {
         injector.bindSingleton("pictureViewModelBinder", PictureViewModelBinder)
         injector.bindSingleton("pictureHandler", PictureHandlers);
 
+        // TODO: Create respective handler property in WidgetEditorDefinition
+        injector.bindToCollectionAsSingletone("dropHandlers", PictureHandlers);
+
         const widgetService = injector.resolve<IWidgetService>("widgetService");
 
         widgetService.registerWidget("picture", {
