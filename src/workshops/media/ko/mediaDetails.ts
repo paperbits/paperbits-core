@@ -65,8 +65,7 @@ export class MediaDetailsWorkshop {
             .subscribe(this.updateMedia);
 
         this.mediaItem.permalink
-            .extend(ChangeRateLimit)
-            .extend(<any>{ required: true, validPermalink: this.mediaItem.key, onlyValid: true })
+            .extend(<any>{ required: true, isValidPermalink: true, onlyValid: true })
             .subscribe(this.updateMedia);
     }
 
