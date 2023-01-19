@@ -6,6 +6,7 @@ import { IPublisher } from "@paperbits/common/publishing";
 import { IBlobStorage, Query } from "@paperbits/common/persistence";
 import { IMediaService, MediaContract, MediaVariantContract } from "@paperbits/common/media";
 import { Logger } from "@paperbits/common/logging";
+import { validateAndNormalizePermalink } from "@paperbits/common/permalinks/utils";
 
 
 export class MediaPublisher implements IPublisher {
@@ -34,6 +35,7 @@ export class MediaPublisher implements IPublisher {
         }
 
         const content = response.toByteArray();
+
         await this.uploadToStorage(permalink, content, mediaFile.mimeType);
     }
 
@@ -56,9 +58,10 @@ export class MediaPublisher implements IPublisher {
         await this.uploadToStorage(permalink, content, mediaFile.mimeType);
     }
 
-    private async uploadToStorage(key: string, content: Uint8Array, mimeType: string): Promise<void> {
+    private async uploadToStorage(permalink: string, content: Uint8Array, mimeType: string): Promise<void> {
         try {
-            await this.outputBlobStorage.uploadBlob(key, content, mimeType);
+            permalink = validateAndNormalizePermalink(permalink);
+            await this.outputBlobStorage.uploadBlob(permalink, content, mimeType);
         }
         catch (error) {
             throw new Error(`Unable to upload media file to destination storage. ${error.stack || error.message}`);

@@ -8,7 +8,7 @@ import {
     SitemapBuilder,
     SearchIndexBuilder
 } from "@paperbits/common/publishing";
-import { normalizePermalink } from "@paperbits/common/permalinks/utils";
+import { validateAndNormalizePermalink } from "@paperbits/common/permalinks/utils";
 import { maxParallelPublisingTasks } from "@paperbits/common/constants";
 import { IBlobStorage, Query } from "@paperbits/common/persistence";
 import { IPageService, PageContract } from "@paperbits/common/pages";
@@ -162,7 +162,7 @@ export class PagePublisher implements IPublisher {
             this.sitemapBuilder.appendPermalink(pagePermalink);
             this.searchIndexBuilder.appendHtml(pagePermalink, htmlPage.title, htmlPage.description, this.getIndexableContent(htmlContent));
 
-            let permalink = normalizePermalink(pagePermalink);
+            let permalink = validateAndNormalizePermalink(pagePermalink);
             permalink = `${permalink}${rootHtmlPageFilePath}`;
 
             const uploadPath = permalink;
