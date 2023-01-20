@@ -18,7 +18,7 @@ ko.bindingHandlers["gridCommand"] = {
         }
 
         if (command.callback) {
-            bindings["click"] = command.callback;
+            bindings["activate"] = command.callback;
         }
 
         ko.applyBindingsToNode(element, bindings, null);

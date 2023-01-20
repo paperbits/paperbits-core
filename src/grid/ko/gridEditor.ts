@@ -121,6 +121,9 @@ export class GridEditor {
                 };
 
                 this.viewManager.setSelectedElement(config, contextualCommands);
+
+                this.selection = selectableParent;
+                document.getElementById("contentEditor").focus();
             }
         };
 
@@ -297,6 +300,10 @@ export class GridEditor {
     }
 
     private onKeyDown(event: KeyboardEvent): void {
+        if (document.activeElement.id !== "contentEditor") {
+            return;
+        }
+
         const selectedElement = this.viewManager.getSelectedElement();
 
         if (!selectedElement) {
@@ -348,9 +355,13 @@ export class GridEditor {
                 break;
 
             case Keys.Enter:
-                if (gridItem.binding.editor) {
-                    this.viewManager.openWidgetEditor(gridItem.binding);
-                }
+                // if (gridItem.binding.editor) {
+                //     this.viewManager.openWidgetEditor(gridItem.binding);
+                // }
+                break;
+
+            case Keys.Escape:
+                // On Esc we should return forcus to selected element
                 break;
 
             default:
