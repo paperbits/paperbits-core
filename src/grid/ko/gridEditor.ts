@@ -14,6 +14,7 @@ import { TextblockEditor } from "../../textblock/ko";
 
 
 const defaultCommandColor = "#607d8b";
+const contentEditorElementId = "contentEditor";
 
 export class GridEditor {
     private activeHighlightedGridItem: GridItem;
@@ -114,16 +115,7 @@ export class GridEditor {
                     return;
                 }
 
-                const config: IHighlightConfig = {
-                    element: selectableParent.element,
-                    text: selectableParent.binding.displayName,
-                    color: contextualCommands.color
-                };
-
-                this.viewManager.setSelectedElement(config, contextualCommands);
-
-                this.selection = selectableParent;
-                document.getElementById("contentEditor").focus();
+                this.selectElement(selectableParent);
             }
         };
 
@@ -300,7 +292,7 @@ export class GridEditor {
     }
 
     private onKeyDown(event: KeyboardEvent): void {
-        if (document.activeElement.id !== "contentEditor") {
+        if (document.activeElement.id !== contentEditorElementId) {
             return;
         }
 
@@ -388,8 +380,8 @@ export class GridEditor {
 
         this.viewManager.setSelectedElement(config, commandSet);
         this.activeContextualCommands = commandSet;
-
         this.selection = item;
+        document.getElementById(contentEditorElementId).focus();
 
         if (scrollIntoView) {
             item.element.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -542,7 +534,7 @@ export class GridEditor {
         }
     }
 
-    private getUnderlyingElements(): HTMLElement[] {
+    private getElementsUnderPointer(): HTMLElement[] {
         const elements = Utils.elementsFromPoint(this.ownerDocument, this.pointerX, this.pointerY);
 
         // Determining cut-off index to exclude from selection stack the elements under popups or dropdowns.
@@ -711,7 +703,7 @@ export class GridEditor {
     private onGlobalFocusChange(event: FocusEvent): void {
         const target = <HTMLElement>event.target;
 
-        if (target.id === "contentEditor") {
+        if (target.id === contentEditorElementId) {
             if (this.selection) { // also, check for element existence.
                 this.selectElement(this.selection, false);
             }
@@ -800,7 +792,7 @@ export class GridEditor {
     }
 
     private getGridItemsUnderPointer(layerName?: string): GridItem[] {
-        const elements = this.getUnderlyingElements().filter(x => x.tagName !== "HTML");
+        const elements = this.getElementsUnderPointer().filter(x => x.tagName !== "HTML");
         return this.getGridItems(elements, layerName);
     }
 
