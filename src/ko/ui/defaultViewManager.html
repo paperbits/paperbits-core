@@ -31,7 +31,8 @@
 </div>
 
 <!-- ko with: activeView() -->
-<div role="dialog" aria-labelledby="popupHeading" tabindex="-1" class="toolbox toolbox-popup toolbox-position-left-offset"
+<div role="dialog" aria-labelledby="popupHeading" tabindex="-1"
+    class="toolbox toolbox-popup toolbox-position-left-offset"
     data-bind="resizable: resizing, surface: $data, dialog: {}">
     <div role="document" class="editor resizable-content flex flex-column">
         <!-- ko if: heading -->
@@ -39,13 +40,12 @@
             <span data-bind="text: heading"></span>
         </h1>
         <!-- /ko -->
-        <button class="btn btn-dismiss" title="Close" aria-label="Close"
-            data-bind="click: $component.closeView">
+        <button class="btn btn-dismiss" title="Close" aria-label="Close" data-bind="click: $component.closeView">
             <i aria-hidden="true" class="paperbits-icon paperbits-simple-remove"></i>
         </button>
         <hr />
         <div class="form" data-bind="scrollable: $data.scrolling, view: $data">
-            
+
         </div>
     </div>
 </div>
@@ -108,26 +108,26 @@
 </div>
 
 <!-- ko with: selectedElementContextualEditor() -->
-<div class="fixed toolbox toolbox-horizontal toolbox-context"
-    data-bind="stickTo: { target: element, position: 'top right', offsetY: 10, placement: 'outside' }">
+<div role="listbox" class="fixed toolbox toolbox-horizontal toolbox-context"
+    data-bind="stickTo: { target: element, position: 'top right', offsetY: 10, placement: 'outside' }, listbox: {}">
     <!-- ko foreach: { data: selectCommands, as: 'command' } -->
-    <div data-bind="gridCommand: command, css: command.controlType">
+    <a data-bind="gridCommand: command, css: command.controlType">
         <!-- ko if: command.iconClass -->
         <i aria-hidden="true" data-bind="css: command.iconClass"></i>
         <!-- /ko -->
         <!-- ko if: command.displayName -->
         <span data-bind="text: command.displayName"></span>
         <!-- /ko -->
-    </div>
+    </a>
     <!-- ko if: command.component -->
     <div class="balloon" data-bind="component: command.component"></div>
     <!-- /ko -->
     <!-- /ko -->
 
     <!-- ko if: deleteCommand -->
-    <button tabindex="-1" class="toolbox-button" data-bind="gridCommand: deleteCommand">
+    <a role="option" class="toolbox-button" data-bind="gridCommand: deleteCommand">
         <i aria-hidden="true" class="paperbits-icon paperbits-trash-simple"></i>
-    </button>
+    </a>
     <!-- /ko -->
 </div>
 <!-- /ko -->
