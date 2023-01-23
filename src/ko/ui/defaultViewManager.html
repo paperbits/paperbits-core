@@ -111,7 +111,7 @@
 <div role="listbox" class="fixed toolbox toolbox-horizontal toolbox-context"
     data-bind="stickTo: { target: element, position: 'top right', offsetY: 10, placement: 'outside' }, listbox: {}">
     <!-- ko foreach: { data: selectCommands, as: 'command' } -->
-    <a role="option" data-bind="gridCommand: command, css: command.controlType">
+    <a data-bind="gridCommand: command, css: command.controlType">
         <!-- ko if: command.iconClass -->
         <i aria-hidden="true" data-bind="css: command.iconClass"></i>
         <!-- /ko -->

@@ -930,7 +930,6 @@ export class GridEditor {
             displayName: componentStyleDefinition.displayName,
             binding: binding,
             element: element,
-            isStylable: true,
             editor: "style-editor",
             getParent: () => this.getParent(gridItem),
             getChildren: () => this.getChildren(gridItem),
