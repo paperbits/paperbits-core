@@ -38,9 +38,9 @@
     <!--ko ifnot: $component.working()-->
     <div role="tabpanel" class="flex flex-column flex-grow"
         data-bind="scrollable: true, focus: { childSelector: '.list-item' }">
-        <div role="list" data-bind="foreach: { data: $component.snippets, as: 'snippet' }">
-            <a href="#" class="snippet-grid list-item" role="listitem" aria-label="Select layout"
-                data-bind="click: $component.selectLayout, styledInPlace: snippet.viewModel.styles">
+        <div role="listbox" data-bind="foreach: { data: $component.snippets, as: 'snippet' }, listbox: {}">
+            <a class="snippet-grid list-item" role="option" aria-label="Select layout"
+                data-bind="activate: $component.selectLayout, styledInPlace: snippet.viewModel.styles">
                 <!-- ko foreach: { data: snippet.viewModel.widgets, as: 'widget' } -->
                 <div class="snippet-grid-cell" data-bind="styledInPlace: widget.styles">
                 </div>
