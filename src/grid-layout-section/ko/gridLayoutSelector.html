@@ -2,11 +2,11 @@
     <h1 data-bind="text: heading"> </h1>
     <hr />
 
-    <div class="tabs" role="tablist">
+    <div class="tabs" role="listbox" data-bind="listbox: {}">
         <!-- ko if: isBlankTabEnabled -->
         <div class="tab"
             data-bind="css: { 'tab-is-active': selected() === 'blank' }, attr: { 'aria-selected':  selected() === 'blank'}">
-            <a href="#" data-bind="click: selected.bind($data,'blank'), focus: true" title="New section" role="tab"
+            <a role="option" data-bind="activate: selected.bind($data,'blank'), focus: true" title="New section"
                 aria-label="add empty section">
                 Blank
             </a>
@@ -15,7 +15,7 @@
         <!-- ko if: isBlocksTabEnabled -->
         <div class="tab"
             data-bind="css: { 'tab-is-active': selected() === 'library' }, attr: { 'aria-selected': selected() === 'library' }">
-            <a href="#" data-bind="click: selected.bind($data,'library')" title="Blocks" role="tab"
+            <a role="option" data-bind="activate: selected.bind($data,'library')" title="Blocks"
                 aria-label="add from blocks">
                 Library
             </a>
@@ -23,7 +23,7 @@
         <!-- /ko -->
         <div class="tab"
             data-bind="css: { 'tab-is-active': selected() === 'saved' }, attr: { 'aria-selected': selected() === 'saved' }">
-            <a href="#" data-bind="click: selected.bind($data,'saved')" title="From library" role="tab"
+            <a role="option" data-bind="activate: selected.bind($data,'saved')" title="From library"
                 aria-label="Add from library">
                 Saved
             </a>
