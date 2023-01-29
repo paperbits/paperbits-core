@@ -21,7 +21,7 @@ ko.bindingHandlers["activate"] = {
             callback(data);
         };
 
-        const onKeyDown = (event: KeyboardEvent) => {
+        const onKeyDown = (event: KeyboardEvent): void => {
             if (event.key !== Keys.Enter && event.key !== Keys.Space) {
                 return;
             }

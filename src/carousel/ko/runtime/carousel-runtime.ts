@@ -93,15 +93,15 @@ export class CarouselHTMLElement extends HTMLElement {
     private enablePauseOnHover = (): void => {
         if (this.autoplay) {
             const element = <HTMLElement>this;
-            element.addEventListener("mouseover", this.disableAutoplay);
-            element.addEventListener("mouseout", this.enableAutoplay);
+            element.addEventListener(Events.MouseOver, this.disableAutoplay);
+            element.addEventListener(Events.MouseOut, this.enableAutoplay);
         }
     }
 
     private disablePauseOnHover = (): void => {
         const element = <HTMLElement>this;
-        element.removeEventListener("mouseover", this.disableAutoplay);
-        element.removeEventListener("mouseout", this.enableAutoplay);
+        element.removeEventListener(Events.MouseOver, this.disableAutoplay);
+        element.removeEventListener(Events.MouseOut, this.enableAutoplay);
     }
 
     private nextSlide = (): void => {

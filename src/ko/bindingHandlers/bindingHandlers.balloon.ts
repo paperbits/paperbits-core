@@ -358,11 +358,11 @@ export class BalloonBindingHandler {
                         }
 
                         if (activateOn === BalloonActivationMethod.hoverOrFocus) {
-                            balloonElement.addEventListener("mouseenter", () => {
+                            balloonElement.addEventListener(Events.MouseEnter, () => {
                                 inBalloon = true;
                             });
 
-                            balloonElement.addEventListener("mouseleave", () => {
+                            balloonElement.addEventListener(Events.MouseLeave, () => {
                                 inBalloon = false;
                                 checkCloseHoverBalloon();
                             });
