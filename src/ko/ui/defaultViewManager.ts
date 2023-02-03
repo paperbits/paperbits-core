@@ -251,6 +251,7 @@ export class DefaultViewManager implements ViewManager {
     public clearJourney(): void {
         this.journey([]);
         this.activeView(null);
+        this.viewStack.clear();
     }
 
     public hideToolboxes(): void {
