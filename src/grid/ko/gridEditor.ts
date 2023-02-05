@@ -738,6 +738,16 @@ export class GridEditor {
         this.eventManager.addEventListener("onDelete", this.onDelete);
 
         document.addEventListener(Events.Focus, (e) => this.onGlobalFocusChange(e), true);
+
+        // Prevent zoom on the content
+        ownerDocument.addEventListener("wheel", (event: WheelEvent): void => {
+            if (event.ctrlKey) {
+                event.preventDefault();
+            }
+
+            const scrollTarget = <HTMLElement>event.target;
+            scrollTarget.scrollBy(event.deltaX, event.deltaY);
+        }, { passive: false });
     }
 
     public dispose(): void {
