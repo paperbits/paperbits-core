@@ -16,15 +16,19 @@ export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
     private static readonly imageFileExtensions = [".jpg", ".jpeg", ".png", ".svg", ".gif"];
 
     public getContentDescriptorFromDataTransfer(dataTransfer: IDataTransfer): IContentDescriptor {
-        if (!dataTransfer.name || !PictureHandlers.imageFileExtensions.some(e => dataTransfer.name.endsWith(e))) {
-            return null;
+        if (typeof dataTransfer.source !== "string" && !dataTransfer.mimeType?.startsWith("image/")) {
+            return;
         }
 
         const source = dataTransfer.source;
 
-        const getThumbnailPromise = () => new Promise<string>(async (resolve) => {
-            resolve(await Utils.readBlobAsDataUrl(<Blob>source));
-        });
+        const getThumbnailPromise = async () => {
+            if (typeof source === "string") {
+                return <string>source;
+            }
+
+            return await Utils.readBlobAsDataUrl(<Blob>source);
+        };
 
         return {
             title: widgetDisplayName,
