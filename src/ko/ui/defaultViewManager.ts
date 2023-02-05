@@ -4,7 +4,7 @@ import * as Arrays from "@paperbits/common/arrays";
 import * as Html from "@paperbits/common/html";
 import template from "./defaultViewManager.html";
 import "@paperbits/common/extensions";
-import { Bag } from "@paperbits/common";
+import { Bag, Keys } from "@paperbits/common";
 import { EventManager, GlobalEventHandler } from "@paperbits/common/events";
 import { IComponent, View, ViewManager, ICommand, ViewManagerMode, IHighlightConfig, IContextCommandSet, ISplitterConfig, Toast, IContextCommand } from "@paperbits/common/ui";
 import { Router } from "@paperbits/common/routing";
@@ -119,6 +119,17 @@ export class DefaultViewManager implements ViewManager {
     }
 
     private onKeyDown(event: KeyboardEvent): void {
+        console.log(this.canPreview());
+
+        if (this.canPreview() && event.key === Keys.F9) {
+            if (this.mode === ViewManagerMode.preview) {
+                this.disablePreviewMode();
+            }
+            else {
+                this.enablePreviewMode();
+            }
+        }
+
         if (this.getActiveView()) {
             return;
         }
@@ -602,7 +613,7 @@ export class DefaultViewManager implements ViewManager {
     public disablePreviewMode(): void {
         this.showToolboxes();
         this.designTime(true);
-        this.mode = this.previousMode;
+        this.mode = ViewManagerMode.selecting;
     }
 
     public returnToContentEditing(): void {
