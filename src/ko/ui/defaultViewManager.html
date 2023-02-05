@@ -141,13 +141,13 @@
 <!-- ko if: canPreview -->
 <div class="toolbox toolbox-position-right-top">
     <button tabindex="-1" class="toolbox-btn"
-        data-bind="visible: primaryToolboxVisible(), click: $component.enablePreviewMode, tooltip: { message: '<h1>Preview</h1><p>See the website live before publishing.<p>', position: 'left' }"
+        data-bind="visible: primaryToolboxVisible(), click: $component.enablePreviewMode, tooltip: { message: '<h1>Preview</h1><p>See the website live before publishing.<p><div class=\'subtle\'>(Ctrl+F10)</div>', position: 'left' }"
         aria-label="Preview">
         <i aria-hidden="true" class="paperbits-icon paperbits-l-search"></i>
     </button>
 
     <button tabindex="-1" class="toolbox-btn"
-        data-bind="visible: !primaryToolboxVisible(), click: $component.disablePreviewMode, tooltip: { message: '<h1>Go back</h1><p>Return to editing the content.<p>', position: 'left' }"
+        data-bind="visible: !primaryToolboxVisible(), click: $component.disablePreviewMode, tooltip: { message: '<h1>Go back</h1><p>Return to editing the content.<p><div class=\'subtle\'>(Ctrl+F10)</div>', position: 'left' }"
         aria-label="Return to editing the content">
         <i aria-hidden="true" class="paperbits-icon paperbits-curved-arrow-left"></i>
     </button>
@@ -157,7 +157,7 @@
 <!-- ko if: canGoBack -->
 <div class="toolbox toolbox-position-right-top">
     <button tabindex="-1" class="toolbox-btn"
-        data-bind="click: $component.returnToContentEditing, tooltip: { message: '<h1>Go back</h1><p>Return to editing the content.<p>', position: 'left' }"
+        data-bind="click: $component.returnToContentEditing, tooltip: { message: '<h1>Go back</h1><p>Return to editing the content.<p><div class=\'subtle\'>(Esc)</div>', position: 'left' }"
         aria-label="Return to editing the content">
         <i aria-hidden="true" class="paperbits-icon paperbits-curved-arrow-left"></i>
     </button>

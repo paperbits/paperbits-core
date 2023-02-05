@@ -119,9 +119,7 @@ export class DefaultViewManager implements ViewManager {
     }
 
     private onKeyDown(event: KeyboardEvent): void {
-        console.log(this.canPreview());
-
-        if (this.canPreview() && event.key === Keys.F9) {
+        if (this.canPreview() && event.ctrlKey && event.key === Keys.F10) {
             if (this.mode === ViewManagerMode.preview) {
                 this.disablePreviewMode();
             }
