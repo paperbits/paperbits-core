@@ -15,6 +15,7 @@ import { ComponentBinder } from "@paperbits/common/editing";
 
 export class CoreRuntimeModule implements IInjectorModule {
     public register(injector: IInjector): void {
+        injector.bindInstance("injector", injector);
         injector.bindInstance<Bag<ComponentBinder>>("componentBinders", {});
         injector.bindModule(new KnockoutRegistrationLoaders());
         injector.bindModule(new CarouselRuntimeModule());
