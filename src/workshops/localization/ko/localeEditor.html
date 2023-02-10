@@ -2,16 +2,18 @@
     <label class="form-label">
         Language
     </label>
-    <select id="textTransform" class="form-control"
-        data-bind="options: languages, value: selectedLanguage, optionsText: 'displayName'"></select>
+    <dropdown id="language" params="{ options: languages, value: selectedLanguage, optionsText: 'displayName' }"
+        aria-label="Language">
+    </dropdown>
 </div>
 <!-- ko if: locales -->
 <div class="form-group">
     <label class="form-label">
         Locale
     </label>
-    <select id="textTransform" class="form-control"
-        data-bind="options: locales, value: selectedLocale, optionsText: 'displayName'"></select>
+    <dropdown id="locale" params="{ options: locales, value: selectedLocale, optionsText: 'displayName' }"
+        aria-label="Locale">
+    </dropdown>
 </div>
 <!-- /ko -->
 

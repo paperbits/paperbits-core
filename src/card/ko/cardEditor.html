@@ -26,8 +26,10 @@
                 <button class="btn btn-info" role="tooltip"
                     data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
             </label>
-            <select id="appearanceStyle" class="form-control"
-                data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
+            <dropdown id="appearanceStyle"
+                params="{ options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key' }"
+                aria-label="Appearance">
+            </dropdown>
         </div>
     </div>
 </div>

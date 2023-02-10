@@ -28,16 +28,20 @@
         <button class="btn btn-info" role="tooltip" aria-hidden="true" role="tooltip"
             data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
     </label>
-    <select id="buttonVariationKey" class="form-control"
-        data-bind="options: buttonVariations, value: buttonVariationKey, optionsText: 'displayName', optionsValue: 'key'"></select>
+    <dropdown id="buttonVariationKey"
+        params="{ options: buttonVariations, value: buttonVariationKey, onOptionSelected: onDisplayChange, optionsText: 'displayName', optionsValue: 'key' }"
+        aria-label="Appearance">
+    </dropdown>
 </div>
 
 <div class="form-group">
     <label for="displayStyle" class="form-label">
         Visibility
     </label>
-    <select id="displayStyle" class="form-control"
-        data-bind="options: displayOptions, value: displayStyle, optionsText: 'text', optionsValue: 'value', event: { change: onDisplayChange }"></select>
+    <dropdown id="displayStyle"
+        params="{ options: displayOptions, value: displayStyle, onOptionSelected: onDisplayChange, optionsText: 'text', optionsValue: 'value' }"
+        aria-label="Visibility">
+    </dropdown>
 </div>
 
 <glyph-input params="{ selection: model.iconKey, onChange: onIconSelect }"></glyph-input>
