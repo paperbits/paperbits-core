@@ -14,6 +14,9 @@ export class Dropdown {
     public readonly dropdownContentWidth: ko.Observable<string>;
 
     @Param()
+    public optionsCaption: ko.Observable<string>;
+    
+    @Param()
     public value: ko.Observable<string>;
 
     @Param()
@@ -38,6 +41,7 @@ export class Dropdown {
         this.options = ko.observable<any[]>();
         this.selectedOption = ko.observable<SelectOption>();
         this.displayedOptions = ko.observable<SelectOption[]>();
+        this.optionsCaption = ko.observable<string>();
     };
 
     @OnMounted()
@@ -50,7 +54,7 @@ export class Dropdown {
             }
 
             if (this.isOptionsArrayOfStrings()) {
-                this.displayedOptions(this.options().map(o => { return { "value": o, "text": o } }));
+                this.displayedOptions([{value: "", text: this.optionsCaption()}].concat(this.options().map(o => { return { "value": o, "text": o } })));
             } else {
                 if (!this.optionsValue()) {
                     this.optionsValue("value");
@@ -60,7 +64,7 @@ export class Dropdown {
                     this.optionsText("text");
                 }
 
-                this.displayedOptions(this.options().map(o => { return { "value": o[this.optionsValue()], "text": o[this.optionsText()] } }));
+                this.displayedOptions([{value: "", text: this.optionsCaption()}].concat(this.options().map(o => { return { "value": o[this.optionsValue()], "text": o[this.optionsText()] } })));
             }
 
             if (!this.value()) {
