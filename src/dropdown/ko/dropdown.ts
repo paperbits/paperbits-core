@@ -15,7 +15,7 @@ export class Dropdown {
 
     @Param()
     public optionsCaption: ko.Observable<string>;
-    
+
     @Param()
     public value: ko.Observable<string>;
 
@@ -40,7 +40,7 @@ export class Dropdown {
         this.value = ko.observable<string>();
         this.options = ko.observable<any[]>();
         this.selectedOption = ko.observable<SelectOption>();
-        this.displayedOptions = ko.observable<SelectOption[]>();
+        this.displayedOptions = ko.observable<SelectOption[]>([]);
         this.optionsCaption = ko.observable<string>();
     };
 
@@ -54,7 +54,12 @@ export class Dropdown {
             }
 
             if (this.isOptionsArrayOfStrings()) {
-                this.displayedOptions([{value: "", text: this.optionsCaption()}].concat(this.options().map(o => { return { "value": o, "text": o } })));
+                const options = this.options().map(o => { return { "value": o, "text": o } })
+                if (this.optionsCaption()) {
+                    this.displayedOptions([{ value: "", text: this.optionsCaption() }]);
+                }
+
+                this.displayedOptions(this.displayedOptions().concat(options));
             } else {
                 if (!this.optionsValue()) {
                     this.optionsValue("value");
@@ -64,7 +69,12 @@ export class Dropdown {
                     this.optionsText("text");
                 }
 
-                this.displayedOptions([{value: "", text: this.optionsCaption()}].concat(this.options().map(o => { return { "value": o[this.optionsValue()], "text": o[this.optionsText()] } })));
+                const options = this.options().map(o => { return { "value": o[this.optionsValue()], "text": o[this.optionsText()] } });
+                if (this.optionsCaption()) {
+                    this.displayedOptions([{ value: "", text: this.optionsCaption() }]);
+                }
+
+                this.displayedOptions(this.displayedOptions().concat(options));
             }
 
             if (!this.value()) {
