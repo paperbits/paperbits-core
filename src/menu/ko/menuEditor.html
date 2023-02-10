@@ -18,14 +18,18 @@
 
 <div class="form-group">
     <label for="minHeadingLevel" class="form-label">Min heading level</label>
-    <select id="minHeadingLevel" class="form-control"
-        data-bind="options: headingLevelOptions, value: minHeadingLevel, optionsText: 'text', optionsValue: 'value'"></select>
+    <dropdown id="minHeadingLevel"
+        params="{ options: headingLevelOptions, value: minHeadingLevel, optionsText: 'text', optionsValue: 'value' }"
+        aria-label="Min heading level">
+    </dropdown>
 </div>
 
 <div class="form-group">
     <label for="maxHeadingLevel" class="form-label">Max heading level</label>
-    <select id="maxHeadingLevel" class="form-control"
-        data-bind="options: headingLevelOptions, value: maxHeadingLevel, optionsText: 'text', optionsValue: 'value'"></select>
+    <dropdown id="maxHeadingLevel"
+        params="{ options: headingLevelOptions, value: maxHeadingLevel, optionsText: 'text', optionsValue: 'value' }"
+        aria-label="Max heading level">
+    </dropdown>
 </div>
 
 <!-- /ko -->
@@ -34,9 +38,9 @@
     <label for="layout" class="form-label">
         Layout
     </label>
-    <select id="layout" class="form-control"
-        data-bind="options: layoutOptions, value: layout, optionsText: 'text', optionsValue: 'value'">
-    </select>
+    <dropdown id="layout" params="{ options: layoutOptions, value: layout, optionsText: 'text', optionsValue: 'value' }"
+        aria-label="Layout">
+    </dropdown>
 </div>
 
 <div class="form-group">
@@ -45,14 +49,18 @@
         <button class="btn btn-info" role="tooltip"
             data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
     </label>
-    <select id="appearanceStyle" class="form-control"
-        data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
+    <dropdown id="appearanceStyle"
+        params="{ options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key' }"
+        aria-label="Appearance">
+    </dropdown>
 </div>
 
 <div class="form-group">
     <label for="displayStyle" class="form-label">
         Visibility
     </label>
-    <select id="displayStyle" class="form-control"
-        data-bind="options: displayOptions, value: displayStyle, optionsText: 'text', optionsValue: 'value', event: { change: onDisplayChange }"></select>
+    <dropdown id="appearanceStyle"
+        params="{ options: displayOptions, value: displayStyle, optionsText: 'text', optionsValue: 'value', onOptionSelected: onDisplayChange }"
+        aria-label="Visibility">
+    </dropdown>
 </div>

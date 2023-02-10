@@ -8,6 +8,7 @@ import { VideoPlayerDesignModule } from "./video-player/videoPlayer.design.modul
 import { PictureDesignModule } from "./picture/picture.design.module";
 import { YoutubePlayerDesignModule } from "./youtube-player/youtubePlayer.design.module";
 import { ButtonDesignModule } from "./button/button.design.module";
+import { Dropdown } from "./dropdown/ko/dropdown";
 import { TestimonialsEditorModule } from "./testimonials/ko/testimonialsEditor.module";
 import { ColumnEditorModule } from "./column/ko/columnEditor.module";
 import { SectionEditorModule } from "./section/ko/sectionEditor.module";
@@ -34,6 +35,7 @@ import {
 } from "./ko/bindingHandlers";
 import { ComponentBinder, ContainerModelBinder, HtmlEditorProvider, MediaHandlers } from "@paperbits/common/editing";
 import { HyperlinkSelector } from "./workshops/hyperlinks/ko/hyperlinkSelector";
+import { DropdownContent } from "./dropdown/ko/dropdownContent";
 import { WidgetSelector } from "./workshops/widgets/ko/widgetSelector";
 import { UrlHyperlinkDetails, UrlSelector } from "./workshops/urls/ko";
 import { LayoutDesignModule } from "./layout/ko/layout.design.module";
@@ -235,6 +237,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bind("localeSelector", LocaleSelector);
         injector.bind("localeEditor", LocaleEditor);
         injector.bind("hyperlinkSelector", HyperlinkSelector);
+        injector.bind("dropdownContent", DropdownContent);
         injector.bind("widgetSelector", WidgetSelector);
         injector.bind("urlSelector", UrlSelector);
         injector.bind("urlHyperlinkDetails", UrlHyperlinkDetails);
@@ -244,6 +247,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bind("spinner", Spinner);
         injector.bind("helpCenter", HelpCenter);
         injector.bind("localSettings", LocalStorageSettingsProvider);
+        injector.bind("dropdown", Dropdown);
         injector.bindModule(new MapDesignModule());
         injector.bindToCollection("permalinkResolvers", MediaPermalinkResolver, "mediaPermalinkResolver");
 

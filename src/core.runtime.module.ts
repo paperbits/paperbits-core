@@ -12,6 +12,8 @@ import { KnockoutRegistrationLoaders } from "./ko";
 import { ConsoleLogger } from "@paperbits/common/logging";
 import { Bag } from "@paperbits/common";
 import { ComponentBinder } from "@paperbits/common/editing";
+import { Dropdown } from "./dropdown/ko/dropdown";
+import {DropdownContent } from "./dropdown/ko/dropdownContent";
 
 export class CoreRuntimeModule implements IInjectorModule {
     public register(injector: IInjector): void {
@@ -31,5 +33,8 @@ export class CoreRuntimeModule implements IInjectorModule {
         injector.bindToCollection("autostart", location.href.includes("designtime=true")
             ? HistoryRouteHandler
             : LocationRouteHandler);
+
+        injector.bind("dropdown", Dropdown);
+        injector.bind("dropdownContent", DropdownContent);
     }
 }

@@ -17,8 +17,10 @@
             <a href="#" class="form-control" data-bind="text: appearanceStyle() && appearanceStyle().displayName, balloon: { component: { name: 'style-variation-selector', params: { snippetType: 'components/dismissButton', onSelect: $component.onVariationSelected } } }">
             </a>
         </div> -->
-    <select id="appearanceStyle" class="form-control"
-        data-bind="options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key'"></select>
+    <dropdown id="appearanceStyle"
+        params="{ options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key' }"
+        aria-label="Appearance">
+    </dropdown>
 </div>
 
 <!-- <div class="form-group">

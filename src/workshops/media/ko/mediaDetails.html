@@ -5,7 +5,8 @@
                 Name
             </label>
             <div class="input-group">
-                <input type="text" id="fileName" class="form-control" data-bind="textInput: mediaItem.fileName, validationElement: mediaItem.fileName"
+                <input type="text" id="fileName" class="form-control"
+                    data-bind="textInput: mediaItem.fileName, validationElement: mediaItem.fileName"
                     placeholder="i.e. Orders" maxlength="256" />
                 <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: mediaItem.fileName"
                     type="button">!</button>
@@ -17,9 +18,11 @@
                 Permalink
             </label>
             <div class="input-group">
-                <input type="text" id="permalink" class="form-control" data-bind="textInput: mediaItem.permalink, validationElement: mediaItem.permalink"
+                <input type="text" id="permalink" class="form-control"
+                    data-bind="textInput: mediaItem.permalink, validationElement: mediaItem.permalink"
                     placeholder="http://www.site.com/" maxlength="2000" spellcheck="false" />
-                <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: mediaItem.permalink" type="button">!</button>
+                <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: mediaItem.permalink"
+                    type="button">!</button>
             </div>
         </div>
 
@@ -29,16 +32,26 @@
                 Reference URL
             </label>
             <div class="input-group">
-                <input type="text" id="downloadUrl" class="form-control" data-bind="textInput: mediaItem.downloadUrl, validationElement: mediaItem.downloadUrl"
+                <input type="text" id="downloadUrl" class="form-control"
+                    data-bind="textInput: mediaItem.downloadUrl, validationElement: mediaItem.downloadUrl"
                     placeholder="https://cdn.paperbits.io/images/logo.svg" maxlength="2000" spellcheck="false" />
-                <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: mediaItem.downloadUrl" type="button">!</button>
+                <button class="btn btn-danger input-group-btn"
+                    data-bind="validationMessageToggle: mediaItem.downloadUrl" type="button">!</button>
             </div>
         </div>
         <div class="form-group">
             <label for="contentType" class="form-label">
                 Content type
             </label>
-            <select id="contentType" class="form-control" data-bind="options: contentTypes, value: mediaItem.contentType"></select>
+            <dropdown id="appearanceStyle"
+                params="{ options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key' }"
+                aria-label="Appearance">
+            </dropdown>
+
+            <dropdown id="contentType"
+                params="{ options: contentTypes, value: mediaItem.contentType, optionsText: 'displayName' }"
+                aria-label="Content type">
+            </dropdown>
         </div>
         <!-- /ko -->
 
@@ -46,14 +59,16 @@
             <label for="description" class="form-label">
                 Description
             </label>
-            <textarea id="description" class="form-control" data-bind="textInput: mediaItem.description" maxlength="256"></textarea>
+            <textarea id="description" class="form-control" data-bind="textInput: mediaItem.description"
+                maxlength="256"></textarea>
         </div>
 
         <div class="form-group">
             <label for="keywords" class="form-label">
                 Keywords
             </label>
-            <input type="text" id="keywords" class="form-control" data-bind="textInput: mediaItem.keywords" maxlength="256" />
+            <input type="text" id="keywords" class="form-control" data-bind="textInput: mediaItem.keywords"
+                maxlength="256" />
         </div>
     </div>
 
@@ -70,7 +85,8 @@
             Download
         </button>
 
-        <button class="btn btn-default" data-bind="confirm: { message: 'Are you sure you want to delete this media?', onConfirm: deleteMedia }">
+        <button class="btn btn-default"
+            data-bind="confirm: { message: 'Are you sure you want to delete this media?', onConfirm: deleteMedia }">
             <i aria-hidden="true" class="paperbits-icon paperbits-simple-remove"></i>
             Delete
         </button>
