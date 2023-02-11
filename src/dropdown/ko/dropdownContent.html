@@ -1,8 +1,8 @@
-<div class="form-control dropdown" role="listbox" aria-label="Options" data-bind="style: { 'width': dropdownContentWidth }">
+<div class="form-control dropdown" role="listbox" aria-label="Options"
+    data-bind="style: { 'width': dropdownContentWidth }, scrollable: true, listbox: {}">
     <!-- ko foreach: { data: displayedOptions, as: 'option' } -->
-    <div tabindex="0" role="option" class="option"
-        data-bind="click: $component.selectOption, css:{'selected': $component.selectedOption() == option }, event: { keydown: $component.onOptionKeyDown }">
-        <span data-bind="text: option.text"></span>
-    </div>
+    <a role="option" class="list-item" data-bind="activate: $component.selectOption, css: { 'selected': $component.selectedOption() == option }">
+        <span class="list-item-label" data-bind="text: option.text"></span>
+    </a>
     <!-- /ko -->
 </div>
