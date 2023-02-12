@@ -10,9 +10,10 @@ import { Keys } from "@paperbits/common";
     selector: "dropdown-content",
     template: template
 })
-
-
 export class DropdownContent {
+    @Param()
+    public optionsCaption: ko.Observable<string>;
+
     @Param()
     public dropdownContentWidth: ko.Observable<string>;
 
@@ -32,6 +33,7 @@ export class DropdownContent {
         this.displayedOptions = ko.observable<SelectOption>();
         this.selectedOption = ko.observable<SelectOption>();
         this.value = ko.observable<string>();
+        this.optionsCaption = ko.observable<string>();
     }
 
     public selectOption(option: SelectOption): void {

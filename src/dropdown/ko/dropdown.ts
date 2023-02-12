@@ -54,13 +54,15 @@ export class Dropdown {
             }
 
             if (this.isOptionsArrayOfStrings()) {
-                const options = this.options().map(o => { return { "value": o, "text": o } })
-                if (this.optionsCaption()) {
-                    this.displayedOptions([{ value: "", text: this.optionsCaption() }]);
-                }
+                const options = this.options().map(o => { return { "value": o, "text": o } });
+
+                // if (this.optionsCaption()) {
+                //     this.displayedOptions([{ value: "", text: this.optionsCaption() }]);
+                // }
 
                 this.displayedOptions(this.displayedOptions().concat(options));
-            } else {
+            }
+            else {
                 if (!this.optionsValue()) {
                     this.optionsValue("value");
                 }
@@ -70,9 +72,9 @@ export class Dropdown {
                 }
 
                 const options = this.options().map(o => { return { "value": o[this.optionsValue()], "text": o[this.optionsText()] } });
-                if (this.optionsCaption()) {
-                    this.displayedOptions([{ value: "", text: this.optionsCaption() }]);
-                }
+                // if (this.optionsCaption()) {
+                //     this.displayedOptions([{ value: "", text: this.optionsCaption() }]);
+                // }
 
                 this.displayedOptions(this.displayedOptions().concat(options));
             }

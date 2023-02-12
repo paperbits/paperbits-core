@@ -1,8 +1,10 @@
+
 <div id="dropdown" tabindex="0" class="form-control"
     data-bind="balloon: { position: 'bottom', closeOn: $component.selectedOption,
         component: { name: 'dropdown-content', 
-        params: { dropdownContentWidth: $component.dropdownContentWidth, displayedOptions: $component.displayedOptions, selectedOption: $component.selectedOption, value: $component.value, onOptionSelected : $component.onOptionSelected } } }"
+        params: { optionsCaption: optionsCaption, dropdownContentWidth: $component.dropdownContentWidth, displayedOptions: $component.displayedOptions, selectedOption: $component.selectedOption, value: $component.value, onOptionSelected : $component.onOptionSelected } } }"
     aria-haspopup="true" role="button">
+
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <span data-bind="text: selectedOption()?.text"></span>
         <i class="paperbits-icon paperbits-small-down"></i>
