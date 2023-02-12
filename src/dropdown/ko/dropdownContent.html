@@ -1,14 +1,14 @@
 <div class="editor">
     <div role="listbox" aria-label="Options"
         data-bind="style: { 'width': dropdownContentWidth }, scrollable: true, listbox: {}">
-        <!-- ko if: optionsCaption -->
-        <h1 data-bind="text: optionsCaption"></h1>
+        <!-- ko if: heading -->
+        <h1 data-bind="text: heading"></h1>
         <hr />
         <!--/ko-->
 
         <!-- ko foreach: { data: displayedOptions, as: 'option' } -->
         <a role="option" class="list-item"
-            data-bind="activate: $component.selectOption, css: { 'selected': $component.selectedOption() == option }">
+            data-bind="activate: $parent.selectOption, css: { 'selected': $parent.selectedOption() == option }">
             <span class="list-item-label" data-bind="text: option.text"></span>
         </a>
         <!-- /ko -->

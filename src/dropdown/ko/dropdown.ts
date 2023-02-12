@@ -1,11 +1,13 @@
 import * as ko from "knockout";
 import { Component, OnMounted, Param } from "@paperbits/common/ko/decorators";
 import template from "./dropdown.html";
+import dropdownContent from "./dropdownContent.html";
 import { SelectOption } from "@paperbits/common/ui/selectOption";
 
 @Component({
     selector: "dropdown",
-    template: template
+    template: template,
+    childTemplates: { dropdownContent: dropdownContent }
 })
 
 export class Dropdown {
@@ -29,7 +31,10 @@ export class Dropdown {
     public optionsValue: ko.Observable<string>;
 
     @Param()
-    public onOptionSelected: () => void;
+    public onOptionSelected: (option: any) => void;
+
+    @Param()
+    public heading: ko.Observable<string>;
 
     constructor() {
         const width = document.getElementById("dropdown").getBoundingClientRect().width;
@@ -42,50 +47,46 @@ export class Dropdown {
         this.selectedOption = ko.observable<SelectOption>();
         this.displayedOptions = ko.observable<SelectOption[]>([]);
         this.optionsCaption = ko.observable<string>();
+        this.heading = ko.observable<string>();
     };
 
     @OnMounted()
     public initialize(): void {
-        setTimeout(() => {
-            if (!this.options() || this.options().length === 0) {
-                this.displayedOptions([]);
-                this.selectedOption({ value: "", text: "" });
-                return;
+        if (this.isOptionsArrayOfStrings()) {
+            const options = this.options().map(opiton => { return { "value": opiton, "text": opiton } });
+            this.displayedOptions(this.displayedOptions().concat(options));
+
+            if (this.optionsCaption()) {
+                this.displayedOptions([{ value: "", text: this.optionsCaption() }]);
             }
 
-            if (this.isOptionsArrayOfStrings()) {
-                const options = this.options().map(o => { return { "value": o, "text": o } });
-
-                // if (this.optionsCaption()) {
-                //     this.displayedOptions([{ value: "", text: this.optionsCaption() }]);
-                // }
-
-                this.displayedOptions(this.displayedOptions().concat(options));
-            }
-            else {
-                if (!this.optionsValue()) {
-                    this.optionsValue("value");
-                }
-
-                if (!this.optionsText()) {
-                    this.optionsText("text");
-                }
-
-                const options = this.options().map(o => { return { "value": o[this.optionsValue()], "text": o[this.optionsText()] } });
-                // if (this.optionsCaption()) {
-                //     this.displayedOptions([{ value: "", text: this.optionsCaption() }]);
-                // }
-
-                this.displayedOptions(this.displayedOptions().concat(options));
+            this.displayedOptions(this.displayedOptions().concat(options));
+        }
+        else {
+            if (!this.optionsValue()) {
+                this.optionsValue("value");
             }
 
-            if (!this.value()) {
-                this.value(this.displayedOptions()[0].value);
+            if (!this.optionsText()) {
+                this.optionsText("text");
             }
 
-            this.selectedOption(this.displayedOptions().find(x => x.value === this.value()));
-            this.value.subscribe(() => this.selectedOption(this.displayedOptions().find(x => x.value === this.value())));
-        }, 0);
+            const options = this.options()
+                .map(option => { return { value: option[this.optionsValue()], text: option[this.optionsText()] } });
+
+            this.displayedOptions(this.displayedOptions().concat(options));
+        }
+
+        if (!this.value()) {
+            this.value(this.displayedOptions()[0].value);
+        }
+
+        this.selectedOption(this.displayedOptions().find(x => x.value === this.value()));
+    }
+
+    public selectOption(option: any): void {
+        this.value(option.value);
+        this.selectedOption(option);
     }
 
     private isOptionsArrayOfStrings(): boolean {
