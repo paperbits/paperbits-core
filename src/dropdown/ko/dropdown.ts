@@ -48,10 +48,18 @@ export class Dropdown {
         this.displayedOptions = ko.observable<SelectOption[]>([]);
         this.optionsCaption = ko.observable<string>();
         this.heading = ko.observable<string>();
+
+        this.options.subscribe(this.initialize.bind(this));
     };
 
     @OnMounted()
     public initialize(): void {
+        if(!this.options() || this.options().length === 0) {
+            return;
+        }
+
+        this.displayedOptions([]);
+
         if (this.isOptionsArrayOfStrings()) {
             const options = this.options().map(opiton => { return { "value": opiton, "text": opiton } });
             this.displayedOptions(this.displayedOptions().concat(options));
