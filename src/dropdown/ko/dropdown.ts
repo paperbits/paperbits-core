@@ -42,33 +42,35 @@ export class Dropdown {
 
         this.optionsText = ko.observable<string>();
         this.optionsValue = ko.observable<string>();
-        this.value = ko.observable<string>();
+        this.value = ko.observable<string>(null);
         this.options = ko.observable<any[]>();
         this.selectedOption = ko.observable<SelectOption>();
         this.displayedOptions = ko.observable<SelectOption[]>([]);
         this.optionsCaption = ko.observable<string>();
         this.heading = ko.observable<string>();
-
-        this.options.subscribe(this.initialize.bind(this));
     };
 
     @OnMounted()
     public initialize(): void {
-        if(!this.options() || this.options().length === 0) {
-            return;
+        this.configureOptions();
+        this.options.subscribe(this.configureOptions);
+
+        this.configureSelectedOption();
+        this.value.subscribe(this.configureSelectedOption);
+    }
+
+    private configureOptions(): void {
+        const displayedOptions = [];
+
+        if (this.optionsCaption()) {
+            displayedOptions.push({ value: null, text: this.optionsCaption() });
         }
 
-        this.displayedOptions([]);
-
         if (this.isOptionsArrayOfStrings()) {
-            const options = this.options().map(opiton => { return { "value": opiton, "text": opiton } });
-            this.displayedOptions(this.displayedOptions().concat(options));
+            const options = this.options()
+                .map(option => { return { "value": option, "text": option } });
 
-            if (this.optionsCaption()) {
-                this.displayedOptions([{ value: "", text: this.optionsCaption() }]);
-            }
-
-            this.displayedOptions(this.displayedOptions().concat(options));
+            displayedOptions.push(...options);
         }
         else {
             if (!this.optionsValue()) {
@@ -82,14 +84,15 @@ export class Dropdown {
             const options = this.options()
                 .map(option => { return { value: option[this.optionsValue()], text: option[this.optionsText()] } });
 
-            this.displayedOptions(this.displayedOptions().concat(options));
+            displayedOptions.push(...options);
         }
 
-        if (!this.value()) {
-            this.value(this.displayedOptions()[0].value);
-        }
+        this.displayedOptions(displayedOptions);
+    }
 
-        this.selectedOption(this.displayedOptions().find(x => x.value === this.value()));
+    private configureSelectedOption(): void {
+        const value = this.value() || null;
+        this.selectedOption(this.displayedOptions().find(x => x.value === value));
     }
 
     public selectOption(option: any): void {
