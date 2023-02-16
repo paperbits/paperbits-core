@@ -6,7 +6,8 @@ import { IPublisher } from "@paperbits/common/publishing";
 import { IBlobStorage, Query } from "@paperbits/common/persistence";
 import { IMediaService, MediaContract, MediaVariantContract } from "@paperbits/common/media";
 import { Logger } from "@paperbits/common/logging";
-import { validateAndNormalizePermalink } from "@paperbits/common/permalinks/utils";
+import { normalizePermalink } from "@paperbits/common/permalinks/utils";
+import { RegExps } from "@paperbits/common";
 
 
 export class MediaPublisher implements IPublisher {
@@ -60,7 +61,6 @@ export class MediaPublisher implements IPublisher {
 
     private async uploadToStorage(permalink: string, content: Uint8Array, mimeType: string): Promise<void> {
         try {
-            permalink = validateAndNormalizePermalink(permalink);
             await this.outputBlobStorage.uploadBlob(permalink, content, mimeType);
         }
         catch (error) {
@@ -94,6 +94,15 @@ export class MediaPublisher implements IPublisher {
                     continue;
                 }
 
+                const permalink = normalizePermalink(mediaContract.permalink);
+
+                const isPermalinkValid = RegExps.permalink.test(permalink);
+
+                if (!isPermalinkValid) {
+                    this.logger.trackEvent("Publishing", { message: `Skipping media "${mediaContract.fileName}" with invalid permalink: "${permalink}".` });
+                    continue;
+                }
+
                 this.logger.trackEvent("Publishing", { message: `Publishing media ${mediaContract.fileName}...` });
 
                 const original: MediaVariantContract = {
@@ -107,7 +116,7 @@ export class MediaPublisher implements IPublisher {
                     continue;
                 }
 
-                tasks.push(() => this.renderMediaFile(mediaContract.permalink, original));
+                tasks.push(() => this.renderMediaFile(permalink, original));
 
                 if (mediaContract.variants) {
                     for (const variant of mediaContract.variants) {
@@ -116,7 +125,7 @@ export class MediaPublisher implements IPublisher {
                             continue;
                         }
 
-                        const variantPermalink = MediaUtils.getPermalinkForMediaVariant(mediaContract.permalink, variant);
+                        const variantPermalink = MediaUtils.getPermalinkForMediaVariant(permalink, variant);
                         tasks.push(() => this.renderMediaFile(variantPermalink, variant));
                     }
                 }

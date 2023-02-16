@@ -8,7 +8,7 @@ import {
     SitemapBuilder,
     SearchIndexBuilder
 } from "@paperbits/common/publishing";
-import { validateAndNormalizePermalink } from "@paperbits/common/permalinks/utils";
+import { normalizePermalink } from "@paperbits/common/permalinks/utils";
 import { maxParallelPublisingTasks } from "@paperbits/common/constants";
 import { IBlobStorage, Query } from "@paperbits/common/persistence";
 import { IPageService, PageContract } from "@paperbits/common/pages";
@@ -19,7 +19,7 @@ import { IMediaService } from "@paperbits/common/media";
 import { StyleCompiler, StyleManager } from "@paperbits/common/styles";
 import { LocalStyleBuilder } from "@paperbits/styles";
 import { OpenGraphType } from "@paperbits/common/publishing/openGraph";
-import { MimeTypes } from "@paperbits/common";
+import { MimeTypes, RegExps } from "@paperbits/common";
 
 
 const globalStylesheetPermalink = `/styles/styles.css`;
@@ -80,7 +80,15 @@ export class PagePublisher implements IPublisher {
 
     private async renderAndUpload(settings: SiteSettingsContract, faviconPermalink: string, page: PageContract, locale?: LocaleModel): Promise<void> {
         if (!page.permalink) {
-            this.logger.trackEvent("Publishing", { message: `Skipping page with no permalink specified: "${page.title}".` });
+            this.logger.trackEvent("Publishing", { message: `Skipping page "${page.title}" with no permalink specified.` });
+            return;
+        }
+
+        let permalink = normalizePermalink(page.permalink);
+        const isPermalinkValid = RegExps.permalink.test(permalink);
+
+        if (!isPermalinkValid) {
+            this.logger.trackEvent("Publishing", { message: `Skipping page "${page.title}" with invalid permalink: "${permalink}".` });
             return;
         }
 
@@ -162,7 +170,15 @@ export class PagePublisher implements IPublisher {
             this.sitemapBuilder.appendPermalink(pagePermalink);
             this.searchIndexBuilder.appendHtml(pagePermalink, htmlPage.title, htmlPage.description, this.getIndexableContent(htmlContent));
 
-            let permalink = validateAndNormalizePermalink(pagePermalink);
+            let permalink = normalizePermalink(pagePermalink);
+
+            const isPermalinkValid = RegExps.permalink.test(permalink);
+
+            if (!isPermalinkValid) {
+                this.logger.trackEvent("Publishing", { message: `The permalink is invalid: "${permalink}". Skipping publishing.` });
+                return;
+            }
+
             permalink = `${permalink}${rootHtmlPageFilePath}`;
 
             const uploadPath = permalink;
