@@ -104,7 +104,10 @@ export class Dropdown {
     public selectOption(option: any): void {
         this.value(option.value);
         this.selectedOption(option);
-        this.onOptionSelected(option.value);
+
+        if (this.onOptionSelected) {
+            this.onOptionSelected(option.value);
+        }
 
         if (this.closeOnSelect()) {
             this.onDismiss.notifySubscribers();
