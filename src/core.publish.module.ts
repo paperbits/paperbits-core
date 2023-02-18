@@ -32,7 +32,8 @@ import { YoutubePlayerPublishModule } from "./youtube-player/youtubePlayer.publi
 import { PagePermalinkResolver } from "@paperbits/common/pages/pagePermalinkResolver";
 import { UrlPermalinkResolver } from "@paperbits/common/urls/urlPermalinkResolver";
 import { Bag } from "@paperbits/common";
-import { ComponentBinder, ContainerModelBinder } from "@paperbits/common/editing";
+import { ComponentBinder } from "@paperbits/common/components";
+import { ContainerModelBinder } from "@paperbits/common/editing";
 import { DefaultSettingsProvider } from "@paperbits/common/configuration";
 import { XmlHttpRequestClient } from "@paperbits/common/http";
 import { DefaultEventManager, GlobalEventHandler } from "@paperbits/common/events";

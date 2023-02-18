@@ -33,7 +33,8 @@ import {
     SurfaceBindingHandler,
     WidgetBindingHandler,
 } from "./ko/bindingHandlers";
-import { ComponentBinder, ContainerModelBinder, HtmlEditorProvider, MediaHandlers } from "@paperbits/common/editing";
+import { ComponentBinder } from "@paperbits/common/components";
+import { ContainerModelBinder, HtmlEditorProvider, MediaHandlers } from "@paperbits/common/editing";
 import { HyperlinkSelector } from "./workshops/hyperlinks/ko/hyperlinkSelector";
 import { WidgetSelector } from "./workshops/widgets/ko/widgetSelector";
 import { UrlHyperlinkDetails, UrlSelector } from "./workshops/urls/ko";

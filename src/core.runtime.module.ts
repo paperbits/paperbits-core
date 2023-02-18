@@ -11,7 +11,7 @@ import { SearchRuntimeModule } from "./search/search.runtime.module";
 import { KnockoutRegistrationLoaders } from "./ko";
 import { ConsoleLogger } from "@paperbits/common/logging";
 import { Bag } from "@paperbits/common";
-import { ComponentBinder } from "@paperbits/common/editing";
+import { ComponentBinder } from "@paperbits/common/components";
 import { Dropdown } from "./dropdown/ko/dropdown";
 
 export class CoreRuntimeModule implements IInjectorModule {
