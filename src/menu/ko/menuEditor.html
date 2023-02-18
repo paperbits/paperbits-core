@@ -54,6 +54,8 @@
 <div class="form-group">
     <label for="displayStyle" class="form-label">
         Visibility
+        <button class="btn btn-info" role="tooltip" aria-hidden="true" role="tooltip"
+        data-bind="tooltip: 'Change visibility of the widget. This setting might differ depending on screen size, following the mobile-first approach. If not specified for the current screen size (inherit), the setting gets taken from the closest smaller screen size.'"></button>
     </label>
     <dropdown id="appearanceStyle"
         params="{ options: displayOptions, value: displayStyle, optionsText: 'text', optionsValue: 'value', onOptionSelected: onDisplayChange, heading: 'Visibility' }">
