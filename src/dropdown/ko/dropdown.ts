@@ -37,6 +37,9 @@ export class Dropdown {
     @Param()
     public heading: ko.Observable<string>;
 
+    @Param()
+    public closeOnSelect: ko.Observable<boolean>;
+
     constructor() {
         const width = document.getElementById("dropdown").getBoundingClientRect().width;
         this.dropdownContentWidth = ko.observable<string>(width + "px");
@@ -50,6 +53,7 @@ export class Dropdown {
         this.optionsCaption = ko.observable<string>();
         this.heading = ko.observable<string>();
         this.onDismiss = new ko.subscribable<SelectOption[]>();
+        this.closeOnSelect = ko.observable<boolean>(false);
     };
 
     @OnMounted()
@@ -100,7 +104,11 @@ export class Dropdown {
     public selectOption(option: any): void {
         this.value(option.value);
         this.selectedOption(option);
-        this.onDismiss.notifySubscribers();
+        this.onOptionSelected(option.value);
+
+        if (this.closeOnSelect()) {
+            this.onDismiss.notifySubscribers();
+        }
     }
 
     private isOptionsArrayOfStrings(): boolean {
