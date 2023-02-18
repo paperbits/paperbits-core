@@ -19,16 +19,14 @@
 <div class="form-group">
     <label for="minHeadingLevel" class="form-label">Min heading level</label>
     <dropdown id="minHeadingLevel"
-        params="{ options: headingLevelOptions, value: minHeadingLevel, optionsText: 'text', optionsValue: 'value' }"
-        aria-label="Min heading level">
+        params="{ options: headingLevelOptions, value: minHeadingLevel, optionsText: 'text', optionsValue: 'value', heading: 'Min heading level' }">
     </dropdown>
 </div>
 
 <div class="form-group">
     <label for="maxHeadingLevel" class="form-label">Max heading level</label>
     <dropdown id="maxHeadingLevel"
-        params="{ options: headingLevelOptions, value: maxHeadingLevel, optionsText: 'text', optionsValue: 'value' }"
-        aria-label="Max heading level">
+        params="{ options: headingLevelOptions, value: maxHeadingLevel, optionsText: 'text', optionsValue: 'value', heading: 'Max heading level' }">
     </dropdown>
 </div>
 
@@ -38,8 +36,7 @@
     <label for="layout" class="form-label">
         Layout
     </label>
-    <dropdown id="layout" params="{ options: layoutOptions, value: layout, optionsText: 'text', optionsValue: 'value' }"
-        aria-label="Layout">
+    <dropdown id="layout" params="{ options: layoutOptions, value: layout, optionsText: 'text', optionsValue: 'value', heading: 'Layout' }">
     </dropdown>
 </div>
 
@@ -50,8 +47,7 @@
             data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
     </label>
     <dropdown id="appearanceStyle"
-        params="{ options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key' }"
-        aria-label="Appearance">
+        params="{ options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key' }">
     </dropdown>
 </div>
 
@@ -60,7 +56,6 @@
         Visibility
     </label>
     <dropdown id="appearanceStyle"
-        params="{ options: displayOptions, value: displayStyle, optionsText: 'text', optionsValue: 'value', onOptionSelected: onDisplayChange }"
-        aria-label="Visibility">
+        params="{ options: displayOptions, value: displayStyle, optionsText: 'text', optionsValue: 'value', onOptionSelected: onDisplayChange, heading: 'Visibility' }">
     </dropdown>
 </div>

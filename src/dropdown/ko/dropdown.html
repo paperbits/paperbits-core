@@ -1,6 +1,6 @@
 <div id="dropdown" tabindex="0" class="form-control"
-    data-bind="balloon: { template: { name: 'dropdownContent', data: $component }, closeOn: $component.onDismiss }"
-    aria-haspopup="true" role="button">
+    data-bind="attr: { 'aria-label': heading }, balloon: { template: { name: 'dropdownContent', data: $component }, closeOn: $component.onDismiss }"
+    role="button">
 
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <span data-bind="text: selectedOption()?.text"></span>

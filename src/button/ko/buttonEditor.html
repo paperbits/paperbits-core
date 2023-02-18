@@ -29,8 +29,7 @@
             data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
     </label>
     <dropdown id="buttonVariationKey"
-        params="{ options: buttonVariations, value: buttonVariationKey, onOptionSelected: onDisplayChange, optionsText: 'displayName', optionsValue: 'key' }"
-        aria-label="Appearance">
+        params="{ options: buttonVariations, value: buttonVariationKey, onOptionSelected: onDisplayChange, optionsText: 'displayName', optionsValue: 'key', heading: 'Appearance' }">
     </dropdown>
 </div>
 
@@ -39,8 +38,7 @@
         Visibility
     </label>
     <dropdown id="displayStyle"
-        params="{ options: displayOptions, value: displayStyle, onOptionSelected: onDisplayChange, optionsText: 'text', optionsValue: 'value' }"
-        aria-label="Visibility">
+        params="{ options: displayOptions, value: displayStyle, onOptionSelected: onDisplayChange, optionsText: 'text', optionsValue: 'value', heading: 'Visibility' }">
     </dropdown>
 </div>
 

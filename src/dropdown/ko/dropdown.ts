@@ -14,6 +14,7 @@ export class Dropdown {
     public readonly selectedOption: ko.Observable<SelectOption>;
     public readonly displayedOptions = ko.observable<SelectOption[]>();
     public readonly dropdownContentWidth: ko.Observable<string>;
+    public onDismiss: ko.Subscribable;
 
     @Param()
     public optionsCaption: ko.Observable<string>;
@@ -48,6 +49,7 @@ export class Dropdown {
         this.displayedOptions = ko.observable<SelectOption[]>([]);
         this.optionsCaption = ko.observable<string>();
         this.heading = ko.observable<string>();
+        this.onDismiss = new ko.subscribable<SelectOption[]>();
     };
 
     @OnMounted()
@@ -98,6 +100,7 @@ export class Dropdown {
     public selectOption(option: any): void {
         this.value(option.value);
         this.selectedOption(option);
+        this.onDismiss.notifySubscribers();
     }
 
     private isOptionsArrayOfStrings(): boolean {
