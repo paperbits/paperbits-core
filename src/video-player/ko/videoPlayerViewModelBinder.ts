@@ -16,6 +16,7 @@ export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerMo
         componentInstance.autoplay(state.autoplay);
         componentInstance.muted(state.muted);
         componentInstance.posterUrl(state.posterUrl);
+        componentInstance.styles(state.styles);
     }
 
     public async modelToState(model: VideoPlayerModel, state: WidgetState): Promise<void> {
