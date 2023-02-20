@@ -12,7 +12,7 @@ export class RoleBasedSecurityModelEditorProvider implements IVisibilityCommandP
     public create(context: WidgetContext): IContextCommand {
         return createStandardVisibilityCommand(() =>
             this.viewManager.openViewAsPopup({
-                heading: `Visibility`,
+                heading: `Access control`,
                 component: createSecurityModelEditorComponent(context, "role-based-security-model-editor"),
                 resizing: "vertically horizontally",
             }));

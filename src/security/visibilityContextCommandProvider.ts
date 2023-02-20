@@ -10,7 +10,7 @@ export interface IVisibilityCommandProvider {
 export function createStandardVisibilityCommand(callback: IContextCommand["callback"], overrides?: Partial<Exclude<IContextCommand, "callback">>): IContextCommand {
     return {
         controlType: "toolbox-button",
-        tooltip: "Change visibility",
+        tooltip: "Change access",
         iconClass: "paperbits-icon paperbits-a-security",
         position: "top right",
         color: "#607d8b",
