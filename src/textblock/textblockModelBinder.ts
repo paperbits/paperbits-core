@@ -13,11 +13,11 @@ export class TextblockModelBinder implements IModelBinder<TextblockModel> {
 
         if (contract.nodes && contract.nodes.length > 0) {
             const modelPromises = contract.nodes.map(async (contract: Contract) => {
-                const modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(contract);
+                const modelBinder = this.modelBinderSelector.getModelBinderByContract<BlockModel>(contract);
                 return await modelBinder.contractToModel(contract, bindingContext);
             });
 
-            content = await Promise.all<BlockModel>(modelPromises);
+            content = await Promise.all<any>(modelPromises);
         }
 
         const model = new TextblockModel(content);
@@ -29,7 +29,7 @@ export class TextblockModelBinder implements IModelBinder<TextblockModel> {
     }
 
     public modelToContract(model: TextblockModel): Contract {
-        let content: BlockModel[];
+        let content: Contract[];
 
         const isArray = Array.isArray(model.content);
 
