@@ -300,6 +300,10 @@ export class BalloonBindingHandler {
                     const existingBalloonHandle: BalloonHandle = toggleElement["activeBalloon"];
 
                     if (existingBalloonHandle) {
+                        if (existingBalloonHandle.balloonState == BalloonState.opening || existingBalloonHandle.balloonState == BalloonState.open) {
+                            return;
+                        }
+
                         if (existingBalloonHandle.activateOn === BalloonActivationMethod.hoverOrFocus) {
                             existingBalloonHandle.close();
                         }
@@ -423,7 +427,7 @@ export class BalloonBindingHandler {
                     options.onCreated(balloonHandle);
                 }
 
-                const getBaloonBaloonHandleFor = (...methods: BalloonActivationMethod[]): BalloonHandle => {
+                const getBaloonHandleFor = (...methods: BalloonActivationMethod[]): BalloonHandle => {
                     const balloonHandles: BalloonHandle[] = toggleElement[balloonHandlesProp];
 
                     const handle = methods.map(x => balloonHandles.find(y => y.activateOn === x)).find(x => !!x);
@@ -442,7 +446,7 @@ export class BalloonBindingHandler {
                         return;
                     }
 
-                    const handle = getBaloonBaloonHandleFor(BalloonActivationMethod.clickOrKeyDown);
+                    const handle = getBaloonHandleFor(BalloonActivationMethod.clickOrKeyDown);
 
                     if (handle) {
                         handle.toggle();
@@ -464,7 +468,7 @@ export class BalloonBindingHandler {
                 };
 
                 const onMouseEnter = (event: MouseEvent): void => {
-                    const handle = getBaloonBaloonHandleFor(BalloonActivationMethod.hoverOrFocus, BalloonActivationMethod.all);
+                    const handle = getBaloonHandleFor(BalloonActivationMethod.hoverOrFocus, BalloonActivationMethod.all);
 
                     if (!handle) {
                         return;
@@ -503,7 +507,7 @@ export class BalloonBindingHandler {
                         case Keys.Space:
                             event.preventDefault();
 
-                            const handle = getBaloonBaloonHandleFor(BalloonActivationMethod.clickOrKeyDown, BalloonActivationMethod.all);
+                            const handle = getBaloonHandleFor(BalloonActivationMethod.clickOrKeyDown, BalloonActivationMethod.all);
 
                             if (handle) {
                                 handle.toggle();
