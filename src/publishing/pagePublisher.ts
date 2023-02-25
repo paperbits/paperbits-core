@@ -17,17 +17,17 @@ import { Logger } from "@paperbits/common/logging";
 import { ILocaleService, LocaleModel } from "@paperbits/common/localization";
 import { IMediaService } from "@paperbits/common/media";
 import { StyleCompiler, StyleManager } from "@paperbits/common/styles";
-import { LocalStyleBuilder } from "@paperbits/styles";
+import { StyleBuilder } from "@paperbits/styles";
 import { OpenGraphType } from "@paperbits/common/publishing/openGraph";
 import { MimeTypes, RegExps } from "@paperbits/common";
+import { SourceLink } from "@paperbits/common/publishing/sourceLink";
 
 
 const globalStylesheetPermalink = `/styles/styles.css`;
-const localStylesheetFilePath = `/styles.css`;
 const rootHtmlPageFilePath = "/index.html";
 
 export class PagePublisher implements IPublisher {
-    private localStyleBuilder: LocalStyleBuilder;
+    private localStyleBuilder: StyleBuilder;
 
     constructor(
         protected readonly pageService: IPageService,
@@ -41,7 +41,7 @@ export class PagePublisher implements IPublisher {
         protected readonly searchIndexBuilder: SearchIndexBuilder,
         protected readonly logger: Logger
     ) {
-        this.localStyleBuilder = new LocalStyleBuilder(this.outputBlobStorage);
+        this.localStyleBuilder = new StyleBuilder(this.outputBlobStorage);
     }
 
     public async renderPage(page: HtmlPage): Promise<string> {
@@ -78,7 +78,7 @@ export class PagePublisher implements IPublisher {
         // return mainContent;
     }
 
-    private async renderAndUpload(settings: SiteSettingsContract, faviconPermalink: string, page: PageContract, locale?: LocaleModel): Promise<void> {
+    private async renderAndUpload(settings: SiteSettingsContract, faviconPermalink: string, page: PageContract, globalStylesLink: SourceLink, locale?: LocaleModel): Promise<void> {
         if (!page.permalink) {
             this.logger.trackEvent("Publishing", { message: `Skipping page "${page.title}" with no permalink specified.` });
             return;
@@ -108,9 +108,6 @@ export class PagePublisher implements IPublisher {
                 : pagePermalink;
 
             const styleManager = new StyleManager();
-            const localStylesheetPermalink = pagePermalink === "/" // home page
-                ? localStylesheetFilePath
-                : `${pagePermalink}${localStylesheetFilePath}`
 
             const htmlPage: HtmlPage = {
                 title: [page.title, siteTitle].join(" - "),
@@ -122,10 +119,7 @@ export class PagePublisher implements IPublisher {
                 faviconPermalink: faviconPermalink,
                 locale: locale,
                 template: template,
-                styleReferences: [
-                    globalStylesheetPermalink,
-                    localStylesheetPermalink
-                ],
+                styleReferences: [globalStylesLink],
                 author: siteAuthor,
                 socialShareData: page.socialShareData,
                 openGraph: {
@@ -163,10 +157,6 @@ export class PagePublisher implements IPublisher {
 
             const htmlContent = await this.renderPage(htmlPage);
 
-            // Building local styles
-            const styleSheets = styleManager.getAllStyleSheets();
-            this.localStyleBuilder.buildLocalStyle(pagePermalink, styleSheets);
-
             this.sitemapBuilder.appendPermalink(pagePermalink);
             this.searchIndexBuilder.appendHtml(pagePermalink, htmlPage.title, htmlPage.description, this.getIndexableContent(htmlContent));
 
@@ -191,7 +181,7 @@ export class PagePublisher implements IPublisher {
         }
     }
 
-    private async publishNonLocalized(siteSettings: SiteSettingsContract, faviconPermalink: string): Promise<void> {
+    private async publishNonLocalized(siteSettings: SiteSettingsContract, faviconPermalink: string, globalStylesLink: SourceLink): Promise<void> {
         const query: Query<PageContract> = Query.from<PageContract>();
         let pagesOfResults = await this.pageService.search(query);
 
@@ -200,7 +190,7 @@ export class PagePublisher implements IPublisher {
             const pages = pagesOfResults.value;
 
             for (const page of pages) {
-                tasks.push(() => this.renderAndUpload(siteSettings, faviconPermalink, page));
+                tasks.push(() => this.renderAndUpload(siteSettings, faviconPermalink, page, globalStylesLink));
             }
 
             await parallel(tasks, maxParallelPublisingTasks);
@@ -215,7 +205,7 @@ export class PagePublisher implements IPublisher {
         while (pagesOfResults);
     }
 
-    private async publishLocalized(siteSettings: SiteSettingsContract, faviconPermalink: string, locales: LocaleModel[]): Promise<void> {
+    private async publishLocalized(siteSettings: SiteSettingsContract, faviconPermalink: string, globalStylesLink: SourceLink, locales: LocaleModel[]): Promise<void> {
         const defaultLocale = await this.localeService.getDefaultLocaleCode();
 
         for (const locale of locales) {
@@ -231,7 +221,7 @@ export class PagePublisher implements IPublisher {
                 const pages = pagesOfResults.value;
 
                 for (const page of pages) {
-                    tasks.push(() => this.renderAndUpload(siteSettings, faviconPermalink, page, requestedLocale));
+                    tasks.push(() => this.renderAndUpload(siteSettings, faviconPermalink, page, globalStylesLink, requestedLocale));
                 }
 
                 await parallel(tasks, maxParallelPublisingTasks);
@@ -254,7 +244,11 @@ export class PagePublisher implements IPublisher {
         const globalStyleSheet = await this.styleCompiler.getStyleSheet();
 
         // Building global styles
-        this.localStyleBuilder.buildGlobalStyle(globalStyleSheet);
+        const signature = await this.localStyleBuilder.buildStyle(globalStylesheetPermalink, globalStyleSheet);
+        const globalStylesLink: SourceLink = {
+            src: globalStylesheetPermalink,
+            integrity: signature
+        };
 
         try {
             const settings = await this.siteService.getSettings<any>();
@@ -264,10 +258,10 @@ export class PagePublisher implements IPublisher {
                 : null;
 
             if (localizationEnabled) {
-                await this.publishLocalized(siteSettings, faviconPermalink, locales);
+                await this.publishLocalized(siteSettings, faviconPermalink, globalStylesLink, locales);
             }
             else {
-                await this.publishNonLocalized(siteSettings, faviconPermalink);
+                await this.publishNonLocalized(siteSettings, faviconPermalink, globalStylesLink);
             }
         }
         catch (error) {
