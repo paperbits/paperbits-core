@@ -41,9 +41,6 @@ export class Dropdown {
     public closeOnSelect: ko.Observable<boolean>;
 
     constructor() {
-        const width = document.getElementById("dropdown").getBoundingClientRect().width;
-        this.dropdownContentWidth = ko.observable<string>(width + "px");
-
         this.optionsText = ko.observable<string>();
         this.optionsValue = ko.observable<string>();
         this.value = ko.observable<string>(null);
