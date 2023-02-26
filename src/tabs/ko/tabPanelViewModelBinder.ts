@@ -2,7 +2,7 @@ import { TabPanelViewModel } from "./tabPanel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { TabPanelItemModel, TabPanelModel } from "../tabPanelModel";
-import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
+import { Placeholder } from "../../placeholder/ko/placeholder";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { TabPanelHandlers } from "../tabPanelHandlers";
 import { EventManager, Events } from "@paperbits/common/events";
@@ -58,7 +58,7 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
         const defaultLabel = `Tab ${index + 1}`;
 
         if (viewModels.length === 0) {
-            viewModels.push(<any>new PlaceholderViewModel(defaultLabel));
+            viewModels.push(<any>new Placeholder(defaultLabel));
         }
 
         viewModel.widgets(viewModels);
@@ -101,7 +101,7 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
         }
 
         if (tabPanelItemViewModels.length === 0) {
-            tabPanelItemViewModels.push(<any>new PlaceholderViewModel("Tab panel"));
+            tabPanelItemViewModels.push(<any>new Placeholder("Tab panel"));
         }
 
         viewModel.tabPanelItems(tabPanelItemViewModels);

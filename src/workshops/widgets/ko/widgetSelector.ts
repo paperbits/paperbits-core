@@ -5,6 +5,9 @@ import { Logger } from "@paperbits/common/logging";
 import { IWidgetService, WidgetModel } from "@paperbits/common/widgets";
 import { WidgetItem } from "./widgetItem";
 import template from "./widgetSelector.html";
+import { ViewManager } from "@paperbits/common/ui";
+import { IWidgetOrder } from "@paperbits/common/editing";
+import { ContentModel } from "../../../content";
 
 @Component({
     selector: "widget-selector",
@@ -20,6 +23,7 @@ export class WidgetSelector {
 
     constructor(
         private readonly widgetService: IWidgetService,
+        private readonly viewManager: ViewManager,
         private readonly logger: Logger
     ) {
         this.working = ko.observable(true);
@@ -62,12 +66,36 @@ export class WidgetSelector {
         this.widgetCount(widgetCount);
     }
 
+    private async getContentPartOrders(): Promise<IWidgetOrder[]> {
+        const activeLayer = this.viewManager.getActiveLayer();
+
+        if (activeLayer !== "layout") {
+            return [];
+        }
+
+        const pageContentWidgetOrder: IWidgetOrder = {
+            displayName: "Page content",
+            category: "Layout",
+            createModel: async () => {
+                const model = new ContentModel();
+                model.type = "page";
+                return model;
+            }
+        }
+
+        return [pageContentWidgetOrder];
+    }
+
     private async loadWidgetOrders(): Promise<void> {
         this.working(true);
 
         const items = new Array<WidgetItem>();
         const widgetOrders = await this.widgetService.getWidgetOrders();
         const provided = this.onRequest();
+
+        const contentParts = await this.getContentPartOrders();
+
+        widgetOrders.push(...contentParts);
 
         widgetOrders
             .filter(widgetOrder => !widgetOrder.requires || widgetOrder.requires.every(entry => provided.includes(entry)))

@@ -5,7 +5,7 @@ import { StyleCompiler } from "@paperbits/common/styles";
 import { IWidgetService, ViewModelBinder } from "@paperbits/common/widgets";
 import { CollapsiblePanelHandlers } from "..";
 import { ViewModelBinderSelector } from "../../ko";
-import { PlaceholderViewModel } from "../../placeholder/ko";
+import { Placeholder } from "../../placeholder/ko";
 import { CollapsiblePanelModel } from "../collapsiblePanelModel";
 import { CollapsiblePanel } from "./collapsiblePanelViewModel";
 
@@ -40,7 +40,7 @@ export class CollapsiblePanelViewModelBinder implements ViewModelBinder<Collapsi
         const widgetViewModels = await Promise.all(promises);
 
         if (widgetViewModels.length === 0) {
-            widgetViewModels.push(new PlaceholderViewModel("Collapsible panel content"));
+            widgetViewModels.push(new Placeholder("Collapsible panel content"));
         }
 
         if (model.styles) {

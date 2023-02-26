@@ -1,7 +1,7 @@
-import { PlaceholderViewModelBinder } from "../placeholder/ko/placeholderViewModelBinder";
 import { ViewModelBinder } from "@paperbits/common/widgets";
-import { PlaceholderModel } from "@paperbits/common/widgets/placeholder";
+import { ContentPartModel } from "@paperbits/common/widgets/contentPart";
 import { IWidgetService } from "@paperbits/common/widgets";
+import { ContentPartViewModelBinder } from "../content-part/ko";
 
 
 export class ViewModelBinderSelector {
@@ -15,15 +15,15 @@ export class ViewModelBinderSelector {
             throw new Error(`Parameter "model" not specified.`);
         }
 
-        if (model instanceof PlaceholderModel) {
-            return <any>(new PlaceholderViewModelBinder());
+        if (model instanceof ContentPartModel) {
+            return <any>(new ContentPartViewModelBinder());
         }
 
         const viewModelBinder = this.viewModelBinders.find(x => x && x.canHandleModel ? x.canHandleModel(model) : false);
 
         if (!viewModelBinder) {
             console.warn(`Could not find view model binder for model: ${model.constructor["name"] || model}`);
-            return <any>(new PlaceholderViewModelBinder());
+            return <any>(new ContentPartViewModelBinder());
         }
 
         return viewModelBinder;

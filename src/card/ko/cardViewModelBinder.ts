@@ -2,7 +2,7 @@ import { Bag } from "@paperbits/common";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { IWidgetService, ViewModelBinder } from "@paperbits/common/widgets";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
-import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
+import { Placeholder } from "../../placeholder/ko/placeholder";
 import { CardModel } from "../cardModel";
 import { CardViewModel } from "./cardViewModel";
 
@@ -37,7 +37,7 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
         const widgetViewModels = await Promise.all(promises);
 
         if (widgetViewModels.length === 0) {
-            widgetViewModels.push(new PlaceholderViewModel("Card"));
+            widgetViewModels.push(new Placeholder("Card"));
         }
 
         state.widgets = widgetViewModels;

@@ -4,7 +4,7 @@ import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { IWidgetService, ViewModelBinder } from "@paperbits/common/widgets";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
-import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
+import { Placeholder } from "../../placeholder/ko/placeholder";
 import { GridCellHandlers } from "../gridCellHandlers";
 import { GridCellModel } from "../gridCellModel";
 import { GridCellViewModel } from "./gridCellViewModel";
@@ -39,7 +39,7 @@ export class GridCellViewModelBinder implements ViewModelBinder<GridCellModel, G
         const widgetViewModels = await Promise.all(promises);
 
         if (widgetViewModels.length === 0) {
-            widgetViewModels.push(new PlaceholderViewModel(model.role));
+            widgetViewModels.push(new Placeholder(model.role));
         }
 
         if (model.styles) {

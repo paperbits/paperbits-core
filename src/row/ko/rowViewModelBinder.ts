@@ -1,7 +1,7 @@
 import { RowViewModel } from "./rowViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
 import { RowModel } from "../rowModel";
-import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
+import { Placeholder } from "../../placeholder/ko/placeholder";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { RowHandlers } from "../rowHandlers";
 import { IWidgetBinding } from "@paperbits/common/editing";
@@ -29,7 +29,7 @@ export class RowViewModelBinder implements ViewModelBinder<RowModel, RowViewMode
         }
 
         if (viewModels.length === 0) {
-            viewModels.push(<any>new PlaceholderViewModel("Row"));
+            viewModels.push(<any>new Placeholder("Row"));
         }
 
         viewModel.widgets(viewModels);

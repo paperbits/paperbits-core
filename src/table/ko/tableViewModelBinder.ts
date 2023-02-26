@@ -1,7 +1,7 @@
 import { TableViewModel } from "./tableViewModel";
 import { IWidgetService, ViewModelBinder } from "@paperbits/common/widgets";
 import { TableModel } from "../tableModel";
-import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
+import { Placeholder } from "../../placeholder/ko/placeholder";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
@@ -37,7 +37,7 @@ export class TableViewModelBinder implements ViewModelBinder<TableModel, TableVi
         const widgetViewModels = await Promise.all(promises);
 
         if (widgetViewModels.length === 0) {
-            widgetViewModels.push(new PlaceholderViewModel("Table"));
+            widgetViewModels.push(new Placeholder("Table"));
         }
 
         state.widgets = widgetViewModels;

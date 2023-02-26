@@ -43,7 +43,7 @@ import { UrlHyperlinkProvider } from "@paperbits/common/urls/urlHyperlinkProvide
 import { MediaHyperlinkProvider, MediaService } from "@paperbits/common/media";
 import { DragManager } from "@paperbits/common/ui/draggables";
 import { UnhandledErrorHandler } from "@paperbits/common/errors";
-import { PlaceholderViewModel } from "./placeholder/ko/placeholderViewModel";
+import { Placeholder } from "./placeholder/ko/placeholder";
 import { DefaultViewManager, Tooltip } from "./ko/ui";
 import { CropperBindingHandler } from "./workshops/cropper/cropper";
 import { GridEditor } from "./grid/ko";
@@ -113,6 +113,7 @@ import { GridCellModule } from "./grid-cell/ko";
 import { TestimonialsModule } from "./testimonials/ko";
 import { PagePermalinkResolver } from "@paperbits/common/pages/pagePermalinkResolver";
 import { UrlPermalinkResolver } from "@paperbits/common/urls/urlPermalinkResolver";
+import { ContentPart } from "./content-part/ko";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -229,7 +230,8 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bind("tooltip", Tooltip);
         injector.bindSingleton("dragManager", DragManager);
         injector.bindSingleton("lightbox", Lightbox);
-        injector.bind("placeholderWidget", PlaceholderViewModel);
+        injector.bind("placeholder", Placeholder);
+        injector.bind("contentPart", ContentPart);
         injector.bindSingleton("htmlEditorProvider", HtmlEditorProvider);
         injector.bindSingleton("mediaHandler", MediaHandlers);
         injector.bind("workshops", Workshops);

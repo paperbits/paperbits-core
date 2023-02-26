@@ -9,7 +9,7 @@ import { ContentModel } from "../contentModel";
 import { ContentModelBinder } from "../contentModelBinder";
 import { ContentViewModel } from "./contentViewModel";
 import { WidgetViewModel } from "../../ko";
-import { PlaceholderViewModel } from "../../placeholder/ko";
+import { ContentPart } from "../../content-part/ko";
 
 
 export class ContentViewModelBinder implements ViewModelBinder<ContentModel, ContentViewModel> {
@@ -108,7 +108,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
         viewModel.widgets(viewModels);
 
         if (viewModels.length === 0 && bindingContext.layer !== model.type) {
-            viewModel.widgets.push(new PlaceholderViewModel(`${model.type} content`));
+            viewModel.widgets.push(new ContentPart(`${model.type} content`));
         }
 
         return viewModel;

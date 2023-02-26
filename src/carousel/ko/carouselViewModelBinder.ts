@@ -2,7 +2,7 @@ import { CarouselViewModel } from "./carousel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
 import { CarouselItemModel, CarouselModel } from "../carouselModel";
-import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
+import { Placeholder } from "../../placeholder/ko/placeholder";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { CarouselHandlers } from "../carouselHandlers";
 import { EventManager, Events } from "@paperbits/common/events";
@@ -34,7 +34,7 @@ export class CarouselViewModelBinder implements ViewModelBinder<CarouselModel, C
         }
 
         if (viewModels.length === 0) {
-            viewModels.push(<any>new PlaceholderViewModel(`Slide ${index + 1}`));
+            viewModels.push(<any>new Placeholder(`Slide ${index + 1}`));
         }
 
         viewModel.widgets(viewModels);
@@ -97,7 +97,7 @@ export class CarouselViewModelBinder implements ViewModelBinder<CarouselModel, C
         }
 
         if (carouselItemViewModels.length === 0) {
-            carouselItemViewModels.push(<any>new PlaceholderViewModel("Carousel"));
+            carouselItemViewModels.push(<any>new Placeholder("Carousel"));
         }
 
         viewModel.carouselItems(carouselItemViewModels);

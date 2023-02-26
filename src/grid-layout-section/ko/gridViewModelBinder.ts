@@ -2,7 +2,7 @@ import { GridViewModel } from "./gridViewModel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { GridModel } from "../gridModel";
-import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
+import { Placeholder } from "../../placeholder/ko/placeholder";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
@@ -31,7 +31,7 @@ export class GridViewModelBinder implements ViewModelBinder<GridModel, GridViewM
         const viewModels = await Promise.all<WidgetViewModel>(promises);
 
         if (viewModels.length === 0) {
-            viewModels.push(<any>new PlaceholderViewModel("Grid"));
+            viewModels.push(<any>new Placeholder("Grid"));
         }
 
         viewModel.widgets(viewModels);

@@ -6,7 +6,7 @@ import { StyleCompiler } from "@paperbits/common/styles";
 import { IWidgetService, ModelBinderSelector, ViewModelBinder } from "@paperbits/common/widgets";
 import { PopupInstanceContract } from "..";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
-import { PlaceholderViewModel } from "../../placeholder/ko/placeholderViewModel";
+import { Placeholder } from "../../placeholder/ko/placeholder";
 import { PopupHandlers } from "../popupHandlers";
 import { PopupInstanceModel } from "../popupModel";
 import { PopupViewModel } from "./popup";
@@ -136,7 +136,7 @@ export class PopupViewModelBinder implements ViewModelBinder<PopupInstanceModel,
         // }
 
         if (widgetViewModels.length === 0) {
-            widgetViewModels.push(new PlaceholderViewModel("Popup content"));
+            widgetViewModels.push(new Placeholder("Popup content"));
         }
 
         if (model.styles) {

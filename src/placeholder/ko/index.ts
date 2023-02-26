@@ -1,2 +1,1 @@
-export * from "./placeholderViewModel";
-export * from "./placeholderViewModelBinder";
+export * from "./placeholder";
