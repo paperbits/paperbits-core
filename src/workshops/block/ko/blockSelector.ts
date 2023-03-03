@@ -10,6 +10,7 @@ import { StyleManager } from "@paperbits/common/styles";
 import { ModelBinderSelector } from "@paperbits/common/widgets/modelBinderSelector";
 import { ViewModelBinderSelector } from "../../../ko/viewModelBinderSelector";
 import { BlockItem } from "./blockItem";
+import { Logger } from "@paperbits/common/logging";
 
 
 const blockPath = "blocks";
@@ -27,7 +28,8 @@ export class BlockSelector {
     constructor(
         private readonly blockService: IBlockService,
         private readonly modelBinderSelector: ModelBinderSelector,
-        private readonly viewModelBinderSelector: ViewModelBinderSelector
+        private readonly viewModelBinderSelector: ViewModelBinderSelector,
+        private readonly logger: Logger
     ) {
         this.blocks = ko.observableArray();
         this.widgets = ko.observableArray();
@@ -146,6 +148,8 @@ export class BlockSelector {
     }
 
     public selectBlock(block: BlockItem): void {
+        this.logger.trackEvent("BlockAdded", { key: block.contentKey })
+
         if (this.onSelect) {
             this.onSelect(block);
         }

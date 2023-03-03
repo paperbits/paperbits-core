@@ -10,7 +10,7 @@ import { IComponent, View, ViewManager, ICommand, ViewManagerMode, IHighlightCon
 import { Router } from "@paperbits/common/routing";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IWidgetBinding } from "@paperbits/common/editing";
-import { Component, OnMounted, OnDestroyed, RuntimeComponent } from "@paperbits/common/ko/decorators";
+import { Component, OnMounted, OnDestroyed } from "@paperbits/common/ko/decorators";
 import { RoleModel, BuiltInRoles } from "@paperbits/common/user";
 import { DesignerUserService } from "./designerUserService";
 import { ViewStack } from "@paperbits/common/ui/viewStack";
