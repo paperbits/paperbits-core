@@ -6,8 +6,7 @@ import { StyleCompiler } from "@paperbits/common/styles";
 
 @Component({
     selector: "widget-container",
-    template: template,
-    encapsulation: Encapsulation.shadowDom
+    template: template
 })
 export class WidgetContainer {
     public widgetViewModel: ko.Observable<any>;
@@ -44,7 +43,7 @@ ko.bindingHandlers["previewContainer"] = {
         const componentDefinition = valueAccessor();
         const hostElement: HTMLIFrameElement = document.createElement("iframe");
         hostElement.setAttribute("src", "about:blank");
-        hostElement.setAttribute("class", "zoom-item");
+        hostElement.setAttribute("class", "block-item-container");
 
         const onLoad = async (): Promise<void> => {
             const contentDocument = hostElement.contentDocument;
