@@ -10,6 +10,7 @@ import { ContentModelBinder } from "../contentModelBinder";
 import { ContentViewModel } from "./contentViewModel";
 import { WidgetViewModel } from "../../ko";
 import { ContentPart } from "../../content-part/ko";
+import { Placeholder } from "../../placeholder/ko";
 
 
 export class ContentViewModelBinder implements ViewModelBinder<ContentModel, ContentViewModel> {
@@ -84,6 +85,8 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
             viewModel = new ContentViewModel();
         }
 
+        console.log(model.type);
+
         let childBindingContext: Bag<any> = {};
 
         if (bindingContext) {
@@ -92,6 +95,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
             childBindingContext.template = bindingContext.template;
             childBindingContext.styleManager = bindingContext.styleManager;
             childBindingContext.layer = model.type; // setting same layer for all child components
+            childBindingContext.activeLayer = bindingContext.activeLayer;
         }
 
         const promises = model.widgets.map(widgetModel => {
@@ -107,8 +111,13 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
 
         viewModel.widgets(viewModels);
 
-        if (viewModels.length === 0 && bindingContext.layer !== model.type) {
-            viewModel.widgets.push(new ContentPart(`${model.type} content`));
+        if (viewModels.length === 0) {
+            if (bindingContext.activeLayer !== model.type) {
+                viewModel.widgets.push(new ContentPart(`${model.type} content`));
+            }
+            else {
+                viewModel.widgets.push(new Placeholder(`${model.type} content`));
+            }
         }
 
         return viewModel;
