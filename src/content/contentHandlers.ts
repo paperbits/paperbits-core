@@ -12,11 +12,11 @@ export class ContentHandlers implements IWidgetHandler {
     }
 
     public getContextCommands(context: WidgetContext): IContextCommandSet {
-        const contextualEditor: IContextCommandSet = {};
+        const contextCommands: IContextCommandSet = {};
         const activeLayer = this.viewManager.getActiveLayer();
 
         if (context.model.widgets.length === 0 && activeLayer === context.model["type"]) {
-            contextualEditor.hoverCommands = [{
+            contextCommands.hoverCommands = [{
                 controlType: "toolbox-button",
                 color: "#2b87da",
                 iconClass: "paperbits-icon paperbits-simple-add",
@@ -36,9 +36,18 @@ export class ContentHandlers implements IWidgetHandler {
             }];
         }
         else {
-            contextualEditor.hoverCommands = [];
+            contextCommands.hoverCommands = [];
         }
 
-        return contextualEditor;
+        contextCommands.selectCommands = [
+            {
+                controlType: "toolbox-button",
+                tooltip: "Switch to parent",
+                iconClass: "paperbits-icon paperbits-enlarge-vertical",
+                position: "top right",
+                callback: () => context.switchToParent()
+            }];
+
+        return contextCommands;
     }
 }
