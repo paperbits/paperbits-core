@@ -38,3 +38,20 @@ export class WidgetContainer {
         this.widgetViewModel(this.widgetData.widget);
     }
 }
+
+ko.bindingHandlers["previewContainer"] = {
+    init: (element: HTMLElement, valueAccessor: () => (data: any) => void, allBindings, viewModel) => {
+        const componentDefinition = valueAccessor();
+        const hostElement: HTMLIFrameElement = document.createElement("iframe");
+        hostElement.setAttribute("src", "about:blank");
+        hostElement.setAttribute("class", "zoom-item");
+
+        const onLoad = async (): Promise<void> => {
+            const contentDocument = hostElement.contentDocument;
+            ko.applyBindingsToNode(contentDocument.body, { component: componentDefinition }, null);
+        }
+
+        hostElement.addEventListener("load", onLoad, false);
+        element.appendChild(hostElement);
+    }
+}
