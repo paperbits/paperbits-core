@@ -148,8 +148,6 @@ export class BalloonBindingHandler {
                             positionY = Position.bottom;
                             availableSpaceY = spaceBottom - egdeGap - padding;
                         }
-                        
-                        availableSpaceX = spaceLeft - egdeGap - padding;
                     }
                     else {
                         if (spaceLeft > spaceRight) {
@@ -160,8 +158,6 @@ export class BalloonBindingHandler {
                             positionX = Position.right;
                             availableSpaceX = spaceRight - egdeGap;
                         }
-
-                        availableSpaceY = window.innerHeight - egdeGap - padding;
                     }
 
                     if (balloonRect.height > availableSpaceY) {

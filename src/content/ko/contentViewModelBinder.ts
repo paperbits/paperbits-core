@@ -85,8 +85,6 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
             viewModel = new ContentViewModel();
         }
 
-        console.log(model.type);
-
         let childBindingContext: Bag<any> = {};
 
         if (bindingContext) {
