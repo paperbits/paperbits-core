@@ -16,11 +16,3 @@ export class ContentPart {
         this.widgetBinding = { displayName: title  };
     }
 }
-
-customElements.define('content-part-control', class extends HTMLElement {
-    connectedCallback() {
-      this.attachShadow({ mode: 'open' });
-      this.shadowRoot.innerHTML = `Page content`;
-    }
-  });
-  
