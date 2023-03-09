@@ -1,26 +1,9 @@
 import * as ko from "knockout";
+import { FocusBehavior, FocusOptions } from "@paperbits/common/behaviors/behavior.focus";
 
 ko.bindingHandlers["focus"] = {
-    init: (element: HTMLElement, valueAccessor: () => string) => {
+    init: (element: HTMLElement, valueAccessor: () => boolean | FocusOptions) => {
         const options = ko.unwrap(valueAccessor());
-
-        setTimeout(() => {
-            const type = typeof options;
-
-            if (type === "boolean" && options) {
-                element.focus();
-                return;
-            }
-
-            if (type === "object" && options["childSelector"]) {
-                element = <HTMLElement>element.querySelector(options["childSelector"]);
-
-                if (element) {
-                    element.focus();
-                }
-
-                return;
-            }
-        }, 100);
+        FocusBehavior.attach(element, options);
     }
 };
