@@ -1,6 +1,5 @@
 import * as Utils from "@paperbits/common/utils";
 import parallel from "await-parallel-limit";
-import template from "./page.html";
 import {
     IPublisher,
     HtmlPage,
@@ -118,7 +117,6 @@ export class PagePublisher implements IPublisher {
                 siteHostName: siteHostname,
                 faviconPermalink: faviconPermalink,
                 locale: locale,
-                template: template,
                 styleReferences: [globalStylesLink],
                 author: siteAuthor,
                 socialShareData: page.socialShareData,
