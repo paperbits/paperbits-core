@@ -80,7 +80,7 @@ export class LayoutsWorkshop {
         this.selectedLayout(layoutItem);
 
         const view: View = {
-            heading: "Layout",
+            heading: "Layout details",
             component: {
                 name: "layout-details-workshop",
                 params: {

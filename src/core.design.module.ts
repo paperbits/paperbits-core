@@ -37,9 +37,7 @@ import { ComponentBinder } from "@paperbits/common/components";
 import { ContainerModelBinder, HtmlEditorProvider, MediaHandlers } from "@paperbits/common/editing";
 import { HyperlinkSelector } from "./workshops/hyperlinks/ko/hyperlinkSelector";
 import { WidgetSelector } from "./workshops/widgets/ko/widgetSelector";
-import { UrlHyperlinkDetails, UrlSelector } from "./workshops/urls/ko";
 import { LayoutDesignModule } from "./layout/ko/layout.design.module";
-import { UrlHyperlinkProvider } from "@paperbits/common/urls/urlHyperlinkProvider";
 import { MediaHyperlinkProvider, MediaService } from "@paperbits/common/media";
 import { DragManager } from "@paperbits/common/ui/draggables";
 import { UnhandledErrorHandler } from "@paperbits/common/errors";
@@ -114,6 +112,7 @@ import { TestimonialsModule } from "./testimonials/ko";
 import { PagePermalinkResolver } from "@paperbits/common/pages/pagePermalinkResolver";
 import { UrlPermalinkResolver } from "@paperbits/common/urls/urlPermalinkResolver";
 import { ContentPart } from "./content-part/ko";
+import { UrlDesignModule } from "./workshops/urls/ko/url.design.module";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -193,6 +192,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new LayoutDesignModule());
         injector.bindModule(new BlockWorkshopModule());
         injector.bindModule(new NavigationWorkshopModule());
+        injector.bindModule(new UrlDesignModule());
         injector.bindModule(new SettingsWorkshopModule());
         injector.bindModule(new ColumnEditorModule());
         injector.bindModule(new RowEditorModule());
@@ -218,7 +218,6 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindSingleton("stateCache", MemoryCache);
         injector.bindSingleton("changesCache", MemoryCache);
         injector.bind("mediaHyperlinkProvider", MediaHyperlinkProvider);
-        injector.bind("urlHyperlinkProvider", UrlHyperlinkProvider);
         injector.bind("gridEditor", GridEditor);
         injector.bindToCollection("autostart", ResizableBindingHandler);
         injector.bindToCollection("autostart", CropperBindingHandler);
@@ -240,8 +239,6 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bind("localeEditor", LocaleEditor);
         injector.bind("hyperlinkSelector", HyperlinkSelector);
         injector.bind("widgetSelector", WidgetSelector);
-        injector.bind("urlSelector", UrlSelector);
-        injector.bind("urlHyperlinkDetails", UrlHyperlinkDetails);
         injector.bind("confirmation", Confirmation);
         injector.bind("roleSelector", RoleSelector);
         injector.bind("roleInput", RoleInput);
@@ -274,7 +271,6 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindToCollection("routeGuards", JavaScriptRouteGuard);
 
 
-        injector.bindToCollection("hyperlinkProviders", UrlHyperlinkProvider);
         injector.bindToCollection("autostart", HostBindingHandler);
         injector.bindToCollection("autostart", DraggablesBindingHandler);
         injector.bindToCollection("autostart", GridBindingHandler);

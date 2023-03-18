@@ -70,6 +70,18 @@ export class KnockoutValidation {
             message: "This permalink is reserved or already in use."
         };
 
+        validation.rules["isValidUrl"] = {
+            validator: (permalink: string): boolean => {
+                if (!permalink) {
+                    return false;
+                }
+
+                const isValidUrl= RegExps.url.test(permalink);
+                return isValidUrl;
+            },
+            message: `Permalink is invalid. Use letters, numbers, dashes and slashes. Example: "/about/contacts"`
+        };
+
         validation.rules["uniqueLayoutUri"] = {
             async: true,
             validator: async (permalinkTemplate, layoutKey, callback: (isInUse: boolean) => void) => {

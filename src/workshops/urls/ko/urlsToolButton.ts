@@ -1,10 +1,10 @@
 import { ToolButton, ViewManager, View } from "@paperbits/common/ui";
 
-const helpText = "<h1>External URLs</h1><p>Add or edit external URLs of your website.</p>";
+const helpText = "<h1>URLs</h1><p>Add or edit URLs pointing to external resources.</p>";
 
 export class UrlsToolButton implements ToolButton {
     public readonly iconClass: string = "paperbits-icon paperbits-link-69-2";
-    public readonly title: string = "External URLs";
+    public readonly title: string = "URLs";
     public readonly tooltip: string = helpText;
 
     constructor(private readonly viewManager: ViewManager) { }
@@ -15,7 +15,7 @@ export class UrlsToolButton implements ToolButton {
         const view: View = {
             heading: this.title,
             helpText: helpText,
-            component: { name: "url-selector" }
+            component: { name: "urls" }
         };
 
         this.viewManager.openViewAsWorkshop(view);

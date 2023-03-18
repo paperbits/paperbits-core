@@ -90,7 +90,7 @@ export class PagesWorkshop {
         this.selectedPage(pageItem);
 
         const view: View = {
-            heading: "Page",
+            heading: "Page details",
             // returnFocusTo: ???
             component: {
                 name: "page-details-workshop",

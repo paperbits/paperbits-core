@@ -1,0 +1,41 @@
+<div class="flex flex-column fit">
+    <div class="flex-item flex-item-grow form" data-bind="scrollable: true">
+        <div class="form-group">
+            <label for="title" class="form-label">Title</label>
+            <div class="input-group">
+                <input type="text" id="title" class="form-control"
+                    data-bind="textInput: urlItem.title, validationElement: urlItem.title, focus: true"
+                    placeholder="e.g. About" maxlength="256" aria-required="true" />
+                <button class="btn btn-danger input-group-btn" type="button"
+                    data-bind="validationMessageToggle: urlItem.title">!</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="permalink" class="form-label">Permalink</label>
+            <div class="input-group">
+                <input type="text" id="permalink" class="form-control"
+                    data-bind="textInput: urlItem.permalink, validationElement: urlItem.permalink, disable: $component.isReserved"
+                    placeholder="e.g. /about" maxlength="2000" spellcheck="false" aria-required="true" />
+                <!-- ko ifnot: $component.isReserved -->
+                <button class="btn btn-danger input-group-btn" data-bind="validationMessageToggle: urlItem.permalink"
+                    type="button">!</button>
+                <!-- /ko -->
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description" class="form-label">Description</label>
+            <textarea id="description" class="form-control" data-bind="textInput: urlItem.description"
+                maxlength="256"></textarea>
+        </div>
+    </div>
+
+    <!-- ko ifnot: $component.isReserved -->
+    <div class="flex-item btn-group">
+        <button class="btn btn-default"
+            data-bind="confirm: { message: 'Are you sure you want to delete this url?', onConfirm: deleteUrl }">
+            <i aria-hidden="true" class="paperbits-icon paperbits-simple-remove"></i>
+            Delete URL
+        </button>
+    </div>
+    <!-- /ko -->
+</div>
