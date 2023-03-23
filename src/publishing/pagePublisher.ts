@@ -251,8 +251,8 @@ export class PagePublisher implements IPublisher {
         try {
             const settings = await this.siteService.getSettings<any>();
             const siteSettings: SiteSettingsContract = settings.site;
-            const faviconPermalink = settings?.faviconSourceKey
-                ? await this.getFaviconPermalink(settings.faviconSourceKey)
+            const faviconPermalink = siteSettings?.faviconSourceKey
+                ? await this.getFaviconPermalink(siteSettings.faviconSourceKey)
                 : null;
 
             if (localizationEnabled) {
