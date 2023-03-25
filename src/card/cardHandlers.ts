@@ -1,10 +1,11 @@
-import { IWidgetOrder, IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
+import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { EventManager, Events } from "@paperbits/common/events";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { WidgetModel } from "@paperbits/common/widgets";
 import { CardModel } from "./cardModel";
 import { TextblockModel } from "./../textblock/textblockModel";
+import { openWidgetEditorCommand, splitter, switchToParentCommand } from "@paperbits/common/ui/commands";
 
 
 export class CardHandlers implements IWidgetHandler {
@@ -56,26 +57,10 @@ export class CardHandlers implements IWidgetHandler {
                     this.eventManager.dispatchEvent(Events.ContentUpdate);
                 }
             },
-            selectCommands: [{
-                controlType: "toolbox-button",
-                displayName: "Edit card",
-                position: "top right",
-                color: "#4c5866",
-                callback: () => this.viewManager.openWidgetEditor(context.binding)
-            },
-            {
-                controlType: "toolbox-splitter",
-            },
-            {
-                controlType: "toolbox-button",
-                tooltip: "Switch to parent",
-                iconClass: "paperbits-icon paperbits-enlarge-vertical",
-                position: "top right",
-                color: "#4c5866",
-                callback: () => {
-                    context.switchToParent();
-                }
-            }]
+            selectCommands: [
+            openWidgetEditorCommand(context, "Edit card"),
+            splitter(),
+            switchToParentCommand(context)]
         };
 
         if (context.model.widgets.length === 0) {

@@ -1,8 +1,8 @@
 ﻿import * as Utils from "@paperbits/common/utils";
-import { MediaContract } from "@paperbits/common/media";
 import { IContentDropHandler, IWidgetHandler, IDataTransfer, IContentDescriptor, WidgetContext } from "@paperbits/common/editing";
 import { PictureModel } from "./pictureModel";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
+import { deleteWidgetCommand, openHelpArticleCommand, openWidgetEditorCommand, splitter, switchToParentCommand } from "@paperbits/common/ui/commands";
 
 const widgetDisplayName = "Picture";
 
@@ -43,39 +43,12 @@ export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
         const contextualEditor: IContextCommandSet = {
             color: "#2b87da",
             selectCommands: [
-                {
-                    controlType: "toolbox-button",
-                    displayName: "Edit picture",
-                    callback: () => this.viewManager.openWidgetEditor(context.binding)
-                },
-                {
-                    controlType: "toolbox-splitter"
-                },
-                {
-                    controlType: "toolbox-button",
-                    tooltip: "Switch to parent",
-                    iconClass: "paperbits-icon paperbits-enlarge-vertical",
-                    callback: () => context.gridItem.getParent().select(),
-                }
-                // {
-                //     tooltip: "Help",
-                //     iconClass: "paperbits-icon paperbits-c-question",
-                //     position: "top right",
-                //     color: "#607d8b",
-                //     callback: () => {
-                //         // 
-                //     }
-                // }
+                openWidgetEditorCommand(context, "Edit picture"),
+                splitter(),
+                switchToParentCommand(context),
+                // openHelpArticleCommand(context, "/widgets/picture")
             ],
-            deleteCommand: {
-                controlType: "toolbox-button",
-                tooltip: "Delete widget",
-                callback: () => {
-                    context.parentModel.widgets.remove(context.model);
-                    context.parentBinding.applyChanges();
-                    this.viewManager.clearContextualCommands();
-                }
-            }
+            deleteCommand: deleteWidgetCommand(context)
         };
 
         return contextualEditor;

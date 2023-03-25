@@ -3,6 +3,7 @@ import { WidgetContext } from "@paperbits/common/editing";
 import { EventManager, Events } from "@paperbits/common/events";
 import { SectionModel } from "../section";
 import { CarouselItemModel } from "./carouselModel";
+import { splitter } from "@paperbits/common/ui/commands";
 
 
 export class CarouselItemHandlers {
@@ -21,9 +22,7 @@ export class CarouselItemHandlers {
                     displayName: "Edit carousel",
                     callback: () => this.viewManager.openWidgetEditor(context.parentBinding)
                 },
-                {
-                    controlType: "toolbox-splitter"
-                },
+                splitter(),
                 {
                     tooltip: "Slide settings",
                     displayName: context.binding.displayName,
@@ -82,39 +81,14 @@ export class CarouselItemHandlers {
                 //         this.viewManager.openViewAsPopup(view);
                 //     }
                 // },
-                {
-                    controlType: "toolbox-splitter"
-                },
+                splitter(),
                 {
                     controlType: "toolbox-button",
                     tooltip: "Switch to parent",
                     iconClass: "paperbits-icon paperbits-enlarge-vertical",
                     callback: () => context.gridItem.getParent().getParent().select(),
-                }
-                // {
-                //     tooltip: "Help",
-                //     iconClass: "paperbits-icon paperbits-c-question",
-                //     callback: () => {
-                //         const view: View = {
-                //             heading: "Help center",
-                //             component: {
-                //                 name: "help-center",
-                //                 params: {
-                //                     articleKey: "popups",
-                //                 }
-                //             },
-                //             resizing: {
-                //                 directions: "vertically horizontally",
-                //                 initialWidth: 500,
-                //                 initialHeight: 700
-                //             },
-                //             scrollable: false
-                //         };
-
-                //         this.viewManager.openViewAsPopup(view);
-                //     },
-                //     controlType: "toolbox-button"
-                // }
+                },
+                //openHelpArticleCommand(context, "/widgets/carousel")
             ]
         };
 

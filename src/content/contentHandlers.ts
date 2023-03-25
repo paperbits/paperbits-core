@@ -1,5 +1,6 @@
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { ViewManager, IContextCommandSet } from "@paperbits/common/ui";
+import { switchToParentCommand } from "@paperbits/common/ui/commands";
 import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { WidgetModel } from "@paperbits/common/widgets";
 
@@ -40,13 +41,8 @@ export class ContentHandlers implements IWidgetHandler {
         }
 
         contextCommands.selectCommands = [
-            {
-                controlType: "toolbox-button",
-                tooltip: "Switch to parent",
-                iconClass: "paperbits-icon paperbits-enlarge-vertical",
-                position: "top right",
-                callback: () => context.switchToParent()
-            }];
+            switchToParentCommand(context)
+        ];
 
         return contextCommands;
     }

@@ -1,7 +1,7 @@
 ﻿import { TextblockModel } from "./textblockModel";
 import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
-
+import { openHelpArticleCommand, openWidgetEditorCommand, splitter, switchToParentCommand } from "@paperbits/common/ui/commands";
 
 export class TextblockHandlers implements IWidgetHandler {
     constructor(private readonly viewManager: ViewManager) { }
@@ -23,29 +23,10 @@ export class TextblockHandlers implements IWidgetHandler {
         const contextualEditor: IContextCommandSet = {
             color: "#2b87da",
             selectCommands: [
-                {
-                    controlType: "toolbox-button",
-                    displayName: "Edit text",
-                    callback: () => this.viewManager.openWidgetEditor(context.binding)
-                },
-                {
-                    controlType: "toolbox-splitter"
-                },
-                {
-                    controlType: "toolbox-button",
-                    tooltip: "Switch to parent",
-                    iconClass: "paperbits-icon paperbits-enlarge-vertical",
-                    callback: () => context.gridItem.getParent().select(),
-                }
-                // {
-                //     tooltip: "Help",
-                //     iconClass: "paperbits-icon paperbits-c-question",
-                //     position: "top right",
-                //     color: "#607d8b",
-                //     callback: () => {
-                //         // 
-                //     }
-                // }
+                openWidgetEditorCommand(context, "Edit text"),
+                splitter(),
+                switchToParentCommand(context),
+                // openHelpArticleCommand(context, "/widgets/text")
             ],
             deleteCommand: {
                 controlType: "toolbox-button",

@@ -3,6 +3,7 @@ import * as Utils from "@paperbits/common/utils";
 import * as Html from "@paperbits/common/html";
 import * as Objects from "@paperbits/common/objects";
 import { ViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet, ActiveElement, View, IContextCommand } from "@paperbits/common/ui";
+import { switchToParentCommand, defaultCommandColor, deleteWidgetCommand, splitter } from "@paperbits/common/ui/commands";
 import { IWidgetBinding, WidgetContext, GridItem, ComponentFlow, GridHelper } from "@paperbits/common/editing";
 import { IWidgetService } from "@paperbits/common/widgets";
 import { EventManager, Events } from "@paperbits/common/events";
@@ -13,7 +14,7 @@ import { StyleHelper } from "@paperbits/styles";
 import { TextblockEditor } from "../../textblock/ko";
 
 
-const defaultCommandColor = "#607d8b";
+
 const contentEditorElementId = "contentEditor";
 
 export class GridEditor {
@@ -102,6 +103,9 @@ export class GridEditor {
             binding: binding,
             half: half,
             providers: providers,
+            openWidgetEditor: () => {
+                this.viewManager.openWidgetEditor(binding);
+            },
             switchToParent: () => {
                 const selectableParent = gridItem.getParent(null, true);
 
@@ -116,6 +120,11 @@ export class GridEditor {
                 }
 
                 this.selectElement(selectableParent);
+            },
+            deleteWidget: () => {
+                parentModel.widgets.remove(model);
+                parentBinding.applyChanges();
+                this.viewManager.clearContextualCommands();
             }
         };
 
@@ -583,16 +592,7 @@ export class GridEditor {
                     }
                 }
             }],
-            deleteCommand: {
-                controlType: "toolbox-button",
-                tooltip: "Delete widget",
-                color: defaultCommandColor,
-                callback: () => {
-                    context.parentModel.widgets.remove(context.model);
-                    context.parentBinding.applyChanges();
-                    this.viewManager.clearContextualCommands();
-                },
-            },
+            deleteCommand: deleteWidgetCommand(context),
             selectCommands: context.binding?.editor && context.binding?.applyChanges && [{
                 controlType: "toolbox-button",
                 displayName: `Edit widget`,
@@ -600,17 +600,8 @@ export class GridEditor {
                 color: defaultCommandColor,
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
             },
-            {
-                controlType: "toolbox-splitter"
-            },
-            {
-                controlType: "toolbox-button",
-                tooltip: "Switch to parent",
-                iconClass: "paperbits-icon paperbits-enlarge-vertical",
-                position: "top right",
-                color: defaultCommandColor,
-                callback: () => context.switchToParent()
-            }]
+            splitter(),
+            switchToParentCommand(context)]
         };
 
         if (!context.half) { // Not selection mode.
