@@ -6,6 +6,7 @@ import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { Query, Operator, Page } from "@paperbits/common/persistence";
 import { PopupItem } from "./popupItem";
+import { EventManager, Events } from "@paperbits/common/events";
 
 
 @Component({
@@ -22,7 +23,8 @@ export class PopupsWorkshop {
 
     constructor(
         private readonly popupService: IPopupService,
-        private readonly viewManager: ViewManager
+        private readonly viewManager: ViewManager,
+        private readonly eventManager: EventManager
     ) {
         this.popups = ko.observableArray<PopupItem>();
         this.selectedPopup = ko.observable<PopupItem>();
@@ -109,12 +111,13 @@ export class PopupsWorkshop {
     public async addPopup(): Promise<void> {
         this.working(true);
 
-
-        const popupContract = await this.popupService.createPopup("New popup", "");
+        const popupContract = await this.popupService.createPopup("New popup");
         const popupItem = new PopupItem(popupContract);
 
         this.popups.push(popupItem);
         this.selectPopup(popupItem);
+
+        this.eventManager.dispatchEvent(Events.PopupCreated, popupContract.key);
 
         this.working(false);
     }

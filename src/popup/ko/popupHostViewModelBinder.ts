@@ -1,6 +1,6 @@
 import { Bag } from "@paperbits/common";
 import { IWidgetBinding } from "@paperbits/common/editing";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { Query } from "@paperbits/common/persistence";
 import { IPopupService } from "@paperbits/common/popups";
 import { ViewModelBinder } from "@paperbits/common/widgets";
@@ -43,8 +43,8 @@ export class PopupHostViewModelBinder implements ViewModelBinder<PopupHostModel,
             model: model,
             draggable: false,
             applyChanges: () => this.modelToViewModel(model, viewModel, bindingContext),
-            onCreate: () => this.eventManager.addEventListener("onPopupCreate", addPopup),
-            onDispose: () => this.eventManager.removeEventListener("onPopupCreate", addPopup)
+            onCreate: () => this.eventManager.addEventListener(Events.PopupCreated, addPopup),
+            onDispose: () => this.eventManager.removeEventListener(Events.PopupCreated, addPopup)
         };
 
         viewModel["widgetBinding"] = binding;

@@ -18,43 +18,6 @@ export class ToggleablesManager {
         this.onPopupRequest = this.onPopupRequest.bind(this);
     }
 
-    private runHitTest(targetElement: HTMLElement): void {
-        const handles = [...this.stack]; // clone array
-
-        for (const handle of handles.reverse()) {
-            const hit = !!closest(targetElement, (node: HTMLElement) => node === handle.targetElement);
-
-            if (hit) {
-                break;
-            }
-
-            this.stack.pop();
-            handle.close();
-        }
-    }
-
-    private closeHandleStack(handle: ToggleableHandle): void {
-        if (!this.stack.includes(handle)) {
-            return;
-        }
-
-        let topHandle: ToggleableHandle;
-
-        do {
-            topHandle = this.stack.pop();
-            topHandle.close();
-        }
-        while (!topHandle || topHandle !== handle);
-
-        if (!topHandle) {
-            return;
-        }
-
-        if (topHandle.toggleElement) {
-            handle.toggleElement.focus();
-        }
-    }
-
     private openTogglable(toggleElement: HTMLElement, toggleType: ToggleableType, triggerEvent: ToggleableTriggerEvent): void {
         let toggleableHandle: ToggleableHandle;
 
@@ -101,13 +64,17 @@ export class ToggleablesManager {
 
         const dismissElements: HTMLElement[] = Arrays.coerce(targetElement.querySelectorAll(`[${DataAttributes.Dismiss}]`));
 
+        const onDisimissElementMouseDown = (event: MouseEvent) => {
+            closeTarget();
+        }
+
         const openTarget = (): void => {
             this.openTogglableInternal(targetElement, toggleElement);
 
             setImmediate(() => addEventListener(Events.MouseDown, clickOutside));
 
             for (const dismissElement of dismissElements) {
-                dismissElement.addEventListener(Events.Click, closeTarget);
+                dismissElement.addEventListener(Events.Click, onDisimissElementMouseDown);
             }
         };
 
@@ -116,7 +83,7 @@ export class ToggleablesManager {
             removeEventListener(Events.MouseDown, clickOutside);
 
             for (const dismissElement of dismissElements) {
-                dismissElement.removeEventListener(Events.Click, closeTarget);
+                dismissElement.removeEventListener(Events.Click, onDisimissElementMouseDown);
             }
         };
 
@@ -154,7 +121,7 @@ export class ToggleablesManager {
      * @param targetElement - The element that needs to be closed.
      * @param toggleElement - The element that triggered opening the target.
      */
-    private closeTogglable(targetElement: HTMLElement, toggleElement: HTMLElement): void {
+    private closeTogglable(targetElement: HTMLElement, toggleElement: HTMLElement, returnFocus: boolean = true): void {
         targetElement.classList.remove(showClassName);
 
         if (toggleElement) {
@@ -168,18 +135,23 @@ export class ToggleablesManager {
                 return; // on "hover" focus doesn't change
             }
 
-            setImmediate(() => toggleElement.focus());
+            if (returnFocus) {
+                setImmediate(() => toggleElement.focus());
+            }
         }
     }
 
     private openTogglableInternal(targetElement: HTMLElement, toggleElement: HTMLElement): void {
         targetElement.classList.add(showClassName);
-        toggleElement.setAttribute(AriaAttributes.expanded, "true");
 
-        const triggerEvent = toggleElement.getAttribute(DataAttributes.TriggerEvent);
+        if (toggleElement) {
+            toggleElement.setAttribute(AriaAttributes.expanded, "true");
 
-        if (triggerEvent === ToggleableTriggerEvent.Hover) {
-            return; // on "hover" focus doesn't change
+            const triggerEvent = toggleElement.getAttribute(DataAttributes.TriggerEvent);
+
+            if (triggerEvent === ToggleableTriggerEvent.Hover) {
+                return; // on "hover" focus doesn't change
+            }
         }
 
         const focusableElements = getFocusableElements(targetElement);
@@ -190,8 +162,8 @@ export class ToggleablesManager {
         }
     }
 
-    private configurePopup(toggleElement: HTMLElement, targetElement: HTMLElement, triggerEvent: ToggleableTriggerEvent): ToggleableHandle {
-        if (!toggleElement || !targetElement) {
+    private configurePopup(triggerElement: HTMLElement, targetElement: HTMLElement, triggerEvent: ToggleableTriggerEvent): ToggleableHandle {
+        if (!targetElement) {
             return;
         }
 
@@ -209,7 +181,7 @@ export class ToggleablesManager {
             const computedStyles = getComputedStyle(popupContainerElement);
 
             if (computedStyles.position === "absolute") {
-                const actualToggleElement: HTMLElement = event?.detail?.element || toggleElement;
+                const actualToggleElement: HTMLElement = event?.detail?.element || triggerElement;
                 const toggleElementRect = actualToggleElement.getBoundingClientRect();
                 const popupContainerElement: HTMLElement = targetElement.querySelector(`.${popupContainerClass}`);
                 const popupContainerElementRect = popupContainerElement.getBoundingClientRect();
@@ -263,7 +235,7 @@ export class ToggleablesManager {
                 return;
             }
 
-            const isToggleClicked = toggleElement.contains(eventTarget);
+            const isToggleClicked = triggerElement?.contains(eventTarget);
 
             if (isToggleClicked) {
                 return;
@@ -272,7 +244,7 @@ export class ToggleablesManager {
             event.preventDefault();
             event.stopImmediatePropagation();
 
-            closeTarget();
+            closeTarget(false); // outside click doesn't return the focus
         };
 
         const checkOutsideMove = (event: MouseEvent) => {
@@ -288,7 +260,7 @@ export class ToggleablesManager {
                 return;
             }
 
-            const isToggleClicked = toggleElement.contains(eventTarget);
+            const isToggleClicked = triggerElement.contains(eventTarget);
 
             if (isToggleClicked) {
                 return;
@@ -300,9 +272,13 @@ export class ToggleablesManager {
             closeTarget();
         };
 
-        const closeTarget = (): void => {
+        const onDisimissElementMouseDown = (event: MouseEvent) => {
+            closeTarget();
+        }
+
+        const closeTarget = (returnFocus: boolean = true): void => {
             for (const dismissElement of dismissElements) {
-                dismissElement.removeEventListener(Events.MouseDown, closeTarget);
+                dismissElement.removeEventListener(Events.MouseDown, onDisimissElementMouseDown);
             }
 
             switch (triggerEvent) {
@@ -315,7 +291,7 @@ export class ToggleablesManager {
                     break;
             }
 
-            this.closeTogglable(targetElement, toggleElement)
+            this.closeTogglable(targetElement, triggerElement, returnFocus)
 
             // Temporary hack to reposition popup:
             document.removeEventListener(Events.PopupRepositionRequest, repositionPopup);
@@ -323,10 +299,10 @@ export class ToggleablesManager {
 
         const openTarget = (): void => {
             for (const dismissElement of dismissElements) {
-                dismissElement.addEventListener(Events.MouseDown, closeTarget);
+                dismissElement.addEventListener(Events.MouseDown, onDisimissElementMouseDown);
             }
 
-            this.openTogglableInternal(targetElement, toggleElement);
+            this.openTogglableInternal(targetElement, triggerElement);
 
             setImmediate(() => {
                 switch (triggerEvent) {
@@ -352,7 +328,7 @@ export class ToggleablesManager {
 
         const togglableHandle: ToggleableHandle = {
             targetElement: targetElement,
-            toggleElement: toggleElement,
+            toggleElement: triggerElement,
             close: closeTarget
         };
 

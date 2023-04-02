@@ -6,7 +6,7 @@ import { Component, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { Query, Operator, Page } from "@paperbits/common/persistence";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 
 @Component({
     selector: "popup-selector",
@@ -109,7 +109,7 @@ export class PopupSelector {
             this.onHyperlinkSelect(popupItem.getHyperlink());
         }
 
-        this.eventManager.dispatchEvent("onPopupCreate", popupContract.key);
+        this.eventManager.dispatchEvent(Events.PopupCreated, popupContract.key);
 
         this.searchPopups();
     }
@@ -120,7 +120,7 @@ export class PopupSelector {
         if (uri) {
             await this.popupService.deletePopup(uri.toContract());
         }
-        
+
         await this.searchPopups();
     }
 }
