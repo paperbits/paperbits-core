@@ -4,7 +4,7 @@ import { EventManager, Events } from "@paperbits/common/events";
 import { IPopupService } from "@paperbits/common/popups";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { IWidgetService, ModelBinderSelector, ViewModelBinder } from "@paperbits/common/widgets";
-import { PopupInstanceContract } from "..";
+import { PopupInstanceContract } from "../popupContract";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { Placeholder } from "../../placeholder/ko/placeholder";
 import { PopupHandlers } from "../popupHandlers";

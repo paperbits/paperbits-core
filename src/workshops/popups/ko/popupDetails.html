@@ -1,0 +1,33 @@
+<div class="flex flex-column fit">
+    <div class="flex-item flex-item-grow form" data-bind="scrollable: true">
+        <div class="form-group">
+            <label for="title" class="form-label">Title</label>
+            <div class="input-group">
+                <input type="text" id="title" class="form-control"
+                    data-bind="textInput: popupItem.title, validationElement: popupItem.title, focus: true"
+                    placeholder="e.g. About" maxlength="256" aria-required="true" />
+                <button class="btn btn-danger input-group-btn" type="button"
+                    data-bind="validationMessageToggle: popupItem.title">!</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description" class="form-label">Description</label>
+            <textarea id="description" class="form-control" data-bind="textInput: popupItem.description"
+                maxlength="256"></textarea>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-round" data-bind="click: openPopup">Open popup</button>
+        </div>
+    </div>
+
+    <!-- ko ifnot: $component.isReserved -->
+    <div class="flex-item btn-group">
+        <button class="btn btn-default"
+            data-bind="confirm: { message: 'Are you sure you want to delete this popup?', onConfirm: deletePopup }">
+            <i aria-hidden="true" class="paperbits-icon paperbits-simple-remove"></i>
+            Delete popup
+        </button>
+    </div>
+    <!-- /ko -->
+</div>

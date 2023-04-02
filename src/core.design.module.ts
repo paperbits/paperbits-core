@@ -75,13 +75,6 @@ import { TableDesignModule } from "./table/ko";
 import { TableCellDesignModule } from "./table-cell/tableCell.design.module";
 // import { DividerDesignModule } from "./divider/divider.design.module";
 import { DefaultSettingsProvider, LocalStorageSettingsProvider } from "@paperbits/common/configuration";
-import { PopupHandlers, PopupModelBinder } from "./popup";
-import { PopupHostViewModelBinder } from "./popup/ko/popupHostViewModelBinder";
-import { PopupEditor, PopupViewModel, PopupViewModelBinder } from "./popup/ko";
-import { PopupHost } from "./popup/ko/popupHost";
-import { PopupSelector } from "./workshops/popups/ko";
-import { PopupPermalinkResolver, PopupService } from "@paperbits/common/popups";
-import { PopupHostModelBinder } from "./popup/popupHostModelBinder";
 import { DismissButtonDesignModule } from "./dismiss-button/dismissButton.design.module";
 import { StickToBindingHandler } from "./ko/bindingHandlers/bindingHandlers.stickTo";
 import { KnockoutDesignModule } from "./ko/knockout.design.module";
@@ -113,6 +106,7 @@ import { PagePermalinkResolver } from "@paperbits/common/pages/pagePermalinkReso
 import { UrlPermalinkResolver } from "@paperbits/common/urls/urlPermalinkResolver";
 import { ContentPart } from "./content-part/ko";
 import { UrlDesignModule } from "./workshops/urls/ko/url.design.module";
+import { PopupDesignModule } from "./popup/popup.design.module";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -192,6 +186,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new LayoutDesignModule());
         injector.bindModule(new BlockWorkshopModule());
         injector.bindModule(new NavigationWorkshopModule());
+        injector.bindModule(new PopupDesignModule());
         injector.bindModule(new UrlDesignModule());
         injector.bindModule(new SettingsWorkshopModule());
         injector.bindModule(new ColumnEditorModule());
@@ -249,18 +244,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new MapDesignModule());
         injector.bindToCollection("permalinkResolvers", MediaPermalinkResolver, "mediaPermalinkResolver");
 
-        /* Popups */
-        injector.bind("popup", PopupViewModel);
-        injector.bind("popupHost", PopupHost);
-        injector.bind("popupEditor", PopupEditor);
-        injector.bind("popupSelector", PopupSelector);
-        injector.bindSingleton("popupService", PopupService);
-        injector.bindToCollection("modelBinders", PopupHostModelBinder, "popupHostModelBinder");
-        injector.bindToCollection("permalinkResolvers", PopupPermalinkResolver, "popupPermalinkResolver");
-        injector.bindToCollection("viewModelBinders", PopupViewModelBinder);
-        injector.bindToCollection("widgetHandlers", PopupHandlers);
-        injector.bindToCollection("modelBinders", PopupModelBinder, "popupModelBinder");
-        injector.bindToCollection("viewModelBinders", PopupHostViewModelBinder, "popupHostViewModelBinder");
+
 
 
 

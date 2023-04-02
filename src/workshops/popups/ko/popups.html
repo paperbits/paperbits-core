@@ -1,0 +1,49 @@
+<div class="flex flex-column fit">
+    <div class="flex-item form">
+        <div class="form-group">
+            <input class="form-control" type="search" role="searchbox"
+                data-bind="textInput: searchPattern, valueUpdate: 'keyup', focus: true" placeholder="Search URLs..."
+                aria-label="Search popups" aria-controls="searchResult" />
+            <p id="searchResult" class="text-hide" role="region" aria-live="polite"
+                data-bind="text: `Popups found: ${popups().length}`">
+            </p>
+        </div>
+    </div>
+
+    <!-- ko if: !working() && popups().length === 0 -->
+
+    <!-- ko if: searchPattern() === "" -->
+    <p class="flex-item flex-item-grow text-center">It seems that you don't have URLs yet. Would you like to
+        <a href="#" class="btn-link" data-bind="click: addPopup">create one</a>?
+    </p>
+    <!-- /ko -->
+
+    <!-- ko if: searchPattern() !== ""  -->
+    <p class="flex-item flex-item-grow text-center">Could not find anything. Try to change search criteria.</p>
+    <!-- /ko -->
+
+    <!-- /ko -->
+
+    <div class="flex flex-column flex-item flex-item-grow" role="listbox" data-bind="scrollable: true, listbox: {}">
+        <!-- ko foreach: { data: popups, as: 'popup' } -->
+        <a role="option" class="list-item flex-grow"
+            data-bind="css: { selected: $component.isSelected(popup) }, attr: { title: popup.title }, activate: $component.selectPopup, selectable: true">
+            <i aria-hidden="true" class="paperbits-icon paperbits-single-content-03"></i>
+            <span class="text-overflow" data-bind="text: popup.title"></span>
+        </a>
+        <!-- /ko -->
+        <!--ko if: $component.working()-->
+        <spinner></spinner>
+        <!--/ko-->
+        <!-- ko ifnot: $component.working -->
+        <div class="list-edge" data-bind="whenInView: $component.loadNextPopup"></div>
+        <!-- /ko -->
+    </div>
+
+    <div class="flex-item btn-group">
+        <button class="btn btn-default" data-bind="click: $component.addPopup">
+            <i aria-hidden="true" class="paperbits-icon paperbits-simple-add"></i>
+            Add popup
+        </button>
+    </div>
+</div>

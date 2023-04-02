@@ -160,6 +160,14 @@ export class ToggleablesManager {
         if (toggleElement) {
             this.stack.pop();
             toggleElement.setAttribute(AriaAttributes.expanded, "false");
+
+
+            const triggerEvent = toggleElement.getAttribute(DataAttributes.TriggerEvent);
+
+            if (triggerEvent === ToggleableTriggerEvent.Hover) {
+                return; // on "hover" focus doesn't change
+            }
+
             setImmediate(() => toggleElement.focus());
         }
     }
@@ -167,6 +175,12 @@ export class ToggleablesManager {
     private openTogglableInternal(targetElement: HTMLElement, toggleElement: HTMLElement): void {
         targetElement.classList.add(showClassName);
         toggleElement.setAttribute(AriaAttributes.expanded, "true");
+
+        const triggerEvent = toggleElement.getAttribute(DataAttributes.TriggerEvent);
+
+        if (triggerEvent === ToggleableTriggerEvent.Hover) {
+            return; // on "hover" focus doesn't change
+        }
 
         const focusableElements = getFocusableElements(targetElement);
 
@@ -352,7 +366,7 @@ export class ToggleablesManager {
         const triggerSelector = `[data-target="${targetSelector}"]`;
         const triggerElement = <HTMLElement>document.querySelector(triggerSelector);
 
-        if (targetElement.classList.contains(showClassName)) {
+        if (targetElement?.classList.contains(showClassName)) {
             return;
         }
 
