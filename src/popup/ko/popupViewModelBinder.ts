@@ -1,9 +1,9 @@
 import { Bag } from "@paperbits/common";
-import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow, ContainerModelBinder, IWidgetBinding } from "@paperbits/common/editing";
 import { EventManager, Events } from "@paperbits/common/events";
 import { IPopupService } from "@paperbits/common/popups";
 import { StyleCompiler } from "@paperbits/common/styles";
-import { IWidgetService, ModelBinderSelector, ViewModelBinder } from "@paperbits/common/widgets";
+import { IWidgetService, ViewModelBinder } from "@paperbits/common/widgets";
 import { PopupInstanceContract } from "../popupContract";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { Placeholder } from "../../placeholder/ko/placeholder";
@@ -13,7 +13,7 @@ import { PopupViewModel } from "./popup";
 
 export class PopupViewModelBinder implements ViewModelBinder<PopupInstanceModel, PopupViewModel> {
     constructor(
-        private readonly modelBinderSelector: ModelBinderSelector,
+        private readonly containerModelBinder: ContainerModelBinder,
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly popupService: IPopupService,
         private readonly eventManager: EventManager,
@@ -53,10 +53,8 @@ export class PopupViewModelBinder implements ViewModelBinder<PopupInstanceModel,
                 nodes: []
             };
 
-            model.widgets.forEach(widget => {
-                const modelBinder = this.modelBinderSelector.getModelBinderByModel(widget);
-                popupInstanceContract.nodes.push(modelBinder.modelToContract(widget));
-            });
+            const childNodes = this.containerModelBinder.getChildContracts(model.widgets);
+            popupInstanceContract.nodes.push(...childNodes);
 
             await this.popupService.updatePopupContent(model.key, popupInstanceContract);
         };

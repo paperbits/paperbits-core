@@ -1,8 +1,8 @@
 import * as Objects from "@paperbits/common/objects";
 import { Bag, Contract } from "@paperbits/common";
-import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow, ContainerModelBinder, IWidgetBinding } from "@paperbits/common/editing";
 import { EventManager, Events } from "@paperbits/common/events";
-import { ModelBinderSelector, ViewModelBinder } from "@paperbits/common/widgets";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { ContentHandlers } from "../contentHandlers";
 import { ContentModel } from "../contentModel";
@@ -17,7 +17,7 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly contentModelBinder: ContentModelBinder<ContentModel>,
-        private readonly modelBinderSelector: ModelBinderSelector,
+        private readonly containerModelBinder: ContainerModelBinder,
         private readonly eventManager: EventManager
     ) { }
 
@@ -30,10 +30,8 @@ export class ContentViewModelBinder implements ViewModelBinder<ContentModel, Con
                 nodes: []
             };
 
-            model.widgets.forEach(section => {
-                const modelBinder = this.modelBinderSelector.getModelBinderByModel(section);
-                contentContract.nodes.push(modelBinder.modelToContract(section));
-            });
+            const childNodes = this.containerModelBinder.getChildContracts(model.widgets);
+            contentContract.nodes.push(...childNodes);
 
             const onValueUpdate = bindingContext?.template?.[contentContract.type]?.onValueUpdate;
 

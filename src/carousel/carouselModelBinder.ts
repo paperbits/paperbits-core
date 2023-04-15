@@ -1,6 +1,6 @@
 import { CarouselContract, CarouselItemContract } from "./carouselContract";
 import { CarouselItemModel, CarouselModel } from "./carouselModel";
-import { IModelBinder } from "@paperbits/common/editing";
+import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { Contract, Bag } from "@paperbits/common";
 
@@ -14,22 +14,14 @@ export class CarouselModelBinder implements IModelBinder<CarouselModel> {
         return model instanceof CarouselModel;
     }
 
-    constructor(
-        private readonly modelBinderSelector: ModelBinderSelector
-    ) { }
+    constructor(private readonly containerModelBinder: ContainerModelBinder) { }
 
     public async contractItemToModel(contract: CarouselItemContract, bindingContext?: Bag<any>): Promise<CarouselItemModel> {
         const model = new CarouselItemModel();
 
         contract.nodes = contract.nodes || [];
         model.styles = contract.styles || {};
-
-        const modelPromises = contract.nodes.map(async (contract: Contract) => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(contract);
-            return await modelBinder.contractToModel(contract, bindingContext);
-        });
-
-        model.widgets = await Promise.all<any>(modelPromises);
+        model.widgets = await this.containerModelBinder.getChildModels(contract.nodes, bindingContext);
 
         return model;
     }
@@ -61,10 +53,8 @@ export class CarouselModelBinder implements IModelBinder<CarouselModel> {
             nodes: []
         };
 
-        carouselItemModel.widgets.forEach(carouselItemModel => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByModel(carouselItemModel);
-            carouselContract.nodes.push(modelBinder.modelToContract(carouselItemModel));
-        });
+        const childNodes = this.containerModelBinder.getChildContracts(carouselItemModel.widgets);
+        carouselContract.nodes.push(...childNodes);
 
         return carouselContract;
     }

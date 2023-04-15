@@ -1,14 +1,14 @@
 import { Contract, Bag } from "@paperbits/common";
 import { StyleCompiler } from "@paperbits/common/styles";
-import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { ListModel } from "@paperbits/common/text/models/listModel";
 import { ListContract } from "../contracts/listContract";
+import { ContainerModelBinder } from "@paperbits/common/editing";
 
 export class ListModelBinder {
     private listTypes = ["ordered-list", "bulleted-list"];
 
     constructor(
-        private readonly modelBinderSelector: ModelBinderSelector,
+        private readonly containerModelBinder: ContainerModelBinder,
         private readonly styleCompiler: StyleCompiler
     ) { }
 
@@ -36,12 +36,7 @@ export class ListModelBinder {
         };
 
         if (contract.nodes && contract.nodes.length > 0) {
-            const modelPromises = contract.nodes.map(async (contract: Contract) => {
-                const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-                return await modelBinder.contractToModel(contract, bindingContext);
-            });
-
-            model.nodes = await Promise.all<any>(modelPromises);
+            model.nodes = await this.containerModelBinder.getChildModels(contract.nodes, bindingContext);
         }
 
         return model;
@@ -55,10 +50,10 @@ export class ListModelBinder {
         };
 
         if (model.nodes && model.nodes.length > 0) {
-            model.nodes.forEach(contentItem => {
-                const modelBinder = this.modelBinderSelector.getModelBinderByModel(contentItem);
-                contract.nodes.push(<any>modelBinder.modelToContract(contentItem));
-            });
+            contract.nodes = [];
+
+            const childNodes: any[] = this.containerModelBinder.getChildContracts(<any>model.nodes);
+            contract.nodes.push(...childNodes);
         }
 
         return contract;

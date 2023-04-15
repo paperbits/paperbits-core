@@ -1,7 +1,6 @@
 import { TabPanelContract, TabPanelItemContract } from "./tabPanelContract";
 import { TabPanelItemModel, TabPanelModel } from "./tabPanelModel";
-import { IModelBinder } from "@paperbits/common/editing";
-import { ModelBinderSelector } from "@paperbits/common/widgets";
+import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
 import { Contract, Bag } from "@paperbits/common";
 
 
@@ -14,9 +13,7 @@ export class TabPanelModelBinder implements IModelBinder<TabPanelModel> {
         return model instanceof TabPanelModel;
     }
 
-    constructor(
-        private readonly modelBinderSelector: ModelBinderSelector
-    ) { }
+    constructor(private readonly containerModelBinder: ContainerModelBinder) { }
 
     public async contractItemToModel(contract: TabPanelItemContract, bindingContext?: Bag<any>): Promise<TabPanelItemModel> {
         const model = new TabPanelItemModel();
@@ -24,13 +21,7 @@ export class TabPanelModelBinder implements IModelBinder<TabPanelModel> {
         contract.nodes = contract.nodes || [];
         model.styles = contract.styles || {};
         model.label = contract.label;
-
-        const modelPromises = contract.nodes.map(async (contract: Contract) => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(contract);
-            return await modelBinder.contractToModel(contract, bindingContext);
-        });
-
-        model.widgets = await Promise.all<any>(modelPromises);
+        model.widgets = await this.containerModelBinder.getChildModels(contract.nodes, bindingContext);
 
         return model;
     }
@@ -50,18 +41,16 @@ export class TabPanelModelBinder implements IModelBinder<TabPanelModel> {
         return model;
     }
 
-    public itemModelToContract(tabPanelItemModel: TabPanelItemModel): TabPanelItemContract {
+    public itemModelToContract(model: TabPanelItemModel): TabPanelItemContract {
         const tabPanelContract: TabPanelItemContract = {
             type: "tabPanel-item",
-            styles: tabPanelItemModel.styles,
-            label: tabPanelItemModel.label,
+            styles: model.styles,
+            label: model.label,
             nodes: []
         };
 
-        tabPanelItemModel.widgets.forEach(tabPanelItemModel => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByModel(tabPanelItemModel);
-            tabPanelContract.nodes.push(modelBinder.modelToContract(tabPanelItemModel));
-        });
+        const childNodes = this.containerModelBinder.getChildContracts(model.widgets);
+        tabPanelContract.nodes.push(...childNodes);
 
         return tabPanelContract;
     }

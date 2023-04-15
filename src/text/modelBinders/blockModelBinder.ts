@@ -1,15 +1,15 @@
 import * as Utils from "@paperbits/common/utils";
 import { Contract, Bag } from "@paperbits/common";
 import { StyleCompiler } from "@paperbits/common/styles";
-import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { BlockModel } from "@paperbits/common/text/models/blockModel";
 import { BlockContract } from "../contracts/blockContract";
+import { ContainerModelBinder } from "@paperbits/common/editing";
 
 export class BlockModelBinder {
     private blockTypes: string[] = ["paragraph", "list-item", "break", "formatted", "quote", "heading1", "heading2", "heading3", "heading4", "heading5", "heading6", "property"];
 
     constructor(
-        private readonly modelBinderSelector: ModelBinderSelector,
+        private readonly containerModelBinder: ContainerModelBinder,
         private readonly styleCompiler: StyleCompiler
     ) {
     }
@@ -50,12 +50,7 @@ export class BlockModelBinder {
         };
 
         if (contract.nodes && contract.nodes.length > 0) {
-            const modelPromises = contract.nodes.map(async (contract: Contract) => {
-                const modelBinder = this.modelBinderSelector.getModelBinderByContract(contract);
-                return await modelBinder.contractToModel(contract, bindingContext);
-            });
-
-            model.nodes = await Promise.all<any>(modelPromises);
+            model.nodes = await this.containerModelBinder.getChildModels(contract.nodes, bindingContext);
         }
 
         return model;
@@ -77,11 +72,10 @@ export class BlockModelBinder {
         if (model.nodes && model.nodes.length > 0) {
             contract.nodes = [];
 
-            model.nodes.forEach(contentItem => {
-                const modelBinder = this.modelBinderSelector.getModelBinderByModel(contentItem);
-                contract.nodes.push(<any>modelBinder.modelToContract(contentItem));
-            });
+            const childNodes = this.containerModelBinder.getChildContracts(<any>model.nodes);
+            contract.nodes.push(...childNodes);
         }
+
         return contract;
     }
 }

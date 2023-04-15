@@ -1,7 +1,6 @@
 import { SectionContract } from "./sectionContract";
 import { SectionModel } from "./sectionModel";
-import { IModelBinder } from "@paperbits/common/editing";
-import { ModelBinderSelector } from "@paperbits/common/widgets";
+import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
 import { Contract, Bag } from "@paperbits/common";
 import { SecurityModelBinder } from "@paperbits/common/security";
 
@@ -16,7 +15,7 @@ export class SectionModelBinder implements IModelBinder<SectionModel> {
     }
 
     constructor(
-        private readonly modelBinderSelector: ModelBinderSelector,
+        private readonly containerModelBinder: ContainerModelBinder,
         private readonly securityModelBinder: SecurityModelBinder<any, any>
     ) { }
 
@@ -25,17 +24,11 @@ export class SectionModelBinder implements IModelBinder<SectionModel> {
 
         contract.nodes = contract.nodes || [];
         model.styles = contract.styles || {};
+        model.widgets = await this.containerModelBinder.getChildModels(contract.nodes, bindingContext);
 
         if (contract.security) {
             model.security = await this.securityModelBinder.contractToModel(contract.security);
         }
-
-        const modelPromises = contract.nodes.map(async (contract: Contract) => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByContract<any>(contract);
-            return await modelBinder.contractToModel(contract, bindingContext);
-        });
-
-        model.widgets = await Promise.all<any>(modelPromises);
 
         return model;
     }
@@ -51,10 +44,8 @@ export class SectionModelBinder implements IModelBinder<SectionModel> {
             contract.security = this.securityModelBinder.modelToContract(model.security);
         }
 
-        model.widgets.forEach(widgetModel => {
-            const modelBinder = this.modelBinderSelector.getModelBinderByModel(widgetModel);
-            contract.nodes.push(modelBinder.modelToContract(widgetModel));
-        });
+        const childNodes = this.containerModelBinder.getChildContracts(model.widgets);
+        contract.nodes.push(...childNodes);
 
         return contract;
     }
