@@ -424,7 +424,7 @@ export class GridEditor {
             return false;
         });
 
-        if (!acceptingParent || dragSession.sourceParentBinding === acceptingParent.binding) {
+        if (!acceptingParent) {
             delete dragSession.targetElement;
             delete dragSession.targetBinding;
 
@@ -456,7 +456,6 @@ export class GridEditor {
                 });
             }
             else {
-
                 if (quadrant.vertical === "bottom") {
                     dragSession.insertIndex++;
                 }
