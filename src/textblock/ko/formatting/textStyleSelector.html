@@ -1,6 +1,6 @@
 <div id="textStyleSelector" role="listbox" class="tools-paragraphstyle" data-bind="scrollable: true, listbox: {}">
     <!--ko foreach: { data: styles, as: 'style' } -->
-    <a href="#" role="option" class="tools-paragraph-style tools-paragraph-style-normal"
+    <a role="option" class="tools-paragraph-style tools-paragraph-style-normal"
         data-bind="text: style.displayName, click: $parent.setTextStyle"></a>
     <!--/ko-->
 </div>
