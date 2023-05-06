@@ -21,8 +21,8 @@ export class ButtonDesignModule implements IInjectorModule {
             key: "button",
             name: "components_button",
             groupName: "Buttons",
-            selectorTemplate: `<a data-bind="css: classNames" style="display: inline-block">Button</a>`,
-            styleTemplate: `<a data-bind="stylePreview: variation.key" style="display: inline-block">Button</button>`
+            selectorTemplate: `<a role="button" data-bind="css: classNames" style="display: inline-block">Button</a>`,
+            styleTemplate: `<a role="button" data-bind="stylePreview: variation.key" style="display: inline-block">Button</button>`
         };
         injector.bindInstanceToCollection("styleGroups", styleGroup);
 
