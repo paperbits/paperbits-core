@@ -147,7 +147,7 @@ export class TextBlockEditorFormattingTools {
 
         const textStyleKey = selectionState.appearance || "globals/body/default";
         const textStyle = this.textStyles().find(item => item.key === textStyleKey);
-        this.appearance(textStyle.displayName);
+        this.appearance(textStyle?.displayName);
 
         this.anchored(!!selectionState.anchorKey);
 
