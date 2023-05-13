@@ -192,7 +192,6 @@ export class TextBlockEditorFormattingTools {
 
     public toggleNn(): void {
         // htmlEditor.setList(this.intentions.container.list.nested_numbering);
-        this.updateFormattingState();
     }
 
     public toggleBold(): void {
@@ -217,12 +216,10 @@ export class TextBlockEditorFormattingTools {
 
     // public setStyle(intention: Intention): void {
     //     htmlEditor.toggleIntention(intention);
-    //     this.updateFormattingState();
     // }
 
     // public setSize(intention: Intention): void {
     //     htmlEditor.toggleIntention(intention);
-    //     this.updateFormattingState();
     // }
 
     public toggleParagraph(): void {
@@ -323,8 +320,6 @@ export class TextBlockEditorFormattingTools {
         }
 
         htmlEditor.increaseIndent();
-
-        this.updateFormattingState();
     }
 
     public decreaseIndentation(): void {
