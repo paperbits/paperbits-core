@@ -1,5 +1,5 @@
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': ol() }">
-    <a href="#" role="button" aria-label="Toggle ordered list" data-bind="click: toggleOrderedList, tooltip: { message: 'Toggle ordered list' }">
+    <a tabindex="0" role="button" aria-label="Toggle ordered list" data-bind="activate: toggleOrderedList, tooltip: { message: 'Toggle ordered list' }">
         <i aria-hidden="true" class="paperbits-icon paperbits-list-numbers"></i>
 
         <!-- ko if: orderedListStyles().length > 1 -->
@@ -11,7 +11,7 @@
 </div>
 
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': ul() }">
-    <a href="#" role="button" aria-label="Toggle un-ordered list" data-bind="click: toggleUnorderedList, tooltip: { message: 'Toggle unordered list' }">
+    <a tabindex="0" role="button" aria-label="Toggle un-ordered list" data-bind="activate: toggleUnorderedList, tooltip: { message: 'Toggle unordered list' }">
         <i aria-hidden="true" class="paperbits-icon paperbits-list-bullet"></i>
 
         <!-- ko if: unorderedListStyles().length > 1 -->
@@ -23,79 +23,79 @@
 </div>
 
 <!-- <div class="toolbox-btn" >
-    <a href="#" role="button" data-bind="click: decreaseIndentation, tooltip: { message: 'Decrease Indentation' }">
+    <a tabindex="0" role="button" data-bind="activate: decreaseIndentation, tooltip: { message: 'Decrease Indentation' }">
         <i aria-hidden="true" class="paperbits-icon paperbits-margin-right"></i>
     </a>
 </div>
 <div class="toolbox-btn">
-    <a href="#" role="button" data-bind="click: increaseIndentation, tooltip: { message: 'Increase Indentation' }">
+    <a tabindex="0" role="button" data-bind="activate: increaseIndentation, tooltip: { message: 'Increase Indentation' }">
         <i aria-hidden="true" class="paperbits-icon paperbits-margin-left"></i>
     </a>
 </div> -->
 
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': bold() }">
-    <a href="#" role="button" aria-label="Toggle bold" data-bind="click: toggleBold, tooltip: { message: 'Toggle bold <div class=subtle>(Ctrl+B)</div>' }">
+    <a tabindex="0" role="button" aria-label="Toggle bold" data-bind="activate: toggleBold, tooltip: { message: 'Toggle bold <div class=subtle>(Ctrl+B)</div>' }">
         <i aria-hidden="true" class="paperbits-icon paperbits-bold"></i>
     </a>
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': italic() }">
-    <a href="#" role="button" aria-label="Toggle italic" data-bind="click: toggleItalic, tooltip: { message: 'Toggle italic <div class=subtle>(Ctrl+I)</div>' }">
+    <a tabindex="0" role="button" aria-label="Toggle italic" data-bind="activate: toggleItalic, tooltip: { message: 'Toggle italic <div class=subtle>(Ctrl+I)</div>' }">
         <i aria-hidden="true" class="paperbits-icon paperbits-italic"></i>
     </a>
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': underlined() }">
-    <a href="#" role="button" aria-label="Toggle underline" data-bind="click: toggleUnderlined, tooltip: { message: 'Toggle underlined <div class=subtle>(Ctrl+U)</div>' }">
+    <a tabindex="0" role="button" aria-label="Toggle underline" data-bind="activate: toggleUnderlined, tooltip: { message: 'Toggle underlined <div class=subtle>(Ctrl+U)</div>' }">
         <i aria-hidden="true" class="paperbits-icon paperbits-underline"></i>
     </a>
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': striked() }">
-    <a href="#" role="button" aria-label="Toggle striked" data-bind="click: toggleStriked, tooltip: { message: 'Toggle strike-through' }">
+    <a tabindex="0" role="button" aria-label="Toggle striked" data-bind="activate: toggleStriked, tooltip: { message: 'Toggle strike-through' }">
         <i aria-hidden="true" class="paperbits-icon paperbits-strikethrough"></i>
     </a>
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': highlighted() }">
-    <a href="#" role="button" aria-label="Toggle highlighted" data-bind="click: toggleHighlighted, tooltip: { message: 'Toggle highlighted' }">
+    <a tabindex="0" role="button" aria-label="Toggle highlighted" data-bind="activate: toggleHighlighted, tooltip: { message: 'Toggle highlighted' }">
         <i aria-hidden="true" class="paperbits-icon paperbits-marker-2"></i>
     </a>
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': code() }">
-    <a href="#" role="button" aria-label="Toggle formatted" data-bind="click: toggleCode, tooltip: { message: 'Toggle formatted' }">
+    <a tabindex="0" role="button" aria-label="Toggle formatted" data-bind="activate: toggleCode, tooltip: { message: 'Toggle formatted' }">
         <i aria-hidden="true" class="paperbits-icon paperbits-code"></i>
     </a>
 </div>
 <div class="toolbox-btn toolbox-dropdown">
-    <a href="#" role="button" aria-label="Change block type"
+    <a tabindex="0" role="button" aria-label="Change block type"
         data-bind="text: style, balloon: { component: { name: 'block-style-selector' } }, tooltip: { message: 'Change block type' }"></a>
 </div>
 
 <!-- ko if: textStyles().length > 1 -->
 <div class="toolbox-btn toolbox-dropdown">
-    <a href="#" role="button" aria-label="Change text style"
+    <a tabindex="0" role="button" aria-label="Change text style"
         data-bind="text: appearance, balloon: { component: { name: 'text-style-selector', params: { styles: textStyles, onSelect: onTextStyleSelected } } }, tooltip: { message: 'Change text style' }"></a>
 </div>
 <!-- /ko -->
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active':  alignment() == 'left' }">
-    <a href="#" role="button" aria-label="Align left" data-bind="click: toggleAlignLeft, tooltip: { message: 'Align left' }">
+    <a tabindex="0" role="button" aria-label="Align left" data-bind="activate: toggleAlignLeft, tooltip: { message: 'Align left' }">
         <i aria-hidden="true" class="paperbits-icon paperbits-align-left-2"></i>
     </a>
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': alignment() == 'center' }">
-    <a href="#" role="button" aria-label="Align cener" data-bind="click: toggleAlignCenter, tooltip: { message: 'Align center' }">
+    <a tabindex="0" role="button" aria-label="Align cener" data-bind="activate: toggleAlignCenter, tooltip: { message: 'Align center' }">
         <i aria-hidden="true" class="paperbits-icon paperbits-align-center"></i>
     </a>
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active':  alignment() == 'right' }">
-    <a href="#" role="button" aria-label="Align right" data-bind="click: toggleAlignRight, tooltip: { message: 'Align right' }">
+    <a tabindex="0" role="button" aria-label="Align right" data-bind="activate: toggleAlignRight, tooltip: { message: 'Align right' }">
         <i aria-hidden="true" class="paperbits-icon paperbits-align-right-2"></i>
     </a>
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active':  alignment() == 'justify' }">
-    <a href="#" role="button" aria-label="Justify" data-bind="click: toggleJustify, tooltip: { message: 'Justify' }">
+    <a tabindex="0" role="button" aria-label="Justify" data-bind="activate: toggleJustify, tooltip: { message: 'Justify' }">
         <i aria-hidden="true" class="paperbits-icon paperbits-align-justify"></i>
     </a>
 </div>
 <div class="toolbox-btn" data-bind="css: { 'toolbox-btn-is-active': colored() }">
-    <a href="#" role="button" aria-label="Change color"
+    <a tabindex="0" role="button" aria-label="Change color"
         data-bind="balloon: { component: { name: 'color-selector', params: { selectedColorKey: $component.selectedColorKey, onSelect: $component.onColorSelected } } }, tooltip: { message: 'Change color' }">
         <i aria-hidden="true" class="paperbits-icon paperbits-color"></i>
     </a>
