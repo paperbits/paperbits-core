@@ -164,7 +164,7 @@ export class MediaWorkshop {
     //         widgetHandler.onDragDrop(dragSession);
     //     }
 
-    //     this.eventManager.dispatchEvent("virtualDragEnd");
+    //     this.eventManager.dispatchEvent(Events.VirtualDragEnd);
     // }
 
     public isSelected(media: MediaItem): boolean {

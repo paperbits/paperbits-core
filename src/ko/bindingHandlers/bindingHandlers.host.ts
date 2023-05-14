@@ -1,15 +1,25 @@
 ﻿import * as ko from "knockout";
 import { EventManager, Events, GlobalEventHandler } from "@paperbits/common/events";
-import { ViewManager, ViewManagerMode } from "@paperbits/common/ui";
+import { IComponent, ViewManager, ViewManagerMode } from "@paperbits/common/ui";
 import { Router, Route } from "@paperbits/common/routing";
 import { MetaDataSetter } from "@paperbits/common/meta/metaDataSetter";
 import { SiteService, SiteSettingsContract } from "@paperbits/common/sites";
 import { IMediaService } from "@paperbits/common/media";
 
+interface HostConfig {
+    viewport: ko.Observable<string>;
+    block: ko.Observable<boolean>;
+    host: ko.Observable<IComponent>;
+    onDocumentCreated: (document: Document) => void;
+    onDocumentDisposed: () => void;
+}
+
 
 export class HostBindingHandler {
     private readonly hostComponent: ko.Observable<any>;
     private readonly designTime: ko.Observable<boolean>;
+    private onDocumentCreated: (document: Document) => void;
+    private onDocumentDisposed: () => void;
 
     constructor(
         private readonly globalEventHandler: GlobalEventHandler,
@@ -21,9 +31,8 @@ export class HostBindingHandler {
         this.hostComponent = ko.observable();
         this.designTime = ko.observable(true);
 
-
         ko.bindingHandlers["host"] = {
-            init: (element: HTMLElement, valueAccessor: () => any) => {
+            init: (element: HTMLElement, valueAccessor: () => HostConfig) => {
                 const config = valueAccessor();
                 const css = ko.observable<string>("desktop");
 
@@ -63,6 +72,9 @@ export class HostBindingHandler {
                     }
                 });
 
+                this.onDocumentCreated = config.onDocumentCreated;
+                this.onDocumentDisposed =  config.onDocumentDisposed;
+
                 ko.applyBindingsToNode(element, { css: css }, null);
 
                 const hostElement = this.createIFrame();
@@ -75,6 +87,7 @@ export class HostBindingHandler {
             }
         };
     }
+
 
     private createIFrame(): HTMLIFrameElement {
         const hostElement: HTMLIFrameElement = document.createElement("iframe");
@@ -94,7 +107,10 @@ export class HostBindingHandler {
         const onLoad = async (): Promise<void> => {
             const contentDocument = hostElement.contentDocument;
 
-            this.viewManager["hostDocument"] = contentDocument;
+            if (this.onDocumentCreated) {
+                this.onDocumentCreated(contentDocument);
+            }
+
             this.globalEventHandler.appendDocument(contentDocument);
             this.setRootElement(contentDocument.body);
 
@@ -141,6 +157,10 @@ export class HostBindingHandler {
         const onUnload = (): void => {
             /* removing listener when iframe gets unloaded */
             this.router.removeRouteChangeListener(onRouteChange);
+
+            if (this.onDocumentDisposed) {
+                this.onDocumentDisposed();
+            }
         };
 
         hostElement.addEventListener("load", onLoad, false);

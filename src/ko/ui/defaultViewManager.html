@@ -1,6 +1,6 @@
 <!-- ko if: host -->
 <div id="contentEditor" class="viewport" tabindex="0"
-    data-bind="host: { viewport: viewport, host: host, block: block }"></div>
+    data-bind="host: { viewport: viewport, host: host, block: block, onDocumentCreated: onHostDocumentCreated, onDocumentDisposed: onHostDocumentDisposed  }"></div>
 <!-- /ko -->
 
 <div class="shutter" data-bind="css: { 'active': shutter }">

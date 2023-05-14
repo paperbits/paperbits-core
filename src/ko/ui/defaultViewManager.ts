@@ -5,7 +5,7 @@ import * as Html from "@paperbits/common/html";
 import template from "./defaultViewManager.html";
 import "@paperbits/common/extensions";
 import { Bag, Keys } from "@paperbits/common";
-import { EventManager, GlobalEventHandler } from "@paperbits/common/events";
+import { EventManager, Events, GlobalEventHandler } from "@paperbits/common/events";
 import { IComponent, View, ViewManager, ICommand, ViewManagerMode, IHighlightConfig, IContextCommandSet, ISplitterConfig, Toast, IContextCommand } from "@paperbits/common/ui";
 import { Router } from "@paperbits/common/routing";
 import { DragSession } from "@paperbits/common/ui/draggables";
@@ -25,6 +25,8 @@ declare let uploadDialog: HTMLInputElement;
 })
 export class DefaultViewManager implements ViewManager {
     private contextualCommandsBag: Bag<IContextCommandSet> = {};
+    private pointerX: number;
+    private pointerY: number;
 
     public readonly designTime: ko.Observable<boolean>;
     public readonly previewable: ko.Observable<boolean>;
@@ -105,7 +107,7 @@ export class DefaultViewManager implements ViewManager {
         this.globalEventHandler.addDragDropListener(this.onDragEnd.bind(this));
         this.globalEventHandler.addDragEndListener(this.onDragEnd.bind(this));
         this.globalEventHandler.addDragLeaveScreenListener(this.showToolboxes.bind(this));
-        this.eventManager.addEventListener("virtualDragEnd", this.onDragEnd.bind(this));
+        this.eventManager.addEventListener(Events.VirtualDragEnd, this.onDragEnd.bind(this));
 
         this.router.addRouteChangeListener(this.onRouteChange.bind(this));
         this.globalEventHandler.appendDocument(document);
@@ -116,6 +118,16 @@ export class DefaultViewManager implements ViewManager {
 
         const websitePreviewEnabled = await this.settingsProvider.getSetting<boolean>("features/preview");
         this.websitePreviewEnabled(websitePreviewEnabled || false);
+    }
+
+    public onHostDocumentCreated(hostDocument: Document): void {
+        this.hostDocument = hostDocument;
+        this.hostDocument.addEventListener(Events.MouseMove, this.onPointerMove, true);
+    }
+
+    public onHostDocumentDisposed(): void {
+        this.hostDocument = null;
+        this.hostDocument.removeEventListener(Events.MouseMove, this.onPointerMove, true);
     }
 
     private onKeyDown(event: KeyboardEvent): void {
@@ -168,6 +180,15 @@ export class DefaultViewManager implements ViewManager {
         this.clearContextualCommands();
         this.host(component);
         this.previewable(component.name !== "style-guide");
+    }
+
+    private onPointerMove(event: PointerEvent): void {
+        this.pointerX = event.clientX;
+        this.pointerY = event.clientY;
+    }
+
+    public getPointerPosition(): any {
+        return { x: this.pointerX, y: this.pointerY };
     }
 
     public getHost(): IComponent {
@@ -632,7 +653,5 @@ export class DefaultViewManager implements ViewManager {
     }
 
     @OnDestroyed()
-    public dispose(): void {
-        // TODO
-    }
+    public dispose(): void { }
 }

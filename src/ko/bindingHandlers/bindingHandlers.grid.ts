@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import { ViewManager, ViewManagerMode } from "@paperbits/common/ui";
 import { GridHelper } from "@paperbits/common/editing";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { GridEditor } from "../../grid/ko/gridEditor";
 import { IWidgetService } from "@paperbits/common/widgets";
 
@@ -94,7 +94,7 @@ export class GridBindingHandler {
 
             placeholderElement.remove();
 
-            eventManager.dispatchEvent("virtualDragEnd");
+            eventManager.dispatchEvent(Events.VirtualDragEnd);
         };
 
         const preventDragging = (): boolean => {

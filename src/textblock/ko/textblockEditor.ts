@@ -27,6 +27,6 @@ export class TextblockEditor {
     @OnMounted()
     public initialize(): void {
         this.pluginNames.push(...this.textblockEditorPlugins);
-        this.eventManager.dispatchEvent("enableHtmlEditor");
+        this.eventManager.dispatchEvent("enableHtmlEditor", this.model);
     }
 }

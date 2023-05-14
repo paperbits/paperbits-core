@@ -26,7 +26,14 @@ export class HtmlEditorBindingHandler {
                 const onViewClose = () => htmlEditor.detachFromElement();
                 eventManager.addEventListener("onViewClose", onViewClose);
 
-                const onHtmlEditorRequested = () => htmlEditor.enable();
+                const onHtmlEditorRequested = (model) => {
+                    if (viewModel["widgetBinding"].model == model) {
+                        htmlEditor.enable(element);
+                    }
+                    else {
+                        htmlEditor.enable();
+                    }
+                }
 
                 htmlEditor.attachToElement(element);
                 htmlEditor.setState(ko.unwrap(config));

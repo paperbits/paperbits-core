@@ -225,7 +225,7 @@ export class DropBucket {
     //         widgetHandler.onDragDrop(dragSession);
     //     }
 
-    //     this.eventManager.dispatchEvent("virtualDragEnd");
+    //     this.eventManager.dispatchEvent(Events.VirtualDragEnd);
     // }
 
     public async uploadContentAsMedia(dropbucketItem: DropBucketItem): Promise<void> {
