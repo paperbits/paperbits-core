@@ -85,7 +85,7 @@ export class CarouselItemHandlers {
                 {
                     controlType: "toolbox-button",
                     tooltip: "Switch to parent",
-                    iconClass: "paperbits-icon paperbits-enlarge-vertical",
+                    iconClass: "paperbits-icon paperbits-arrow-up",
                     callback: () => context.gridItem.getParent().getParent().select(),
                 },
                 //openHelpArticleCommand(context, "/widgets/carousel")

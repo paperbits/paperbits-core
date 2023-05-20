@@ -6,6 +6,7 @@ import { RowModel } from "../row/rowModel";
 import { EventManager, Events } from "@paperbits/common/events";
 import { SectionModelBinder } from "./sectionModelBinder";
 import { IVisibilityCommandProvider } from "../security/visibilityContextCommandProvider";
+import { switchToChildCommand } from "@paperbits/common/ui/commands";
 
 
 export class SectionHandlers implements IWidgetHandler {
@@ -17,7 +18,7 @@ export class SectionHandlers implements IWidgetHandler {
     ) { }
 
     public getContextCommands(context: WidgetContext): IContextCommandSet {
-        const sectionContextualEditor: IContextCommandSet = {
+        const contextualCommands: IContextCommandSet = {
             color: "#2b87da",
             hoverCommands: [{
                 controlType: "toolbox-button",
@@ -102,7 +103,7 @@ export class SectionHandlers implements IWidgetHandler {
         };
 
         if (context.model.widgets.length === 0) {
-            sectionContextualEditor.hoverCommands.push({
+            contextualCommands.hoverCommands.push({
                 controlType: "toolbox-button",
                 position: "center",
                 iconClass: "paperbits-icon paperbits-simple-add",
@@ -126,7 +127,10 @@ export class SectionHandlers implements IWidgetHandler {
                 }
             });
         }
+        else {
+            contextualCommands.selectCommands.push(switchToChildCommand(context));
+        }
 
-        return sectionContextualEditor;
+        return contextualCommands;
     }
 }

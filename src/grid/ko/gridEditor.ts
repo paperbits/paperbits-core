@@ -121,6 +121,16 @@ export class GridEditor {
 
                 this.selectElement(selectableParent);
             },
+            switchToChild: () => {
+                const children = gridItem.getChildren(this.activeLayer, true);
+
+                if (children.length == 0) {
+                    return;
+                }
+                
+                const firstChild = children[0];
+                this.selectElement(firstChild, true);
+            },
             deleteWidget: () => {
                 parentModel.widgets.remove(model);
                 parentBinding.applyChanges();

@@ -59,7 +59,7 @@ export class TableCellHandlers implements IWidgetHandler {
                 {
                     controlType: "toolbox-button",
                     tooltip: "Switch to parent",
-                    iconClass: "paperbits-icon paperbits-enlarge-vertical",
+                    iconClass: "paperbits-icon paperbits-arrow-up",
                     position: "top right",
                     color: "#9C27B0",
                     callback: () => context.gridItem.getParent().getParent().select()

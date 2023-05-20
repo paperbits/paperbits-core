@@ -2,7 +2,7 @@ import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { EventManager, Events } from "@paperbits/common/events";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
-import { openWidgetEditorCommand, splitter, switchToParentCommand } from "@paperbits/common/ui/commands";
+import { openWidgetEditorCommand, splitter, switchToChildCommand, switchToParentCommand } from "@paperbits/common/ui/commands";
 import { WidgetModel } from "@paperbits/common/widgets";
 
 
@@ -17,7 +17,7 @@ export class GridCellHandlers implements IWidgetHandler {
     }
 
     public getContextCommands(context: WidgetContext): IContextCommandSet {
-        const gridCellContextualEditor: IContextCommandSet = {
+        const contextualCommands: IContextCommandSet = {
             color: "#9C27B0",
             hoverCommands: [],
             deleteCommand: null,
@@ -29,10 +29,11 @@ export class GridCellHandlers implements IWidgetHandler {
         };
 
         if (context.model.widgets.length !== 0) {
-            return gridCellContextualEditor;
+            contextualCommands.selectCommands.push(switchToChildCommand(context));
+            return contextualCommands;
         }
 
-        gridCellContextualEditor.hoverCommands.push({
+        contextualCommands.hoverCommands.push({
             controlType: "toolbox-button",
             color: "#607d8b",
             iconClass: "paperbits-icon paperbits-simple-add",
@@ -52,6 +53,6 @@ export class GridCellHandlers implements IWidgetHandler {
             }
         });
 
-        return gridCellContextualEditor;
+        return contextualCommands;
     }
 }
