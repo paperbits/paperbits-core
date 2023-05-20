@@ -1,7 +1,6 @@
-import { ComponentFlow } from "@paperbits/common/editing";
 import { IInjector, IInjectorModule } from "@paperbits/common/injection";
 import { IWidgetService } from "@paperbits/common/widgets";
-import { HtmlEditorBindingHandler } from "../ko/bindingHandlers";
+import { TextblockBindingHandler } from "../ko/bindingHandlers";
 import { KnockoutComponentBinder } from "../ko/knockoutComponentBinder";
 import { BlockModelBinder } from "../text/modelBinders/blockModelBinder";
 import { InlineModelBinder } from "../text/modelBinders/inlineModelBinder";
@@ -23,7 +22,7 @@ export class TextblockDesignModule implements IInjectorModule {
         injector.bindToCollection("modelBinders", InlineModelBinder);
         injector.bindToCollection("modelBinders", BlockModelBinder);
         injector.bindToCollection("modelBinders", ListModelBinder);
-        injector.bindToCollection("autostart", HtmlEditorBindingHandler);
+        injector.bindToCollection("autostart", TextblockBindingHandler);
         injector.bindInstance("textblockEditorPlugins", [
             "text-block-editor-formatting",
             "text-block-editor-hyperlinks"

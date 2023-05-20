@@ -27,6 +27,7 @@ import { DismissButtonPublishModule } from "./dismiss-button/dismissButton.publi
 import { ConsoleLogger } from "@paperbits/common/logging";
 import { CardPublishModule } from "./card/card.publish.module";
 import { TextblockPublishModule } from "./textblock/textblock.publish.module";
+import { ProseMirrorPublishModule } from "@paperbits/prosemirror/prosemirror.publish.module";
 import { VideoPlayerModule } from "./video-player/videoPlayer.publish.module";
 import { YoutubePlayerPublishModule } from "./youtube-player/youtubePlayer.publish.module";
 import { PagePermalinkResolver } from "@paperbits/common/pages/pagePermalinkResolver";
@@ -131,6 +132,7 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindModule(new DismissButtonPublishModule());
         injector.bindModule(new ButtonPublishModule());
         injector.bindModule(new CardPublishModule());
+        injector.bindModule(new ProseMirrorPublishModule());
         injector.bindModule(new TextblockPublishModule());
         injector.bindModule(new VideoPlayerModule());
         injector.bindModule(new YoutubePlayerPublishModule());

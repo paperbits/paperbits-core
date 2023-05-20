@@ -5,12 +5,12 @@ import { BlockModel } from "@paperbits/common/text/models";
 import { TextblockViewModel } from "../../textblock/ko/textblockViewModel";
 
 
-export class HtmlEditorBindingHandler {
+export class TextblockBindingHandler {
     constructor(
         eventManager: EventManager,
         htmlEditorFactory: any
     ) {
-        ko.bindingHandlers["htmlEditor"] = {
+        ko.bindingHandlers["textblock"] = {
             init(element: HTMLElement, valueAccessor: () => BlockModel[], allBindings: any, viewModel: TextblockViewModel): void {
                 const config = valueAccessor();
                 const htmlEditor: IHtmlEditor = htmlEditorFactory.createHtmlEditor();

@@ -9,7 +9,7 @@ export * from "./bindingHandlers.grid";
 export * from "./bindingHandlers.gridCommand";
 export * from "./bindingHandlers.highlight";
 export * from "./bindingHandlers.host";
-export * from "./bindingHandlers.htmlEditor";
+export * from "./bindingHandlers.textblock";
 export * from "./bindingHandlers.hyperlink";
 export * from "./bindingHandlers.lightbox";
 export * from "./bindingHandlers.resizable";

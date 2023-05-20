@@ -19,6 +19,7 @@ import { MediaWorkshopModule } from "./workshops/media/ko/media.module";
 import { NavigationWorkshopModule } from "./workshops/navigation/ko/navigation.module";
 import { SettingsWorkshopModule } from "./workshops/settings/ko/settings.module";
 import { Workshops } from "./workshops/workshops";
+import { ProseMirrorDesignModule } from "@paperbits/prosemirror/prosemirror.design.module";
 import { TextblockDesignModule } from "./textblock/textblock.design.module";
 import { DropbucketModule } from "./workshops/dropbucket/ko/dropbucket.module";
 import { ViewportSelector } from "./workshops/viewports/ko/viewport-selector";
@@ -173,6 +174,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new PictureDesignModule());
         injector.bindModule(new TestimonialsModule());
         injector.bindModule(new CollapsiblePanelModule());
+        injector.bindModule(new ProseMirrorDesignModule());
         injector.bindModule(new TextblockDesignModule());
         injector.bindModule(new PictureDesignModule());
         injector.bindModule(new ButtonDesignModule());
@@ -244,17 +246,13 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new MapDesignModule());
         injector.bindToCollection("permalinkResolvers", MediaPermalinkResolver, "mediaPermalinkResolver");
 
-
-
-
-
         /* Router */
         injector.bindSingleton("router", DefaultRouter);
         injector.bindToCollection("routeGuards", DefaultRouteGuard);
         injector.bindToCollection("routeGuards", MailtoRouteGuard);
         injector.bindToCollection("routeGuards", JavaScriptRouteGuard);
 
-
+        /* Autostart */
         injector.bindToCollection("autostart", HostBindingHandler);
         injector.bindToCollection("autostart", DraggablesBindingHandler);
         injector.bindToCollection("autostart", GridBindingHandler);

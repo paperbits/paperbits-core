@@ -1,15 +1,13 @@
-import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { TextblockViewModelBinder } from "./textblockViewModelBinder";
-import { TextblockViewModel } from "./ko/textblockViewModel";
-import { TextblockModelBinder } from "./textblockModelBinder";
-import { HtmlEditorBindingHandler } from "../ko/bindingHandlers/bindingHandlers.htmlEditor";
-import { InlineModelBinder } from "../text/modelBinders/inlineModelBinder";
-import { BlockModelBinder } from "../text/modelBinders/blockModelBinder";
-import { ListModelBinder } from "../text/modelBinders/listModelBinder";
+import { IInjector, IInjectorModule } from "@paperbits/common/injection";
 import { IWidgetService } from "@paperbits/common/widgets";
-import { TextblockModel } from "./textblockModel";
-import { TextblockHandlers } from "./textblockHandlers";
 import { KnockoutComponentBinder } from "../ko/knockoutComponentBinder";
+import { BlockModelBinder } from "../text/modelBinders/blockModelBinder";
+import { InlineModelBinder } from "../text/modelBinders/inlineModelBinder";
+import { ListModelBinder } from "../text/modelBinders/listModelBinder";
+import { TextblockViewModel } from "./ko/textblockViewModel";
+import { TextblockModel } from "./textblockModel";
+import { TextblockModelBinder } from "./textblockModelBinder";
+import { TextblockViewModelBinder } from "./textblockViewModelBinder";
 
 
 export class TextblockPublishModule implements IInjectorModule {
@@ -18,11 +16,8 @@ export class TextblockPublishModule implements IInjectorModule {
         injector.bindToCollection("modelBinders", InlineModelBinder);
         injector.bindToCollection("modelBinders", BlockModelBinder);
         injector.bindToCollection("modelBinders", ListModelBinder);
-        injector.bindToCollection("autostart", HtmlEditorBindingHandler);
-        
         injector.bindSingleton("textblockModelBinder", TextblockModelBinder);
         injector.bindSingleton("textblockViewModelBinder", TextblockViewModelBinder);
-        injector.bindSingleton("textblockHandler", TextblockHandlers);
 
         const widgetService = injector.resolve<IWidgetService>("widgetService");
 
