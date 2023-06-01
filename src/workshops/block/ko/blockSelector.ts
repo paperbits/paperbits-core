@@ -98,6 +98,10 @@ export class BlockSelector {
 
             for (const block of blocks) {
                 const content = await this.blockService.getBlockContent(block.key);
+                
+                if(!content){
+                    continue;
+                }
 
                 if (!content.type) {
                     content.type = block.type;
