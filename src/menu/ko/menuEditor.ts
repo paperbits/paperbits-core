@@ -5,7 +5,7 @@ import { NavigationItemModel } from "@paperbits/common/navigation";
 import { ViewManager } from "@paperbits/common/ui";
 import { SelectOption } from "@paperbits/common/ui/selectOption";
 import { StyleHelper, StyleService } from "@paperbits/styles";
-import { Display } from "@paperbits/styles/plugins";
+import { BoxStylePluginConfig, Display, MarginStylePluginConfig, SizeStylePluginConfig } from "@paperbits/styles/plugins";
 import { MenuModel } from "../menuModel";
 
 
@@ -23,9 +23,12 @@ export class MenuEditor {
     public readonly maxHeadingLevel: ko.Observable<number>;
     public readonly layout: ko.Observable<string>;
     public readonly layoutOptions: ko.ObservableArray<SelectOption>;
-    public readonly appearanceStyles: ko.ObservableArray<any>;
-    public readonly appearanceStyle: ko.Observable<any>;
+    public readonly menuVariations: ko.ObservableArray<any>;
+    public readonly menuVariationKey: ko.Observable<any>;
     public readonly displayStyle: ko.Observable<string>;
+
+    public readonly boxConfig: ko.Observable<BoxStylePluginConfig>;
+    public readonly sizeConfig: ko.Observable<SizeStylePluginConfig>;
 
     public displayOptions: SelectOption[] = [
         { value: null, text: "(Inherit)" },
@@ -41,8 +44,10 @@ export class MenuEditor {
         this.minHeadingLevel = ko.observable();
         this.maxHeadingLevel = ko.observable();
         this.layout = ko.observable();
-        this.appearanceStyles = ko.observableArray<any>();
-        this.appearanceStyle = ko.observable<any>();
+        this.menuVariations = ko.observableArray<any>();
+        this.menuVariationKey = ko.observable<any>();
+        this.boxConfig = ko.observable<BoxStylePluginConfig>();
+        this.sizeConfig = ko.observable<SizeStylePluginConfig>();
 
         this.headingLevelOptions = ko.observableArray<SelectOption>([
             { text: "Heading 1", value: 1 },
@@ -70,23 +75,31 @@ export class MenuEditor {
 
     @OnMounted()
     public async initialize(): Promise<void> {
+        const localStyles = this.model.styles;
+
         this.showHeadings(!!this.model.minHeading || !!this.model.maxHeading);
         this.minHeadingLevel(this.model.minHeading || 1);
         this.maxHeadingLevel(this.model.maxHeading || 6);
 
         const variations = await this.styleService.getComponentVariations("menu");
-        this.appearanceStyles(variations.filter(x => x.category === "appearance"));
+        this.menuVariations(variations.filter(x => x.category === "appearance"));
 
-        this.appearanceStyle(this.model.styles?.appearance);
+        this.menuVariationKey(this.model.styles?.appearance);
         this.navigationItemTitle(this.model.navigationItem?.label || emptySelectionLabel);
 
         this.layout(this.model.layout);
+
+        const marginConfig = <MarginStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(localStyles, "margin");
+        this.boxConfig({ margin: marginConfig });
+
+        const sizeConfig = <SizeStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(localStyles, "size");
+        this.sizeConfig(sizeConfig);
 
         this.minHeadingLevel.subscribe(this.applyChanges);
         this.maxHeadingLevel.subscribe(this.applyChanges);
         this.layout.subscribe(this.applyChanges);
         this.showHeadings.subscribe(this.applyChanges);
-        this.appearanceStyle.subscribe(this.applyChanges);
+        this.menuVariationKey.subscribe(this.applyChanges);
     }
 
     public onNavigationItemChange(navigationItem: NavigationItemModel): void {
@@ -103,6 +116,20 @@ export class MenuEditor {
         this.onChange(this.model);
     }
 
+    public onVariationChange(): void {
+        this.onChange(this.model);
+    }
+
+    public onSizeChange(sizeConfig: SizeStylePluginConfig): void {
+        this.sizeConfig(sizeConfig);
+        this.applyChanges();
+    }
+
+    public onBoxUpdate(pluginConfig: BoxStylePluginConfig): void {
+        this.boxConfig(pluginConfig);
+        this.applyChanges();
+    }
+
     public applyChanges(): void {
         if (this.showHeadings()) {
             this.model.minHeading = this.minHeadingLevel();
@@ -115,8 +142,15 @@ export class MenuEditor {
 
         this.model.layout = this.layout();
         this.model.styles = {
-            appearance: this.appearanceStyle()
+            appearance: this.menuVariationKey()
         };
+
+        const marginStyle = this.boxConfig().margin;
+        const paddingStyle = this.boxConfig().padding;
+        const sizeConfig: SizeStylePluginConfig = this.sizeConfig();
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "size", sizeConfig);
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "margin", marginStyle);
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "padding", paddingStyle)
 
         this.onChange(this.model);
     }

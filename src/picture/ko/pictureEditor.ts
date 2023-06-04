@@ -12,6 +12,8 @@ import { StyleService } from "@paperbits/styles/styleService";
 import { MediaItem } from "../../workshops/media/ko";
 import { PictureModel } from "../pictureModel";
 import { MimeTypes } from "@paperbits/common";
+import { BoxStylePluginConfig, MarginStylePluginConfig } from "@paperbits/styles/plugins";
+import { StyleHelper } from "@paperbits/styles";
 
 
 
@@ -29,6 +31,7 @@ export class PictureEditor {
     public readonly appearanceStyles: ko.ObservableArray<any>;
     public readonly appearanceStyle: ko.Observable<any>;
     public readonly mediaFileName: ko.Observable<string>;
+    public readonly boxConfig: ko.Observable<BoxStylePluginConfig>;
 
     constructor(
         private readonly styleService: StyleService,
@@ -39,7 +42,8 @@ export class PictureEditor {
         this.background = ko.observable();
         this.hyperlink = ko.observable<HyperlinkModel>();
         this.hyperlinkTitle = ko.computed<string>(() => this.hyperlink() ? this.hyperlink().title : "Add a link...");
-        this.sizeConfig = ko.observable();
+        this.sizeConfig = ko.observable<SizeStylePluginConfig>();
+        this.boxConfig = ko.observable<BoxStylePluginConfig>();
         this.appearanceStyles = ko.observableArray();
         this.appearanceStyle = ko.observable();
         this.mediaFileName = ko.observable();
@@ -70,6 +74,9 @@ export class PictureEditor {
         this.hyperlink(this.model.hyperlink);
         this.sizeConfig({ width: this.model.width, height: this.model.height });
 
+        const marginConfig = <MarginStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(this.model.styles, "margin");
+        this.boxConfig({ margin: marginConfig });
+
         const variations = await this.styleService.getComponentVariations("picture");
         this.appearanceStyles(variations.filter(x => x.category === "appearance"));
         this.appearanceStyle(this.model.styles?.appearance);
@@ -97,6 +104,9 @@ export class PictureEditor {
                 appearance: this.appearanceStyle()
             };
         }
+
+        const marginStyle = this.boxConfig().margin;
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "margin", marginStyle);
 
         this.onChange(this.model);
     }
@@ -151,6 +161,11 @@ export class PictureEditor {
         });
     }
 
+    public onBoxUpdate(pluginConfig: BoxStylePluginConfig): void {
+        this.boxConfig(pluginConfig);
+        this.applyChanges();
+    }
+
     public onHyperlinkChange(hyperlink: HyperlinkModel): void {
         this.hyperlink(hyperlink);
         this.applyChanges();
@@ -159,6 +174,7 @@ export class PictureEditor {
     public onSizeChange(sizeConfig: SizeStylePluginConfig): void {
         this.model.width = <number>sizeConfig.width;
         this.model.height = <number>sizeConfig.height;
+
         this.applyChanges();
     }
 }

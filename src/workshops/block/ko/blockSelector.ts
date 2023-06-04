@@ -98,8 +98,8 @@ export class BlockSelector {
 
             for (const block of blocks) {
                 const content = await this.blockService.getBlockContent(block.key);
-                
-                if(!content){
+
+                if (!content) {
                     continue;
                 }
 

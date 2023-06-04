@@ -49,18 +49,6 @@
 
 <div class="form-group form-group-collapsible">
     <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
-            aria-label="Toggle 'Size' section"></a>
-        <b>Size</b>
-    </label>
-    <div id="sizeCollapse" class="collapse form-group-collapse">
-        <size-editor params="{ features: 'height,width', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
-        </size-editor>
-    </div>
-</div>
-
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
         <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#miscellaneousCollapse'"
             aria-label="Toggle 'Styling' section"></a>
         <b>Styling</b>
@@ -80,5 +68,28 @@
                 params="{ options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key', heading: 'Appearance' }">
             </dropdown>
         </div>
+    </div>
+</div>
+
+<div class="form-group form-group-collapsible">
+    <label class="form-label">
+        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
+            aria-label="Toggle 'Size' section"></a>
+        <b>Size</b>
+    </label>
+    <div id="sizeCollapse" class="collapse form-group-collapse">
+        <size-editor params="{ features: 'height,width', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
+        </size-editor>
+    </div>
+</div>
+
+<div class="form-group form-group-collapsible">
+    <label class="form-label">
+        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#boxCollapse'"
+            aria-label="Toggle 'Box' section"></a>
+        <b>Box</b>
+    </label>
+    <div id="boxCollapse" class="collapse form-group-collapse">
+        <box params="{ features: 'margin', box: boxConfig, onUpdate: onBoxUpdate }"></box>
     </div>
 </div>

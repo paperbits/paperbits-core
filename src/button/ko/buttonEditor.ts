@@ -5,7 +5,7 @@ import { StyleHelper, StyleService } from "@paperbits/styles";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { ButtonModel } from "../buttonModel";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
-import { Display } from "@paperbits/styles/plugins";
+import { BoxStylePluginConfig, Display, MarginStylePluginConfig, SizeStylePluginConfig } from "@paperbits/styles/plugins";
 import { ViewManager } from "@paperbits/common/ui";
 import { EventManager, Events } from "@paperbits/common/events";
 import { SelectOption } from "@paperbits/common/ui/selectOption";
@@ -22,6 +22,8 @@ export class ButtonEditor {
     public readonly buttonVariationKey: ko.Observable<string>;
     public readonly buttonVariations: ko.ObservableArray<VariationContract>;
     public readonly displayStyle: ko.Observable<string>;
+    public readonly boxConfig: ko.Observable<BoxStylePluginConfig>;
+    public readonly sizeConfig: ko.Observable<SizeStylePluginConfig>;
 
     public displayOptions: SelectOption[] = [
         { value: null, text: "(Inherit)" },
@@ -40,6 +42,8 @@ export class ButtonEditor {
         this.hyperlink = ko.observable<HyperlinkModel>();
         this.hyperlinkTitle = ko.observable<string>();
         this.displayStyle = ko.observable<string>();
+        this.boxConfig = ko.observable<BoxStylePluginConfig>();
+        this.sizeConfig = ko.observable<SizeStylePluginConfig>();
         this.updateObservables = this.updateObservables.bind(this);
     }
 
@@ -72,8 +76,15 @@ export class ButtonEditor {
 
             this.buttonVariationKey(<string>this.model.styles?.appearance);
 
-            const displayStyle = <Display>StyleHelper.getPluginConfigForLocalStyles(localStyles, "display", viewport);
-            this.displayStyle(displayStyle);
+            const displayConfig = <Display>StyleHelper.getPluginConfigForLocalStyles(localStyles, "display", viewport);
+            this.displayStyle(displayConfig);
+
+            const marginConfig = <MarginStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(localStyles, "margin");
+            const paddingConfig = <MarginStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(localStyles, "padding");
+            this.boxConfig({ margin: marginConfig, padding: paddingConfig });
+
+            const sizeConfig = <SizeStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(localStyles, "size");
+            this.sizeConfig(sizeConfig);
         }
 
         this.hyperlink(this.model.hyperlink);
@@ -104,10 +115,31 @@ export class ButtonEditor {
         this.onChange(this.model);
     }
 
+    public onVariationChange(): void {
+        this.onChange(this.model);
+    }
+
+    public onBoxUpdate(pluginConfig: BoxStylePluginConfig): void {
+        this.boxConfig(pluginConfig);
+        this.applyChanges();
+    }
+
+    public onSizeChange(sizeConfig: SizeStylePluginConfig): void {
+        this.sizeConfig(sizeConfig);
+        this.applyChanges();
+    }
+
     private applyChanges(): void {
         this.model.label = this.label();
         this.model.hyperlink = this.hyperlink();
         this.model.styles["appearance"] = this.buttonVariationKey();
+
+        const marginStyle = this.boxConfig().margin;
+        const paddingStyle = this.boxConfig().padding;
+        const sizeConfig: SizeStylePluginConfig = this.sizeConfig();
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "size", sizeConfig);
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "margin", marginStyle);
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "padding", paddingStyle)
 
         this.onChange(this.model);
     }
