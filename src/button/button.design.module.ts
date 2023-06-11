@@ -24,6 +24,7 @@ export class ButtonDesignModule implements IInjectorModule {
             selectorTemplate: `<a role="button" data-bind="css: classNames" style="display: inline-block">Button</a>`,
             styleTemplate: `<a role="button" data-bind="stylePreview: variation.key" style="display: inline-block">Button</button>`
         };
+        
         injector.bindInstanceToCollection("styleGroups", styleGroup);
 
         const widgetService = injector.resolve<IWidgetService>("widgetService");
