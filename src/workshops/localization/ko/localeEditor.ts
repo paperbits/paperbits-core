@@ -59,21 +59,23 @@ export class LocaleEditor {
 
     @OnMounted()
     public async initialize(): Promise<void> {
-        this.selectedLanguage.subscribe(language => {
-            this.locales(null);
-            this.selectedLocale(null);
+        this.selectedLanguage.subscribe(this.onLanguageSelected);
+    }
 
-            if (!language.locales) {
-                return;
-            }
+    private onLanguageSelected(language: LanguageContract): void {
+        this.selectedLocale(null);
 
-            this.locales(Object.keys(language.locales).map(x => {
-                return {
-                    code: x,
-                    displayName: language.locales[x].nameNative
-                };
-            }));
-        });
+        if (!language.locales) {
+            this.locales([]);
+            return;
+        }
+
+        this.locales(Object.keys(language.locales).map(localCode => {
+            return {
+                code: localCode,
+                displayName: language.locales[localCode].nameNative
+            };
+        }));
     }
 
     public async addLocale(): Promise<void> {

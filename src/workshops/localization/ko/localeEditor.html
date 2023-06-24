@@ -6,7 +6,7 @@
         aria-label="Language">
     </dropdown>
 </div>
-<!-- ko if: locales -->
+<!-- ko if: locales().length > 0 -->
 <div class="form-group">
     <label class="form-label">
         Locale
@@ -17,7 +17,7 @@
 <!-- /ko -->
 
 <div class="flex-item btn-group">
-    <button class="btn btn-default" data-bind="click: addLocale">
+    <button class="btn btn-default" data-bind="click: addLocale, disable: !selectedLocale()">
         <i aria-hidden="true" class="paperbits-icon paperbits-simple-add"></i>
         Add locale
     </button>

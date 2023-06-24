@@ -85,7 +85,7 @@ export class Dropdown {
             }
 
             const options = this.options()
-                .map(option => { return { value: option[this.optionsValue()], text: option[this.optionsText()] } });
+                .map(option => { return { value: option[this.optionsValue()] || option, text: option[this.optionsText()] } });
 
             displayedOptions.push(...options);
         }
