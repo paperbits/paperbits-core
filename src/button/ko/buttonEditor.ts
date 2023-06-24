@@ -9,7 +9,7 @@ import { BoxStylePluginConfig, Display, MarginStylePluginConfig, SizeStylePlugin
 import { ViewManager } from "@paperbits/common/ui";
 import { EventManager, Events } from "@paperbits/common/events";
 import { SelectOption } from "@paperbits/common/ui/selectOption";
-import { VariationContract } from "@paperbits/common/styles";
+import { StyleCompiler, StyleManager, VariationContract } from "@paperbits/common/styles";
 
 @Component({
     selector: "button-editor",
@@ -34,7 +34,8 @@ export class ButtonEditor {
     constructor(
         private readonly styleService: StyleService,
         private readonly viewManager: ViewManager,
-        private readonly eventManager: EventManager
+        private readonly eventManager: EventManager,
+        private readonly styleCompiler: StyleCompiler
     ) {
         this.label = ko.observable<string>();
         this.buttonVariations = ko.observableArray();
@@ -60,7 +61,6 @@ export class ButtonEditor {
 
         await this.updateObservables();
 
-        this.buttonVariationKey.subscribe(this.applyChanges);
         this.label.subscribe(this.applyChanges);
         this.hyperlink.subscribe(this.applyChanges);
 
@@ -116,6 +116,7 @@ export class ButtonEditor {
     }
 
     public onVariationChange(): void {
+        this.model.styles["appearance"] = this.buttonVariationKey();
         this.onChange(this.model);
     }
 
@@ -127,6 +128,26 @@ export class ButtonEditor {
     public onSizeChange(sizeConfig: SizeStylePluginConfig): void {
         this.sizeConfig(sizeConfig);
         this.applyChanges();
+    }
+
+    public async saveStylesAsVariation(): Promise<void> {
+        this.model.styles = await this.styleService.convertLocalStylesToVariation("button", "Test", this.model.styles);
+
+        const variations = await this.styleService.getComponentVariations("button");
+        this.buttonVariations(variations.filter(x => x.category === "appearance"));
+
+        this.buttonVariationKey(<string>this.model.styles?.appearance);
+
+        this.onChange(this.model);
+
+        this.updateObservables();
+
+        // Send notification to user
+
+        // Rebuild global styles
+        const styleManager = new StyleManager(this.eventManager);
+        const styleSheet = await this.styleCompiler.getStyleSheet();
+        styleManager.setStyleSheet(styleSheet);
     }
 
     private applyChanges(): void {
