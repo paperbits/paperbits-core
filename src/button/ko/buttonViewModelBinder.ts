@@ -7,7 +7,7 @@ import { Button } from "./button";
 export class ButtonViewModelBinder implements ViewModelBinder<ButtonModel, Button>  {
     constructor(private readonly styleCompiler: StyleCompiler) { }
 
-    public stateToIntance(state: WidgetState, componentInstance: Button): void {
+    public stateToInstance(state: WidgetState, componentInstance: Button): void {
         componentInstance.label(state.label);
         componentInstance.hyperlink(state.hyperlink);
         componentInstance.security(state.security);

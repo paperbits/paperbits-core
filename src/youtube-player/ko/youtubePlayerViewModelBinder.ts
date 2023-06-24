@@ -6,7 +6,7 @@ import { YoutubePlayerViewModel } from "./youtubePlayer";
 export class YoutubePlayerViewModelBinder implements ViewModelBinder<YoutubePlayerModel, YoutubePlayerViewModel> {
     constructor(private readonly styleCompiler: StyleCompiler) { }
 
-    public stateToIntance(state: WidgetState, componentInstance: YoutubePlayerViewModel): void {
+    public stateToInstance(state: WidgetState, componentInstance: YoutubePlayerViewModel): void {
         componentInstance.sourceUrl(state.sourceUrl);
         componentInstance.styles(state.styles);
     }

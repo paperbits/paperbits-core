@@ -7,7 +7,7 @@ import { TextblockModel } from "./textblockModel";
 export class TextblockViewModelBinder implements ViewModelBinder<TextblockModel, TextblockViewModel> {
     constructor(private readonly styleCompiler: StyleCompiler) { }
 
-    public async stateToIntance(state: WidgetState, componentInstance: TextblockViewModel): Promise<void> {
+    public async stateToInstance(state: WidgetState, componentInstance: TextblockViewModel): Promise<void> {
         componentInstance.content(state.content);
         componentInstance.styles(state.styles);
     }

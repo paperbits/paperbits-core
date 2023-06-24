@@ -14,7 +14,7 @@ export class CardViewModelBinder implements ViewModelBinder<CardModel, CardViewM
         private readonly widgetService: IWidgetService
     ) { }
 
-    public stateToIntance(state: any, componentInstance: CardViewModel): void {
+    public stateToInstance(state: any, componentInstance: CardViewModel): void {
         componentInstance.styles(state.styles);
         componentInstance.widgets(state.widgets)
     }

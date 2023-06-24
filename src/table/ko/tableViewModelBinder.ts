@@ -14,7 +14,7 @@ export class TableViewModelBinder implements ViewModelBinder<TableModel, TableVi
         private readonly styleCompiler: StyleCompiler
     ) { }
 
-    public stateToIntance(state: any, componentInstance: TableViewModel): void {
+    public stateToInstance(state: any, componentInstance: TableViewModel): void {
         componentInstance.styles(state.styles);
         componentInstance.widgets(state.widgets)
     }
