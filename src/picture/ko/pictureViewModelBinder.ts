@@ -15,7 +15,7 @@ export class PictureViewModelBinder implements ViewModelBinder<PictureModel, Pic
         private readonly mediaService: MediaService
     ) { }
 
-    public stateToIntance(state: WidgetState, componentInstance: Picture): void {
+    public stateToInstance(state: WidgetState, componentInstance: Picture): void {
         componentInstance.sourceUrl(state.sourceUrl);
         componentInstance.hyperlink(state.hyperlink);
         componentInstance.caption(state.caption);

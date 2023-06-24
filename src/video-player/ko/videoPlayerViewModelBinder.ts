@@ -10,7 +10,7 @@ export class VideoPlayerViewModelBinder implements ViewModelBinder<VideoPlayerMo
         private readonly mediaPermalinkResolver: IPermalinkResolver
     ) { }
 
-    public stateToIntance(state: WidgetState, componentInstance: VideoPlayer): void {
+    public stateToInstance(state: WidgetState, componentInstance: VideoPlayer): void {
         componentInstance.sourceUrl(state.sourceUrl);
         componentInstance.controls(state.controls);
         componentInstance.autoplay(state.autoplay);

@@ -6,7 +6,7 @@ import { DismissButton } from "./dismissButtonViewModel";
 export class DismissButtonViewModelBinder implements ViewModelBinder<DismissButtonModel, DismissButton>  {
     constructor(private readonly styleCompiler: StyleCompiler) { }
 
-    public stateToIntance(state: WidgetState, componentInstance: DismissButton): void {
+    public stateToInstance(state: WidgetState, componentInstance: DismissButton): void {
         componentInstance.label(state.label);
         componentInstance.icon(state.iconClass);
         componentInstance.styles(state.styles);

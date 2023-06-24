@@ -19,7 +19,7 @@ export class MapViewModelBinder {
         private readonly siteService: ISiteService
     ) { }
 
-    public stateToIntance(state: WidgetState, componentInstance: MapViewModel): void {
+    public stateToInstance(state: WidgetState, componentInstance: MapViewModel): void {
         componentInstance.runtimeConfig(state.runtimeConfig);
         componentInstance.styles(state.styles);
         componentInstance.hasApiKey(state.hasApiKey);

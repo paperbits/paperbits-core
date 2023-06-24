@@ -72,7 +72,7 @@ export class TableCellViewModelBinder implements ViewModelBinder<TableCellModel,
     //     return viewModel;
     // }
 
-    public stateToIntance(state: any, componentInstance: TableCellViewModel): void {
+    public stateToInstance(state: any, componentInstance: TableCellViewModel): void {
         componentInstance.styles(state.styles);
         componentInstance.role(state.role);
         componentInstance.widgets(state.widgets)
