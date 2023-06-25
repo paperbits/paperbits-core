@@ -602,16 +602,21 @@ export class GridEditor {
                 }
             }],
             deleteCommand: deleteWidgetCommand(context),
-            selectCommands: context.binding?.editor && context.binding?.applyChanges && [{
+            selectCommands: []
+        };
+
+        if (context.binding?.editor && context.binding?.applyChanges) {
+            contextCommands.selectCommands.push({
                 controlType: "toolbox-button",
                 displayName: `Edit widget`,
                 position: "top right",
                 color: defaultCommandColor,
                 callback: () => this.viewManager.openWidgetEditor(context.binding)
-            },
-            splitter(),
-            switchToParentCommand(context)]
-        };
+            });
+            contextCommands.selectCommands.push(splitter());
+        }
+
+        contextCommands.selectCommands.push(switchToParentCommand(context));
 
         if (!context.half) { // Not selection mode.
             const handler = this.widgetService.getWidgetHandler(context.binding);
