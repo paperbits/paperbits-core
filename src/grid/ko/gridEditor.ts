@@ -526,7 +526,9 @@ export class GridEditor {
     }
 
     private onWindowScroll(): void {
-        if (this.viewManager.mode === ViewManagerMode.dragging || this.viewManager.mode === ViewManagerMode.pause) {
+        if (this.viewManager.mode === ViewManagerMode.dragging ||
+            this.viewManager.mode === ViewManagerMode.pause ||
+            this.viewManager.mode === ViewManagerMode.configure) {
             return;
         }
 
