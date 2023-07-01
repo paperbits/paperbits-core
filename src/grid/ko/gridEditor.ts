@@ -127,7 +127,7 @@ export class GridEditor {
                 if (children.length == 0) {
                     return;
                 }
-                
+
                 const firstChild = children[0];
                 this.selectElement(firstChild, true);
             },
@@ -632,7 +632,10 @@ export class GridEditor {
             }
 
             const styleEditorCommand = this.getStyleEditorCommand(context.gridItem.element, context.binding, styleDefinitions);
-            contextCommands.selectCommands.push(styleEditorCommand);
+
+            if (styleEditorCommand) {
+                contextCommands.selectCommands.push(styleEditorCommand);
+            }
         }
 
         return contextCommands;
@@ -930,12 +933,19 @@ export class GridEditor {
             return null;
         }
 
-        const styleEditorCommand = this.getStyleEditorCommand(element, binding, styleDefinitions);
         const componentStyleDefinitionWrapper = StyleHelper.getStyleDefinitionWrappers(styleDefinitions.components);
         const match = componentStyleDefinitionWrapper.find(x => element.matches(x.selector));
 
         if (!match) {
             return null;
+        }
+
+        const selectCommands: IContextCommand[] = [];
+
+        const styleEditorCommand = this.getStyleEditorCommand(element, binding, styleDefinitions);
+
+        if (styleEditorCommand) {
+            selectCommands.push(styleEditorCommand);
         }
 
         const componentStyleDefinition = match.definition;
