@@ -3,7 +3,7 @@ import template from "./tableCellEditor.html";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { TableCellModel } from "../tableCellModel";
 import { EventManager, Events } from "@paperbits/common/events";
-import { ContainerStylePluginConfig, BoxStylePluginConfig } from "@paperbits/styles/plugins";
+import { ContainerStylePluginConfig, BoxStylePluginConfig, BorderStylePluginConfig } from "@paperbits/styles/plugins";
 import { StyleHelper } from "@paperbits/styles";
 import { GridCellStylePluginConfig } from "@paperbits/styles/plugins/grid/gridCellStylePluginConfig";
 import { PaddingStylePluginConfig } from "@paperbits/styles/plugins/padding";
@@ -56,8 +56,12 @@ export class TableCellEditor {
             .plugin("padding")
             .getConfig<PaddingStylePluginConfig>();
 
+        const borderConfig = StyleHelper
+            .style(this.model.styles)
+            .plugin("border")
+            .getConfig<BorderStylePluginConfig>();
 
-        this.box({ padding: paddingConfig });
+        this.box({ padding: paddingConfig, border: borderConfig });
     }
 
     public onContainerUpdate(containerConfig: ContainerStylePluginConfig): void {

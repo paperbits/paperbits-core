@@ -37,7 +37,8 @@ export class TableHandlers implements IWidgetHandler {
                     span: {
                         cols: 1,
                         rows: 1
-                    }
+                    },
+                    overflow: "scroll"
                 },
                 "border": {
                     bottom: {
@@ -60,9 +61,6 @@ export class TableHandlers implements IWidgetHandler {
                         style: "solid",
                         width: "1"
                     }
-                },
-                "container": {
-                    overflow: "scroll"
                 }
             }
         };
@@ -79,7 +77,8 @@ export class TableHandlers implements IWidgetHandler {
                     span: {
                         cols: 1,
                         rows: 1
-                    }
+                    },
+                    overflow: "scroll"
                 },
                 "border": {
                     bottom: {
@@ -102,9 +101,6 @@ export class TableHandlers implements IWidgetHandler {
                         style: "solid",
                         width: "1"
                     }
-                },
-                "container": {
-                    overflow: "scroll"
                 }
             }
         };
@@ -121,7 +117,8 @@ export class TableHandlers implements IWidgetHandler {
                     span: {
                         cols: 1,
                         rows: 1
-                    }
+                    },
+                    overflow: "scroll"
                 },
                 "border": {
                     bottom: {
@@ -144,9 +141,6 @@ export class TableHandlers implements IWidgetHandler {
                         style: "solid",
                         width: "1"
                     }
-                },
-                "container": {
-                    overflow: "scroll"
                 }
             }
         };

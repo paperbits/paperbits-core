@@ -6,8 +6,9 @@ import { ViewManager } from "@paperbits/common/ui";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { GridCellModel } from "../gridCellModel";
 import { EventManager, Events } from "@paperbits/common/events";
-import { BoxStylePluginConfig } from "@paperbits/styles/plugins";
+import { BoxStylePluginConfig, PaddingStylePluginConfig } from "@paperbits/styles/plugins";
 import { ContainerStylePluginConfig } from "@paperbits/styles/plugins";
+import { StyleHelper } from "@paperbits/styles";
 
 
 @Component({
@@ -49,10 +50,6 @@ export class GridCellEditor {
         const breakpoint = Utils.getClosestBreakpoint(gridCellStyleConfig, viewport);
         const styleConfig = gridCellStyleConfig[breakpoint];
 
-        /* 
-            TODO: Container should not be defined on grid-cell level.
-                  It should be on instance level.
-        */
         const containerConfig: ContainerStylePluginConfig = { 
             alignment: styleConfig.alignment,
             overflow: styleConfig.overflow
@@ -60,15 +57,21 @@ export class GridCellEditor {
 
         this.container(containerConfig);
 
-        const paddingConfig = <any>Objects.getObjectAt(`styles/instance/padding/${viewport}`, this.model);
+        const paddingConfig = StyleHelper
+            .style(this.model.styles)
+            .plugin("padding")
+            .getConfig<PaddingStylePluginConfig>(viewport);
+
         this.box({ padding: paddingConfig });
     }
 
     public onContainerUpdate(containerConfig: ContainerStylePluginConfig): void {
         const viewport = this.viewManager.getViewport();
 
-        Objects.setValue(`styles/instance/grid-cell/${viewport}/alignment`, this.model, containerConfig.alignment);
-        Objects.setValue(`styles/instance/grid-cell/${viewport}/overflow`, this.model, containerConfig.overflow);
+        StyleHelper
+            .style(this.model.styles)
+            .plugin("grid-cell")
+            .setConfig(containerConfig, viewport);
 
         this.onChange(this.model);
     }
@@ -76,7 +79,10 @@ export class GridCellEditor {
     public onBoxUpdate(boxConfig: BoxStylePluginConfig): void {
         const viewport = this.viewManager.getViewport();
 
-        Objects.setValue(`styles/instance/padding/${viewport}`, this.model, boxConfig.padding);
+        StyleHelper
+            .style(this.model.styles)
+            .plugin("padding")
+            .setConfig(boxConfig.padding, viewport);
 
         this.onChange(this.model);
     }
