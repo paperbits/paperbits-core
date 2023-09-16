@@ -10,17 +10,15 @@ export class TableHandlers implements IWidgetHandler {
         table.numOfCols = 3;
         table.styles = {
             instance: {
-                grid: {
-                    xs: {
-                        rows: [
-                            "auto"
-                        ],
-                        cols: [
-                            "minmax(100px, 1fr)",
-                            "minmax(100px, 1fr)",
-                            "minmax(100px, 1fr)"
-                        ]
-                    }
+                table: {
+                    rows: [
+                        "auto"
+                    ],
+                    cols: [
+                        "minmax(100px, 1fr)",
+                        "minmax(100px, 1fr)",
+                        "minmax(100px, 1fr)"
+                    ]
                 }
             }
         };
