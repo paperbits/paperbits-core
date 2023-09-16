@@ -31,49 +31,48 @@ export class HostBindingHandler {
         this.hostComponent = ko.observable();
         this.designTime = ko.observable(true);
 
+        const css = ko.observable<string>();
+
+        const getCssForViewport = (viewport: string): string => {
+            switch (viewport) {
+                case "zoomout":
+                    return "viewport-zoomout";
+                    this.viewManager.mode = ViewManagerMode.pause;
+                    break;
+                case "xl":
+                    return "viewport-xl";
+                case "lg":
+                    return "viewport-lg";
+                case "md":
+                    return "viewport-md";
+                case "sm":
+                    return "viewport-sm";
+                case "xs":
+                    return "viewport-xs";
+                default:
+                    throw new Error("Unknown viewport");
+            }
+        }
+
         ko.bindingHandlers["host"] = {
             init: (element: HTMLElement, valueAccessor: () => HostConfig) => {
                 const config = valueAccessor();
-                const css = ko.observable<string>("desktop");
 
                 config.block.subscribe(this.designTime);
 
                 config.viewport.subscribe((viewport: string) => {
-                    this.viewManager.mode = ViewManagerMode.selecting;
-
-                    switch (viewport) {
-                        case "zoomout":
-                            css("viewport-zoomout");
-                            this.viewManager.mode = ViewManagerMode.pause;
-                            break;
-
-                        case "xl":
-                            css("viewport-xl");
-                            break;
-
-                        case "lg":
-                            css("viewport-lg");
-                            break;
-
-                        case "md":
-                            css("viewport-md");
-                            break;
-
-                        case "sm":
-                            css("viewport-sm");
-                            break;
-
-                        case "xs":
-                            css("viewport-xs");
-                            break;
-
-                        default:
-                            throw new Error("Unknown viewport");
+                    if (config.host().name == "style-guide") {
+                        css("viewport-xl");
+                        return;
                     }
+
+                    this.viewManager.mode = ViewManagerMode.selecting;
+                    const className = getCssForViewport(viewport);
+                    css(className);
                 });
 
                 this.onDocumentCreated = config.onDocumentCreated;
-                this.onDocumentDisposed =  config.onDocumentDisposed;
+                this.onDocumentDisposed = config.onDocumentDisposed;
 
                 ko.applyBindingsToNode(element, { css: css }, null);
 
@@ -81,9 +80,19 @@ export class HostBindingHandler {
                 element.appendChild(hostElement);
             },
 
-            update: (element: HTMLElement, valueAccessor: any) => {
+            update: (element: HTMLElement, valueAccessor: () => HostConfig) => {
                 const config = valueAccessor();
                 this.hostComponent(config.host());
+
+                if (config.host().name == "style-guide") {
+                    css("viewport-xl");
+                    return;
+                }
+                else {
+                    const config = valueAccessor();
+                    const className = getCssForViewport(config.viewport());
+                    css(className);
+                }
             }
         };
     }
