@@ -60,7 +60,6 @@ export class DropBucket {
 
         if (contentDescriptor.getThumbnailUrl) {
             contentDescriptor.getThumbnailUrl().then(thumbnailUrl => {
-                console.log(thumbnailUrl);
                 dropbucketItem.previewUrl(thumbnailUrl);
                 dropbucketItem.thumbnailUrl(thumbnailUrl);
             });

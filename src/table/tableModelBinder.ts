@@ -4,14 +4,34 @@ import { IWidgetService, ModelBinderSelector } from "@paperbits/common/widgets";
 import { TableCellContract } from "../table-cell";
 import { TableContract } from "../table/tableContract";
 import { TableModel } from "./tableModel";
+import { LocalStyles } from "@paperbits/common/styles";
 
 export class TableModelBinder extends ContainerModelBinder implements IModelBinder<TableModel> {
     constructor(protected readonly widgetService: IWidgetService, protected modelBinderSelector: ModelBinderSelector) {
         super(widgetService, modelBinderSelector);
     }
 
+    /**
+     * Migration to designated "table" style plugin.
+     */
+    private migrateTableStyles(styles: LocalStyles): void {
+        if (!styles.instance["grid"]) {
+            return;
+        }
+
+        styles.instance["table"] = styles.instance["grid"];
+        delete styles.instance["grid"];
+
+        if (styles.instance["table"].xs) { // Reducing unnecessary viewport variations.
+            styles.instance["table"] = styles.instance["table"].xs;
+        }
+    }
+
     public async contractToModel(contract: TableContract, bindingContext?: Bag<any>): Promise<TableModel> {
         const model = new TableModel();
+
+        this.migrateTableStyles(contract.styles);
+
         model.styles = contract.styles;
         model.numOfCols = contract.numOfCols;
         model.numOfRows = contract.numOfRows;

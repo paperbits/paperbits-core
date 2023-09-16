@@ -39,6 +39,93 @@ export class TableEditor {
             .subscribe(this.applyChanges);
     }
 
+    private removeColumn(columnIndex: number): void {
+        const currentNumOfCols = this.model.numOfCols;
+
+        this.model.styles.instance.table.cols.splice(columnIndex, 1);
+        this.model.numOfCols--;
+
+        for (let rowIndex = this.model.numOfRows; rowIndex >= 0; rowIndex--) {
+            const cellIndex = (rowIndex * currentNumOfCols) + columnIndex;
+            this.model.widgets.splice(cellIndex, 1);
+        }
+    }
+
+    private addColumn(columnIndex: number): void {
+        const currentNumOfCols = this.model.numOfCols;
+
+        this.model.styles.instance.table.cols.push("1fr");
+        this.model.numOfCols++;
+
+        for (let rowIndex = 0; rowIndex < this.model.numOfRows; rowIndex++) {
+            const cellIndex = (rowIndex * currentNumOfCols) + columnIndex + rowIndex;
+            const cell = this.createCell(columnIndex + 1, rowIndex + 1);
+            this.model.widgets.splice(cellIndex, 0, cell);
+        }
+    }
+
+    private removeRow(rowIndex: number): void {
+        this.model.styles.instance.table.rows.splice(rowIndex, 1);
+        this.model.numOfRows--;
+
+        const rowStart = rowIndex * this.model.numOfCols;
+        this.model.widgets.splice(rowStart, this.model.numOfCols);
+    }
+
+    private addRow(rowIndex: number): void {
+        this.model.styles.instance.table.rows.push("1fr");
+        this.model.numOfRows++;
+
+        for (let columnIndex = 0; columnIndex < this.model.numOfCols; columnIndex++) {
+            const cell = this.createCell(columnIndex + 1, rowIndex + 1);
+            this.model.widgets.push(cell);
+        }
+    }
+
+    private createCell(columnIndex: number, rowIndex: number): TableCellModel {
+        const cell = new TableCellModel();
+        cell.role = "cell";
+
+        cell.styles = {
+            instance: {
+                "table-cell": {
+                        position: {
+                            col: columnIndex,
+                            row: rowIndex
+                        },
+                        span: {
+                            cols: 1,
+                            rows: 1
+                        }
+                },
+                "border": {
+                    bottom: {
+                        colorKey: "colors/default",
+                        style: "solid",
+                        width: "1"
+                    },
+                    left: {
+                        colorKey: "colors/default",
+                        style: "solid",
+                        width: "1"
+                    },
+                    right: {
+                        colorKey: "colors/default",
+                        style: "solid",
+                        width: "1"
+                    },
+                    top: {
+                        colorKey: "colors/default",
+                        style: "solid",
+                        width: "1"
+                    }
+                }
+            }
+        };
+
+        return cell;
+    }
+
     private applyChanges(): void {
         const numOfCols = this.numOfCols();
         const numOfRows = this.numOfRows();
@@ -76,94 +163,5 @@ export class TableEditor {
         }
 
         this.onChange(this.model);
-    }
-
-    private removeColumn(columnIndex: number): void {
-        const currentNumOfCols = this.model.numOfCols;
-
-        this.model.styles.instance.grid.xs.cols.splice(columnIndex, 1);
-        this.model.numOfCols--;
-
-        for (let rowIndex = this.model.numOfRows; rowIndex >= 0; rowIndex--) {
-            const cellIndex = (rowIndex * currentNumOfCols) + columnIndex;
-            this.model.widgets.splice(cellIndex, 1);
-        }
-    }
-
-    private addColumn(columnIndex: number): void {
-        const currentNumOfCols = this.model.numOfCols;
-
-        this.model.styles.instance.grid.xs.cols.push("1fr");
-        this.model.numOfCols++;
-
-        for (let rowIndex = 0; rowIndex < this.model.numOfRows; rowIndex++) {
-            const cellIndex = (rowIndex * currentNumOfCols) + columnIndex + rowIndex;
-            const cell = this.createCell(columnIndex + 1, rowIndex + 1);
-            this.model.widgets.splice(cellIndex, 0, cell);
-        }
-    }
-
-    private removeRow(rowIndex: number): void {
-        this.model.styles.instance.grid.xs.rows.splice(rowIndex, 1);
-        this.model.numOfRows--;
-
-        const rowStart = rowIndex * this.model.numOfCols;
-        this.model.widgets.splice(rowStart, this.model.numOfCols);
-    }
-
-    private addRow(rowIndex: number): void {
-        this.model.styles.instance.grid.xs.rows.push("1fr");
-        this.model.numOfRows++;
-
-        for (let columnIndex = 0; columnIndex < this.model.numOfCols; columnIndex++) {
-            const cell = this.createCell(columnIndex + 1, rowIndex + 1);
-            this.model.widgets.push(cell);
-        }
-    }
-
-    private createCell(columnIndex: number, rowIndex: number): TableCellModel {
-        const cell = new TableCellModel();
-        cell.role = "cell";
-
-        cell.styles = {
-            instance: {
-                "grid-cell": {
-                    xs: {
-                        position: {
-                            col: columnIndex,
-                            row: rowIndex
-                        },
-                        span: {
-                            cols: 1,
-                            rows: 1
-                        }
-                    }
-                },
-                "border": {
-                    bottom: {
-                        colorKey: "colors/default",
-                        style: "solid",
-                        width: "1"
-                    },
-                    left: {
-                        colorKey: "colors/default",
-                        style: "solid",
-                        width: "1"
-                    },
-                    right: {
-                        colorKey: "colors/default",
-                        style: "solid",
-                        width: "1"
-                    },
-                    top: {
-                        colorKey: "colors/default",
-                        style: "solid",
-                        width: "1"
-                    }
-                }
-            }
-        };
-
-        return cell;
     }
 }

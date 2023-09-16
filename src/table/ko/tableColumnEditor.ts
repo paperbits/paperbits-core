@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import * as Objects from "@paperbits/common/objects";
 import template from "./tableColumnEditor.html";
-import { StyleHelper, StyleService } from "@paperbits/styles";
+import { StyleHelper } from "@paperbits/styles";
 import { SizeUnits, Size } from "@paperbits/styles/size";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { TableModel } from "../tableModel";
@@ -17,7 +17,7 @@ import { StylePluginConfig } from "@paperbits/common/styles";
 export class TableColumnEditor {
     public readonly width: ko.Observable<string | number>;
 
-    constructor(private readonly styleService: StyleService) {
+    constructor() {
         this.width = ko.observable();
     }
 
@@ -32,7 +32,7 @@ export class TableColumnEditor {
 
     @OnMounted()
     public async initialize(): Promise<void> {
-        const width = Size.parse(this.model.styles.instance.grid.xs.cols[this.columnIndex]);
+        const width = Size.parse(this.model.styles.instance.table.cols[this.columnIndex]);
 
         if (width?.units === SizeUnits.pixels) {
             this.width(width.value);
@@ -79,7 +79,7 @@ export class TableColumnEditor {
             ? "1fr"
             : `${width}px`;
 
-        this.model.styles.instance.grid.xs.cols[this.columnIndex] = value;
+        this.model.styles.instance.table.cols[this.columnIndex] = value;
 
         this.onChange(this.model);
     }

@@ -29,7 +29,7 @@ export class TableHandlers implements IWidgetHandler {
         cell1.role = "Cell";
         cell1.styles = {
             instance: {
-                "grid-cell": {
+                "table-cell": {
                     position: {
                         col: 1,
                         row: 1
@@ -38,7 +38,10 @@ export class TableHandlers implements IWidgetHandler {
                         cols: 1,
                         rows: 1
                     },
-                    overflow: "scroll"
+                    overflow: {
+                        vertical: "scroll",
+                        horizontal: "scroll"
+                    }
                 },
                 "border": {
                     bottom: {
@@ -69,7 +72,7 @@ export class TableHandlers implements IWidgetHandler {
         cell2.role = "Cell";
         cell2.styles = {
             instance: {
-                "grid-cell": {
+                "table-cell": {
                     position: {
                         col: 2,
                         row: 1
@@ -78,7 +81,10 @@ export class TableHandlers implements IWidgetHandler {
                         cols: 1,
                         rows: 1
                     },
-                    overflow: "scroll"
+                    overflow: {
+                        vertical: "scroll",
+                        horizontal: "scroll"
+                    }
                 },
                 "border": {
                     bottom: {
@@ -109,7 +115,7 @@ export class TableHandlers implements IWidgetHandler {
         cell3.role = "Cell";
         cell3.styles = {
             instance: {
-                "grid-cell": {
+                "table-cell": {
                     position: {
                         col: 3,
                         row: 1
@@ -118,7 +124,10 @@ export class TableHandlers implements IWidgetHandler {
                         cols: 1,
                         rows: 1
                     },
-                    overflow: "scroll"
+                    overflow: {
+                        vertical: "scroll",
+                        horizontal: "scroll"
+                    }
                 },
                 "border": {
                     bottom: {

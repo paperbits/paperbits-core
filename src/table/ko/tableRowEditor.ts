@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import * as Objects from "@paperbits/common/objects";
 import template from "./tableRowEditor.html";
-import { StyleHelper, StyleService } from "@paperbits/styles";
+import { StyleHelper } from "@paperbits/styles";
 import { SizeUnits, Size } from "@paperbits/styles/size";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { TableModel } from "../tableModel";
@@ -17,7 +17,7 @@ import { BoxStylePluginConfig } from "@paperbits/styles/plugins";
 export class TableRowEditor {
     public readonly height: ko.Observable<string | number>;
 
-    constructor(private readonly styleService: StyleService) {
+    constructor() {
         this.height = ko.observable();
     }
 
@@ -32,7 +32,7 @@ export class TableRowEditor {
 
     @OnMounted()
     public async initialize(): Promise<void> {
-        const height = Size.parse(this.model.styles.instance.grid.xs.rows[this.rowIndex]);
+        const height = Size.parse(this.model.styles.instance.table.rows[this.rowIndex]);
 
         if (height?.units === SizeUnits.pixels) {
             this.height(height.value);
@@ -81,7 +81,7 @@ export class TableRowEditor {
             ? "1fr"
             : `${height}px`;
 
-        this.model.styles.instance.grid.xs.rows[this.rowIndex] = value;
+        this.model.styles.instance.table.rows[this.rowIndex] = value;
 
         this.onChange(this.model);
     }

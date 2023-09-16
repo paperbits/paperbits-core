@@ -3,6 +3,7 @@ import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
 import { IWidgetService, ModelBinderSelector } from "@paperbits/common/widgets";
 import { TableCellContract } from "./tableCellContract";
 import { TableCellModel } from "./tableCellModel";
+import { LocalStyles } from "@paperbits/common/styles";
 
 
 export class TableCellModelBinder extends ContainerModelBinder implements IModelBinder<TableCellModel> {
@@ -10,16 +11,26 @@ export class TableCellModelBinder extends ContainerModelBinder implements IModel
         super(widgetService, modelBinderSelector);
     }
 
-    public canHandleContract(contract: Contract): boolean {
-        return contract.type === "table-cell";
-    }
+    /**
+     * Migration to designated "table-cell" style plugin.
+     */
+    private migrateTableStyles(styles: LocalStyles): void {
+        if (!styles.instance["grid-cell"]) {
+            return;
+        }
 
-    public canHandleModel(model: Object): boolean {
-        return model instanceof TableCellModel;
+        styles.instance["table-cell"] = styles.instance["grid-cell"];
+        delete styles.instance["grid-cell"];
+
+        if (styles.instance["table-cell"].xs) { // Reducing unnecessary viewport variations.
+            styles.instance["table-cell"] = styles.instance["table-cell"].xs;
+        }
     }
 
     public async contractToModel(contract: TableCellContract, bindingContext?: Bag<any>): Promise<TableCellModel> {
         const tableCellModel = new TableCellModel();
+
+        this.migrateTableStyles(contract.styles);
 
         tableCellModel.styles = contract.styles;
         tableCellModel.role = contract.role;

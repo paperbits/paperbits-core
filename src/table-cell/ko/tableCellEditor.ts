@@ -2,10 +2,9 @@ import * as ko from "knockout";
 import template from "./tableCellEditor.html";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { TableCellModel } from "../tableCellModel";
-import { EventManager, Events } from "@paperbits/common/events";
 import { ContainerStylePluginConfig, BoxStylePluginConfig, BorderStylePluginConfig } from "@paperbits/styles/plugins";
 import { StyleHelper } from "@paperbits/styles";
-import { GridCellStylePluginConfig } from "@paperbits/styles/plugins/grid/gridCellStylePluginConfig";
+import { TableCellStylePluginConfig } from "@paperbits/styles/plugins/table/tableCellStylePluginConfig";
 import { PaddingStylePluginConfig } from "@paperbits/styles/plugins/padding";
 
 
@@ -17,7 +16,7 @@ export class TableCellEditor {
     public readonly container: ko.Observable<ContainerStylePluginConfig>;
     public readonly box: ko.Observable<BoxStylePluginConfig>;
 
-    constructor(private readonly eventManager: EventManager) {
+    constructor() {
         this.container = ko.observable<ContainerStylePluginConfig>();
         this.box = ko.observable<BoxStylePluginConfig>();
     }
@@ -30,15 +29,10 @@ export class TableCellEditor {
 
     @OnMounted()
     public initialize(): void {
-        this.updateObservables();
-        this.eventManager.addEventListener(Events.ViewportChange, this.updateObservables);
-    }
-
-    private updateObservables(): void {
         const tableCellStyleConfig = StyleHelper
             .style(this.model.styles)
-            .plugin("grid-cell")
-            .getConfig<GridCellStylePluginConfig>();
+            .plugin("table-cell")
+            .getConfig<TableCellStylePluginConfig>();
 
         if (!tableCellStyleConfig) {
             return;
@@ -67,7 +61,7 @@ export class TableCellEditor {
     public onContainerUpdate(containerConfig: ContainerStylePluginConfig): void {
         StyleHelper
             .style(this.model.styles)
-            .plugin("grid-cell")
+            .plugin("table-cell")
             .setConfig(containerConfig);
 
         this.onChange(this.model);
