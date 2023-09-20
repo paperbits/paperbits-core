@@ -34,4 +34,8 @@ export class PictureModel {
      * Picture styles.
      */
     public styles: LocalStyles;
+
+    constructor() {
+        this.styles = {};
+    }
 }
