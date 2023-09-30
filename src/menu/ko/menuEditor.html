@@ -1,105 +1,90 @@
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sourceCollapse'"
-            aria-label="Toggle 'main' section"></a>
-        <b>Basic</b>
-    </label>
-    <div id="sourceCollapse" class="collapse form-group-collapse">
-        <div class="form-group">
-            <label class="form-label">Root navigation item</label>
-            <a href="#" class="form-control"
-                data-bind="balloon: { component: { name: 'navigation-item-selector', params: { onSelect: $component.onNavigationItemChange } } }">
-                <i aria-hidden="true" class="paperbits-icon paperbits-menu-34 pull-right"></i>
-                <span data-bind="text: navigationItemTitle"></span>
-            </a>
-        </div>
-
-        <div class="form-group">
-            <label for="showHeadings" class="form-label">
-                <input id="showHeadings" type="checkbox" name="showHeadings" data-bind="checked: showHeadings" />
-                Show page headings
-            </label>
-        </div>
-
-        <!-- ko if: showHeadings -->
-
-        <div class="form-group">
-            <label for="minHeadingLevel" class="form-label">Min heading level</label>
-            <dropdown id="minHeadingLevel"
-                params="{ options: headingLevelOptions, value: minHeadingLevel, optionsText: 'text', optionsValue: 'value', heading: 'Min heading level' }">
-            </dropdown>
-        </div>
-
-        <div class="form-group">
-            <label for="maxHeadingLevel" class="form-label">Max heading level</label>
-            <dropdown id="maxHeadingLevel"
-                params="{ options: headingLevelOptions, value: maxHeadingLevel, optionsText: 'text', optionsValue: 'value', heading: 'Max heading level' }">
-            </dropdown>
-        </div>
-
-        <!-- /ko -->
-
-        <div class="form-group">
-            <label for="layout" class="form-label">
-                Layout
-            </label>
-            <dropdown id="layout"
-                params="{ options: layoutOptions, value: layout, optionsText: 'text', optionsValue: 'value', heading: 'Layout' }">
-            </dropdown>
-        </div>
-
-        <div class="form-group">
-            <label for="displayStyle" class="form-label">
-                Visibility
-                <button class="btn btn-info" role="tooltip" aria-hidden="true" role="tooltip"
-                    data-bind="tooltip: 'Change visibility of the widget. This setting might differ depending on screen size, following the mobile-first approach. If not specified for the current screen size (inherit), the setting gets taken from the closest smaller screen size.'"></button>
-            </label>
-            <dropdown id="appearanceStyle"
-                params="{ options: displayOptions, value: displayStyle, optionsText: 'text', optionsValue: 'value', onOptionSelected: onDisplayChange, heading: 'Visibility' }">
-            </dropdown>
-        </div>
+<details open>
+    <summary>
+        Basic
+    </summary>
+    <div class="form-group">
+        <label class="form-label">Root navigation item</label>
+        <a href="#" class="form-control"
+            data-bind="balloon: { component: { name: 'navigation-item-selector', params: { onSelect: $component.onNavigationItemChange } } }">
+            <i aria-hidden="true" class="paperbits-icon paperbits-menu-34 pull-right"></i>
+            <span data-bind="text: navigationItemTitle"></span>
+        </a>
     </div>
-</div>
 
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#miscellaneousCollapse'"
-            aria-label="Toggle 'Styling' section"></a>
-        <b>Styling</b>
-    </label>
-    <div id="miscellaneousCollapse" class="collapse form-group-collapse">
-        <div class="form-group">
-            <label for="appearanceStyle" class="form-label">
-                Appearance
-                <button class="btn btn-info" role="tooltip"
-                    data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
-            </label>
-            <dropdown id="menuVariationKey"
-                params="{ options: menuVariations, value: menuVariationKey, onOptionSelected: onVariationChange, optionsText: 'displayName', optionsValue: 'key', heading: 'Appearance' }">
-            </dropdown>
-        </div>
+    <div class="form-group">
+        <label for="showHeadings" class="form-label">
+            <input id="showHeadings" type="checkbox" name="showHeadings" data-bind="checked: showHeadings" />
+            Show page headings
+        </label>
     </div>
-</div>
 
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
-            aria-label="Toggle 'Size' section"></a>
-        <b>Size</b>
-    </label>
-    <div id="sizeCollapse" class="collapse form-group-collapse">
-        <size-editor params="{ features: 'height,width', allowUnits: 'px,%', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
-        </size-editor>
-    </div>
-</div>
+    <!-- ko if: showHeadings -->
 
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#boxCollapse'"
-            aria-label="Toggle 'Box' section"></a>
-        <b>Box</b>
-    </label>
-    <div id="boxCollapse" class="collapse form-group-collapse">
-        <box params="{ features: 'margin', box: boxConfig, onUpdate: onBoxUpdate }"></box>
+    <div class="form-group">
+        <label for="minHeadingLevel" class="form-label">Min heading level</label>
+        <dropdown id="minHeadingLevel"
+            params="{ options: headingLevelOptions, value: minHeadingLevel, optionsText: 'text', optionsValue: 'value', heading: 'Min heading level' }">
+        </dropdown>
     </div>
-</div>
+
+    <div class="form-group">
+        <label for="maxHeadingLevel" class="form-label">Max heading level</label>
+        <dropdown id="maxHeadingLevel"
+            params="{ options: headingLevelOptions, value: maxHeadingLevel, optionsText: 'text', optionsValue: 'value', heading: 'Max heading level' }">
+        </dropdown>
+    </div>
+
+    <!-- /ko -->
+
+    <div class="form-group">
+        <label for="layout" class="form-label">
+            Layout
+        </label>
+        <dropdown id="layout"
+            params="{ options: layoutOptions, value: layout, optionsText: 'text', optionsValue: 'value', heading: 'Layout' }">
+        </dropdown>
+    </div>
+
+    <div class="form-group">
+        <label for="displayStyle" class="form-label">
+            Visibility
+            <button class="btn btn-info" role="tooltip" aria-hidden="true" role="tooltip"
+                data-bind="tooltip: 'Change visibility of the widget. This setting might differ depending on screen size, following the mobile-first approach. If not specified for the current screen size (inherit), the setting gets taken from the closest smaller screen size.'"></button>
+        </label>
+        <dropdown id="appearanceStyle"
+            params="{ options: displayOptions, value: displayStyle, optionsText: 'text', optionsValue: 'value', onOptionSelected: onDisplayChange, heading: 'Visibility' }">
+        </dropdown>
+    </div>
+</details>
+
+<details open>
+    <summary>
+        Styling
+    </summary>
+    <div class="form-group">
+        <label for="appearanceStyle" class="form-label">
+            Appearance
+            <button class="btn btn-info" role="tooltip"
+                data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
+        </label>
+        <dropdown id="menuVariationKey"
+            params="{ options: menuVariations, value: menuVariationKey, onOptionSelected: onVariationChange, optionsText: 'displayName', optionsValue: 'key', heading: 'Appearance' }">
+        </dropdown>
+    </div>
+</details>
+
+<details open>
+    <summary>
+        Size
+    </summary>
+    <size-editor
+        params="{ features: 'height,width', allowUnits: 'px,%', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
+    </size-editor>
+</details>
+
+<details open>
+    <summary>
+        Box
+    </summary>
+    <box params="{ features: 'margin', box: boxConfig, onUpdate: onBoxUpdate }"></box>
+</details>

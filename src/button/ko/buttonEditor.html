@@ -1,88 +1,74 @@
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sourceCollapse'"
-            aria-label="Toggle 'main' section"></a>
-        <b>Basic</b>
-    </label>
-    <div id="sourceCollapse" class="collapse form-group-collapse">
-        <div class="form-group">
-            <label for="label" class="form-label">
-                Label
-                <button class="btn btn-info" role="tooltip" aria-hidden="true" role="tooltip"
-                    data-bind="tooltip: 'Text on the button'"></button>
-            </label>
-            <input id="label" type="text" class="form-control" data-bind="textInput: label" maxlength="256" />
-        </div>
+<details open>
+    <summary>
+        Basic
+    </summary>
 
-        <div class="form-group">
-            <label for="hyperlinkSelector" class="form-label">
-                Link to
-                <button class="btn btn-info" role="tooltip" aria-hidden="true" role="tooltip"
-                    data-bind="tooltip: 'A link to be navigated on click.'"></button>
-            </label>
-            <div class="input-group">
-                <input id="hyperlinkSelector" class="form-control" readonly data-bind="value: hyperlinkTitle" />
-                <button class="btn input-group-btn" aria-label="Select hyperlink"
-                    data-bind="balloon: { position: 'right', component: { name: 'hyperlink-selector', params: { hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange } } }">
-                    <i aria-hidden="true" class="paperbits-icon paperbits-link-69-2"></i>
-                </button>
-            </div>
-        </div>
+    <div class="form-group">
+        <label for="label" class="form-label">
+            Label
+            <button class="btn btn-info" role="tooltip" aria-hidden="true" role="tooltip"
+                data-bind="tooltip: 'Text on the button'"></button>
+        </label>
+        <input id="label" type="text" class="form-control" data-bind="textInput: label" maxlength="256" />
+    </div>
 
-        <glyph-input params="{ selection: model.iconKey, onChange: onIconSelect }"></glyph-input>
-
-        <div class="form-group">
-            <label for="displayStyle" class="form-label">
-                Visibility
-                <button class="btn btn-info" role="tooltip" aria-hidden="true" role="tooltip"
-                    data-bind="tooltip: 'Change visibility of the widget. This setting might differ depending on screen size following the mobile-first approach. If not specified for the current screen size (inherit), the setting gets taken from the closest smaller screen size.'"></button>
-            </label>
-            <dropdown id="displayStyle"
-                params="{ options: displayOptions, value: displayStyle, onOptionSelected: onDisplayChange, optionsText: 'text', optionsValue: 'value', heading: 'Visibility' }">
-            </dropdown>
+    <div class="form-group">
+        <label for="hyperlinkSelector" class="form-label">
+            Link to
+            <button class="btn btn-info" role="tooltip" aria-hidden="true" role="tooltip"
+                data-bind="tooltip: 'A link to be navigated on click.'"></button>
+        </label>
+        <div class="input-group">
+            <input id="hyperlinkSelector" class="form-control" readonly data-bind="value: hyperlinkTitle" />
+            <button class="btn input-group-btn" aria-label="Select hyperlink"
+                data-bind="balloon: { position: 'right', component: { name: 'hyperlink-selector', params: { hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange } } }">
+                <i aria-hidden="true" class="paperbits-icon paperbits-link-69-2"></i>
+            </button>
         </div>
     </div>
-</div>
 
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#miscellaneousCollapse'"
-            aria-label="Toggle 'Styling' section"></a>
-        <b>Styling</b>
-    </label>
-    <div id="miscellaneousCollapse" class="collapse form-group-collapse">
-        <div class="form-group">
-            <label for="appearanceStyle" class="form-label">
-                Appearance
-                <button class="btn btn-info" role="tooltip"
-                    data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
-            </label>
-            <dropdown id="buttonVariationKey"
-                params="{ options: buttonVariations, value: buttonVariationKey, onOptionSelected: onVariationChange, optionsText: 'displayName', optionsValue: 'key', heading: 'Appearance' }">
-            </dropdown>
-        </div>
+    <glyph-input params="{ selection: model.iconKey, onChange: onIconSelect }"></glyph-input>
+
+    <div class="form-group">
+        <label for="displayStyle" class="form-label">
+            Visibility
+            <button class="btn btn-info" role="tooltip" aria-hidden="true" role="tooltip"
+                data-bind="tooltip: 'Change visibility of the widget. This setting might differ depending on screen size following the mobile-first approach. If not specified for the current screen size (inherit), the setting gets taken from the closest smaller screen size.'"></button>
+        </label>
+        <dropdown id="displayStyle"
+            params="{ options: displayOptions, value: displayStyle, onOptionSelected: onDisplayChange, optionsText: 'text', optionsValue: 'value', heading: 'Visibility' }">
+        </dropdown>
     </div>
-</div>
+</details>
 
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
-            aria-label="Toggle 'Size' section"></a>
-        <b>Size</b>
-    </label>
-    <div id="sizeCollapse" class="collapse form-group-collapse">
-        <size-editor params="{ features: 'height,width', allowUnits: 'px,%', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
-        </size-editor>
+<details open>
+    <summary>
+        Styling
+    </summary>
+    <div class="form-group">
+        <label for="appearanceStyle" class="form-label">
+            Appearance
+            <button class="btn btn-info" role="tooltip"
+                data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
+        </label>
+        <dropdown id="buttonVariationKey"
+            params="{ options: buttonVariations, value: buttonVariationKey, onOptionSelected: onVariationChange, optionsText: 'displayName', optionsValue: 'key', heading: 'Appearance' }">
+        </dropdown>
     </div>
-</div>
+</details>
 
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#boxCollapse'"
-            aria-label="Toggle 'Box' section"></a>
+<details open>
+    <summary>
+        Size
+    </summary>
+    <size-editor
+        params="{ features: 'height,width', allowUnits: 'px,%', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
+    </size-editor>
+</details>
+
+<details open>
+    <summary>
         <b>Box</b>
-    </label>
-    <div id="boxCollapse" class="collapse form-group-collapse">
-        <box params="{ features: 'margin,padding,border', box: boxConfig, onUpdate: onBoxUpdate }"></box>
-    </div>
-</div>
+    </summary>
+    <box params="{ features: 'margin,padding,border', box: boxConfig, onUpdate: onBoxUpdate }"></box>
+</details>

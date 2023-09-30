@@ -1,73 +1,52 @@
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#backgroundCollapse'"></a>
-        <b>Background</b>
-        <button class="btn btn-info" role="tooltip" data-bind="tooltip: 'Manage background'"></button>
-    </label>
+<details open>
+    <summary>
+        Background
+    </summary>
+    <background params="{ background: $component.background, onUpdate: onBackgroundUpdate }"></background>
+</details>
 
-    <div id="backgroundCollapse" class="collapse form-group-collapse">
-        <background params="{ background: $component.background, onUpdate: onBackgroundUpdate }"></background>
-    </div>
-</div>
+<details open>
+    <summary>
+        Container size
+    </summary>
+    <size-editor
+        params="{ features: 'minMaxHeight,minMaxWidth', sizeConfig: containerSizeStyles, onUpdate: onContainerSizeUpdate }">
+    </size-editor>
+</details>
 
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
-            aria-label="Toggle 'Container size' section"></a>
-        <b>Container size</b>
-    </label>
-    <div id="sizeCollapse" class="collapse form-group-collapse">
-        <size-editor
-            params="{ features: 'minMaxHeight,minMaxWidth', sizeConfig: containerSizeStyles, onUpdate: onContainerSizeUpdate }">
-        </size-editor>
-    </div>
-</div>
+<details open>
+    <summary>
+        Container box
+    </summary>
+    <box params="{ features: 'margin,padding', box: box, onUpdate: onBoxUpdate }"></box>
+</details>
 
-<div class="form-group form-group-collapsible">
+<details open>
+    <summary>
+        Miscellaneous
+    </summary>
     <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#boxCollapse'"
-            aria-label="Toggle 'Box' section"></a>
-        <b>Container box</b>
+        Stick to
+        <button class="btn btn-info" role="tooltip"
+            data-bind="tooltip: 'Make the element stick to the edge (top or bottom) of the screen when its containing element crosses that edge.'"></button>
     </label>
-    <div id="boxCollapse" class="collapse form-group-collapse">
-        <box params="{ features: 'margin,padding', box: box, onUpdate: onBoxUpdate }"></box>
-    </div>
-</div>
-
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#miscellaneousCollapse'"
-            aria-label="Toggle 'Miscellaneous' section"></a>
-        <b>Miscellaneous</b>
-    </label>
-    <div id="miscellaneousCollapse" class="collapse form-group-collapse">
+    <div class="form-group">
         <label class="form-label">
-            Stick to
-            <button class="btn btn-info" role="tooltip"
-                data-bind="tooltip: 'Make the element stick to the edge (top or bottom) of the screen when its containing element crosses that edge.'"></button>
+            <input name="sticking" type="radio" value="none" data-bind="checked: stickTo" />None
         </label>
-        <div class="form-group">
-            <label class="form-label">
-                <input name="sticking" type="radio" value="none" data-bind="checked: stickTo" />None
-            </label>
-            <label class="form-label">
-                <input name="sticking" type="radio" value="top" data-bind="checked: stickTo" />Top
-            </label>
-            <label class="form-label">
-                <input name="sticking" type="radio" value="bottom" data-bind="checked: stickTo" />Bottom
-            </label>
-        </div>
+        <label class="form-label">
+            <input name="sticking" type="radio" value="top" data-bind="checked: stickTo" />Top
+        </label>
+        <label class="form-label">
+            <input name="sticking" type="radio" value="bottom" data-bind="checked: stickTo" />Bottom
+        </label>
     </div>
-</div>
+</details>
 
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#fillSpace'"
-            aria-label="Toggle 'Fill available space' section"></a>
-        <b>Fill available space</b>
-    </label>
-    <div id="fillSpace" class="collapse form-group-collapse">
-        <size-editor params="{ features: 'stretch', sizeConfig: sectionSizeStyles, onUpdate: onSectionSizeUpdate }">
-        </size-editor>
-    </div>
-</div>
+<details open>
+    <summary>
+        Fill available space
+    </summary>
+    <size-editor params="{ features: 'stretch', sizeConfig: sectionSizeStyles, onUpdate: onSectionSizeUpdate }">
+    </size-editor>
+</details>
