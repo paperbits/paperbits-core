@@ -78,9 +78,3 @@ ko.bindingHandlers["collapse"] = {
         }, 100);
     }
 };
-
-ko.bindingHandlers["log"] = {
-    init: (triggerElement, valueAccessor) => {
-        console.log(valueAccessor());
-    }
-};
