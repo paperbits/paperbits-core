@@ -1,15 +1,11 @@
 ﻿import { IWidgetHandler, IWidgetOrder, WidgetContext } from "@paperbits/common/editing";
-import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
+import { IContextCommandSet } from "@paperbits/common/ui";
 import { deleteWidgetCommand, openWidgetEditorCommand, splitter, switchToParentCommand } from "@paperbits/common/ui/commands";
 import { MenuModel } from "./menuModel";
 import { IVisibilityCommandProvider } from "../security/visibilityContextCommandProvider";
 
 export class MenuHandlers implements IWidgetHandler {
-    constructor(
-        private readonly viewManager: ViewManager,
-        private readonly visibilityCommandProvider: IVisibilityCommandProvider,
-    ) {
-    }
+    constructor(private readonly visibilityCommandProvider: IVisibilityCommandProvider) { }
 
     public async getWidgetOrder(): Promise<IWidgetOrder> {
         const widgetOrder: IWidgetOrder = {
