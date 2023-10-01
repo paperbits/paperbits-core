@@ -1,117 +1,91 @@
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section"
-            data-bind="collapse: '#containerBackgroundCollapse'" aria-label="Toggle 'Background' section"></a>
-        <b>Background</b>
+<details open>
+    <summary>
+        Background
         <button class="btn btn-info" role="tooltip" data-bind="tooltip: 'Manage background'"></button>
-    </label>
-
-    <div id="containerBackgroundCollapse" class="collapse form-group-collapse">
-        <background params="{ background: containerBackground, onUpdate: onContainerBackgroundChange }">
-        </background>
-    </div>
-</div>
+    </summary>
+    <background params="{ background: containerBackground, onUpdate: onContainerBackgroundChange }">
+    </background>
+</details>
 
 <container params="{ container: containerConfig, onUpdate: onContainerContainerChange, overflowControls: true  }">
 </container>
 
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
-            aria-label="Toggle 'Container size' section"></a>
-        <b>Container size</b>
-    </label>
-    <div id="sizeCollapse" class="collapse form-group-collapse">
-        <size-editor
-            params="{ features: 'width,height,minMaxWidth,minMaxHeight', allowUnits: 'px,%', sizeConfig: containerSizeStyles, onUpdate: onContainerSizeUpdate }">
-        </size-editor>
-    </div>
-</div>
+<details open>
+    <summary>
+        Container size
+    </summary>
+    <size-editor
+        params="{ features: 'width,height,minMaxWidth,minMaxHeight', allowUnits: 'px,%', sizeConfig: containerSizeStyles, onUpdate: onContainerSizeUpdate }">
+    </size-editor>
+</details>
 
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#positionCollapse'"></a>
-        <b>Position</b>
-    </label>
-    <div id="positionCollapse" class="collapse form-group-collapse">
-        <div class="form-group">
-            <label class="form-label">
-                <input name="position" type="radio" value="center" data-bind="checked: position" />Center
-            </label>
-            <label class="form-label">
-                <input name="position" type="radio" value="top" data-bind="checked: position" />Top
-            </label>
-            <label class="form-label">
-                <input name="position" type="radio" value="left" data-bind="checked: position" />Left
-            </label>
-            <label class="form-label">
-                <input name="position" type="radio" value="right" data-bind="checked: position" />Right
-            </label>
-            <label class="form-label">
-                <input name="position" type="radio" value="bottom" data-bind="checked: position" />Bottom
-            </label>
-            <label class="form-label">
-                <input name="position" type="radio" value="attached" data-bind="checked: position" />By trigger (bottom)
-            </label>
-        </div>
-    </div>
-</div>
-
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#offsetCollapse'"></a>
-        <b>Offset</b>
-    </label>
-    <div id="offsetCollapse" class="collapse form-group-collapse">
-        <div class="form-group">
-            <label for="label" class="form-label">
-                Offset X
-            </label>
-            <input id="offseX" type="number" class="form-control" placeholder="0" data-bind="textInput: offsetX" />
-        </div>
-        <div class="form-group">
-            <label for="label" class="form-label">
-                Offset Y
-            </label>
-            <input id="offseY" type="number" class="form-control" placeholder="0" data-bind="textInput: offsetY" />
-        </div>
-    </div>
-</div>
-
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#boxCollapse'"
-            aria-label="Toggle 'Box' section"></a>
-        <b>Box</b>
-    </label>
-    <div id="boxCollapse" class="collapse form-group-collapse">
-        <box params="{ features: 'padding,border', box: containerBox, onUpdate: onBoxUpdate }"></box>
-    </div>
-</div>
-
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#backdropCollapse'"
-            aria-label="Toggle 'Background' section"></a>
-        <b>Backdrop</b>
-    </label>
-    <div id="backdropCollapse" class="collapse form-group-collapse">
-        <label for="backdrop" class="form-label">
-            <input type="checkbox" id="backdrop" data-bind="checked: backdrop" /> Show backdrop
+<details open>
+    <summary>
+        Position
+    </summary>
+    <div class="form-group">
+        <label class="form-label">
+            <input name="position" type="radio" value="center" data-bind="checked: position" />Center
+        </label>
+        <label class="form-label">
+            <input name="position" type="radio" value="top" data-bind="checked: position" />Top
+        </label>
+        <label class="form-label">
+            <input name="position" type="radio" value="left" data-bind="checked: position" />Left
+        </label>
+        <label class="form-label">
+            <input name="position" type="radio" value="right" data-bind="checked: position" />Right
+        </label>
+        <label class="form-label">
+            <input name="position" type="radio" value="bottom" data-bind="checked: position" />Bottom
+        </label>
+        <label class="form-label">
+            <input name="position" type="radio" value="attached" data-bind="checked: position" />By trigger
+            (bottom)
         </label>
     </div>
-</div>
+</details>
+
+<details open>
+    <summary>
+        Offset
+    </summary>
+    <div class="form-group">
+        <label for="label" class="form-label">
+            Offset X
+        </label>
+        <input id="offseX" type="number" class="form-control" placeholder="0" data-bind="textInput: offsetX" />
+    </div>
+    <div class="form-group">
+        <label for="label" class="form-label">
+            Offset Y
+        </label>
+        <input id="offseY" type="number" class="form-control" placeholder="0" data-bind="textInput: offsetY" />
+    </div>
+</details>
+
+<details open>
+    <summary>
+        Box
+    </summary>
+    <box params="{ features: 'padding,border', box: containerBox, onUpdate: onBoxUpdate }"></box>
+</details>
+
+<details open>
+    <summary>
+        Backdrop
+    </summary>
+    <label for="backdrop" class="form-label">
+        <input type="checkbox" id="backdrop" data-bind="checked: backdrop" /> Show backdrop
+    </label>
+</details>
 
 <!-- ko if: backdrop -->
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#backdropBackgroundCollapse'"
-            aria-label="Toggle 'Backdrop background' section"></a>
-        <b>Backdrop background</b>
+<details open>
+    <summary>
+        Backdrop background
         <button class="btn btn-info" role="tooltip" data-bind="tooltip: 'Manage backdrop background'"></button>
-    </label>
-    <div id="backdropBackgroundCollapse" class="collapse form-group-collapse">
-        <background params="{ background: backdropBackground, onUpdate: onBackdropBackgroundChange }"></background>
-    </div>
-</div>
+    </summary>
+    <background params="{ background: backdropBackground, onUpdate: onBackdropBackgroundChange }"></background>
+</details>
 <!-- /ko -->

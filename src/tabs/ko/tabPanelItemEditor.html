@@ -1,40 +1,27 @@
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#mainCollapse'"
-            aria-label="Toggle 'Main' section"></a>
-        <b>Main</b>
-    </label>
-    <div id="mainCollapse" class="collapse form-group-collapse">
-        <div class="form-group">
-            <button class="btn btn-info" role="tooltip" data-bind="tooltip: 'Tab label'"></button>
-            <label for="styleName">Tab label</label>
-            <input id="styleName" type="text" class="form-control" spellcheck="false"
-                data-bind="textInput: tabLabel, focus: true">
-        </div>
+<details open>
+    <summary>
+        Main
+    </summary>
+    <div class="form-group">
+        <button class="btn btn-info" role="tooltip" data-bind="tooltip: 'Tab label'"></button>
+        <label for="styleName">Tab label</label>
+        <input id="styleName" type="text" class="form-control" spellcheck="false"
+            data-bind="textInput: tabLabel, focus: true">
     </div>
-</div>
+</details>
 
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#backgroundCollapse'"
-            aria-label="Toggle 'Background' section"></a>
-        <b>Background</b>
+<details open>
+    <summary>
+        Background
         <button class="btn btn-info" role="tooltip" data-bind="tooltip: 'Manage background'"></button>
-    </label>
+    </summary>
+    <background params="{ background: $component.background, onUpdate: onBackgroundUpdate }"></background>
+</details>
 
-    <div id="backgroundCollapse" class="collapse form-group-collapse">
-        <background params="{ background: $component.background, onUpdate: onBackgroundUpdate }"></background>
-    </div>
-</div>
-
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
-            aria-label="Toggle 'Size' section"></a>
-        <b>Size</b>
-    </label>
-    <div id="sizeCollapse" class="collapse form-group-collapse">
-        <size-editor params="{ features: 'minMaxWidth', sizeConfig: sizeConfig, onUpdate: onSizeUpdate }">
-        </size-editor>
-    </div>
-</div>
+<details open>
+    <summary>
+        Size
+    </summary>
+    <size-editor params="{ features: 'minMaxWidth', sizeConfig: sizeConfig, onUpdate: onSizeUpdate }">
+    </size-editor>
+</details>

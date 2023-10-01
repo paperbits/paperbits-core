@@ -1,34 +1,25 @@
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#backgroundCollapse'"
-            aria-label="Toggle 'Background' section"></a>
-        <b>Background</b>
+<details open>
+    <summary>
+        Background
         <button class="btn btn-info" role="tooltip" data-bind="tooltip: 'Manage background'"></button>
-    </label>
-
-    <div id="backgroundCollapse" class="collapse form-group-collapse">
-        <background params="{ background: background, onUpdate: onBackgroundChange }"></background>
-    </div>
-</div>
+    </summary>
+    <background params="{ background: background, onUpdate: onBackgroundChange }"></background>
+</details>
 
 <container params="{ container: containerConfig, onUpdate: onContainerChange }"></container>
 
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#miscellaneousCollapse'"
-            aria-label="Toggle 'Size' section"></a>
-        <b>Styling</b>
-    </label>
-    <div id="miscellaneousCollapse" class="collapse form-group-collapse">
-        <div class="form-group">
-            <label for="appearanceStyle" class="form-label">
-                Appearance
-                <button class="btn btn-info" role="tooltip"
-                    data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
-            </label>
-            <dropdown id="appearanceStyle"
-                params="{ options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key', heading: 'Appearance' }">
-            </dropdown>
-        </div>
+<details open>
+    <summary>
+        Styling
+    </summary>
+    <div class="form-group">
+        <label for="appearanceStyle" class="form-label">
+            Appearance
+            <button class="btn btn-info" role="tooltip"
+                data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
+        </label>
+        <dropdown id="appearanceStyle"
+            params="{ options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key', heading: 'Appearance' }">
+        </dropdown>
     </div>
-</div>
+</details>

@@ -7,13 +7,9 @@
             data-bind="textInput: width" />
     </div>
 </div>
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#boxCollapse'"
-            aria-label="Toggle 'Container box' section"></a>
+<details open>
+    <summary>
         <b>Container box</b>
-    </label>
-    <div id="boxCollapse" class="collapse form-group-collapse">
-        <box params="{ features: 'border,padding', onUpdate: onBoxUpdate }"></box>
-    </div>
-</div>
+    </summary>
+    <box params="{ features: 'border,padding', onUpdate: onBoxUpdate }"></box>
+</details>

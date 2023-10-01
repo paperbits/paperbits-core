@@ -1,74 +1,60 @@
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#alignmentCollapse'"
-            aria-label="Toggle 'Content alignment' section"></a>
-        <b>Content alignment</b>
-    </label>
-
-    <div id="alignmentCollapse" class="collapse form-group-collapse">
-        <div class="form-group">
-            <label>Horizontal</label>
-            <a href="#" class="toolbox-btn" role="button"
-                data-bind="click: alignLeft, css: { 'toolbox-btn-is-active': horizontalAlignment() === 'start' }">
-                <i aria-hidden="true" class="paperbits-icon paperbits-align-left"></i>
-            </a>
-            <a href="#" class="toolbox-btn" role="button"
-                data-bind="click: alignCenter, css: { 'toolbox-btn-is-active': horizontalAlignment() === 'center' || horizontalAlignment() === 'around' || horizontalAlignment() === 'between' }">
-                <i aria-hidden="true" class="paperbits-icon paperbits-align-center-horizontal"></i>
-            </a>
-            <a href="#" class="toolbox-btn" role="button"
-                data-bind="click: alignRight, css: { 'toolbox-btn-is-active': horizontalAlignment() === 'end' }">
-                <i aria-hidden="true" class="paperbits-icon paperbits-align-right"></i>
-            </a>
-        </div>
-
-        <div class="form-group">
-            <label>Vertical</label>
-            <a href="#" class="toolbox-btn" role="button"
-                data-bind="click: alignTop, css: { 'toolbox-btn-is-active': verticalAlignment() === 'start' }">
-                <i aria-hidden="true" class="paperbits-icon paperbits-align-top"></i>
-            </a>
-            <a href="#" class="toolbox-btn" role="button"
-                data-bind="click: alignMiddle, css: { 'toolbox-btn-is-active': verticalAlignment() === 'center' || verticalAlignment() === 'around' || verticalAlignment() === 'between' }">
-                <i aria-hidden="true" class="paperbits-icon paperbits-align-center-vertical"></i>
-            </a>
-            <a href="#" class="toolbox-btn" role="button"
-                data-bind="click: alignBottom, css: { 'toolbox-btn-is-active': verticalAlignment() === 'end' }">
-                <i aria-hidden="true" class="paperbits-icon paperbits-align-bottom"></i>
-            </a>
-        </div>
+<details open>
+    <summary>
+        Content alignment
+    </summary>
+    <div class="form-group">
+        <label>Horizontal</label>
+        <a href="#" class="toolbox-btn" role="button"
+            data-bind="click: alignLeft, css: { 'toolbox-btn-is-active': horizontalAlignment() === 'start' }">
+            <i aria-hidden="true" class="paperbits-icon paperbits-align-left"></i>
+        </a>
+        <a href="#" class="toolbox-btn" role="button"
+            data-bind="click: alignCenter, css: { 'toolbox-btn-is-active': horizontalAlignment() === 'center' || horizontalAlignment() === 'around' || horizontalAlignment() === 'between' }">
+            <i aria-hidden="true" class="paperbits-icon paperbits-align-center-horizontal"></i>
+        </a>
+        <a href="#" class="toolbox-btn" role="button"
+            data-bind="click: alignRight, css: { 'toolbox-btn-is-active': horizontalAlignment() === 'end' }">
+            <i aria-hidden="true" class="paperbits-icon paperbits-align-right"></i>
+        </a>
     </div>
-</div>
+    <div class="form-group">
+        <label>Vertical</label>
+        <a href="#" class="toolbox-btn" role="button"
+            data-bind="click: alignTop, css: { 'toolbox-btn-is-active': verticalAlignment() === 'start' }">
+            <i aria-hidden="true" class="paperbits-icon paperbits-align-top"></i>
+        </a>
+        <a href="#" class="toolbox-btn" role="button"
+            data-bind="click: alignMiddle, css: { 'toolbox-btn-is-active': verticalAlignment() === 'center' || verticalAlignment() === 'around' || verticalAlignment() === 'between' }">
+            <i aria-hidden="true" class="paperbits-icon paperbits-align-center-vertical"></i>
+        </a>
+        <a href="#" class="toolbox-btn" role="button"
+            data-bind="click: alignBottom, css: { 'toolbox-btn-is-active': verticalAlignment() === 'end' }">
+            <i aria-hidden="true" class="paperbits-icon paperbits-align-bottom"></i>
+        </a>
+    </div>
+</details>
 
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#contentFlowCollapse'"
-            aria-label="Toggle 'Content flow' section"></a>
-        <b>Content flow</b>
+<details open>
+    <summary>
+        Content flow
         <button class="btn btn-info" role="tooltip"
             data-bind="tooltip: 'Manage scrolling settings for container'"></button>
-    </label>
-    <div id="contentFlowCollapse" class="collapse form-group-collapse">
-        <label class="form-label">
-            <input name="scrollOnOverlow" type="checkbox" data-bind="checked: scrollOnOverlow" />Scroll on overflow
-        </label>
-    </div>
-</div>
-
-<div class="form-group form-group-collapsible">
+    </summary>
     <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#miscellaneousCollapse'"
-            aria-label="Toggle 'Miscellaneous' section"></a>
-        <b>Miscellaneous</b>
+        <input name="scrollOnOverlow" type="checkbox" data-bind="checked: scrollOnOverlow" />Scroll on overflow
     </label>
-    <div id="miscellaneousCollapse" class="collapse form-group-collapse">
-        <label class="form-label">
-            Order in row
-            <button class="btn btn-info" role="tooltip"
-                data-bind="tooltip: 'Manage an element order in a parent container'"></button>
-        </label>
-        <div class="form-group">
-            <input type="number" class="form-control" max="12" min="1" data-bind="textInput: order">
-        </div>
+</details>
+
+<details open>
+    <summary>
+        <b>Miscellaneous</b>
+    </summary>
+    <label class="form-label">
+        Order in row
+        <button class="btn btn-info" role="tooltip"
+            data-bind="tooltip: 'Manage an element order in a parent container'"></button>
+    </label>
+    <div class="form-group">
+        <input type="number" class="form-control" max="12" min="1" data-bind="textInput: order">
     </div>
-</div>
+</details>

@@ -1,88 +1,72 @@
-﻿<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sourceCollapse'"
-            aria-label="Toggle 'Source' section"></a>
-        <b>Source</b>
-    </label>
-    <div id="sourceCollapse" class="collapse form-group-collapse">
-        <div class="dropzone">
-            <a href="#" class="dropzone-showbox" role="button" aria-label="Video source"
-                data-bind="balloon: { component: { name: 'media-selector', params: { mimeType: 'video/', onSelect: $component.onMediaSelected, mimeType: $component.mimeType } }, position: 'right' }">
-                <!-- ko if: sourceUrl -->
-                <video class="fit" controls>
-                    <source data-bind="attr: { src: sourceUrl }" />
-                </video>
-                <!-- /ko -->
-            </a>
-        </div>
+﻿<details open>
+    <summary>
+        Source
+    </summary>
+    <div class="dropzone">
+        <a href="#" class="dropzone-showbox" role="button" aria-label="Video source"
+            data-bind="balloon: { component: { name: 'media-selector', params: { mimeType: 'video/', onSelect: $component.onMediaSelected, mimeType: $component.mimeType } }, position: 'right' }">
+            <!-- ko if: sourceUrl -->
+            <video class="fit" controls>
+                <source data-bind="attr: { src: sourceUrl }" />
+            </video>
+            <!-- /ko -->
+        </a>
     </div>
-</div>
+</details>
 
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#miscellaneousCollapse'"
-            aria-label="Toggle 'Miscellaneous' section"></a>
-        <b>Miscellaneous</b>
+<details open>
+    <summary>
+        Miscellaneous
+    </summary>
+    <label for="controls" class="form-label">
+        <input type="checkbox" id="controls" data-bind="checked: controls" />Controls
     </label>
-    <div id="miscellaneousCollapse" class="collapse form-group-collapse">
-
-        <label for="controls" class="form-label">
-            <input type="checkbox" id="controls" data-bind="checked: controls" />Controls
-        </label>
-        <!-- <label for="muted" class="form-label">
+    <!-- <label for="muted" class="form-label">
                 <input type="checkbox" id="muted" data-bind="checked: muted" />Muted
             </label> -->
-        <label for="autoplay" class="form-label">
-            <input type="checkbox" id="autoplay" data-bind="checked: autoplay" />Autoplay
+    <label for="autoplay" class="form-label">
+        <input type="checkbox" id="autoplay" data-bind="checked: autoplay" />Autoplay
+    </label>
+
+    <!-- ko if: sourceUrl -->
+    <div class="dropzone">
+        <label for="source" class="form-label">
+            Poster
+            <button class="btn btn-info" role="tooltip" aria-label="Error" aria-haspopup="true" aria-hidden="true"
+                data-bind="tooltip: 'Source of the picture. To change, click on preview area below and select a picture from media libaray.'"></button>
         </label>
-
-        <!-- ko if: sourceUrl -->
-        <div class="dropzone">
-            <label for="source" class="form-label">
-                Poster
-                <button class="btn btn-info" role="tooltip" aria-label="Error" aria-haspopup="true" aria-hidden="true"
-                    data-bind="tooltip: 'Source of the picture. To change, click on preview area below and select a picture from media libaray.'"></button>
-            </label>
-            <a href="#" id="source" role="img" class="dropzone-showbox"
-                data-bind="balloon: { position: 'right', component: { name: 'media-selector', params: { mimeType: 'image/', onSelect: $component.onPosterSelected } } }, focus: true">
-                <div class="fit" role="presentation" data-bind="background: background"></div>
-            </a>
-        </div>
-        <!-- /ko -->
+        <a href="#" id="source" role="img" class="dropzone-showbox"
+            data-bind="balloon: { position: 'right', component: { name: 'media-selector', params: { mimeType: 'image/', onSelect: $component.onPosterSelected } } }, focus: true">
+            <div class="fit" role="presentation" data-bind="background: background"></div>
+        </a>
     </div>
-</div>
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
-            aria-label="Toggle 'Size' section"></a>
-        <b>Size</b>
-    </label>
-    <div id="sizeCollapse" class="collapse form-group-collapse">
-        <size-editor params="{ features: 'height,width', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
-        </size-editor>
-    </div>
-</div>
+    <!-- /ko -->
+</details>
 
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#miscellaneousCollapse'"
-            aria-label="Toggle 'Styling' section"></a>
-        <b>Styling</b>
-    </label>
-    <div id="miscellaneousCollapse" class="collapse form-group-collapse">
-        <div class="form-group">
-            <label for="appearanceStyle" class="form-label">
-                Appearance
-                <button class="btn btn-info" role="tooltip"
-                    data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
-            </label>
-            <!-- <div class="input-group">
+<details open>
+    <summary>
+        Size
+    </summary>
+    <size-editor params="{ features: 'height,width', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
+    </size-editor>
+</details>
+
+<details open>
+    <summary>
+        Styling
+    </summary>
+    <div class="form-group">
+        <label for="appearanceStyle" class="form-label">
+            Appearance
+            <button class="btn btn-info" role="tooltip"
+                data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
+        </label>
+        <!-- <div class="input-group">
                     <a href="#" class="form-control" data-bind="text: appearanceStyle() && appearanceStyle().displayName, balloon: { component: { name: 'style-variation-selector', params: { snippetType: 'components/picture', onSelect: $component.onVariationSelected } } }">
                     </a>
                 </div> -->
-            <dropdown id="appearanceStyle"
-                params="{ options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key', heading: 'Appearance' }">
-            </dropdown>
-        </div>
+        <dropdown id="appearanceStyle"
+            params="{ options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key', heading: 'Appearance' }">
+        </dropdown>
     </div>
-</div>
+</details>

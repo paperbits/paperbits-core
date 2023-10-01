@@ -1,26 +1,17 @@
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#backgroundCollapse'"
-            aria-label="Toggle 'Background' section"></a>
-        <b>Background</b>
+<details open>
+    <summary>
+        Background
         <button class="btn btn-info" role="tooltip" data-bind="tooltip: 'Manage background'"></button>
-    </label>
-
-    <div id="backgroundCollapse" class="collapse form-group-collapse">
-        <background params="{ background: backgroundConfig, onUpdate: onBackgroundChange }"></background>
-    </div>
-</div>
+    </summary>
+    <background params="{ background: backgroundConfig, onUpdate: onBackgroundChange }"></background>
+</details>
 
 <container params="{ container: containerConfig, onUpdate: onContainerChange }"></container>
 
-<div class="form-group form-group-collapsible">
-    <label class="form-label">
-        <a href="#" class="form-group-toggle" title="Toggle section" data-bind="collapse: '#sizeCollapse'"
-            aria-label="Toggle 'Size' section"></a>
-        <b>Size</b>
-    </label>
-    <div id="sizeCollapse" class="collapse form-group-collapse">
-        <size-editor params="{ features: 'minMaxWidth', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
-        </size-editor>
-    </div>
-</div>
+<details open>
+    <summary>
+        Size
+    </summary>
+    <size-editor params="{ features: 'minMaxWidth', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
+    </size-editor>
+</details>
