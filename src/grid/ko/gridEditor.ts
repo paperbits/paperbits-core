@@ -813,6 +813,7 @@ export class GridEditor {
 
     private getGridItemsUnderPointer(layerName?: string): GridItem[] {
         const elements = this.getElementsUnderPointer().filter(x => x.tagName !== "HTML");
+
         return this.getGridItems(elements, layerName);
     }
 
@@ -938,6 +939,8 @@ export class GridEditor {
         const componentStyleDefinitionWrapper = StyleHelper.getStyleDefinitionWrappers(styleDefinitions.components);
         const match = componentStyleDefinitionWrapper.find(x => element.matches(x.selector));
 
+        
+
         if (!match) {
             return null;
         }
@@ -986,12 +989,21 @@ export class GridEditor {
 
         for (const element of elements.reverse()) {
             const widgetGridItem = this.getGridItem(element, layerName);
+  
+            // if (element.classList.contains("click-counter")) {
+            //     debugger;
+            // }
+
+            // if (element.classList.contains("button")) {
+            //     debugger;
+            // }
 
             if (widgetGridItem && widgetGridItem.binding !== currentwidgetBinding) {
                 stackOfGridItems.push(widgetGridItem);
                 currentwidgetBinding = widgetGridItem.binding;
                 continue;
             }
+
 
             const styleableGridItem = this.getStylableGridItem(element);
 

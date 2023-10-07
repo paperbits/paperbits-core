@@ -3,7 +3,7 @@
     <div class="collapsible-content" data-bind="styled: $component.styles">
         <!-- ko foreach: { data: widgets, as: 'widget' } -->
         <!-- ko if: widget.wrapped -->
-        <div class="contents" data-bind="widget: widget"></div>
+        <div data-bind="widget: widget"></div>
         <!-- /ko -->
         <!-- ko ifnot: widget.wrapped -->
         <!-- ko widget: widget -->

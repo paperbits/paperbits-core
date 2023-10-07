@@ -1,7 +1,7 @@
 <div class="col" data-bind="css: css">
     <!-- ko foreach: { data: widgets, as: 'widget' } -->
     <!-- ko if: widget.wrapped -->
-    <div class="contents" data-bind="widget: widget"></div>
+    <div data-bind="widget: widget"></div>
     <!-- /ko -->
     <!-- ko ifnot: widget.wrapped -->
     <!-- ko widget: widget -->
