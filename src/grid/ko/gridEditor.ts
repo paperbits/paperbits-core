@@ -9,7 +9,7 @@ import { IWidgetService } from "@paperbits/common/widgets";
 import { EventManager, Events } from "@paperbits/common/events";
 import { Router } from "@paperbits/common/routing";
 import { Bag, Keys, MouseButtons } from "@paperbits/common";
-import { LocalStyles, StyleDefinition, VariationContract } from "@paperbits/common/styles";
+import { LocalStyles, PluginBag, StyleDefinition, VariationContract } from "@paperbits/common/styles";
 import { StyleHelper } from "@paperbits/styles";
 import { TextblockEditor } from "../../textblock/ko";
 
@@ -882,7 +882,7 @@ export class GridEditor {
                     shortKey = "instance";
                 }
 
-                let componentVariation: VariationContract;
+                let componentVariation: PluginBag;
                 componentVariation = Objects.getObjectAt(shortKey, styles);
 
                 if (!componentVariation) {

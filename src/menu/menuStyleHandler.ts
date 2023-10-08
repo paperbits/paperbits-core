@@ -80,26 +80,28 @@ const getActiveNavLinkStyle = (key: string): VariationContract => {
     };
 };
 
-const getMenuStyle = (key: string): any => {
+const getMenuStyle = (key: string): VariationContract => {
     return {
-        default: {
-            displayName: "Normal menu",
-            key: key,
-            category: "appearance",
-            components: {
-                dropdown: {
-                    default: getDropdownStyle(`${key}/components/dropdown/default`)
-                },
-                navLink: {
-                    default: getNavLinkStyle(`${key}/components/navLink/default`),
-                    active: getActiveNavLinkStyle(`${key}/components/navLink/active`),
-                }
+        displayName: "Normal menu",
+        key: key,
+        category: "appearance",
+        components: {
+            dropdown: {
+                default: getDropdownStyle(`${key}/components/dropdown/default`)
+            },
+            navLink: {
+                default: getNavLinkStyle(`${key}/components/navLink/default`),
+                active: getActiveNavLinkStyle(`${key}/components/navLink/active`),
             }
         }
     };
 };
 
-const getDefaultStyle = (key: string = `components/menu/default`) => {
+const getDefaultStyle = (key: string = `components/menu/default`): VariationContract => {
+    if (!key.startsWith("components/menu")) {
+        return null;
+    }
+
     const regex = /components\/(\w*)\/(\w*)/gm;
 
     let matches;
