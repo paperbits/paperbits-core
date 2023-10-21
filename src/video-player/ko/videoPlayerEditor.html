@@ -61,10 +61,6 @@
             <button class="btn btn-info" role="tooltip"
                 data-bind="tooltip: 'Predefined appearance from style guide.'"></button>
         </label>
-        <!-- <div class="input-group">
-                    <a href="#" class="form-control" data-bind="text: appearanceStyle() && appearanceStyle().displayName, balloon: { component: { name: 'style-variation-selector', params: { snippetType: 'components/picture', onSelect: $component.onVariationSelected } } }">
-                    </a>
-                </div> -->
         <dropdown id="appearanceStyle"
             params="{ options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key', heading: 'Appearance' }">
         </dropdown>

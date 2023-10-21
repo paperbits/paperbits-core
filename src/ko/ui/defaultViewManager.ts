@@ -464,6 +464,10 @@ export class DefaultViewManager implements ViewManager {
 
         if (view) {
             this.viewStack.removeView(view);
+
+            if (view.onClose) {
+                view.onClose();
+            }
         }
 
         this.activeView(null);

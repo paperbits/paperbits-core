@@ -8,6 +8,7 @@ import { ButtonModelBinder } from "./buttonModelBinder";
 import { Button } from "./ko/button";
 import { ButtonEditor } from "./ko/buttonEditor";
 import { ButtonViewModelBinder } from "./ko/buttonViewModelBinder";
+import styleTemplate from "./styleGuideSnippet.html";
 
 export class ButtonDesignModule implements IInjectorModule {
     public register(injector: IInjector): void {
@@ -21,8 +22,7 @@ export class ButtonDesignModule implements IInjectorModule {
             key: "button",
             name: "components_button",
             groupName: "Buttons",
-            selectorTemplate: `<a role="button" data-bind="css: classNames" style="display: inline-block">Button</a>`,
-            styleTemplate: `<a role="button" data-bind="stylePreview: variation.key" style="display: inline-block">Button</button>`
+            styleTemplate: styleTemplate
         };
         
         injector.bindInstanceToCollection("styleGroups", styleGroup);

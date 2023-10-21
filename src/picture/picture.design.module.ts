@@ -42,7 +42,6 @@ export class PictureDesignModule implements IInjectorModule {
             key: "picture",
             name: "components_picture",
             groupName: "Pictures",
-            selectorTemplate: `<img src="https://cdn.paperbits.io/images/placeholder-340x190.jpg" alt="Picture" data-bind="css: classNames" width="280px" height="190px" /><div data-bind="text: displayName"></div>`,
             styleTemplate: template
         };
         injector.bindInstanceToCollection("styleGroups", styleGroup);

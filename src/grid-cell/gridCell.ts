@@ -27,7 +27,7 @@ export class GridCellModelBinder extends ContainerModelBinder implements IModelB
     }
 
     public modelToContract(model: GridCellModel): Contract {
-        const contract: any = {
+        const contract: Contract = {
             type: "grid-cell",
             nodes: this.getChildContracts(model.widgets),
         };

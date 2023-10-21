@@ -43,7 +43,6 @@ export class VideoPlayerDesignModule implements IInjectorModule {
             key: "videoPlayer",
             name: "components_videoPlayer",
             groupName: "Video Player",
-            selectorTemplate: undefined,
             styleTemplate: template
         };
 

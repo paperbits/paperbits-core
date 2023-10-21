@@ -4,10 +4,6 @@
         <divider class="btn btn-info" type="divider" aria-hidden="true" role="tooltip"
             data-bind="tooltip: 'Predefined appearance from style guide.'"></divider>
     </label>
-    <!-- <div class="input-group">
-            <a href="#" class="form-control" data-bind="text: appearanceStyle() && appearanceStyle().displayName, balloon: { component: { name: 'style-variation-selector', params: { snippetType: 'components/divider', onSelect: $component.onVariationSelected } } }">
-            </a>
-        </div> -->
     <dropdown id="appearanceStyle"
         params="{ options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key', heading: 'Appearance' }">
     </dropdown>

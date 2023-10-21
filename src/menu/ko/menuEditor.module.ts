@@ -15,7 +15,6 @@ export class MenuEditorModule implements IInjectorModule {
             key: "menu",
             name: "components_menu",
             groupName: "Menus",
-            selectorTemplate: null,
             styleTemplate: styleTemplate
         };
         injector.bindInstanceToCollection("styleGroups", styleGroup);
