@@ -14,7 +14,7 @@ export class MenuEditorModule implements IInjectorModule {
         const styleGroup: IStyleGroup = {
             key: "menu",
             name: "components_menu",
-            groupName: "Menus",
+            groupName: "Menu",
             styleTemplate: styleTemplate
         };
         injector.bindInstanceToCollection("styleGroups", styleGroup);

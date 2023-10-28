@@ -21,7 +21,7 @@ export class ButtonDesignModule implements IInjectorModule {
         const styleGroup: IStyleGroup = {
             key: "button",
             name: "components_button",
-            groupName: "Buttons",
+            groupName: "Button",
             styleTemplate: styleTemplate
         };
         

@@ -21,7 +21,7 @@ export class CardEditorModule implements IInjectorModule {
         const styleGroup: IStyleGroup = {
             key: "card",
             name: "components_card",
-            groupName: "Cards",
+            groupName: "Card",
             styleTemplate: `<div data-bind="stylePreview: variation.key, styleableGlobal: variation" style="width: 340px"><h1>Card</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p></div>`
         };
         injector.bindInstanceToCollection("styleGroups", styleGroup);

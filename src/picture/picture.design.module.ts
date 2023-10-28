@@ -41,7 +41,7 @@ export class PictureDesignModule implements IInjectorModule {
         const styleGroup: IStyleGroup = {
             key: "picture",
             name: "components_picture",
-            groupName: "Pictures",
+            groupName: "Picture",
             styleTemplate: template
         };
         injector.bindInstanceToCollection("styleGroups", styleGroup);

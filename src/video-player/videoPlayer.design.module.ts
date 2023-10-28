@@ -42,7 +42,7 @@ export class VideoPlayerDesignModule implements IInjectorModule {
         const styleGroup: IStyleGroup = {
             key: "videoPlayer",
             name: "components_videoPlayer",
-            groupName: "Video Player",
+            groupName: "Video player",
             styleTemplate: template
         };
 
