@@ -32,17 +32,18 @@
         </div>
     </div>
 
-    <!-- ko if: canDelete -->
+
     <div class="flex-item btn-group">
+        <!-- ko if: canDelete -->
         <button class="btn btn-default"
             data-bind="confirm: { message: 'Are you sure you want to delete this layout?', onConfirm: deleteLayout }">
             <i aria-hidden="true" class="paperbits-icon paperbits-simple-remove"></i>
             Delete layout
         </button>
+        <!-- /ko -->
         <button class="btn btn-default" data-bind="click: copyLayout">
             <i aria-hidden="true" class="paperbits-icon paperbits-single-copy-04"></i>
             Copy layout
         </button>
     </div>
-    <!-- /ko -->
 </div>

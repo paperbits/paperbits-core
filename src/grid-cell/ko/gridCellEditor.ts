@@ -6,7 +6,7 @@ import { ViewManager } from "@paperbits/common/ui";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { GridCellModel } from "../gridCellModel";
 import { EventManager, Events } from "@paperbits/common/events";
-import { BoxStylePluginConfig, PaddingStylePluginConfig } from "@paperbits/styles/plugins";
+import { BorderRadiusStylePluginConfig, BorderStylePluginConfig, BoxStylePluginConfig, PaddingStylePluginConfig } from "@paperbits/styles/plugins";
 import { ContainerStylePluginConfig } from "@paperbits/styles/plugins";
 import { StyleHelper } from "@paperbits/styles";
 
@@ -35,11 +35,11 @@ export class GridCellEditor {
 
     @OnMounted()
     public initialize(): void {
-       this.updateObservables();
-       this.eventManager.addEventListener(Events.ViewportChange, this.updateObservables);
+        this.updateObservables();
+        this.eventManager.addEventListener(Events.ViewportChange, this.updateObservables);
     }
 
-    private updateObservables(): void { 
+    private updateObservables(): void {
         const gridCellStyleConfig = <any>Objects.getObjectAt(`styles/instance/grid-cell`, this.model);
 
         if (!gridCellStyleConfig) {
@@ -50,7 +50,7 @@ export class GridCellEditor {
         const breakpoint = Utils.getClosestBreakpoint(gridCellStyleConfig, viewport);
         const styleConfig = gridCellStyleConfig[breakpoint];
 
-        const containerConfig: ContainerStylePluginConfig = { 
+        const containerConfig: ContainerStylePluginConfig = {
             alignment: styleConfig.alignment,
             overflow: styleConfig.overflow
         };
@@ -62,7 +62,21 @@ export class GridCellEditor {
             .plugin("padding")
             .getConfig<PaddingStylePluginConfig>(viewport);
 
-        this.box({ padding: paddingConfig });
+        const borderConfig = StyleHelper
+            .style(this.model.styles)
+            .plugin("border")
+            .getConfig<BorderStylePluginConfig>();
+
+        const borderRadiusConfig = StyleHelper
+            .style(this.model.styles)
+            .plugin("borderRadius")
+            .getConfig<BorderRadiusStylePluginConfig>();
+
+        this.box({
+            padding: paddingConfig,
+            border: borderConfig,
+            borderRadius: borderRadiusConfig
+        });
     }
 
     public onContainerUpdate(containerConfig: ContainerStylePluginConfig): void {
@@ -83,6 +97,16 @@ export class GridCellEditor {
             .style(this.model.styles)
             .plugin("padding")
             .setConfig(boxConfig.padding, viewport);
+
+        StyleHelper
+            .style(this.model.styles)
+            .plugin("border")
+            .setConfig(boxConfig.border);
+
+        StyleHelper
+            .style(this.model.styles)
+            .plugin("borderRadius")
+            .setConfig(boxConfig.borderRadius);
 
         this.onChange(this.model);
     }
