@@ -154,8 +154,6 @@ export class SectionEditor {
             .plugin("borderRadius")
             .setConfig(pluginConfig.borderRadius);
 
-            console.log(pluginConfig);
-
         this.onChange(this.model);
     }
 
