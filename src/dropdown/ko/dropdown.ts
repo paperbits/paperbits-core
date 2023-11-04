@@ -76,16 +76,16 @@ export class Dropdown {
             displayedOptions.push(...options);
         }
         else {
-            if (!this.optionsValue()) {
-                this.optionsValue("value");
-            }
-
-            if (!this.optionsText()) {
-                this.optionsText("text");
-            }
+            const optionValueFieldName = this.optionsValue();
+            const optionTextFieldName = this.optionsText();
 
             const options = this.options()
-                .map(option => { return { value: option[this.optionsValue()] || option, text: option[this.optionsText()] } });
+                .map(option => {
+                    return {
+                        value: optionValueFieldName ? option[optionValueFieldName] : option,
+                        text: optionTextFieldName ? option[optionTextFieldName] : option
+                    }
+                });
 
             displayedOptions.push(...options);
         }

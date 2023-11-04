@@ -1,5 +1,4 @@
 import * as ko from "knockout";
-import * as Objects from "@paperbits/common/objects";
 import template from "./buttonEditor.html";
 import { StyleHelper, StyleService } from "@paperbits/styles";
 import { HyperlinkModel } from "@paperbits/common/permalinks";

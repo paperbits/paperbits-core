@@ -10,7 +10,9 @@ import {
     TypographyStylePluginConfig,
     MarginStylePluginConfig,
     SizeStylePluginConfig,
-    BoxStylePluginConfig
+    BoxStylePluginConfig,
+    BorderStylePluginConfig,
+    BorderRadiusStylePluginConfig
 } from "@paperbits/styles/plugins";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { EventManager } from "@paperbits/common/events/eventManager";
@@ -25,7 +27,8 @@ export class SectionEditor {
     public readonly stickTo: ko.Observable<string>;
     public readonly background: ko.Observable<BackgroundStylePluginConfig>;
     public readonly typography: ko.Observable<TypographyStylePluginConfig>;
-    public readonly box: ko.Observable<BoxStylePluginConfig>;
+    public readonly containerBox: ko.Observable<BoxStylePluginConfig>;
+    public readonly sectionBox: ko.Observable<BoxStylePluginConfig>;
     public readonly containerSizeStyles: ko.Observable<SizeStylePluginConfig>;
     public readonly sectionSizeStyles: ko.Observable<SizeStylePluginConfig>;
     private gridModel: GridModel;
@@ -39,7 +42,8 @@ export class SectionEditor {
         this.typography = ko.observable<TypographyStylePluginConfig>();
         this.containerSizeStyles = ko.observable<SizeStylePluginConfig>();
         this.sectionSizeStyles = ko.observable<SizeStylePluginConfig>();
-        this.box = ko.observable<BoxStylePluginConfig>();
+        this.sectionBox = ko.observable<BoxStylePluginConfig>();
+        this.containerBox = ko.observable<BoxStylePluginConfig>();
     }
 
     @Param()
@@ -65,6 +69,10 @@ export class SectionEditor {
         /* Section styles */
         const localStyles = this.model.styles;
 
+
+        const sectionStyles = StyleHelper
+            .style(this.model.styles);
+
         const typographyStyles = <TypographyStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(localStyles, "typography");
         this.typography(typographyStyles);
 
@@ -85,8 +93,18 @@ export class SectionEditor {
         const marginStyles = <MarginStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(gridLocalStyles, "margin", viewport);
         const paddingStyles = <MarginStylePluginConfig>StyleHelper.getPluginConfigForLocalStyles(gridLocalStyles, "padding", viewport);
 
-        this.box({ margin: marginStyles, padding: paddingStyles });
+        this.containerBox({ margin: marginStyles, padding: paddingStyles });
         this.containerSizeStyles(containerSizeStyles);
+
+        const borderStyles = sectionStyles.plugin("border").getConfig<BorderStylePluginConfig>();
+        const borderRadiusStyles = sectionStyles.plugin("borderRadius").getConfig<BorderRadiusStylePluginConfig>();
+
+        const sectionBoxStyles: BoxStylePluginConfig = {
+            border: borderStyles,
+            borderRadius: borderRadiusStyles
+        };
+
+        this.sectionBox(sectionBoxStyles);
     }
 
     /**
@@ -103,8 +121,8 @@ export class SectionEditor {
 
         /* Grid styles */
         const gridStyles = this.gridModel.styles;
-        const marginStyle = this.box().margin;
-        const paddingStyle = this.box().padding;
+        const marginStyle = this.containerBox().margin;
+        const paddingStyle = this.containerBox().padding;
         const containerSizeStyles: SizeStylePluginConfig = this.containerSizeStyles();
         StyleHelper.setPluginConfigForLocalStyles(gridStyles, "size", containerSizeStyles, viewport);
         StyleHelper.setPluginConfigForLocalStyles(gridStyles, "margin", marginStyle, viewport);
@@ -123,8 +141,26 @@ export class SectionEditor {
         this.applyChanges();
     }
 
-    public onBoxUpdate(pluginConfig: BoxStylePluginConfig): void {
-        this.box(pluginConfig);
+    public onSectionBoxUpdate(pluginConfig: BoxStylePluginConfig): void {
+        this.sectionBox(pluginConfig);
+
+        StyleHelper
+            .style(this.model.styles)
+            .plugin("border")
+            .setConfig(pluginConfig.border);
+
+        StyleHelper
+            .style(this.model.styles)
+            .plugin("borderRadius")
+            .setConfig(pluginConfig.borderRadius);
+
+            console.log(pluginConfig);
+
+        this.onChange(this.model);
+    }
+
+    public onContainerBoxUpdate(pluginConfig: BoxStylePluginConfig): void {
+        this.containerBox(pluginConfig);
         this.applyChanges();
     }
 
