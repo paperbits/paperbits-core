@@ -1,11 +1,11 @@
 import { BlockModel } from "@paperbits/common/text/models";
-import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
+import { CollectionModelBinder, IModelBinder } from "@paperbits/common/editing";
 import { Contract, Bag } from "@paperbits/common";
 import { TextblockModel } from "./textblockModel";
 import { TextBlockContract } from "./textblockContract";
 
 export class TextblockModelBinder implements IModelBinder<TextblockModel> {
-    constructor(private readonly containerModelBinder: ContainerModelBinder) { }
+    constructor(private readonly containerModelBinder: CollectionModelBinder) { }
 
     public async contractToModel(contract: TextBlockContract, bindingContext?: Bag<any>): Promise<TextblockModel> {
         let content: BlockModel[] = [];

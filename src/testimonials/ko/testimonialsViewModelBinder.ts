@@ -3,7 +3,8 @@ import { ViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
 import { TestimonialsModel } from "../testimonialsModel";
 import { EventManager, Events } from "@paperbits/common/events";
 import { Bag } from "@paperbits/common";
-import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
+import { IWidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow } from "@paperbits/common/components";
 
 export class TestimonialsViewModelBinder implements ViewModelBinder<TestimonialsModel, TestimonialsViewModel>  {
     constructor(private readonly eventManager: EventManager) { }

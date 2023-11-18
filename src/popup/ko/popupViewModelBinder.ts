@@ -1,5 +1,5 @@
 import { Bag } from "@paperbits/common";
-import { ComponentFlow, ContainerModelBinder, IWidgetBinding } from "@paperbits/common/editing";
+import { CollectionModelBinder, IWidgetBinding } from "@paperbits/common/editing";
 import { EventManager, Events } from "@paperbits/common/events";
 import { IPopupService } from "@paperbits/common/popups";
 import { StyleCompiler } from "@paperbits/common/styles";
@@ -10,10 +10,11 @@ import { Placeholder } from "../../placeholder/ko/placeholder";
 import { PopupHandlers } from "../popupHandlers";
 import { PopupInstanceModel } from "../popupModel";
 import { PopupViewModel } from "./popup";
+import { ComponentFlow } from "@paperbits/common/components";
 
 export class PopupViewModelBinder implements ViewModelBinder<PopupInstanceModel, PopupViewModel> {
     constructor(
-        private readonly containerModelBinder: ContainerModelBinder,
+        private readonly containerModelBinder: CollectionModelBinder,
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly popupService: IPopupService,
         private readonly eventManager: EventManager,

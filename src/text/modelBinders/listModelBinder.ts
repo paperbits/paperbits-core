@@ -2,13 +2,13 @@ import { Contract, Bag } from "@paperbits/common";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { ListModel } from "@paperbits/common/text/models/listModel";
 import { ListContract } from "../contracts/listContract";
-import { ContainerModelBinder } from "@paperbits/common/editing";
+import { CollectionModelBinder } from "@paperbits/common/editing";
 
 export class ListModelBinder {
     private listTypes = ["ordered-list", "bulleted-list"];
 
     constructor(
-        private readonly containerModelBinder: ContainerModelBinder,
+        private readonly containerModelBinder: CollectionModelBinder,
         private readonly styleCompiler: StyleCompiler
     ) { }
 

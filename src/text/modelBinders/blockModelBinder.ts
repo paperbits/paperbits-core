@@ -3,13 +3,13 @@ import { Contract, Bag } from "@paperbits/common";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { BlockModel } from "@paperbits/common/text/models/blockModel";
 import { BlockContract } from "../contracts/blockContract";
-import { ContainerModelBinder } from "@paperbits/common/editing";
+import { CollectionModelBinder } from "@paperbits/common/editing";
 
 export class BlockModelBinder {
     private blockTypes: string[] = ["paragraph", "list-item", "break", "formatted", "quote", "heading1", "heading2", "heading3", "heading4", "heading5", "heading6", "property"];
 
     constructor(
-        private readonly containerModelBinder: ContainerModelBinder,
+        private readonly containerModelBinder: CollectionModelBinder,
         private readonly styleCompiler: StyleCompiler
     ) {
     }

@@ -1,6 +1,5 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
 import { CardEditor } from "./ko/cardEditor";
-import { IWidgetHandler } from "@paperbits/common/editing";
 import { CardHandlers } from "./cardHandlers";
 import { IStyleGroup } from "@paperbits/common/styles/IStyleGroup";
 import { IWidgetService } from "@paperbits/common/widgets";

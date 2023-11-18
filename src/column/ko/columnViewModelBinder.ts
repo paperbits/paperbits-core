@@ -2,11 +2,12 @@ import * as Utils from "@paperbits/common/utils";
 import { Bag } from "@paperbits/common";
 import { ColumnViewModel } from "./columnViewModel";
 import { IWidgetService, ViewModelBinder } from "@paperbits/common/widgets";
-import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
+import { IWidgetBinding } from "@paperbits/common/editing";
 import { ColumnModel } from "../columnModel";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { ColumnHandlers } from "../columnHandlers";
 import { EventManager, Events } from "@paperbits/common/events";
+import { ComponentFlow } from "@paperbits/common/components";
 
 
 export class ColumnViewModelBinder implements ViewModelBinder<ColumnModel, ColumnViewModel> {

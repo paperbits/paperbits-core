@@ -3,12 +3,33 @@
         Background
         <button class="btn btn-info" role="tooltip" data-bind="tooltip: 'Manage background'"></button>
     </summary>
-    <background params="{ background: background, onUpdate: onBackgroundChange }"></background>
+    <background params="{ background: backgroundConfig, onUpdate: onBackgroundChange }"></background>
 </details>
 
 <alignment-editor params="{ container: containerConfig, onUpdate: onContainerChange }"></alignment-editor>
 
 <details open>
+    <summary>
+        Box
+    </summary>
+    <box params="{ features: 'margin, padding, border', box: boxConfig, onUpdate: onBoxUpdate }"></box>
+</details>
+
+<details open>
+    <summary>
+        Size
+    </summary>
+    <div class="form-group">
+        <label for="stretch" class="form-label">
+            <input type="checkbox" id="stretch" name="stretch" data-bind="checked: stretch" />Stretch
+        </label>
+    </div>
+    <size-editor
+        params="{ features: 'height,width', allowUnits: 'px,%', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
+    </size-editor>
+</details>
+
+<!-- <details open>
     <summary>
         Styling
     </summary>
@@ -22,4 +43,4 @@
             params="{ options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key', heading: 'Appearance' }">
         </dropdown>
     </div>
-</details>
+</details> -->

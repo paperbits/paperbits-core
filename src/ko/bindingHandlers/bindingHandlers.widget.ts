@@ -1,8 +1,9 @@
 ﻿import * as ko from "knockout";
 import * as Arrays from "@paperbits/common";
-import { ComponentFlow, IWidgetBinding, WidgetBinding } from "@paperbits/common/editing";
+import { IWidgetBinding, WidgetBinding } from "@paperbits/common/editing";
 import { ComponentDefinition } from "../componentDefinition";
 import { KnockoutComponentBinder } from "../knockoutComponentBinder";
+import { ComponentFlow } from "@paperbits/common/components";
 
 
 export class WidgetBindingHandler {

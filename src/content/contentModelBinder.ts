@@ -1,6 +1,6 @@
 import * as Utils from "@paperbits/common/utils";
 import { Bag, Contract } from "@paperbits/common";
-import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
+import { CollectionModelBinder, IModelBinder } from "@paperbits/common/editing";
 import { IWidgetService, ModelBinderSelector, WidgetModel } from "@paperbits/common/widgets";
 import { SectionModel } from "@paperbits/core/section";
 import { GridCellModel } from "../grid-cell/gridCellModel";
@@ -10,7 +10,7 @@ import { ContentModel } from "./contentModel";
 
 const typeName = "page";
 
-export class ContentModelBinder<TModel> extends ContainerModelBinder implements IModelBinder<TModel> {
+export class ContentModelBinder<TModel> extends CollectionModelBinder implements IModelBinder<TModel> {
     constructor(protected readonly widgetService: IWidgetService, protected readonly modelBinderSelector: ModelBinderSelector) {
         super(widgetService, modelBinderSelector);
     }

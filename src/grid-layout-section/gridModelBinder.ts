@@ -1,6 +1,6 @@
 import { GridContract } from "../grid/gridContract";
 import { GridModel } from "./gridModel";
-import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
+import { CollectionModelBinder, IModelBinder } from "@paperbits/common/editing";
 import { Contract, Bag } from "@paperbits/common";
 
 export class GridModelBinder implements IModelBinder<GridModel> {
@@ -12,7 +12,7 @@ export class GridModelBinder implements IModelBinder<GridModel> {
         return model instanceof GridModel;
     }
 
-    constructor(private readonly containerModelBinder: ContainerModelBinder) { }
+    constructor(private readonly containerModelBinder: CollectionModelBinder) { }
 
     public async contractToModel(contract: GridContract, bindingContext?: Bag<any>): Promise<GridModel> {
         const model = new GridModel();

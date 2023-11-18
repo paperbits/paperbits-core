@@ -1,6 +1,6 @@
 import * as Objects from "@paperbits/common/objects";
 import { Bag, Contract } from "@paperbits/common";
-import { ComponentFlow, ContainerModelBinder, IWidgetBinding } from "@paperbits/common/editing";
+import { CollectionModelBinder, IWidgetBinding } from "@paperbits/common/editing";
 import { EventManager, Events } from "@paperbits/common/events";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
@@ -11,13 +11,14 @@ import { ContentViewModel } from "./contentViewModel";
 import { WidgetViewModel } from "../../ko";
 import { ContentPart } from "../../content-part/ko";
 import { Placeholder } from "../../placeholder/ko";
+import { ComponentFlow } from "@paperbits/common/components";
 
 
 export class ContentViewModelBinder implements ViewModelBinder<ContentModel, ContentViewModel> {
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly contentModelBinder: ContentModelBinder<ContentModel>,
-        private readonly containerModelBinder: ContainerModelBinder,
+        private readonly containerModelBinder: CollectionModelBinder,
         private readonly eventManager: EventManager
     ) { }
 

@@ -1,5 +1,5 @@
 import { Bag } from "@paperbits/common";
-import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
+import { IWidgetBinding } from "@paperbits/common/editing";
 import { EventManager, Events } from "@paperbits/common/events";
 import { NavigationEvents, NavigationItemModel } from "@paperbits/common/navigation";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
@@ -10,6 +10,7 @@ import { MenuHandlers } from "../menuHandlers";
 import { MenuModel } from "../menuModel";
 import { MenuItemViewModel } from "./menuItemViewModel";
 import { MenuViewModel } from "./menuViewModel";
+import { ComponentFlow } from "@paperbits/common/components";
 
 export class MenuViewModelBinder implements ViewModelBinder<MenuModel, MenuViewModel> {
     constructor(

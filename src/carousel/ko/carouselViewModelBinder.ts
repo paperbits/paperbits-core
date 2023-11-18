@@ -1,6 +1,6 @@
 import { CarouselViewModel } from "./carousel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
-import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
+import { IWidgetBinding } from "@paperbits/common/editing";
 import { CarouselItemModel, CarouselModel } from "../carouselModel";
 import { Placeholder } from "../../placeholder/ko/placeholder";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
@@ -10,6 +10,7 @@ import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
 import { CarouselItemViewModel } from "./carouselItemViewModel";
 import { CarouselItemHandlers } from "../carouselItemHandlers";
+import { ComponentFlow } from "@paperbits/common/components";
 
 
 export class CarouselViewModelBinder implements ViewModelBinder<CarouselModel, CarouselViewModel> {

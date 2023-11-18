@@ -1,5 +1,5 @@
 import { Bag, Contract } from "@paperbits/common";
-import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
+import { CollectionModelBinder, IModelBinder } from "@paperbits/common/editing";
 import { IWidgetService, ModelBinderSelector } from "@paperbits/common/widgets";
 import { GridCellContract } from "./gridCellContract";
 import { GridCellModel } from "./gridCellModel";
@@ -7,7 +7,7 @@ import { GridCellModel } from "./gridCellModel";
 
 const nodeType = "grid-cell";
 
-export class GridCellModelBinder extends ContainerModelBinder implements IModelBinder<GridCellModel> {
+export class GridCellModelBinder extends CollectionModelBinder implements IModelBinder<GridCellModel> {
     constructor(
         protected readonly widgetService: IWidgetService,
         protected modelBinderSelector: ModelBinderSelector

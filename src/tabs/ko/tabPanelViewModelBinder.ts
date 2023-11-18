@@ -1,6 +1,6 @@
 import { TabPanelViewModel } from "./tabPanel";
 import { ViewModelBinder } from "@paperbits/common/widgets";
-import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
+import { IWidgetBinding } from "@paperbits/common/editing";
 import { TabPanelItemModel, TabPanelModel } from "../tabPanelModel";
 import { Placeholder } from "../../placeholder/ko/placeholder";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
@@ -10,6 +10,7 @@ import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
 import { TabPanelItemViewModel } from "./tabPanelItemViewModel";
 import { TabPanelItemHandlers } from "../tabPanelItemHandlers";
+import { ComponentFlow } from "@paperbits/common/components";
 
 
 export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, TabPanelViewModel> {

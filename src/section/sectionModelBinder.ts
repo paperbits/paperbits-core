@@ -1,6 +1,6 @@
 import { SectionContract } from "./sectionContract";
 import { SectionModel } from "./sectionModel";
-import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
+import { CollectionModelBinder, IModelBinder } from "@paperbits/common/editing";
 import { Contract, Bag } from "@paperbits/common";
 import { SecurityModelBinder } from "@paperbits/common/security";
 
@@ -15,7 +15,7 @@ export class SectionModelBinder implements IModelBinder<SectionModel> {
     }
 
     constructor(
-        private readonly containerModelBinder: ContainerModelBinder,
+        private readonly containerModelBinder: CollectionModelBinder,
         private readonly securityModelBinder: SecurityModelBinder<any, any>
     ) { }
 

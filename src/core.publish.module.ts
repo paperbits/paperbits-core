@@ -34,7 +34,7 @@ import { PagePermalinkResolver } from "@paperbits/common/pages/pagePermalinkReso
 import { UrlPermalinkResolver } from "@paperbits/common/urls/urlPermalinkResolver";
 import { Bag } from "@paperbits/common";
 import { ComponentBinder } from "@paperbits/common/components";
-import { ContainerModelBinder } from "@paperbits/common/editing";
+import { CollectionModelBinder } from "@paperbits/common/editing";
 import { DefaultSettingsProvider } from "@paperbits/common/configuration";
 import { XmlHttpRequestClient } from "@paperbits/common/http";
 import { DefaultEventManager, GlobalEventHandler } from "@paperbits/common/events";
@@ -63,6 +63,7 @@ import { TestimonialsModule } from "./testimonials/ko";
 import { CollapsiblePanelModule } from "./collapsible-panel/ko";
 import { BackgroundBindingHandler, WidgetBindingHandler } from "./ko/bindingHandlers";
 import { DefaultChangeCommitter } from "@paperbits/common/persistence";
+import { ContainerPublishModule } from "./container/container.publish.module";
 
 export class CorePublishModule implements IInjectorModule {
     public register(injector: IInjector): void {
@@ -75,7 +76,7 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindCollectionLazily("viewModelBinders");
         injector.bindCollectionLazily("permalinkResolvers");
         injector.bindInstance<Bag<ComponentBinder>>("componentBinders", {});
-        injector.bind("containerModelBinder", ContainerModelBinder);
+        injector.bind("containerModelBinder", CollectionModelBinder);
 
         /*** Core ***/
         injector.bindSingleton("settingsProvider", DefaultSettingsProvider);
@@ -132,6 +133,7 @@ export class CorePublishModule implements IInjectorModule {
         injector.bindModule(new DismissButtonPublishModule());
         injector.bindModule(new ButtonPublishModule());
         injector.bindModule(new CardPublishModule());
+        injector.bindModule(new ContainerPublishModule());
         injector.bindModule(new ProseMirrorPublishModule());
         injector.bindModule(new TextblockPublishModule());
         injector.bindModule(new VideoPlayerModule());

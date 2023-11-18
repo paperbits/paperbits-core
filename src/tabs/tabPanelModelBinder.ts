@@ -1,6 +1,6 @@
 import { TabPanelContract, TabPanelItemContract } from "./tabPanelContract";
 import { TabPanelItemModel, TabPanelModel } from "./tabPanelModel";
-import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
+import { CollectionModelBinder, IModelBinder } from "@paperbits/common/editing";
 import { Contract, Bag } from "@paperbits/common";
 
 
@@ -13,7 +13,7 @@ export class TabPanelModelBinder implements IModelBinder<TabPanelModel> {
         return model instanceof TabPanelModel;
     }
 
-    constructor(private readonly containerModelBinder: ContainerModelBinder) { }
+    constructor(private readonly containerModelBinder: CollectionModelBinder) { }
 
     public async contractItemToModel(contract: TabPanelItemContract, bindingContext?: Bag<any>): Promise<TabPanelItemModel> {
         const model = new TabPanelItemModel();

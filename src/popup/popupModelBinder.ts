@@ -1,11 +1,11 @@
 import { Bag, Contract } from "@paperbits/common";
-import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
+import { CollectionModelBinder, IModelBinder } from "@paperbits/common/editing";
 import { PopupContract, PopupService } from "@paperbits/common/popups";
 import { IWidgetService, ModelBinderSelector } from "@paperbits/common/widgets";
 import { PopupInstanceContract } from "./popupContract";
 import { PopupInstanceModel } from "./popupModel";
 
-export class PopupModelBinder extends ContainerModelBinder implements IModelBinder<PopupInstanceModel> {
+export class PopupModelBinder extends CollectionModelBinder implements IModelBinder<PopupInstanceModel> {
     constructor(
         protected readonly widgetService: IWidgetService,
         protected readonly modelBinderSelector: ModelBinderSelector,

@@ -2,9 +2,9 @@ import { Contract, Bag } from "@paperbits/common";
 import { RowContract } from "./rowContract";
 import { RowModel } from "./rowModel";
 import { IWidgetService, ModelBinderSelector } from "@paperbits/common/widgets";
-import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
+import { CollectionModelBinder, IModelBinder } from "@paperbits/common/editing";
 
-export class RowModelBinder extends ContainerModelBinder implements IModelBinder<RowModel> {
+export class RowModelBinder extends CollectionModelBinder implements IModelBinder<RowModel> {
     constructor(
         protected readonly widgetService: IWidgetService,
         protected modelBinderSelector: ModelBinderSelector

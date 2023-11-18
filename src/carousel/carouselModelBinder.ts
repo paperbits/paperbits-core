@@ -1,6 +1,6 @@
 import { CarouselContract, CarouselItemContract } from "./carouselContract";
 import { CarouselItemModel, CarouselModel } from "./carouselModel";
-import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
+import { CollectionModelBinder, IModelBinder } from "@paperbits/common/editing";
 import { ModelBinderSelector } from "@paperbits/common/widgets";
 import { Contract, Bag } from "@paperbits/common";
 
@@ -14,7 +14,7 @@ export class CarouselModelBinder implements IModelBinder<CarouselModel> {
         return model instanceof CarouselModel;
     }
 
-    constructor(private readonly containerModelBinder: ContainerModelBinder) { }
+    constructor(private readonly containerModelBinder: CollectionModelBinder) { }
 
     public async contractItemToModel(contract: CarouselItemContract, bindingContext?: Bag<any>): Promise<CarouselItemModel> {
         const model = new CarouselItemModel();

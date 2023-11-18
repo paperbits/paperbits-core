@@ -35,7 +35,7 @@ import {
     WidgetBindingHandler,
 } from "./ko/bindingHandlers";
 import { ComponentBinder } from "@paperbits/common/components";
-import { ContainerModelBinder, HtmlEditorProvider, MediaHandlers } from "@paperbits/common/editing";
+import { CollectionModelBinder, HtmlEditorProvider, MediaHandlers } from "@paperbits/common/editing";
 import { HyperlinkSelector } from "./workshops/hyperlinks/ko/hyperlinkSelector";
 import { WidgetSelector } from "./workshops/widgets/ko/widgetSelector";
 import { LayoutDesignModule } from "./layout/ko/layout.design.module";
@@ -108,6 +108,7 @@ import { UrlPermalinkResolver } from "@paperbits/common/urls/urlPermalinkResolve
 import { ContentPart } from "./content-part/ko";
 import { UrlDesignModule } from "./workshops/urls/ko/url.design.module";
 import { PopupDesignModule } from "./popup/popup.design.module";
+import { ContainerEditorModule } from "./container/container.design.module";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -163,7 +164,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new KnockoutDesignModule());
 
         /* Widgets */
-        injector.bindSingleton("containerModelBinder", ContainerModelBinder);
+        injector.bindSingleton("containerModelBinder", CollectionModelBinder);
         injector.bindModule(new ContentModule());
         injector.bindModule(new ColumnModule());
         injector.bindModule(new RowModule());
@@ -198,6 +199,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new GridCellEditorModule());
         injector.bindModule(new ContentEditorModule());
         injector.bindModule(new CardEditorModule());
+        injector.bindModule(new ContainerEditorModule());
         injector.bindModule(new CollapsiblePanelEditorModule());
         injector.bindModule(new CarouselDesignModule());
         injector.bindModule(new TabPanelDesignModule());

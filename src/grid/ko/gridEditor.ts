@@ -4,7 +4,7 @@ import * as Html from "@paperbits/common/html";
 import * as Objects from "@paperbits/common/objects";
 import { ViewManager, ViewManagerMode, IHighlightConfig, IContextCommandSet, ActiveElement, View, IContextCommand } from "@paperbits/common/ui";
 import { switchToParentCommand, defaultCommandColor, deleteWidgetCommand, splitter } from "@paperbits/common/ui/commands";
-import { IWidgetBinding, WidgetContext, GridItem, ComponentFlow, GridHelper } from "@paperbits/common/editing";
+import { IWidgetBinding, WidgetContext, GridItem, GridHelper } from "@paperbits/common/editing";
 import { IWidgetService } from "@paperbits/common/widgets";
 import { EventManager, Events } from "@paperbits/common/events";
 import { Router } from "@paperbits/common/routing";
@@ -12,6 +12,7 @@ import { Bag, Keys, MouseButtons } from "@paperbits/common";
 import { LocalStyles, PluginBag, StyleDefinition, VariationContract } from "@paperbits/common/styles";
 import { StyleHelper } from "@paperbits/styles";
 import { TextblockEditor } from "../../textblock/ko";
+import { ComponentFlow } from "@paperbits/common/components";
 
 
 
@@ -987,7 +988,7 @@ export class GridEditor {
 
         for (const element of elements.reverse()) {
             const widgetGridItem = this.getGridItem(element, layerName);
-  
+
             if (widgetGridItem && widgetGridItem.binding !== currentwidgetBinding) {
                 stackOfGridItems.push(widgetGridItem);
                 currentwidgetBinding = widgetGridItem.binding;

@@ -1,7 +1,8 @@
 import { Bag } from "@paperbits/common";
 import { ViewModelBinder } from "@paperbits/common/widgets";
 import { EventManager, Events } from "@paperbits/common/events";
-import { ComponentFlow, IWidgetBinding } from "@paperbits/common/editing";
+import { IWidgetBinding } from "@paperbits/common/editing";
+import { ComponentFlow } from "@paperbits/common/components";
 import { SearchViewModel } from "./searchViewModel";
 import { SearchModel } from "../searchModel";
 import { SearchHandlers } from "../searchHandlers";

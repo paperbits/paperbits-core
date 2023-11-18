@@ -1,11 +1,11 @@
 import * as Utils from "@paperbits/common/utils";
 import { Bag, Contract } from "@paperbits/common";
-import { ContainerModelBinder, IModelBinder } from "@paperbits/common/editing";
+import { CollectionModelBinder, IModelBinder } from "@paperbits/common/editing";
 import { IWidgetService, ModelBinderSelector } from "@paperbits/common/widgets";
 import { ColumnContract } from "./columnContract";
 import { ColumnModel } from "./columnModel";
 
-export class ColumnModelBinder extends ContainerModelBinder implements IModelBinder<ColumnModel> {
+export class ColumnModelBinder extends CollectionModelBinder implements IModelBinder<ColumnModel> {
     constructor(
         protected readonly widgetService: IWidgetService,
         protected modelBinderSelector: ModelBinderSelector
