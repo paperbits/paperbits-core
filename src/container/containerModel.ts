@@ -1,6 +1,6 @@
-import { WidgetModel } from "@paperbits/common/widgets";
 import { Breakpoints } from "@paperbits/common";
 import { LocalStyles } from "@paperbits/common/styles";
+import { WidgetModel } from "@paperbits/common/widgets";
 
 export class ContainerModel implements WidgetModel {
     public widgets: WidgetModel[];
@@ -12,6 +12,22 @@ export class ContainerModel implements WidgetModel {
     constructor() {
         this.widgets = [];
         this.alignment = {};
-        this.styles = { appearance: "components/container/default" };
+        this.styles = {
+            instance: {
+                background: {
+                    colorKey: "colors/defaultBg"
+                },
+                size: {
+                    width: 300,
+                    height: 200
+                },
+                container: {
+                    alignment: {
+                        vertical: "center",
+                        horizontal: "center"
+                    }
+                }
+            }
+        };
     }
 }

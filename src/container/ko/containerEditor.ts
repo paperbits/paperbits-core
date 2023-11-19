@@ -21,7 +21,6 @@ export class ContainerEditor implements WidgetEditor<ContainerModel> {
     public readonly appearanceStyle: ko.Observable<any>;
     public readonly containerConfig: ko.Observable<ContainerStylePluginConfig>;
     public readonly boxConfig: ko.Observable<BoxStylePluginConfig>;
-    public readonly stretch: ko.Observable<boolean>;
     public readonly sizeConfig: ko.Observable<SizeStylePluginConfig>;
 
     constructor(private readonly styleService: StyleService) {
@@ -31,7 +30,6 @@ export class ContainerEditor implements WidgetEditor<ContainerModel> {
         this.backgroundConfig = ko.observable<BackgroundStylePluginConfig>();
         this.boxConfig = ko.observable<BoxStylePluginConfig>();
         this.sizeConfig = ko.observable<SizeStylePluginConfig>();
-        this.stretch = ko.observable<boolean>(false);
     }
 
     @Param()
@@ -48,8 +46,6 @@ export class ContainerEditor implements WidgetEditor<ContainerModel> {
         this.updateObservables();
 
         this.appearanceStyle.subscribe(this.onAppearanceChange);
-
-        this.stretch.subscribe(this.onStretchChange);
     }
 
     private updateObservables(): void {
@@ -62,8 +58,6 @@ export class ContainerEditor implements WidgetEditor<ContainerModel> {
             .getConfig<BackgroundStylePluginConfig>();
 
         this.backgroundConfig(backgroundStyleConfig);
-
-        console.log(backgroundStyleConfig);
 
         const paddingConfig = StyleHelper
             .style(this.model.styles)
@@ -140,27 +134,6 @@ export class ContainerEditor implements WidgetEditor<ContainerModel> {
             .style(this.model.styles)
             .plugin("size")
             .setConfig(sizeConfig);
-
-        this.onChange(this.model);
-    }
-
-    public onStretchChange(stretch: boolean): void {
-        const positionConfig: PositionStylePluginConfig =
-            stretch
-                ? {
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    position: "absolute",
-                    zIndex: 100
-                }
-                : null;
-
-        StyleHelper
-            .style(this.model.styles)
-            .plugin("position")
-            .setConfig(positionConfig);
 
         this.onChange(this.model);
     }

@@ -40,7 +40,7 @@ export class ContainerEditorModule implements IInjectorModule {
             componentBinder: KnockoutComponentBinder,
             componentDefinition: ContainerEditor,
             handlerComponent: ContainerHandlers,
-            iconClass: "widget-icon widget-icon-container",
+            iconClass: "widget-icon widget-icon-component",
             draggable: true
         });
     }

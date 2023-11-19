@@ -4,7 +4,6 @@ import { DragSession } from "@paperbits/common/ui/draggables";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { WidgetModel } from "@paperbits/common/widgets";
 import { ContainerModel } from "./containerModel";
-import { TextblockModel } from "./../textblock/textblockModel";
 import { openWidgetEditorCommand, splitter, switchToParentCommand } from "@paperbits/common/ui/commands";
 
 
@@ -58,9 +57,9 @@ export class ContainerHandlers implements IWidgetHandler {
                 }
             },
             selectCommands: [
-            openWidgetEditorCommand(context, "Edit container"),
-            splitter(),
-            switchToParentCommand(context)]
+                openWidgetEditorCommand(context, "Edit container"),
+                splitter(),
+                switchToParentCommand(context)]
         };
 
         if (context.model.widgets.length === 0) {
@@ -89,20 +88,6 @@ export class ContainerHandlers implements IWidgetHandler {
     }
 
     public async getWidgetModel(): Promise<ContainerModel> {
-        const textblock: any = new TextblockModel([
-            {
-                type: "heading1",
-                nodes: [{ type: "text", text: "Container" }]
-            },
-            {
-                type: "paragraph",
-                nodes: [{ type: "text", text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor..." }]
-            }
-        ]);
-
-        const model = new ContainerModel();
-        model.widgets.push(textblock);
-
-        return model;
+        return new ContainerModel();
     }
 }

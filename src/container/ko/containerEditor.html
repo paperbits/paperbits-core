@@ -19,13 +19,8 @@
     <summary>
         Size
     </summary>
-    <div class="form-group">
-        <label for="stretch" class="form-label">
-            <input type="checkbox" id="stretch" name="stretch" data-bind="checked: stretch" />Stretch
-        </label>
-    </div>
     <size-editor
-        params="{ features: 'height,width', allowUnits: 'px,%', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
+        params="{ features: 'height,width,fit', allowUnits: 'px', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
     </size-editor>
 </details>
 
