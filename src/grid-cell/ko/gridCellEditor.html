@@ -2,7 +2,15 @@
 
 <details open>
     <summary>
+        Background
+        <button class="btn btn-info" role="tooltip" data-bind="tooltip: 'Manage background'"></button>
+    </summary>
+    <background params="{ background: backgroundConfig, onUpdate: onBackgroundChange }"></background>
+</details>
+
+<details open>
+    <summary>
         Box
     </summary>
-    <box params="{ features: 'padding', box: box, onUpdate: onBoxUpdate }"></box>
+    <box params="{ features: 'padding, border', box: box, onUpdate: onBoxUpdate }"></box>
 </details>

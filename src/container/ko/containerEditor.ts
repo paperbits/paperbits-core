@@ -7,6 +7,8 @@ import { BackgroundStylePluginConfig, TypographyStylePluginConfig } from "@paper
 import { BorderRadiusStylePluginConfig, BorderStylePluginConfig, BoxStylePluginConfig, ContainerStylePluginConfig, PaddingStylePluginConfig, PositionStylePluginConfig, SizeStylePluginConfig } from "@paperbits/styles/plugins";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { ContainerModel } from "../containerModel";
+import { ViewManager } from "@paperbits/common/ui";
+import { EventManager, Events } from "@paperbits/common/events";
 
 
 
@@ -23,7 +25,10 @@ export class ContainerEditor implements WidgetEditor<ContainerModel> {
     public readonly boxConfig: ko.Observable<BoxStylePluginConfig>;
     public readonly sizeConfig: ko.Observable<SizeStylePluginConfig>;
 
-    constructor(private readonly styleService: StyleService) {
+    constructor(private readonly styleService: StyleService,
+        private readonly viewManager: ViewManager,
+        private readonly eventManager: EventManager
+    ) {
         this.appearanceStyles = ko.observableArray<any>();
         this.appearanceStyle = ko.observable<any>();
         this.containerConfig = ko.observable<ContainerStylePluginConfig>();
@@ -46,9 +51,13 @@ export class ContainerEditor implements WidgetEditor<ContainerModel> {
         this.updateObservables();
 
         this.appearanceStyle.subscribe(this.onAppearanceChange);
+
+        this.eventManager.addEventListener(Events.ViewportChange, this.updateObservables);
     }
 
     private updateObservables(): void {
+        const viewport = this.viewManager.getViewport();
+
         const containerStyleConfig = StyleHelper.getPluginConfigForLocalStyles(this.model.styles, "container");
         this.containerConfig(containerStyleConfig);
 
@@ -83,7 +92,7 @@ export class ContainerEditor implements WidgetEditor<ContainerModel> {
         const sizeConfig = StyleHelper
             .style(this.model.styles)
             .plugin("size")
-            .getConfig<SizeStylePluginConfig>();
+            .getConfig<SizeStylePluginConfig>(viewport);
 
         this.sizeConfig(sizeConfig);
 
@@ -128,12 +137,14 @@ export class ContainerEditor implements WidgetEditor<ContainerModel> {
     }
 
     public onSizeChange(sizeConfig: SizeStylePluginConfig): void {
+        const viewport = this.viewManager.getViewport();
+
         this.sizeConfig(sizeConfig);
 
         StyleHelper
             .style(this.model.styles)
             .plugin("size")
-            .setConfig(sizeConfig);
+            .setConfig(sizeConfig, viewport);
 
         this.onChange(this.model);
     }

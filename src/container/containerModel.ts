@@ -23,8 +23,8 @@ export class ContainerModel implements WidgetModel {
                 },
                 container: {
                     alignment: {
-                        vertical: "center",
-                        horizontal: "center"
+                        vertical: "start",
+                        horizontal: "start"
                     }
                 }
             }

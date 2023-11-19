@@ -6,7 +6,7 @@ import { ViewManager } from "@paperbits/common/ui";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { GridCellModel } from "../gridCellModel";
 import { EventManager, Events } from "@paperbits/common/events";
-import { BorderRadiusStylePluginConfig, BorderStylePluginConfig, BoxStylePluginConfig, PaddingStylePluginConfig } from "@paperbits/styles/plugins";
+import { BackgroundStylePluginConfig, BorderRadiusStylePluginConfig, BorderStylePluginConfig, BoxStylePluginConfig, PaddingStylePluginConfig } from "@paperbits/styles/plugins";
 import { ContainerStylePluginConfig } from "@paperbits/styles/plugins";
 import { StyleHelper } from "@paperbits/styles";
 
@@ -16,6 +16,7 @@ import { StyleHelper } from "@paperbits/styles";
     template: template
 })
 export class GridCellEditor {
+    public readonly backgroundConfig: ko.Observable<BackgroundStylePluginConfig>;
     public readonly container: ko.Observable<ContainerStylePluginConfig>;
     public readonly box: ko.Observable<BoxStylePluginConfig>;
 
@@ -25,6 +26,7 @@ export class GridCellEditor {
     ) {
         this.container = ko.observable<ContainerStylePluginConfig>();
         this.box = ko.observable<BoxStylePluginConfig>();
+        this.backgroundConfig = ko.observable<BackgroundStylePluginConfig>();
     }
 
     @Param()
@@ -77,6 +79,13 @@ export class GridCellEditor {
             border: borderConfig,
             borderRadius: borderRadiusConfig
         });
+
+        const backgroundStyleConfig = StyleHelper
+            .style(this.model.styles)
+            .plugin("background")
+            .getConfig<BackgroundStylePluginConfig>();
+
+        this.backgroundConfig(backgroundStyleConfig);
     }
 
     public onContainerUpdate(containerConfig: ContainerStylePluginConfig): void {
@@ -108,6 +117,11 @@ export class GridCellEditor {
             .plugin("borderRadius")
             .setConfig(boxConfig.borderRadius);
 
+        this.onChange(this.model);
+    }
+
+    public onBackgroundChange(pluginConfig: BackgroundStylePluginConfig): void {
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "background", pluginConfig);
         this.onChange(this.model);
     }
 }
