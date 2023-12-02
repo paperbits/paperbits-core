@@ -3,18 +3,19 @@ import parallel from "await-parallel-limit";
 import { maxParallelPublisingTasks } from "@paperbits/common/constants";
 import { HttpClient, HttpResponse } from "@paperbits/common/http";
 import { IPublisher } from "@paperbits/common/publishing";
-import { IBlobStorage, Query } from "@paperbits/common/persistence";
+import { IBlobStorageStream, Query } from "@paperbits/common/persistence";
 import { IMediaService, MediaContract, MediaVariantContract } from "@paperbits/common/media";
 import { Logger } from "@paperbits/common/logging";
 import { normalizePermalink } from "@paperbits/common/permalinks/utils";
 import { RegExps } from "@paperbits/common";
+import { ReadStream } from "node:fs";
 
 
 export class MediaPublisher implements IPublisher {
     constructor(
         private readonly mediaService: IMediaService,
-        private readonly blobStorage: IBlobStorage,
-        private readonly outputBlobStorage: IBlobStorage,
+        private readonly blobStorage: IBlobStorageStream,
+        private readonly outputBlobStorage: IBlobStorageStream,
         private readonly httpClient: HttpClient,
         private readonly logger: Logger
     ) { }
@@ -59,6 +60,23 @@ export class MediaPublisher implements IPublisher {
         await this.uploadToStorage(permalink, content, mediaFile.mimeType);
     }
 
+    private async publishFromStorageStream(permalink: string, mediaFile: MediaVariantContract): Promise<void> {
+        try {
+            const contentStream = await this.blobStorage.getBlobAsStream(mediaFile.blobKey);
+            
+            if (!contentStream) {
+                this.logger.trackEvent("Publishing", { message: `Blob with key ${mediaFile.blobKey} not found in source storage.` });
+                return null;
+            }
+
+            await this.outputBlobStorage.uploadStreamToBlob(permalink, <ReadStream>contentStream, mediaFile.mimeType);
+        }
+        catch (error) {
+            this.logger.trackEvent("Publishing", { message: `Could not download media ${mediaFile.blobKey} from source storage. ${error.message}` });
+            return null;
+        }
+    }
+
     private async uploadToStorage(permalink: string, content: Uint8Array, mimeType: string): Promise<void> {
         try {
             await this.outputBlobStorage.uploadBlob(permalink, content, mimeType);
@@ -70,7 +88,11 @@ export class MediaPublisher implements IPublisher {
 
     private async renderMediaFile(permalink: string, mediaFile: MediaVariantContract): Promise<void> {
         if (mediaFile.blobKey) {
-            await this.publishFromStorage(permalink, mediaFile);
+            if(this.blobStorage.getBlobAsStream) {
+                await this.publishFromStorageStream(permalink, mediaFile);
+            } else {
+                await this.publishFromStorage(permalink, mediaFile);
+            }
             return;
         }
 
