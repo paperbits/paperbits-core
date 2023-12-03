@@ -11,6 +11,7 @@ export class KnockoutRegistrationLoaders implements IInjectorModule {
                 const injectable = Reflect.getMetadata(InjectableMetadataKey, config);
 
                 if (!injectable) {
+                    console.warn(`The component "${name}" is not registered in dependency injector container. Use injector.bind(...) to register it.`);
                     callback(null); // If no injectable metadata, let another loader handle it.
                     return;
                 }

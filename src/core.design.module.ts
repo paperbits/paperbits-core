@@ -37,6 +37,7 @@ import {
 import { ComponentBinder } from "@paperbits/common/components";
 import { CollectionModelBinder, HtmlEditorProvider, MediaHandlers } from "@paperbits/common/editing";
 import { HyperlinkSelector } from "./workshops/hyperlinks/ko/hyperlinkSelector";
+import { HyperlinkInput } from "./workshops/hyperlinks/ko/hyperlinkInput";
 import { WidgetSelector } from "./workshops/widgets/ko/widgetSelector";
 import { LayoutDesignModule } from "./layout/ko/layout.design.module";
 import { MediaHyperlinkProvider, MediaService } from "@paperbits/common/media";
@@ -237,6 +238,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bind("localeSelector", LocaleSelector);
         injector.bind("localeEditor", LocaleEditor);
         injector.bind("hyperlinkSelector", HyperlinkSelector);
+        injector.bind("hyperlinkInput", HyperlinkInput);
         injector.bind("widgetSelector", WidgetSelector);
         injector.bind("confirmation", Confirmation);
         injector.bind("roleSelector", RoleSelector);
