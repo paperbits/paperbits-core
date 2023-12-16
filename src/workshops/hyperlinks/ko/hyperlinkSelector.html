@@ -27,11 +27,11 @@
     <!-- ko if: hyperlinkProvider -->
 
     <div class="form-group">
-        <label for="hyperlink">
+        <label for="hyperlinkTitle">
             Link points to:
         </label>
         <div class="max-w300 text-overflow">
-            <b id="hyperlink" data-bind="text: $component.selection, attr: { title: selection }"></b>
+            <b id="hyperlinkTitle" data-bind="text: $component.selection, attr: { title: selection }"></b>
         </div>
     </div>
     <!-- ko if: hyperlinkProvider().hyperlinkDetailsComponentName -->

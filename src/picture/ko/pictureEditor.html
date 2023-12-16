@@ -27,18 +27,12 @@
     </div>
 
     <div class="form-group">
-        <label for="hyperlinkSelector" class="form-label">
+        <label for="hyperlink" class="form-label">
             Link to
             <button class="btn btn-info" role="tooltip" aria-hidden="true" role="tooltip"
                 data-bind="tooltip: 'A link to be navigated on click.'"></button>
         </label>
-        <div class="input-group">
-            <input id="hyperlinkSelector" class="form-control" readonly data-bind="value: hyperlinkTitle" />
-            <button class="btn input-group-btn" aria-label="Select hyperlink"
-                data-bind="balloon: { position: 'right', component: { name: 'hyperlink-selector', params: { hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange } } }">
-                <i aria-hidden="true" class="paperbits-icon paperbits-link-69-2"></i>
-            </button>
-        </div>
+        <input-hyperlink params="{ id: 'hyperlink', hyperlink: $component.hyperlink, onChange: $component.onHyperlinkChange }"></input-hyperlink>
     </div>
 </details>
 
