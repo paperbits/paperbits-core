@@ -3,7 +3,7 @@ import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { RowModel } from "../row/rowModel";
 
 
-export class RowHandlers implements IWidgetHandler {
+export class RowHandlers implements IWidgetHandler<RowModel> {
     constructor(private readonly viewManager: ViewManager) { }
 
     public getContextCommands(context: WidgetContext): IContextCommandSet {

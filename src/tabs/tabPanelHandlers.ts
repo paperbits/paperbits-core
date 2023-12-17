@@ -11,8 +11,8 @@ export class TabPanelHandlers {
         private readonly eventManager: EventManager
     ) { }
 
-    public async getWidgetOrder(): Promise<IWidgetOrder> {
-        const widgetOrder: IWidgetOrder = {
+    public async getWidgetOrder(): Promise<IWidgetOrder<TabPanelModel>> {
+        const widgetOrder: IWidgetOrder<TabPanelModel> = {
             name: "tab-panel",
             displayName: "Tab panel",
             iconClass: "widget-icon widget-icon-tab-panel",

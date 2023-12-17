@@ -7,6 +7,6 @@ import { RowHandlers } from "../rowHandlers";
 export class RowEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("rowLayoutSelector", RowLayoutSelector);
-        injector.bindToCollection<IWidgetHandler>("widgetHandlers", RowHandlers, "rowHandler");
+        injector.bindToCollection("widgetHandlers", RowHandlers, "rowHandler");
     }
 }

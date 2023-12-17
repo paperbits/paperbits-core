@@ -7,7 +7,7 @@ import { ContainerModel } from "./containerModel";
 import { openWidgetEditorCommand, splitter, switchToParentCommand } from "@paperbits/common/ui/commands";
 
 
-export class ContainerHandlers implements IWidgetHandler {
+export class ContainerHandlers implements IWidgetHandler<ContainerModel> {
     constructor(
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager

@@ -9,7 +9,7 @@ import { MenuHandlers } from "../menuHandlers";
 export class MenuEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("menuEditor", MenuEditor);
-        injector.bindToCollection<IWidgetHandler>("widgetHandlers", MenuHandlers, "menuHandler");
+        injector.bindToCollection("widgetHandlers", MenuHandlers, "menuHandler");
 
         const styleGroup: IStyleGroup = {
             key: "menu",

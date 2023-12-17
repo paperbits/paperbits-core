@@ -17,7 +17,7 @@ export class CarouselDesignModule implements IInjectorModule {
         injector.bind("carouselItemEditor", CarouselItemEditor);
         injector.bindToCollection("modelBinders", CarouselModelBinder, "carouselModelBinder");
         injector.bindToCollection("viewModelBinders", CarouselViewModelBinder);
-        injector.bindToCollection<IWidgetHandler>("widgetHandlers", CarouselHandlers, "carouselHandler");
-        injector.bindToCollection<IWidgetHandler>("widgetHandlers", CarouselItemHandlers, "carouselItemHandler");
+        injector.bindToCollection("widgetHandlers", CarouselHandlers, "carouselHandler");
+        injector.bindToCollection("widgetHandlers", CarouselItemHandlers, "carouselItemHandler");
     }
 }

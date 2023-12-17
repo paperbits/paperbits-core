@@ -6,6 +6,6 @@ import { TestimonialsHandlers } from "../testimonialsHandlers";
 export class TestimonialsEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("testimonialsEditor", TestimonialsEditor);
-        injector.bindToCollection<IWidgetHandler>("widgetHandlers", TestimonialsHandlers, "testimonialsHandler");
+        injector.bindToCollection("widgetHandlers", TestimonialsHandlers, "testimonialsHandler");
     }
 }

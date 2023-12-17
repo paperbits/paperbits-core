@@ -66,14 +66,14 @@ export class WidgetSelector {
         this.widgetCount(widgetCount);
     }
 
-    private async getContentPartOrders(): Promise<IWidgetOrder[]> {
+    private async getContentPartOrders(): Promise<IWidgetOrder<unknown>[]> {
         const activeLayer = this.viewManager.getActiveLayer();
 
         if (activeLayer !== "layout") {
             return [];
         }
 
-        const pageContentWidgetOrder: IWidgetOrder = {
+        const pageContentWidgetOrder: IWidgetOrder<unknown> = {
             displayName: "Page content",
             category: "Layout",
             createModel: async () => {

@@ -2,9 +2,9 @@ import { IWidgetHandler, IWidgetOrder, WidgetContext } from "@paperbits/common/e
 import { CarouselItemModel, CarouselModel } from "./carouselModel";
 
 
-export class CarouselHandlers implements IWidgetHandler {
-    public async getWidgetOrder(): Promise<IWidgetOrder> {
-        const widgetOrder: IWidgetOrder = {
+export class CarouselHandlers implements IWidgetHandler<CarouselModel> {
+    public async getWidgetOrder(): Promise<IWidgetOrder<CarouselModel>> {
+        const widgetOrder: IWidgetOrder<CarouselModel> = {
             name: "carousel",
             displayName: "Carousel",
             iconClass: "widget-icon widget-icon-carousel",

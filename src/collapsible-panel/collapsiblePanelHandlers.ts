@@ -6,7 +6,7 @@ import { EventManager, Events } from "@paperbits/common/events";
 import { DragSession } from "@paperbits/common/ui/draggables";
 
 
-export class CollapsiblePanelHandlers implements IWidgetHandler {
+export class CollapsiblePanelHandlers implements IWidgetHandler<CollapsiblePanelModel> {
     constructor(
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager
@@ -16,8 +16,8 @@ export class CollapsiblePanelHandlers implements IWidgetHandler {
         return !["section", "row", "column", "collapsiblePanel"].includes(dragSession.sourceBinding.name);
     }
 
-    public async getWidgetOrder(): Promise<IWidgetOrder> {
-        const widgetOrder: IWidgetOrder = {
+    public async getWidgetOrder(): Promise<IWidgetOrder<CollapsiblePanelModel>> {
+        const widgetOrder: IWidgetOrder<CollapsiblePanelModel> = {
             name: "collapsiblePanel",
             displayName: "Collapsible panel",
             iconClass: "widget-icon widget-icon-collapsible-panel",

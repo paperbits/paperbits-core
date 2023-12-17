@@ -5,7 +5,7 @@ import { ButtonModel } from "./buttonModel";
 import { IVisibilityCommandProvider } from "../security/visibilityContextCommandProvider";
 
 
-export class ButtonHandlers implements IWidgetHandler {
+export class ButtonHandlers implements IWidgetHandler<ButtonModel> {
     constructor(
         private readonly viewManager: ViewManager,
         private readonly visibilityCommandProvider: IVisibilityCommandProvider,

@@ -1,7 +1,7 @@
 ﻿import { IContentDropHandler, IContentDescriptor, IDataTransfer, IWidgetHandler } from "@paperbits/common/editing";
 import { YoutubePlayerModel } from "./youtubePlayerModel";
 
-export class YoutubeHandlers implements IWidgetHandler, IContentDropHandler {
+export class YoutubeHandlers implements IWidgetHandler<YoutubePlayerModel>, IContentDropHandler {
     public async getWidgetModel(): Promise<YoutubePlayerModel> {
         return new YoutubePlayerModel();
     }

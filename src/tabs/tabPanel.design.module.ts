@@ -18,8 +18,8 @@ export class TabPanelDesignModule implements IInjectorModule {
         injector.bind("tabPanelItemSelector", TabPanelItemSelector);
         injector.bindToCollection("modelBinders", TabPanelModelBinder, "tabPanelModelBinder");
         injector.bindToCollection("viewModelBinders", TabPanelViewModelBinder);
-        injector.bindToCollection<IWidgetHandler>("widgetHandlers", TabPanelHandlers, "tabPanelHandler");
-        injector.bindToCollection<IWidgetHandler>("widgetHandlers", TabPanelItemHandlers, "tabPanelItemHandler");
+        injector.bindToCollection("widgetHandlers", TabPanelHandlers, "tabPanelHandler");
+        injector.bindToCollection("widgetHandlers", TabPanelItemHandlers, "tabPanelItemHandler");
         injector.bindToCollection("styleHandlers", TabPanelStyleHandler);
     }
 }

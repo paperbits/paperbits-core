@@ -7,6 +7,6 @@ import { GridLayoutSelector } from "./gridLayoutSelector";
 export class GridEditorModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bind("gridLayoutSelector", GridLayoutSelector);
-        injector.bindToCollection<IWidgetHandler>("widgetHandlers", GridHandlers, "gridHandler");
+        injector.bindToCollection("widgetHandlers", GridHandlers, "gridHandler");
     }
 }

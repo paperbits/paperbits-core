@@ -7,7 +7,7 @@ export class DropBucketItem {
     public description: string;
     public previewUrl: ko.Observable<string>;
     public thumbnailUrl: ko.Observable<string>;
-    public widgetOrder: ko.Observable<IWidgetOrder>;
+    public widgetOrder: ko.Observable<IWidgetOrder<unknown>>;
     public uploadables: ko.ObservableArray<File | string>;
     public uploadablesPending: Promise<any>;
     public widgetFactoryResult: IWidgetFactoryResult<any, any>;
@@ -19,7 +19,7 @@ export class DropBucketItem {
         this.previewUrl = ko.observable<string>();
         this.thumbnailUrl = ko.observable<string>();
         this.uploadables = ko.observableArray<File | string>();
-        this.widgetOrder = ko.observable<IWidgetOrder>();
+        this.widgetOrder = ko.observable<IWidgetOrder<unknown>>();
 
         this.background = ko.computed<BackgroundModel>(() => {
             const background = new BackgroundModel();

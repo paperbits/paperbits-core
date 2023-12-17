@@ -4,7 +4,7 @@ import { deleteWidgetCommand, openHelpArticleCommand, openWidgetEditorCommand, s
 import { DismissButtonModel } from "./dismissButtonModel";
 
 
-export class DismissButtonHandlers implements IWidgetHandler {
+export class DismissButtonHandlers implements IWidgetHandler<DismissButtonModel> {
     public async getWidgetModel(): Promise<DismissButtonModel> {
         return new DismissButtonModel();
     }

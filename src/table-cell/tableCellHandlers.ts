@@ -4,9 +4,10 @@ import { DragSession } from "@paperbits/common/ui/draggables";
 import { IContextCommandSet, View, ViewManager } from "@paperbits/common/ui";
 import { WidgetModel } from "@paperbits/common/widgets";
 import { TableModel } from "../table/tableModel";
+import { TableCellModel } from "./tableCellModel";
 
 
-export class TableCellHandlers implements IWidgetHandler {
+export class TableCellHandlers implements IWidgetHandler<TableCellModel> {
     constructor(
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager
@@ -17,7 +18,7 @@ export class TableCellHandlers implements IWidgetHandler {
     }
 
     public getContextCommands(context: WidgetContext): IContextCommandSet {
-        const tableParentBinding =  context.gridItem.getParent().getParent().binding;
+        const tableParentBinding = context.gridItem.getParent().getParent().binding;
         const tableParentModel = tableParentBinding.model;
         const tableModel = context.gridItem.getParent().binding.model;
 

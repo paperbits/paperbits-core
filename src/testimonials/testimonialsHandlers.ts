@@ -1,9 +1,9 @@
 ﻿import { TestimonialsModel } from "./testimonialsModel";
 import { IWidgetOrder, IWidgetHandler } from "@paperbits/common/editing";
 
-export class TestimonialsHandlers implements IWidgetHandler {
-    public async getWidgetOrder(): Promise<IWidgetOrder> {
-        const widgetOrder: IWidgetOrder = {
+export class TestimonialsHandlers implements IWidgetHandler<TestimonialsModel> {
+    public async getWidgetOrder(): Promise<IWidgetOrder<TestimonialsModel>> {
+        const widgetOrder: IWidgetOrder<TestimonialsModel> = {
             name: "testimonials",
             displayName: "Testimonials",
             iconClass: "widget-icon widget-icon-testimonials",

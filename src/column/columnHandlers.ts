@@ -3,9 +3,10 @@ import { EventManager, Events } from "@paperbits/common/events";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { WidgetModel } from "@paperbits/common/widgets";
+import { ColumnModel } from "./columnModel";
 
 
-export class ColumnHandlers implements IWidgetHandler {
+export class ColumnHandlers implements IWidgetHandler<ColumnModel> {
     constructor(
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager

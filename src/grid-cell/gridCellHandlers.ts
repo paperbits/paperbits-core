@@ -4,9 +4,10 @@ import { DragSession } from "@paperbits/common/ui/draggables";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { openWidgetEditorCommand, splitter, switchToChildCommand, switchToParentCommand } from "@paperbits/common/ui/commands";
 import { WidgetModel } from "@paperbits/common/widgets";
+import { GridCellModel } from "./gridCellModel";
 
 
-export class GridCellHandlers implements IWidgetHandler {
+export class GridCellHandlers implements IWidgetHandler<GridCellModel> {
     constructor(
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager

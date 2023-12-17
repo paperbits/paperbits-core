@@ -8,7 +8,7 @@ import { TextblockModel } from "./../textblock/textblockModel";
 import { openWidgetEditorCommand, splitter, switchToParentCommand } from "@paperbits/common/ui/commands";
 
 
-export class CardHandlers implements IWidgetHandler {
+export class CardHandlers implements IWidgetHandler<CardModel> {
     constructor(
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager

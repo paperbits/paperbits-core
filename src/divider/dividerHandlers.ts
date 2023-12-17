@@ -2,9 +2,9 @@
 import { DividerModel } from "./dividerModel";
 
 
-export class DividerHandlers implements IWidgetHandler {
-    public async getWidgetOrder(): Promise<IWidgetOrder> {
-        const widgetOrder: IWidgetOrder = {
+export class DividerHandlers implements IWidgetHandler<DividerModel> {
+    public async getWidgetOrder(): Promise<IWidgetOrder<DividerModel>> {
+        const widgetOrder: IWidgetOrder<DividerModel> = {
             name: "divider",
             displayName: "Divider",
             iconClass: "paperbits-icon paperbits-divider-2",

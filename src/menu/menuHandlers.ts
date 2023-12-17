@@ -4,11 +4,11 @@ import { deleteWidgetCommand, openWidgetEditorCommand, splitter, switchToParentC
 import { MenuModel } from "./menuModel";
 import { IVisibilityCommandProvider } from "../security/visibilityContextCommandProvider";
 
-export class MenuHandlers implements IWidgetHandler {
+export class MenuHandlers implements IWidgetHandler<MenuModel> {
     constructor(private readonly visibilityCommandProvider: IVisibilityCommandProvider) { }
 
-    public async getWidgetOrder(): Promise<IWidgetOrder> {
-        const widgetOrder: IWidgetOrder = {
+    public async getWidgetOrder(): Promise<IWidgetOrder<MenuModel>> {
+        const widgetOrder: IWidgetOrder<MenuModel> = {
             name: "menu",
             displayName: "Menu",
             iconClass: "widget-icon widget-icon-menu",

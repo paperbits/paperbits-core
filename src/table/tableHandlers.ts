@@ -3,7 +3,7 @@ import { TableCellModel } from "../table-cell";
 import { TableModel } from "./tableModel";
 
 
-export class TableHandlers implements IWidgetHandler {
+export class TableHandlers implements IWidgetHandler<TableModel> {
     public async getWidgetModel(): Promise<TableModel> {
         const table = new TableModel();
         table.numOfRows = 1;

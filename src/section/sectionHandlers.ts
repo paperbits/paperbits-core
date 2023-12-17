@@ -9,7 +9,7 @@ import { IVisibilityCommandProvider } from "../security/visibilityContextCommand
 import { switchToChildCommand } from "@paperbits/common/ui/commands";
 
 
-export class SectionHandlers implements IWidgetHandler {
+export class SectionHandlers implements IWidgetHandler<SectionModel> {
     constructor(
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager,

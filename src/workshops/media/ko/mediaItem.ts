@@ -1,8 +1,7 @@
 ﻿import * as ko from "knockout";
 import * as MediaUtils from "@paperbits/common/media/mediaUtils";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
-import { MediaVariantContract } from "@paperbits/common/media/mediaVariantContract";
-import { IWidgetOrder, IWidgetFactoryResult } from "@paperbits/common/editing";
+import { IWidgetFactoryResult } from "@paperbits/common/editing";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 
 export const defaultFileName: string = "media.svg";
@@ -11,7 +10,6 @@ export const defaultURL: string = "https://cdn.paperbits.io/images/logo.svg";
 export class MediaItem {
     public key: string;
     public blobKey: string;
-    public widgetOrder: IWidgetOrder;
     public downloadUrl: ko.Observable<string>;
     public thumbnailUrl: ko.Observable<string>;
     public permalink: ko.Observable<string>;
@@ -21,7 +19,6 @@ export class MediaItem {
     public mimeType: ko.Observable<string>;
     public widgetFactoryResult: IWidgetFactoryResult<any, any>;
     public nonPreviewable: ko.Computed<boolean>;
-
 
 
     constructor(mediaContract: MediaContract) {

@@ -6,7 +6,7 @@ import { deleteWidgetCommand, openHelpArticleCommand, openWidgetEditorCommand, s
 
 const widgetDisplayName = "Picture";
 
-export class PictureHandlers implements IWidgetHandler, IContentDropHandler {
+export class PictureHandlers implements IWidgetHandler<PictureModel>,  IContentDropHandler {
     constructor(private readonly viewManager: ViewManager) { }
 
     public async getWidgetModel(): Promise<PictureModel> {

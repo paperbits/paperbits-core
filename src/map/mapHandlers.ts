@@ -3,7 +3,7 @@ import { IContentDescriptor, IDataTransfer, IWidgetHandler } from "@paperbits/co
 import { MapContract } from "./mapContract";
 
 
-export class MapHandlers implements IWidgetHandler /*, IContentDropHandler */ {
+export class MapHandlers implements IWidgetHandler<MapModel> /*, IContentDropHandler */ {
     public name: string = "map";
     public displayName: string = "Map";
 

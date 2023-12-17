@@ -3,9 +3,10 @@ import { ViewManager, IContextCommandSet } from "@paperbits/common/ui";
 import { switchToParentCommand } from "@paperbits/common/ui/commands";
 import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { WidgetModel } from "@paperbits/common/widgets";
+import { ContentModel } from "./contentModel";
 
 
-export class ContentHandlers implements IWidgetHandler {
+export class ContentHandlers implements IWidgetHandler<ContentModel> {
     constructor(private readonly viewManager: ViewManager) { }
 
     public canAccept(dragSession: DragSession): boolean {

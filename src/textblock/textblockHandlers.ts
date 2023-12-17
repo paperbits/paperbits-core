@@ -3,7 +3,7 @@ import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { openHelpArticleCommand, openWidgetEditorCommand, splitter, switchToParentCommand } from "@paperbits/common/ui/commands";
 
-export class TextblockHandlers implements IWidgetHandler {
+export class TextblockHandlers implements IWidgetHandler<TextblockModel> {
     constructor(private readonly viewManager: ViewManager) { }
 
     public async getWidgetModel(): Promise<TextblockModel> {

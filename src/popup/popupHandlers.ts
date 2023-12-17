@@ -3,9 +3,10 @@ import { EventManager, Events } from "@paperbits/common/events";
 import { DragSession } from "@paperbits/common/ui/draggables";
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { WidgetModel } from "@paperbits/common/widgets";
+import { PopupInstanceModel } from "./popupModel";
 
 
-export class PopupHandlers implements IWidgetHandler {
+export class PopupHandlers implements IWidgetHandler<PopupInstanceModel> {
     constructor(
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager
