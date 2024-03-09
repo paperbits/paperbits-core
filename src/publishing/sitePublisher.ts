@@ -2,6 +2,7 @@ import * as Utils from "@paperbits/common/utils";
 import { IPublisher, SitemapBuilder, SearchIndexBuilder } from "@paperbits/common/publishing";
 import { Logger } from "@paperbits/common/logging";
 import { IBlobStorage, ChangeCommitter } from "@paperbits/common/persistence";
+import { ISettingsProvider } from "@paperbits/common/configuration";
 
 
 export class SitePublisher implements IPublisher {
@@ -11,12 +12,15 @@ export class SitePublisher implements IPublisher {
         private readonly sitemapBuilder: SitemapBuilder,
         private readonly searchIndexBuilder: SearchIndexBuilder,
         private readonly outputBlobStorage: IBlobStorage,
-        private readonly changeCommitter: ChangeCommitter
+        private readonly changeCommitter: ChangeCommitter,
+        private readonly settingsProvider: ISettingsProvider
     ) { }
 
     public async publish(): Promise<void> {
         try {
             this.logger.trackEvent("Publishing", { message: `Publishing website...` });
+
+            await this.settingsProvider.setSetting("staticAssetSuffix", Utils.identifier(10));
 
             for (const publisher of this.publishers) {
                 await publisher.publish();

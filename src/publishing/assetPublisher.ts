@@ -1,19 +1,26 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as mime from "mime";
+import * as Utils from "@paperbits/common/utils";
 import { IPublisher } from "@paperbits/common/publishing";
 import { IBlobStorage } from "@paperbits/common/persistence";
+import { ISettingsProvider } from "@paperbits/common/configuration";
 
 
 const assetsBaseBath = path.resolve(__dirname, "./assets");
 
 export class AssetPublisher implements IPublisher {
-    constructor(private readonly outputBlobStorage: IBlobStorage) { }
+    constructor(
+        private readonly outputBlobStorage: IBlobStorage,
+        private readonly settingsProvider: ISettingsProvider
+    ) { }
 
-    private async copyAssetFrom(assetPath: string): Promise<void> {
+    private async copyAssetFrom(assetPath: string, suffix: string): Promise<void> {
         try {
             const byteArray = await this.downloadBlob(assetPath);
             const fileName = assetPath.split("/").pop();
+            assetPath = Utils.appendSuffixToFileName(assetPath, suffix);
+
             const contentType = mime.getType(fileName) || "application/octet-stream";
 
             await this.outputBlobStorage.uploadBlob(assetPath, byteArray, contentType);
@@ -23,11 +30,11 @@ export class AssetPublisher implements IPublisher {
         }
     }
 
-    private async copyAssets(): Promise<void> {
+    private async copyAssets(suffix: string): Promise<void> {
         const assetPaths = await this.listAssests();
 
         if (assetPaths.length > 0) {
-            const copyPromises = assetPaths.map(assetPath => this.copyAssetFrom(assetPath));
+            const copyPromises = assetPaths.map(assetPath => this.copyAssetFrom(assetPath, suffix));
             await Promise.all(copyPromises);
         }
     }
@@ -87,11 +94,13 @@ export class AssetPublisher implements IPublisher {
     }
 
     public async publish(): Promise<void> {
+        const staticAssetSuffix = await this.settingsProvider.getSetting<string>("staticAssetSuffix");
+
         if (!fs.existsSync(assetsBaseBath)) {
             console.warn(`Folder ${assetsBaseBath} doesn't exist. Copying assets will be skipped.`);
             return;
         }
 
-        await this.copyAssets();
+        await this.copyAssets(staticAssetSuffix);
     }
 }

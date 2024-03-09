@@ -20,6 +20,7 @@ import { StyleBuilder } from "@paperbits/styles";
 import { OpenGraphType } from "@paperbits/common/publishing/openGraph";
 import { MimeTypes, RegExps } from "@paperbits/common";
 import { SourceLink } from "@paperbits/common/publishing/sourceLink";
+import { ISettingsProvider } from "@paperbits/common/configuration";
 
 
 const globalStylesheetPermalink = `/styles/styles.css`;
@@ -38,6 +39,7 @@ export class PagePublisher implements IPublisher {
         protected readonly localeService: ILocaleService,
         protected readonly sitemapBuilder: SitemapBuilder,
         protected readonly searchIndexBuilder: SearchIndexBuilder,
+        protected readonly settingsProvider: ISettingsProvider,
         protected readonly logger: Logger
     ) {
         this.localStyleBuilder = new StyleBuilder(this.outputBlobStorage);
@@ -237,14 +239,17 @@ export class PagePublisher implements IPublisher {
 
     public async publish(): Promise<void> {
         const locales = await this.localeService.getLocales();
+        const staticAssetSuffix = await this.settingsProvider.getSetting<string>("staticAssetSuffix");
 
         const localizationEnabled = locales.length > 0;
         const globalStyleSheet = await this.styleCompiler.getStyleSheet();
 
+        const stylesheetPermalink = Utils.appendSuffixToFileName(globalStylesheetPermalink, staticAssetSuffix);
+
         // Building global styles
-        const signature = await this.localStyleBuilder.buildStyle(globalStylesheetPermalink, globalStyleSheet);
+        const signature = await this.localStyleBuilder.buildStyle(stylesheetPermalink, globalStyleSheet);
         const globalStylesLink: SourceLink = {
-            src: globalStylesheetPermalink,
+            src: stylesheetPermalink,
             integrity: signature
         };
 
