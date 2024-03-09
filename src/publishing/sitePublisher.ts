@@ -20,7 +20,11 @@ export class SitePublisher implements IPublisher {
         try {
             this.logger.trackEvent("Publishing", { message: `Publishing website...` });
 
-            await this.settingsProvider.setSetting("staticAssetSuffix", Utils.identifier(10));
+            const enableSuffix = await this.settingsProvider.getSetting<boolean>("features/addSuffixToStaticFiles");
+
+            if (enableSuffix || enableSuffix === true) {
+                await this.settingsProvider.setSetting("staticAssetSuffix", Utils.identifier(10));
+            }
 
             for (const publisher of this.publishers) {
                 await publisher.publish();
