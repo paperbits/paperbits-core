@@ -6,7 +6,7 @@ import { SizeUnits, Size } from "@paperbits/styles/size";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { TableModel } from "../tableModel";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
-import { BoxStylePluginConfig } from "@paperbits/styles/plugins";
+import { BackgroundStylePluginConfig, BoxStylePluginConfig } from "@paperbits/styles/plugins";
 import { StylePluginConfig } from "@paperbits/common/styles";
 
 
@@ -66,6 +66,11 @@ export class TableColumnEditor {
         this.applyColumnStyles("border", changeset.border);
         this.applyColumnStyles("padding", changeset.padding);
 
+        this.onChange(this.model);
+    }
+
+    public onBackgroundUpdate(backgroundStyles: BackgroundStylePluginConfig): void {
+        this.applyColumnStyles("background", backgroundStyles);
         this.onChange(this.model);
     }
 

@@ -7,7 +7,7 @@ import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorat
 import { TableModel } from "../tableModel";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { StylePluginConfig } from "@paperbits/common/styles";
-import { BoxStylePluginConfig } from "@paperbits/styles/plugins";
+import { BackgroundStylePluginConfig, BoxStylePluginConfig } from "@paperbits/styles/plugins";
 
 
 @Component({
@@ -70,6 +70,10 @@ export class TableRowEditor {
         this.onChange(this.model);
     }
 
+    public onBackgroundUpdate(backgroundStyles: BackgroundStylePluginConfig): void {
+        this.applyRowStyles("background", backgroundStyles);
+        this.onChange(this.model);
+    }
 
     private applyChanges(): void {
         if (!this.rowIndex) {

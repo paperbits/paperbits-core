@@ -7,9 +7,17 @@
             data-bind="textInput: width" />
     </div>
 </div>
+
 <details open>
     <summary>
-        Container box
+        Background (applied once)
+    </summary>
+    <background params="{ background: $component.background, onUpdate: onBackgroundUpdate }"></background>
+</details>
+
+<details open>
+    <summary>
+        Container box  (applied once)
     </summary>
     <box params="{ features: 'border,padding', onUpdate: onBoxUpdate }"></box>
 </details>
