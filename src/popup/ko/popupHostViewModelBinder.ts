@@ -1,4 +1,4 @@
-import { Bag } from "@paperbits/common";
+import { Bag, Contract } from "@paperbits/common";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { EventManager, Events } from "@paperbits/common/events";
 import { Query } from "@paperbits/common/persistence";
@@ -11,6 +11,8 @@ import { PopupHostModel } from "../popupHostModel";
 import { PopupHostModelBinder } from "../popupHostModelBinder";
 import { PopupModelBinder } from "../popupModelBinder";
 import { PopupHost } from "./popupHost";
+import * as Objects from "@paperbits/common/objects";
+
 
 export class PopupHostViewModelBinder implements ViewModelBinder<PopupHostModel, PopupHost> {
     constructor(
@@ -83,9 +85,39 @@ export class PopupHostViewModelBinder implements ViewModelBinder<PopupHostModel,
         return model instanceof PopupHostModel;
     }
 
-    public async contractToViewModel(bindingContext: Bag<any>): Promise<PopupHost> {
-        // TODO: Scan page and fetch referenced popup keys.
-        const popupContracts = await this.popupService.search(Query.from());
+    private findNodesOfType(node: Contract): string[] {
+        const result = [];
+
+        if (node["hyperlink"]?.["targetKey"]?.startsWith("popups/")) {
+            const popupKey = node["hyperlink"]["targetKey"];
+            result.push(popupKey);
+        }
+
+        if (node.nodes) {
+            node.nodes.forEach(x => {
+                var children = this.findNodesOfType(x);
+                result.push(...children);
+            });
+        }
+
+        return result;
+    }
+
+
+    public async contractToViewModel(bindingContext: Bag<any>, cont?: Contract): Promise<PopupHost> {
+         // TODO: Scan page and fetch referenced popup keys.
+         const popupContracts = await this.popupService.search(Query.from());
+
+        let popupKeys;
+
+        if (cont) {
+            popupKeys = this.findNodesOfType(cont);
+            debugger;
+        }
+        const aaaa = popupContracts.value.filter(x => popupKeys.includes(x.key));
+
+        debugger;
+
         const popupHostContract: PopupHostContract = { popups: popupContracts.value };
         const popupHostModel = await this.popupHostModelBinder.contractToModel(popupHostContract, bindingContext);
         const popupHostViewModel = await this.modelToViewModel(popupHostModel, null, bindingContext);

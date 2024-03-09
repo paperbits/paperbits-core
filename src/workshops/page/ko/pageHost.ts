@@ -121,14 +121,14 @@ export class PageHost {
 
         this.contentViewModel(layoutContentViewModel);
 
-        await this.refreshPopupContent();
+        await this.refreshPopupContent(layoutContentContract);
 
         this.viewManager.removeShutter();
 
         this.jumpToAnchor(route);
     }
 
-    private async refreshPopupContent(): Promise<void> {
+    private async refreshPopupContent(contract?: any): Promise<void> {
         const route = this.router.getCurrentRoute();
 
         const popupBindingContext = {
@@ -141,7 +141,7 @@ export class PageHost {
             }
         };
 
-        const popupHostViewModel = await this.popupHostViewModelBinder.contractToViewModel(popupBindingContext);
+        const popupHostViewModel = await this.popupHostViewModelBinder.contractToViewModel(popupBindingContext, contract);
         popupHostViewModel["widgetBinding"].provides = ["html", "js", "interaction"];
 
         this.popupHostViewModel(popupHostViewModel);
