@@ -12,8 +12,7 @@ import {
     LinkedDataHtmlPagePublisherPlugin,
     SocialShareDataHtmlPagePublisherPlugin,
     JsDomHtmlDocumentProvider,
-    SitemapBuilder,
-    SearchIndexBuilder
+    SitemapBuilder
 } from "@paperbits/common/publishing";
 import { ButtonPublishModule } from "./button/button.publish.module";
 import { MapPublishModule } from "./map/map.publish.module";
@@ -64,6 +63,7 @@ import { CollapsiblePanelModule } from "./collapsible-panel/ko";
 import { BackgroundBindingHandler, WidgetBindingHandler } from "./ko/bindingHandlers";
 import { DefaultChangeCommitter } from "@paperbits/common/persistence";
 import { ContainerPublishModule } from "./container/container.publish.module";
+import { SearchIndexBuilder } from "@paperbits/common/search";
 
 export class CorePublishModule implements IInjectorModule {
     public register(injector: IInjector): void {

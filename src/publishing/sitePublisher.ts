@@ -1,5 +1,6 @@
 import * as Utils from "@paperbits/common/utils";
-import { IPublisher, SitemapBuilder, SearchIndexBuilder } from "@paperbits/common/publishing";
+import { IPublisher, SitemapBuilder } from "@paperbits/common/publishing";
+import { SearchIndexBuilder } from "@paperbits/common/search";
 import { Logger } from "@paperbits/common/logging";
 import { IBlobStorage, ChangeCommitter } from "@paperbits/common/persistence";
 import { ISettingsProvider } from "@paperbits/common/configuration";

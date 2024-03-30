@@ -4,8 +4,7 @@ import {
     IPublisher,
     HtmlPage,
     HtmlPagePublisher,
-    SitemapBuilder,
-    SearchIndexBuilder
+    SitemapBuilder
 } from "@paperbits/common/publishing";
 import { normalizePermalink } from "@paperbits/common/permalinks/utils";
 import { maxParallelPublisingTasks } from "@paperbits/common/constants";
@@ -21,6 +20,7 @@ import { OpenGraphType } from "@paperbits/common/publishing/openGraph";
 import { MimeTypes, RegExps } from "@paperbits/common";
 import { SourceLink } from "@paperbits/common/publishing/sourceLink";
 import { ISettingsProvider } from "@paperbits/common/configuration";
+import { SearchIndexBuilder } from "@paperbits/common/search";
 
 
 const globalStylesheetPermalink = `/styles/styles.css`;
