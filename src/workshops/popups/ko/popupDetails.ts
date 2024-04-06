@@ -38,6 +38,9 @@ export class PopupDetailsWorkshop {
     @Event()
     private readonly onDeleteCallback: () => void;
 
+    @Event()
+    private readonly onCopyCallback: (popupItem: PopupItem) => void;
+
     @OnMounted()
     public async onMounted(): Promise<void> {
         this.popupItem.title
@@ -94,5 +97,13 @@ export class PopupDetailsWorkshop {
         }
 
         this.router.navigateTo("/");
+    }
+
+    public async copyPopup(): Promise<void> {
+        const copiedPopup = await this.popupService.copyPopup(this.popupItem.key);
+
+        if (this.onCopyCallback) {
+            this.onCopyCallback(new PopupItem(copiedPopup));
+        }
     }
 }
