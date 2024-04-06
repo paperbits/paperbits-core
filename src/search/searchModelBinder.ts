@@ -1,10 +1,10 @@
 import { Contract } from "@paperbits/common";
 import { IModelBinder } from "@paperbits/common/editing";
-import { SearchModel } from "./searchModel";
+import { SearchInputModel } from "./searchInputModel";
 import { SearchContract } from "./searchContract";
 
 
-export class SearchModelBinder implements IModelBinder<SearchModel> {
+export class SearchModelBinder implements IModelBinder<SearchInputModel> {
     constructor(
     ) {
         this.contractToModel = this.contractToModel.bind(this);
@@ -15,14 +15,14 @@ export class SearchModelBinder implements IModelBinder<SearchModel> {
     }
 
     public canHandleModel(model: Object): boolean {
-        return model instanceof SearchModel;
+        return model instanceof SearchInputModel;
     }
 
-    public async contractToModel(searchContract: SearchContract): Promise<SearchModel> {
-        return new SearchModel();
+    public async contractToModel(searchContract: SearchContract): Promise<SearchInputModel> {
+        return new SearchInputModel();
     }
 
-    public modelToContract(searchModel: SearchModel): Contract {
+    public modelToContract(searchModel: SearchInputModel): Contract {
         const searchConfig: SearchContract = {
             type: "search"
         };

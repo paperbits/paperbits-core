@@ -1,16 +1,15 @@
 import * as ko from "knockout";
 import template from "./search-runtime.html";
-import { stripHtml } from "@paperbits/common/utils";
-import { HttpClient } from "@paperbits/common/http";
-import { Component, RuntimeComponent, OnMounted } from "@paperbits/common/ko/decorators";
+import { Component, RuntimeComponent, OnMounted, Param } from "@paperbits/common/ko/decorators";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
-import { MimeTypes } from "@paperbits/common";
-import { SearchResult, SearchResultBuilder } from "@paperbits/common/search";
-import { SearchService, StaticSearchService } from "@paperbits/common/search/staticSearchService";
+import { SearchResult } from "@paperbits/common/search";
+import { SearchService } from "@paperbits/common/search/staticSearchService";
 
 
 
-@RuntimeComponent({ selector: "search-runtime" })
+@RuntimeComponent({
+    selector: "search-runtime"
+})
 @Component({
     selector: "search-runtime",
     template: template
@@ -24,7 +23,15 @@ export class SearchRuntime {
         this.searchPattern = ko.observable();
         this.results = ko.observableArray([]);
         this.hasResults = ko.observable(false);
+        this.label = ko.observable();
+        this.placeholder = ko.observable();
     }
+
+    @Param()
+    public readonly label: ko.Observable<string>;
+
+    @Param()
+    public readonly placeholder: ko.Observable<string>;
 
     @OnMounted()
     public async loadIndex(): Promise<void> {

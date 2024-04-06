@@ -1,41 +1,27 @@
-import { Bag } from "@paperbits/common";
-import { ViewModelBinder } from "@paperbits/common/widgets";
-import { EventManager, Events } from "@paperbits/common/events";
-import { IWidgetBinding } from "@paperbits/common/editing";
-import { ComponentFlow } from "@paperbits/common/components";
-import { SearchViewModel } from "./searchViewModel";
-import { SearchModel } from "../searchModel";
-import { SearchHandlers } from "../searchHandlers";
+import { ViewModelBinder, WidgetState } from "@paperbits/common/widgets";
+import { SearchViewModel } from "./search";
+import { SearchInputModel } from "../searchInputModel";
+import { StyleCompiler } from "@paperbits/common/styles";
 
 
-export class SearchViewModelBinder implements ViewModelBinder<SearchModel, SearchViewModel> {
-    constructor(private readonly eventManager: EventManager) { }
+export class SearchViewModelBinder implements ViewModelBinder<SearchInputModel, SearchViewModel> {
+    constructor(private readonly styleCompiler: StyleCompiler) { }
 
-    public async modelToViewModel(model: SearchModel, viewModel?: SearchViewModel, bindingContext?: Bag<any>): Promise<SearchViewModel> {
-        if (!viewModel) {
-            viewModel = new SearchViewModel();
+    public stateToInstance(state: WidgetState, componentInstance: SearchViewModel): void {
+        componentInstance.styles(state.styles);
 
-            const binding: IWidgetBinding<SearchModel, SearchViewModel> = {
-                name: "search",
-                displayName: "Search website",
-                layer: bindingContext?.layer,
-                handler: SearchHandlers,
-                model: model,
-                flow: ComponentFlow.Block,
-                draggable: true,
-                applyChanges: async () => {
-                    await this.modelToViewModel(model, viewModel, bindingContext);
-                    this.eventManager.dispatchEvent(Events.ContentUpdate);
-                }
-            };
-
-            viewModel["widgetBinding"] = binding;
-        }
-
-        return viewModel;
+        componentInstance.runtimeConfig(JSON.stringify({
+            label: state.label,
+            placeholder: state.placeholder
+        }));
     }
 
-    public canHandleModel(model: SearchModel): boolean {
-        return model instanceof SearchModel;
+    public async modelToState(model: SearchInputModel, state: WidgetState): Promise<void> {
+        state.label = model.label;
+        state.placeholder = model.placeholder;
+
+        if (model.styles) {
+            state.styles = await this.styleCompiler.getStyleModelAsync(model.styles);
+        }
     }
 }

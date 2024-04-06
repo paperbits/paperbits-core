@@ -1,2 +1,2 @@
-export * from "./searchViewModel";
+export * from "./search";
 export * from "./searchViewModelBinder";

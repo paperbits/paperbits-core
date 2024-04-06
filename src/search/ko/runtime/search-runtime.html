@@ -1,17 +1,19 @@
-<form data-bind="/search" enctype="application/x-www-form-urlencoded" class="form-group">
-    <div class="input-group">
-        <input type="search" class="form-control" data-bind="textInput: searchPattern" placeholder="Search website..." aria-label="Search website" />
-    </div>
-</form>
+<div class="form-group">
+    <!-- ko if: label -->
+    <label class="form-label" data-bind="text: label"></label>
+    <!-- /ko -->
+    <input type="search" class="form-control"
+        data-bind="textInput: searchPattern, attr: { placeholder: placeholder }" />
+</div>
 
 <!-- ko if: hasResults -->
 <!-- ko if: results().length > 0 -->
-<article data-bind="foreach: results">
-    <h2>
-        <a data-bind="attr: { href: $data.url }, text: $data.title"></a>
-    </h2>
-    <p data-bind="text: $data.summary"></p>
-</article>
+<div role="listbox" data-bind="foreach: results">
+    <div role="presentation">
+        <b><a data-bind="attr: { href: $data.url }, text: $data.title"></a></b>
+        <p data-bind="text: $data.summary"></p>
+    </div>
+</div>
 <!-- /ko -->
 
 <!-- ko if: results().length === 0 -->

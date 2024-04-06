@@ -1,4 +1,4 @@
 export * from "./searchContract";
 export * from "./searchHandlers";
-export * from "./searchModel";
+export * from "./searchInputModel";
 export * from "./searchModelBinder";

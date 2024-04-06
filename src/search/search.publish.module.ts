@@ -1,5 +1,5 @@
 import { IInjectorModule, IInjector } from "@paperbits/common/injection";
-import { SearchViewModel } from "./ko/searchViewModel";
+import { SearchViewModel } from "./ko/search";
 import { SearchModelBinder } from "./searchModelBinder";
 import { SearchViewModelBinder } from "./ko/searchViewModelBinder";
 
