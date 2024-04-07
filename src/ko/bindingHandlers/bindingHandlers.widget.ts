@@ -171,18 +171,24 @@ export class WidgetBindingHandler {
 
                         ko.applyBindingsToDescendants(childBindingContext, element);
 
-                        let nonVirtualElement: Node = getNonVirtualElement(element);
+                        let nonVirtualElement = getNonVirtualElement(element);
 
                         if (nonVirtualElement) {
                             if (binding) {
-                                ko.applyBindingsToNode(nonVirtualElement, {
-                                    css: {
-                                        "block": binding.flow === ComponentFlow.Block,
-                                        "inline-block": binding.flow === ComponentFlow.Inline,
-                                        "legacy": binding.flow === ComponentFlow.Legacy,
-                                        "placeholder": binding.flow === ComponentFlow.Placeholder
-                                    }
-                                }, null);
+                                switch (binding.flow) {
+                                    case ComponentFlow.Block:
+                                        nonVirtualElement.classList.add("block");
+                                        break;
+                                    case ComponentFlow.Inline:
+                                        nonVirtualElement.classList.add("inline-block");
+                                        break;
+                                    case ComponentFlow.Legacy:
+                                        nonVirtualElement.classList.add("legacy");
+                                        break;
+                                    case ComponentFlow.Placeholder:
+                                        nonVirtualElement.classList.add("placeholder");
+                                        break;
+                                }
 
                                 componentViewModel["wrapped"] = binding.flow !== ComponentFlow.None;
 

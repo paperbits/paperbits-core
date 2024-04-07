@@ -5,7 +5,7 @@ import { WidgetEditor } from "@paperbits/common/widgets";
 import { StyleHelper } from "@paperbits/styles";
 import { Component, OnMounted, Param, Event } from "@paperbits/common/ko/decorators";
 import { PopupInstanceModel } from "../popupModel";
-import { BackgroundStylePluginConfig, TypographyStylePluginConfig, ContainerStylePluginConfig, SizeStylePluginConfig, BoxStylePluginConfig, BorderStylePluginConfig, PaddingStylePluginConfig, BorderRadiusStylePluginConfig } from "@paperbits/styles/plugins";
+import { BackgroundStylePluginConfig, TypographyStylePluginConfig, ContainerStylePluginConfig, SizeStylePluginConfig, BoxStylePluginConfig, BorderStylePluginConfig, PaddingStylePluginConfig, BorderRadiusStylePluginConfig, ShadowStylePluginConfig } from "@paperbits/styles/plugins";
 import { EventManager, Events } from "@paperbits/common/events";
 import { PositionStylePluginConfig } from "@paperbits/styles/plugins/position";
 import { TransformStylePluginConfig } from "@paperbits/styles/plugins/transform";
@@ -23,6 +23,7 @@ export class PopupEditor implements WidgetEditor<PopupInstanceModel> {
     public readonly containerConfig: ko.Observable<ContainerStylePluginConfig>;
     public readonly containerSizeStyles: ko.Observable<SizeStylePluginConfig>;
     public readonly containerSizeStylesResponsive: ko.Observable<boolean>;
+    public readonly containerShadow: ko.Observable<ShadowStylePluginConfig>;
     public readonly backdrop: ko.Observable<boolean>;
     public readonly position: ko.Observable<string>;
     public readonly containerBox: ko.Observable<BoxStylePluginConfig>;
@@ -38,6 +39,7 @@ export class PopupEditor implements WidgetEditor<PopupInstanceModel> {
         this.backdropBackground = ko.observable<BackgroundStylePluginConfig>();
         this.containerBox = ko.observable<BoxStylePluginConfig>();
         this.containerSizeStyles = ko.observable<SizeStylePluginConfig>();
+        this.containerShadow = ko.observable<ShadowStylePluginConfig>();
         this.containerSizeStylesResponsive = ko.observable<boolean>();
         this.position = ko.observable();
         this.backdrop = ko.observable(true);
@@ -78,6 +80,9 @@ export class PopupEditor implements WidgetEditor<PopupInstanceModel> {
 
         const containerBackgroundStyleConfig = popupContainerStyles.plugin("background").getConfig<BackgroundStylePluginConfig>();
         this.containerBackground(containerBackgroundStyleConfig);
+
+        const shadowConfig = popupContainerStyles.plugin("shadow").getConfig<ShadowStylePluginConfig>();
+        this.containerShadow(shadowConfig);
 
         const containerSizeStyles = popupContainerStyles.plugin("size").getConfig<SizeStylePluginConfig>();
         this.containerSizeStyles(containerSizeStyles);
@@ -121,6 +126,17 @@ export class PopupEditor implements WidgetEditor<PopupInstanceModel> {
             .component("popupContainer")
             .variation("default")
             .plugin("background")
+            .setConfig(pluginConfig);
+
+        this.onChange(this.model);
+    }
+
+    public onShadowUpdate(pluginConfig: ShadowStylePluginConfig): void {
+        StyleHelper
+            .style(this.model.styles)
+            .component("popupContainer")
+            .variation("default")
+            .plugin("shadow")
             .setConfig(pluginConfig);
 
         this.onChange(this.model);
