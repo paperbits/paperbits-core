@@ -11,7 +11,13 @@
 <div role="listbox" data-bind="foreach: results">
     <div role="presentation">
         <b><a data-bind="attr: { href: $data.url }, text: $data.title"></a></b>
-        <p data-bind="text: $data.summary"></p>
+        <p>
+            <div data-bind="text: $data.summary"></div>
+            <!-- ko if: $data.category -->
+            <sub data-bind="text: $data.category"></sub>
+            <!-- /ko -->
+        </p>
+        <br />
     </div>
 </div>
 <!-- /ko -->
