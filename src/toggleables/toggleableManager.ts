@@ -404,6 +404,19 @@ export class ToggleablesManager {
         }
 
         const eventTarget = <HTMLElement>event.target;
+
+        const dismissElement = <HTMLElement>eventTarget.closest(`[${DataAttributes.Dismiss}]`);
+
+        if (dismissElement) {
+            const closestOpenTogglable = <HTMLElement>document.activeElement.closest(`.${showClassName}`);
+
+            if (closestOpenTogglable) {
+                this.closeTogglable(closestOpenTogglable, null, false);
+            }
+            
+            return;
+        }
+
         const toggleElement = <HTMLElement>eventTarget.closest(`[${DataAttributes.Toggle}]`);
 
         if (!toggleElement) {

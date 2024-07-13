@@ -10,7 +10,7 @@
 <!-- ko if: results().length > 0 -->
 <div role="listbox" data-bind="foreach: results">
     <div role="presentation">
-        <b><a data-bind="attr: { href: $data.url }, text: $data.title"></a></b>
+        <b><a data-bind="attr: { href: $data.url }, click: $component.onResultSelect, text: $data.title" data-dismiss="modal"></a></b>
         <p>
             <div data-bind="text: $data.summary"></div>
             <!-- ko if: $data.category -->

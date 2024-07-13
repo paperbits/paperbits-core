@@ -17,6 +17,7 @@ import { Dropdown } from "./dropdown/ko/dropdown";
 export class CoreRuntimeModule implements IInjectorModule {
     public register(injector: IInjector): void {
         injector.bindInstance("injector", injector);
+        injector.bind("httpClient", XmlHttpRequestClient);
         injector.bindInstance<Bag<ComponentBinder>>("componentBinders", {});
         injector.bindModule(new KnockoutRegistrationLoaders());
         injector.bindModule(new CarouselRuntimeModule());
@@ -28,7 +29,7 @@ export class CoreRuntimeModule implements IInjectorModule {
         injector.bindCollection("autostart");
         injector.bindCollection("routeGuards");
         injector.bindSingleton("router", DefaultRouter);
-        injector.bind("httpClient", XmlHttpRequestClient);
+        
         injector.bindToCollection("autostart", VisibilityGuard);
         injector.bindToCollection("autostart", location.href.includes("designtime=true")
             ? HistoryRouteHandler

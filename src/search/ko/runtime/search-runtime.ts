@@ -4,6 +4,7 @@ import { Component, RuntimeComponent, OnMounted, Param } from "@paperbits/common
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { SearchResult } from "@paperbits/common/search";
 import { SearchService } from "@paperbits/common/search/staticSearchService";
+import { Router } from "@paperbits/common/routing";
 
 
 
@@ -19,7 +20,10 @@ export class SearchRuntime {
     public readonly results: ko.ObservableArray<SearchResult>;
     public readonly hasResults: ko.Observable<boolean>;
 
-    constructor(private readonly searchService: SearchService) {
+    constructor(
+        private readonly searchService: SearchService,
+        private readonly router: Router,
+    ) {
         this.searchPattern = ko.observable();
         this.results = ko.observableArray([]);
         this.hasResults = ko.observable(false);
@@ -61,5 +65,11 @@ export class SearchRuntime {
 
         this.results(results);
         this.hasResults(true);
+    }
+
+    public async onResultSelect(result: SearchResult): Promise<void> {
+        this.searchPattern("");
+        this.results([]);
+        this.router.navigateTo(result.url);
     }
 }
