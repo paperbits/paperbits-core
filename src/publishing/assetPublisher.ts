@@ -5,6 +5,7 @@ import * as Utils from "@paperbits/common/utils";
 import { IPublisher } from "@paperbits/common/publishing";
 import { IBlobStorage } from "@paperbits/common/persistence";
 import { ISettingsProvider } from "@paperbits/common/configuration";
+import { Logger } from "@paperbits/common/logging";
 
 
 const assetsBaseBath = path.resolve(__dirname, "./assets");
@@ -12,14 +13,20 @@ const assetsBaseBath = path.resolve(__dirname, "./assets");
 export class AssetPublisher implements IPublisher {
     constructor(
         private readonly outputBlobStorage: IBlobStorage,
-        private readonly settingsProvider: ISettingsProvider
+        private readonly settingsProvider: ISettingsProvider,
+        private readonly logger: Logger
     ) { }
 
     private async copyAssetFrom(assetPath: string, suffix: string): Promise<void> {
         try {
+            this.logger.trackEvent("Publishing", { message: `Publishing asset ${assetPath}...` });
+
             const byteArray = await this.downloadBlob(assetPath);
             const fileName = assetPath.split("/").pop();
-            assetPath = Utils.appendSuffixToFileName(assetPath, suffix);
+
+            if (!assetPath.startsWith("/styles/fonts/icons")) { // TODO: Add exclusion list to settings
+                assetPath = Utils.appendSuffixToFileName(assetPath, suffix);
+            }
 
             const contentType = mime.getType(fileName) || "application/octet-stream";
 
