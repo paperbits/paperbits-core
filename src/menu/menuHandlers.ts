@@ -2,10 +2,10 @@
 import { IContextCommandSet } from "@paperbits/common/ui";
 import { deleteWidgetCommand, openWidgetEditorCommand, splitter, switchToParentCommand } from "@paperbits/common/ui/commands";
 import { MenuModel } from "./menuModel";
-import { IVisibilityCommandProvider } from "../security/visibilityContextCommandProvider";
+import { IVisibilityContextCommandProvider } from "../security/visibilityContextCommandProvider";
 
 export class MenuHandlers implements IWidgetHandler<MenuModel> {
-    constructor(private readonly visibilityCommandProvider: IVisibilityCommandProvider) { }
+    constructor(private readonly visibilityCommandProvider: IVisibilityContextCommandProvider) { }
 
     public async getWidgetOrder(): Promise<IWidgetOrder<MenuModel>> {
         const widgetOrder: IWidgetOrder<MenuModel> = {
@@ -20,14 +20,21 @@ export class MenuHandlers implements IWidgetHandler<MenuModel> {
     }
 
     public getContextCommands(context: WidgetContext): IContextCommandSet {
+        const visibilityCommand = this.visibilityCommandProvider.create(context);
+
+        const selectCommands = [
+            openWidgetEditorCommand(context, "Edit menu"),
+            splitter(),
+            switchToParentCommand(context),
+        ];
+
+        if (visibilityCommand) {
+            selectCommands.push(visibilityCommand);
+        }
+
         const contextualEditor: IContextCommandSet = {
             color: "#2b87da",
-            selectCommands: [
-                openWidgetEditorCommand(context, "Edit menu"),
-                splitter(),
-                switchToParentCommand(context),
-                this.visibilityCommandProvider.create(context),
-            ],
+            selectCommands: selectCommands,
             deleteCommand: deleteWidgetCommand(context)
         };
 

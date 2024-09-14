@@ -1,34 +1,14 @@
 import { WidgetContext } from "@paperbits/common/editing";
-import { IContextCommand } from "@paperbits/common/ui/IContextCommandSet";
-import { IComponent } from "@paperbits/common/ui/IComponent";
-import { SecurityModelEditor } from "./securityModelEditor";
+import { IContextCommand } from "@paperbits/common/ui";
 
-export interface IVisibilityCommandProvider {
+/**
+ * Provider for visibility context command. Using widget context, it determines whether visibility command 
+ * should be displayed for the given widget.
+ */
+export interface IVisibilityContextCommandProvider {
+    /**
+     * Creates a visibility command for the given widget context.
+     * @param context Widget context.
+     */
     create(context: WidgetContext): IContextCommand;
-}
-
-export function createStandardVisibilityCommand(callback: IContextCommand["callback"], overrides?: Partial<Exclude<IContextCommand, "callback">>): IContextCommand {
-    return {
-        controlType: "toolbox-button",
-        tooltip: "Change access",
-        iconClass: "paperbits-icon paperbits-a-security",
-        position: "top right",
-        color: "#607d8b",
-        ...overrides,
-        callback,
-    };
-}
-
-export function createSecurityModelEditorComponent(context: WidgetContext, componentSelector: string): IComponent {
-    const securityModelEditorParams: SecurityModelEditor = {
-        securityModel: context.binding.model.security,
-        onChange: (securityModel): void => {
-            context.binding.model.security = securityModel;
-            context.binding.applyChanges(context.model);
-        },
-    };
-    return {
-        name: componentSelector,
-        params: securityModelEditorParams,
-    };
 }

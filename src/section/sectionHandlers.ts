@@ -1,11 +1,11 @@
 import * as Utils from "@paperbits/common/utils";
-import { IContextCommandSet, View, ViewManager } from "@paperbits/common/ui";
+import { IContextCommand, IContextCommandSet, View, ViewManager } from "@paperbits/common/ui";
 import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { SectionModel } from "./sectionModel";
 import { RowModel } from "../row/rowModel";
 import { EventManager, Events } from "@paperbits/common/events";
 import { SectionModelBinder } from "./sectionModelBinder";
-import { IVisibilityCommandProvider } from "../security/visibilityContextCommandProvider";
+import { IVisibilityContextCommandProvider } from "../security/visibilityContextCommandProvider";
 import { switchToChildCommand } from "@paperbits/common/ui/commands";
 
 
@@ -14,10 +14,53 @@ export class SectionHandlers implements IWidgetHandler<SectionModel> {
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager,
         private readonly sectionModelBinder: SectionModelBinder,
-        private readonly visibilityCommandProvider: IVisibilityCommandProvider,
+        private readonly visibilityCommandProvider: IVisibilityContextCommandProvider,
     ) { }
 
     public getContextCommands(context: WidgetContext): IContextCommandSet {
+        const selectCommands: IContextCommand[] = [
+            {
+                controlType: "toolbox-button",
+                displayName: "Edit section",
+                position: "top right",
+                color: "#2b87da",
+                callback: () => this.viewManager.openWidgetEditor(context.binding)
+            },
+            {
+                controlType: "toolbox-splitter",
+            },
+            {
+                controlType: "toolbox-button",
+                tooltip: "Add to library",
+                iconClass: "paperbits-icon paperbits-simple-add",
+                position: "top right",
+                color: "#2b87da",
+                callback: () => {
+                    const sectionContract = this.sectionModelBinder.modelToContract(<SectionModel>context.model);
+
+                    const view: View = {
+                        heading: "Add to library",
+                        component: {
+                            name: "add-block-dialog",
+                            params: {
+                                blockContract: sectionContract,
+                                blockType: "layout-section"
+                            }
+                        },
+                        resizing: "vertically horizontally"
+                    };
+
+                    this.viewManager.openViewAsPopup(view);
+                }
+            },
+        ];
+
+        const visibilityCommand = this.visibilityCommandProvider.create(context);
+
+        if (visibilityCommand) {
+            selectCommands.push(visibilityCommand);
+        }
+
         const contextualCommands: IContextCommandSet = {
             color: "#2b87da",
             hoverCommands: [{
@@ -65,41 +108,7 @@ export class SectionHandlers implements IWidgetHandler<SectionModel> {
                     this.viewManager.clearContextualCommands();
                 }
             },
-            selectCommands: [{
-                controlType: "toolbox-button",
-                displayName: "Edit section",
-                position: "top right",
-                color: "#2b87da",
-                callback: () => this.viewManager.openWidgetEditor(context.binding)
-            },
-            {
-                controlType: "toolbox-splitter",
-            },
-            {
-                controlType: "toolbox-button",
-                tooltip: "Add to library",
-                iconClass: "paperbits-icon paperbits-simple-add",
-                position: "top right",
-                color: "#2b87da",
-                callback: () => {
-                    const sectionContract = this.sectionModelBinder.modelToContract(<SectionModel>context.model);
-
-                    const view: View = {
-                        heading: "Add to library",
-                        component: {
-                            name: "add-block-dialog",
-                            params: {
-                                blockContract: sectionContract,
-                                blockType: "layout-section"
-                            }
-                        },
-                        resizing: "vertically horizontally"
-                    };
-
-                    this.viewManager.openViewAsPopup(view);
-                }
-            },
-            this.visibilityCommandProvider.create(context)]
+            selectCommands: selectCommands
         };
 
         if (context.model.widgets.length === 0) {

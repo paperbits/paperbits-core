@@ -1,19 +1,42 @@
-import { ViewManager, IContextCommand } from "@paperbits/common/ui";
+import { ViewManager, IContextCommand, IComponent } from "@paperbits/common/ui";
 import { WidgetContext } from "@paperbits/common/editing";
-import {
-    createSecurityModelEditorComponent,
-    createStandardVisibilityCommand,
-    IVisibilityCommandProvider
-} from "./visibilityContextCommandProvider";
+import { IVisibilityContextCommandProvider } from "./visibilityContextCommandProvider";
+import { SecurityModelEditor } from "./securityModelEditor";
 
-export class RoleBasedSecurityModelEditorProvider implements IVisibilityCommandProvider {
+export class RoleBasedSecurityModelEditorProvider implements IVisibilityContextCommandProvider {
     constructor(private readonly viewManager: ViewManager) { }
 
+    private createStandardVisibilityCommand(callback: IContextCommand["callback"], overrides?: Partial<Exclude<IContextCommand, "callback">>): IContextCommand {
+        return {
+            controlType: "toolbox-button",
+            tooltip: "Change access",
+            iconClass: "paperbits-icon paperbits-a-security",
+            position: "top right",
+            color: "#607d8b",
+            ...overrides,
+            callback,
+        };
+    }
+    
+    private createSecurityModelEditorComponent(context: WidgetContext, componentSelector: string): IComponent {
+        const securityModelEditorParams: SecurityModelEditor = {
+            securityModel: context.binding.model.security,
+            onChange: (securityModel): void => {
+                context.binding.model.security = securityModel;
+                context.binding.applyChanges(context.model);
+            },
+        };
+        return {
+            name: componentSelector,
+            params: securityModelEditorParams,
+        };
+    }
+
     public create(context: WidgetContext): IContextCommand {
-        return createStandardVisibilityCommand(() =>
+        return this.createStandardVisibilityCommand(() =>
             this.viewManager.openViewAsPopup({
                 heading: `Access control`,
-                component: createSecurityModelEditorComponent(context, "role-based-security-model-editor"),
+                component: this.createSecurityModelEditorComponent(context, "role-based-security-model-editor"),
                 resizing: "vertically horizontally",
             }));
     }
