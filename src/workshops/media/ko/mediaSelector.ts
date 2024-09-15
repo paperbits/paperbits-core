@@ -3,7 +3,7 @@ import * as Utils from "@paperbits/common/utils";
 import template from "./mediaSelector.html";
 import { MediaItem } from "./mediaItem";
 import { IMediaService, MediaContract } from "@paperbits/common/media";
-import { ViewManager } from "@paperbits/common/ui";
+import { ViewManager, ToastError } from "@paperbits/common/ui";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { HyperlinkModel } from "@paperbits/common/permalinks/hyperlinkModel";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
@@ -128,7 +128,17 @@ export class MediaSelector {
             uploadPromises.push(uploadPromise);
         }
 
-        const results = await Promise.all<MediaContract>(uploadPromises);
+        let results: MediaContract[] = [];
+        try {
+            results = await Promise.all<MediaContract>(uploadPromises);
+        } catch (error) {
+            if (error instanceof ToastError) {
+                const info: ToastError = error;
+                info.showError(this.viewManager);
+            } else {
+                this.viewManager.notifyError("Media library", `Unable to upload media: ${error.message}`);
+            }
+        }
         await this.searchMedia();
 
         const mediaItem = new MediaItem(results[0]);

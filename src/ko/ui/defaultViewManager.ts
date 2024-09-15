@@ -255,9 +255,9 @@ export class DefaultViewManager implements ViewManager {
 
         promise.then(() => {
             toast.progress(100);
-        });
-
-        promise.then(() => {
+        }).catch(() => {
+            toast.state("error");
+        }).finally(() => {
             this.scheduleToastRemoval(toast);
         });
 

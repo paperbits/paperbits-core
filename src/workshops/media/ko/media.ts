@@ -2,7 +2,7 @@
 import * as Utils from "@paperbits/common/utils";
 import template from "./media.html";
 import { IMediaService } from "@paperbits/common/media";
-import { ViewManager, View } from "@paperbits/common/ui";
+import { ViewManager, View, ToastError } from "@paperbits/common/ui";
 import { MediaItem, defaultFileName, defaultURL } from "./mediaItem";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
 import { EventManager } from "@paperbits/common/events";
@@ -98,7 +98,17 @@ export class MediaWorkshop {
             uploadPromises.push(uploadPromise);
         }
 
-        await Promise.all(uploadPromises);
+        try {
+            await Promise.all<MediaContract>(uploadPromises);
+        } catch (error) {
+            if (error instanceof ToastError) {
+                const info: ToastError = error;
+                info.showError(this.viewManager);
+            } else {
+                this.viewManager.notifyError("Media library", `Unable to upload media: ${error.message}`);
+            }
+        }
+        
         await this.searchMedia();
 
         this.working(false);
