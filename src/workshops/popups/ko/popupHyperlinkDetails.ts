@@ -54,7 +54,7 @@ export class PopupHyperlinkDetails {
         this.viewManager.clearJourney();
         this.viewManager.closeView();
 
-        this.eventManager.dispatchEvent("displayHint", {
+        this.eventManager.dispatchEvent(Events.HintRequest, {
             key: "4de8",
             content: `You can open a popup anytime by clicking on its trigger holding Ctrl (Windows) or ⌘ (Mac) key.`
         });

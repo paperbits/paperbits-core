@@ -2,14 +2,15 @@
 import * as Utils from "@paperbits/common/utils";
 import template from "./media.html";
 import { IMediaService } from "@paperbits/common/media";
-import { ViewManager, View, ToastError } from "@paperbits/common/ui";
+import { ViewManager, View } from "@paperbits/common/ui";
 import { MediaItem, defaultFileName, defaultURL } from "./mediaItem";
 import { MediaContract } from "@paperbits/common/media/mediaContract";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 import { Component, OnMounted } from "@paperbits/common/ko/decorators";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { Query, Operator, Page } from "@paperbits/common/persistence";
 import { MimeTypes } from "@paperbits/common";
+import { UserError } from "@paperbits/common/errors";
 
 @Component({
     selector: "media",
@@ -79,7 +80,7 @@ export class MediaWorkshop {
     }
 
     public async uploadMedia(): Promise<void> {
-        this.eventManager.dispatchEvent("displayHint", {
+        this.eventManager.dispatchEvent(Events.HintRequest, {
             key: "88d9",
             content: `You may upload pictures, videos and other files just by dropping them anywhere in editor window and even make respective widget out of them.`
         });
@@ -90,28 +91,29 @@ export class MediaWorkshop {
 
         const uploadPromises = [];
 
-        for (const file of files) {
-            const content = await Utils.readFileAsByteArray(file);
-            const uploadPromise = this.mediaService.createMedia(file.name, content, file.type);
-
-            this.viewManager.notifyProgress(uploadPromise, "Media library", `Uploading ${file.name}...`);
-            uploadPromises.push(uploadPromise);
-        }
-
         try {
+            for (const file of files) {
+                const content = await Utils.readFileAsByteArray(file);
+                const uploadPromise = this.mediaService.createMedia(file.name, content, file.type);
+
+                this.viewManager.notifyProgress(uploadPromise, "Media library", `Uploading ${file.name}...`);
+                uploadPromises.push(uploadPromise);
+            }
+
             await Promise.all<MediaContract>(uploadPromises);
-        } catch (error) {
-            if (error instanceof ToastError) {
-                const info: ToastError = error;
-                info.showError(this.viewManager);
-            } else {
-                this.viewManager.notifyError("Media library", `Unable to upload media: ${error.message}`);
+            await this.searchMedia();
+        }
+        catch (error) {
+            if (error instanceof UserError) {
+                this.viewManager.notifyError("Media library", error.message);
+            }
+            else {
+                throw error;
             }
         }
-        
-        await this.searchMedia();
-
-        this.working(false);
+        finally {
+            this.working(false);
+        }
     }
 
     public async linkMedia(): Promise<void> {

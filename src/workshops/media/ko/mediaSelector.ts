@@ -3,11 +3,12 @@ import * as Utils from "@paperbits/common/utils";
 import template from "./mediaSelector.html";
 import { MediaItem } from "./mediaItem";
 import { IMediaService, MediaContract } from "@paperbits/common/media";
-import { ViewManager, ToastError } from "@paperbits/common/ui";
+import { ViewManager } from "@paperbits/common/ui";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { HyperlinkModel } from "@paperbits/common/permalinks/hyperlinkModel";
 import { ChangeRateLimit } from "@paperbits/common/ko/consts";
 import { Query, Operator, Page } from "@paperbits/common/persistence";
+import { UserError } from "@paperbits/common/errors";
 
 @Component({
     selector: "media-selector",
@@ -120,31 +121,35 @@ export class MediaSelector {
 
         const uploadPromises = [];
 
-        for (const file of files) {
-            const content = await Utils.readFileAsByteArray(file);
-            const uploadPromise = this.mediaService.createMedia(file.name, content, file.type);
-
-            this.viewManager.notifyProgress(uploadPromise, "Media library", `Uploading ${file.name}...`);
-            uploadPromises.push(uploadPromise);
-        }
-
-        let results: MediaContract[] = [];
         try {
+            for (const file of files) {
+                const content = await Utils.readFileAsByteArray(file);
+                const uploadPromise = this.mediaService.createMedia(file.name, content, file.type);
+
+                this.viewManager.notifyProgress(uploadPromise, "Media library", `Uploading ${file.name}...`);
+                uploadPromises.push(uploadPromise);
+            }
+
+            let results: MediaContract[] = [];
+
+
             results = await Promise.all<MediaContract>(uploadPromises);
-        } catch (error) {
-            if (error instanceof ToastError) {
-                const info: ToastError = error;
-                info.showError(this.viewManager);
-            } else {
-                this.viewManager.notifyError("Media library", `Unable to upload media: ${error.message}`);
+            await this.searchMedia();
+
+            const mediaItem = new MediaItem(results[0]);
+            this.selectMedia(mediaItem);
+        }
+        catch (error) {
+            if (error instanceof UserError) {
+                this.viewManager.notifyError("Media library", error.message);
+            }
+            else {
+                throw error;
             }
         }
-        await this.searchMedia();
-
-        const mediaItem = new MediaItem(results[0]);
-        this.selectMedia(mediaItem);
-
-        this.working(false);
+        finally {
+            this.working(false);
+        }
     }
 
     public isSelected(media: MediaItem): boolean {

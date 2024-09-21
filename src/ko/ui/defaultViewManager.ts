@@ -449,7 +449,7 @@ export class DefaultViewManager implements ViewManager {
 
         this.openViewAsPopup(view);
 
-        this.eventManager.dispatchEvent("displayHint", {
+        this.eventManager.dispatchEvent(Events.HintRequest, {
             key: "fe7c",
             content: `You can resize and move almost every editor, and it will remember its size and position.`
         });

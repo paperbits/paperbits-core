@@ -63,7 +63,7 @@ export class NavigationWorkshop {
 
         rootViewModel.onUpdate.subscribe(this.onNavigationUpdate);
 
-        this.eventManager.dispatchEvent("displayHint", {
+        this.eventManager.dispatchEvent(Events.HintRequest, {
             key: "b300",
             content: `You can manage the navigation structure of the entire website in one place. Specific nodes of this structure can be assigned to navigation widgets like a Menu.`
         });

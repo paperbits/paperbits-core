@@ -4,7 +4,7 @@ import { ViewManager } from "@paperbits/common/ui";
 import { ILayoutService } from "@paperbits/common/layouts/";
 import { LayoutItem } from "./layoutItem";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
-import { EventManager } from "@paperbits/common/events";
+import { EventManager, Events } from "@paperbits/common/events";
 
 @Component({
     selector: "layout-details-workshop",
@@ -58,7 +58,7 @@ export class LayoutDetails {
         
         this.viewManager.setHost({ name: "layout-host", params: { layoutKey: this.layoutItem.key } });
 
-        this.eventManager.dispatchEvent("displayHint", {
+        this.eventManager.dispatchEvent(Events.HintRequest, {
             key: "48f5",
             content: `<p>You may have different page layouts for different parts of your website. Which layout gets applied at a given moment is determined by matching its URL template to URL of the current page.</p><p>Press Escape button to get back to the page editing.</p>`
         });
