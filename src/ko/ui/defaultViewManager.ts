@@ -240,7 +240,7 @@ export class DefaultViewManager implements ViewManager {
     public notifyError(title: string, content: string): Toast {
         const toast = new Toast(title, content, "error");
         this.toasts.push(toast);
-        this.scheduleToastRemoval(toast);
+        this.scheduleToastRemoval(toast, 15000);
         return toast;
     }
 
@@ -332,10 +332,10 @@ export class DefaultViewManager implements ViewManager {
         this.mode = ViewManagerMode.selecting;
     }
 
-    public scheduleToastRemoval(toast: Toast): void {
+    private scheduleToastRemoval(toast: Toast, displayDuration: number = 8000): void {
         setTimeout(() => {
             this.toasts(_.without(this.toasts(), toast));
-        }, 8000);
+        }, displayDuration);
     }
 
     public openUploadDialog(...accept: string[]): Promise<File[]> {
