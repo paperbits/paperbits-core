@@ -17,7 +17,7 @@ export class SearchDesignModule implements IInjectorModule {
 
         const widgetService = injector.resolve<IWidgetService>("widgetService");
 
-        widgetService.registerWidget("search", {
+        widgetService.registerWidget("input:search", {
             modelDefinition: SearchInputModel,
             componentBinder: KnockoutComponentBinder,
             componentDefinition: SearchViewModel,
@@ -25,7 +25,7 @@ export class SearchDesignModule implements IInjectorModule {
             viewModelBinder: SearchViewModelBinder
         });
 
-        widgetService.registerWidgetEditor("search", {
+        widgetService.registerWidgetEditor("input:search", {
             displayName: "Search",
             iconClass: "widget-icon widget-icon-search-box",
             componentBinder: KnockoutComponentBinder,

@@ -11,20 +11,28 @@ export class SearchModelBinder implements IModelBinder<SearchInputModel> {
     }
 
     public canHandleContract(contract: Contract): boolean {
-        return contract.type === "search";
+        return contract.type === "input:search";
     }
 
     public canHandleModel(model: Object): boolean {
         return model instanceof SearchInputModel;
     }
 
-    public async contractToModel(searchContract: SearchContract): Promise<SearchInputModel> {
-        return new SearchInputModel();
+    public async contractToModel(contract: SearchContract): Promise<SearchInputModel> {
+        const model = new SearchInputModel();
+        model.label = contract.label;
+        model.placeholder = contract.placeholder;
+        model.styles = contract.styles || { appearance: "components/formGroup/default" };
+
+        return model;
     }
 
-    public modelToContract(searchModel: SearchInputModel): Contract {
+    public modelToContract(model: SearchInputModel): Contract {
         const searchConfig: SearchContract = {
-            type: "search"
+            type: "input:search",
+            placeholder: model.placeholder,
+            label: model.label,
+            styles: model.styles
         };
 
         return searchConfig;
