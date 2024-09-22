@@ -12,7 +12,8 @@ export class SearchViewModelBinder implements ViewModelBinder<SearchInputModel, 
 
         componentInstance.runtimeConfig(JSON.stringify({
             label: state.label,
-            placeholder: state.placeholder
+            placeholder: state.placeholder,
+            classNames: state.styles?.classNames
         }));
     }
 

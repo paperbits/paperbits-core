@@ -29,6 +29,7 @@ export class SearchRuntime {
         this.hasResults = ko.observable(false);
         this.label = ko.observable();
         this.placeholder = ko.observable();
+        this.classNames = ko.observable();
     }
 
     @Param()
@@ -36,6 +37,9 @@ export class SearchRuntime {
 
     @Param()
     public readonly placeholder: ko.Observable<string>;
+
+    @Param()
+    public readonly classNames: ko.Observable<string>;
 
     @OnMounted()
     public async loadIndex(): Promise<void> {
