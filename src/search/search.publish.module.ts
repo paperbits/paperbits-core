@@ -18,7 +18,7 @@ export class SearchPublishModule implements IInjectorModule {
 
         const widgetService = injector.resolve<IWidgetService>("widgetService");
 
-        widgetService.registerWidget("search", {
+        widgetService.registerWidget("input:search", {
             modelDefinition: SearchInputModel,
             componentBinder: KnockoutComponentBinder,
             componentDefinition: SearchViewModel,
