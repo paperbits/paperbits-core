@@ -1,4 +1,4 @@
-import { Contract } from "@paperbits/common";
+import { Bag, Contract } from "@paperbits/common";
 import { IModelBinder } from "@paperbits/common/editing";
 import { IPermalinkResolver } from "@paperbits/common/permalinks";
 import { SecurityModelBinder } from "@paperbits/common/security";
@@ -6,13 +6,13 @@ import { ButtonContract } from "./buttonContract";
 import { ButtonModel } from "./buttonModel";
 
 
-export class ButtonModelBinder implements IModelBinder<ButtonModel>  {
+export class ButtonModelBinder implements IModelBinder<ButtonModel> {
     constructor(
         private readonly permalinkResolver: IPermalinkResolver,
         private readonly securityModelBinder: SecurityModelBinder<any, any>
     ) { }
 
-    public async contractToModel(contract: ButtonContract): Promise<ButtonModel> {
+    public async contractToModel(contract: ButtonContract, bindingContext?: Bag<any>): Promise<ButtonModel> {
         const model = new ButtonModel();
         model.label = contract.label;
         model.styles = contract.styles || { appearance: "components/button/default" };
@@ -29,7 +29,7 @@ export class ButtonModelBinder implements IModelBinder<ButtonModel>  {
         }
 
         if (contract.hyperlink) {
-            model.hyperlink = await this.permalinkResolver.getHyperlinkFromContract(contract.hyperlink);
+            model.hyperlink = await this.permalinkResolver.getHyperlinkFromContract(contract.hyperlink, bindingContext?.locale);
         }
 
         return model;
