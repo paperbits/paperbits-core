@@ -28,6 +28,21 @@ export class WidgetBindingHandler {
                         throw new Error(`No component binders registered for ${binding.framework} framework. Binding: ${binding.name}`);
                     }
 
+                    switch (binding.wrapper) {
+                        case ComponentFlow.Block:
+                            element.classList.add("block");
+                            break;
+                        case ComponentFlow.Inline:
+                            element.classList.add("inline-block");
+                            break;
+                        case ComponentFlow.Legacy:
+                            element.classList.add("legacy");
+                            break;
+                        case ComponentFlow.Placeholder:
+                            element.classList.add("placeholder");
+                            break;
+                    }
+
                     componentBinder
                         .bind(element, binding.componentDefinition)
                         .then(componentInstance => {
