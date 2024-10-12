@@ -30,7 +30,8 @@ export class TableCellDesignModule implements IInjectorModule {
             componentBinder: KnockoutComponentBinder,
             componentDefinition: TableCellEditor,
             handlerComponent: TableCellHandlers,
-            selectable: false
+            selectable: false,
+            draggable: false
         });
     }
 }

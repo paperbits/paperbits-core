@@ -48,6 +48,62 @@ export class TableCellHandlers implements IWidgetHandler<TableCellModel> {
                 },
                 {
                     controlType: "toolbox-button",
+                    tooltip: "Row settings",
+                    displayName: "Row",
+                    position: "top right",
+                    color: "#9C27B0",
+                    callback: () => {
+                        const view: View = {
+                            heading: "Table row",
+                            component: {
+                                name: "table-row-editor",
+                                params: {
+                                    model: context.parentModel,
+                                    cellModel: context.model,
+                                    rowIndex: Math.floor(context.parentModel.widgets.indexOf(context.model) / context.parentModel["numOfCols"]),
+                                    onChange: (model: TableModel) => {
+                                        context.parentBinding.applyChanges();
+                                        this.eventManager.dispatchEvent(Events.ContentUpdate);
+                                        // this.viewManager.clearContextualCommands();
+                                    }
+                                }
+                            }
+                        };
+                        this.viewManager.openViewAsPopup(view);
+                    }
+                },
+                {
+                    controlType: "toolbox-splitter"
+                },
+                {
+                    controlType: "toolbox-button",
+                    tooltip: "Column settings",
+                    displayName: "Column",
+                    position: "top right",
+                    color: "#9C27B0",
+                    callback: () => {
+                        const view: View = {
+                            heading: "Table column",
+                            component: {
+                                name: "table-column-editor",
+                                params: {
+                                    model: context.parentModel,
+                                    columnIndex: context.parentModel.widgets.indexOf(context.model),
+                                    onChange: (model: TableModel) => {
+                                        context.parentBinding.applyChanges();
+                                        this.eventManager.dispatchEvent(Events.ContentUpdate);
+                                    }
+                                }
+                            }
+                        };
+                        this.viewManager.openViewAsPopup(view);
+                    }
+                },
+                {
+                    controlType: "toolbox-splitter"
+                },
+                {
+                    controlType: "toolbox-button",
                     tooltip: "Cell settings",
                     displayName: "Cell",
                     position: "top right",
