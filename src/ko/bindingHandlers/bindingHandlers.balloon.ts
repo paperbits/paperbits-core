@@ -403,7 +403,10 @@ export class BalloonBindingHandler {
                     }
 
                     removeBalloon();
-                    toggleElement.setAttribute(Html.AriaAttributes.expanded, "false");
+
+                    if (activateOn === BalloonActivationMethod.clickOrKeyDown) {
+                        toggleElement.setAttribute(Html.AriaAttributes.expanded, "false");
+                    }
                 };
 
                 const toggle = (): void => {
