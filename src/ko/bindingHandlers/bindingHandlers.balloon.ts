@@ -1,5 +1,6 @@
 ﻿import * as ko from "knockout";
 import * as Html from "@paperbits/common/html";
+import * as Utils from "@paperbits/common/utils";
 import { Keys } from "@paperbits/common/keyboard";
 import { View } from "@paperbits/common/ui";
 import { BalloonOptions, BalloonActivationMethod, BalloonHandle, BalloonState } from "@paperbits/common/ui/balloons";
@@ -49,9 +50,12 @@ export class BalloonBindingHandler {
                 let closeTimeout;
                 let createBalloonElement: () => void;
 
+                const balloonElementId = Utils.randomClassName();
+                
                 if (options.component) {
                     createBalloonElement = () => {
                         balloonElement = document.createElement("div");
+                        balloonElement.id = balloonElementId;
                         balloonElement.classList.add(balloonClass);
                         ko.applyBindingsToNode(balloonElement, { component: options.component, dialog: {} }, null);
                         document.body.appendChild(balloonElement);
@@ -69,6 +73,7 @@ export class BalloonBindingHandler {
 
                 if (activateOn === BalloonActivationMethod.clickOrKeyDown) {
                     toggleElement.setAttribute(Html.AriaAttributes.expanded, "false");
+                    toggleElement.setAttribute(Html.AriaAttributes.controls, balloonElementId);
                 }
 
                 const createBalloonTip = (): void => {

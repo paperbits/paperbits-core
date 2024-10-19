@@ -114,7 +114,7 @@
         <!-- ko if: command.iconClass -->
         <i aria-hidden="true" data-bind="css: command.iconClass"></i>
         <!-- /ko -->
-        <!-- ko if: command.displayName -->
+        <!-- ko if: command.displayName && !command.iconOnly -->
         <span data-bind="text: command.displayName"></span>
         <!-- /ko -->
     </a>
@@ -124,7 +124,7 @@
     <!-- /ko -->
 
     <!-- ko if: deleteCommand -->
-    <a role="option" class="toolbox-button" data-bind="gridCommand: deleteCommand">
+    <a role="option" class="toolbox-button" data-bind="gridCommand: deleteCommand" aria-label="Delete widget">
         <i aria-hidden="true" class="paperbits-icon paperbits-trash-simple"></i>
     </a>
     <!-- /ko -->
