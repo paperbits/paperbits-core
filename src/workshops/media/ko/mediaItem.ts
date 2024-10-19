@@ -19,6 +19,7 @@ export class MediaItem {
     public mimeType: ko.Observable<string>;
     public widgetFactoryResult: IWidgetFactoryResult<any, any>;
     public nonPreviewable: ko.Computed<boolean>;
+    public isReferenced: ko.Computed<boolean>;
 
 
     constructor(mediaContract: MediaContract) {
@@ -33,6 +34,11 @@ export class MediaItem {
         this.thumbnailUrl = ko.observable<string>();
         this.downloadUrl = ko.observable<string>(mediaContract.downloadUrl);
         this.setThumbnail(mediaContract);
+
+        this.isReferenced = ko.computed(() => {
+            return !!mediaContract.downloadUrl 
+                && (mediaContract.downloadUrl.startsWith("https://") || mediaContract.downloadUrl.startsWith("https//"));
+        });
     }
 
     private async setThumbnail(mediaContract: MediaContract): Promise<void> {
