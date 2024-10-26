@@ -29,7 +29,7 @@ export class GridEditor {
     private ownerDocument: Document;
     private selection: GridItem;
     private activeLayer: string;
-    private noificationTimeout: any;
+    private notificationTimeout: any;
 
     constructor(
         private readonly viewManager: ViewManager,
@@ -389,11 +389,11 @@ export class GridEditor {
 
         this.eventManager.dispatchEvent(Events.NotificationRequest, item.displayName);
 
-        if (this.noificationTimeout) {
-            clearTimeout(this.noificationTimeout);
+        if (this.notificationTimeout) {
+            clearTimeout(this.notificationTimeout);
         }
 
-        this.noificationTimeout = setTimeout(() => {
+        this.notificationTimeout = setTimeout(() => {
             this.eventManager.dispatchEvent(Events.NotificationRequest, "selected");
         }, 1000);
 
