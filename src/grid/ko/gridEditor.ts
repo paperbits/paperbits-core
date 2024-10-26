@@ -29,6 +29,7 @@ export class GridEditor {
     private ownerDocument: Document;
     private selection: GridItem;
     private activeLayer: string;
+    private noificationTimeout: any;
 
     constructor(
         private readonly viewManager: ViewManager,
@@ -385,6 +386,17 @@ export class GridEditor {
         if (!item) {
             throw new Error(`Parameter "item" not specified.`);
         }
+
+        this.eventManager.dispatchEvent(Events.NotificationRequest, item.displayName);
+
+        if (this.noificationTimeout) {
+            clearTimeout(this.noificationTimeout);
+        }
+
+        this.noificationTimeout = setTimeout(() => {
+            this.eventManager.dispatchEvent(Events.NotificationRequest, "selected");
+        }, 1000);
+
 
         const commandSet = item?.getContextCommands();
 

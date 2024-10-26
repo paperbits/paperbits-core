@@ -110,6 +110,7 @@ import { ContentPart } from "./content-part/ko";
 import { UrlDesignModule } from "./workshops/urls/ko/url.design.module";
 import { PopupDesignModule } from "./popup/popup.design.module";
 import { ContainerEditorModule } from "./container/container.design.module";
+import { LiveAreaBindingHandler } from "./ko/bindingHandlers/bindingHandlers.livearea";
 
 
 export class CoreDesignModule implements IInjectorModule {
@@ -265,6 +266,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindToCollection("autostart", Hinter);
         injector.bindToCollection("autostart", WidgetBindingHandler);
         injector.bindToCollection("autostart", BackgroundBindingHandler);
+        injector.bindToCollection("autostart", LiveAreaBindingHandler);
 
         injector.bindInstance("reservedPermalinks", ["/", "/404", "/500"]);
         injector.resolve("workshopSections");
