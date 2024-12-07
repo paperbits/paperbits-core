@@ -64,7 +64,7 @@ export class MediaPublisher implements IPublisher {
     private async publishFromStorageStream(permalink: string, mediaFile: MediaVariantContract): Promise<void> {
         try {
             const contentStream = await this.blobStorage.getBlobAsStream(mediaFile.blobKey);
-            
+
             if (!contentStream) {
                 this.logger.trackEvent("Publishing", { message: `Blob with key ${mediaFile.blobKey} not found in source storage.` });
                 return null;
@@ -89,7 +89,7 @@ export class MediaPublisher implements IPublisher {
 
     private async renderMediaFile(permalink: string, mediaFile: MediaVariantContract): Promise<void> {
         if (mediaFile.blobKey) {
-            if(this.blobStorage.getBlobAsStream) {
+            if (this.blobStorage.getBlobAsStream) {
                 await this.publishFromStorageStream(permalink, mediaFile);
             } else {
                 await this.publishFromStorage(permalink, mediaFile);

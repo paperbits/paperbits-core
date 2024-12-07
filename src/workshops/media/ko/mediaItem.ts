@@ -36,8 +36,8 @@ export class MediaItem {
         this.setThumbnail(mediaContract);
 
         this.isReferenced = ko.computed(() => {
-            return !!mediaContract.downloadUrl 
-                && (mediaContract.downloadUrl.startsWith("https://") || mediaContract.downloadUrl.startsWith("https//"));
+            return !mediaContract.blobKey
+                && (mediaContract.downloadUrl?.startsWith("http://") || mediaContract.downloadUrl?.startsWith("https//"));
         });
     }
 
