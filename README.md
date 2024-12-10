@@ -9,7 +9,7 @@ Paperbits is a library of reusable tools and components helping you build web ap
 
 [Demo project](https://github.com/paperbits/paperbits-demo)
 
-[Getting started](https://paperbits.io/wiki/getting-started)
+[Get started](https://paperbits.io/wiki/get-started)
 
 [Blog](https://paperbits.io/blog)
 
