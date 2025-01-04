@@ -19,6 +19,7 @@ export class ButtonHandlers implements IWidgetHandler<ButtonModel> {
             openWidgetEditorCommand(context, "Edit button"),
             splitter(),
             switchToParentCommand(context),
+            // openHelpArticleCommand(context, "/widgets/button")
         ];
 
         if (visibilityCommand) {
@@ -26,12 +27,7 @@ export class ButtonHandlers implements IWidgetHandler<ButtonModel> {
         }
 
         const contextualEditor: IContextCommandSet = {
-            selectCommands: [
-                openWidgetEditorCommand(context, "Edit button"),
-                splitter(),
-                switchToParentCommand(context),
-                // openHelpArticleCommand(context, "/widgets/button")
-            ],
+            selectCommands: selectCommands,
             deleteCommand: deleteWidgetCommand(context)
         };
 

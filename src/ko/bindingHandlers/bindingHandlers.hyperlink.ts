@@ -1,6 +1,6 @@
 ﻿import * as ko from "knockout";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
-import { HyperlinkBehavior } from "@paperbits/common/behaviors/hyperlinkBehavior";
+import { HyperlinkBehavior } from "@paperbits/common/behaviors/behavior.hyperlink";
 
 ko.bindingHandlers["hyperlink"] = {
     update(element: HTMLElement, valueAccessor: () => HyperlinkModel): void {
