@@ -1,12 +1,12 @@
-<nav data-bind="secured: security, styled: styles">
+<nav data-bind="secured: security">
     <!--ko if: $component.nodes().length > 0 -->
 
     <!-- ko if: $component.layout() === 'horizontal' -->
-    <div class="menu menu-horizontal" data-bind="template: { name: 'horizontalMenu', data: $component }"></div>
+    <div class="menu menu-horizontal" data-bind="template: { name: 'horizontalMenu', data: $component }, styled: styles"></div>
     <!--/ko-->
 
     <!-- ko if: $component.layout() === 'vertical' -->
-    <div class="menu menu-vertical" data-bind="template: { name: 'verticalMenu', data: $component }"></div>
+    <div class="menu menu-vertical" data-bind="template: { name: 'verticalMenu', data: $component }, styled: styles"></div>
     <!--/ko-->
 
     <!--/ko-->
