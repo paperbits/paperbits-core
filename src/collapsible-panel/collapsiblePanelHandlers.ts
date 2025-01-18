@@ -16,22 +16,6 @@ export class CollapsiblePanelHandlers implements IWidgetHandler<CollapsiblePanel
         return !["section", "row", "column", "collapsiblePanel"].includes(dragSession.sourceBinding.name);
     }
 
-    public async getWidgetOrder(): Promise<IWidgetOrder<CollapsiblePanelModel>> {
-        const widgetOrder: IWidgetOrder<CollapsiblePanelModel> = {
-            name: "collapsiblePanel",
-            displayName: "Collapsible panel",
-            iconClass: "widget-icon widget-icon-collapsible-panel",
-            requires: ["html", "js"],
-            createModel: async () => {
-                const model = new CollapsiblePanelModel();
-                model.version = "1.1.0";
-                return model;
-            }
-        };
-
-        return widgetOrder;
-    }
-
     public getContextCommands(context: WidgetContext): IContextCommandSet {
         const gridCellContextualEditor: IContextCommandSet = {
             color: "#9C27B0",

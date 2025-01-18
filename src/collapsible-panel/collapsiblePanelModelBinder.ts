@@ -5,7 +5,7 @@ import { CollapsiblePanelContract } from "./collapsiblePanelContract";
 import { CollapsiblePanelModel } from "./collapsiblePanelModel";
 
 
-export class CollapsiblePanelModelBinder extends CollectionModelBinder implements IModelBinder<CollapsiblePanelModel>  {
+export class CollapsiblePanelModelBinder extends CollectionModelBinder implements IModelBinder<CollapsiblePanelModel> {
     constructor(
         protected readonly widgetService: IWidgetService,
         protected modelBinderSelector: ModelBinderSelector
@@ -23,7 +23,7 @@ export class CollapsiblePanelModelBinder extends CollectionModelBinder implement
 
     public async contractToModel(contract: CollapsiblePanelContract, bindingContext?: Bag<any>): Promise<CollapsiblePanelModel> {
         const model = new CollapsiblePanelModel();
-        model.styles = contract.styles;
+        model.styles = contract.styles || {};
         model.widgets = await this.getChildModels(contract.nodes, bindingContext);
         return model;
     }
