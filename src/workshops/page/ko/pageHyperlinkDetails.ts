@@ -2,6 +2,7 @@ import * as ko from "knockout";
 import template from "./pageHyperlinkDetails.html";
 import { Component, Param, Event, OnMounted } from "@paperbits/common/ko/decorators";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
+import { NavigationTarget } from "@paperbits/common/html";
 
 
 @Component({
@@ -23,7 +24,7 @@ export class PageHyperlinkDetails {
 
     @OnMounted()
     public async initialize(): Promise<void> {
-        this.target(this.hyperlink.target || "_self");
+        this.target(this.hyperlink.target || NavigationTarget.Self);
         this.target.subscribe(this.applyChanges);
     }
 

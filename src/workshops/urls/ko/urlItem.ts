@@ -1,6 +1,7 @@
 import * as ko from "knockout";
 import { UrlContract } from "@paperbits/common/urls/urlContract";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
+import { NavigationTarget } from "@paperbits/common/html";
 
 /**
  * URL view model.
@@ -33,7 +34,7 @@ export class UrlItem {
     public getHyperlink(): HyperlinkModel {
         const hyperlinkModel = new HyperlinkModel();
         hyperlinkModel.title = this.title();
-        hyperlinkModel.target = "_self";
+        hyperlinkModel.target = NavigationTarget.Self;
         hyperlinkModel.targetKey = this.key;
         hyperlinkModel.href = this.permalink();
 
