@@ -1,6 +1,6 @@
 import { ToolButton, ViewManager, View } from "@paperbits/common/ui";
 
-const helpText = `<h1>Popups</h1><p>Add or edit popups - floating windows shown on top of page content. It gets invoked and dismissed by user actions, like clicking or hovering over a link, button, map marker, etc.</p>`;
+const helpText = `<p>Add or edit popups - floating windows shown on top of page content. It gets invoked and dismissed by user actions, like clicking or hovering over a link, button, map marker, etc.</p>`;
 
 export class PopupsToolButton implements ToolButton {
     public readonly iconClass: string = "paperbits-icon paperbits-polaroid";
@@ -14,7 +14,9 @@ export class PopupsToolButton implements ToolButton {
 
         const view: View = {
             heading: this.title,
+            helpHeading: this.title,
             helpText: helpText,
+            helpArticle: "/popups",
             component: { name: "popups" }
         };
 

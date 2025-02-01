@@ -2,6 +2,7 @@ import * as ko from "knockout";
 import { PageContract } from "@paperbits/common/pages/pageContract";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { SocialShareData } from "@paperbits/common/pages/socialShareData";
+import { NavigationTarget } from "@paperbits/common/html";
 
 export class AnchorItem {
     public title: string;
@@ -43,7 +44,7 @@ export class PageItem {
     public getHyperlink(): HyperlinkModel {
         const hyperlinkModel = new HyperlinkModel();
         hyperlinkModel.title = this.title();
-        hyperlinkModel.target = "_self";
+        hyperlinkModel.target = NavigationTarget.Self;
         hyperlinkModel.targetKey = this.key;
         hyperlinkModel.href = this.permalink();
 
