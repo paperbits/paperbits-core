@@ -1,6 +1,6 @@
 import { ToolButton, ViewManager, View } from "@paperbits/common/ui";
 
-const helpText = "<h1>Layouts</h1><p>Add or edit layouts. Layouts let you centralize common content (e.g., navigation bar, footer), which will be applied to pages. Each page is automatically matched with a layout based on the URL template.</p>";
+const helpText = "<p>Add or edit layouts. Layouts let you centralize common content (e.g., navigation bar, footer), which will be applied to pages. Each page is automatically matched with a layout based on the URL template.</p>";
 
 export class LayoutsToolButton implements ToolButton {
     public readonly iconClass: string = "paperbits-icon paperbits-layout-11-2";
@@ -14,7 +14,9 @@ export class LayoutsToolButton implements ToolButton {
 
         const view: View = {
             heading: this.title,
+            helpHeading: this.title,
             helpText: helpText,
+            helpArticle: "/layouts",
             component: { name: "layouts" }
         };
 
