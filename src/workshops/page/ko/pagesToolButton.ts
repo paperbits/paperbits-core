@@ -1,6 +1,6 @@
 import { ToolButton, ViewManager, View } from "@paperbits/common/ui";
 
-const helpText = "<h1>Pages</h1><p>Add or edit pages of your website. Each page has a unique URL, which also automatically defines the layout it is part of.</p>";
+const helpText = "<p>Add or edit pages of your website. Each page has a unique URL, which also automatically defines the layout it is part of.</p>";
 
 export class PagesToolButton implements ToolButton {
     public readonly iconClass: string = "paperbits-icon paperbits-menu-4";
@@ -14,7 +14,9 @@ export class PagesToolButton implements ToolButton {
 
         const view: View = {
             heading: this.title,
+            helpHeading: this.title,
             helpText: helpText,
+            helpArticle: "/pages",
             component: { name: "pages" }
         };
 

@@ -21,13 +21,14 @@ export class HelpCenterBindingHandler {
                             directions: "vertically horizontally",
                             initialWidth: 500,
                             initialHeight: 700
-                        }
+                        },
+                        scrolling: false
                     };
 
                     this.viewManager.openViewAsPopup(view);
                 };
 
-                ko.applyBindingsToNode(element, { click: openHelpCenter }, null);
+                ko.applyBindingsToNode(element, { activate: openHelpCenter }, null);
             }
         };
     }

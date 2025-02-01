@@ -105,6 +105,25 @@ export class GridEditor {
             binding: binding,
             half: half,
             providers: providers,
+            openHelpCenter: (articleKey: string) => {
+                const view: View = {
+                    heading: "Help center",
+                    component: {
+                        name: "help-center",
+                        params: {
+                            articleKey: articleKey,
+                        }
+                    },
+                    resizing: {
+                        directions: "vertically horizontally",
+                        initialWidth: 500,
+                        initialHeight: 700
+                    },
+                    scrolling: false
+                };
+
+                this.viewManager.openViewAsPopup(view);
+            },
             openWidgetEditor: () => {
                 this.viewManager.openWidgetEditor(binding);
             },

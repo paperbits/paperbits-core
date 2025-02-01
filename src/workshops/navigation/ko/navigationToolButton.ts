@@ -1,6 +1,6 @@
 import { ToolButton, ViewManager, View } from "@paperbits/common/ui";
 
-const helpText = "<h1>Navigation</h1><p>Add or edit navigation menus.</p>";
+const helpText = "<p>Add or edit navigation menus.</p>";
 
 export class NavigationToolButton implements ToolButton {
     public readonly iconClass: string = "paperbits-icon paperbits-menu-34";
@@ -15,6 +15,7 @@ export class NavigationToolButton implements ToolButton {
         const view: View = {
             heading: this.title,
             helpText: helpText,
+            helpArticle: "/navigation",
             component: { name: "navigation" }
         };
 

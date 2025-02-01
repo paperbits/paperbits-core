@@ -11,15 +11,23 @@ export class Tooltip {
     public readonly announcementText: ko.Observable<string>;
 
     constructor() {
+        this.heading = ko.observable();
         this.observableText = ko.observable();
         this.announcementText = ko.observable();
+        this.articleKey = ko.observable();
     }
 
     @Param()
     public text: any;
 
     @Param()
+    public heading: any;
+
+    @Param()
     public observableText: any;
+
+    @Param()
+    public articleKey: any;
 
     @OnMounted()
     public init(): void {

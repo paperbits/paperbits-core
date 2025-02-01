@@ -6,9 +6,19 @@ const defaultTooltipDelayMs = 700;
 
 interface TooltipOptions {
     /**
+     * Tooltip heading.
+     */
+    heading?: string;
+
+    /**
      * Tooltip message.
      */
     message: string;
+
+    /**
+     * Tooltip help article.
+     */
+    articleKey?: string;
 
     /**
      * Preferred tooltip position, e.g. `top`.
@@ -31,6 +41,11 @@ interface TooltipOptions {
     isDisabled: ko.Observable<boolean>;
 }
 
+interface TooltipParams {
+    heading: string;
+    observableText: ko.Observable<string>;
+    articleKey: string;
+}
 
 ko.bindingHandlers["tooltip"] = {
     init: (triggerElement: HTMLElement, valueAccessor: () => TooltipOptions) => {
@@ -63,7 +78,11 @@ ko.bindingHandlers["tooltip"] = {
         let hasText: boolean = false;
         const isDisabled: () => boolean = () => !!options.isDisabled ? options.isDisabled() : false;
 
-        const textParams: any = {};
+        const textParams: TooltipParams = {
+            heading: options.heading,
+            observableText: null,
+            articleKey: options.articleKey
+        };
         let closeTimeout = 0;
 
         if (ko.isObservable(tooltipMessage)) {
@@ -80,7 +99,7 @@ ko.bindingHandlers["tooltip"] = {
         }
         else {
             hasText = !!tooltipMessage;
-            textParams.text = tooltipMessage;
+            textParams.observableText = tooltipMessage;
         }
 
         ko.applyBindingsToNode(triggerElement, {

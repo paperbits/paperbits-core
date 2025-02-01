@@ -1,2 +1,12 @@
-<div class="tooltip" data-bind="html: observableText, scrollable: true"></div>
+<div class="tooltip">
+    <!-- ko if: heading -->
+    <h1 data-bind="text: heading"></h1>
+    <!-- /ko-->
+    <div data-bind="html: observableText, scrollable: true"></div>
+
+    <!-- ko if: articleKey -->
+    <a href="#" class="btn btn-link" data-bind="helpCenter: articleKey">Learn more ></a>
+    <!-- /ko-->
+</div>
+
 <span class="text-hide" aria-live="polite" data-bind="text: announcementText"></span>
