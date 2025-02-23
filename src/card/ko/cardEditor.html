@@ -10,7 +10,7 @@
 
 <details open>
     <summary>
-        Styling
+        Base styling
     </summary>
     <div class="form-group">
         <label for="appearanceStyle" class="form-label">
@@ -22,4 +22,20 @@
             params="{ options: appearanceStyles, value: appearanceStyle, optionsText: 'displayName', optionsValue: 'key', heading: 'Appearance' }">
         </dropdown>
     </div>
+</details>
+
+<details open>
+    <summary>
+        Size
+    </summary>
+    <size-editor
+        params="{ features: 'height,width', allowUnits: 'px,%', sizeConfig: sizeConfig, onUpdate: onSizeChange }">
+    </size-editor>
+</details>
+
+<details open>
+    <summary>
+        Box
+    </summary>
+    <box params="{ features: 'margin,padding,border', box: boxConfig, onUpdate: onBoxUpdate }"></box>
 </details>

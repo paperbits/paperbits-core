@@ -119,8 +119,10 @@ export class ButtonEditor {
     }
 
     public onBoxUpdate(pluginConfig: BoxStylePluginConfig): void {
-        this.boxConfig(pluginConfig);
-        this.applyChanges();
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "margin", pluginConfig.margin);
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "padding", pluginConfig.padding);
+        StyleHelper.setPluginConfigForLocalStyles(this.model.styles, "border", pluginConfig.border);
+        this.onChange(this.model);
     }
 
     public onSizeChange(sizeConfig: SizeStylePluginConfig): void {
