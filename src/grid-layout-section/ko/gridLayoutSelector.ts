@@ -1,4 +1,4 @@
-import * as ko from "knockout";
+import ko from "knockout";
 import * as Objects from "@paperbits/common/objects";
 import template from "./gridLayoutSelector.html";
 import { Bag } from "@paperbits/common";
@@ -7,7 +7,7 @@ import { EventManager } from "@paperbits/common/events";
 import { Component, Event, OnMounted, Param } from "@paperbits/common/ko/decorators";
 import { StyleCompiler, StyleManager } from "@paperbits/common/styles";
 import { IResourceSelector } from "@paperbits/common/ui/IResourceSelector";
-import { GridViewModelBinder } from ".";
+import { GridViewModelBinder } from "./gridViewModelBinder";
 import { GridModelBinder } from "../../grid-layout-section";
 import { GridContract } from "../../grid/gridContract";
 import { SectionModelBinder } from "../../section";

@@ -17,7 +17,7 @@ export class NavigationItemSelector {
     constructor(
         private readonly navigationService: INavigationService,
         private readonly navigationModelBinder: NavigationModelBinder,
-        private readonly navigationViewModelBinder: NavigationViewModelBinder
+        private readonly navigationViewModelBinder: any // NavigationViewModelBinder
     ) {
         // rebinding...
         this.selectNavigationItem = this.selectNavigationItem.bind(this);

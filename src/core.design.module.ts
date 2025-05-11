@@ -174,7 +174,6 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new GridModule());
         injector.bindModule(new GridCellModule());
         injector.bindModule(new MenuModule());
-        injector.bindModule(new PictureDesignModule());
         injector.bindModule(new TestimonialsModule());
         injector.bindModule(new CollapsiblePanelModule());
         injector.bindModule(new ProseMirrorDesignModule());

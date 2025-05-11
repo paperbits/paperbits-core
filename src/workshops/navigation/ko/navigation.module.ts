@@ -11,8 +11,8 @@ export class NavigationWorkshopModule implements IInjectorModule {
         injector.bind("navigationWorkshop", NavigationWorkshop);
         injector.bind("navigationDetailsWorkshop", NavigationDetailsWorkshop);
         injector.bind("navigationItemSelector", NavigationItemSelector);
-        injector.bindToCollection("workshopSections", NavigationToolButton);
         injector.bindToCollection("modelBinders", NavigationModelBinder, "navigationModelBinder");
         injector.bindToCollection("viewModelBinders", NavigationViewModelBinder, "navigationViewModelBinder");
+        injector.bindToCollection("workshopSections", NavigationToolButton);
     }
 }

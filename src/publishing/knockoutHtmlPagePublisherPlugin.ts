@@ -26,7 +26,6 @@ export class KnockoutHtmlPagePublisherPlugin implements HtmlPagePublisherPlugin 
         const document = this.htmlDocumentProvider.createDocument(); // KO referenced global document
         global.window = document.defaultView.window;
         global.document = document;
-        global.navigator = window.navigator;
 
         // this needed to avoid rendering issues with domino in different environments.
         ko.tasks.scheduler = (callback) => setImmediate(callback);
