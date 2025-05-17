@@ -1,22 +1,15 @@
 import * as ko from "knockout";
+import { WhenInViewBehavior } from "@paperbits/common/behaviors/whenInViewBehavior";
 
 ko.bindingHandlers["whenInView"] = {
     init: (element: HTMLElement, valueAccessor) => {
         const callback = valueAccessor();
-
-        const onIntersect = (entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && callback) {
-                    callback();
-                }
-            });
-        };
-
-        const observer = new IntersectionObserver(onIntersect);
-        observer.observe(element);
+        const behaviorHandle = WhenInViewBehavior.attach(element, callback);
 
         ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
-            observer.disconnect();
+            if (behaviorHandle && behaviorHandle.detach) {
+                behaviorHandle.detach();
+            }
         });
     }
 };
