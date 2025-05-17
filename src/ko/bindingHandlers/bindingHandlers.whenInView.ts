@@ -1,5 +1,5 @@
 import * as ko from "knockout";
-import { WhenInViewBehavior } from "@paperbits/common/behaviors/whenInViewBehavior";
+import { WhenInViewBehavior } from "@paperbits/common/behaviors/behavior.whenInView";
 
 ko.bindingHandlers["whenInView"] = {
     init: (element: HTMLElement, valueAccessor) => {

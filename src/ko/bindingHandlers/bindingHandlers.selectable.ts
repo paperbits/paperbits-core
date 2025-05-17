@@ -1,11 +1,8 @@
 import * as ko from "knockout";
+import { SelectableBehavior } from "@paperbits/common/behaviors";
 
 ko.bindingHandlers["selectable"] = {
     init: (element: HTMLElement, valueAccessor) => {
-        setImmediate(() => {
-            if (element.classList.contains("selected")) {
-                element.scrollIntoView({ block: "center" });
-            }
-        });
+        SelectableBehavior.attach(element);
     }
 };

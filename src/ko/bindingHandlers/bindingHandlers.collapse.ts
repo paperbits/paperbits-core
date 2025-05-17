@@ -1,5 +1,5 @@
 import * as ko from "knockout";
-import { CollapseBehavior } from "@paperbits/common/behaviors/collapseBehavior";
+import { CollapseBehavior } from "@paperbits/common/behaviors/behavior.collapse";
 
 ko.bindingHandlers["collapse"] = {
     init: (triggerElement: HTMLElement, valueAccessor) => {

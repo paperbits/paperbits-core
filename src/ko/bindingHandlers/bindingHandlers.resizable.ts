@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import { EventManager } from "@paperbits/common/events";
 import { ResizableOptions } from "@paperbits/common/ui/resizableOptions";
-import { ResizableBehavior } from "@paperbits/common/behaviors/resizableBehavior";
+import { ResizableBehavior } from "@paperbits/common/behaviors/behavior.resizable";
 import { BehaviorHandle } from "@paperbits/common/behaviors/behavior";
 
 export class ResizableBindingHandler {

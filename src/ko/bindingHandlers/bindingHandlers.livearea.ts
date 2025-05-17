@@ -1,4 +1,4 @@
-import { LiveAreaBehavior } from "@paperbits/common/behaviors/liveAreaBehavior";
+import { LiveAreaBehavior } from "@paperbits/common/behaviors/behavior.liveArea";
 import { EventManager } from "@paperbits/common/events";
 import * as ko from "knockout";
 
