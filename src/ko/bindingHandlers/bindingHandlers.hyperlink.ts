@@ -5,13 +5,24 @@ import { HyperlinkBehavior } from "@paperbits/common/behaviors/behavior.hyperlin
 ko.bindingHandlers["hyperlink"] = {
     update(element: HTMLElement, valueAccessor: () => HyperlinkModel): void {
         const hyperlink: HyperlinkModel = valueAccessor();
-        const behavior = new HyperlinkBehavior();
+        let behaviorHandle: any;
 
         if (ko.isObservable(hyperlink)) {
-            hyperlink.subscribe(newValue => behavior.attach(element, newValue));
+            hyperlink.subscribe(newValue => {
+                if (behaviorHandle && behaviorHandle.detach) {
+                    behaviorHandle.detach();
+                }
+                behaviorHandle = HyperlinkBehavior.attach(element, newValue);
+            });
         }
 
         const initial = ko.unwrap(hyperlink);
-        behavior.attach(element, initial);
+        behaviorHandle = HyperlinkBehavior.attach(element, initial);
+
+        if (behaviorHandle && behaviorHandle.detach) {
+            ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
+                behaviorHandle.detach();
+            });
+        }
     }
 };

@@ -3,10 +3,24 @@ import { ListboxBehavior, ListboxOptions } from "@paperbits/common/behaviors/beh
 
 ko.bindingHandlers["listbox"] = {
     init: (listboxElement: HTMLElement, valueAccessor: () => ListboxOptions) => {
-        const behaviorHandle = ListboxBehavior.attach(listboxElement, valueAccessor());
+        const originalOptions = valueAccessor();
+
+        // Adapt the onSelect callback to maintain the original contract (passing ko.dataFor(element))
+        // while the behavior itself now passes the HTMLElement.
+        const adaptedOptions: ListboxOptions = {
+            onSelect: (selectedElement: HTMLElement) => {
+                if (originalOptions && originalOptions.onSelect) {
+                    originalOptions.onSelect(ko.dataFor(selectedElement));
+                }
+            }
+        };
+
+        const behaviorHandle = ListboxBehavior.attach(listboxElement, adaptedOptions);
 
         ko.utils.domNodeDisposal.addDisposeCallback(listboxElement, (): void => {
-            behaviorHandle.detach();
+            if (behaviorHandle && behaviorHandle.detach) {
+                behaviorHandle.detach();
+            }
         });
     }
 };

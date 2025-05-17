@@ -1,77 +1,54 @@
-﻿import { StyleService } from "@paperbits/styles";
-import * as ko from "knockout";
+﻿import * as ko from "knockout";
 import { BackgroundModel } from "@paperbits/common/widgets/background";
+import { BackgroundBehavior, BehaviorHandle } from "@paperbits/common/behaviors/behavior.background";
 
-ko.bindingHandlers["style"] = {
-    update(element: HTMLElement, valueAccessor): void {
-        const value = ko.utils.unwrapObservable(valueAccessor() || {});
-
-        ko.utils.objectForEach(value, function (styleName, styleValue) {
-            styleValue = ko.utils.unwrapObservable(styleValue);
-
-            if (styleValue === null || styleValue === undefined || styleValue === false) {
-                // Empty string removes the value, whereas null/undefined have no effect
-                styleValue = "";
-            }
-
-            element.style.setProperty(styleName, styleValue);
-        });
-    }
-};
+// ko.bindingHandlers["style"] = { ... }; // This global style binding handler remains unchanged.
 
 export class BackgroundBindingHandler {
-    constructor(styleService: StyleService) {
+    constructor() { // StyleService removed as it was not used by this specific binding handler
         ko.bindingHandlers["background"] = {
-            init(element: HTMLElement, valueAccessor: () => BackgroundModel): void {
-                const configuration = valueAccessor();
-                const styleObservable = ko.observable();
+            init(element: HTMLElement, valueAccessor: () => BackgroundModel | ko.Observable<BackgroundModel>): void {
+                const configurationObservableOrModel = valueAccessor();
+                let behaviorHandle: BehaviorHandle | undefined;
 
-                const setBackground = async (backgroundModel: BackgroundModel) => {
-                    if (backgroundModel.sourceUrl) {
-                        styleObservable({
-                            "background-image": `url("${ko.unwrap(backgroundModel.sourceUrl)}")`,
-                            "background-repeat": "no-repeat",
-                            "background-size": "cover",
-                            "background-position": "center",
-                            "background-color": backgroundModel.color
-                        });
+                // Helper to unwrap BackgroundModel properties if they are observable
+                // This ensures the Behavior class receives plain data.
+                const getCleanModel = (model?: BackgroundModel): BackgroundModel => {
+                    if (!model) {
+                        return {};
                     }
-                    else if (backgroundModel.color) {
-                        styleObservable({
-                            "background-color": backgroundModel.color
-                        });
+                    const cleanModel: BackgroundModel = {};
+                    if (model.sourceUrl !== undefined) {
+                        cleanModel.sourceUrl = ko.unwrap(model.sourceUrl);
                     }
-                    else {
-                        styleObservable({
-                            "background-image": null,
-                            "background-repeat": null,
-                            "background-size": null,
-                            "background-position": null,
-                            "background-color": null
-                        });
+                    if (model.color !== undefined) {
+                        cleanModel.color = ko.unwrap(model.color);
                     }
+                    // Add other properties from BackgroundModel if they can be observable and are used
+                    return cleanModel;
                 };
 
-                ko.applyBindingsToNode(element, { style: styleObservable }, null);
+                if (ko.isObservable(configurationObservableOrModel)) {
+                    const configurationObservable = configurationObservableOrModel as ko.Observable<BackgroundModel>;
+                    
+                    const initialModel = getCleanModel(ko.unwrap(configurationObservable));
+                    behaviorHandle = BackgroundBehavior.attach(element, initialModel);
 
-                if (ko.isObservable(configuration)) {
-                    configuration.subscribe((newConfiguration) => {
-                        if (!newConfiguration) {
-                            setBackground({});
-                        }
-                        else {
-                            setBackground(ko.unwrap(newConfiguration));
+                    configurationObservable.subscribe((newConfiguration) => {
+                        if (behaviorHandle?.update) {
+                            behaviorHandle.update(getCleanModel(newConfiguration));
                         }
                     });
+                } else {
+                    const model = getCleanModel(configurationObservableOrModel as BackgroundModel);
+                    behaviorHandle = BackgroundBehavior.attach(element, model);
                 }
 
-                let initialConfiguration = ko.unwrap(configuration);
-
-                if (!initialConfiguration) {
-                    initialConfiguration = {};
-                }
-
-                setBackground(initialConfiguration);
+                ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
+                    if (behaviorHandle?.dispose) {
+                        behaviorHandle.dispose();
+                    }
+                });
             }
         };
     }

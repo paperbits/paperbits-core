@@ -1,11 +1,11 @@
 ﻿import * as ko from "knockout";
 import { View } from "@paperbits/common/ui";
+import { ViewBehavior } from "@paperbits/common/behaviors/behavior.view";
 
 
 ko.bindingHandlers["view"] = {
-    init: function (element: any, valueAccessor: any, ignored1: any, ignored2: any, bindingContext: any): any {
-        const view: View = valueAccessor();
-
+    init: function (element: HTMLElement, valueAccessor: () => View): any {
+        const view = valueAccessor();
         const componentBinder = view.component.binder;
 
         if (!componentBinder) {
@@ -13,10 +13,12 @@ ko.bindingHandlers["view"] = {
             return;
         }
 
-        componentBinder.bind(element, view.component.definition, view.component.params);
+        const behaviorHandle = ViewBehavior.attach(element, view);
 
-        if (componentBinder.unbind) {
-            ko.utils.domNodeDisposal.addDisposeCallback(element, () => componentBinder.unbind(element));
+        if (behaviorHandle && behaviorHandle.detach) {
+            ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
+                behaviorHandle.detach();
+            });
         }
     }
-}
+};
