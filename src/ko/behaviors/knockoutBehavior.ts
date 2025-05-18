@@ -3,9 +3,9 @@ import * as ko from "knockout";
 export function registerKnockoutBehavior(behaviorName: string, BehaviorClass) {
     ko.bindingHandlers[behaviorName] = {
         init: (element, valueAccessor, allBindings, viewModel, context) => {
-            const params = ko.toJSON(valueAccessor());
+            const params = ko.unwrap(valueAccessor());
              // Ensure params are converted to a plain object if needed
-            const behavior = new BehaviorClass(element, params, context);
+            const behavior = new BehaviorClass(element, params);
 
             // store instance using Knockout's DOM data utils
             ko.utils.domData.set(element, behaviorName, behavior);
