@@ -1,6 +1,4 @@
 import * as ko from "knockout";
-import { GridCellModel } from "../../grid-cell";
-import { GridCellViewModel } from "../../grid-cell/ko";
 import { GridHelper } from "@paperbits/common/editing";
 
 

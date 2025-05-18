@@ -1,5 +1,5 @@
 import * as ko from "knockout";
-import { MarkdownBehavior } from "@paperbits/common/behaviors/behavior.markdown"; // Corrected path
+import { MarkdownBehavior } from "@paperbits/common/behaviors/behavior.markdown";
 
 ko.bindingHandlers["markdown"] = {
     update: (element: HTMLElement, valueAccessor: () => string): void => {

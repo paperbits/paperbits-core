@@ -1,11 +1,12 @@
 ﻿import * as ko from "knockout";
 import { HyperlinkModel } from "@paperbits/common/permalinks";
 import { HyperlinkBehavior } from "@paperbits/common/behaviors/behavior.hyperlink";
+import { BehaviorHandle } from "@paperbits/common/behaviors";
 
 ko.bindingHandlers["hyperlink"] = {
     update(element: HTMLElement, valueAccessor: () => HyperlinkModel): void {
         const hyperlink: HyperlinkModel = valueAccessor();
-        let behaviorHandle: any;
+        let behaviorHandle: BehaviorHandle;
 
         if (ko.isObservable(hyperlink)) {
             hyperlink.subscribe(newValue => {
