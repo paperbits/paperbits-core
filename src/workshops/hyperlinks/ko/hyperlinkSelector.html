@@ -34,8 +34,8 @@
             <b id="hyperlinkTitle" data-bind="text: $component.selection, attr: { title: selection }"></b>
         </div>
     </div>
-    <!-- ko if: hyperlinkProvider().hyperlinkDetailsComponentName -->
-    <div data-bind="component: { name: hyperlinkProvider().hyperlinkDetailsComponentName, params: { hyperlink: hyperlink, onHyperlinkChange: $component.onHyperlinkSelected } }"></div>
+    <!-- ko if: hyperlinkProvider -->
+    <div data-bind="component: { name: hyperlinkProvider().hyperlinkDetailsComponentName, params: { hyperlink: $component.hyperlink, onHyperlinkChange: $component.onHyperlinkSelected } }"></div>
     <!--/ko-->
 
     <!--/ko-->
