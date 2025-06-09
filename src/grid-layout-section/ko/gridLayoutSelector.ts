@@ -1,4 +1,4 @@
-import ko from "knockout";
+import * as ko from "knockout";
 import * as Objects from "@paperbits/common/objects";
 import template from "./gridLayoutSelector.html";
 import { Bag } from "@paperbits/common";
