@@ -1,6 +1,6 @@
 {
     "name": "@paperbits/core",
-    "version": "0.1.649",
+    "version": "0.1.650",
     "description": "Paperbits core components.",
     "author": "Paperbits",
     "license": "MIT",
@@ -21,9 +21,9 @@
     ],
     "dependencies": {
         "@googlemaps/js-api-loader": "^1.12.9",
-        "@paperbits/common": "0.1.649",
-        "@paperbits/styles": "0.1.649",
-        "@paperbits/prosemirror": "0.1.649",
+        "@paperbits/common": "0.1.650",
+        "@paperbits/styles": "0.1.650",
+        "@paperbits/prosemirror": "0.1.650",
         "await-parallel-limit": "^2.1.0",
         "basiclightbox": "^5.0.4",
         "cropperjs": "^1.5.11",
