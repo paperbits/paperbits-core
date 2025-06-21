@@ -2,6 +2,7 @@
 import { View } from "@paperbits/common/ui";
 import "@paperbits/common/extensions";
 import { ISettingsProvider } from "@paperbits/common/configuration";
+import { PositioningOptions } from "@paperbits/common/ui/positioningOptions";
 
 
 interface EditorSettings {
@@ -50,6 +51,58 @@ export class SurfaceBindingHandler {
                 }
 
                 element.style.top = editorSettings.top + "px";
+            }
+        }
+        else {
+            if (view.positioning) {
+                let positioning: PositioningOptions;
+
+                const defaultOffset = 20;
+                const rect = element.getBoundingClientRect();
+
+                if (typeof view.positioning === "string") {
+                    switch (view.positioning) {
+                        case "left":
+                            positioning = {
+                                left: defaultOffset,
+                                top: (document.body.clientHeight / 2) - (rect.height / 2)
+                            };
+                            break;
+                        case "right":
+                            positioning = {
+                                right: defaultOffset,
+                                top: (document.body.clientHeight / 2) - (rect.height / 2)
+                            };
+                            break;
+                        case "top":
+                            positioning = {
+                                top: defaultOffset,
+                                left: (document.body.clientWidth / 2) - (rect.width / 2)
+                            };
+                            break;
+                        case "bottom":
+                            positioning = {
+                                bottom: defaultOffset,
+                                left: (document.body.clientWidth / 2) - (rect.width / 2)
+                            };
+                            break;
+                        case "center":
+                            positioning = {
+                                left: (document.body.clientWidth / 2) - (rect.width / 2),
+                                top: (document.body.clientHeight / 2) - (rect.height / 2)
+                            };
+                    }
+                }
+                else {
+                    positioning = view.positioning as PositioningOptions;
+                }
+
+                element.style.left = (document.body.clientWidth / 2) - (rect.width / 2) + "px";
+                element.style.top = document.body.clientHeight / 2 - rect.height / 2 + "px";
+                element.style.left = positioning.left ? positioning.left + "px" : null;
+                element.style.top = positioning.top ? positioning.top + "px" : null;
+                element.style.right = positioning.right ? positioning.right + "px" : null;
+                element.style.bottom = positioning.bottom ? positioning.bottom + "px" : null;
             }
         }
 

@@ -17,6 +17,7 @@ import { ViewStack } from "@paperbits/common/ui/viewStack";
 import { ISettingsProvider } from "@paperbits/common/configuration";
 
 declare let uploadDialog: HTMLInputElement;
+const defaultEditorWidth = 320;
 
 
 @Component({
@@ -375,7 +376,25 @@ export class DefaultViewManager implements ViewManager {
         }
 
         if (!view.resizing) {
-            view.resizing = "vertically horizontally";
+            view.resizing = {
+                directions: "vertically horizontally",
+                initialWidth: defaultEditorWidth
+            }
+        }
+        else {
+            if (typeof view.resizing === "string" && view.name !== "text-block-editor") {
+                view.resizing = {
+                    directions: view.resizing,
+                    initialWidth: defaultEditorWidth
+                };
+            }
+        }
+
+        if (!view.positioning) {
+            view.positioning = {
+                top: 20,
+                left: 150
+            }
         }
 
         this.clearContextualCommands();
@@ -443,7 +462,7 @@ export class DefaultViewManager implements ViewManager {
             },
             scrolling: "editorScrolling" in binding ? <boolean>binding.editorScrolling : true,
             heading: binding.displayName,
-            resizing: <string>binding.editorResizing || "vertically horizontally",
+            resizing: <string>binding.editorResizing,
             returnFocusTo: document.getElementById("contentEditor")
         };
 

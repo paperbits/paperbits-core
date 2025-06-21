@@ -19,9 +19,10 @@ export class HelpCenterBindingHandler {
                         },
                         resizing: {
                             directions: "vertically horizontally",
-                            initialWidth: 500,
-                            initialHeight: 700
+                            initialWidth: 600,
+                            initialHeight: 700,
                         },
+                        positioning: "center",
                         scrolling: false
                     };
 
