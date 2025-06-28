@@ -57,6 +57,12 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
         state.tabPanelItems = tabPanelItemViewModels;
         state.tabLabels = tabLabels;
 
+        
+        // binding["setActiveItem"] = (index: number) => viewModel.activeItemIndex(index);
+        // binding["getActiveItem"] = () => parseInt(<any>viewModel.activeItemIndex());
+        // viewModel["widgetBinding"] = binding;
+        // viewModel.activeItemIndex(0);
+
         if (model.styles) {
             state.styles = await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager);
         }

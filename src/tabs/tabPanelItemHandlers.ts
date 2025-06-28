@@ -2,7 +2,7 @@ import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { WidgetContext } from "@paperbits/common/editing";
 import { EventManager, Events } from "@paperbits/common/events";
 import { SectionModel } from "../section";
-import { TabPanelItemModel } from "./tabPanelModel";
+import { TabPanelItemModel, TabPanelModel } from "./tabPanelModel";
 
 
 export class TabPanelItemHandlers {
@@ -44,7 +44,7 @@ export class TabPanelItemHandlers {
                             tabPanelItemModels: context.parentBinding.model.tabPanelItems,
                             onSelect: (item: TabPanelItemModel): void => {
                                 const index = context.parentBinding.model.tabPanelItems.indexOf(item);
-                                context.parentBinding["setActiveItem"](index);
+                                context.parentBinding.viewModel.activeItemIndex(index);
                                 this.viewManager.clearContextualCommands();
                             },
                             onCreate: (): void => {
@@ -53,7 +53,7 @@ export class TabPanelItemHandlers {
                                 const index = context.parentBinding.model.tabPanelItems.length - 1;
 
                                 context.parentBinding.applyChanges();
-                                context.parentBinding["setActiveItem"](index);
+                                context.parentBinding.viewModel.activeItemIndex(index);
 
                                 this.viewManager.clearContextualCommands();
                                 this.eventManager.dispatchEvent(Events.ContentUpdate);
@@ -78,7 +78,7 @@ export class TabPanelItemHandlers {
                     this.viewManager.clearContextualCommands();
                     this.eventManager.dispatchEvent(Events.ContentUpdate);
 
-                    context.parentBinding["setActiveItem"](0);
+                    context.parentBinding.viewModel.activeItemIndex(0);
                 }
             };
         }
