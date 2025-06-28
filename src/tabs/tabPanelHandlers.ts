@@ -1,32 +1,22 @@
 import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { openWidgetEditorCommand, splitter, switchToParentCommand } from "@paperbits/common/ui/commands";
-import { IWidgetOrder, WidgetContext } from "@paperbits/common/editing";
+import { IWidgetHandler, WidgetContext } from "@paperbits/common/editing";
 import { TabPanelItemModel, TabPanelModel } from "./tabPanelModel";
 import { EventManager, Events } from "@paperbits/common/events";
 
 
-export class TabPanelHandlers {
+export class TabPanelHandlers implements IWidgetHandler<TabPanelModel> {
     constructor(
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager
     ) { }
 
-    public async getWidgetOrder(): Promise<IWidgetOrder<TabPanelModel>> {
-        const widgetOrder: IWidgetOrder<TabPanelModel> = {
-            name: "tab-panel",
-            displayName: "Tab panel",
-            iconClass: "widget-icon widget-icon-tab-panel",
-            requires: ["js", "interaction"],
-            createModel: async () => {
-                const model = new TabPanelModel();
-                model.tabPanelItems.push(new TabPanelItemModel("Tab 1"));
-                model.tabPanelItems.push(new TabPanelItemModel("Tab 2"));
-                model.tabPanelItems.push(new TabPanelItemModel("Tab 3"));
-                return model;
-            }
-        };
-
-        return widgetOrder;
+    public async getWidgetModel(): Promise<TabPanelModel> {
+        const model = new TabPanelModel();
+        model.tabPanelItems.push(new TabPanelItemModel("Tab 1"));
+        model.tabPanelItems.push(new TabPanelItemModel("Tab 2"));
+        model.tabPanelItems.push(new TabPanelItemModel("Tab 3"));
+        return model;
     }
 
     public getContextCommands(context: WidgetContext): IContextCommandSet {

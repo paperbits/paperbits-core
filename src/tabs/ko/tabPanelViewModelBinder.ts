@@ -1,5 +1,5 @@
 import { TabPanelViewModel } from "./tabPanel";
-import { ViewModelBinder } from "@paperbits/common/widgets";
+import { IWidgetService, ViewModelBinder } from "@paperbits/common/widgets";
 import { IWidgetBinding } from "@paperbits/common/editing";
 import { TabPanelItemModel, TabPanelModel } from "../tabPanelModel";
 import { Placeholder } from "../../placeholder/ko/placeholder";
@@ -17,8 +17,33 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
     constructor(
         private readonly viewModelBinderSelector: ViewModelBinderSelector,
         private readonly eventManager: EventManager,
-        private readonly styleCompiler: StyleCompiler
+        private readonly styleCompiler: StyleCompiler,
+        private readonly widgetService: IWidgetService
     ) { }
+
+    public stateToInstance(state: any, componentInstance: TabPanelViewModel): void {
+        componentInstance.styles(state.styles);
+        componentInstance.tabPanelItems(state.tabPanelItems);
+    }
+
+    public async modelToState(model: TabPanelModel, state: any, bindingContext: Bag<any>): Promise<void> {
+        const tabPanelItemViewModels = [];
+
+        for (const [index, tabPanelItemModel] of model.tabPanelItems.entries()) {
+            const tabPanelItemViewModel = await this.itemModelToViewModel(tabPanelItemModel, index, null, bindingContext);
+            tabPanelItemViewModels.push(tabPanelItemViewModel);
+        }
+
+        if (tabPanelItemViewModels.length === 0) {
+            tabPanelItemViewModels.push(<any>new Placeholder("Tab panel"));
+        }
+
+        state.tabPanelItems = tabPanelItemViewModels;
+
+        if (model.styles) {
+            state.styles = await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager);
+        }
+    }
 
     private createBinding(model: TabPanelModel, viewModel?: TabPanelViewModel, bindingContext?: Bag<any>): void {
         const binding: IWidgetBinding<TabPanelModel, TabPanelViewModel> = {
@@ -47,14 +72,21 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
             viewModel = new TabPanelItemViewModel();
         }
 
-        const viewModels = [];
+        const promises = model.widgets.map(widgetModel => {
+            const definition = this.widgetService.getWidgetDefinitionForModel(widgetModel);
 
-        for (const widgetModel of model.widgets) {
+            if (definition) {
+                const bindingPromise = this.widgetService.createWidgetBinding(definition, widgetModel, bindingContext);
+                return bindingPromise;
+            }
+
+            // legacy binding resolution
             const widgetViewModelBinder = this.viewModelBinderSelector.getViewModelBinderByModel(widgetModel);
-            const widgetViewModel = await widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+            const bindingPromise = widgetViewModelBinder.modelToViewModel(widgetModel, null, bindingContext);
+            return bindingPromise;
+        });
 
-            viewModels.push(widgetViewModel);
-        }
+        const viewModels = await Promise.all(promises);
 
         const defaultLabel = `Tab ${index + 1}`;
 
