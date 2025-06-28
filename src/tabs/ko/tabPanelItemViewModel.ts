@@ -1,11 +1,16 @@
 import * as ko from "knockout";
+import template from "./tabPanelItem.html";
+import { Component } from "@paperbits/common/ko/decorators";
 import { StyleModel } from "@paperbits/common/styles";
-import { WidgetViewModel } from "../../ko/widgetViewModel";
 
 
+@Component({
+    selector: "tabPanelItem",
+    template: template
+})
 export class TabPanelItemViewModel {
     public readonly styles: ko.Observable<StyleModel>;
-    public readonly widgets: ko.ObservableArray<WidgetViewModel>;
+    public readonly widgets: ko.ObservableArray<any>;
     public readonly label: ko.Observable<string>;
 
     constructor() {

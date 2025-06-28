@@ -7,26 +7,38 @@ import { TabPanelEditor } from "./ko/tabPanelEditor";
 import { TabPanelItemEditor } from "./ko/tabPanelItemEditor";
 import { TabPanelItemSelector } from "./ko/tabPanelItemSelector";
 import { TabPanelViewModelBinder } from "./ko/tabPanelViewModelBinder";
+import { TabPanelItemViewModel } from "./ko/tabPanelItemViewModel";
+import { TabPanelItemViewModelBinder } from "./ko/tabPanelItemViewModelBinder";
 import { TabPanelHandlers } from "./tabPanelHandlers";
 import { TabPanelItemHandlers } from "./tabPanelItemHandlers";
 import { TabPanelModelBinder } from "./tabPanelModelBinder";
+import { TabPanelItemModelBinder } from "./tabPanelItemModelBinder";
 import { TabPanelStyleHandler } from "./tabPanelStyleHandler";
-import { TabPanelModel } from "./tabPanelModel";
+import { TabPanelModel, TabPanelItemModel } from "./tabPanelModel";
 
 export class TabPanelDesignModule implements IInjectorModule {
     public register(injector: IInjector): void {
+        // TabPanel components
         injector.bind("tabPanel", TabPanelViewModel);
         injector.bind("tabPanelEditor", TabPanelEditor);
-        injector.bind("tabPanelItemEditor", TabPanelItemEditor);
-        injector.bind("tabPanelItemSelector", TabPanelItemSelector);
         injector.bindSingleton("tabPanelModelBinder", TabPanelModelBinder);
         injector.bindSingleton("tabPanelViewModelBinder", TabPanelViewModelBinder);
         injector.bindSingleton("tabPanelHandler", TabPanelHandlers);
+
+        // TabPanelItem components
+        injector.bind("tabPanelItem", TabPanelItemViewModel);
+        injector.bind("tabPanelItemEditor", TabPanelItemEditor);
+        injector.bind("tabPanelItemSelector", TabPanelItemSelector);
+        injector.bindSingleton("tabPanelItemModelBinder", TabPanelItemModelBinder);
+        injector.bindSingleton("tabPanelItemViewModelBinder", TabPanelItemViewModelBinder);
+        injector.bindSingleton("tabPanelItemHandler", TabPanelItemHandlers);
+
         injector.bindToCollection("widgetHandlers", TabPanelItemHandlers, "tabPanelItemHandler");
         injector.bindToCollection("styleHandlers", TabPanelStyleHandler);
 
         const widgetService = injector.resolve<IWidgetService>("widgetService");
 
+        // Register TabPanel widget
         widgetService.registerWidget("tab-panel", {
             modelDefinition: TabPanelModel,
             componentBinder: KnockoutComponentBinder,
@@ -42,6 +54,24 @@ export class TabPanelDesignModule implements IInjectorModule {
             componentBinder: KnockoutComponentBinder,
             componentDefinition: TabPanelEditor,
             handlerComponent: TabPanelHandlers
+        });
+
+        // Register TabPanelItem widget
+        widgetService.registerWidget("tabPanel-item", {
+            modelDefinition: TabPanelItemModel,
+            componentBinder: KnockoutComponentBinder,
+            componentDefinition: TabPanelItemViewModel,
+            modelBinder: TabPanelItemModelBinder,
+            viewModelBinder: TabPanelItemViewModelBinder
+        });
+
+        widgetService.registerWidgetEditor("tabPanel-item", {
+            displayName: "Tab panel item",
+            componentBinder: KnockoutComponentBinder,
+            componentDefinition: TabPanelItemEditor,
+            handlerComponent: TabPanelItemHandlers,
+            selectable: false,
+            draggable: false
         });
     }
 }

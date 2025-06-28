@@ -10,15 +10,8 @@
     </ul>
     <!-- ko foreach: { data: tabPanelItems, as: 'tabPanelItem' } -->
     <div class="tab-content"
-        data-bind="styled: tabPanelItem.styles, css: { 'tab-content-active': $index() === $component.activeItemIndex() }">
-        <!-- ko foreach: { data: tabPanelItem.widgets, as: 'widget' } -->
-        <!-- ko if: widget.wrapped -->
-        <div data-bind="widget: widget"></div>
-        <!-- /ko -->
-        <!-- ko ifnot: widget.wrapped -->
-        <!-- ko widget: widget -->
-        <!-- /ko -->
-        <!-- /ko -->
+        data-bind="css: { 'tab-content-active': $index() === $component.activeItemIndex() }">
+        <!-- ko widget: tabPanelItem -->
         <!-- /ko -->
     </div>
     <!-- /ko -->

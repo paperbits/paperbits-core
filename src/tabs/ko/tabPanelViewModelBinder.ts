@@ -1,16 +1,12 @@
 import { TabPanelViewModel } from "./tabPanel";
 import { IWidgetService, ViewModelBinder } from "@paperbits/common/widgets";
-import { IWidgetBinding } from "@paperbits/common/editing";
 import { TabPanelItemModel, TabPanelModel } from "../tabPanelModel";
 import { Placeholder } from "../../placeholder/ko/placeholder";
 import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
-import { TabPanelHandlers } from "../tabPanelHandlers";
 import { EventManager, Events } from "@paperbits/common/events";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
 import { TabPanelItemViewModel } from "./tabPanelItemViewModel";
-import { TabPanelItemHandlers } from "../tabPanelItemHandlers";
-import { ComponentFlow } from "@paperbits/common/components";
 
 
 export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, TabPanelViewModel> {
@@ -24,47 +20,46 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
     public stateToInstance(state: any, componentInstance: TabPanelViewModel): void {
         componentInstance.styles(state.styles);
         componentInstance.tabPanelItems(state.tabPanelItems);
+        
+        // Set tab labels directly instead of computing from view models
+        if (state.tabLabels) {
+            componentInstance.tabLinks(state.tabLabels);
+        }
     }
 
     public async modelToState(model: TabPanelModel, state: any, bindingContext: Bag<any>): Promise<void> {
         const tabPanelItemViewModels = [];
+        const tabLabels = [];
 
         for (const [index, tabPanelItemModel] of model.tabPanelItems.entries()) {
-            const tabPanelItemViewModel = await this.itemModelToViewModel(tabPanelItemModel, index, null, bindingContext);
-            tabPanelItemViewModels.push(tabPanelItemViewModel);
+            const definition = this.widgetService.getWidgetDefinitionForModel(tabPanelItemModel);
+
+            if (definition) {
+                // Create widget binding through the service
+                const widgetBinding = await this.widgetService.createWidgetBinding(definition, tabPanelItemModel, bindingContext);
+                tabPanelItemViewModels.push(widgetBinding);
+            } else {
+                // fallback to direct processing if not registered as widget
+                const tabPanelItemViewModel = await this.itemModelToViewModel(tabPanelItemModel, index, null, bindingContext);
+                tabPanelItemViewModels.push(tabPanelItemViewModel);
+            }
+
+            // Extract label from model for tab navigation
+            const defaultLabel = `Tab ${index + 1}`;
+            tabLabels.push(tabPanelItemModel.label || defaultLabel);
         }
 
         if (tabPanelItemViewModels.length === 0) {
             tabPanelItemViewModels.push(<any>new Placeholder("Tab panel"));
+            tabLabels.push("Tab panel");
         }
 
         state.tabPanelItems = tabPanelItemViewModels;
+        state.tabLabels = tabLabels;
 
         if (model.styles) {
             state.styles = await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager);
         }
-    }
-
-    private createBinding(model: TabPanelModel, viewModel?: TabPanelViewModel, bindingContext?: Bag<any>): void {
-        const binding: IWidgetBinding<TabPanelModel, TabPanelViewModel> = {
-            name: "tab-panel",
-            displayName: "Tab panel",
-            layer: bindingContext?.layer,
-            model: model,
-            draggable: true,
-            flow: ComponentFlow.Block,
-            handler: TabPanelHandlers,
-            editor: "tab-panel-editor",
-            applyChanges: async () => {
-                await this.modelToViewModel(model, viewModel, bindingContext);
-                this.eventManager.dispatchEvent(Events.ContentUpdate);
-            }
-        };
-
-        binding["setActiveItem"] = (index: number) => viewModel.activeItemIndex(index);
-        binding["getActiveItem"] = () => parseInt(<any>viewModel.activeItemIndex());
-        viewModel["widgetBinding"] = binding;
-        viewModel.activeItemIndex(0);
     }
 
     public async itemModelToViewModel(model: TabPanelItemModel, index: number, viewModel?: TabPanelItemViewModel, bindingContext?: Bag<any>): Promise<TabPanelItemViewModel> {
@@ -96,48 +91,6 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
 
         viewModel.widgets(viewModels);
         viewModel.label(model.label || defaultLabel);
-
-        if (model.styles) {
-            viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));
-        }
-
-        const binding: IWidgetBinding<TabPanelItemModel, TabPanelItemViewModel> = {
-            name: "tabPanel-item",
-            displayName: defaultLabel,
-            layer: bindingContext?.layer,
-            model: model,
-            draggable: true,
-            editor: "tabPanel-item-editor",
-            handler: TabPanelItemHandlers,
-            applyChanges: async () => {
-                await this.itemModelToViewModel(model, index, viewModel, bindingContext);
-                this.eventManager.dispatchEvent(Events.ContentUpdate);
-            }
-        };
-
-        viewModel["widgetBinding"] = binding;
-
-        return viewModel;
-    }
-
-    public async modelToViewModel(model: TabPanelModel, viewModel?: TabPanelViewModel, bindingContext?: Bag<any>): Promise<TabPanelViewModel> {
-        if (!viewModel) {
-            viewModel = new TabPanelViewModel();
-            this.createBinding(model, viewModel, bindingContext);
-        }
-
-        const tabPanelItemViewModels = [];
-
-        for (const [index, tabPanelItemModel] of model.tabPanelItems.entries()) {
-            const tabPanelItemViewModel = await this.itemModelToViewModel(tabPanelItemModel, index, null, bindingContext);
-            tabPanelItemViewModels.push(tabPanelItemViewModel);
-        }
-
-        if (tabPanelItemViewModels.length === 0) {
-            tabPanelItemViewModels.push(<any>new Placeholder("Tab panel"));
-        }
-
-        viewModel.tabPanelItems(tabPanelItemViewModels);
 
         if (model.styles) {
             viewModel.styles(await this.styleCompiler.getStyleModelAsync(model.styles, bindingContext?.styleManager));

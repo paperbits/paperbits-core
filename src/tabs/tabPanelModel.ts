@@ -11,7 +11,7 @@ export class TabPanelModel {
     }
 }
 
-export class TabPanelItemModel {
+export class TabPanelItemModel implements WidgetModel {
     public widgets: WidgetModel[];
     public styles: LocalStyles;
     public label: string;
