@@ -5,6 +5,7 @@ import { ViewModelBinderSelector } from "../../ko/viewModelBinderSelector";
 import { Placeholder } from "../../placeholder/ko/placeholder";
 import { StyleCompiler } from "@paperbits/common/styles";
 import { Bag } from "@paperbits/common";
+import { stat } from "fs";
 
 
 export class TabPanelItemViewModelBinder implements ViewModelBinder<TabPanelItemModel, TabPanelItemViewModel> {
@@ -17,7 +18,9 @@ export class TabPanelItemViewModelBinder implements ViewModelBinder<TabPanelItem
     public stateToInstance(state: any, componentInstance: TabPanelItemViewModel): void {
         componentInstance.styles(state.styles);
         componentInstance.label(state.label);
-        componentInstance.widgets(state.widgets)
+        componentInstance.widgets(state.widgets);
+
+        console.log(state)
     }
 
     public async modelToState(model: TabPanelItemModel, state: any, bindingContext: Bag<any>): Promise<void> {

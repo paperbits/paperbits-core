@@ -18,6 +18,7 @@ import { TabPanelModel, TabPanelItemModel } from "./tabPanelModel";
 
 export class TabPanelDesignModule implements IInjectorModule {
     public register(injector: IInjector): void {
+        console.log("Registering TabPanel design module...");
         // TabPanel components
         injector.bind("tabPanel", TabPanelViewModel);
         injector.bind("tabPanelEditor", TabPanelEditor);
@@ -66,7 +67,7 @@ export class TabPanelDesignModule implements IInjectorModule {
         });
 
         widgetService.registerWidgetEditor("tabPanel-item", {
-            displayName: "Tab panel item",
+            displayName: "Tab",
             componentBinder: KnockoutComponentBinder,
             componentDefinition: TabPanelItemEditor,
             handlerComponent: TabPanelItemHandlers,

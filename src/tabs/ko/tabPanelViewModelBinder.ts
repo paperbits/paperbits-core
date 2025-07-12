@@ -20,6 +20,8 @@ export class TabPanelViewModelBinder implements ViewModelBinder<TabPanelModel, T
     public stateToInstance(state: any, componentInstance: TabPanelViewModel): void {
         componentInstance.styles(state.styles);
         componentInstance.tabPanelItems(state.tabPanelItems);
+
+        console.log(state.tabPanelItems);
         
         // Set tab labels directly instead of computing from view models
         if (state.tabLabels) {
