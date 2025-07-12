@@ -19,8 +19,6 @@ export class TabPanelItemViewModelBinder implements ViewModelBinder<TabPanelItem
         componentInstance.styles(state.styles);
         componentInstance.label(state.label);
         componentInstance.widgets(state.widgets);
-
-        console.log(state)
     }
 
     public async modelToState(model: TabPanelItemModel, state: any, bindingContext: Bag<any>): Promise<void> {
