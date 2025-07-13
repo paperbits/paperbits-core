@@ -1,0 +1,17 @@
+<details class="accordion-item">
+    <summary class="accordion-header">
+        <span data-bind="text: label">Item 1</span>
+        <i class="icon-emb icon-emb-ctrl-right" aria-hidden="true"></i>
+    </summary>
+    <div class="accordion-collapse" data-bind="styled: styles">
+        <!-- ko foreach: { data: widgets, as: 'widget' } -->
+        <!-- ko if: widget.wrapped -->
+        <div data-bind="widget: widget"></div>
+        <!-- /ko -->
+        <!-- ko ifnot: widget.wrapped -->
+        <!-- ko widget: widget -->
+        <!-- /ko -->
+        <!-- /ko -->
+        <!-- /ko -->
+    </div>
+</details>

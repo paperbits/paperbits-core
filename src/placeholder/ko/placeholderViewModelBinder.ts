@@ -1,4 +1,4 @@
-import { ViewModelBinder } from "@paperbits/common/widgets/IViewModelBinder";
+import { ViewModelBinder } from "@paperbits/common/widgets";
 import { PlaceholderModel } from "@paperbits/common/widgets/placeholder";
 import { Placeholder } from "./placeholder";
 
