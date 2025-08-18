@@ -73,6 +73,7 @@ import { MemoryCache } from "@paperbits/common/caching";
 import { DefaultHelpService } from "@paperbits/common/tutorials/defaultHelpService";
 import { CarouselDesignModule } from "./carousel/ko";
 import { TabPanelDesignModule } from "./tabs/tabPanel.design.module";
+import { AccordionDesignModule } from "./accordion/accordion.design.module";
 import { TableDesignModule } from "./table/ko";
 import { TableCellDesignModule } from "./table-cell/tableCell.design.module";
 // import { DividerDesignModule } from "./divider/divider.design.module";
@@ -204,6 +205,7 @@ export class CoreDesignModule implements IInjectorModule {
         injector.bindModule(new CollapsiblePanelEditorModule());
         injector.bindModule(new CarouselDesignModule());
         injector.bindModule(new TabPanelDesignModule());
+        injector.bindModule(new AccordionDesignModule());
         injector.bindModule(new TableDesignModule());
         injector.bindModule(new TableCellDesignModule());
         injector.bindModule(new DismissButtonDesignModule());

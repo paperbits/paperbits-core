@@ -1,22 +1,22 @@
 import { WidgetModel } from "@paperbits/common/widgets";
 import { LocalStyles } from "@paperbits/common/styles";
 
-export class TabPanelModel {
-    public tabPanelItems: TabPanelItemModel[];
+export class AccordionModel {
+    public accordionItems: AccordionItemModel[];
     public styles: LocalStyles;
 
     constructor() {
         this.styles = {};
-        this.tabPanelItems = [];
+        this.accordionItems = [];
     }
 }
 
-export class TabPanelItemModel implements WidgetModel {
+export class AccordionItemModel implements WidgetModel {
     public widgets: WidgetModel[];
     public styles: LocalStyles;
     public label: string;
 
-    constructor(label: string = "Tab") {
+    constructor(label: string = "Item") {
         this.styles = {};
         this.widgets = [];
         this.label = label;

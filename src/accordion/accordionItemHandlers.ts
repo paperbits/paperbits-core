@@ -2,10 +2,11 @@ import { IContextCommandSet, ViewManager } from "@paperbits/common/ui";
 import { WidgetContext } from "@paperbits/common/editing";
 import { EventManager, Events } from "@paperbits/common/events";
 import { SectionModel } from "../section";
-import { TabPanelItemModel, TabPanelModel } from "./tabPanelModel";
+import { AccordionItemModel } from "./accordionModel";
+import { WidgetModel } from "@paperbits/common/widgets";
 
 
-export class TabPanelItemHandlers {
+export class AccordionItemHandlers {
     constructor(
         private readonly viewManager: ViewManager,
         private readonly eventManager: EventManager
@@ -19,7 +20,7 @@ export class TabPanelItemHandlers {
             selectCommands: [
                 {
                     controlType: "toolbox-button",
-                    displayName: "Tab panel",
+                    displayName: "Edit accordion",
                     callback: () => this.viewManager.openWidgetEditor(context.parentBinding)
                 },
                 {
@@ -27,33 +28,29 @@ export class TabPanelItemHandlers {
                 },
                 {
                     controlType: "toolbox-button",
-                    displayName: context.binding.displayName,
-                    tooltip: "Tab settings",
+                    displayName: context.binding.model.label,
+                    tooltip: "Accordion settings",
                     position: "top right",
                     color: "#607d8b",
                     callback: () => this.viewManager.openWidgetEditor(context.binding)
                 },
                 {
-                    tooltip: "Select tab",
+                    tooltip: "Select accordion",
                     iconClass: "paperbits-icon paperbits-small-down",
                     controlType: "toolbox-dropdown",
                     component: {
-                        name: "tabpanel-item-selector",
+                        name: "accordion-item-selector",
                         params: {
-                            activeTabPanelItemModel: context.model,
-                            tabPanelItemModels: context.parentBinding.model.tabPanelItems,
-                            onSelect: (item: TabPanelItemModel): void => {
-                                const index = context.parentBinding.model.tabPanelItems.indexOf(item);
-                                context.parentBinding.viewModel.activeItemIndex(index);
-                                this.viewManager.clearContextualCommands();
-                            },
+                            activeAccordionItemModel: context.model,
+                            accordionItemModels: context.parentBinding.model.accordionItems,
+                            // onSelect: (item: AccordionItemModel): void => {
+                            //     const parent = context.gridItem.getParent();
+                            //     const index = parent.binding.model.accordionItems.indexOf(item);
+                            //     parent.getChildren()[index].select(true);
+                            // },
                             onCreate: (): void => {
-                                context.parentBinding.model.tabPanelItems.push(new TabPanelItemModel());
-
-                                const index = context.parentBinding.model.tabPanelItems.length - 1;
-
+                                context.parentBinding.model.accordionItems.push(new AccordionItemModel(`Item ${context.parentBinding.model.accordionItems.length + 1}`));
                                 context.parentBinding.applyChanges();
-                                context.parentBinding.viewModel.activeItemIndex(index);
 
                                 this.viewManager.clearContextualCommands();
                                 this.eventManager.dispatchEvent(Events.ContentUpdate);
@@ -67,39 +64,52 @@ export class TabPanelItemHandlers {
             ]
         };
 
-        if (context.parentModel["tabPanelItems"].length > 1) {
+        if (context.parentModel["accordionItems"].length > 1) {
             contextualEditor.deleteCommand = {
                 controlType: "toolbox-button",
-                tooltip: "Delete tab",
+                tooltip: "Delete item",
                 color: "#607d8b",
                 callback: () => {
-                    context.parentModel["tabPanelItems"].remove(context.model);
+                    context.parentModel["accordionItems"].remove(context.model);
                     context.parentBinding.applyChanges();
                     this.viewManager.clearContextualCommands();
                     this.eventManager.dispatchEvent(Events.ContentUpdate);
+                }
+            };
+        }
+        else {
+            const accordionParentBinding = context.gridItem.getParent().getParent().binding;
+            const accordionParentModel = accordionParentBinding.model;
+            const accordionModel = context.gridItem.getParent().binding.model;
 
-                    context.parentBinding.viewModel.activeItemIndex(0);
+            contextualEditor.deleteCommand = {
+                controlType: "toolbox-button",
+                tooltip: "Delete accordion",
+                callback: () => {
+                    accordionParentModel.widgets.remove(accordionModel);
+                    accordionParentBinding.applyChanges();
+                    this.viewManager.clearContextualCommands();
+                    this.eventManager.dispatchEvent(Events.ContentUpdate);
                 }
             };
         }
 
         if (context.model.widgets.length === 0) {
             contextualEditor.hoverCommands.push({
-                color: "#607d8b",
                 controlType: "toolbox-button",
+                color: "#607d8b",
                 iconClass: "paperbits-icon paperbits-simple-add",
                 position: "center",
-                tooltip: "Set tab layout",
+                tooltip: "Add widget",
                 component: {
-                    name: "grid-layout-selector",
+                    name: "widget-selector",
                     params: {
-                        heading: "Set tab layout",
-                        onSelect: (section: SectionModel) => { // TODO: Here should come Grid model
-                            context.model.widgets = section.widgets;
+                        onRequest: () => context.providers,
+                        onSelect: (widget: WidgetModel) => {
+                            context.model.widgets.push(widget);
                             context.binding.applyChanges();
-
-                            this.viewManager.clearContextualCommands();
                             this.eventManager.dispatchEvent(Events.ContentUpdate);
+                            this.viewManager.clearContextualCommands();
                         }
                     }
                 }

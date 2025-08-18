@@ -1,0 +1,19 @@
+<details open>
+    <summary>
+        Main
+    </summary>
+    <div class="form-group">
+        <button class="btn btn-info" role="tooltip" data-bind="tooltip: 'Accordion label'"></button>
+        <label for="styleName">Accordion label</label>
+        <input id="styleName" type="text" class="form-control" spellcheck="false"
+            data-bind="textInput: accordionLabel, focus: true">
+    </div>
+</details>
+
+<details open>
+    <summary>
+        Background
+        <button class="btn btn-info" role="tooltip" data-bind="tooltip: 'Manage background'"></button>
+    </summary>
+    <background params="{ background: $component.background, onUpdate: onBackgroundUpdate }"></background>
+</details>

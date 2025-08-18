@@ -10,14 +10,14 @@ import { TabPanelItemViewModel } from "./tabPanelItemViewModel";
 })
 export class TabPanelViewModel {
     public styles: ko.Observable<StyleModel>;
-    public tabPanelItems: ko.ObservableArray<TabPanelItemViewModel>;
-    public tabLinks: ko.Computed<string[]>;
+    public tabPanelItems: ko.ObservableArray<any>;
+    public tabLinks: ko.Observable<string[]>;
     public activeItemIndex: ko.Observable<number>;
 
     constructor() {
-        this.tabPanelItems = ko.observableArray<TabPanelItemViewModel>();
+        this.tabPanelItems = ko.observableArray<any>();
         this.styles = ko.observable<StyleModel>();
         this.activeItemIndex = ko.observable(0);
-        this.tabLinks = ko.computed(() => this.tabPanelItems().map(x => x.label()));
+        this.tabLinks = ko.observable<string[]>([]);
     }
 }
